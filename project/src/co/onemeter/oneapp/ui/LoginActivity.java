@@ -1,19 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.util.ArrayList;
-
-import org.wowtalk.api.Account;
-import org.wowtalk.api.AlbumCover;
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Connect2;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.GlobalValue;
-import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.R;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,14 +17,14 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
+import android.widget.*;
+import co.onemeter.oneapp.R;
 import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.GlobalValue;
+import org.wowtalk.ui.MessageBox;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends Activity implements OnClickListener {
 
@@ -65,7 +51,6 @@ public class LoginActivity extends Activity implements OnClickListener {
     private LinearLayout mSignUp;
     private LinearLayout mAutoRegister;
 
-    private EditText edtCompany;
 	private EditText edtAccount;
 	private EditText edtPassword;
     private ImageButton fieldClear;
@@ -108,7 +93,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                         webIF.logoutByUid(oldAccount.uid, oldAccount.password);
                     }
 
-                    String company = edtCompany.getText().toString().trim();
+                    String company = "wowtest"; // TODO remove company
                     mPrefUtil.setAutoLogin(isAutoLogin);
                     if(!isAutoLogin) {
                         mPrefUtil.setCompanyId(company);
@@ -220,7 +205,6 @@ public class LoginActivity extends Activity implements OnClickListener {
         btnLogin = (Button) findViewById(R.id.loginButton);
         mSignUp = (LinearLayout) findViewById(R.id.layout_signup);
         mAutoRegister = (LinearLayout) findViewById(R.id.layout_auto_register);
-        edtCompany = (EditText) findViewById(R.id.companyInput);
 		edtAccount = (EditText) findViewById(R.id.accountInput);
 		edtPassword = (EditText) findViewById(R.id.passWordInput);
         fieldClear = (ImageButton) findViewById(R.id.field_clear);
@@ -310,7 +294,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 
     private void login() {
-        final String companyId = edtCompany.getText().toString().trim();
+        final String companyId = "wowtest"; // TODO remove company ID
         final String username = edtAccount.getText().toString().trim();
         final String pwdStr = edtPassword.getText().toString().trim();
         if (companyId.equals("")) {

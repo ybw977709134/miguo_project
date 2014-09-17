@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="group_category">
+        <item>同事朋友</item>
+        <item>粉丝</item>
+        <item>生活休闲</item>
+        <item>兴趣爱好</item>
+        <item>游戏</item>
+        <item>学习考试</item>
+        <item>行业交流</item>
+        <item>置业安家</item>
+        <item>品牌产品</item>
+        <item>其它</item>
+    </string-array>
+
+    <string-array name="group_category_msg">
+        <item>friendandcollegue</item>
+        <item>fan</item>
+        <item>lifeandrelax</item>
+        <item>hobit</item>
+        <item>game</item>
+        <item>studyandexam</item>
+        <item>career</item>
+        <item>estate</item>
+        <item>brandandproduct</item>
+        <item>others</item>
+    </string-array>
+
+    <string-array name="area_array">
+        <item>平江区</item>
+        <item>工业园区</item>
+        <item>沧浪区</item>
+        <item>金阊区</item>
+        <item>吴中区</item>
+        <item>高新区</item>
+        <item>相城区</item>
+        <item>昆山市</item>
+        <item>吴江区</item>
+        <item>常熟市</item>
+        <item>张家港市</item>
+        <item>太仓市</item>
+        <item>虎丘区</item>
+        <item>其它</item>
+    </string-array>
+
+    <string-array name="function_msg">
+        <item>newfunction</item>
+    </string-array>
+
+    <string-array name="function">
+        <item>新的朋友</item>
+    </string-array>
+</resources>

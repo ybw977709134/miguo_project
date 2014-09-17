@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<RelativeLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true">
+
+		<LinearLayout
+			android:id="@+id/layoutText"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/layoutVoice"
+                android:orientation="vertical"
+                android:background="@color/color_e6e6e6">
+
+            <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:src="@color/color_bfbfbf"/>
+			<RelativeLayout
+				android:id="@+id/layoutTextInnerWrapper"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+				android:paddingLeft="5dp"
+				android:paddingRight="5dp" >
+
+				<Button
+					android:id="@+id/btn_toggle_media"
+					android:layout_width="@dimen/dimen_40"
+					android:layout_height="@dimen/dimen_40"
+					android:layout_centerVertical="true"
+					android:background="@drawable/sms_add_btn"
+					android:padding="5dp" />
+
+				<Button
+					android:id="@+id/btn_toggle_emotion"
+					android:layout_width="@dimen/dimen_40"
+					android:layout_height="@dimen/dimen_40"
+					android:layout_centerVertical="true"
+					android:layout_marginLeft="5dp"
+					android:layout_toRightOf="@+id/btn_toggle_media"
+					android:background="@drawable/sms_kaomoji_btn"
+					android:padding="5dp" />
+
+				<RelativeLayout
+					android:id="@+id/layout_input_text"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+					android:layout_marginLeft="5dp"
+                    android:layout_centerVertical="true"
+					android:layout_toRightOf="@+id/btn_toggle_emotion"
+					android:focusable="true"
+					android:focusableInTouchMode="true" >
+
+					<requestFocus />
+
+					<EditText
+						android:id="@+id/txt_content"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:layout_centerVertical="true"
+						android:layout_marginRight="5dp"
+						android:layout_toLeftOf="@+id/btn_send"
+                        android:minHeight="@dimen/dimen_40"
+                        android:maxHeight="200dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+						android:background="@drawable/text_field"
+						android:textColor="@color/black"
+						android:textSize="17sp" />
+
+					<Button
+						android:id="@+id/btn_send"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentRight="true"
+						android:layout_centerVertical="true"
+                        android:minHeight="@dimen/dimen_40"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+						android:background="@drawable/btn_blue_selector"
+						android:text="@string/send"
+						android:textColor="@color/white"
+						android:textSize="18sp" />
+				</RelativeLayout>
+
+				<Button
+					android:id="@+id/btn_speak"
+					android:layout_width="fill_parent"
+					android:layout_height="@dimen/dimen_40"
+					android:layout_marginLeft="5dp"
+					android:layout_toRightOf="@+id/btn_toggle_media"
+                    android:layout_centerVertical="true"
+					android:background="@drawable/btn_blue_selector"
+					android:text="@string/hold_to_speak"
+					android:textColor="@color/white"
+					android:textSize="18sp"
+					android:visibility="invisible" />
+			</RelativeLayout>
+            <ImageView
+                    android:id="@+id/family_layout_top_img"
+                    android:layout_height="@dimen/dimen_50"
+                    android:layout_width="fill_parent"
+                    android:src="@drawable/sms_unfold_btn"
+                    android:scaleType="center"
+                    android:background="@color/gray"
+                    android:visibility="gone"/>
+		</LinearLayout>
+
+        <include
+            android:id="@+id/layoutVoice"
+            android:layout_height="200dp"
+            android:layout_width="fill_parent"
+            android:layout_alignParentTop="true"
+            layout="@layout/msg_voice_recording_dialog"/>
+
+		<include
+			android:id="@+id/layoutMedia"
+			android:layout_width="match_parent"
+			android:layout_height="100dp"
+			android:layout_below="@+id/layoutText"
+			layout="@layout/msg_message_composer_inputmedia" />
+
+		<include
+			android:id="@+id/layoutStamp"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/layoutText"
+			layout="@layout/msg_message_composer_stamp" />
+
+	</RelativeLayout>
+	<include
+		android:id="@+id/layout_recording_indicator"
+		android:layout_width="250dp"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		layout="@layout/msg_voice_recording_indicator"
+		android:visibility="gone" />
+</RelativeLayout>

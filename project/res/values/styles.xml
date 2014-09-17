@@ -1,0 +1,230 @@
+<resources>
+
+
+
+    <style name="page_title">
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="contact_subtitle">
+        <!-- Contact Page / list view group title -->
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:background">@drawable/category_bar</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/contact_subtitle</item>
+    </style>
+
+    <style name="contact_list_main_text">
+        <!-- Contact Page / list view -->
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/default_text</item>
+    </style>
+
+	<style name="search_inputbox">
+		<item name="android:layout_height">@dimen/search_bar_inner_height</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:paddingLeft">10dp</item>
+        <item name="android:background">@drawable/table_white</item>
+		<item name="android:drawableStart">@drawable/search_field_icon</item>
+		<item name="android:drawablePadding">@dimen/padding_small</item>
+		<item name="android:singleLine">true</item>
+		<item name="android:textSize">@dimen/text_size_default</item>
+		<item name="android:hint">@string/search</item>
+	</style>
+
+	<style name="side_index_bar">
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_width">30dp</item>
+		<item name="android:layout_alignParentRight">true</item>
+		<item name="android:textSize">15sp</item>
+	</style>
+
+    <style name="contact_list_sub_text">
+        <!-- Contact Page / list view -->
+        <item name="android:textSize">16sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/default_subtext</item>
+    </style>
+
+    <style name="group_member_counts_text">
+        <!-- Contact Page / list view -->
+        <item name="android:textSize">18sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/group_member_counts_gray</item>
+    </style>
+
+    <style name="btn_back_white">
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="btn_back_black">
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="btn_edit_white">
+        <item name="android:src">@drawable/nav_edit</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="btn_edit_black">
+        <item name="android:src">@drawable/nav_edit</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="page">
+        <item name="android:background">#FFF2F2F2</item>
+    </style>
+
+    <style name="label_white">
+        <item name="android:textColor">#FF000000</item>
+    </style>
+
+    <style name="label_black">
+        <item name="android:textColor">#FFFFFFFF</item>
+    </style>
+
+    <style name="btn_phone_white">
+    </style>
+
+    <style name="btn_phone_black">
+    </style>
+
+    <style name="btn_sms_white">
+        <item name="android:src">@drawable/sms</item>
+    </style>
+
+    <style name="btn_sms_black">
+        <item name="android:src">@drawable/sms</item>
+    </style>
+
+    <style name="btn_contact_white">
+        <item name="android:src">@drawable/tabbar_contact</item>
+    </style>
+
+    <style name="btn_contact_black">
+        <item name="android:src">@drawable/tabbar_contact</item>
+    </style>
+
+    <style name="btn_settings_white">
+        <item name="android:src">@drawable/nav_settings</item>
+    </style>
+
+    <style name="btn_settings_black">
+        <item name="android:src">@drawable/nav_settings</item>
+    </style>
+
+    <style name="button_white">
+        <item name="android:textColor">#FF000000</item>
+        <item name="android:background">@drawable/btn_blue_selector</item>
+    </style>
+
+    <style name="button_black">
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:background">@drawable/btn_blue_selector</item>
+    </style>
+
+    <style name="inputbox_white" parent="@android:style/Widget.EditText">
+	    <item name="android:textColor">@color/default_text</item>
+	    <item name="android:background">@drawable/sms_text_field</item>
+    </style>
+
+    <style name="inputbox_black" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">@color/default_text</item>
+	    <item name="android:background">@drawable/sms_text_field</item>
+    </style>
+
+    <style name="selected_white">
+    </style>
+
+    <style name="selected_black">
+    </style>
+
+    <style name="unselected_white">
+    </style>
+
+    <style name="unselected_black">
+    </style>
+
+    <style name="add_white">
+    </style>
+
+    <style name="add_black">
+    </style>
+
+    <style name="delete_white">
+    </style>
+
+    <style name="delete_black">
+    </style>
+
+    <style name="list_white">
+    </style>
+
+    <style name="list_black">
+    </style>
+
+    <style name="confirm_white">
+    </style>
+
+    <style name="confirm_black">
+    </style>
+
+    <style name="checked_white">
+    </style>
+
+    <style name="checked_black">
+    </style>
+
+    <style name="unchecked_white">
+    </style>
+
+    <style name="unchecked_black">
+    </style>
+
+	<style name="moment_user_name">
+		<item name="android:textStyle">bold</item>
+		<item name="android:textSize">18sp</item>
+		<item name="android:textColor">@color/event_blue</item>
+	</style>
+
+	<style name="moment_datetime">
+		<item name="android:textColor">@color/default_subtext</item>
+		<item name="android:textSize">12sp</item>
+	</style>
+
+	<style name="moment_date">
+		<item name="android:textColor">@color/default_subtext</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:textSize">16sp</item>
+	</style>
+
+	<style name="moment_body">
+		<item name="android:textSize">20sp</item>
+		<item name="android:textColor">@color/default_text</item>
+		<item name="android:layout_marginTop">@dimen/padding_medium</item>
+	</style>
+
+	<style name="moment_listitem_outter_wrapper">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:paddingTop">@dimen/padding_medium</item>
+		<item name="android:orientation">vertical</item>
+	</style>
+
+    <style name="system_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/android_notification_bg</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+</resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="page" format="reference"></attr>
+    <attr name="backButton" format="reference"></attr>
+    <attr name="addButton" format="reference"></attr>
+    <attr name="deleteButton" format="reference"></attr>
+    <attr name="editButton" format="reference"></attr>
+    <attr name="listButton" format="reference"></attr>
+    <attr name="phoneButton" format="reference"></attr>
+    <attr name="smsButton" format="reference"></attr>
+    <attr name="contactButton" format="reference"></attr>
+    <attr name="settingsButton" format="reference"></attr>
+    <attr name="label" format="reference"></attr>
+    <attr name="wowtalk_text" format="reference"></attr>
+    <attr name="button" format="reference"></attr>
+    <attr name="inputbox" format="reference"></attr>
+    <attr name="selected" format="reference"></attr>
+    <attr name="unselected" format="reference"></attr>
+    <attr name="confirmButton" format="reference"></attr>
+    <attr name="checked" format="reference"></attr>
+    <attr name="unchecked" format="reference"></attr>
+    <attr name="drawableStart" format="integer" />
+
+    <declare-styleable name="SideBar">
+        <attr name="textSize"/>
+        <attr name="drawableStart" />
+    </declare-styleable>
+
+    <declare-styleable name="CircleImageView">
+        <attr name="circle_border_width" format="dimension" />
+        <attr name="circle_border_color" format="color" />
+    </declare-styleable>
+</resources>

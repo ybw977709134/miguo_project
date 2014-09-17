@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:background="@drawable/timeline_card_bg"
+        android:layout_margin="5dp"
+        android:layout_centerInParent="true">
+
+    <LinearLayout
+            style="@style/moment_listitem_outter_wrapper"
+            android:orientation="vertical">
+
+        <RelativeLayout
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:paddingLeft="@dimen/padding_medium">
+
+            <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_alignParentLeft="true"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:id="@+id/txt_date"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:text="2013年4月9日"
+                        style="@style/moment_date"/>
+
+                <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:id="@+id/txt_name"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="1"
+                            android:singleLine="true"
+                            android:clickable="true"
+                            android:text="小强"
+                            style="@style/moment_user_name"/>
+
+                    <TextView
+                        android:id="@+id/txt_time"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_marginLeft="7dp"
+                        android:text="17:18"
+                        style="@style/moment_datetime" />
+<!--
+                    <ImageView
+                        android:id="@+id/img_location"
+                        android:layout_height="25dp"
+                        android:layout_width="25dp"
+                        android:background="@drawable/write_icon_location"
+                        android:layout_marginRight="5dp"
+                        android:visibility="gone"/>
+                        -->
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_height="@dimen/moment_tag_ind_height"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:id="@+id/moment_item_tag"
+                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_vertical"
+                        style="@style/moment_datetime"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:background="@color/background"/>
+
+                <ImageView
+                        android:id="@+id/iv_moment_item_tag_color_line"
+                        android:layout_width="@dimen/create_moment_option_tag_left_img_width"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <include layout="@layout/piece_moment_content"/>
+        <!--
+            <include layout="@layout/piece_moment_operations"
+                android:visibility="visible" />
+        -->
+
+
+        <ImageView
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:visibility="gone"
+                android:src="@drawable/divider_320"/>
+    </LinearLayout>
+</RelativeLayout>

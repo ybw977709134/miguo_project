@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView 
+        android:id="@+id/faceitem_kaomoji"
+        android:layout_height="35dp"
+        android:layout_width="fill_parent"
+        android:textColor="@color/white"
+        android:background="@color/wowtalk_gray"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:text="happy"
+        android:gravity="center"/>
+    <ImageView
+        android:id="@+id/faceitem_stamp"
+        android:background="@null"
+        android:layout_height="35dp"
+        android:layout_width="35dp"
+        android:src="@drawable/sms_add_btn" />
+
+</RelativeLayout>

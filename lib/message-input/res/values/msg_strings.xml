@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="msg_cancel">Cancel</string>
+    <string name="msg_cancelled_call">Cancelled Call</string>
+    <string name="msg_error_need_internet_for_msg">There is no network connection available</string>
+    <string name="msg_hold_to_speak">Hold to speek</string>
+    <string name="msg_release_to_send">Release to send</string>
+    <string name="msg_drag_to_upside_to_cancel">Drag here to cancel</string>
+    <string name="msg_release_to_cancel_send">Release to cancel send</string>
+    <string name="msg_newer_chatmessage_receive">Your friend sent you a cool multimedia message !</string>
+    <string name="msg_ok">OK</string>
+    <string name="msg_yes">Yes</string>
+    <string name="msg_voice_too_short">Voice message too short</string>
+    <string name="msg_resend_this_message">Resend</string>
+    <string name="msg_resend_this_message_msg">Is it OK to resend this message?</string>
+    <string name="msg_operation_failed">Operation failed</string>
+    <string name="msg_session_unknown_buddy">unknown buddy</string>
+    <string name="msg_unknow">Unknow</string>
+    <string name="msg_readed">Readed</string>
+    <string name="msg_readed_with_count">Readed(%d)</string>
+    <string name="msg_reached">Reached</string>
+    <string name="msg_sent">Sent</string>
+    <string name="msg_sending">Sending</string>
+    <string name="msg_kaomoji_based">basic</string>
+    <string name="msg_kaomoji_happy">happy</string>
+    <string name="msg_kaomoji_sad">sad</string>
+    <string name="msg_kaomoji_angry">angry</string>
+    <string name="msg_kaomoji_animal">animal</string>
+    <string name="msg_kaomoji_others">others</string>
+    <string name="msg_common_google_play_services_enable_text">You will have to start Google Play service to use this fuction</string>
+    <string name="msg_are_you_sure_to_cancel_download">Cancel downloading?</string>
+
+</resources>

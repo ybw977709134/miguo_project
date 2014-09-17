@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:background="@color/white">
+
+        <RelativeLayout
+                android:id="@+id/title_bar"
+                android:layout_height="@dimen/title_bar_height"
+                android:layout_width="fill_parent"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/navbar_bg">
+
+            <FrameLayout
+                    android:id="@+id/layout01"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentLeft="true">
+
+                <ImageButton
+                        android:id="@+id/title_back"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@null"
+                        android:src="@drawable/nav_back_selector"/>
+
+                <TextView
+                        android:id="@+id/select_all"
+                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:text="@string/contacts_select_all"
+                        android:visibility="gone"/>
+            </FrameLayout>
+
+            <FrameLayout
+                    android:id="@+id/layout02"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentRight="true">
+
+                <ImageButton
+                        android:id="@+id/title_groupsms"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@null"/>
+
+                <TextView
+                        android:id="@+id/select_done"
+                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:text="@string/done"
+                        android:visibility="gone"/>
+
+            </FrameLayout>
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:text="@string/contacts_local"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:id="@+id/layout_search"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_below="@+id/title_bar"
+                android:orientation="vertical"
+                android:paddingRight="30dp"
+                android:paddingBottom="5dp">
+
+            <include
+                    android:id="@+id/search_bar"
+                    layout="@layout/piece_filter_bar"
+                    android:layout_below="@+id/title_bar"
+                    android:layout_alignParentTop="true"/>
+        </RelativeLayout>
+
+        <ScrollView
+                android:id="@+id/main_scroll_view"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_search"
+                android:layout_above="@+id/layout_button"
+                android:layout_width="fill_parent">
+
+            <LinearLayout
+                    android:id="@+id/main_linear_layout"
+                    android:layout_height="fill_parent"
+                    android:layout_width="fill_parent"
+                    android:orientation="vertical">
+
+
+                <ListView
+                        android:id="@+id/local_contacts_list"
+                        android:layout_height="fill_parent"
+                        android:layout_width="fill_parent"
+                        android:layout_below="@+id/layout_search"
+                        android:layout_above="@+id/layout_button"
+                        android:divider="@null"
+                        android:cacheColorHint="@null">
+
+                </ListView>
+            </LinearLayout>
+
+        </ScrollView>
+
+
+        <co.onemeter.oneapp.ui.SideBar
+                android:id="@+id/side_bar"
+                android:layout_below="@+id/title_bar"
+                android:layout_above="@+id/layout_button"
+                style="@style/side_index_bar"/>
+
+        <LinearLayout
+                android:id="@+id/layout_button"
+                android:layout_height="50dp"
+                android:layout_width="fill_parent"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+            <Button
+                    android:id="@+id/sms_group"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:text="@string/contacts_select_sms"/>
+
+            <Button
+                    android:id="@+id/email_group"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:text="@string/contacts_select_mail"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+</FrameLayout>

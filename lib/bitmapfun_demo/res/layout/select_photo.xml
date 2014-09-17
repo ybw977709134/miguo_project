@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    <RelativeLayout
+            android:id="@+id/title_bar"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_alignParentTop="true">
+        <ImageButton
+                android:id="@+id/title_back"
+                android:layout_height="50dp"
+                android:layout_width="50dp"
+                android:layout_alignParentLeft="true"
+                android:background="@null"/>
+        <ImageButton
+                android:id="@+id/title_confirm"
+                android:layout_height="50dp"
+                android:layout_width="50dp"
+                android:layout_alignParentRight="true"
+                android:background="@null"/>
+        <TextView
+                android:id="@+id/title_text"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                android:singleLine="true"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:text="5/9"/>
+            </RelativeLayout>
+    <LinearLayout
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:layout_below="@+id/title_bar"
+            android:orientation="vertical">
+        <GridView
+                android:id="@+id/photo_grid"
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:numColumns="4"/>
+            </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <FrameLayout
+        android:id="@+id/indicatorBg"
+        android:layout_height="50dp"
+        android:layout_width="fill_parent"
+        android:background="@color/button_normal"
+        android:alpha="0.6">
+        <TextView
+            android:id="@+id/txt_indicator"
+            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/chat_voice_delete_icon"
+            android:drawablePadding="10dp"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:text="@string/msg_drag_to_upside_to_cancel"/>
+    </FrameLayout>
+    <RelativeLayout
+        android:id="@+id/timerBg"
+        android:layout_height="150dp"
+        android:layout_width="fill_parent"
+        android:background="@color/chat_right_font1">
+        <org.wowtalk.ui.msg.TimerTextView
+            android:id="@+id/txt_timer"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/black"
+            android:textSize="50sp"
+            android:text="00:13"/>
+    </RelativeLayout>
+
+</LinearLayout>

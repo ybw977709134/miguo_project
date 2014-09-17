@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:yuanqu="http://schemas.android.com/apk/res/co.onemeter.oneapp"
+	xmlns:dslv="http://schemas.android.com/apk/res/co.onemeter.oneapp"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:id="@+id/layout"
+	android:orientation="vertical"
+	android:background="@color/bg_gray1">
+
+	<RelativeLayout
+		android:id="@+id/title_bar"
+		android:layout_height="@dimen/title_bar_height"
+		android:layout_width="fill_parent"
+		android:layout_alignParentTop="true"
+		android:focusable="true"
+		android:focusableInTouchMode="true"
+		android:background="@drawable/navbar_bg">
+
+        <ImageButton
+            android:id="@+id/title_back"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:layout_alignParentLeft="true"
+            android:background="@null"
+            android:src="@drawable/nav_back_selector"/>
+        <ImageButton
+            android:id="@+id/title_confirm"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:src="@drawable/nav_confirm_selector"/>
+		<TextView
+			android:id="@+id/contact_current_group"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:layout_toRightOf="@id/title_back"
+            android:layout_toLeftOf="@id/title_confirm"
+            android:singleLine="true"
+			android:clickable="true"
+			android:text="@string/contactsforbiz_root_favorite_group_name"
+            android:textStyle="bold"
+			style="@style/page_title"/>
+	</RelativeLayout>
+
+	<com.wowtech.dslv.DragSortListView
+	    android:id="@android:id/list"
+	    android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/title_bar"
+        android:layout_margin="10dp"
+        android:cacheColorHint="@null"
+        android:listSelector="@android:color/transparent"
+        android:divider="@drawable/divider_320"
+        android:dividerHeight="1dp"
+        android:background="@drawable/table_white"
+        dslv:float_alpha="0.6"
+        dslv:float_background_color="@color/bg_gray1"
+        dslv:drag_handle_id="@id/sort_image_view_layout"/>
+</RelativeLayout>

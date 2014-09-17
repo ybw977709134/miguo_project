@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="msg_cancel">キャンセル</string>
+    <string name="msg_cancelled_call">キャンセル通話</string>
+    <string name="msg_error_need_internet_for_msg">インターネットに接続できません</string>
+    <string name="msg_hold_to_speak">押して録音開始</string>
+    <string name="msg_release_to_send">手を離れて送信</string>
+
+    <string name="msg_drag_to_upside_to_cancel">ここまでドラッグして取消</string>
+
+    <string name="msg_release_to_cancel_send">手を離れてキャンセル送信</string>
+    <string name="msg_newer_chatmessage_receive">友達からマルチメディアメッセージが届きました</string>
+    <string name="msg_ok">確認</string>
+    <string name="msg_yes">確認</string>
+    <string name="msg_voice_too_short">ボイスメッセージが短すぎます</string>
+    <string name="msg_resend_this_message">再送</string>
+    <string name="msg_resend_this_message_msg">このメッセージを再送してよろしいでしょうか？</string>
+    <string name="msg_operation_failed">操作が失敗しました</string>
+    <string name="msg_session_unknown_buddy">知らない</string>
+    <string name="msg_unknow">知らない</string>
+    <string name="msg_readed">既読</string>
+    <string name="msg_readed_with_count">既読(%d)</string>
+    <string name="msg_reached">配信済</string>
+    <string name="msg_sent">送信済</string>
+    <string name="msg_sending">送信中</string>
+    <string name="msg_kaomoji_based">基本</string>
+    <string name="msg_kaomoji_happy">楽しみ</string>
+    <string name="msg_kaomoji_sad">悲しみ</string>
+    <string name="msg_kaomoji_angry">怒り</string>
+    <string name="msg_kaomoji_animal">動物</string>
+    <string name="msg_kaomoji_others">そのほか</string>
+    <string name="msg_common_google_play_services_enable_text">この機能のご利用にはGoogle Playサービスの起動が必要です</string>
+    <string name="msg_are_you_sure_to_cancel_download">ダウンロードを取消？</string>
+
+</resources>

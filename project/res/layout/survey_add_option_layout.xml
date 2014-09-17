@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/root_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/contacts_glass">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="@dimen/create_moment_option_tags_width"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="10dp"
+            android:background="@drawable/table_white">
+        <EditText
+                android:id="@+id/a_survey_option_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:hint="@string/survey_add_an_option"
+                android:textColorHint="@color/gray"
+                android:textColor="@color/black"/>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+            <Button
+                    android:id="@+id/a_survey_option_ok"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginRight="3dp"
+                    android:text="@string/ok"
+                    android:gravity="center"
+                    android:textSize="@dimen/emergency_contact_status_title_txt_size"
+                    android:textColor="@color/white"
+                    android:background="@drawable/btn_blue_selector"/>
+            <Button
+                    android:id="@+id/a_survey_option_cancel"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="3dp"
+                    android:text="@string/cancel"
+                    android:gravity="center"
+                    android:textSize="@dimen/emergency_contact_status_title_txt_size"
+                    android:textColor="@color/white"
+                    android:background="@drawable/btn_gray_selector"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    <TextView 
+        android:id="@+id/first_char"
+        android:layout_height="30dp"
+        android:layout_width="fill_parent"
+        style="@style/contact_subtitle"/>
+    <ImageView
+        android:id="@+id/divider_view"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:background="@drawable/divider_320"
+        android:visibility="gone"/>
+    <RelativeLayout 
+        android:layout_height="60dp"
+        android:layout_width="fill_parent"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp">
+        <ImageView 
+            android:id="@+id/cBox"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:gravity="center_vertical"
+            android:layout_marginRight="10dp" />
+        <TextView 
+            android:id="@+id/local_contact_name"
+            android:layout_height="match_parent"
+            android:layout_width="fill_parent"
+            android:layout_toRightOf="@+id/cBox"
+            android:gravity="center_vertical"
+            style="@style/contact_list_main_text"/>
+        <FrameLayout
+                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="25dp"
+                android:layout_centerVertical="true">
+            <TextView
+                    android:id="@+id/tv_add_as_friend"
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    android:background="@drawable/btn_blue_medium_selector"
+                    android:text="@string/add"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"/>
+            <TextView
+                    android:id="@+id/tv_invite"
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    android:background="@drawable/btn_gray_medium_selector"
+                    android:text="@string/invite"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"/>
+        </FrameLayout>
+    </RelativeLayout>
+
+</LinearLayout>

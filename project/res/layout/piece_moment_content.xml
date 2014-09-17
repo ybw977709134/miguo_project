@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content"
+	android:layout_width="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/padding_medium">
+        <TextView
+                android:id="@+id/txt_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:text="这里的天空超级蓝啊！"
+                style="@style/moment_body"/>
+
+        <TableLayout
+                android:id="@+id/imageTable"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/padding_medium"/>
+        <LinearLayout
+                android:id="@+id/mic_layout"
+                android:layout_height="50dp"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:visibility="visible"
+                android:gravity="center"
+                android:orientation="horizontal">
+            <FrameLayout
+                    android:layout_height="50dp"
+                    android:layout_width="50dp"
+                    android:background="@color/text_blue1"
+                    android:layout_gravity="center_vertical">
+                <ImageView
+                        android:id="@+id/btn_play"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_gravity="center"
+                        android:src="@drawable/timeline_player_play"
+                        android:clickable="false"/>
+                <ProgressBar
+                        android:id="@+id/progress"
+                        android:layout_height="fill_parent"
+                        android:layout_width="fill_parent"/>
+            </FrameLayout>
+            <org.wowtalk.ui.msg.TimerTextView
+                    android:id="@+id/mic_timer"
+                    android:layout_height="50dp"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:background="@drawable/timeline_player_bg_right"
+                    android:textSize="25dp"
+                    android:textColor="@color/voice_play_btn_bg"
+                    android:text="00:00"/>
+        </LinearLayout>
+        <TextView
+                android:id="@+id/txt_loc"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:drawableLeft="@drawable/write_location_smail"
+                android:drawablePadding="10dp"
+                android:textSize="15sp"
+                android:textColor="@color/default_text"/>
+
+        <!-- survey layout -->
+        <LinearLayout
+                android:id="@+id/vote_survey_layout"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:layout_marginRight="@dimen/padding_medium"
+                android:orientation="vertical"
+                android:visibility="gone">
+            <TextView
+                    android:id="@+id/survey_dead_line_indicate"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="left"
+                    android:textSize="15sp"
+                    android:textColor="@color/event_blue"/>
+            <!--<ListView-->
+            <!--android:id="@+id/vote_survey_options"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:cacheColorHint="@color/transparent"-->
+            <!--android:scrollbars="none"-->
+            <!--android:divider="@null"-->
+            <!--android:dividerHeight="5dp"/>-->
+            <co.onemeter.oneapp.ui.LinearLayoutAsListView
+                    android:id="@+id/vote_survey_options"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:orientation="vertical"/>
+            <Button
+                    android:id="@+id/vote_survey_button"
+                    android:layout_height="@dimen/emergency_contact_button_height"
+                    android:layout_width="fill_parent"
+                    android:layout_marginTop="@dimen/padding_medium"
+                    android:gravity="center"
+                    android:text="@string/questionnaire"
+                    android:textSize="@dimen/emergency_contact_status_title_txt_size"
+                    android:textColor="@color/white"
+                    android:background="@drawable/btn_gray_selector"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--
+    <include layout="@layout/moment_op_ellipse"
+             android:visibility="visible" />
+             -->
+    <!--
+    <include layout="@layout/piece_moment_operations"/>
+    -->
+
+	<LinearLayout
+		android:id="@+id/reviewLayout"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:layout_marginTop="@dimen/padding_medium"
+        android:layout_marginLeft="@dimen/padding_medium"
+        android:layout_marginRight="@dimen/padding_medium"
+        android:paddingLeft="@dimen/padding_small"
+		android:background="#e6e6e6"
+		android:orientation="vertical">
+
+		<co.onemeter.oneapp.ui.SpannedTextView
+			android:id="@+id/txt_like_names"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:gravity="center_vertical"
+			android:drawablePadding="5dp"
+            android:drawableLeft="@drawable/timeline_like_a"
+			android:textColor="@color/default_text"
+			android:textSize="16sp"/>
+
+		<ImageView
+			android:id="@+id/reviewDivider"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			android:layout_marginTop="5dp"
+			android:layout_marginBottom="5dp"
+			android:background="@drawable/divider_320"/>
+
+		<LinearLayout
+			android:id="@+id/layout_review"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			android:orientation="vertical">
+		</LinearLayout>
+	</LinearLayout>
+
+</LinearLayout>

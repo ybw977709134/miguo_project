@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!-- MISC -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
+    <string name="search">Search</string>
+    <string name="send">Send</string>
+    <string name="need_google_maps"></string>
+    <string name="hold_to_speak">Hold to speak</string>
+    <string name="play">Play</string>
+    <string name="input_photo">Photo</string>
+    <string name="input_video">Video</string>
+    <string name="input_location">Location</string>
+    <string name="input_voice">Voice</string>
+    <string name="input_free_call">Free Call</string>
+    <string name="input_video_chat">Video Chat</string>
+    <string name="send_location">Send Location</string>
+    <string name="media_record_not_avaliable">Media record not avaliable</string>
+</resources>

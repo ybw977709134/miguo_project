@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ok">確認</string>
+    <string name="cancel">キャンセル</string>
+    <string name="done">完了</string>
+    <string name="search">検索</string>
+    <string name="send">送信</string>
+    <string name="need_google_maps"></string>
+    <string name="hold_to_speak">押して録音開始</string>
+    <string name="play">再生</string>
+    <string name="input_photo">画像</string>
+    <string name="input_video">動画</string>
+    <string name="input_location">場所</string>
+    <string name="input_voice">音声</string>
+    <string name="input_free_call">無料通話</string>
+    <string name="input_video_chat">動画通話</string>
+    <string name="send_location">送信場所</string>
+    <string name="media_record_not_avaliable">録音できませんでした</string>
+</resources>

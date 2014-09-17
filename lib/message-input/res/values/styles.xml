@@ -1,0 +1,22 @@
+<resources>
+
+    <style name="borderless_dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowBackground">@color/transparent_color</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+    </style>
+
+    <style name="kaomojiTextGrid">
+        <item name="cellBackground">@drawable/msg_kaomoji_cell_bg</item>
+        <item name="textColor">#ff333333</item>
+        <item name="cellHeight">51dp</item>
+        <item name="paddingLeft">24dp</item>
+        <item name="paddingRight">24dp</item>
+        <item name="textSize">14sp</item>
+        <item name="verticalDivider">@drawable/emoji_div_vertical</item>
+    </style>
+</resources>

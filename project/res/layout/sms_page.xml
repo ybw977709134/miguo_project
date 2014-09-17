@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <RelativeLayout 
+        android:id="@+id/title_bar"
+        android:layout_height="@dimen/title_bar_height"
+        android:layout_width="fill_parent"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/navbar_bg">
+        <ImageButton 
+            android:id="@+id/title_edit"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:layout_alignParentRight="true"
+            android:background="@null"
+            android:src="@drawable/nav_create_chat_selector"/>
+        <TextView
+	        android:id="@+id/txtSmsTitle"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            style="@style/page_title"
+            android:textStyle="bold"
+            android:text="@string/app_name"/>
+    </RelativeLayout>
+    
+    <RelativeLayout 
+        android:id="@+id/sms_box"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_below="@+id/title_bar"
+        android:background="@color/white">
+        <LinearLayout
+            android:id="@+id/layout_bg"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/chat_list_bg"/>
+            <TextView
+                android:id="@+id/tv_no_chat_message_indicate"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/text_gray3"
+                android:textSize="@dimen/empty_indicator_txt_size"
+                android:text="@string/no_chats_indicate"/>
+            <Button
+                android:id="@+id/btn_new"
+                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_blue_selector"
+                android:textColor="@color/white"
+                android:textSize="23sp"
+                android:text="Start New Chat"
+                android:visibility="invisible"/>
+        </LinearLayout>
+        <ListView
+                android:id="@+id/sms_list"
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:layout_below="@id/search_layout"
+                android:cacheColorHint="@null"
+                android:divider="@drawable/divider_320"
+                android:headerDividersEnabled="false"
+                android:footerDividersEnabled="false">
+        </ListView>
+
+        <ImageView
+                android:id="@+id/search_glass_img"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="left|top"
+                android:layout_marginTop="45dp"
+                android:background="@drawable/contacts_glass"
+                android:visibility="gone"/>
+    </RelativeLayout>
+
+</RelativeLayout>

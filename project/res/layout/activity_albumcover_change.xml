@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:roundedImgView="http://schemas.android.com/apk/auto-res"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/bg_gray1" >
+    <RelativeLayout 
+        android:id="@+id/title_bar"
+        android:layout_height="@dimen/title_bar_height"
+        android:layout_width="fill_parent"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/navbar_bg">
+        <ImageButton 
+            android:id="@+id/title_back"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:layout_alignParentLeft="true"
+            android:background="@null"
+            android:src="@drawable/nav_back_selector"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:text="@string/image_change_cover"/>
+    </RelativeLayout>
+    
+    <ScrollView 
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_below="@+id/title_bar">
+        <LinearLayout 
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:orientation="vertical">
+
+            <LinearLayout 
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_marginTop="@dimen/setting_top_margin"
+                android:background="@drawable/menu_view_middle_selector"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/pick_from_local" 
+                    android:layout_height="50dp"
+                    android:layout_width="fill_parent"
+                    android:gravity="center_vertical"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
+                    android:singleLine="true"
+                    android:drawableRight="@drawable/table_arrow"
+                    android:text="@string/image_pick_from_local"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"/>
+                <ImageView 
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/divider"/>
+                <TextView
+                    android:id="@+id/take_photo" 
+                    android:layout_height="50dp"
+                    android:layout_width="fill_parent"
+                    android:gravity="center_vertical"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
+                    android:singleLine="true"
+                    android:drawableRight="@drawable/table_arrow"
+                    android:text="@string/image_take_photo"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/select_provider_cover" 
+                android:layout_marginTop="@dimen/setting_items_padding"
+                android:layout_height="50dp"
+                android:background="@drawable/menu_view_middle_selector"
+                android:layout_width="fill_parent"
+                android:gravity="center_vertical"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:drawableRight="@drawable/table_arrow"
+                android:text="@string/image_provider_cover"
+                android:textColor="@color/black"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+    </ScrollView>
+    
+</RelativeLayout>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+    <co.onemeter.oneapp.widget.scale_viewpager.PhotoViewPager
+            android:id="@+id/mainViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    <RelativeLayout
+            android:id="@+id/title_bar"
+            android:layout_height="@dimen/title_bar_height"
+            android:layout_width="fill_parent"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/navbar_semi_trans">
+        <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/btn_back"
+                android:background="@drawable/nav_back_selector"
+                android:layout_alignParentLeft="true" />
+        <TextView
+                android:id="@+id/txtPhotoIdxIndicate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:singleLine="true"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+        <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/btn_save"
+                android:background="@drawable/nav_download_selector"
+                android:layout_alignParentRight="true" />
+            </RelativeLayout>
+
+
+<!--
+    <LinearLayout
+        android:id="@+id/mainImgLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+		android:layout_below="@+id/btn_save">
+		
+        <ImageView
+            android:id="@+id/imgMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/sms_album" />
+        
+    </LinearLayout>
+ -->
+</RelativeLayout>

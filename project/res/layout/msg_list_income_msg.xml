@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:gravity="top" >
+    <TextView
+        android:id="@+id/msg_date"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:visibility="gone"/>
+
+    <FrameLayout
+        android:id="@+id/frame_photo"
+        android:layout_height="40dp"
+        android:layout_width="40dp"
+        android:layout_below="@+id/msg_date"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp">
+
+        <ImageView
+            android:id="@+id/img_contact_thumbnail"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/default_avatar_90" />
+		<ImageView
+		    android:layout_height="fill_parent"
+		    android:layout_width="fill_parent"
+		    android:background="@drawable/avatar_mask_40"/>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_toRightOf="@+id/frame_photo"
+        android:layout_alignTop="@+id/frame_photo"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/txt_contact_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:gravity="top|left"
+            android:text="name"
+            android:textColor="@color/wowtalk_blue"
+            android:textSize="13sp"
+            android:visibility="gone"
+            android:layout_toRightOf="@+id/frame_photo"
+            android:layout_alignTop="@+id/frame_photo"/>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/frame_photo"
+            android:layout_below="@+id/txt_contact_name"
+            android:layout_toRightOf="@+id/frame_photo" >
+
+            <RelativeLayout
+                android:id="@+id/layout_balloon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingLeft="@dimen/msg_ballon_padding_h_size_add_angle"
+                android:paddingRight="@dimen/msg_ballon_padding_h_size"
+                android:paddingTop="@dimen/msg_ballon_padding_v_size"
+                android:paddingBottom="@dimen/msg_ballon_padding_v_size"
+                android:background="@drawable/sms_left_balloon"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/messagedetail_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:maxWidth="150dp"
+                    android:autoLink="all"
+                    android:textColor="@color/sms_left_font"
+                    android:textSize="16sp"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_sentstatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/layout_balloon"
+                android:layout_toRightOf="@+id/layout_balloon"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/messagedetail_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/layout_balloon"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="date"
+                    android:textColor="@color/sms_left_date"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/msg_fix_status_and_date" />
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

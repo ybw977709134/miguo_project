@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!-- MISC -->
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="done">完成</string>
+    <string name="search">搜索</string>
+    <string name="send">发送</string>
+    <string name="need_google_maps"></string>
+    <string name="hold_to_speak">按住讲话</string>
+    <string name="play">播放</string>
+    <string name="input_photo">图片</string>
+    <string name="input_video">视频</string>
+    <string name="input_location">位置</string>
+    <string name="input_voice">音频</string>
+    <string name="input_free_call">电话</string>
+    <string name="input_video_chat">视频通话</string>
+    <string name="send_location">发送位置</string>
+    <string name="media_record_not_avaliable">无法获取录音设备</string>
+</resources>

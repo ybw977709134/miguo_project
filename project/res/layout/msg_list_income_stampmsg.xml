@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="top" >
+    <TextView
+        android:id="@+id/msg_date"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:visibility="gone"/>
+    <FrameLayout 
+        android:id="@+id/frame_photo"
+        android:layout_height="40dp"
+        android:layout_width="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/msg_date"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp">
+       	<ImageView
+       		android:id="@+id/img_contact_thumbnail"
+        	android:layout_width="fill_parent"
+        	android:layout_height="fill_parent"
+        	android:src="@drawable/default_avatar_90" />
+       	<ImageView 
+       	    android:layout_height="fill_parent"
+       	    android:layout_width="fill_parent"
+       	    android:background="@drawable/avatar_mask_40"/> 
+    </FrameLayout>
+
+    
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/frame_photo"
+        android:layout_toRightOf="@+id/frame_photo"
+        android:layout_marginLeft="5dp" >
+
+
+        <RelativeLayout
+            android:id="@+id/multimediaHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_contact_name"
+            android:layout_alignTop="@+id/frame_photo"
+            android:layout_marginLeft="5dp" >
+
+
+            <org.wowtalk.ui.msg.AnimImage
+                android:id="@+id/img_thumbnail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_sentstatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/multimediaHolder"
+            android:layout_toRightOf="@+id/multimediaHolder"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/messagedetail_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="date"
+                android:textStyle="bold"
+                android:textColor="@color/sms_left_date"
+                android:textSize="@dimen/msg_fix_status_and_date" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_contact_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="top|left"
+            android:text="name"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/wowtalk_blue"
+            android:visibility="gone"
+            android:textSize="12sp"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

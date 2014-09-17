@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:src="@color/color_bfbfbf"
+            android:layout_alignParentTop="true"/>
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+        <RelativeLayout
+                android:id="@+id/faces_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="150dp"
+                android:background="@color/background" >
+
+            <HorizontalScrollView
+                    android:id="@+id/hscroll_view"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:visibility="gone" >
+                <FrameLayout
+                        android:id="@+id/grid_fram_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true" >
+
+                    <GridView
+                            android:id="@+id/grid_faces"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:columnWidth="150dp"
+                            android:gravity="center"
+                            android:horizontalSpacing="2dp"
+                            android:listSelector="@color/black"
+                            android:numColumns="auto_fit"
+                            android:stretchMode="spacingWidthUniform"
+                            android:verticalSpacing="2dp" />
+                </FrameLayout>
+            </HorizontalScrollView>
+            <org.wowtalk.ui.HorizontalListView
+                    android:id="@+id/kaomoji_wrapper"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"/>
+            <org.wowtalk.ui.HorizontalListView
+                    android:id="@+id/stamp_wrapper"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:id="@+id/vg_emoji_div_horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+            <!-- android:layout_marginTop == TextGrid.cellHeight -->
+            <ImageView
+                    android:id="@+id/emoji_div_horizontal_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="51dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/emoji_div_horizontal" />
+
+            <ImageView
+                    android:id="@+id/emoji_div_horizontal_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/emoji_div_horizontal_1"
+                    android:layout_marginTop="51dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/emoji_div_horizontal" />
+        </RelativeLayout>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/faces_layout"
+                android:orientation="vertical">
+            <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:src="@color/color_bfbfbf"
+                    android:layout_alignParentTop="true"/>
+
+            <LinearLayout
+                    android:id="@+id/face_config"
+                    android:layout_width="fill_parent"
+                    android:layout_height="41dp"
+                    android:background="@color/color_e6e6e6"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingBottom="3dp"
+                    android:paddingTop="3dp" >
+
+                <ImageButton
+                        android:id="@+id/face_type"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/kaomoji"
+                        android:contentDescription="@null"/>
+
+                <HorizontalScrollView
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:scrollbars="none" >
+
+                    <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" >
+
+                        <GridView
+                                android:id="@+id/grid_facetype"
+                                android:layout_width="1000dp"
+                                android:layout_height="wrap_content"
+                                android:columnWidth="35dp"
+                                android:gravity="center"
+                                android:horizontalSpacing="3dp"
+                                android:listSelector="@color/black"
+                                android:numColumns="auto_fit"
+                                android:scrollbars="none"
+                                android:stretchMode="spacingWidthUniform" />
+                    </FrameLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.wowtalk.ui.msg"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk android:minSdkVersion="15" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- required by google maps -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+    <!-- required by google maps -->
+    <permission
+        android:name="org.wowtalk.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+    <!-- required by google maps -->
+    <uses-permission android:name="org.wowtalk.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+
+    <application>
+
+        <!-- required by google maps -->
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyCFNTi3hn1MOfB8ZMEYQFz48BL_Xsdqy7Y" />
+
+        <activity
+            android:name="org.wowtalk.ui.msg.PickLocActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/moment_op_btns_layout_whole"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/timeline_card_bg2">
+    <RelativeLayout
+            android:layout_height="@dimen/title_bar_height"
+            android:layout_width="match_parent">
+
+        <!--
+        <ImageView
+                android:layout_height="2dp"
+                android:layout_width="match_parent"
+                android:layout_alignParentTop="true"
+                android:src="@color/color_e6e6e6"/>
+        -->
+
+        <LinearLayout
+                android:id="@+id/review_btn"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal">
+
+            <LinearLayout
+                    android:id="@+id/layout_like"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:background="@color/transparent">
+
+                <Button
+                        android:id="@+id/btn_like"
+                        android:layout_height="20dp"
+                        android:layout_width="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/timeline_like"/>
+
+                <TextView
+                        android:id="@+id/tv_moment_op_like"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/moments_like"
+                        android:textSize="@dimen/moment_op_txt_size"
+                        android:textColor="@color/default_text"/>
+            </LinearLayout>
+
+            <ImageView
+                    android:layout_height="match_parent"
+                    android:layout_width="2dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:src="@color/color_cccccc"/>
+
+            <LinearLayout
+                    android:id="@+id/layout_comment"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:background="@color/transparent">
+
+                <Button
+                        android:id="@+id/btn_comment"
+                        android:layout_height="20dp"
+                        android:layout_width="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/timeline_comment"/>
+
+                <TextView
+                        android:id="@+id/tv_moment_op_comment"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/moments_comment"
+                        android:textSize="@dimen/moment_op_txt_size"
+                        android:textColor="@color/default_text"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:id="@+id/layout_answer"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:background="@color/transparent"
+                    android:visibility="gone">
+
+                <Button
+                        android:id="@+id/btn_answer"
+                        android:layout_height="20dp"
+                        android:layout_width="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/timeline_comment"/>
+
+                <TextView
+                        android:id="@+id/tv_moment_op_answer"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/answer_qa"
+                        android:textSize="@dimen/moment_op_txt_size"
+                        android:textColor="@color/default_text"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

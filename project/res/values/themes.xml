@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="AppTheme" parent="android:Theme.Light" />
+
+    <style name="Theme" parent="@android:style/Theme.NoTitleBar">
+        <item name="backButton">@style/btn_back_black</item>
+        <item name="editButton">@style/btn_edit_black</item>
+        <item name="label">@style/label_black</item>
+        <item name="phoneButton">@style/btn_phone_black</item>
+        <item name="smsButton">@style/btn_sms_black</item>
+        <item name="contactButton">@style/btn_contact_black</item>
+        <item name="settingsButton">@style/btn_settings_black</item>
+        <item name="button">@style/button_black</item>
+        <item name="inputbox">@style/inputbox_black</item>
+        <item name="selected">@style/selected_black</item>
+        <item name="unselected">@style/unselected_black</item>
+        <item name="addButton">@style/add_black</item>
+        <item name="deleteButton">@style/delete_black</item>
+        <item name="listButton">@style/list_black</item>
+        <item name="confirmButton">@style/confirm_black</item>
+        <item name="checked">@style/checked_black</item>
+        <item name="unchecked">@style/unchecked_black</item>
+    </style>
+
+    <style name="Theme.White">
+        <item name="backButton">@style/btn_back_white</item>
+        <item name="editButton">@style/btn_edit_white</item>
+        <item name="label">@style/label_white</item>
+        <item name="phoneButton">@style/btn_phone_white</item>
+        <item name="smsButton">@style/btn_sms_white</item>
+        <item name="contactButton">@style/btn_contact_white</item>
+        <item name="settingsButton">@style/btn_settings_white</item>
+        <item name="button">@style/button_white</item>
+        <item name="inputbox">@style/inputbox_white</item>
+        <item name="selected">@style/selected_white</item>
+        <item name="unselected">@style/unselected_white</item>
+        <item name="addButton">@style/add_white</item>
+        <item name="deleteButton">@style/delete_white</item>
+        <item name="listButton">@style/list_white</item>
+        <item name="confirmButton">@style/confirm_white</item>
+        <item name="checked">@style/checked_white</item>
+        <item name="unchecked">@style/unchecked_white</item>
+    </style>
+
+</resources>

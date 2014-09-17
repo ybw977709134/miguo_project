@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:roundedImgView="http://schemas.android.com/apk/auto-res"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <ImageView
+            android:id="@+id/divider_view"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:background="@drawable/divider_320"
+            android:visibility="gone"/>
+
+
+    <LinearLayout
+            android:layout_height="65dp"
+            android:layout_width="match_parent"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:orientation="horizontal">
+
+        <FrameLayout
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_vertical">
+
+            <org.wowtalk.ui.msg.RoundedImageView
+                    android:id="@+id/contact_photo"
+                    android:layout_height="@dimen/contact_icon_size"
+                    android:layout_width="@dimen/contact_icon_size"
+                    roundedImgView:corner_radius="@dimen/rounded_img_view_cornor_radius"
+                    roundedImgView:border_width="@dimen/rounded_img_view_border_width"
+                    roundedImgView:border_color="@color/rounded_img_view_border_color"
+                    roundedImgView:click_dim="false"
+                    android:clickable="false"
+                    android:background="@drawable/default_avatar_90"/>
+        </FrameLayout>
+
+        <LinearLayout
+                android:layout_height="50dp"
+                android:layout_width="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="7dp"
+                android:orientation="vertical">
+
+            <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal">
+
+                <ImageView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/family_icon"/>
+
+                <TextView
+                        android:id="@+id/contact_name"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_gravity="bottom"
+                        style="@style/contact_list_main_text"
+                        android:text="qq@qq.com"/>
+            </LinearLayout>
+
+            <TextView
+                    android:id="@+id/contact_status"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:paddingRight="10dp"
+                    style="@style/contact_list_sub_text"
+                    android:text="111111111111111111111"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

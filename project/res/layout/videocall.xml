@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/video_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/gray" >
+    
+    <org.wowtalk.video.GL2JNIView 
+        android:id="@+id/video_surface"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:visibility="visible">
+    </org.wowtalk.video.GL2JNIView>
+    
+
+    
+    <ImageView 
+        android:id="@+id/QoS"
+        android:layout_height="15dp"
+        android:layout_width="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:visibility="gone"/>
+
+    <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+        <RelativeLayout
+                android:id="@+id/video_call_self_window_layout"
+                android:layout_height="@dimen/video_call_self_window_height"
+                android:layout_width="100dp"
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/call_video_border">
+            <org.wowtalk.ui.component.IncallTimer
+                    android:id="@+id/call_timer"
+                    android:layout_height="30dp"
+                    android:layout_width="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:textColor="@color/white"/>
+            <SurfaceView
+                    android:id="@+id/video_capture_surface"
+                    android:layout_height="130dp"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_alignParentTop="true"/>
+            <ImageView
+                    android:id="@+id/img_nowebcam"
+                    android:layout_height="130dp"
+                    android:layout_width="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:visibility="gone"/>
+        </RelativeLayout>
+
+        <ImageView
+                android:layout_height="20dp"
+                android:layout_width="fill_parent"
+                android:src="@color/transparent"/>
+
+        <LinearLayout
+                android:layout_height="49dp"
+                android:layout_width="fill_parent"
+                android:background="@drawable/videocall_bar"
+                android:gravity="center_vertical"
+                android:visibility="visible"
+                android:orientation="horizontal">
+            <RelativeLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:alpha="50"
+                    android:gravity="center">
+                <ImageButton
+                        android:id="@+id/btn_switch"
+                        android:layout_height="40dp"
+                        android:layout_width="40dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/videocall_change_camera"/>
+            </RelativeLayout>
+            <RelativeLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:alpha="50"
+                    android:gravity="center">
+                <org.wowtalk.ui.component.MuteMicButton
+                        android:id="@+id/btn_mute"
+                        android:layout_height="40dp"
+                        android:layout_width="40dp"
+                        android:layout_alignParentLeft="true"
+                        checked="@drawable/videocall_mute_a"
+                        unchecked="@drawable/videocall_mute"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:alpha="50"
+                    android:gravity="center">
+                <org.wowtalk.ui.component.SpeakerButton
+                        android:id="@+id/btn_speaker"
+                        android:layout_height="40dp"
+                        android:layout_width="40dp"
+                        checked="@drawable/videocall_speaker_a"
+                        unchecked="@drawable/videocall_speaker"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:alpha="50"
+                    android:gravity="center">
+                <org.wowtalk.ui.component.HangCallButton
+                        android:id="@+id/btn_end"
+                        android:layout_height="40dp"
+                        android:layout_width="40dp"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/videocall_endcall"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

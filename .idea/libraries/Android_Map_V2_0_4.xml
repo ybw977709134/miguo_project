@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Android_Map_V2.0.4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/message-input/libs/Android_Map_V2.0.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/message-input/libs/MapApiLocation.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/message-input/libs/MapApiSearch.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

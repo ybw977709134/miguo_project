@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+    <ImageView
+            android:id="@+id/img_photo"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:src="@drawable/feed_default_pic"
+            android:scaleType="centerCrop"/>
+
+    <ImageView
+            android:id="@+id/img_isSelected"
+            android:layout_height="30dp"
+            android:layout_width="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="7dp"/>
+</RelativeLayout>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/white">
+
+    <RelativeLayout
+            android:id="@+id/title_bar"
+            android:layout_height="@dimen/title_bar_height"
+            android:layout_width="fill_parent"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/navbar_bg">
+
+        <!-- as now does not create event locally,no need this button-->
+        <ImageButton
+                android:id="@+id/right_button"
+                android:layout_height="50dp"
+                android:layout_width="50dp"
+                android:layout_alignParentRight="true"
+                android:background="@null"
+                android:src="@drawable/nav_add_selector"
+                android:visibility="gone"/>
+
+        <ImageView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_toLeftOf="@+id/right_button"
+                android:background="@drawable/navbar_div"
+                android:visibility="gone"/>
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+            <TextView
+                    android:id="@+id/title_text"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    style="@style/page_title"
+                    android:textStyle="bold"
+                    android:text="@string/events_all"/>
+
+            <ImageView
+                    android:layout_height="9dp"
+                    android:layout_width="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/navbar_arrow"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:layout_below="@+id/title_bar">
+
+        <ListView
+                android:id="@+id/event_list"
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:cacheColorHint="@null"
+                android:divider="@drawable/divider_320"/>
+    </LinearLayout>
+
+    <ImageView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_below="@+id/title_bar"
+            android:background="@drawable/shadow_under"/>
+
+</RelativeLayout>

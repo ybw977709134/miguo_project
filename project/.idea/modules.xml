@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Yuanqu.iml" filepath="$PROJECT_DIR$/Yuanqu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../lib/bitmapfun/bitmapfun.iml" filepath="$PROJECT_DIR$/../lib/bitmapfun/bitmapfun.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../lib/google-play-services_lib/google-play-services_lib.iml" filepath="$PROJECT_DIR$/../lib/google-play-services_lib/google-play-services_lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../lib/DiskLruCache/src/main/main.iml" filepath="$PROJECT_DIR$/../lib/DiskLruCache/src/main/main.iml" />
+    </modules>
+  </component>
+</project>
+

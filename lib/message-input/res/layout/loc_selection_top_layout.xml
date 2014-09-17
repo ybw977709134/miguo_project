@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/relativeLayout1"
+        android:layout_height="50dp"
+        android:layout_width="fill_parent"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/navbar_semi_trans">
+    <ImageButton
+            android:id="@+id/btn_cancel"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:layout_alignParentLeft="true"
+            android:background="@null"
+            android:src="@drawable/nav_back_selector"/>
+    <ImageView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@+id/btn_cancel"
+            android:background="@drawable/navbar_div"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/btn_cancel"
+            android:layout_toLeftOf="@+id/btn_done"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/send_location"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
+
+    <ImageButton
+            android:id="@+id/btn_done"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:layout_alignParentRight="true"
+            android:background="@null"
+            android:src="@drawable/nav_confirm_selector"/>
+    <ImageView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_toLeftOf="@+id/btn_done"
+            android:background="@drawable/navbar_div"/>
+</RelativeLayout>

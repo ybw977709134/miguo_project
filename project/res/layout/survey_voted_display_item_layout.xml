@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white">
+    <TextView
+            android:id="@+id/option_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:textSize="18sp"
+            android:textColor="@color/black"/>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="25dp">
+        <ImageView
+                android:id="@+id/option_voted_iv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:background="@color/group_search_blue"/>
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minWidth="@dimen/survey_right_voted_info_min_width"
+                android:layout_marginLeft="3dp"
+                android:layout_toRightOf="@id/option_voted_iv_desc"
+                android:orientation="horizontal">
+            <TextView
+                    android:id="@+id/voted_factor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/voted_num"
+                    android:textSize="20sp"
+                    android:textColor="@color/gray"/>
+            <TextView
+                    android:id="@+id/voted_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/event_blue"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

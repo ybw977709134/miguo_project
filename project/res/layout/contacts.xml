@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:yuanqu="http://schemas.android.com/apk/res/co.onemeter.oneapp"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:background="@color/white">
+
+	<RelativeLayout
+		android:id="@+id/title_bar"
+		android:layout_height="@dimen/title_bar_height"
+		android:layout_width="fill_parent"
+		android:layout_alignParentTop="true"
+		android:focusable="true"
+		android:focusableInTouchMode="true"
+		android:background="@drawable/navbar_bg">
+
+		<ImageButton
+			android:id="@+id/contact_add"
+			android:layout_height="50dp"
+			android:layout_width="50dp"
+			android:layout_alignParentRight="true"
+			android:layout_gravity="center"
+            android:background="@null"
+			android:src="@drawable/nav_refresh_selector"/>
+
+        <FrameLayout
+            android:id="@+id/refresh_layout"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:layout_alignParentLeft="true"
+            android:visibility="gone">
+            <ImageButton
+                android:id="@+id/title_refresh"
+                android:layout_height="50dp"
+                android:layout_width="50dp"
+                android:background="@null"
+                android:src="@drawable/nav_more"/>
+            <ProgressBar
+                android:id="@+id/title_progress"
+                android:layout_height="30dp"
+                android:layout_width="30dp"
+                android:layout_gravity="center"
+                style="@android:style/Widget.ProgressBar.Small"
+                android:visibility="gone"/>
+        </FrameLayout>
+		<LinearLayout
+			android:id="@+id/layout_contact_group"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:layout_centerInParent="true"
+			android:orientation="horizontal">
+
+			<TextView
+				android:id="@+id/contact_current_group"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:clickable="true"
+				android:text="@string/tab_contacts"
+                android:textStyle="bold"
+				style="@style/page_title"/>
+
+			<ImageView
+				android:id="@+id/title_arrow"
+				android:layout_height="9dp"
+				android:layout_width="10dp"
+				android:layout_gravity="center_vertical"
+				android:background="@drawable/navbar_arrow"
+				android:visibility="invisible"/>
+		</LinearLayout>
+
+
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:layout_height="fill_parent"
+		android:layout_width="fill_parent"
+		android:layout_below="@+id/title_bar"
+		android:layout_above="@+id/contact_operate">
+
+		<ScrollView
+			android:layout_height="fill_parent"
+			android:layout_width="fill_parent"
+			android:id="@+id/main_scroll_view">
+
+			<LinearLayout
+                android:id="@+id/main_linear_layout"
+				android:layout_height="wrap_content"
+				android:layout_width="fill_parent"
+				android:orientation="vertical">
+
+				<RelativeLayout
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent"
+                    android:background="@color/bg_gray1">
+					<include
+						android:id="@+id/search_bar"
+						layout="@layout/piece_filter_bar"
+						android:layout_alignParentTop="true"/>
+
+				</RelativeLayout>
+
+				<LinearLayout
+					android:id="@+id/layout_new_friends"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent"
+					android:gravity="center_vertical"
+                    android:visibility="gone"
+					android:orientation="horizontal">
+
+					<ImageView
+						android:layout_height="@dimen/contact_icon_size"
+						android:layout_width="@dimen/contact_icon_size"
+						android:background="@drawable/new_friends"
+						android:layout_margin="5dp"/>
+
+					<TextView
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content"
+						style="@style/contact_list_main_text"
+						android:text="@string/contacts_new_friends"/>
+
+				</LinearLayout>
+
+				<TextView
+					style="@style/contact_subtitle"
+                    android:visibility="gone"
+					android:text="@string/contact_subtitle_func"/>
+
+				<LinearLayout
+					android:id="@+id/layout_local"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent"
+					android:gravity="center_vertical"
+                    android:visibility="gone"
+					android:orientation="horizontal">
+
+					<ImageView
+						android:layout_height="@dimen/contact_icon_size"
+						android:layout_width="@dimen/contact_icon_size"
+						android:background="@drawable/phone_book_icon"
+						android:layout_margin="5dp"/>
+
+					<TextView
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content"
+						style="@style/contact_list_main_text"
+						android:text="@string/contacts_local"/>
+				</LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_public_account"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:gravity="center_vertical"
+                    android:visibility="gone"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_height="@dimen/contact_icon_size"
+                        android:layout_width="@dimen/contact_icon_size"
+                        android:background="@drawable/phone_book_icon"
+                        android:layout_margin="5dp"/>
+
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        style="@style/contact_list_main_text"
+                        android:text="@string/public_account"/>
+                </LinearLayout>
+
+				<ListView
+					android:id="@+id/function_list"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent"
+					android:cacheColorHint="@null"
+                    android:background="@color/white"
+					android:divider="@drawable/divider_320"/>
+
+                <TextView
+                        android:id="@+id/tv_family_friend"
+                        style="@style/contact_subtitle"
+                        android:text="@string/family_friend_title"/>
+
+                <ListView
+                        android:id="@+id/family_friend_list"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:cacheColorHint="@null"
+                        android:divider="@null"/>
+
+				<TextView
+                    android:id="@+id/group_indicator"
+					style="@style/contact_subtitle"
+					android:text="@string/contact_subtitle_group"/>
+
+				<ListView
+					android:id="@+id/group_list"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent"
+					android:cacheColorHint="@null"
+					android:visibility="gone"
+					android:divider="@drawable/divider_320"/>
+				<ExpandableListView
+                    android:id="@+id/group_list_biz"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:groupIndicator="@drawable/group_indicator_selector"
+                    android:cacheColorHint="@null"
+                    android:divider="@drawable/divider_320"
+                    android:childDivider="@drawable/divider_320"/>
+
+				<ListView
+					android:id="@+id/contact_detail"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent"
+					android:divider="@null"
+					android:visibility="gone"
+					android:cacheColorHint="@null"/>
+
+			</LinearLayout>
+		</ScrollView>
+
+
+		<co.onemeter.oneapp.ui.SideBar
+			android:id="@+id/side_bar"
+			android:visibility="gone"
+			style="@style/side_index_bar"/>
+	</RelativeLayout>
+
+	<LinearLayout
+		android:id="@+id/contact_operate"
+		android:layout_height="60dp"
+		android:layout_width="fill_parent"
+		android:layout_alignParentBottom="true"
+		android:background="@drawable/tabbar_bg"
+		android:visibility="gone">
+
+		<LinearLayout
+			android:id="@+id/send_mail"
+			android:layout_height="fill_parent"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:orientation="vertical">
+
+			<ImageView
+				android:id="@+id/send_mail_image"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_gravity="center_horizontal"
+				android:background="@null"/>
+
+			<TextView
+				android:id="@+id/send_mail_text"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_gravity="center_horizontal"
+				android:textColor="@color/white"
+				android:textSize="11sp"
+				android:text="@string/contacts_local_mail"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/send_sms"
+			android:layout_height="fill_parent"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:orientation="vertical">
+
+			<ImageView
+				android:id="@+id/send_sms_image"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_gravity="center_horizontal"
+				android:background="@null"/>
+
+			<TextView
+				android:id="@+id/send_sms_text"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_gravity="center_horizontal"
+				android:textColor="@color/white"
+				android:textSize="11sp"
+				android:text="@string/contacts_local_sms"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/move_to"
+			android:layout_height="fill_parent"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:orientation="vertical">
+
+			<ImageView
+				android:id="@+id/move_to_image"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_gravity="center_horizontal"
+				android:background="@null"/>
+
+			<TextView
+				android:id="@+id/move_to_text"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_gravity="center_horizontal"
+				android:textColor="@color/white"
+				android:textSize="11sp"
+				android:text="@string/contacts_local_moveto"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/contact_delete"
+			android:layout_height="fill_parent"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:orientation="vertical">
+
+			<ImageView
+				android:id="@+id/contact_delete_image"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_gravity="center_horizontal"
+				android:background="@null"/>
+
+			<TextView
+				android:id="@+id/contact_delete_text"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_gravity="center_horizontal"
+				android:textColor="@color/white"
+				android:textSize="11sp"
+				android:text="@string/contacts_local_delete"/>
+		</LinearLayout>
+	</LinearLayout>
+
+	<ImageView
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:layout_below="@+id/title_bar"
+        android:visibility="gone"
+		android:background="@drawable/shadow_under"/>
+</RelativeLayout>

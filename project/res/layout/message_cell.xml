@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?> <!-- from Android Layout Tricks #1 -->
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:roundedImgView="http://schemas.android.com/apk/res/co.onemeter.oneapp"
+    style="?page"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="60dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp" >
+
+    <ImageView
+        android:id="@+id/listItem_checkbox"
+        style="?unselected"
+        android:layout_width="29dp"
+        android:layout_height="29dp"
+        android:layout_centerVertical="true"
+        android:layout_margin="5dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/message_cell_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:text="2012/12/21"
+        android:textColor="@color/blue_color_3299ff"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/message_cell_content"
+        style="?label"
+        android:layout_width="fill_parent"
+        android:layout_height="25dp"
+        android:layout_below="@+id/message_cell_contact"
+        android:layout_toLeftOf="@+id/unreadMsg"
+        android:layout_toRightOf="@+id/photo_frame"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:textSize="15sp"
+        android:textColor="@color/text_gray3" />
+
+    <TextView
+        android:id="@+id/message_cell_contact"
+        style="?label"
+        android:layout_width="fill_parent"
+        android:layout_height="25dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="3dp"
+        android:layout_toLeftOf="@+id/message_cell_date"
+        android:layout_toRightOf="@+id/photo_frame"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black" />
+    
+    <FrameLayout
+        android:id="@+id/photo_frame"
+        android:layout_height="50dp"
+        android:layout_width="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:layout_toRightOf="@+id/listItem_checkbox">
+        <org.wowtalk.ui.msg.RoundedImageView
+        	android:id="@+id/contactPhoto"
+        	android:layout_width="50dp"
+        	android:layout_height="50dp"
+        	android:layout_marginRight="5dp"
+	        roundedImgView:corner_radius="@dimen/rounded_img_view_cornor_radius"
+	        roundedImgView:border_width="@dimen/rounded_img_view_border_width"
+	        roundedImgView:border_color="@color/rounded_img_view_border_color"
+	        roundedImgView:click_dim="false"
+	        android:clickable="false"
+        	android:src="@drawable/default_avatar_90" />
+    </FrameLayout>
+
+    
+
+    <TextView
+        android:id="@+id/unreadMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/message_cell_content"
+        android:background="@drawable/unread_count_bg"
+        android:gravity="center"
+        android:text="aaa"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:visibility="visible" />
+
+</RelativeLayout>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/root_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/contacts_glass">
+
+    <LinearLayout
+                  android:orientation="vertical"
+                  android:layout_width="@dimen/create_moment_option_tags_width"
+                  android:layout_height="wrap_content"
+                  android:layout_centerInParent="true"
+                  android:background="@drawable/table_white">
+
+        <LinearLayout
+                android:id="@+id/create_tag_timeline"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/create_moment_option_tag_height"
+                android:orientation="horizontal"
+                android:background="@drawable/create_tag_bg_selector">
+
+            <ImageView
+                    android:layout_width="@dimen/create_moment_option_tag_left_img_width"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:background="@color/moment_tag_timeline"/>
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/timeline"
+                    android:textSize="@dimen/create_moment_option_tag_txt_size"
+                    android:textColor="@color/color_333333"/>
+        </LinearLayout>
+
+        <ImageView
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:background="@drawable/divider"/>
+
+        <LinearLayout
+                android:id="@+id/create_tag_qa"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/create_moment_option_tag_height"
+                android:orientation="horizontal"
+                android:background="@drawable/create_tag_bg_selector">
+
+            <ImageView
+                    android:layout_width="@dimen/create_moment_option_tag_left_img_width"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:background="@color/moment_tag_qa"/>
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/qa"
+                    android:textSize="@dimen/create_moment_option_tag_txt_size"
+                    android:textColor="@color/color_333333"/>
+        </LinearLayout>
+
+        <ImageView
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:background="@drawable/divider"/>
+
+        <LinearLayout
+                android:id="@+id/create_tag_report"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/create_moment_option_tag_height"
+                android:orientation="horizontal"
+                android:background="@drawable/create_tag_bg_selector">
+
+            <ImageView
+                    android:layout_width="@dimen/create_moment_option_tag_left_img_width"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:background="@color/moment_tag_report"/>
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/moment_tag_report"
+                    android:textSize="@dimen/create_moment_option_tag_txt_size"
+                    android:textColor="@color/color_333333"/>
+        </LinearLayout>
+
+        <ImageView
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:background="@drawable/divider"/>
+
+        <LinearLayout
+                android:id="@+id/create_tag_question"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/create_moment_option_tag_height"
+                android:orientation="horizontal"
+                android:background="@drawable/create_tag_bg_selector">
+
+            <ImageView
+                    android:layout_width="@dimen/create_moment_option_tag_left_img_width"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:background="@color/moment_tag_question"/>
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/questionnaire"
+                    android:textSize="@dimen/create_moment_option_tag_txt_size"
+                    android:textColor="@color/color_333333"/>
+        </LinearLayout>
+
+        <ImageView
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:background="@drawable/divider"
+                android:visibility="gone"/>
+
+        <LinearLayout
+                android:id="@+id/create_tag_attendance"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/create_moment_option_tag_height"
+                android:orientation="horizontal"
+                android:background="@drawable/create_tag_bg_selector"
+                android:visibility="gone">
+
+            <ImageView
+                    android:layout_width="@dimen/create_moment_option_tag_left_img_width"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:background="@color/moment_tag_attendance"/>
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/moment_tag_attendance"
+                    android:textSize="@dimen/create_moment_option_tag_txt_size"
+                    android:textColor="@color/color_333333"/>
+        </LinearLayout>
+
+        <ImageView
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:background="@drawable/divider"
+                android:visibility="gone"/>
+
+        <LinearLayout
+                android:id="@+id/create_tag_todo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/create_moment_option_tag_height"
+                android:orientation="horizontal"
+                android:background="@drawable/create_tag_bg_selector"
+                android:visibility="gone">
+
+            <ImageView
+                    android:layout_width="@dimen/create_moment_option_tag_left_img_width"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:background="@color/moment_tag_todo"/>
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/moment_tag_todo"
+                    android:textSize="@dimen/create_moment_option_tag_txt_size"
+                    android:textColor="@color/color_333333"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

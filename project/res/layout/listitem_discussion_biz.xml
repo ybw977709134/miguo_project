@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:roundedImgView="http://schemas.android.com/apk/auto-res"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout 
+        android:layout_height="65dp"
+        android:layout_width="fill_parent"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:orientation="horizontal">
+        <FrameLayout 
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical">
+            <org.wowtalk.ui.msg.RoundedImageView 
+                android:id="@+id/group_photo"
+                android:layout_height="@dimen/contact_icon_size"
+                android:layout_width="@dimen/contact_icon_size"
+                roundedImgView:corner_radius="@dimen/rounded_img_view_cornor_radius"
+                roundedImgView:border_width="@dimen/rounded_img_view_border_width"
+                roundedImgView:border_color="@color/rounded_img_view_border_color"
+                roundedImgView:click_dim="false"
+                android:clickable="false"
+                android:background="@drawable/default_avatar_90"/>
+        </FrameLayout>
+
+        <RelativeLayout 
+            android:layout_height="50dp"
+            android:layout_width="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="7dp">
+            <TextView 
+                android:id="@+id/group_name"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                style="@style/contact_list_main_text"
+                android:text="qq@qq.com"/>
+            <TextView 
+                android:id="@+id/member_counts"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_toRightOf="@id/group_name"
+                android:layout_marginLeft="5dp"
+                android:layout_centerVertical="true"
+                style="@style/group_member_counts_text"
+                android:text="11"/>
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

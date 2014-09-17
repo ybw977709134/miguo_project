@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="libs2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/message-input/libs/android-support-v4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/message-input/libs/wowtalk_jar_yqtdev01_haslog_0331.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

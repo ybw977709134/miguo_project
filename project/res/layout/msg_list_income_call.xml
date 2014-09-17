@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutCall"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp" >
+    <TextView
+        android:id="@+id/msg_date"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:visibility="gone"/>
+    <FrameLayout
+        android:id="@+id/frame_photo"
+        android:layout_height="40dp"
+        android:layout_width="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/msg_date"
+        android:layout_marginLeft="5dp">
+        <ImageView
+            android:id="@+id/img_contact_thumbnail"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:background="@drawable/default_avatar_90"/>
+        <ImageView
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:background="@drawable/avatar_mask_40"/>
+    </FrameLayout>
+    <RelativeLayout
+        android:id="@+id/relative01"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/frame_photo"
+        android:layout_below="@+id/msg_date"
+        android:gravity="center_vertical"
+        android:clickable="true">
+        <TextView 
+                android:id="@+id/txt_contact_name"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:visibility="gone"/>
+        <RelativeLayout
+	        android:layout_height="wrap_content"
+	        android:layout_width="wrap_content"
+	        android:layout_marginLeft="5dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/msg_ballon_padding_h_size_add_angle"
+            android:paddingRight="@dimen/msg_ballon_padding_h_size"
+            android:paddingTop="@dimen/msg_ballon_padding_v_size"
+            android:paddingBottom="@dimen/msg_ballon_padding_v_size"
+	        android:layout_below="@id/txt_contact_name"
+	        android:background="@drawable/sms_left_balloon"
+	        android:clickable="true">
+
+			<LinearLayout
+				android:id="@+id/layout_call"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal" >
+
+				<ImageView
+					android:layout_width="24dp"
+					android:layout_height="26dp"
+					android:background="@drawable/call_left" />
+
+				<TextView
+					android:id="@+id/txt_time"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:layout_marginLeft="5dp"
+					android:textColor="@color/text_blue1"
+					android:textSize="16sp"
+					android:textStyle="bold" />
+			</LinearLayout>
+
+	        <LinearLayout
+	            android:id="@+id/layout_callmissed"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal" >
+
+	            <ImageView
+	                android:layout_width="24dp"
+	                android:layout_height="26dp"
+	                android:background="@drawable/call_missed" />
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:layout_marginLeft="5dp"
+					android:text="@string/call_missed"
+					android:textColor="@color/text_orange"
+					android:textSize="16sp"
+					android:textStyle="bold" />
+			</LinearLayout>
+		</RelativeLayout>
+
+	    <TextView
+			android:id="@+id/messagedetail_text"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:visibility="gone" />
+    </RelativeLayout>
+
+	<TextView
+		android:id="@+id/messagedetail_date"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textStyle="bold"
+		android:textColor="@color/sms_left_date"
+        android:textSize="@dimen/msg_fix_status_and_date"
+		android:text="date"
+		android:layout_toRightOf="@+id/relative01"
+		android:layout_below="@+id/frame_photo"/>
+</RelativeLayout>
+

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content" >
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="#6336">
+
+		<ImageView
+			android:id="@+id/bg"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_alignParentTop="true"
+			android:scaleType="fitXY"
+			android:src="@drawable/home" />
+
+		<RelativeLayout
+			android:id="@+id/box_image"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="#6600ff00">
+			<ImageView
+				android:id="@+id/imgRotate"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:src="@drawable/colorful_ptr_rotate"
+				android:layout_gravity="center"
+				android:layout_alignParentLeft="true"
+				android:layout_marginLeft="20dp"
+				android:layout_alignParentTop="true"
+				android:layout_marginTop="150dp"/>
+		</RelativeLayout>
+
+		<ImageView
+			android:id="@+id/img_rotate_dummy"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:src="@drawable/colorful_ptr_rotate"
+			android:layout_gravity="center"
+			android:layout_alignParentLeft="true"
+			android:layout_marginLeft="120dp"
+			android:layout_alignParentTop="true"
+			android:layout_marginTop="150dp"
+			android:visibility="gone"/>
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="New Button"
+			android:layout_centerInParent="true"
+			android:id="@+id/button" />
+
+	</RelativeLayout>
+</RelativeLayout>

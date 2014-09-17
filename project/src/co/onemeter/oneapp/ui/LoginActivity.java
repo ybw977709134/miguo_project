@@ -209,9 +209,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 		edtPassword = (EditText) findViewById(R.id.passWordInput);
         fieldClear = (ImageButton) findViewById(R.id.field_clear);
 
-		txtForgetPwd.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
-		txtForgetPwd.setTextColor(Color.WHITE);
-
         mTitleBack.setOnClickListener(this);
 		btnLogin.setOnClickListener(this);
 		txtForgetPwd.setOnClickListener(this);

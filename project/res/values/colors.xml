@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<color name="logo_green">#00c630</color>
 	<color name="group_member_counts_gray">#b3b3b3</color>
 	<color name="group_iteration_item_bg">#DD505050</color>
 	<color name="login_hint_font">#515151</color>
@@ -13,7 +14,7 @@
 	<color name="text_blue1">#3485CA</color>
 	<color name="text_orange">#F3943A</color>
 	<color name="text_gray1">#333333</color>
-	<color name="text_gray2">#4D4D4D</color>
+	<color name="text_gray2">#666666</color>
 	<color name="text_gray3">#808080</color>
     <color name="red">#ff0000</color>
 
@@ -30,7 +31,7 @@
     <color name="color_cccccc">#cccccc</color>
     <color name="menu_color_blue">#389BFF</color>
 
-    <drawable name="color_drawable_gray">#808080</drawable>
+	<drawable name="color_drawable_gray">#808080</drawable>
     <drawable name="color_drawable_orange">#ff5500</drawable>
     <drawable name="color_drawable_transparent">#00000000</drawable>
     <drawable name="color_drawable_blue">#3485CA</drawable>

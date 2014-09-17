@@ -9,7 +9,7 @@
 	4) 只有包含完整路径的字符串，才允许冗余。
 
 	-->
-    <string name="app_name">WowTalk企业版</string>
+    <string name="app_name">一米家校</string>
     <string name="login_input_id_and_bind">员工 ID或者手机邮箱不能为空！</string>
 
     <string name="registration_logging">连接中...</string>
@@ -350,7 +350,7 @@
     <string name="login_failed">登陆失败</string>
     <string name="login_user_cannot_be_null">用户名不能为空，请输入用户名</string>
     <string name="login_pwd_cannot_be_null">密码不能为空，请输入密码</string>
-    <string name="registered_account">注册帐号</string>
+    <string name="registered_account">没有帐号，注册一个</string>
     <string name="login">登录</string>
     <string name="forgotPassWord">忘记密码？</string>
     <string name="automatically_registered">自动注册</string>

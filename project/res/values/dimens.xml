@@ -76,4 +76,5 @@
     <dimen name="moment_op_txt_size">12sp</dimen>
     <dimen name="moment_header_bottom_op_line_height">45dp</dimen>
     <dimen name="moment_share_range_iv_size">10dp</dimen>
+	<dimen name="home_icon_size">60dp</dimen>
 </resources>

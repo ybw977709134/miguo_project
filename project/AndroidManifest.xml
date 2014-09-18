@@ -498,6 +498,7 @@
                 android:name=".ui.SysNoticeForOthersSetting"
                 android:screenOrientation="portrait">
         </activity>
+		<activity android:name=".ui.HomeActivity"/>
 	</application>
 
 </manifest>

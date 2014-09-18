@@ -689,4 +689,8 @@
     <string name="favorite_moment">收藏</string>
     <string name="un_favorite_moment">取消收藏</string>
 	<string name="register_through_following">使用以下方式注册</string>
+	<string name="home_button_expand">拓展学习</string>
+	<string name="home_button_events">乐趣活动</string>
+	<string name="home_button_growupfiles">成长档案</string>
+	<string name="home_button_gift">抽奖礼品推荐</string>
 </resources>

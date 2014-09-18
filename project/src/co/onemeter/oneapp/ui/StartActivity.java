@@ -307,7 +307,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 //		mFriendIntent = new Intent(StartActivity.this, FriendsActivity.class);
 		mFriendIntent = new Intent(StartActivity.this, MomentActivity.class);
 //        mHomeIntent = new Intent(StartActivity.this, EventActivity.class);
-        mHomeIntent = new Intent(StartActivity.this, DraggableEventActivity.class);
+        mHomeIntent = new Intent(StartActivity.this, HomeActivity.class);
 		mSettingIntent = new Intent(StartActivity.this, SettingActivity.class);
 		
 		mHost.addTab(buildTabSpec(String.valueOf(TAB_SMS), getResources().getString(R.string.app_name), R.drawable.ic_action_search, mSmsIntent));

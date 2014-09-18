@@ -27,72 +27,11 @@
 			style="@style/page_title"/>
 	</RelativeLayout>
 
-	<LinearLayout
-		android:id="@+id/bottomLayout"
-		android:layout_width="fill_parent"
-		android:layout_height="98dp"
-		android:layout_alignParentBottom="true"
-		android:visibility="gone">
-		<RelativeLayout
-			android:layout_height="fill_parent"
-			android:layout_width="0dp"
-			android:layout_weight="1"
-			android:gravity="center">
-			<LinearLayout
-				android:id="@+id/layout_signup"
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:orientation="vertical">
-				<ImageView
-					android:layout_height="32dp"
-					android:layout_width="32dp"
-					android:layout_gravity="center_horizontal"/>
-				<TextView
-					android:layout_height="wrap_content"
-					android:layout_width="wrap_content"
-					android:layout_marginTop="10dp"
-					android:textColor="@color/login_bottom_font"
-					android:textSize="15sp"
-					android:text="@string/registered_account"/>
-			</LinearLayout>
-		</RelativeLayout>
-		<ImageView
-			android:layout_height="fill_parent"
-			android:layout_width="wrap_content"
-			android:background="@drawable/emoji_div_vertical"/>
-
-		<RelativeLayout
-			android:layout_height="fill_parent"
-			android:layout_width="0dp"
-			android:layout_weight="1"
-			android:gravity="center">
-			<LinearLayout
-				android:id="@+id/layout_auto_register"
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:orientation="vertical">
-				<ImageView
-					android:layout_height="32dp"
-					android:layout_width="32dp"
-					android:layout_gravity="center_horizontal"/>
-				<TextView
-					android:layout_height="wrap_content"
-					android:layout_width="wrap_content"
-					android:layout_marginTop="10dp"
-					android:textColor="@color/login_bottom_font"
-					android:textSize="15sp"
-					android:text="@string/automatically_registered"/>
-			</LinearLayout>
-		</RelativeLayout>
-
-	</LinearLayout>
-
 	<RelativeLayout
 		android:id="@+id/bodyLayout"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:layout_below="@id/title_bar"
-		android:layout_above="@id/bottomLayout"
 		android:gravity="center" >
 
 		<LinearLayout

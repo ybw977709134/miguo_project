@@ -5,8 +5,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -48,8 +46,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 	private TextView txtForgetPwd;
 	private Button btnLogin;
 
-    private LinearLayout mSignUp;
-    private LinearLayout mAutoRegister;
+    private View mSignUp;
 
 	private EditText edtAccount;
 	private EditText edtPassword;
@@ -203,8 +200,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         mTitleBack = (ImageButton) findViewById(R.id.title_back);
         txtForgetPwd = (TextView) findViewById(R.id.forgotPassWord);
         btnLogin = (Button) findViewById(R.id.loginButton);
-        mSignUp = (LinearLayout) findViewById(R.id.layout_signup);
-        mAutoRegister = (LinearLayout) findViewById(R.id.layout_auto_register);
+        mSignUp = findViewById(R.id.registerButton);
 		edtAccount = (EditText) findViewById(R.id.accountInput);
 		edtPassword = (EditText) findViewById(R.id.passWordInput);
         fieldClear = (ImageButton) findViewById(R.id.field_clear);
@@ -213,7 +209,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 		btnLogin.setOnClickListener(this);
 		txtForgetPwd.setOnClickListener(this);
         mSignUp.setOnClickListener(this);
-        mAutoRegister.setOnClickListener(this);
         fieldClear.setOnClickListener(this);
 
 		edtAccount.addTextChangedListener(new TextWatcher() {
@@ -272,11 +267,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 		case R.id.loginButton:
 			login();
 			break;
-		case R.id.layout_signup:
+		case R.id.registerButton:
 			fGotoRegister();
-			break;
-		case R.id.layout_auto_register:
-			fAutoRegister();
 			break;
 		case R.id.forgotPassWord:
 			fGotoFetchPwd();

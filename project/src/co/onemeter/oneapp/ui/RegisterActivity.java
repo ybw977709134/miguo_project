@@ -33,7 +33,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	private EditText edtPwd;
 	private EditText edtPwdConfirm;
 	
-	private Button btnBack;
+	private View btnBack;
 	private Button btnCreate;
 
     private MessageBox mMsgBox;
@@ -74,7 +74,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	};
 	
 	private void initView() {
-		btnBack = (Button) findViewById(R.id.back_button);
+		btnBack = findViewById(R.id.title_back);
 		btnCreate = (Button) findViewById(R.id.create_button);
 		
 		edtAccount = (EditText) findViewById(R.id.account_edit);
@@ -247,7 +247,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.back_button:
+		case R.id.title_back:
 			finish();
 			break;
 		case R.id.create_button:

@@ -1,118 +1,247 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:gravity="center_horizontal" >
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/bg_gray1"
+                android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/logo_view"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:layout_marginTop="40dp"
-        android:textSize="40sp"
-        android:textColor="@color/white"
-        android:text="@string/logo_name"/>
+	<RelativeLayout
+		android:id="@+id/title_bar"
+		android:layout_width="fill_parent"
+		android:layout_height="@dimen/title_bar_height"
+		android:layout_alignParentTop="true"
+		android:visibility="gone"
+		android:background="@drawable/navbar_bg">
+		<ImageButton
+			android:id="@+id/title_back"
+			android:layout_height="50dp"
+			android:layout_width="50dp"
+			android:layout_alignParentRight="true"
+			android:background="@null"
+			android:src="@drawable/nav_close_selector"/>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
+			android:textStyle="bold"
+			android:text="@string/create_account"
+			style="@style/page_title"/>
+	</RelativeLayout>
 
-    <!--<ImageView-->
-        <!--android:id="@+id/yuanqu_text"-->
-        <!--android:layout_width="200dp"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_marginTop="40dp"-->
-        <!--android:background="@drawable/yuanqu_text" />-->
+	<RelativeLayout
+		android:id="@+id/bodyLayout"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_below="@id/title_bar"
+		android:gravity="center" >
 
-    <LinearLayout
-        android:id="@+id/layout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/logo_view"
-        android:layout_margin="14dp"
-        android:orientation="vertical" >
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical" >
 
-        <EditText
-            android:id="@+id/account_edit"
-            android:layout_width="fill_parent"
-            android:layout_height="46dp"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:hint="@string/input_yuanqu_account"
-            android:imeOptions="actionNext"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textCursorDrawable="@null"
-            android:textSize="17sp" />
+			<ImageView
+				android:id="@+id/logo"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_gravity="center_horizontal"
+				android:layout_marginLeft="20dp"
+				android:layout_marginRight="20dp"
+				android:src="@drawable/login_logo"
+				android:scaleType="centerInside"/>
 
+			<TextView
+				android:id="@+id/logo_view"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_horizontal"
+				android:gravity="center"
+				android:layout_marginBottom="40dp"
+				android:textSize="25sp"
+				android:textColor="@color/logo_green"
+				android:text="@string/logo_name"/>
 
-        <EditText
-            android:id="@+id/pwd_edit"
-            android:layout_width="fill_parent"
-            android:layout_height="46dp"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:hint="@string/input_password"
-            android:imeOptions="actionNext"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:inputType="textPassword"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textCursorDrawable="@null"
-            android:textSize="17sp" />
+			<LinearLayout
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="15dp"
+				android:layout_marginLeft="14dp"
+				android:layout_marginRight="14dp"
+				android:background="@drawable/table_white"
+				android:orientation="vertical" >
 
-        <EditText
-            android:id="@+id/pwd_confirm_edit"
-            android:layout_width="fill_parent"
-            android:layout_height="46dp"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:hint="@string/input_password_again"
-            android:imeOptions="actionDone"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:inputType="textPassword"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textCursorDrawable="@null"
-            android:textSize="17sp" />
-    </LinearLayout>
+				<EditText
+					android:id="@+id/account_edit"
+					android:layout_width="fill_parent"
+					android:layout_height="50dp"
+					android:background="@null"
+					android:drawableLeft="@drawable/login_icon_id"
+					android:drawablePadding="10dp"
+					android:textColor="@color/text_gray3"
+					android:singleLine="true"
+					android:imeOptions="actionNext"
+					android:shadowColor="@color/white"
+					android:hint="@string/account_hint"
+					android:paddingLeft="10dp"
+					android:paddingRight="10dp"
+					android:textSize="17sp" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/layout"
-        android:layout_marginLeft="14dp"
-        android:layout_marginRight="14dp"
-        android:orientation="horizontal" >
+				<ImageView
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:background="@drawable/divider"
+					android:scaleType="fitXY"/>
+				<RelativeLayout
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent">
+					<EditText
+						android:id="@+id/pwd_edit"
+						android:layout_width="fill_parent"
+						android:layout_height="50dp"
+						android:background="@null"
+						android:drawableLeft="@drawable/login_icon_password"
+						android:drawablePadding="10dp"
+						android:textColor="@color/text_gray3"
+						android:hint="@string/passWord_hint"
+						android:paddingLeft="10dp"
+						android:paddingRight="10dp"
+						android:singleLine="true"
+						android:imeOptions="actionDone"
+						android:inputType="textPassword"
+						android:textSize="17sp" />
+					<ImageButton
+						android:id="@+id/field_clear"
+						android:layout_height="20dp"
+						android:layout_width="20dp"
+						android:layout_marginRight="7dp"
+						android:layout_centerVertical="true"
+						android:layout_alignParentRight="true"
+						android:visibility="gone"
+						android:background="@drawable/field_clear"/>
 
-        <Button
-            android:id="@+id/back_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="7dp"
-            android:layout_weight="1"
-            android:background="@drawable/btn_gray_selector"
-            android:shadowColor="@color/white_80"
-            android:shadowDy="1"
-            android:text="@string/back"
-            android:textColor="@color/black"
-            android:textSize="17sp" />
+				</RelativeLayout>
 
-        <Button
-            android:id="@+id/create_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginLeft="7dp"
-            android:background="@drawable/btn_blue_selector"
-            android:shadowColor="@color/black_30"
-            android:shadowDy="1"
-            android:text="@string/create_account"
-            android:textColor="@color/white"
-            android:textSize="17sp" />
-    </LinearLayout>
+				<ImageView
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:background="@drawable/divider"
+					android:scaleType="fitXY"/>
+				<RelativeLayout
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent">
+					<EditText
+						android:id="@+id/pwd_confirm_edit"
+						android:layout_width="fill_parent"
+						android:layout_height="50dp"
+						android:background="@null"
+						android:drawableLeft="@drawable/login_icon_password"
+						android:drawablePadding="10dp"
+						android:textColor="@color/text_gray3"
+						android:hint="@string/input_password_again"
+						android:paddingLeft="10dp"
+						android:paddingRight="10dp"
+						android:singleLine="true"
+						android:imeOptions="actionDone"
+						android:inputType="textPassword"
+						android:textSize="17sp" />
+					<ImageButton
+						android:id="@+id/field_clear2"
+						android:layout_height="20dp"
+						android:layout_width="20dp"
+						android:layout_marginRight="7dp"
+						android:layout_centerVertical="true"
+						android:layout_alignParentRight="true"
+						android:visibility="gone"
+						android:background="@drawable/field_clear"/>
+
+				</RelativeLayout>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="fill_parent"
+				android:layout_height="45dp"
+				android:gravity="center_horizontal"
+				android:paddingLeft="14dp"
+				android:paddingRight="14dp" >
+
+				<Button
+					android:id="@+id/create_button"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:background="@drawable/btn_green_selector"
+					android:paddingBottom="10dp"
+					android:paddingLeft="30dp"
+					android:paddingRight="30dp"
+					android:paddingTop="10dp"
+					android:shadowColor="@color/black_30"
+					android:shadowDy="1"
+					android:text="@string/register_do"
+					android:textColor="@color/white"
+					android:textSize="17sp" />
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:gravity="left"
+				android:layout_marginTop="20dp"
+				android:layout_marginBottom="10dp"
+				android:paddingLeft="14dp"
+				android:paddingRight="14dp" >
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/register_through_following"
+					android:textColor="@color/text_gray2"/>
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_horizontal"
+				android:weightSum="2"
+				android:orientation="horizontal"
+				android:paddingLeft="14dp"
+				android:paddingRight="14dp" >
+
+				<Button
+					android:id="@+id/register1"
+					android:layout_weight="1"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:background="@drawable/btn_gray_selector"
+					android:shadowColor="@color/white_80"
+					android:shadowDy="1"
+					android:paddingBottom="10dp"
+					android:paddingLeft="30dp"
+					android:paddingRight="30dp"
+					android:paddingTop="10dp"
+					android:layout_marginRight="5dp"
+					android:text="@string/register_scan_code"
+					android:textColor="@color/text_gray1"
+					android:textSize="17sp" />
+
+				<Button
+					android:id="@+id/register2"
+					android:layout_weight="1"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:background="@drawable/btn_gray_selector"
+					android:shadowColor="@color/white_80"
+					android:shadowDy="1"
+					android:layout_marginLeft="5dp"
+					android:paddingBottom="10dp"
+					android:paddingLeft="30dp"
+					android:paddingRight="30dp"
+					android:paddingTop="10dp"
+					android:text="@string/register_invite_code"
+					android:textColor="@color/text_gray1"
+					android:textSize="17sp" />
+			</LinearLayout>
+
+		</LinearLayout>
+	</RelativeLayout>
 
 </RelativeLayout>
+

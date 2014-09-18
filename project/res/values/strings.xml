@@ -350,7 +350,10 @@
     <string name="login_failed">登陆失败</string>
     <string name="login_user_cannot_be_null">用户名不能为空，请输入用户名</string>
     <string name="login_pwd_cannot_be_null">密码不能为空，请输入密码</string>
-    <string name="registered_account">没有帐号，注册一个</string>
+	<string name="registered_account">没有帐号，注册一个</string>
+    <string name="register_scan_code">二维码</string>
+	<string name="register_invite_code">邀请码</string>
+	<string name="register_do">注册</string>
     <string name="login">登录</string>
     <string name="forgotPassWord">忘记密码？</string>
     <string name="automatically_registered">自动注册</string>
@@ -685,4 +688,5 @@
     <string name="view_share_range">查看可见范围</string>
     <string name="favorite_moment">收藏</string>
     <string name="un_favorite_moment">取消收藏</string>
+	<string name="register_through_following">使用以下方式注册</string>
 </resources>

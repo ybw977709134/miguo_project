@@ -12,15 +12,14 @@
             android:layout_width="fill_parent"
             android:layout_height="@dimen/title_bar_height"
             android:layout_alignParentTop="true"
-            android:background="@drawable/navbar_bg">
+            android:background="@drawable/home_bg_navbar">
 
         <TextView
                 android:id="@+id/contact_current_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:text="@string/settings_pagetitle"
-                style="@style/page_title"/>
+                style="@style/page_title_dark"/>
     </RelativeLayout>
 
     <ScrollView

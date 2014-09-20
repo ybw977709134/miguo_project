@@ -10,7 +10,7 @@
         android:layout_height="@dimen/title_bar_height"
         android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
-        android:background="@drawable/navbar_bg">
+        android:background="@drawable/home_bg_navbar">
         <ImageButton 
             android:id="@+id/title_left"
             android:layout_height="50dp"
@@ -75,8 +75,8 @@
                 android:layout_width="wrap_content"
                 android:layout_gravity="center|center_horizontal"
                 android:singleLine="true"
-                android:textSize="20sp"
-                android:textColor="@color/white"/>
+                android:text="{dummy}"
+                style="@style/page_title_dark"/>
             <ImageView
                     android:id="@+id/tv_title_bottom_drawable"
                     android:layout_height="5dp"

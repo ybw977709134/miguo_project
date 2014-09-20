@@ -14,7 +14,7 @@
 		android:layout_alignParentTop="true"
 		android:focusable="true"
 		android:focusableInTouchMode="true"
-		android:background="@drawable/navbar_bg">
+		android:background="@drawable/contacts_bg_navbar">
 
 		<ImageButton
 			android:id="@+id/contact_add"
@@ -58,8 +58,7 @@
 				android:layout_height="wrap_content"
 				android:clickable="true"
 				android:text="@string/tab_contacts"
-                android:textStyle="bold"
-				style="@style/page_title"/>
+				style="@style/page_title_dark" />
 
 			<ImageView
 				android:id="@+id/title_arrow"

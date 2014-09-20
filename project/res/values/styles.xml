@@ -1,11 +1,16 @@
 <resources>
 
 
+	<style name="page_title">
+		<item name="android:layout_centerInParent">true</item>
+		<item name="android:textSize">20sp</item>
+		<item name="android:textColor">@color/text_gray1</item>
+		<item name="android:textStyle">bold</item>
+	</style>
 
-    <style name="page_title">
-        <item name="android:layout_centerInParent">true</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/white</item>
+	<!-- 深色背景中的页面标题。-->
+    <style name="page_title_dark" parent="@style/page_title">
+	    <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="contact_subtitle">

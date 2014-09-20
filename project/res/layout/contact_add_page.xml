@@ -7,7 +7,7 @@
         android:id="@+id/title_bar"
         android:layout_height="@dimen/title_bar_height"
         android:layout_width="fill_parent"
-        android:background="@drawable/navbar_bg">
+        android:background="@drawable/contacts_bg_navbar">
         <ImageButton 
             android:id="@+id/title_close"
             android:layout_height="50dp"
@@ -19,9 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_centerInParent="true"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
+            style="@style/page_title_dark"
             android:text="@string/firends_add_pagetitle"/>
     </RelativeLayout>
     <LinearLayout 

@@ -15,7 +15,7 @@
 		android:layout_alignParentTop="true"
 		android:focusable="true"
 		android:focusableInTouchMode="true"
-		android:background="@drawable/navbar_bg">
+		android:background="@drawable/contacts_bg_navbar">
 
 		<ImageButton
 			android:id="@+id/contact_refresh"
@@ -51,9 +51,7 @@
                     android:layout_gravity="center|center_horizontal"
                     android:singleLine="true"
                     android:text="@string/tab_contacts"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:textColor="@color/white"/>
+                    style="@style/page_title_dark"/>
             <ImageView
                     android:id="@+id/tv_title_bottom_drawable"
                     android:layout_height="5dp"

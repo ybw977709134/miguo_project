@@ -8,7 +8,7 @@
         android:layout_height="@dimen/title_bar_height"
         android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
-        android:background="@drawable/navbar_bg">
+        android:background="@drawable/messages_bg_navbar">
         <ImageButton 
             android:id="@+id/title_edit"
             android:layout_height="50dp"
@@ -20,8 +20,7 @@
 	        android:id="@+id/txtSmsTitle"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            style="@style/page_title"
-            android:textStyle="bold"
+            style="@style/page_title_dark"
             android:text="@string/app_name"/>
     </RelativeLayout>
     

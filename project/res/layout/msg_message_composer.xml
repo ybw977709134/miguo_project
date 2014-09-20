@@ -10,7 +10,7 @@
         android:id="@+id/title_bar"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/navbar_bg" >
+        android:background="@drawable/messages_bg_navbar" >
 
         <ImageButton
             android:id="@+id/img_back"
@@ -34,8 +34,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="xiao Qiang ggggggggggggggggggggggggggg"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
+            style="@style/page_title_dark"/>
 
         <ImageButton
             android:id="@+id/img_call"

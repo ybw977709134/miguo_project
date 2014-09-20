@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<color name="logo_green">#00c630</color>
+
+	<color name="tabbar_color_red">#ffe71326</color>
+	<color name="tabbar_color_geeen">#ff00c630</color>
+	<color name="tabbar_color_blue">#ff1badfa</color>
+
 	<color name="group_member_counts_gray">#b3b3b3</color>
 	<color name="group_iteration_item_bg">#DD505050</color>
 	<color name="login_hint_font">#515151</color>

@@ -16,11 +16,11 @@
     <string name="registration_failed">WowTalk Biz(连接解除)</string>
     <string name="registration_success"></string>
 
-	<string name="tab_sms">会话</string>
-	<string name="tab_contacts">联系人</string>
-	<string name="tab_friends">朋友们</string>
+	<string name="tab_sms">消息</string>
+	<string name="tab_contacts">小伙伴</string>
+	<string name="tab_friends">好友圈</string>
 	<string name="tab_events">活动</string>
-	<string name="tab_settings">设置</string>
+	<string name="tab_settings">更多</string>
 
     <string name="title_group_apply">入群请求</string>
 

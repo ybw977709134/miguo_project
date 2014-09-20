@@ -253,23 +253,23 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 
 		switch (index) {
 		case TAB_SMS:
-			txtTabSms.setTextColor(getResources().getColor(R.color.white));
+			txtTabSms.setTextColor(getResources().getColor(R.color.tabbar_color_red));
 			imgTabSms.setImageResource(R.drawable.tabbar_sms_a);
 			break;
 		case TAB_CONTACTS:
-			txtTabContact.setTextColor(getResources().getColor(R.color.white));
+			txtTabContact.setTextColor(getResources().getColor(R.color.tabbar_color_blue));
 			imgTabContacts.setImageResource(R.drawable.tabbar_contact_a);
 			break;
 		case TAB_FRIENDS:
-			txtTabFriend.setTextColor(getResources().getColor(R.color.white));
+			txtTabFriend.setTextColor(getResources().getColor(R.color.tabbar_color_geeen));
 			imgTabFriends.setImageResource(R.drawable.tabbar_feed_a);
 			break;
 		case TAB_HOME:
-			txtTabHome.setTextColor(getResources().getColor(R.color.white));
+			txtTabHome.setTextColor(getResources().getColor(R.color.tabbar_color_geeen));
 			imgTabHome.setImageResource(R.drawable.tabbar_home_green);
 			break;
 		case TAB_SETTING:
-			txtTabSetting.setTextColor(getResources().getColor(R.color.white));
+			txtTabSetting.setTextColor(getResources().getColor(R.color.tabbar_color_geeen));
 			imgTabSetting.setImageResource(R.drawable.tabbar_settings_a);
 			break;
 		default:

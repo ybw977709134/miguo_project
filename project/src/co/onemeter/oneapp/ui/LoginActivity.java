@@ -283,12 +283,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 
     private void login() {
-        final String companyId = "wowtest"; // TODO remove company ID
         final String username = edtAccount.getText().toString().trim();
         final String pwdStr = edtPassword.getText().toString().trim();
-        if (companyId.equals("")) {
-            return;
-        }
         if (username.equals("")) {
             alert(R.string.login_user_cannot_be_null);
             return;
@@ -300,7 +296,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         // 添加帐号时，判断此帐号是否已经存在于account_list中
         if (mIsAddAccount) {
-            String tempWowtalkId = companyId + "_" + username;
+            String tempWowtalkId = username;
             ArrayList<Account> accounts = mPrefUtil.getAccountList();
             for (Account account : accounts) {
                 if (tempWowtalkId.equalsIgnoreCase(account.wowtalkId)) {
@@ -341,7 +337,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 }
 
                 int result = -1;
-                result = webIF.loginForBiz(companyId, username, pwdStr, buddy);
+                result = webIF.fLogin(username, pwdStr, buddy);
                 System.out.println(result);
                 Message msg = Message.obtain();
                 if (result == ErrorCode.OK) {

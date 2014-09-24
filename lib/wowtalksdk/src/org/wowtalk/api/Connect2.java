@@ -50,7 +50,7 @@ public class Connect2 {
     /**
      * 中央服务器地址
      */
-    public static final String HOST_URL_CENTER_SERVER = GlobalSetting.WEB_HOST_HTTPS;
+    public static final String HOST_URL_CENTER_SERVER = GlobalSetting.WEB_HOST_HTTP;
     /**
      * web服务器domain，根据用户的公司填写的服务器地址，第一次登录时从中央服务器获取
      */
@@ -68,10 +68,10 @@ public class Connect2 {
     private int mFlagIndex;
 
     /**
-     * 连接地方服务器
+     * 连接中央服务器
      */
     public Connect2() {
-        this(false);
+        this(true);
     }
 
     /**

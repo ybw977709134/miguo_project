@@ -50,15 +50,6 @@
     </orderEntry>
     <orderEntry type="module" module-name="google-play-services_lib" exported="" />
     <orderEntry type="module" module-name="messagebox" exported="" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../lib/wowtalksdk/libs/wowtalksdk.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" scope="PROVIDED" name="Android_Map_V2.0.4" level="project" />
     <orderEntry type="module" module-name="SimpleQRCodeLib" />
     <orderEntry type="module" module-name="DraggableListView" />
@@ -66,6 +57,15 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../lib/wowtalksdk/libs/kakasi.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../lib/wowtalksdk/libs/wowtalk_jar_onemeter_haslog_20140924.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

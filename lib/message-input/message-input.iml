@@ -49,7 +49,7 @@
     <orderEntry type="module-library" scope="PROVIDED">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../wowtalksdk/libs/wowtalksdk.jar!/" />
+          <root url="jar://$MODULE_DIR$/../wowtalksdk/libs/wowtalk_jar_onemeter_haslog_20140924.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

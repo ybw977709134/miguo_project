@@ -25,15 +25,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/wowtalksdk.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="module-library" scope="PROVIDED">
       <library>
         <CLASSES>
@@ -47,6 +38,15 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/kakasi.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/wowtalk_jar_onemeter_haslog_20140924.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

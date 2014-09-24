@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,14 +13,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.Utils;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.utils.Utils;
 
 public class RegisterActivity extends Activity implements OnClickListener{
 	
@@ -89,9 +88,9 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (s.length() == 0) {
-					edtAccount.setTextColor(getResources().getColor(R.color.login_input_font));
+					edtAccount.setTextColor(getResources().getColor(R.color.login_hint_font));
 				} else {
-					edtAccount.setTextColor(Color.WHITE);
+                    edtAccount.setTextColor(getResources().getColor(R.color.login_input_font));
 				}
 			}
 			
@@ -112,9 +111,9 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (s.length() == 0) {
-					edtPwd.setTextColor(getResources().getColor(R.color.login_input_font));
+					edtPwd.setTextColor(getResources().getColor(R.color.login_hint_font));
 				} else {
-					edtPwd.setTextColor(Color.WHITE);
+                    edtPwd.setTextColor(getResources().getColor(R.color.login_input_font));
 				}
 			}
 			
@@ -135,9 +134,9 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (s.length() == 0) {
-					edtPwdConfirm.setTextColor(getResources().getColor(R.color.login_input_font));
+					edtPwdConfirm.setTextColor(getResources().getColor(R.color.login_hint_font));
 				} else {
-					edtPwdConfirm.setTextColor(Color.WHITE);
+                    edtPwdConfirm.setTextColor(getResources().getColor(R.color.login_input_font));
 				}
 			}
 			

@@ -1073,7 +1073,7 @@ public class WowTalkWebServerIF {
 
 		final String action = "register";
 		String postStr = "action=" + action
-				+ "&wowtalk_id=" + Utils.urlencodeUtf8(wowtalk_id)
+				+ "&user=" + Utils.urlencodeUtf8(wowtalk_id)
 				+ "&plain_password=" + Utils.urlencodeUtf8(password)
 				+ "&lang=" + Locale.getDefault().getLanguage();
 

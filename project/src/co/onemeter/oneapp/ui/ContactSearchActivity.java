@@ -58,7 +58,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 	private TextView txtResultCount;
     private ListView lvBuddy;
 	private ListView lvGroups;
-	
+
+    private BuddySearchItemAdapter buddyAdapter;
 	private GroupSearchAdapter groupAdapter;
 
     private String buddySearchContent="";
@@ -100,6 +101,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
             if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
                 if(!buddySearchContent.equals(curSearchTxt)) {
                     searchedBuddyList.clear();
+                    if (buddyAdapter != null)
+                        buddyAdapter.notifyDataSetChanged();
                 }
                 buddySearchContent=edtSearchContent.getText().toString();
             } else {
@@ -154,6 +157,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 			protected Void doInBackground(Void... arg0) {
 //				buddy = new Buddy();
                 searchedBuddyList.clear();
+                if (buddyAdapter != null)
+                    buddyAdapter.notifyDataSetChanged();
 				errno = mWebif.fSearchBuddy(wowtalkId,Buddy.ACCOUNT_TYPE_NORMAL, searchedBuddyList);
 
 //                mAllowAdd = errno == ErrorCode.OK
@@ -177,6 +182,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 			protected void onPostExecute(Void v) {
                 mMsgBox.dismissWait();
 
+                if (buddyAdapter != null)
+                    buddyAdapter.notifyDataSetChanged();
 				if (errno == ErrorCode.OK) {
 					fShowBuddyResult();
 				} else if (errno == ErrorCode.USER_NOT_EXISTS) {
@@ -244,7 +251,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //            txtPersonName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
 //            btnAdd.setVisibility(mAllowAdd ? View.VISIBLE : View.INVISIBLE);
 //        }
-        lvBuddy.setAdapter(new BuddySearchItemAdapter(this,searchedBuddyList,edtSearchContent.getText().toString().trim(),mMsgBox));
+        lvBuddy.setAdapter(buddyAdapter = new BuddySearchItemAdapter(this,searchedBuddyList,edtSearchContent.getText().toString().trim(),mMsgBox));
         setSearchResultStatus();
 	}
 	

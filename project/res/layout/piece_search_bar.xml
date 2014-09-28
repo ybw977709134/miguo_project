@@ -27,7 +27,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
 		android:background="@drawable/btn_gray_selector"
-		android:textColor="@color/white"
+		android:textColor="@color/text_gray1"
 		android:textSize="@dimen/text_size_default"
 		android:layout_marginLeft="@dimen/padding_small"
 		android:text="@string/search"/>

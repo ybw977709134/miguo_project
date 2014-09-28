@@ -51,9 +51,11 @@
             android:layout_centerInParent="true"
             android:singleLine="true"
             style="@style/page_title_dark"
-            android:text="@string/contacts_search_group"/>
+            android:text="@string/contacts_search_buddy"/>
 	</RelativeLayout>
 	<include
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
 		android:id="@+id/relativeLayout01"
 		layout="@layout/piece_search_bar"
 		android:layout_below="@+id/title_bar"/>

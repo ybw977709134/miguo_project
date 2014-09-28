@@ -1,14 +1,14 @@
 package org.wowtalk.ui;
 
-import java.util.HashSet;
-
 import co.onemeter.oneapp.ui.Log;
+
+import java.util.HashSet;
 
 public class GlobalValue {
     /** Release option, release as WowCity? */
-    public final static boolean RELEASE_AS_WOWCITY = false;
+    public final static boolean RELEASE_AS_WOWCITY = true;
     /** Release option, release as WowTalkBiz? */
-    public final static boolean RELEASE_AS_WOWTALKBIZ = true;
+    public final static boolean RELEASE_AS_WOWTALKBIZ = false;
 
 	/*don't change this*/
 	public static final String INCOME_MISSEDCALL_INTENT="org.wowtalk.intent.missedcall";

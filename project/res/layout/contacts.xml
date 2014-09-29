@@ -214,7 +214,6 @@
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"
 					android:divider="@null"
-					android:visibility="gone"
 					android:cacheColorHint="@null"/>
 
 			</LinearLayout>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:roundedImgView="http://schemas.android.com/apk/co.onemeter.oneapp"
+        xmlns:circleImageView="http://schemas.android.com/apk/res/co.onemeter.oneapp"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/white"
@@ -144,25 +144,21 @@
                 <RelativeLayout
                         android:id="@+id/information"
                         android:layout_width="fill_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="100dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:gravity="center_vertical"
                         android:clickable="true">
 
-                    <org.wowtalk.ui.msg.RoundedImageView
-                            android:id="@+id/img_thumbnail"
-                            android:layout_height="@dimen/setting_item_left_drawable_size"
-                            android:layout_width="@dimen/setting_item_left_drawable_size"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:scaleType="centerCrop"
-                            roundedImgView:corner_radius="@dimen/rounded_img_view_cornor_radius"
-                            roundedImgView:border_width="@dimen/rounded_img_view_border_width"
-                            roundedImgView:border_color="@color/rounded_img_view_border_color"
-                            roundedImgView:click_dim="true"
-                            android:clickable="true"
-                            android:src="@drawable/default_avatar_90"/>
+	                <co.onemeter.oneapp.ui.CircleImageView
+		                android:id="@+id/img_thumbnail"
+		                android:layout_height="100dp"
+		                android:layout_width="100dp"
+		                circleImageView:circle_border_width="2dp"
+		                android:layout_alignParentLeft="true"
+		                android:layout_centerVertical="true"
+		                android:clickable="true"
+		                android:src="@drawable/default_avatar_90" />
 
                     <ImageButton
                             android:layout_width="wrap_content"

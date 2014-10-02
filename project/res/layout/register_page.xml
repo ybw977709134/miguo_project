@@ -106,7 +106,7 @@
 						android:paddingLeft="10dp"
 						android:paddingRight="10dp"
 						android:singleLine="true"
-						android:imeOptions="actionDone"
+						android:imeOptions="actionNext"
 						android:inputType="textPassword"
 						android:textSize="17sp" />
 					<ImageButton

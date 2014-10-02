@@ -76,7 +76,8 @@ public class SettingActivity extends Activity implements OnClickListener {
 
 	private RelativeLayout mInformation;
 	private RelativeLayout mAccount;
-	
+
+    private TextView mName;
 	private TextView mTrends;
 	private TextView mPrivacy;
 	private TextView mPlugin;
@@ -154,6 +155,7 @@ public class SettingActivity extends Activity implements OnClickListener {
     private void initView() {
 		mInformation = (RelativeLayout) findViewById(R.id.information);
 		mAccount = (RelativeLayout) findViewById(R.id.account);
+        mName = (TextView)findViewById(R.id.txt_name);
 		mTrends = (TextView) findViewById(R.id.trends);
 		mPrivacy = (TextView) findViewById(R.id.privacy);
 		mPlugin = (TextView) findViewById(R.id.plug_in);
@@ -434,6 +436,7 @@ public class SettingActivity extends Activity implements OnClickListener {
 		me.userID = PrefUtil.getInstance(this).getUid();
 		me.photoUploadedTimeStamp = PrefUtil.getInstance(this).getMyPhotoUploadedTimestamp();
 		PhotoDisplayHelper.displayPhoto(this, imgPhoto, R.drawable.default_avatar_90, me, true);
+        mName.setText(mPrefUtil.getMyNickName());
 
         updateNoticeStatus();
         setAccountData();

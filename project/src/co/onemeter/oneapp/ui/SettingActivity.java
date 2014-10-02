@@ -1,27 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import org.wowtalk.api.Account;
-import org.wowtalk.api.AlbumCover;
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.IDBTableChangeListener;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.UpdatesInfo;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.BottomButtonBoard;
-import org.wowtalk.ui.GlobalValue;
-import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.adapter.AccountsListAdapter;
-import co.onemeter.oneapp.utils.AppUpgradeTask;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -31,19 +9,24 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.adapter.AccountsListAdapter;
+import co.onemeter.oneapp.utils.AppUpgradeTask;
 import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.BottomButtonBoard;
+import org.wowtalk.ui.GlobalValue;
+import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.PhotoDisplayHelper;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class SettingActivity extends Activity implements OnClickListener, OnItemClickListener {
     class MyAppUpgradeTask extends AppUpgradeTask {
@@ -527,29 +510,10 @@ public class SettingActivity extends Activity implements OnClickListener, OnItem
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position,
             long id) {
-        if (0 == position) {
-            return;
-        }
-        showSwitchAccountOption(position);
+        // Wowtalk biz 的逻辑是切换帐号，
+        // 一米家校的逻辑改成了进入个人资料页面。
+        Intent intent = new Intent();
+        intent.setClass(SettingActivity.this, MyInfoActivity.class);
+        startActivity(intent);
     }
-
-    private void showSwitchAccountOption(final int position) {
-        final Account newAccount = mAccountDatas.get(position);
-        final BottomButtonBoard bottomBoard = new BottomButtonBoard(this, getWindow().getDecorView());
-        bottomBoard.add(String.format(getString(R.string.manage_account_switch_confirm), newAccount.wowtalkId), BottomButtonBoard.BUTTON_BLUE,
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        bottomBoard.dismiss();
-                        mMsgBox.showWait(getString(R.string.manage_account_switch_prompt));
-                        Account oldAccount = mAccountDatas.get(0);
-                        ManageAccountsActivity.switchAccount(SettingActivity.this,
-                                oldAccount, newAccount, mSwitchAccountHandler);
-                    }
-                });
-        bottomBoard.addCancelBtn(getString(R.string.cancel));
-        bottomBoard.show();
-
-    }
-
 }

@@ -90,7 +90,10 @@ public class LoginActivity extends Activity implements OnClickListener {
                         webIF.logoutByUid(oldAccount.uid, oldAccount.password);
                     }
 
-                    String company = "wowtest"; // TODO remove company
+                    // Company ID 是 Wowtalk biz 的概念，
+                    // 为了在“一米家校”中以最小改动复用 Wowtalk biz 的代码，
+                    // 这里硬编码一个 dummy company ID.
+                    String company = "onemeter";
                     mPrefUtil.setAutoLogin(isAutoLogin);
                     if(!isAutoLogin) {
                         mPrefUtil.setCompanyId(company);

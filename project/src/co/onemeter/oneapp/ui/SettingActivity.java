@@ -12,10 +12,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.*;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.adapter.AccountsListAdapter;
 import co.onemeter.oneapp.utils.AppUpgradeTask;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class SettingActivity extends Activity implements OnClickListener, OnItemClickListener {
+public class SettingActivity extends Activity implements OnClickListener {
     class MyAppUpgradeTask extends AppUpgradeTask {
 
         public MyAppUpgradeTask(Context context, String md5sum) {
@@ -73,8 +74,6 @@ public class SettingActivity extends Activity implements OnClickListener, OnItem
     private static final int MSG_LOGOUT_SUCCESS = 100;
     private static final int HANDLER_GET_ACCOUNT_UNREAD_COUNT = 1;
 
-    private ListView mAccountListView;
-    private TextView mManageAccounts;
 	private RelativeLayout mInformation;
 	private RelativeLayout mAccount;
 	
@@ -101,7 +100,6 @@ public class SettingActivity extends Activity implements OnClickListener, OnItem
     private RelativeLayout sysNoticeSettingLayout;
     private TextView tvNoticeStatus;
 
-    private AccountsListAdapter mAccountAdapter;
     private ArrayList<Account> mAccountDatas;
 
     private Handler mSwitchAccountHandler = new Handler() {
@@ -135,9 +133,6 @@ public class SettingActivity extends Activity implements OnClickListener, OnItem
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
             case HANDLER_GET_ACCOUNT_UNREAD_COUNT:
-                mAccountAdapter.setDataSource(mAccountDatas);
-                mAccountAdapter.notifyDataSetChanged();
-                ListHeightUtil.setListHeight(mAccountListView);
                 break;
             default:
                 break;
@@ -157,8 +152,6 @@ public class SettingActivity extends Activity implements OnClickListener, OnItem
     };
 
     private void initView() {
-        mAccountListView = (ListView) findViewById(R.id.accounts_listview);
-        mManageAccounts = (TextView) findViewById(R.id.manage_accounts);
 		mInformation = (RelativeLayout) findViewById(R.id.information);
 		mAccount = (RelativeLayout) findViewById(R.id.account);
 		mTrends = (TextView) findViewById(R.id.trends);
@@ -186,8 +179,6 @@ public class SettingActivity extends Activity implements OnClickListener, OnItem
         mUpgradeProgressBar.setVisibility(View.GONE);
         mUpgradeProgressBar.setMax(100);
 
-        mAccountListView.setOnItemClickListener(this);
-        mManageAccounts.setOnClickListener(this);
         sysNoticeSettingLayout.setOnClickListener(this);
 		mInformation.setOnClickListener(this);
         imgPhoto.setOnClickListener(this);
@@ -233,10 +224,6 @@ public class SettingActivity extends Activity implements OnClickListener, OnItem
 	public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
-            case R.id.manage_accounts:
-                intent.setClass(SettingActivity.this, ManageAccountsActivity.class);
-                startActivity(intent);
-                break;
             case R.id.sys_notice_layout:
                 intent.setClass(SettingActivity.this, SysNoticeSetting.class);
                 startActivityForResult(intent, REQ_ID_SYS_NOTICE_SETTING);
@@ -495,15 +482,6 @@ public class SettingActivity extends Activity implements OnClickListener, OnItem
             mPrefUtil.saveAccountsList(null, account);
             mAccountDatas.add(account);
         }
-
-        if (null == mAccountAdapter) {
-            mAccountAdapter = new AccountsListAdapter(this, mAccountDatas);
-            mAccountListView.setAdapter(mAccountAdapter);
-        } else {
-            mAccountAdapter.setDataSource(mAccountDatas);
-            mAccountAdapter.notifyDataSetChanged();
-        }
-        ListHeightUtil.setListHeight(mAccountListView);
     }
 
     @Override
@@ -511,16 +489,6 @@ public class SettingActivity extends Activity implements OnClickListener, OnItem
         super.onPause();
         MobclickAgent.onPause(this);
         Database.removeDBTableChangeListener(mAlbumCoverObserver);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, final int position,
-            long id) {
-        // Wowtalk biz 的逻辑是切换帐号，
-        // 一米家校的逻辑改成了进入个人资料页面。
-        Intent intent = new Intent();
-        intent.setClass(SettingActivity.this, MyInfoActivity.class);
-        startActivity(intent);
     }
 
     /**

@@ -109,38 +109,11 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <ListView
-                    android:id="@+id/accounts_listview"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/manage_accounts"
-                    android:layout_width="fill_parent"
-                    android:layout_height="40dp"
-                    android:background="@drawable/menu_view_middle_selector"
-                    android:textColor="@color/menu_color_blue"
-                    android:textSize="20sp"
-                    android:gravity="center"
-                    android:text="@string/manage_account_title"/>
-                <ImageView
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:background="@drawable/divider"/>
-            </LinearLayout>
-
-            <LinearLayout
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:layout_marginTop="@dimen/setting_items_padding"
                     android:orientation="vertical">
 
-                <ImageView
-                        android:layout_height="wrap_content"
-                        android:layout_width="fill_parent"
-                        android:background="@drawable/divider"/>
                 <RelativeLayout
                         android:id="@+id/information"
                         android:layout_width="fill_parent"
@@ -327,6 +300,7 @@
                 <ImageView
                         android:layout_height="wrap_content"
                         android:layout_width="fill_parent"
+                        android:visibility="gone"
                         android:background="@drawable/divider"/>
                 <TextView
                         android:id="@+id/tell_friend"

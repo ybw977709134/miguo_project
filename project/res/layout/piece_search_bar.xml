@@ -9,6 +9,7 @@
 		android:id="@+id/edt_search"
 		android:layout_toLeftOf="@+id/btn_search"
 		android:paddingRight="30dp"
+		android:imeOptions="actionSearch"
 		style="@style/search_inputbox"/>
     <ImageButton
         android:id="@+id/field_clear"

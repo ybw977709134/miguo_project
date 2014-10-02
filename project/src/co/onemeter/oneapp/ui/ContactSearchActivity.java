@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
@@ -362,7 +364,17 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
                 edtSearchContent.setText("");
             }
         });
-		
+        edtSearchContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    fStartSearch();
+                    return true;
+                }
+                return false;
+            }
+        });
+
 //		framePhoto.setOnClickListener(this);
 		btnTitleBack.setOnClickListener(this);
 		btnSearchGroup.setOnClickListener(this);

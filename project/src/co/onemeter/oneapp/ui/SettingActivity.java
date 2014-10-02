@@ -84,6 +84,7 @@ public class SettingActivity extends Activity implements OnClickListener, OnItem
 	private TextView mTellFriend;
 	private TextView mRateus;
 	private TextView mAboutus;
+    private TextView mLogout;
     private View mCheckForUpdates;
 
 	private ImageView imgPhoto;
@@ -166,6 +167,7 @@ public class SettingActivity extends Activity implements OnClickListener, OnItem
 		mTellFriend = (TextView) findViewById(R.id.tell_friend);
 		mRateus = (TextView) findViewById(R.id.rate_us);
 		mAboutus = (TextView) findViewById(R.id.about_us);
+        mLogout = (TextView) findViewById(R.id.logout);
 		mNewUpdateView = (TextView) findViewById(R.id.new_update);
 		if (StartActivity.instance().isNewUpdate()) {
 		    mNewUpdateView.setVisibility(View.VISIBLE);
@@ -196,6 +198,7 @@ public class SettingActivity extends Activity implements OnClickListener, OnItem
 		mTellFriend.setOnClickListener(this);
 		mRateus.setOnClickListener(this);
 		mAboutus.setOnClickListener(this);
+        mLogout.setOnClickListener(this);
         mCheckForUpdates.setOnClickListener(this);
         findViewById(R.id.emergency_contact).setOnClickListener(this);
         findViewById(R.id.favorite_moment).setOnClickListener(this);
@@ -273,6 +276,9 @@ public class SettingActivity extends Activity implements OnClickListener, OnItem
                 break;
             case R.id.tell_friend:
                 tellFriend(v);
+                break;
+            case R.id.logout:
+                logoutAccount();
                 break;
             case R.id.rate_us:
                 Intent rateIntent = new Intent(Intent.ACTION_VIEW);
@@ -515,5 +521,39 @@ public class SettingActivity extends Activity implements OnClickListener, OnItem
         Intent intent = new Intent();
         intent.setClass(SettingActivity.this, MyInfoActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     * 这是经过简化的 {@link co.onemeter.oneapp.ui.ManageAccountsActivity#logoutAccount(android.os.Handler)}，
+     * 移除了自动切换帐号的逻辑。
+     */
+    private void logoutAccount() {
+        mMsgBox.showWait();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int resultCode =  mWeb.fLogout();
+                if (resultCode == ErrorCode.OK) {
+                    ManageAccountsActivity.deleteDatasInDB(SettingActivity.this);
+                    mPrefUtil.logoutAccount();
+                    WowTalkVoipIF.getInstance(SettingActivity.this).fStopWowTalkService();
+                    Database database = new Database(SettingActivity.this);
+                    database.close();
+
+                    mMsgBox.dismissWait();
+
+                    // goto login page
+                    if (StartActivity.isInstanciated()) {
+                        StartActivity.instance().finish();
+                    }
+                    Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    mMsgBox.dismissWait();
+                    mMsgBox.toast(R.string.manage_account_logout_failure);
+                }
+            }
+        }).start();
     }
 }

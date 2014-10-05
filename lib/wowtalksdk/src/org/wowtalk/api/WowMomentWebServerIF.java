@@ -701,7 +701,7 @@ public class WowMomentWebServerIF {
     }
 
     public int fGetMomentsOfAll(long maxTimestamp, int count, boolean withReview) {
-        return doGetMoment("get_moments_of_all",maxTimestamp,count,withReview,null);
+        return doGetMoment("get_moments_for_all_buddys",maxTimestamp,count,withReview,null);
     }
     
     /**

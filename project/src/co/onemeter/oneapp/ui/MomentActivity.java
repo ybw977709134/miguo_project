@@ -639,27 +639,30 @@ public class MomentActivity extends Activity
             }
         }
         //2. filter by department and the limits of the moments
-        ArrayList<Moment> momentsFilteredByDeptAndLimits = new ArrayList<Moment>();
-        for(Moment aMoment : momentsFilteredByTag) {
-            // dept
-            if (buddyListInCurDepartment.contains(aMoment.owner)) {
-                // 自己发的动态，自己能看到
-                if (!TextUtils.isEmpty(mMyUid) && mMyUid.equals(aMoment.owner.userID)) {
-                    momentsFilteredByDeptAndLimits.add(aMoment);
-                } else if (aMoment.limitedDepartmentList.isEmpty()) {
-                    // 没有limits，则都可见
-                    momentsFilteredByDeptAndLimits.add(aMoment);
-                } else if (!mDeptIds.isEmpty()) {
-                    // limits
-                    for (String deptId : mDeptIds) {
-                        if (aMoment.limitedDepartmentList.contains(deptId)) {
-                            momentsFilteredByDeptAndLimits.add(aMoment);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+        // (BEGIN this filter is disabled)
+//        ArrayList<Moment> momentsFilteredByDeptAndLimits = new ArrayList<Moment>();
+//        for(Moment aMoment : momentsFilteredByTag) {
+//            // dept
+//            if (buddyListInCurDepartment.contains(aMoment.owner)) {
+//                // 自己发的动态，自己能看到
+//                if (!TextUtils.isEmpty(mMyUid) && mMyUid.equals(aMoment.owner.userID)) {
+//                    momentsFilteredByDeptAndLimits.add(aMoment);
+//                } else if (aMoment.limitedDepartmentList.isEmpty()) {
+//                    // 没有limits，则都可见
+//                    momentsFilteredByDeptAndLimits.add(aMoment);
+//                } else if (!mDeptIds.isEmpty()) {
+//                    // limits
+//                    for (String deptId : mDeptIds) {
+//                        if (aMoment.limitedDepartmentList.contains(deptId)) {
+//                            momentsFilteredByDeptAndLimits.add(aMoment);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+        // (END this filter is disabled)
+        ArrayList<Moment> momentsFilteredByDeptAndLimits = momentsFilteredByTag;
 
         //3. filter by favorite
         ArrayList<Moment> momentsFilteredByFavorite;

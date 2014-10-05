@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:roundedImgView="http://schemas.android.com/apk/auto-res"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/bg_gray1" >
@@ -17,12 +16,12 @@
             android:layout_width="50dp"
             android:layout_alignParentLeft="true"
             android:background="@null"
-            android:src="@drawable/nav_back_selector"/>
+            android:src="@drawable/nav_back_selector_green"/>
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_centerInParent="true"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="20sp"
             android:text="@string/image_change_cover"/>

@@ -21,7 +21,7 @@
                 android:layout_width="50dp"
                 android:layout_alignParentLeft="true"
                 android:background="@null"
-                android:src="@drawable/nav_back_selector"/>
+                android:src="@drawable/nav_back_selector_green"/>
 
         <TextView
                 android:id="@+id/title_moment_send"
@@ -30,7 +30,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="15dp"
-                android:textColor="@color/white"
+                android:textColor="@color/gray"
                 android:textSize="20sp"
                 android:text="@string/moment_send"/>
 

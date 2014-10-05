@@ -207,7 +207,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         TextView rightConfirm=(TextView) findViewById(R.id.title_moment_send);
 
         if (isContentValid() && isSurveyValid() && !isGetingLocation()) {
-            rightConfirm.setTextColor(getResources().getColor(R.color.white));
+            rightConfirm.setTextColor(getResources().getColor(R.color.logo_green));
             rightConfirm.setEnabled(true);
         } else {
             rightConfirm.setTextColor(getResources().getColor(R.color.gray));

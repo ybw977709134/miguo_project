@@ -232,8 +232,8 @@
     <string name="inputsimpletext_empty">%s不能为空</string>
     <string name="inputsimpletext_failure">更改%s失败</string>
 
-	<string name="moments_all">全部</string>
-	<string name="moments_my">我的</string>
+	<string name="moments_all">分享</string>
+	<string name="moments_my">成长日记</string>
 	<string name="moments_compose">编写动态</string>
 	<string name="moments_compose_camera">拍照</string>
 	<string name="moments_compose_gallery">相册</string>

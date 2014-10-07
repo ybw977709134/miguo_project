@@ -157,6 +157,9 @@ public class MomentActivity extends Activity
     TextView tvAttendance;
     TextView tvTodo;
 
+    View btnAll;
+    View btnMy;
+
     private ImageView ivAllIndicator;
     private ImageView ivTimeLineIndicator;
     private ImageView ivQAIndicator;
@@ -1060,6 +1063,9 @@ public class MomentActivity extends Activity
         if (null != mLoadingTask)
             mLoadingTask.cancel(true);
 //        loadMoments(LOADING_REASON_INIT);
+        initDatas();
+        btnAll.setBackgroundResource(R.drawable.tab_button_left_a);
+        btnMy.setBackgroundResource(R.drawable.tab_button_right);
     }
 
     private void changeModeSingle() {
@@ -1084,6 +1090,10 @@ public class MomentActivity extends Activity
                 btnTitleEdit.setImageResource(R.drawable.nav_more_selector);
             }
         }
+
+        initDatas();
+        btnAll.setBackgroundResource(R.drawable.tab_button_left);
+        btnMy.setBackgroundResource(R.drawable.tab_button_right_a);
     }
 
     /**
@@ -1258,6 +1268,11 @@ public class MomentActivity extends Activity
 
     private void initView() {
         btnTitleLeft = (ImageButton) findViewById(R.id.title_left);
+        btnAll = findViewById(R.id.btn_all);
+        btnMy = findViewById(R.id.btn_me);
+
+        // disabled as per UI design
+        btnTitleLeft.setVisibility(View.GONE);
 
         if(SELECT_MODE_ALL == _selectMode && !isWithFavorite) {
 //            btnTitleLeft.setVisibility((_selectMode == SELECT_MODE_ALL) ? View.GONE : View.VISIBLE);
@@ -1341,6 +1356,8 @@ public class MomentActivity extends Activity
 
         btnTitleLeft.setOnClickListener(this);
         btnTitleEdit.setOnClickListener(this);
+        btnAll.setOnClickListener(this);
+        btnMy.setOnClickListener(this);
 //        btnGotoNewReviews.setOnClickListener(this);
         mAlbumCoverView.findViewById(R.id.frame).setOnClickListener(this);
 
@@ -2043,6 +2060,12 @@ public class MomentActivity extends Activity
             case R.id.tv_title_bottom_drawable:
             case R.id.tv_title:
                 showDepartment();
+                break;
+            case R.id.btn_all:
+                changeModeAll();
+                break;
+            case R.id.btn_me:
+                changeModeSingle();
                 break;
 //            case R.id.hsv_tag_content:
 //                break;

@@ -496,24 +496,24 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
     public static void setTagdesc(final Context context,final Moment moment,ImageView iv,TextView tv,
                                   LinearLayout voteSurveyLayout,final LinearLayoutAsListView lvSurveyOptions,final ArrayList<String> choosed,final Button btnSurvey) {
-        if(TextUtils.isEmpty(moment.tag) || moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_STATUS)) {
-            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_timeline));
-            tv.setText(R.string.timeline);
+        if(TextUtils.isEmpty(moment.tag) || moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_LIFE)) {
+            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_life));
+            tv.setText(R.string.moment_tag_life);
         } else if (moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_QA)) {
             iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_qa));
-            tv.setText(R.string.qa);
-        } else if (moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_REPORT)) {
-            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_report));
-            tv.setText(R.string.moment_tag_report);
+            tv.setText(R.string.moment_tag_qa);
+        } else if (moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_NOTICE)) {
+            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_notice));
+            tv.setText(R.string.moment_tag_notice);
         } else if (moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_SURVEY_SINGLE) || moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_SURVEY_MULTI)) {
-            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_question));
-            tv.setText(R.string.questionnaire);
-        } else if (moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_ATTENDANCE)) {
-            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_attendance));
-            tv.setText(R.string.moment_tag_attendance);
-        } else if (moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_TODO)) {
-            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_todo));
-            tv.setText(R.string.moment_tag_todo);
+            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_survey));
+            tv.setText(R.string.moment_tag_survey);
+        } else if (moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_STUDY)) {
+            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_study));
+            tv.setText(R.string.moment_tag_study);
+        } else if (moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_VIDEO)) {
+            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_video));
+            tv.setText(R.string.moment_tag_video);
         }
 
         setSurveyInfo(context,moment,voteSurveyLayout,lvSurveyOptions,choosed,btnSurvey);

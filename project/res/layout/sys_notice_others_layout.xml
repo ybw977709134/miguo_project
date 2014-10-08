@@ -127,7 +127,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:text="@string/timeline"
+                            android:text="@string/moment_tag_notice"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:textSize="18sp"/>
@@ -154,7 +154,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:text="@string/qa"
+                            android:text="@string/moment_tag_qa"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:textSize="18sp"/>
@@ -181,7 +181,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:text="@string/moment_tag_report"
+                            android:text="@string/moment_tag_study"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:textSize="18sp"/>
@@ -193,6 +193,60 @@
                             android:layout_centerVertical="true"
                             android:scaleType="centerInside"/>
                 </RelativeLayout>
+	            <ImageView
+		            android:layout_height="wrap_content"
+		            android:layout_width="fill_parent"
+		            android:layout_marginLeft="@dimen/def_sys_notice_setting_item_padding_2"
+		            android:background="@drawable/divider"/>
+	            <RelativeLayout
+		            android:layout_width="match_parent"
+		            android:layout_height="@dimen/def_sys_notice_item_height"
+		            android:paddingLeft="@dimen/def_sys_notice_setting_item_padding_2"
+		            android:paddingRight="@dimen/def_sys_notice_setting_item_padding">
+		            <TextView
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/moment_tag_life"
+			            android:textColor="@color/black"
+			            android:textStyle="bold"
+			            android:textSize="18sp"/>
+		            <ImageView
+			            android:id="@+id/iv_sys_notice_life"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_alignParentRight="true"
+			            android:layout_centerVertical="true"
+			            android:scaleType="centerInside"/>
+	            </RelativeLayout>
+	            <ImageView
+		            android:layout_height="wrap_content"
+		            android:layout_width="fill_parent"
+		            android:layout_marginLeft="@dimen/def_sys_notice_setting_item_padding_2"
+		            android:background="@drawable/divider"/>
+	            <RelativeLayout
+		            android:layout_width="match_parent"
+		            android:layout_height="@dimen/def_sys_notice_item_height"
+		            android:paddingLeft="@dimen/def_sys_notice_setting_item_padding_2"
+		            android:paddingRight="@dimen/def_sys_notice_setting_item_padding">
+		            <TextView
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/moment_tag_survey"
+			            android:textColor="@color/black"
+			            android:textStyle="bold"
+			            android:textSize="18sp"/>
+		            <ImageView
+			            android:id="@+id/iv_sys_notice_video"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_alignParentRight="true"
+			            android:layout_centerVertical="true"
+			            android:scaleType="centerInside"/>
+	            </RelativeLayout>
                 <ImageView
                         android:layout_height="wrap_content"
                         android:layout_width="fill_parent"
@@ -208,7 +262,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:text="@string/questionnaire"
+                            android:text="@string/moment_tag_video"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:textSize="18sp"/>

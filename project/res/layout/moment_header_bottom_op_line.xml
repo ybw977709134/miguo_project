@@ -42,7 +42,7 @@
                             android:paddingRight="@dimen/moment_header_bottom_tag_item_margin"
                             android:gravity="center"
                             android:layout_centerInParent="true"
-                            android:text="@string/moments_all"
+                            android:text="@string/moment_tag_all"
                             android:textSize="@dimen/moment_header_bottom_line_txt_size"
                             android:textColor="@color/gray"/>
                     <ImageView
@@ -66,7 +66,7 @@
                             android:paddingRight="@dimen/moment_header_bottom_tag_item_margin"
                             android:gravity="center"
                             android:layout_centerInParent="true"
-                            android:text="@string/timeline"
+                            android:text="@string/moment_tag_notice"
                             android:textSize="@dimen/moment_header_bottom_line_txt_size"
                             android:textColor="@color/gray"/>
                     <ImageView
@@ -76,7 +76,7 @@
                             android:minWidth="@dimen/moment_header_bottom_tag_indicator_min_width"
                             android:layout_centerHorizontal="true"
                             android:layout_alignParentBottom="true"
-                            android:background="@color/moment_tag_timeline"/>
+                            android:background="@color/moment_tag_notice"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -90,7 +90,7 @@
                             android:paddingRight="@dimen/moment_header_bottom_tag_item_margin"
                             android:gravity="center"
                             android:layout_centerInParent="true"
-                            android:text="@string/qa"
+                            android:text="@string/moment_tag_qa"
                             android:textSize="@dimen/moment_header_bottom_line_txt_size"
                             android:textColor="@color/gray"/>
                     <ImageView
@@ -114,7 +114,7 @@
                             android:paddingRight="@dimen/moment_header_bottom_tag_item_margin"
                             android:gravity="center"
                             android:layout_centerInParent="true"
-                            android:text="@string/moment_tag_report"
+                            android:text="@string/moment_tag_study"
                             android:textSize="@dimen/moment_header_bottom_line_txt_size"
                             android:textColor="@color/gray"/>
                     <ImageView
@@ -124,7 +124,7 @@
                             android:minWidth="@dimen/moment_header_bottom_tag_indicator_min_width"
                             android:layout_centerHorizontal="true"
                             android:layout_alignParentBottom="true"
-                            android:background="@color/moment_tag_report"/>
+                            android:background="@color/moment_tag_study"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -138,7 +138,7 @@
                             android:paddingRight="@dimen/moment_header_bottom_tag_item_margin"
                             android:gravity="center"
                             android:layout_centerInParent="true"
-                            android:text="@string/questionnaire"
+                            android:text="@string/moment_tag_life"
                             android:textSize="@dimen/moment_header_bottom_line_txt_size"
                             android:textColor="@color/gray"/>
                     <ImageView
@@ -148,13 +148,12 @@
                             android:minWidth="@dimen/moment_header_bottom_tag_indicator_min_width"
                             android:layout_centerHorizontal="true"
                             android:layout_alignParentBottom="true"
-                            android:background="@color/moment_tag_question"/>
+                            android:background="@color/moment_tag_life"/>
                 </RelativeLayout>
 
                 <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:visibility="gone">
+                        android:layout_height="match_parent" >
                     <TextView
                             android:id="@+id/tv_bottom_selector_attendance"
                             android:layout_width="wrap_content"
@@ -163,7 +162,7 @@
                             android:paddingRight="@dimen/moment_header_bottom_tag_item_margin"
                             android:gravity="center"
                             android:layout_centerInParent="true"
-                            android:text="@string/moment_tag_attendance"
+                            android:text="@string/moment_tag_survey"
                             android:textSize="@dimen/moment_header_bottom_line_txt_size"
                             android:textColor="@color/gray"/>
                     <ImageView
@@ -173,13 +172,12 @@
                             android:minWidth="@dimen/moment_header_bottom_tag_indicator_min_width"
                             android:layout_centerHorizontal="true"
                             android:layout_alignParentBottom="true"
-                            android:background="@color/moment_tag_attendance"/>
+                            android:background="@color/moment_tag_survey"/>
                 </RelativeLayout>
 
                 <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:visibility="gone">
+                        android:layout_height="match_parent" >
                     <TextView
                             android:id="@+id/tv_bottom_selector_todo"
                             android:layout_width="wrap_content"
@@ -188,7 +186,7 @@
                             android:paddingRight="@dimen/moment_header_bottom_tag_item_margin"
                             android:gravity="center"
                             android:layout_centerInParent="true"
-                            android:text="@string/moment_tag_todo"
+                            android:text="@string/moment_tag_video"
                             android:textSize="@dimen/moment_header_bottom_line_txt_size"
                             android:textColor="@color/gray"/>
                     <ImageView
@@ -198,7 +196,7 @@
                             android:minWidth="@dimen/moment_header_bottom_tag_indicator_min_width"
                             android:layout_centerHorizontal="true"
                             android:layout_alignParentBottom="true"
-                            android:background="@color/moment_tag_todo"/>
+                            android:background="@color/moment_tag_video"/>
                 </RelativeLayout>
 
                 <ImageView

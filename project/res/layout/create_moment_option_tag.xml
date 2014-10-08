@@ -14,7 +14,7 @@
                   android:background="@drawable/table_white">
 
         <LinearLayout
-                android:id="@+id/create_tag_timeline"
+                android:id="@+id/create_tag_notice"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/create_moment_option_tag_height"
                 android:orientation="horizontal"
@@ -24,13 +24,13 @@
                     android:layout_width="@dimen/create_moment_option_tag_left_img_width"
                     android:layout_height="match_parent"
                     android:layout_gravity="left"
-                    android:background="@color/moment_tag_timeline"/>
+                    android:background="@color/moment_tag_notice"/>
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/timeline"
+                    android:text="@string/moment_tag_notice"
                     android:textSize="@dimen/create_moment_option_tag_txt_size"
                     android:textColor="@color/color_333333"/>
         </LinearLayout>
@@ -57,7 +57,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/qa"
+                    android:text="@string/moment_tag_qa"
                     android:textSize="@dimen/create_moment_option_tag_txt_size"
                     android:textColor="@color/color_333333"/>
         </LinearLayout>
@@ -68,7 +68,7 @@
                 android:background="@drawable/divider"/>
 
         <LinearLayout
-                android:id="@+id/create_tag_report"
+                android:id="@+id/create_tag_study"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/create_moment_option_tag_height"
                 android:orientation="horizontal"
@@ -78,13 +78,13 @@
                     android:layout_width="@dimen/create_moment_option_tag_left_img_width"
                     android:layout_height="match_parent"
                     android:layout_gravity="left"
-                    android:background="@color/moment_tag_report"/>
+                    android:background="@color/moment_tag_study"/>
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/moment_tag_report"
+                    android:text="@string/moment_tag_study"
                     android:textSize="@dimen/create_moment_option_tag_txt_size"
                     android:textColor="@color/color_333333"/>
         </LinearLayout>
@@ -94,84 +94,81 @@
                 android:layout_width="fill_parent"
                 android:background="@drawable/divider"/>
 
-        <LinearLayout
-                android:id="@+id/create_tag_question"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/create_moment_option_tag_height"
-                android:orientation="horizontal"
-                android:background="@drawable/create_tag_bg_selector">
+	    <LinearLayout
+		    android:id="@+id/create_tag_survey"
+		    android:layout_width="match_parent"
+		    android:layout_height="@dimen/create_moment_option_tag_height"
+		    android:orientation="horizontal"
+		    android:background="@drawable/create_tag_bg_selector">
 
-            <ImageView
-                    android:layout_width="@dimen/create_moment_option_tag_left_img_width"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="left"
-                    android:background="@color/moment_tag_question"/>
+		    <ImageView
+			    android:layout_width="@dimen/create_moment_option_tag_left_img_width"
+			    android:layout_height="match_parent"
+			    android:layout_gravity="left"
+			    android:background="@color/moment_tag_survey"/>
 
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="@string/questionnaire"
-                    android:textSize="@dimen/create_moment_option_tag_txt_size"
-                    android:textColor="@color/color_333333"/>
-        </LinearLayout>
+		    <TextView
+			    android:layout_width="match_parent"
+			    android:layout_height="match_parent"
+			    android:gravity="center"
+			    android:text="@string/moment_tag_survey"
+			    android:textSize="@dimen/create_moment_option_tag_txt_size"
+			    android:textColor="@color/color_333333"/>
+	    </LinearLayout>
 
-        <ImageView
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:background="@drawable/divider"
-                android:visibility="gone"/>
+	    <ImageView
+		    android:layout_height="wrap_content"
+		    android:layout_width="fill_parent"
+		    android:background="@drawable/divider"/>
 
-        <LinearLayout
-                android:id="@+id/create_tag_attendance"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/create_moment_option_tag_height"
-                android:orientation="horizontal"
-                android:background="@drawable/create_tag_bg_selector"
-                android:visibility="gone">
+	    <LinearLayout
+		    android:id="@+id/create_tag_life"
+		    android:layout_width="match_parent"
+		    android:layout_height="@dimen/create_moment_option_tag_height"
+		    android:orientation="horizontal"
+		    android:background="@drawable/create_tag_bg_selector">
 
-            <ImageView
-                    android:layout_width="@dimen/create_moment_option_tag_left_img_width"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="left"
-                    android:background="@color/moment_tag_attendance"/>
+		    <ImageView
+			    android:layout_width="@dimen/create_moment_option_tag_left_img_width"
+			    android:layout_height="match_parent"
+			    android:layout_gravity="left"
+			    android:background="@color/moment_tag_life"/>
 
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="@string/moment_tag_attendance"
-                    android:textSize="@dimen/create_moment_option_tag_txt_size"
-                    android:textColor="@color/color_333333"/>
-        </LinearLayout>
+		    <TextView
+			    android:layout_width="match_parent"
+			    android:layout_height="match_parent"
+			    android:gravity="center"
+			    android:text="@string/moment_tag_life"
+			    android:textSize="@dimen/create_moment_option_tag_txt_size"
+			    android:textColor="@color/color_333333"/>
+	    </LinearLayout>
 
-        <ImageView
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:background="@drawable/divider"
-                android:visibility="gone"/>
+	    <ImageView
+		    android:layout_height="wrap_content"
+		    android:layout_width="fill_parent"
+		    android:background="@drawable/divider"/>
 
-        <LinearLayout
-                android:id="@+id/create_tag_todo"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/create_moment_option_tag_height"
-                android:orientation="horizontal"
-                android:background="@drawable/create_tag_bg_selector"
-                android:visibility="gone">
+	    <LinearLayout
+		    android:id="@+id/create_tag_video"
+		    android:layout_width="match_parent"
+		    android:layout_height="@dimen/create_moment_option_tag_height"
+		    android:orientation="horizontal"
+		    android:background="@drawable/create_tag_bg_selector">
 
-            <ImageView
-                    android:layout_width="@dimen/create_moment_option_tag_left_img_width"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="left"
-                    android:background="@color/moment_tag_todo"/>
+		    <ImageView
+			    android:layout_width="@dimen/create_moment_option_tag_left_img_width"
+			    android:layout_height="match_parent"
+			    android:layout_gravity="left"
+			    android:background="@color/moment_tag_video"/>
 
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="@string/moment_tag_todo"
-                    android:textSize="@dimen/create_moment_option_tag_txt_size"
-                    android:textColor="@color/color_333333"/>
-        </LinearLayout>
+		    <TextView
+			    android:layout_width="match_parent"
+			    android:layout_height="match_parent"
+			    android:gravity="center"
+			    android:text="@string/moment_tag_video"
+			    android:textSize="@dimen/create_moment_option_tag_txt_size"
+			    android:textColor="@color/color_333333"/>
+	    </LinearLayout>
+
     </LinearLayout>
 </RelativeLayout>

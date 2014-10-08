@@ -174,12 +174,12 @@ public class MomentActivity extends Activity
     private String curShownDepartmentId;
 
     private final static int TAG_ALL_IDX=0;
-    public final static int TAG_STATUS_IDX=1;
+    public final static int TAG_NOTICE_IDX =1;
     public final static int TAG_QA_IDX=2;
-    public final static int TAG_SURVEY_IDX=3;
-    public final static int TAG_REPORT_IDX=4;
-    public final static int TAG_ATTENDANCE_IDX=5;
-    public final static int TAG_TODO_IDX=6;
+    public final static int TAG_STUDY_IDX =3;
+    public final static int TAG_SURVEY_IDX=4;
+    public final static int TAG_LIFE_IDX =5;
+    public final static int TAG_VIDEO_IDX =6;
     private final static int TAG_LIST_ITEM_COUNT=7;
     private int curSelectedTagIdx=TAG_ALL_IDX;
 
@@ -551,8 +551,8 @@ public class MomentActivity extends Activity
         switch(tagIdx) {
             case TAG_ALL_IDX:
                 break;
-            case TAG_STATUS_IDX:
-                tag=Moment.SERER_MOMENT_TAG_FOR_STATUS;
+            case TAG_NOTICE_IDX:
+                tag=Moment.SERER_MOMENT_TAG_FOR_LIFE;
                 break;
             case TAG_QA_IDX:
                 tag=Moment.SERER_MOMENT_TAG_FOR_QA;
@@ -564,14 +564,14 @@ public class MomentActivity extends Activity
                     tag=Moment.SERER_MOMENT_TAG_FOR_SURVEY_SINGLE;
                 }
                 break;
-            case TAG_REPORT_IDX:
-                tag=Moment.SERER_MOMENT_TAG_FOR_REPORT;
+            case TAG_STUDY_IDX:
+                tag=Moment.SERER_MOMENT_TAG_FOR_NOTICE;
                 break;
-            case TAG_ATTENDANCE_IDX:
-                tag=Moment.SERER_MOMENT_TAG_FOR_ATTENDANCE;
+            case TAG_LIFE_IDX:
+                tag=Moment.SERER_MOMENT_TAG_FOR_STUDY;
                 break;
-            case TAG_TODO_IDX:
-                tag=Moment.SERER_MOMENT_TAG_FOR_TODO;
+            case TAG_VIDEO_IDX:
+                tag=Moment.SERER_MOMENT_TAG_FOR_VIDEO;
                 break;
             default:
                 break;
@@ -584,23 +584,23 @@ public class MomentActivity extends Activity
         switch(tagIdx) {
             case TAG_ALL_IDX:
                 break;
-            case TAG_STATUS_IDX:
-                tag=context.getString(R.string.timeline);
+            case TAG_NOTICE_IDX:
+                tag=context.getString(R.string.moment_tag_notice);
                 break;
             case TAG_QA_IDX:
-                tag=context.getString(R.string.qa);
+                tag=context.getString(R.string.moment_tag_qa);
                 break;
             case TAG_SURVEY_IDX:
-                tag=context.getString(R.string.questionnaire);
+                tag=context.getString(R.string.moment_tag_survey);
                 break;
-            case TAG_REPORT_IDX:
-                tag=context.getString(R.string.moment_tag_report);
+            case TAG_STUDY_IDX:
+                tag=context.getString(R.string.moment_tag_study);
                 break;
-            case TAG_ATTENDANCE_IDX:
-                tag=context.getString(R.string.moment_tag_attendance);
+            case TAG_LIFE_IDX:
+                tag=context.getString(R.string.moment_tag_life);
                 break;
-            case TAG_TODO_IDX:
-                tag=context.getString(R.string.moment_tag_todo);
+            case TAG_VIDEO_IDX:
+                tag=context.getString(R.string.moment_tag_video);
                 break;
             default:
                 break;
@@ -636,7 +636,7 @@ public class MomentActivity extends Activity
             momentsFilteredByTag= new ArrayList<Moment>();
             for(Moment aMoment : momentsAll) {
                 if((!TextUtils.isEmpty(aMoment.tag) && (aMoment.tag.equals(curSelectedTag) || aMoment.tag.equals(curSelectedTag2))) ||
-                        (TextUtils.isEmpty(aMoment.tag) && TAG_STATUS_IDX==curSelectedTagIdx)) {
+                        (TextUtils.isEmpty(aMoment.tag) && TAG_NOTICE_IDX ==curSelectedTagIdx)) {
                     momentsFilteredByTag.add(aMoment);
                 }
             }
@@ -1693,9 +1693,9 @@ public class MomentActivity extends Activity
         }
 
         switch(tagType) {
-            case TAG_STATUS_IDX:
+            case TAG_NOTICE_IDX:
             case TAG_QA_IDX:
-            case TAG_REPORT_IDX:
+            case TAG_STUDY_IDX:
             case TAG_SURVEY_IDX:
                 //normal moment with tag
                 intent = new Intent(MomentActivity.this,CreateNormalMomentWithTagActivity.class);
@@ -1703,8 +1703,8 @@ public class MomentActivity extends Activity
                 intent.putExtra(CreateMomentActivity.EXTRA_KEY_MOMENT_TAG_ID,tagType);
                 startActivityForResult(intent, REQ_CREATE_MOMENT);
                 break;
-            case TAG_ATTENDANCE_IDX:
-            case TAG_TODO_IDX:
+            case TAG_LIFE_IDX:
+            case TAG_VIDEO_IDX:
             default:
                 intent = new Intent(MomentActivity.this,
                         CreateMomentActivity.class);
@@ -1723,12 +1723,12 @@ public class MomentActivity extends Activity
         final PopupWindow tagOptionPopWindow = Utils.getFixedPopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
 
-        View createTagTimeline=contentView.findViewById(R.id.create_tag_timeline);
+        View createTagTimeline=contentView.findViewById(R.id.create_tag_notice);
         View createTagQA=contentView.findViewById(R.id.create_tag_qa);
-        View createTagQuestion=contentView.findViewById(R.id.create_tag_question);
-        View createTagReport=contentView.findViewById(R.id.create_tag_report);
-        View createTagAttendance=contentView.findViewById(R.id.create_tag_attendance);
-        View createTagTodo=contentView.findViewById(R.id.create_tag_todo);
+        View createTagQuestion=contentView.findViewById(R.id.create_tag_life);
+        View createTagReport=contentView.findViewById(R.id.create_tag_study);
+        View createTagAttendance=contentView.findViewById(R.id.create_tag_survey);
+        View createTagTodo=contentView.findViewById(R.id.create_tag_video);
 
         contentView.findViewById(R.id.root_layout).setOnClickListener(new OnClickListener() {
             @Override
@@ -1740,7 +1740,7 @@ public class MomentActivity extends Activity
             @Override
             public void onClick(View view) {
                 tagOptionPopWindow.dismiss();
-                triggerCreateMoment(TAG_STATUS_IDX);
+                triggerCreateMoment(TAG_NOTICE_IDX);
             }
         });
         createTagQA.setOnClickListener(new OnClickListener() {
@@ -1761,21 +1761,21 @@ public class MomentActivity extends Activity
             @Override
             public void onClick(View view) {
                 tagOptionPopWindow.dismiss();
-                triggerCreateMoment(TAG_REPORT_IDX);
+                triggerCreateMoment(TAG_STUDY_IDX);
             }
         });
         createTagAttendance.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 tagOptionPopWindow.dismiss();
-                triggerCreateMoment(TAG_ATTENDANCE_IDX);
+                triggerCreateMoment(TAG_LIFE_IDX);
             }
         });
         createTagTodo.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 tagOptionPopWindow.dismiss();
-                triggerCreateMoment(TAG_TODO_IDX);
+                triggerCreateMoment(TAG_VIDEO_IDX);
             }
         });
 
@@ -1905,7 +1905,7 @@ public class MomentActivity extends Activity
                 tvSelected=tvAll;
                 ivSelected=ivAllIndicator;
                 break;
-            case TAG_STATUS_IDX:
+            case TAG_NOTICE_IDX:
                 tvSelected=tvTimeLine;
                 ivSelected=ivTimeLineIndicator;
                 break;
@@ -1917,15 +1917,15 @@ public class MomentActivity extends Activity
                 tvSelected=tvQuestionnaire;
                 ivSelected=ivQuestionnaireIndicator;
                 break;
-            case TAG_REPORT_IDX:
+            case TAG_STUDY_IDX:
                 tvSelected=tvReport;
                 ivSelected=ivReportIndicator;
                 break;
-            case TAG_ATTENDANCE_IDX:
+            case TAG_LIFE_IDX:
                 tvSelected=tvAttendance;
                 ivSelected=ivAttendanceIndicator;
                 break;
-            case TAG_TODO_IDX:
+            case TAG_VIDEO_IDX:
                 tvSelected=tvTodo;
                 ivSelected=ivTodoIndicator;
                 break;
@@ -2073,7 +2073,7 @@ public class MomentActivity extends Activity
                 performContentSelector(TAG_ALL_IDX);
                 break;
             case R.id.tv_bottom_selector_timeline:
-                performContentSelector(TAG_STATUS_IDX);
+                performContentSelector(TAG_NOTICE_IDX);
                 break;
             case R.id.tv_bottom_selector_qa:
                 performContentSelector(TAG_QA_IDX);
@@ -2082,13 +2082,13 @@ public class MomentActivity extends Activity
                 performContentSelector(TAG_SURVEY_IDX);
                 break;
             case R.id.tv_bottom_selector_report:
-                performContentSelector(TAG_REPORT_IDX);
+                performContentSelector(TAG_STUDY_IDX);
                 break;
             case R.id.tv_bottom_selector_attendance:
-                performContentSelector(TAG_ATTENDANCE_IDX);
+                performContentSelector(TAG_LIFE_IDX);
                 break;
             case R.id.tv_bottom_selector_todo:
-                performContentSelector(TAG_TODO_IDX);
+                performContentSelector(TAG_VIDEO_IDX);
                 break;
             case R.id.title_left:
                 if(SELECT_MODE_ALL == _selectMode && !isWithFavorite) {

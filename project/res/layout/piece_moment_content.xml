@@ -106,7 +106,7 @@
                     android:layout_width="fill_parent"
                     android:layout_marginTop="@dimen/padding_medium"
                     android:gravity="center"
-                    android:text="@string/questionnaire"
+                    android:text="@string/moment_tag_qa"
                     android:textSize="@dimen/emergency_contact_status_title_txt_size"
                     android:textColor="@color/white"
                     android:background="@drawable/btn_gray_selector"/>

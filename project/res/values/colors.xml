@@ -25,12 +25,12 @@
 
     <color name="moment_light_gray_bg">#dadada</color>
 
-    <color name="moment_tag_timeline">#3299ff</color>
+    <color name="moment_tag_life">#3299ff</color>
     <color name="moment_tag_qa">#fd8216</color>
-    <color name="moment_tag_question">#52c429</color>
-    <color name="moment_tag_report">#ff3737</color>
-    <color name="moment_tag_attendance">#9b59b6</color>
-    <color name="moment_tag_todo">#34495e</color>
+    <color name="moment_tag_survey">#52c429</color>
+    <color name="moment_tag_notice">#ff3737</color>
+    <color name="moment_tag_study">#9b59b6</color>
+    <color name="moment_tag_video">#34495e</color>
     <color name="blue_color_3299ff">#3299ff</color>
     <color name="color_333333">#333333</color>
     <color name="color_cccccc">#cccccc</color>

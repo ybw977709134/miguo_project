@@ -42,7 +42,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/wowtalkforbiz_text"
+                android:src="@drawable/login_logo"
                 android:scaleType="centerInside"/>
             <LinearLayout
                     android:layout_height="wrap_content"

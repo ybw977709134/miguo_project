@@ -43,20 +43,14 @@
                     android:layout_height="50dp"
                     android:layout_width="fill_parent"
                     android:layout_alignParentTop="true"
-                    android:background="@drawable/navbar_bg">
+                    android:background="@drawable/contacts_bg_navbar">
                 <ImageButton
                         android:id="@+id/title_back"
                         android:layout_height="50dp"
                         android:layout_width="50dp"
                         android:layout_alignParentLeft="true"
                         android:background="@null"
-                        android:src="@drawable/nav_back_selector"/>
-                <ImageView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_toRightOf="@+id/title_back"
-                        android:background="@drawable/navbar_div"/>
-
+                        android:src="@drawable/nav_back"/>
                 <TextView
                         android:id="@+id/qr_title"
                         android:layout_height="wrap_content"

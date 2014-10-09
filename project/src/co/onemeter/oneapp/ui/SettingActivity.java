@@ -2,7 +2,6 @@ package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,7 +12,6 @@ import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
@@ -30,44 +28,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class SettingActivity extends Activity implements OnClickListener {
-    class MyAppUpgradeTask extends AppUpgradeTask {
-
-        public MyAppUpgradeTask(Context context, String md5sum) {
-            super(context, md5sum);
-        }
-
-        @Override
-        public void onPostExecute(String path) {
-            mUpgradeProgressBar.setVisibility(View.GONE);
-            if (!isCancelled() && null == path) {
-                String errmsg;
-                switch(lastError()) {
-                    case ERR_CHECKSUM:
-                        errmsg = getString(R.string.settings_upgrade_file_corrupted);
-                        break;
-                    default:
-                        errmsg = null;
-                }
-                if (errmsg == null)
-                    mMsgBox.show(null, getString(R.string.operation_failed));
-                else
-                    mMsgBox.show(getString(R.string.operation_failed), errmsg);
-            }
-            super.onPostExecute(path);
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... progress) {
-            mUpgradeProgressBar.setProgress(progress[0]);
-        }
-
-        @Override
-        protected void onCancelled() {
-            mUpgradeProgressBar.setVisibility(View.GONE);
-            super.onCancelled();
-        }
-
-    };
+    ;
 
     //--------------------------------------------------------------------------------
 
@@ -78,19 +39,14 @@ public class SettingActivity extends Activity implements OnClickListener {
 	private RelativeLayout mAccount;
 
     private TextView mName;
-	private TextView mTrends;
 	private TextView mPrivacy;
 	private TextView mPlugin;
 	private TextView mTellFriend;
-	private TextView mRateus;
 	private TextView mAboutus;
     private TextView mLogout;
-    private View mCheckForUpdates;
 
 	private ImageView imgPhoto;
 	private TextView txtPwdState;
-	private TextView mNewUpdateView;
-    private ProgressBar mUpgradeProgressBar;
 	private MessageBox mMsgBox;
 
     private WowTalkWebServerIF mWeb;
@@ -98,8 +54,6 @@ public class SettingActivity extends Activity implements OnClickListener {
 
     private AppUpgradeTask mUpgradeTask;
 
-    private RelativeLayout sysNoticeSettingLayout;
-    private TextView tvNoticeStatus;
 
     private ArrayList<Account> mAccountDatas;
 
@@ -156,60 +110,30 @@ public class SettingActivity extends Activity implements OnClickListener {
 		mInformation = (RelativeLayout) findViewById(R.id.information);
 		mAccount = (RelativeLayout) findViewById(R.id.account);
         mName = (TextView)findViewById(R.id.txt_name);
-		mTrends = (TextView) findViewById(R.id.trends);
 		mPrivacy = (TextView) findViewById(R.id.privacy);
 		mPlugin = (TextView) findViewById(R.id.plug_in);
 		mTellFriend = (TextView) findViewById(R.id.tell_friend);
-		mRateus = (TextView) findViewById(R.id.rate_us);
 		mAboutus = (TextView) findViewById(R.id.about_us);
         mLogout = (TextView) findViewById(R.id.logout);
-		mNewUpdateView = (TextView) findViewById(R.id.new_update);
-		if (StartActivity.instance().isNewUpdate()) {
-		    mNewUpdateView.setVisibility(View.VISIBLE);
-		} else {
-            mNewUpdateView.setVisibility(View.GONE);
-        }
-        mUpgradeProgressBar = (ProgressBar)findViewById(R.id.progressBar);
 		imgPhoto = (ImageView) findViewById(R.id.img_thumbnail);
 		txtPwdState = (TextView) findViewById(R.id.pwd_state);
-        mCheckForUpdates = findViewById(R.id.check_for_updates);
 
-        sysNoticeSettingLayout=(RelativeLayout) findViewById(R.id.sys_notice_layout);
-        tvNoticeStatus = (TextView) findViewById(R.id.sys_notice_layout_status_ind);
         updateNoticeStatus();
 
-        mUpgradeProgressBar.setVisibility(View.GONE);
-        mUpgradeProgressBar.setMax(100);
-
-        sysNoticeSettingLayout.setOnClickListener(this);
 		mInformation.setOnClickListener(this);
         imgPhoto.setOnClickListener(this);
 		mAccount.setOnClickListener(this);
-		mTrends.setOnClickListener(this);
 		mPrivacy.setOnClickListener(this);
 		mPlugin.setOnClickListener(this);
 		mTellFriend.setOnClickListener(this);
-		mRateus.setOnClickListener(this);
 		mAboutus.setOnClickListener(this);
         mLogout.setOnClickListener(this);
-        mCheckForUpdates.setOnClickListener(this);
         findViewById(R.id.emergency_contact).setOnClickListener(this);
-        findViewById(R.id.favorite_moment).setOnClickListener(this);
 	}
-
-    private void startMassSMS(boolean isIvitation) {
-        Intent intent = new Intent();
-    }
-
-    private void startMassEmail() {
-
-    }
 
     private void updateNoticeStatus() {
         if(PrefUtil.getInstance(this).isSysNoticeEnabled()) {
-            tvNoticeStatus.setText(R.string.sys_notice_enabled);
         } else {
-            tvNoticeStatus.setText(R.string.sys_notice_disabled);
         }
     }
 
@@ -226,10 +150,6 @@ public class SettingActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
-            case R.id.sys_notice_layout:
-                intent.setClass(SettingActivity.this, SysNoticeSetting.class);
-                startActivityForResult(intent, REQ_ID_SYS_NOTICE_SETTING);
-                break;
             case R.id.emergency_contact:
                 intent.setClass(SettingActivity.this, EmergencyContactActivity.class);
                 startActivity(intent);
@@ -250,9 +170,6 @@ public class SettingActivity extends Activity implements OnClickListener {
             case R.id.trends:
                 MomentActivity.launchMy(SettingActivity.this);
                 break;
-            case R.id.favorite_moment:
-                MomentActivity.launchFavorite(SettingActivity.this);
-                break;
             case R.id.privacy:
                 intent.setClass(SettingActivity.this, PrivacySettingActivity.class);
                 startActivity(intent);
@@ -269,6 +186,7 @@ public class SettingActivity extends Activity implements OnClickListener {
             case R.id.logout:
                 logoutAccount();
                 break;
+            /*
             case R.id.rate_us:
                 Intent rateIntent = new Intent(Intent.ACTION_VIEW);
                 rateIntent.setData(Uri.parse("market://details?id=" + getPackageName()));
@@ -279,6 +197,8 @@ public class SettingActivity extends Activity implements OnClickListener {
                     mMsgBox.toast("device not suport");
                 }
                 break;
+                */
+            /*
             case R.id.check_for_updates:
                 mNewUpdateView.setVisibility(View.GONE);
                 StartActivity.instance().changeNewUpdateFlagView(View.GONE);
@@ -299,6 +219,7 @@ public class SettingActivity extends Activity implements OnClickListener {
                     checkForUpdates();
                 }
                 break;
+                */
             default:
                 break;
         }

@@ -153,7 +153,7 @@
     <string name="event_info2">活动介绍可以帮助其他用户更好地了解此活动，请不要过于简略。</string>
 
     <string name="settings_myinfo">我的资料</string>
-    <string name="settings_mymoment">我的动态</string>
+    <string name="my_treasure">我的百宝箱</string>
     <string name="settings_account_online"> 在线 </string>
     <string name="settings_account_unread_count"> %d 条未读 </string>
     <string name="settings_account_delete"> 删除 </string>
@@ -657,7 +657,7 @@
     <string name="share_range_to_limited_dep">仅公开给以下部门</string>
     <string name="click_to_add_department">添加部门</string>
     <string name="survey_dead_line_should_after_today">投票截止日期不能早于今天.</string>
-    <string name="my_favorite">我的收藏</string>
+    <string name="my_store">积分商城</string>
     <string name="callee_offline">您呼叫的用户暂时不在线</string>
     <string name="callee_logout_notexist">您呼叫的用户不在线</string>
     <string name="callee_busy">您呼叫的用户正忙</string>
@@ -695,4 +695,7 @@
 	<string name="home_button_events">乐趣活动</string>
 	<string name="home_button_growupfiles">成长档案</string>
 	<string name="home_button_gift">抽奖礼品推荐</string>
+	<string name="my_bonus_qa">有奖抢答</string>
+	<string name="my_funny_school">爆笑校园</string>
+	<string name="my_lesson_history">历史课堂</string>
 </resources>

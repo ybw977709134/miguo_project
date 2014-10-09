@@ -1413,7 +1413,7 @@ public class MomentActivity extends Activity
                 findViewById(R.id.tv_title_bottom_drawable).setVisibility(View.GONE);
                 if(isWithFavorite) {
                     findViewById(R.id.tv_title_bottom_drawable).setVisibility(View.GONE);
-                    tvTitle.setText(R.string.my_favorite);
+                    tvTitle.setText(R.string.my_store);
                 }
                 break;
             case HANDLER_TITLE_ALL:
@@ -1431,7 +1431,7 @@ public class MomentActivity extends Activity
                 }
                 if(isWithFavorite) {
                     findViewById(R.id.tv_title_bottom_drawable).setVisibility(View.GONE);
-                    tvTitle.setText(R.string.my_favorite);
+                    tvTitle.setText(R.string.my_store);
                 }
                 break;
             case HANDLER_ALBUM_COVER_LOCAL:

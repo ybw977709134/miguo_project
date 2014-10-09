@@ -14,9 +14,12 @@ else
     to=$2
 fi
 
+#projectdir=project/
+projectdir=lib/message-input/
+
 for dpi in mdpi hdpi xhdpi
 do
-    echo cp -f ../om_im_ui/client/android/$dpi/$from.png project/res/drawable-$dpi/$to.png
-    cp -f ../om_im_ui/client/android/$dpi/$from.png project/res/drawable-$dpi/$to.png
+    echo cp -f ../om_im_ui/client/android/$dpi/$from.png $projectdir/res/drawable-$dpi/$to.png
+    cp -f ../om_im_ui/client/android/$dpi/$from.png $projectdir/res/drawable-$dpi/$to.png
 done
 

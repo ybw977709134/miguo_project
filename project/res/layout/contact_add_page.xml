@@ -37,7 +37,7 @@
                 android:id="@+id/add_search"
                 android:layout_height="@dimen/table_cell_grouped_height"
                 android:layout_width="fill_parent"
-                android:drawableLeft="@drawable/table_search"
+                android:drawableLeft="@drawable/addcontacts_icon_search"
                 android:drawableRight="@drawable/table_arrow"
                 android:drawablePadding="10dp"
                 android:paddingLeft="10dp"
@@ -58,7 +58,7 @@
                     android:id="@+id/scan_qr_code"
                     android:layout_height="@dimen/table_cell_grouped_height"
                     android:layout_width="fill_parent"
-                    android:drawableLeft="@drawable/table_qrcode"
+                    android:drawableLeft="@drawable/addcontacts_icon_scan"
                     android:drawableRight="@drawable/table_arrow"
                     android:drawablePadding="10dp"
                     android:paddingLeft="10dp"
@@ -68,12 +68,12 @@
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:text="@string/scan_qr_code"
-                    android:background="@drawable/group_list_bg_body"
                     android:clickable="true"/>
+				<!--android:background="@drawable/group_list_bg_body"-->
             <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
-                    android:background="@drawable/table_divider_white"/>
+                    android:background="@drawable/divider"/>
             <TextView 
                 android:id="@+id/add_import"
                 android:layout_height="@dimen/table_cell_grouped_height"
@@ -94,7 +94,7 @@
                 android:id="@+id/add_create_group"
                 android:layout_height="50dp"
                 android:layout_width="fill_parent"
-                android:drawableLeft="@drawable/table_create_group"
+                android:drawableLeft="@drawable/addcontacts_icon_group"
                 android:drawableRight="@drawable/table_arrow"
                 android:drawablePadding="10dp"
                 android:paddingLeft="10dp"

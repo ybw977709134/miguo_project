@@ -124,7 +124,12 @@ public class PhotoDisplayHelper extends ImageWorker {
         if (new File(path).exists()
                 /*&& (bmp = BmpUtils.decodeFile(path, MAX_DISPLAY_WIDTH, MAX_DISPLAY_HEIGHT)) != null*/) {
 //            view.setImageDrawable(new BitmapDrawable(context.getResources(), bmp));
-            view.setImageDrawable(new BitmapDrawable(context.getResources(), path));
+            BitmapDrawable drawable = new BitmapDrawable(context.getResources(), path);
+            if (drawable.getBitmap() != null) {
+                view.setImageDrawable(drawable);
+            } else {
+                view.setImageDrawable(defaultDrawable);
+            }
             if(target.getPhotoUploadedTimestamp() > 0 &&
                     new File(path).lastModified() / 1000 < target.getPhotoUploadedTimestamp()) {
                 fetchAndDisplayPhoto(context, view, target, isThumbnail, path);
@@ -355,7 +360,7 @@ public class PhotoDisplayHelper extends ImageWorker {
 	 * db.
 	 */
 	public static void displayPhoto(final Context context, ImageView view,
-			int defaultResid, final String fileid, String ext,
+			final int defaultResid, final String fileid, String ext,
             final String fileDir,
 			final OnFileDownloadedListener onFileDownloadedListener) {
 		
@@ -422,7 +427,12 @@ public class PhotoDisplayHelper extends ImageWorker {
 				if(ok) {
 					Log.e("i'm here");
 					if(fileid.equals((String)view.getTag())) {
-                        view.setImageDrawable(new BitmapDrawable(context.getResources(), path));
+                        BitmapDrawable drawable = new BitmapDrawable(context.getResources(), path);
+                        if (drawable.getBitmap() != null) {
+                            view.setImageDrawable(drawable);
+                        } else {
+                            view.setImageResource(defaultResid);
+                        }
 					} else {
 						Log.e("skip set image drawable for fileid " + fileid);
 					}
@@ -515,7 +525,10 @@ public class PhotoDisplayHelper extends ImageWorker {
 			protected void onPostExecute(Void v) {
 				if(ok) {
 					if(buddy.getGUID().equals((String)view.getTag())) {
-						view.setImageDrawable(new BitmapDrawable(context.getResources(), path));
+                        BitmapDrawable drawable = new BitmapDrawable(context.getResources(), path);
+                        if (drawable.getBitmap() != null) {
+                            view.setImageDrawable(drawable);
+                        }
 					}
 //					if(thumbnail) 
 //						buddy.pathOfThumbNail = path;

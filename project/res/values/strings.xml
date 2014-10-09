@@ -10,7 +10,7 @@
 
 	-->
     <string name="app_name">一米家校</string>
-    <string name="login_input_id_and_bind">员工 ID或者手机邮箱不能为空！</string>
+    <string name="login_input_id_and_bind">用户 ID或者手机邮箱不能为空！</string>
 
     <string name="registration_logging">连接中...</string>
     <string name="registration_failed">WowTalk Biz(连接解除)</string>
@@ -49,7 +49,7 @@
 	<string name="contact_info_official_pagetitle">公众帐号</string>
 	<string name="contact_info_add_as_friend">加为好友</string>
 	<string name="contact_info_remarkname">备注名: %s</string>
-	<string name="contact_info_wowid">员工 ID：%s</string>
+	<string name="contact_info_wowid">用户 ID：%s</string>
 	<string name="contact_info_group_short_id">群组号：%s</string>
     <string name="contact_info_call">免费语音呼叫</string>
     <string name="contact_info_video_call">免费视频通话</string>
@@ -64,7 +64,7 @@
     <string name="contactgroupinfo_load_failure">数据加载失败</string>
 	<string name="contacts_search_buddy">搜索人</string>
 	<string name="contacts_search_group">搜索组</string>
-	<string name="contacts_search_buddy_hint">请输入员工 ID</string>
+	<string name="contacts_search_buddy_hint">请输入用户 ID</string>
 	<string name="contacts_search_group_hint">请输入群组号或名称</string>
 	<string name="contacts_new_friends">新的朋友</string>
 	<string name="contacts_new_friends_pending_in">发来好友请求</string>
@@ -173,7 +173,7 @@
 	<string name="settings_change_field">更改%s</string>
 	<string name="settings_account">帐号设置</string>
 	<string name="settings_wowid_pagetitle">设置公司 ID</string>
-	<string name="settings_account_wowid">员工 ID</string>
+	<string name="settings_account_wowid">用户 ID</string>
 	<string name="settings_account_pwd">密码设定</string>
 	<string name="settings_account_phone">手机号</string>
 	<string name="settings_account_email">邮箱</string>
@@ -183,12 +183,12 @@
 	<string name="settings_account_not_set">未设定</string>
 	<string name="settings_account_setted">已设定</string>
 	<string name="settings_account_wowid_already_changed">园区通ID只能修改一次</string>
-	<string name="settings_account_wowid_used_by_others">您所设置的员工 ID已经存在，请重新选择一个员工 ID</string>
+	<string name="settings_account_wowid_used_by_others">您所设置的用户 ID已经存在，请重新选择一个用户 ID</string>
 	<string name="settings_account_email_used_by_others">您要绑定的邮箱已经绑定到其它帐号</string>
 	<string name="settings_account_phone_used_by_others">您要绑定的手机号码已经绑定到其它帐号</string>
 	<string name="settings_account_passwd_format_error">密码格式不正确，请重新输入</string>
 	<string name="settings_account_passwd_retypo">两次输入的密码不一致</string>
-	<string name="settings_account_logout_without_set_id_pwd">为了能够再次登录，请您先设置员工 ID和登录密码后再退出</string>
+	<string name="settings_account_logout_without_set_id_pwd">为了能够再次登录，请您先设置用户 ID和登录密码后再退出</string>
 	<string name="settings_account_verification_code_empty">验证码不能为空</string>
 	<string name="settings_account_verification_code_wrong">验证码错误</string>
 	<string name="settings_account_moment_text_cannot_be_empty">请填写动态正文</string>
@@ -404,11 +404,11 @@
     <string name="video_request">视频请求！</string>
     <string name="video_request_answer">接受</string>
     <string name="video_request_decline">拒绝</string>
-    <string name="setting_wowtalkid_msg">您的好友可以通过员工 ID找到你。\n员工 ID只能修改一次。可以使用2-20个字母，数字，下划线和减号</string>
+    <string name="setting_wowtalkid_msg">您的好友可以通过用户 ID找到你。\n用户 ID只能修改一次。可以使用2-20个字母，数字，下划线和减号</string>
     <string name="confirm">确认</string>
     <string name="setting_wowtalkid_dialog_title">温馨提示</string>
-    <string name="setting_wowtalkid_dialog_msg">员工 ID只能修改一次。您确定要将其修改为%s？</string>
-    <string name="setting_wowtalkid_format_error">员工 ID格式错误，请重新输入</string>
+    <string name="setting_wowtalkid_dialog_msg">用户 ID只能修改一次。您确定要将其修改为%s？</string>
+    <string name="setting_wowtalkid_format_error">用户 ID格式错误，请重新输入</string>
     <string name="bind_phone">绑定手机</string>
     <string name="bind_phone_msg">点击下一步，我们将会向该号码发送验证码</string>
     <string name="bind_email_msg">点击下一步，我们将会向该地址发送验证码</string>

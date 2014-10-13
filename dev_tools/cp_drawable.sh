@@ -14,8 +14,8 @@ else
     to=$2
 fi
 
-#projectdir=project/
-projectdir=lib/message-input/
+projectdir=project/
+#projectdir=lib/message-input/
 
 for dpi in mdpi hdpi xhdpi
 do

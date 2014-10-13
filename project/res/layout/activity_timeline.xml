@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@color/background" >
+	<RelativeLayout
+		android:id="@+id/title_bar"
+		android:layout_height="@dimen/title_bar_height"
+		android:layout_width="fill_parent"
+		android:layout_alignParentTop="true"
+		android:background="@drawable/navbar_bg">
+		<ImageButton
+			android:id="@+id/title_left"
+			android:layout_height="50dp"
+			android:layout_width="50dp"
+			android:layout_alignParentLeft="true"
+			android:background="@null"
+			android:visibility="gone"
+			android:src="@drawable/nav_back_selector_green"/>
+		<ImageButton
+			android:id="@+id/title_edit"
+			android:layout_height="50dp"
+			android:layout_width="50dp"
+			android:layout_alignParentRight="true"
+			android:background="@null"
+			android:src="@drawable/icon_add_green"/>
+		<LinearLayout
+			android:id="@+id/btn_layout"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:layout_centerInParent="true"
+			android:orientation="horizontal">
+			<Button
+				android:id="@+id/btn_all"
+				android:layout_height="wrap_content"
+				android:layout_width="70dp"
+				android:background="@drawable/tab_button_left"
+				android:textSize="14sp"
+				android:textColor="@color/text_gray1"
+				android:text="@string/moments_all"/>
+			<Button
+				android:id="@+id/btn_me"
+				android:layout_height="wrap_content"
+				android:layout_width="70dp"
+				android:background="@drawable/tab_button_right"
+				android:textSize="14sp"
+				android:textColor="@color/text_gray1"
+				android:text="@string/moments_my"/>
+		</LinearLayout>
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:id="@+id/fragment_container"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_below="@+id/title_bar" />
+</RelativeLayout>

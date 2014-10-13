@@ -309,7 +309,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 		}
 		// TODO temp
 //		mFriendIntent = new Intent(StartActivity.this, FriendsActivity.class);
-		mFriendIntent = new Intent(StartActivity.this, MomentActivity.class);
+		mFriendIntent = new Intent(StartActivity.this, TimelineActivity.class);
 //        mHomeIntent = new Intent(StartActivity.this, EventActivity.class);
         mHomeIntent = new Intent(StartActivity.this, HomeActivity.class);
 		mSettingIntent = new Intent(StartActivity.this, SettingActivity.class);
@@ -577,10 +577,10 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getKeyCode() ==   KeyEvent.KEYCODE_BACK
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
-            //as original friend_activity is replaced with MomentActivity
-            //MomentActivity is sub activity in tabActivity,it can not receive onBackPressed mask by this function
+            //as original friend_activity is replaced with TimelineActivity
+            //TimelineActivity is sub activity in tabActivity,it can not receive onBackPressed mask by this function
             //so check it manually
-            if(TAB_FRIENDS == _selectedTabIndex && null != MomentActivity.instance() && MomentActivity.instance().handleBackPress()) {
+            if(TAB_FRIENDS == _selectedTabIndex && null != TimelineActivity.instance() && TimelineActivity.instance().handleBackPress()) {
                 //TODO this should be removed when FriendActivity is come back
                 Log.i("moment activity handled back press");
             } else {
@@ -966,7 +966,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         if(Utils.isNetworkConnected(this)) {
             // 既然 tab changed，说明有用户活动，是检查新评论的好机会。
 
-            new MomentActivity.CheckNewReviewsTask() {
+            new TimelineActivity.CheckNewReviewsTask() {
                 @Override
                 protected void onPostExecute(Integer errno) {
                     if (errno == ErrorCode.OK) {

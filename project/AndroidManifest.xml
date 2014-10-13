@@ -63,7 +63,8 @@
             android:value="5281ab3456240b5632024ab8"
             android:name="UMENG_APPKEY"/>
 
-		<!-- WowTalkService 在 x86 上不能运行。 -->
+		<!-- WowTalkService 在 x86 上不能运行。
+		 -->
 		<service
 			android:name="org.wowtalk.WowTalkService"
 			android:label="WowTalk Notification Center" />
@@ -498,6 +499,7 @@
                 android:screenOrientation="portrait">
         </activity>
 		<activity android:name=".ui.HomeActivity"/>
+		<activity android:name=".ui.TimelineActivity"/>
 	</application>
 
 </manifest>

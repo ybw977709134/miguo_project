@@ -38,11 +38,6 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         allTimelineFragment =  new AllTimelineFragment();
         myTimelineFragment = new MyTimelineFragment();
 
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, allTimelineFragment, "all")
-                .add(R.id.fragment_container, myTimelineFragment, "my")
-                .commit();
-
         switchToAll();
     }
 
@@ -77,8 +72,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         q.find(R.id.btn_all).background(R.drawable.tab_button_left_a).textColorId(R.color.white);
         q.find(R.id.btn_me).background(R.drawable.tab_button_right).textColorId(R.color.text_gray1);
         getSupportFragmentManager().beginTransaction()
-                .show(allTimelineFragment)
-                .hide(myTimelineFragment)
+                .replace(R.id.fragment_container, allTimelineFragment)
                 .commit();
     }
 
@@ -86,8 +80,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         q.find(R.id.btn_all).background(R.drawable.tab_button_left).textColorId(R.color.text_gray1);
         q.find(R.id.btn_me).background(R.drawable.tab_button_right_a).textColorId(R.color.white);
         getSupportFragmentManager().beginTransaction()
-                .hide(allTimelineFragment)
-                .show(myTimelineFragment)
+                .replace(R.id.fragment_container, myTimelineFragment)
                 .commit();
     }
 

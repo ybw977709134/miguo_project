@@ -698,4 +698,6 @@
 	<string name="my_bonus_qa">有奖抢答</string>
 	<string name="my_funny_school">爆笑校园</string>
 	<string name="my_lesson_history">历史课堂</string>
+	<string name="timeline_filter_sender">分享者</string>
+	<string name="timeline_filter_category">分类</string>
 </resources>

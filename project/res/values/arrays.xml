@@ -50,4 +50,17 @@
     <string-array name="function">
         <item>新的朋友</item>
     </string-array>
+	<string-array name="timeline_categories">
+		<item>全部</item>
+		<item>学校通知</item>
+		<item>学习</item>
+		<item>生活</item>
+		<item>问答</item>
+		<item>视频教程</item>
+		<item>投票</item>
+	</string-array>
+	<string-array name="timeline_senders">
+		<item>老师</item>
+		<item>同学</item>
+	</string-array>
 </resources>

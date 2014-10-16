@@ -19,7 +19,8 @@
 			android:layout_height="wrap_content"
 			android:padding="10dp"
 			android:gravity="center"
-			android:drawableRight="@drawable/contact_arrow_down"
+			android:drawablePadding="5dp"
+			android:drawableRight="@drawable/timeline_dropdown_mark_collapsed"
 			android:textColor="@color/text_gray1"
 			android:text="@string/timeline_filter_sender"/>
 	</RelativeLayout>
@@ -42,7 +43,8 @@
 			android:layout_height="wrap_content"
 			android:padding="10dp"
 			android:gravity="center"
-			android:drawableRight="@drawable/contact_arrow_down"
+			android:drawablePadding="5dp"
+			android:drawableRight="@drawable/timeline_dropdown_mark_collapsed"
 			android:textColor="@color/text_gray1"
 			android:text="@string/timeline_filter_category"/>
 	</RelativeLayout>

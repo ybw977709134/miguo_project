@@ -85,8 +85,8 @@ public class AllTimelineFragment extends ListFragment implements MomentAdapter.R
             TimelineFilterOnClickListener clickListener = new TimelineFilterOnClickListener(
                     dialogBackground,
                     headerView,
-                    R.id.btn_sender,
-                    R.id.btn_cat
+                    headerView.findViewById(R.id.btn_sender),
+                    headerView.findViewById(R.id.btn_cat)
             );
             clickListener.setOnFilterChangedListener(onMomentSenderChangedListener);
             q.find(R.id.btn_sender).clicked(clickListener);

@@ -17,8 +17,8 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
     View dialogBackground;
     View anchorView;
     Context context;
-    int btnSenderResId;
-    int btnCategoryResId;
+    View btnSender;
+    View btnCategory;
     int selectedSenderIdx = 0;
     int selectedCatIdx = 0;
     PopupWindow dlgSender;
@@ -33,18 +33,18 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
     /**
      * @param dialogBackground 作为对话框下方的屏幕背景，一般为半透明的黑色。
      * @param anchorView 对话现在在它的下方。
-     * @param btnSenderResId 筛选发送者的按钮ID。
-     * @param btnCategoryResId 筛选类型的按钮ID。
+     * @param btnSender 筛选发送者的按钮。
+     * @param btnCategory 筛选类型的按钮。
      */
     public TimelineFilterOnClickListener(
             View dialogBackground,
             View anchorView,
-            int btnSenderResId, int btnCategoryResId) {
+            View btnSender, View btnCategory) {
         this.dialogBackground = dialogBackground;
         this.anchorView = anchorView;
         context = anchorView.getContext();
-        this.btnSenderResId = btnSenderResId;
-        this.btnCategoryResId = btnCategoryResId;
+        this.btnSender = btnSender;
+        this.btnCategory = btnCategory;
     }
 
     public void setOnFilterChangedListener(OnFilterChangedListener l) {
@@ -53,9 +53,8 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        int vid = v.getId();
         PopupWindow dlgToShow = null;
-        if (vid == btnSenderResId) {
+        if (v == btnSender) {
             // toggle dialog
             if (dlgSender != null && dlgSender.isShowing()) {
                 dismissSenderDialog();
@@ -68,7 +67,7 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
                 }
                 dlgToShow = dlgSender;
             }
-        } else if (vid == btnCategoryResId) {
+        } else if (v == btnCategory) {
             // toggle dialog
             if (dlgCat != null && dlgCat.isShowing()) {
                 dismissCatDialog();
@@ -84,20 +83,33 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
         }
 
         if (dlgToShow != null) {
-            Rect rect = locateView(anchorView);
-            if (rect != null) {
-                ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) dialogBackground.getLayoutParams();
-                lp.topMargin = rect.height();
-                dialogBackground.setLayoutParams(lp);
+            showDialog(dlgToShow, v instanceof TextView ? (TextView) v : null);
+        }
+    }
+
+    private void setRightDrawable(TextView textView, int drawableResId) {
+        Drawable d = context.getResources().getDrawable(drawableResId);
+        d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+        textView.setCompoundDrawables(null, null, d, null);
+    }
+
+    private void showDialog(PopupWindow dlgToShow, TextView button) {
+        Rect rect = locateView(anchorView);
+        if (rect != null) {
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) dialogBackground.getLayoutParams();
+            lp.topMargin = rect.height();
+            dialogBackground.setLayoutParams(lp);
+        }
+        dlgToShow.showAtLocation(dialogBackground, Gravity.TOP, 0, rect != null ? rect.bottom : 0);
+        dialogBackground.setVisibility(View.VISIBLE);
+        dialogBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tryDismissAll();
             }
-            dlgToShow.showAtLocation(dialogBackground, Gravity.TOP, 0, rect != null ? rect.bottom : 0);
-            dialogBackground.setVisibility(View.VISIBLE);
-            dialogBackground.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    tryDismissAll();
-                }
-            });
+        });
+        if (button != null) {
+            setRightDrawable(button, R.drawable.timeline_dropdown_mark_expanded);
         }
     }
 
@@ -105,12 +117,18 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
         dlgCat.dismiss();
         dlgCat = null;
         dialogBackground.setVisibility(View.GONE);
+        if (btnCategory instanceof TextView) {
+            setRightDrawable((TextView)btnCategory, R.drawable.timeline_dropdown_mark_collapsed);
+        }
     }
 
     private void dismissSenderDialog() {
         dlgSender.dismiss();
         dlgSender = null;
         dialogBackground.setVisibility(View.GONE);
+        if (btnSender instanceof TextView) {
+            setRightDrawable((TextView) btnSender, R.drawable.timeline_dropdown_mark_collapsed);
+        }
     }
 
     private void tryDismissAll() {

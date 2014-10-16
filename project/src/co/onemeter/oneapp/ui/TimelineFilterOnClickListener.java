@@ -2,15 +2,15 @@ package co.onemeter.oneapp.ui;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.PopupWindow;
+import android.widget.*;
 import co.onemeter.oneapp.R;
 
 /**
+ * <p>响应时间线页面上的过滤器的点击事件。</p>
  * Created by pzy on 10/15/14.
  */
 public class TimelineFilterOnClickListener implements View.OnClickListener {
@@ -19,8 +19,16 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
     Context context;
     int btnSenderResId;
     int btnCategoryResId;
+    int selectedSenderIdx = 0;
+    int selectedCatIdx = 0;
     PopupWindow dlgSender;
     PopupWindow dlgCat;
+    OnFilterChangedListener onFilterChangedListener;
+
+    public interface OnFilterChangedListener {
+        public void onSenderChanged(int index);
+        public void onCategoryChanged(int index);
+    }
 
     public TimelineFilterOnClickListener(
             ViewGroup dialogContainer,
@@ -32,6 +40,11 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
         this.btnSenderResId = btnSenderResId;
         this.btnCategoryResId = btnCategoryResId;
     }
+
+    public void setOnFilterChangedListener(OnFilterChangedListener l) {
+        onFilterChangedListener = l;
+    }
+
     @Override
     public void onClick(View v) {
         int vid = v.getId();
@@ -39,8 +52,7 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
         if (vid == btnSenderResId) {
             // toggle dialog
             if (dlgSender != null && dlgSender.isShowing()) {
-                dlgSender.dismiss();
-                dialogContainer.setVisibility(View.GONE);
+                dismissSenderDialog();
             } else {
                 if (dlgCat != null && dlgCat.isShowing()) {
                     dlgCat.dismiss();
@@ -53,8 +65,7 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
         } else if (vid == btnCategoryResId) {
             // toggle dialog
             if (dlgCat != null && dlgCat.isShowing()) {
-                dlgCat.dismiss();
-                dialogContainer.setVisibility(View.GONE);
+                dismissCatDialog();
             } else {
                 if (dlgSender != null && dlgSender.isShowing()) {
                     dlgSender.dismiss();
@@ -78,35 +89,88 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
         }
     }
 
-    private PopupWindow createSenderDialog() {
+    private void dismissCatDialog() {
+        dlgCat.dismiss();
+        dlgCat = null;
+        dialogContainer.setVisibility(View.GONE);
+    }
+
+    private void dismissSenderDialog() {
+        dlgSender.dismiss();
+        dlgSender = null;
+        dialogContainer.setVisibility(View.GONE);
+    }
+
+    private static PopupWindow createListDialog(
+            Context context,
+            String[] items, final int selectedIdx,
+            AdapterView.OnItemClickListener onItemClickListener) {
         View dlgView = View.inflate(context, R.layout.timeline_filter_category_list, null);
         ListView lv = ((ListView)dlgView.findViewById(android.R.id.list));
         lv.setAdapter(
                 new ArrayAdapter<String>(context,
                         R.layout.timeline_filter_category_list_item,
                         android.R.id.text1,
-                        context.getResources().getStringArray(R.array.timeline_senders))
+                        items) {
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        View v = super.getView(position, convertView, parent);
+                        TextView tv = (TextView) v.findViewById(android.R.id.text1);
+                        Drawable rightDrawable = selectedIdx == position
+                                ? getContext().getResources().getDrawable(R.drawable.timeline_filter_list_checkmark)
+                                : null;
+                        if (rightDrawable != null) {
+                            rightDrawable.setBounds(0, 0, rightDrawable.getIntrinsicWidth(), rightDrawable.getIntrinsicHeight());
+                        }
+                        tv.setCompoundDrawables(null, null,  rightDrawable, null);
+                        return v;
+                    }
+                }
         );
+        lv.setOnItemClickListener(onItemClickListener);
         return new PopupWindow(dlgView,
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
     }
 
-    private PopupWindow createCategoryDialog() {
-        View dlgView = View.inflate(context, R.layout.timeline_filter_category_list, null);
-        ListView lv = ((ListView)dlgView.findViewById(android.R.id.list));
-        lv.setAdapter(
-                new ArrayAdapter<String>(context,
-                        R.layout.timeline_filter_category_list_item,
-                        android.R.id.text1,
-                        context.getResources().getStringArray(R.array.timeline_categories))
-        );
-        return new PopupWindow(dlgView,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
+    private PopupWindow createSenderDialog() {
+        return createListDialog(context,
+                context.getResources().getStringArray(R.array.timeline_senders),
+                selectedSenderIdx,
+                onSenderListItemClickListener);
     }
+
+    private PopupWindow createCategoryDialog() {
+        return createListDialog(context,
+                context.getResources().getStringArray(R.array.timeline_categories),
+                selectedCatIdx,
+                onCatListItemClickListener);
+    }
+
+    private AdapterView.OnItemClickListener onSenderListItemClickListener =
+            new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    selectedSenderIdx = position;
+                    dismissSenderDialog();
+                    if (onFilterChangedListener != null) {
+                        onFilterChangedListener.onSenderChanged(position);
+                    }
+                }
+            };
+
+    private AdapterView.OnItemClickListener onCatListItemClickListener =
+            new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    selectedCatIdx = position;
+                    dismissCatDialog();
+                    if (onFilterChangedListener != null) {
+                        onFilterChangedListener.onCategoryChanged(position);
+                    }
+                }
+            };
 
     private static Rect locateView(View v)
     {

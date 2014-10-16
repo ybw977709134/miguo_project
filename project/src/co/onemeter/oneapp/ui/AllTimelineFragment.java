@@ -5,6 +5,7 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
 import com.androidquery.AQuery;
@@ -17,6 +18,7 @@ import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 import java.util.ArrayList;
 
 /**
+ * <p>浏览所有人的动态。</p>
  * Created by pzy on 10/13/14.
  */
 public class AllTimelineFragment extends ListFragment implements MomentAdapter.ReplyDelegate {
@@ -27,6 +29,21 @@ public class AllTimelineFragment extends ListFragment implements MomentAdapter.R
     private ArrayList<Moment> moments;
     private View headerView;
     private int originalHeaderViewsCount = 0;
+
+    private TimelineFilterOnClickListener.OnFilterChangedListener onMomentSenderChangedListener =
+            new TimelineFilterOnClickListener.OnFilterChangedListener() {
+                @Override
+                public void onSenderChanged(int index) {
+                    Toast.makeText(AllTimelineFragment.this.getActivity(),
+                            "sender: " + index, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onCategoryChanged(int index) {
+                    Toast.makeText(AllTimelineFragment.this.getActivity(),
+                            "category: " + index, Toast.LENGTH_SHORT).show();
+                }
+            };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,6 +88,7 @@ public class AllTimelineFragment extends ListFragment implements MomentAdapter.R
                     R.id.btn_sender,
                     R.id.btn_cat
             );
+            clickListener.setOnFilterChangedListener(onMomentSenderChangedListener);
             q.find(R.id.btn_sender).clicked(clickListener);
             q.find(R.id.btn_cat).clicked(clickListener);
         }

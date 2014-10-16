@@ -60,7 +60,7 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
                 dismissSenderDialog();
             } else {
                 if (dlgCat != null && dlgCat.isShowing()) {
-                    dlgCat.dismiss();
+                    dismissCatDialog();
                 }
                 if (dlgSender == null) {
                     dlgSender = createSenderDialog();
@@ -73,7 +73,7 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
                 dismissCatDialog();
             } else {
                 if (dlgSender != null && dlgSender.isShowing()) {
-                    dlgSender.dismiss();
+                    dismissSenderDialog();
                 }
                 if (dlgCat == null) {
                     dlgCat = createCategoryDialog();
@@ -93,6 +93,16 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
         textView.setCompoundDrawables(null, null, d, null);
     }
 
+    private void setCollapsedButtonSyle(TextView button) {
+        button.setTextColor(context.getResources().getColor(R.color.text_gray1));
+        setRightDrawable(button, R.drawable.timeline_dropdown_mark_collapsed);
+    }
+
+    private void setExpandedButtonSyle(TextView button) {
+        button.setTextColor(context.getResources().getColor(R.color.logo_green));
+        setRightDrawable(button, R.drawable.timeline_dropdown_mark_expanded);
+    }
+
     private void showDialog(PopupWindow dlgToShow, TextView button) {
         Rect rect = locateView(anchorView);
         if (rect != null) {
@@ -109,7 +119,7 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
             }
         });
         if (button != null) {
-            setRightDrawable(button, R.drawable.timeline_dropdown_mark_expanded);
+            setExpandedButtonSyle(button);
         }
     }
 
@@ -118,7 +128,7 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
         dlgCat = null;
         dialogBackground.setVisibility(View.GONE);
         if (btnCategory instanceof TextView) {
-            setRightDrawable((TextView)btnCategory, R.drawable.timeline_dropdown_mark_collapsed);
+            setCollapsedButtonSyle((TextView) btnCategory);
         }
     }
 
@@ -127,7 +137,7 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
         dlgSender = null;
         dialogBackground.setVisibility(View.GONE);
         if (btnSender instanceof TextView) {
-            setRightDrawable((TextView) btnSender, R.drawable.timeline_dropdown_mark_collapsed);
+            setCollapsedButtonSyle((TextView) btnSender);
         }
     }
 
@@ -138,7 +148,15 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
         if (dlgCat != null) {
             dlgCat.dismiss();
         }
+
         dialogBackground.setVisibility(View.GONE);
+
+        if (btnCategory instanceof TextView) {
+            setCollapsedButtonSyle((TextView) btnCategory);
+        }
+        if (btnSender instanceof TextView) {
+            setCollapsedButtonSyle((TextView) btnSender);
+        }
     }
 
     private static PopupWindow createListDialog(

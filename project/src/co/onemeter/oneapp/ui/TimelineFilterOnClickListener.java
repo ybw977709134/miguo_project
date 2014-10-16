@@ -14,7 +14,7 @@ import co.onemeter.oneapp.R;
  * Created by pzy on 10/15/14.
  */
 public class TimelineFilterOnClickListener implements View.OnClickListener {
-    ViewGroup dialogContainer;
+    View dialogBackground;
     View anchorView;
     Context context;
     int btnSenderResId;
@@ -30,11 +30,17 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
         public void onCategoryChanged(int index);
     }
 
+    /**
+     * @param dialogBackground 作为对话框下方的屏幕背景，一般为半透明的黑色。
+     * @param anchorView 对话现在在它的下方。
+     * @param btnSenderResId 筛选发送者的按钮ID。
+     * @param btnCategoryResId 筛选类型的按钮ID。
+     */
     public TimelineFilterOnClickListener(
-            ViewGroup dialogContainer,
+            View dialogBackground,
             View anchorView,
             int btnSenderResId, int btnCategoryResId) {
-        this.dialogContainer = dialogContainer;
+        this.dialogBackground = dialogBackground;
         this.anchorView = anchorView;
         context = anchorView.getContext();
         this.btnSenderResId = btnSenderResId;
@@ -80,25 +86,41 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
         if (dlgToShow != null) {
             Rect rect = locateView(anchorView);
             if (rect != null) {
-                ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) dialogContainer.getLayoutParams();
-                lp.topMargin = rect.bottom;
-                dialogContainer.setLayoutParams(lp);
+                ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) dialogBackground.getLayoutParams();
+                lp.topMargin = rect.height();
+                dialogBackground.setLayoutParams(lp);
             }
-            dlgToShow.showAtLocation(dialogContainer, Gravity.TOP, 0, rect != null ? rect.bottom : 0);
-            dialogContainer.setVisibility(View.VISIBLE);
+            dlgToShow.showAtLocation(dialogBackground, Gravity.TOP, 0, rect != null ? rect.bottom : 0);
+            dialogBackground.setVisibility(View.VISIBLE);
+            dialogBackground.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tryDismissAll();
+                }
+            });
         }
     }
 
     private void dismissCatDialog() {
         dlgCat.dismiss();
         dlgCat = null;
-        dialogContainer.setVisibility(View.GONE);
+        dialogBackground.setVisibility(View.GONE);
     }
 
     private void dismissSenderDialog() {
         dlgSender.dismiss();
         dlgSender = null;
-        dialogContainer.setVisibility(View.GONE);
+        dialogBackground.setVisibility(View.GONE);
+    }
+
+    private void tryDismissAll() {
+        if (dlgSender != null) {
+            dlgSender.dismiss();
+        }
+        if (dlgCat != null) {
+            dlgCat.dismiss();
+        }
+        dialogBackground.setVisibility(View.GONE);
     }
 
     private static PopupWindow createListDialog(

@@ -23,7 +23,7 @@ import java.util.ArrayList;
  */
 public class AllTimelineFragment extends ListFragment implements MomentAdapter.ReplyDelegate {
 
-    ViewGroup dialogContainer;
+    View dialogBackground;
     MomentAdapter adapter;
     Database dbHelper;
     private ArrayList<Moment> moments;
@@ -48,8 +48,8 @@ public class AllTimelineFragment extends ListFragment implements MomentAdapter.R
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_timeline, container, false);
-        dialogContainer = (ViewGroup) view.findViewById(R.id.dialog_container);
-        dialogContainer.setVisibility(View.GONE);
+        dialogBackground = view.findViewById(R.id.dialog_container);
+        dialogBackground.setVisibility(View.GONE);
         return view;
     }
 
@@ -83,7 +83,7 @@ public class AllTimelineFragment extends ListFragment implements MomentAdapter.R
             getListView().addHeaderView(headerView);
             AQuery q = new AQuery(headerView);
             TimelineFilterOnClickListener clickListener = new TimelineFilterOnClickListener(
-                    dialogContainer,
+                    dialogBackground,
                     headerView,
                     R.id.btn_sender,
                     R.id.btn_cat

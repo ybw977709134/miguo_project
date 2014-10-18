@@ -23,12 +23,13 @@ import java.util.ArrayList;
  */
 public class AllTimelineFragment extends ListFragment implements MomentAdapter.ReplyDelegate {
 
-    View dialogBackground;
-    MomentAdapter adapter;
-    Database dbHelper;
+    private View dialogBackground;
+    private Database dbHelper;
+    private MomentAdapter adapter;
     private ArrayList<Moment> moments;
     private View headerView;
     private int originalHeaderViewsCount = 0;
+    private TimelineFilterOnClickListener timelineFilterOnClickListener;
 
     private TimelineFilterOnClickListener.OnFilterChangedListener onMomentSenderChangedListener =
             new TimelineFilterOnClickListener.OnFilterChangedListener() {
@@ -56,8 +57,12 @@ public class AllTimelineFragment extends ListFragment implements MomentAdapter.R
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //
+        // load moments
+        //
         dbHelper = new Database(getActivity());
-        moments = dbHelper.fetchMomentsOfAllBuddies(-1, 20);
+        moments = dbHelper.fetchMomentsOfAllBuddies(0, 20);
         ImageResizer imageResizer = new ImageResizer(getActivity(), DensityUtil.dip2px(getActivity(), 100));
         adapter = new MomentAdapter(getActivity(),
                 getActivity(),
@@ -74,23 +79,33 @@ public class AllTimelineFragment extends ListFragment implements MomentAdapter.R
     @Override
     public void onResume() {
         super.onResume();
+        setupListHeaderView();
+    }
 
-        // setup list header view
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (timelineFilterOnClickListener.isShowingDialog()) {
+            timelineFilterOnClickListener.tryDismissAll();
+        }
+    }
+
+    private void setupListHeaderView() {
         if (headerView == null || getListView().getHeaderViewsCount() == originalHeaderViewsCount) {
             originalHeaderViewsCount = getListView().getHeaderViewsCount();
             headerView = LayoutInflater.from(getActivity())
                     .inflate(R.layout.timeline_filter, null);
             getListView().addHeaderView(headerView);
             AQuery q = new AQuery(headerView);
-            TimelineFilterOnClickListener clickListener = new TimelineFilterOnClickListener(
+            timelineFilterOnClickListener = new TimelineFilterOnClickListener(
                     dialogBackground,
                     headerView,
                     headerView.findViewById(R.id.btn_sender),
                     headerView.findViewById(R.id.btn_cat)
             );
-            clickListener.setOnFilterChangedListener(onMomentSenderChangedListener);
-            q.find(R.id.btn_sender).clicked(clickListener);
-            q.find(R.id.btn_cat).clicked(clickListener);
+            timelineFilterOnClickListener.setOnFilterChangedListener(onMomentSenderChangedListener);
+            q.find(R.id.btn_sender).clicked(timelineFilterOnClickListener);
+            q.find(R.id.btn_cat).clicked(timelineFilterOnClickListener);
         }
     }
 

@@ -141,7 +141,7 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
         }
     }
 
-    private void tryDismissAll() {
+    public void tryDismissAll() {
         if (dlgSender != null) {
             dlgSender.dismiss();
         }
@@ -157,6 +157,11 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
         if (btnSender instanceof TextView) {
             setCollapsedButtonSyle((TextView) btnSender);
         }
+    }
+
+    public boolean isShowingDialog() {
+        return (dlgSender != null && dlgSender.isShowing())
+                || (dlgCat != null && dlgCat.isShowing());
     }
 
     private static PopupWindow createListDialog(

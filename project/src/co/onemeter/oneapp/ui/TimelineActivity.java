@@ -8,6 +8,7 @@ import android.view.View;
 import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
 import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.Review;
 import org.wowtalk.api.WowMomentWebServerIF;
 import org.wowtalk.ui.GlobalValue;
@@ -37,6 +38,9 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
 
         allTimelineFragment =  new AllTimelineFragment();
         myTimelineFragment = new MyTimelineFragment();
+        Bundle args = new Bundle();
+        args.putString("uid", PrefUtil.getInstance(this).getUid());
+        myTimelineFragment.setArguments(args);
 
         switchToAll();
     }

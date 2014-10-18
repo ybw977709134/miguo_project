@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Timeline 页面的过滤器，用于选择动态的类别。 -->
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@color/background"
+	android:weightSum="6">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:layout_weight="1" >
+		<TextView
+			android:id="@+id/btn_tag_all"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="10dp"
+			android:gravity="center"
+			android:drawablePadding="5dp"
+			android:textColor="@color/text_gray1"
+			android:text="@string/moment_tag_all"/>
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:layout_weight="1" >
+		<TextView
+			android:id="@+id/btn_tag_notice"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="10dp"
+			android:gravity="center"
+			android:drawablePadding="5dp"
+			android:textColor="@color/text_gray1"
+			android:text="@string/moment_tag_notice"/>
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:layout_weight="1" >
+		<TextView
+			android:id="@+id/btn_tag_qa"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="10dp"
+			android:gravity="center"
+			android:drawablePadding="5dp"
+			android:textColor="@color/text_gray1"
+			android:text="@string/moment_tag_qa"/>
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:layout_weight="1" >
+		<TextView
+			android:id="@+id/btn_tag_study"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="10dp"
+			android:gravity="center"
+			android:drawablePadding="5dp"
+			android:textColor="@color/text_gray1"
+			android:text="@string/moment_tag_study"/>
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:layout_weight="1" >
+		<TextView
+			android:id="@+id/btn_tag_life"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="10dp"
+			android:gravity="center"
+			android:drawablePadding="5dp"
+			android:textColor="@color/text_gray1"
+			android:text="@string/moment_tag_life"/>
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:layout_weight="1" >
+		<TextView
+			android:id="@+id/btn_tag_survey"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="10dp"
+			android:gravity="center"
+			android:drawablePadding="5dp"
+			android:textColor="@color/text_gray1"
+			android:text="@string/moment_tag_survey"/>
+	</RelativeLayout>
+</LinearLayout>

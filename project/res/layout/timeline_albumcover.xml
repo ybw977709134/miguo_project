@@ -2,6 +2,7 @@
 
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res/co.onemeter.oneapp"
 	android:layout_height="400dp"
 	android:layout_width="fill_parent"
 	android:orientation="vertical">
@@ -42,18 +43,13 @@
 				android:layout_alignParentBottom="true"
 				android:layout_marginRight="@dimen/padding_medium">
 
-				<ImageView
+				<org.wowtalk.ui.msg.RoundedImageView
 					android:id="@+id/img_thumbnail"
 					android:layout_height="fill_parent"
 					android:layout_width="fill_parent"
 					android:layout_margin="3dp"
 					android:layout_gravity="center"
-					android:background="@drawable/default_avatar_90"/>
-
-				<ImageView
-					android:layout_height="fill_parent"
-					android:layout_width="fill_parent"
-					android:background="@drawable/photo_frame"/>
+					android:src="@drawable/default_avatar_90"/>
 			</FrameLayout>
 
 			<TextView

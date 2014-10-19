@@ -4,7 +4,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="horizontal"
 	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
+	android:layout_height="45dp"
 	android:background="@color/background"
 	android:weightSum="6">
 
@@ -17,11 +17,19 @@
 			android:id="@+id/btn_tag_all"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
 			android:padding="10dp"
 			android:gravity="center"
 			android:drawablePadding="5dp"
 			android:textColor="@color/text_gray1"
 			android:text="@string/moment_tag_all"/>
+		<ImageView
+			android:id="@+id/img_tag_all"
+			android:layout_height="5dp"
+			android:layout_width="@dimen/moment_header_bottom_tag_indicator_min_width"
+			android:layout_centerHorizontal="true"
+			android:layout_alignParentBottom="true"
+			android:background="@color/gray"/>
 	</RelativeLayout>
 
 	<RelativeLayout
@@ -33,11 +41,19 @@
 			android:id="@+id/btn_tag_notice"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
 			android:padding="10dp"
 			android:gravity="center"
 			android:drawablePadding="5dp"
 			android:textColor="@color/text_gray1"
 			android:text="@string/moment_tag_notice"/>
+		<ImageView
+			android:id="@+id/img_tag_notice"
+			android:layout_height="5dp"
+			android:layout_width="@dimen/moment_header_bottom_tag_indicator_min_width"
+			android:layout_centerHorizontal="true"
+			android:layout_alignParentBottom="true"
+			android:background="@color/moment_tag_notice"/>
 	</RelativeLayout>
 
 	<RelativeLayout
@@ -49,11 +65,19 @@
 			android:id="@+id/btn_tag_qa"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
 			android:padding="10dp"
 			android:gravity="center"
 			android:drawablePadding="5dp"
 			android:textColor="@color/text_gray1"
 			android:text="@string/moment_tag_qa"/>
+		<ImageView
+			android:id="@+id/img_tag_qa"
+			android:layout_height="5dp"
+			android:layout_width="@dimen/moment_header_bottom_tag_indicator_min_width"
+			android:layout_centerHorizontal="true"
+			android:layout_alignParentBottom="true"
+			android:background="@color/moment_tag_qa"/>
 	</RelativeLayout>
 
 	<RelativeLayout
@@ -65,11 +89,19 @@
 			android:id="@+id/btn_tag_study"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
 			android:padding="10dp"
 			android:gravity="center"
 			android:drawablePadding="5dp"
 			android:textColor="@color/text_gray1"
 			android:text="@string/moment_tag_study"/>
+		<ImageView
+			android:id="@+id/img_tag_study"
+			android:layout_height="5dp"
+			android:layout_width="@dimen/moment_header_bottom_tag_indicator_min_width"
+			android:layout_centerHorizontal="true"
+			android:layout_alignParentBottom="true"
+			android:background="@color/moment_tag_study"/>
 	</RelativeLayout>
 
 	<RelativeLayout
@@ -81,11 +113,19 @@
 			android:id="@+id/btn_tag_life"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
 			android:padding="10dp"
 			android:gravity="center"
 			android:drawablePadding="5dp"
 			android:textColor="@color/text_gray1"
 			android:text="@string/moment_tag_life"/>
+		<ImageView
+			android:id="@+id/img_tag_life"
+			android:layout_height="5dp"
+			android:layout_width="@dimen/moment_header_bottom_tag_indicator_min_width"
+			android:layout_centerHorizontal="true"
+			android:layout_alignParentBottom="true"
+			android:background="@color/moment_tag_life"/>
 	</RelativeLayout>
 
 	<RelativeLayout
@@ -97,10 +137,18 @@
 			android:id="@+id/btn_tag_survey"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
 			android:padding="10dp"
 			android:gravity="center"
 			android:drawablePadding="5dp"
 			android:textColor="@color/text_gray1"
 			android:text="@string/moment_tag_survey"/>
+		<ImageView
+			android:id="@+id/img_tag_survey"
+			android:layout_height="5dp"
+			android:layout_width="@dimen/moment_header_bottom_tag_indicator_min_width"
+			android:layout_centerHorizontal="true"
+			android:layout_alignParentBottom="true"
+			android:background="@color/moment_tag_survey"/>
 	</RelativeLayout>
 </LinearLayout>

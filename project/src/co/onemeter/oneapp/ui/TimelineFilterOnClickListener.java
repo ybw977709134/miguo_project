@@ -10,7 +10,7 @@ import android.widget.*;
 import co.onemeter.oneapp.R;
 
 /**
- * <p>响应时间线页面上的过滤器的点击事件。</p>
+ * <p>响应时间线页面（{@link co.onemeter.oneapp.ui.AllTimelineFragment}）上的过滤器的点击事件。</p>
  * Created by pzy on 10/15/14.
  */
 public class TimelineFilterOnClickListener implements View.OnClickListener {

@@ -32,7 +32,7 @@ import java.util.Iterator;
  * <p>浏览我发布的动态。</p>
  * Created by pzy on 10/13/14.
  */
-public class MyTimelineFragment extends ListFragment implements MomentAdapter.ReplyDelegate, InputBoardManager.ChangeToOtherAppsListener {
+public class MyTimelineFragment extends ListFragment implements MomentAdapter.ReplyDelegate, InputBoardManager.ChangeToOtherAppsListener, TimelineFilterOnClickListener.OnFilterChangedListener {
     private Bundle args;
     private String uid;
     private Database dbHelper;
@@ -46,6 +46,7 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
     private NetworkIFDelegate albumCoverNetworkDelegate;
     private AlbumCover mAlbumCover;
     private int establishedAlbumCoverHeight = 0;
+    private int selectedTag;
 
     //
     // UI
@@ -186,6 +187,17 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
         }
 
         return false;
+    }
+
+    @Override
+    public void onSenderChanged(int index) {
+
+    }
+
+    @Override
+    public void onCategoryChanged(int index) {
+        selectedTag = index;
+        Toast.makeText(getActivity(), "tag: " + index, Toast.LENGTH_SHORT).show();
     }
 
     private class UploadCoverListener implements MomentActivity.BeginUploadAlbumCover {
@@ -329,19 +341,11 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
     }
 
     private void setupListHeaderView_tagbar() {
-        headerView_tagbar = LayoutInflater.from(getActivity())
-                .inflate(R.layout.timeline_tag_tabbar, null);
+        TimelineTagbar timelineTagbar = new TimelineTagbar(getActivity());
+        headerView_tagbar = timelineTagbar.getView();
         getListView().addHeaderView(headerView_tagbar);
-//            AQuery q = new AQuery(headerView_tagbar);
-//            TimelineFilterOnClickListener clickListener = new TimelineFilterOnClickListener(
-//                    dialogBackground,
-//                    headerView_tagbar,
-//                    headerView_tagbar.findViewById(R.id.btn_sender),
-//                    headerView_tagbar.findViewById(R.id.btn_cat)
-//            );
-//            clickListener.setOnFilterChangedListener(onMomentSenderChangedListener);
-//            q.find(R.id.btn_sender).clicked(clickListener);
-//            q.find(R.id.btn_cat).clicked(clickListener);
+        timelineTagbar.setListener(this);
+        timelineTagbar.updateIndicatesVisibility(selectedTag);
     }
 
     /**

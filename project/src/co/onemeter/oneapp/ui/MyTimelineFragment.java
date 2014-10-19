@@ -39,13 +39,13 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
     private MomentAdapter adapter;
     private ArrayList<Moment> moments;
     private int originalHeaderViewsCount = 0;
-    private boolean isPullToRefreshHeaderPullThresholdSet;
     private InputBoardManager mInputMgr;
     private MediaInputHelper mMediaInput;
     private String mInputedPhotoPathForAlbumcover;
     private MomentActivity.BeginUploadAlbumCover mBeginUploadAlbumCover;
     private NetworkIFDelegate albumCoverNetworkDelegate;
     private AlbumCover mAlbumCover;
+    private int establishedAlbumCoverHeight = 0;
 
     //
     // UI
@@ -74,8 +74,6 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        isPullToRefreshHeaderPullThresholdSet = false; // force resize album cover
 
         mMsgBox = new MessageBox(getActivity());
 
@@ -125,10 +123,6 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
             originalHeaderViewsCount = getListView().getHeaderViewsCount();
             setupListHeaderView_albumCover();
             setupListHeaderView_tagbar();
-        } else {
-            ImageView mHeaderBgImageView = (ImageView) headerView_albumCover.findViewById(R.id.imgAlbumBg);
-            View iconView = headerView_albumCover.findViewById(R.id.imgRefreshRotate);
-            resizeAlbumCoverOnLayoutDone(mHeaderBgImageView, iconView);
         }
     }
 
@@ -165,7 +159,6 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
             displayAlbumCover(albumCoverImageView);
 
         // bind event handlers
-        resizeAlbumCover(albumCoverImageView, imgPtrRefreshIcon);
         listView.setOnPullEventListener(new OnPullEventListener(imgPtrRefreshIcon));
         albumCoverImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +174,7 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
         });
 
         // misc
+        resizeAlbumCover(albumCoverImageView, imgPtrRefreshIcon);
         mBeginUploadAlbumCover = new UploadCoverListener(mProgressUploadingAlbumcover);
         albumCoverNetworkDelegate = new AlbumCoverNetworkDelegate(mProgressUploadingAlbumcover);
     }
@@ -350,26 +344,41 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
 //            q.find(R.id.btn_cat).clicked(clickListener);
     }
 
+    /**
+     * 设置相册封面和下拉刷新列表的尺寸和位置。
+     * 测量得到的高度保存在 {@link #establishedAlbumCoverHeight} 成员变量中。
+     */
     private void resizeAlbumCover(final View bg, final View PtrIcon) {
+        if (establishedAlbumCoverHeight > 0) {
+            resizeAlbumCoverDirectly(bg, PtrIcon, establishedAlbumCoverHeight);
+            return;
+        }
+
         bg.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
-                        if (bg.getWidth() > 0 && !isPullToRefreshHeaderPullThresholdSet) {
-                            isPullToRefreshHeaderPullThresholdSet=true;
-                            resizeAlbumCoverOnLayoutDone(bg, PtrIcon);
+                        if (bg.getWidth() > 0 && establishedAlbumCoverHeight == 0) {
+                            establishedAlbumCoverHeight = (int) (bg.getWidth() * 2.0 / 3);
+                            resizeAlbumCoverDirectly(bg, PtrIcon, establishedAlbumCoverHeight);
                         }
                     }
                 }
         );
     }
 
-    private void resizeAlbumCoverOnLayoutDone(View bg, View PtrIcon) {
+    /**
+     * 在已知合适高度的情况下，设置相册封面和下拉刷新列表的尺寸和位置。
+     * @param bg
+     * @param PtrIcon
+     * @param height
+     */
+    private void resizeAlbumCoverDirectly(View bg, View PtrIcon, int height) {
         ViewGroup.LayoutParams lp = bg.getLayoutParams();
-        lp.height = (int)(bg.getWidth()*2.0/3);
+        lp.height = height;
         bg.setLayoutParams(lp);
 
-        int headerHideHeight = (int)(lp.height * 0.28f);
+        int headerHideHeight = (int)(height * 0.28f);
         listView.setRefreshableViewMarginTop(-headerHideHeight);
 
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) PtrIcon.getLayoutParams();

@@ -38,7 +38,6 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
     private String uid;
     private Database dbHelper;
     private MomentAdapter adapter;
-    private ArrayList<Moment> moments;
     private int originalHeaderViewsCount = 0;
     private InputBoardManager mInputMgr;
     private MediaInputHelper mMediaInput;
@@ -79,6 +78,7 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
         super.onCreate(savedInstanceState);
 
         mMsgBox = new MessageBox(getActivity());
+        dbHelper = new Database(getActivity());
 
         args = getArguments();
         uid = args.getString("uid");
@@ -89,12 +89,16 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
         //
         // load moments
         //
-        dbHelper = new Database(getActivity());
-        moments = dbHelper.fetchMomentsOfSingleBuddy(uid, 0, 20);
+        ArrayList<Moment> moments = dbHelper.fetchMomentsOfSingleBuddy(uid, 0, 20);
+        setupListAdapter(moments);
+        checkNewMoments();
+    }
+
+    private void setupListAdapter(ArrayList<Moment> items) {
         ImageResizer imageResizer = new ImageResizer(getActivity(), DensityUtil.dip2px(getActivity(), 100));
         adapter = new MomentAdapter(getActivity(),
                 getActivity(),
-                moments,
+                items,
                 false,
                 false,
                 imageResizer,
@@ -102,6 +106,32 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
                 null,
                 new MessageBox(getActivity()));
         setListAdapter(adapter);
+    }
+
+    private void checkNewMoments() {
+        new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... params) {
+                WowMomentWebServerIF web = WowMomentWebServerIF.getInstance(getActivity());
+                return web.fGetMomentsOfBuddy(uid, 0, 20, true);
+            }
+
+            @Override
+            protected void onPostExecute(Integer errno) {
+                if (errno == ErrorCode.OK) {
+                    ArrayList<Moment> lst = dbHelper.fetchMomentsOfSingleBuddy(uid, 0, 20);
+                    if (adapter != null) {
+                        adapter.clear();
+                        adapter.addAll(lst);
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        setupListAdapter(lst);
+                    }
+                } else {
+                    Toast.makeText(getActivity(), R.string.moments_check_failed, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.execute((Void)null);
     }
 
     @Override

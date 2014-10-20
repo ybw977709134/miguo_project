@@ -1,2 +1,2 @@
-adb shell pm clear org.wowtech.yuanqu
+adb shell pm clear co.onemeter.oneapp
 adb shell rm -r /sdcard/wowtalk/.cache

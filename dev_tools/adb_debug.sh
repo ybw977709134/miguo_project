@@ -1,1 +1,1 @@
-adb shell am start -D -n org.wowtech.yuanqu/org.wowtech.yuanqu.YuanquActivity
+adb shell am start -D -n "co.onemeter.oneapp/co.onemeter.oneapp.YuanquActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER

@@ -515,7 +515,7 @@ public class WowMomentWebServerIF {
 		if(uid == null || password == null || owner_id == null)
 			return ErrorCode.INVALID_ARGUMENT;
 
-		final String action = "get_moments_of_buddy";
+		final String action = "get_moment_for_buddy";
 		String postStr = "action=" + action
 				+ "&uid=" + Utils.urlencodeUtf8(uid) 
 				+ "&password=" + Utils.urlencodeUtf8(password) 

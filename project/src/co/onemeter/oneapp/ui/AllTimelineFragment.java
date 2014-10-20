@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
 import org.wowtalk.api.Moment;
@@ -23,21 +22,6 @@ public class AllTimelineFragment extends TimelineFragment {
     private int originalHeaderViewsCount = 0;
     private TimelineFilterOnClickListener timelineFilterOnClickListener;
 
-    private TimelineFilterOnClickListener.OnFilterChangedListener onMomentSenderChangedListener =
-            new TimelineFilterOnClickListener.OnFilterChangedListener() {
-                @Override
-                public void onSenderChanged(int index) {
-                    Toast.makeText(AllTimelineFragment.this.getActivity(),
-                            "sender: " + index, Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onCategoryChanged(int index) {
-                    Toast.makeText(AllTimelineFragment.this.getActivity(),
-                            "category: " + index, Toast.LENGTH_SHORT).show();
-                }
-            };
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_timeline, container, false);
@@ -52,8 +36,8 @@ public class AllTimelineFragment extends TimelineFragment {
     }
 
     @Override
-    protected ArrayList<Moment> loadLocalMoments() {
-        return dbHelper.fetchMomentsOfAllBuddies(0, 20);
+    protected ArrayList<Moment> loadLocalMoments(int tag) {
+        return dbHelper.fetchMomentsOfAllBuddies(0, 20, tag);
     }
 
     @Override
@@ -89,7 +73,7 @@ public class AllTimelineFragment extends TimelineFragment {
                     headerView.findViewById(R.id.btn_sender),
                     headerView.findViewById(R.id.btn_cat)
             );
-            timelineFilterOnClickListener.setOnFilterChangedListener(onMomentSenderChangedListener);
+            timelineFilterOnClickListener.setOnFilterChangedListener(this);
             q.find(R.id.btn_sender).clicked(timelineFilterOnClickListener);
             q.find(R.id.btn_cat).clicked(timelineFilterOnClickListener);
         }

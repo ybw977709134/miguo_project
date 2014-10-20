@@ -80,8 +80,8 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
     }
 
     @Override
-    protected ArrayList<Moment> loadLocalMoments() {
-        return dbHelper.fetchMomentsOfSingleBuddy(uid(), 0, 20);
+    protected ArrayList<Moment> loadLocalMoments(int tag) {
+        return dbHelper.fetchMomentsOfSingleBuddy(uid(), 0, 20, tag);
     }
 
     @Override

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public abstract class TimelineFragment extends ListFragment implements MomentAdapter.ReplyDelegate, TimelineFilterOnClickListener.OnFilterChangedListener {
     protected Database dbHelper;
     private MomentAdapter adapter;
-    private int selectedTag;
+    private int selectedTag = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,17 +31,32 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
         dbHelper = new Database(getActivity());
 
         // load moments
-        setupListAdapter(loadLocalMoments());
+        setupListAdapter(loadLocalMoments(selectedTag));
         checkNewMoments();
     }
 
-    protected abstract ArrayList<Moment> loadLocalMoments();
+    /**
+     * Load moments from local DB.
+     * @param tag Tag index. -1 means not limited.
+     * @return
+     */
+    protected abstract ArrayList<Moment> loadLocalMoments(int tag);
 
     /**
      * Load moments from web server.
      * @return {@link org.wowtalk.api.ErrorCode}
      */
     protected abstract int loadRemoteMoments();
+
+    private void fillListView(ArrayList<Moment> lst) {
+        if (adapter != null) {
+            adapter.clear();
+            adapter.addAll(lst);
+            adapter.notifyDataSetChanged();
+        } else {
+            setupListAdapter(lst);
+        }
+    }
 
     private void setupListAdapter(ArrayList<Moment> items) {
         ImageResizer imageResizer = new ImageResizer(getActivity(), DensityUtil.dip2px(getActivity(), 100));
@@ -67,14 +82,8 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
             @Override
             protected void onPostExecute(Integer errno) {
                 if (errno == ErrorCode.OK) {
-                    ArrayList<Moment> lst = loadLocalMoments();
-                    if (adapter != null) {
-                        adapter.clear();
-                        adapter.addAll(lst);
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        setupListAdapter(lst);
-                    }
+                    ArrayList<Moment> lst = loadLocalMoments(selectedTag);
+                    fillListView(lst);
                 } else {
                     Toast.makeText(getActivity(), R.string.moments_check_failed, Toast.LENGTH_SHORT).show();
                 }
@@ -102,12 +111,14 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
 
     @Override
     public void onSenderChanged(int index) {
-
+        Toast.makeText(getActivity(),
+                "sender: " + index, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCategoryChanged(int index) {
         selectedTag = index;
+        fillListView(loadLocalMoments(selectedTag));
         Toast.makeText(getActivity(), "tag: " + index, Toast.LENGTH_SHORT).show();
     }
 }

@@ -12,7 +12,6 @@ import android.media.MediaPlayer;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Pair;
-
 import org.wowtalk.Log;
 
 import java.io.File;
@@ -5364,14 +5363,28 @@ public class Database {
      *
      * @param maxTimestamp 0 means not limited
      * @param count
+     * @param tag Tag index, 0 means not limited
      * @return
      */
+    public ArrayList<Moment> fetchMomentsOfSingleBuddy(String uid, long maxTimestamp, int count, int tag) {
+        String[] selection = new String[3];
+        selection[0] = "owner_uid=?";
+        selection[1] = (maxTimestamp > 0) ? "timestamp<?" : "1";
+        selection[2] = (tag != -1) ? "tag=?" : "1";
+
+        ArrayList<String> args = new ArrayList<String>();
+        args.add(uid);
+        if (maxTimestamp > 0) {
+            args.add(String.valueOf(maxTimestamp));
+        }
+        if (tag != -1) {
+            args.add(String.valueOf(tag));
+        }
+        return fetchMoments(TextUtils.join(" AND ", selection), args.toArray(new String[args.size()]), count);
+    }
+
     public ArrayList<Moment> fetchMomentsOfSingleBuddy(String uid, long maxTimestamp, int count) {
-        if (maxTimestamp > 0)
-            return fetchMoments("owner_uid=? AND timestamp<?",
-                    new String[]{uid, String.valueOf(maxTimestamp)}, count);
-        else
-            return fetchMoments("owner_uid=?", new String[]{uid}, count);
+        return fetchMomentsOfSingleBuddy(uid, maxTimestamp, count, -1);
     }
 
     /**
@@ -5381,12 +5394,22 @@ public class Database {
      * @param count
      * @return
      */
+    public ArrayList<Moment> fetchMomentsOfAllBuddies(long maxTimestamp, int count, int tag) {
+        String[] selection = new String[2];
+        selection[0] = (maxTimestamp > 0) ? "timestamp<?" : "1";
+        selection[1] = (tag != -1) ? "tag=?" : "1";
+
+        ArrayList<String> args = new ArrayList<String>();
+        if (maxTimestamp > 0) {
+            args.add(String.valueOf(maxTimestamp));
+        }
+        if (tag != -1) {
+            args.add(String.valueOf(tag));
+        }
+        return fetchMoments(TextUtils.join(" AND ", selection), args.toArray(new String[args.size()]), count);
+    }
     public ArrayList<Moment> fetchMomentsOfAllBuddies(long maxTimestamp, int count) {
-        if (maxTimestamp > 0)
-            return fetchMoments("timestamp<?",
-                    new String[]{String.valueOf(maxTimestamp)}, count);
-        else
-            return fetchMoments(null, null, count);
+        return fetchMomentsOfAllBuddies(maxTimestamp, count, -1);
     }
 
     public ArrayList<Moment> fetchMomentsOfFavorite(long maxTimestamp, int count) {

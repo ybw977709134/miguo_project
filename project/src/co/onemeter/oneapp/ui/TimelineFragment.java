@@ -22,7 +22,8 @@ import java.util.ArrayList;
 public abstract class TimelineFragment extends ListFragment implements MomentAdapter.ReplyDelegate, TimelineFilterOnClickListener.OnFilterChangedListener {
     protected Database dbHelper;
     private MomentAdapter adapter;
-    private int selectedTag = -1;
+    // selected tag index on UI
+    private int selectedTag = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,7 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
         }
 
         // load moments
-        setupListAdapter(loadLocalMoments(selectedTag));
+        setupListAdapter(loadLocalMoments(tagIdxFromUiToDb(selectedTag)));
         checkNewMoments();
     }
 
@@ -92,7 +93,7 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
             @Override
             protected void onPostExecute(Integer errno) {
                 if (errno == ErrorCode.OK) {
-                    ArrayList<Moment> lst = loadLocalMoments(selectedTag);
+                    ArrayList<Moment> lst = loadLocalMoments(tagIdxFromUiToDb(selectedTag));
                     fillListView(lst);
                 } else {
                     Toast.makeText(getActivity(), R.string.moments_check_failed, Toast.LENGTH_SHORT).show();
@@ -128,11 +129,21 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
     @Override
     public void onCategoryChanged(int index) {
         selectedTag = index;
-        fillListView(loadLocalMoments(selectedTag));
+        fillListView(loadLocalMoments(tagIdxFromUiToDb(selectedTag)));
         Toast.makeText(getActivity(), "tag: " + index, Toast.LENGTH_SHORT).show();
     }
 
     public int getMomentTag() {
         return selectedTag;
+    }
+
+    /**
+     * UI 中的 tag index 以 0 代表不限，
+     * DB 中的 tag index 以 -1 代表不限。
+     * @param uiTagIdx
+     * @return
+     */
+    private int tagIdxFromUiToDb(int uiTagIdx) {
+        return uiTagIdx < 0 ? uiTagIdx : uiTagIdx - 1;
     }
 }

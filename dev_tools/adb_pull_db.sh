@@ -1,1 +1,1 @@
-adb pull /data/data/org.wowtech.yuanqu/databases/wowtalkdb && sqlite3 wowtalkdb
+adb pull /data/data/co.onemeter.oneapp/databases/wowtalkdb && sqlite3 wowtalkdb

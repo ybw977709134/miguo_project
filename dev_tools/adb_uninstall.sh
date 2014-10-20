@@ -1,1 +1,1 @@
-adb uninstall org.wowtech.yuanqu
+adb uninstall co.onemeter.oneapp

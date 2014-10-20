@@ -1,19 +1,14 @@
 package co.onemeter.oneapp.ui;
 
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.adapter.MomentAdapter;
 import com.androidquery.AQuery;
-import org.wowtalk.api.Database;
 import org.wowtalk.api.Moment;
-import org.wowtalk.api.Review;
-import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.bitmapfun.util.ImageResizer;
+import org.wowtalk.api.WowMomentWebServerIF;
 
 import java.util.ArrayList;
 
@@ -21,12 +16,9 @@ import java.util.ArrayList;
  * <p>浏览所有人的动态。</p>
  * Created by pzy on 10/13/14.
  */
-public class AllTimelineFragment extends ListFragment implements MomentAdapter.ReplyDelegate {
+public class AllTimelineFragment extends TimelineFragment {
 
     private View dialogBackground;
-    private Database dbHelper;
-    private MomentAdapter adapter;
-    private ArrayList<Moment> moments;
     private View headerView;
     private int originalHeaderViewsCount = 0;
     private TimelineFilterOnClickListener timelineFilterOnClickListener;
@@ -57,29 +49,22 @@ public class AllTimelineFragment extends ListFragment implements MomentAdapter.R
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
 
-        //
-        // load moments
-        //
-        dbHelper = new Database(getActivity());
-        moments = dbHelper.fetchMomentsOfAllBuddies(0, 20);
-        ImageResizer imageResizer = new ImageResizer(getActivity(), DensityUtil.dip2px(getActivity(), 100));
-        adapter = new MomentAdapter(getActivity(),
-                getActivity(),
-                moments,
-                false,
-                false,
-                imageResizer,
-                this,
-                null,
-                new MessageBox(getActivity()));
-        setListAdapter(adapter);
+    @Override
+    protected ArrayList<Moment> loadLocalMoments() {
+        return dbHelper.fetchMomentsOfAllBuddies(0, 20);
+    }
+
+    @Override
+    protected int loadRemoteMoments() {
+        WowMomentWebServerIF web = WowMomentWebServerIF.getInstance(getActivity());
+        return web.fGetMomentsOfAll(0, 20, true);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        setupListHeaderView();
     }
 
     @Override
@@ -90,7 +75,8 @@ public class AllTimelineFragment extends ListFragment implements MomentAdapter.R
         }
     }
 
-    private void setupListHeaderView() {
+    @Override
+    protected void setupListHeaderView() {
         if (headerView == null || getListView().getHeaderViewsCount() == originalHeaderViewsCount) {
             originalHeaderViewsCount = getListView().getHeaderViewsCount();
             headerView = LayoutInflater.from(getActivity())
@@ -108,10 +94,4 @@ public class AllTimelineFragment extends ListFragment implements MomentAdapter.R
             q.find(R.id.btn_cat).clicked(timelineFilterOnClickListener);
         }
     }
-
-    @Override
-    public void replyToMoment(int position, String momentId, Review replyTo) {
-        new MessageBox(getActivity()).show(null, getString(R.string.not_implemented));
-    }
-
 }

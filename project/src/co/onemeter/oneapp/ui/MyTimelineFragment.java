@@ -3,7 +3,6 @@ package co.onemeter.oneapp.ui;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.*;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.adapter.MomentAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import org.wowtalk.api.*;
@@ -22,7 +20,6 @@ import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
-import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 import org.wowtalk.ui.msg.InputBoardManager;
 import org.wowtalk.ui.msg.RoundedImageView;
 
@@ -33,11 +30,7 @@ import java.util.Iterator;
  * <p>浏览我发布的动态。</p>
  * Created by pzy on 10/13/14.
  */
-public class MyTimelineFragment extends ListFragment implements MomentAdapter.ReplyDelegate, InputBoardManager.ChangeToOtherAppsListener, TimelineFilterOnClickListener.OnFilterChangedListener {
-    private Bundle args;
-    private String uid;
-    private Database dbHelper;
-    private MomentAdapter adapter;
+public class MyTimelineFragment extends TimelineFragment implements InputBoardManager.ChangeToOtherAppsListener {
     private int originalHeaderViewsCount = 0;
     private InputBoardManager mInputMgr;
     private MediaInputHelper mMediaInput;
@@ -78,67 +71,29 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
         super.onCreate(savedInstanceState);
 
         mMsgBox = new MessageBox(getActivity());
-        dbHelper = new Database(getActivity());
-
-        args = getArguments();
-        uid = args.getString("uid");
-        if (uid == null) {
-            throw new RuntimeException("uid is null");
-        }
-
-        //
-        // load moments
-        //
-        ArrayList<Moment> moments = dbHelper.fetchMomentsOfSingleBuddy(uid, 0, 20);
-        setupListAdapter(moments);
-        checkNewMoments();
+        // TODO mInputMgr
     }
 
-    private void setupListAdapter(ArrayList<Moment> items) {
-        ImageResizer imageResizer = new ImageResizer(getActivity(), DensityUtil.dip2px(getActivity(), 100));
-        adapter = new MomentAdapter(getActivity(),
-                getActivity(),
-                items,
-                false,
-                false,
-                imageResizer,
-                this,
-                null,
-                new MessageBox(getActivity()));
-        setListAdapter(adapter);
+    private String uid() {
+        Bundle args = getArguments();
+        return args != null ? args.getString("uid") : null;
     }
 
-    private void checkNewMoments() {
-        new AsyncTask<Void, Void, Integer>() {
-            @Override
-            protected Integer doInBackground(Void... params) {
-                WowMomentWebServerIF web = WowMomentWebServerIF.getInstance(getActivity());
-                return web.fGetMomentsOfBuddy(uid, 0, 20, true);
-            }
+    @Override
+    protected ArrayList<Moment> loadLocalMoments() {
+        return dbHelper.fetchMomentsOfSingleBuddy(uid(), 0, 20);
+    }
 
-            @Override
-            protected void onPostExecute(Integer errno) {
-                if (errno == ErrorCode.OK) {
-                    ArrayList<Moment> lst = dbHelper.fetchMomentsOfSingleBuddy(uid, 0, 20);
-                    if (adapter != null) {
-                        adapter.clear();
-                        adapter.addAll(lst);
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        setupListAdapter(lst);
-                    }
-                } else {
-                    Toast.makeText(getActivity(), R.string.moments_check_failed, Toast.LENGTH_SHORT).show();
-                }
-            }
-        }.execute((Void)null);
+    @Override
+    protected int loadRemoteMoments() {
+        WowMomentWebServerIF web = WowMomentWebServerIF.getInstance(getActivity());
+        return web.fGetMomentsOfBuddy(uid(), 0, 20, true);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         checkoutAlbumCover();
-        setupListHeaderView();
     }
 
     @Override
@@ -151,7 +106,8 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
 
     }
 
-    private void setupListHeaderView() {
+    @Override
+    protected void setupListHeaderView() {
         if (headerView_tagbar == null || getListView().getHeaderViewsCount() == originalHeaderViewsCount) {
             originalHeaderViewsCount = getListView().getHeaderViewsCount();
             setupListHeaderView_albumCover();
@@ -174,8 +130,8 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
         View headerBottomBg= headerView_albumCover.findViewById(R.id.box_info_bg);
 
         // retrieve data
-        Buddy buddy = dbHelper.buddyWithUserID(uid);
-        mAlbumCover = dbHelper.getAlbumCover(uid);
+        Buddy buddy = dbHelper.buddyWithUserID(uid());
+        mAlbumCover = dbHelper.getAlbumCover(uid());
 
         // display data
         txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
@@ -241,17 +197,6 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
         }
 
         return false;
-    }
-
-    @Override
-    public void onSenderChanged(int index) {
-
-    }
-
-    @Override
-    public void onCategoryChanged(int index) {
-        selectedTag = index;
-        Toast.makeText(getActivity(), "tag: " + index, Toast.LENGTH_SHORT).show();
     }
 
     private class UploadCoverListener implements MomentActivity.BeginUploadAlbumCover {
@@ -356,7 +301,7 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
         Account account = null;
         for (Iterator<Account> iterator = prefAccounts.iterator(); iterator.hasNext();) {
             account = iterator.next();
-            if (uid.equals(account.uid)) {
+            if (uid().equals(account.uid)) {
                 if (albumCover.timestamp == -1) {
                     account.albumCoverTimeStamp = -1;
                     account.albumCoverFileId = "";
@@ -377,7 +322,7 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
         if (ErrorCode.OK == mWeb.removeAlbumCover()) {
             mAlbumCover = new AlbumCover();
             mAlbumCover.timestamp = -1;
-            dbHelper.storeAlbumCover(uid, mAlbumCover);
+            dbHelper.storeAlbumCover(uid(), mAlbumCover);
             saveAlbumCover2SP(mAlbumCover);
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -391,7 +336,7 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
     }
 
     private boolean isMe() {
-        return TextUtils.equals(uid, PrefUtil.getInstance(getActivity()).getUid());
+        return TextUtils.equals(uid(), PrefUtil.getInstance(getActivity()).getUid());
     }
 
     private void setupListHeaderView_tagbar() {
@@ -579,7 +524,7 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
             protected Integer doInBackground(Void... params) {
                 try {
                     WowTalkWebServerIF mWeb = WowTalkWebServerIF.getInstance(getActivity());
-                    return mWeb.fGetAlbumCover(uid, ac);
+                    return mWeb.fGetAlbumCover(uid(), ac);
                 } catch (Exception e) {
                     e.printStackTrace();
                     return ErrorCode.BAD_RESPONSE;
@@ -589,7 +534,7 @@ public class MyTimelineFragment extends ListFragment implements MomentAdapter.Re
             @Override
             protected void onPostExecute(Integer errno) {
                 if (ErrorCode.OK == errno) {
-                    dbHelper.storeAlbumCover(uid, ac);
+                    dbHelper.storeAlbumCover(uid(), ac);
 
                     if (mAlbumCover == null
                             || mAlbumCover.fileId == null

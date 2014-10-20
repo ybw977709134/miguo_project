@@ -30,9 +30,19 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
 
         dbHelper = new Database(getActivity());
 
+        if (savedInstanceState != null) {
+            selectedTag = savedInstanceState.getInt("selectedTag");
+        }
+
         // load moments
         setupListAdapter(loadLocalMoments(selectedTag));
         checkNewMoments();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("selectedTag", selectedTag);
     }
 
     /**
@@ -120,5 +130,9 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
         selectedTag = index;
         fillListView(loadLocalMoments(selectedTag));
         Toast.makeText(getActivity(), "tag: " + index, Toast.LENGTH_SHORT).show();
+    }
+
+    public int getMomentTag() {
+        return selectedTag;
     }
 }

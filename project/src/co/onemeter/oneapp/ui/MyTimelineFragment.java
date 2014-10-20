@@ -40,7 +40,6 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
     private AlbumCover mAlbumCover;
     private int establishedAlbumCoverHeight = 0;
     private int establishedAvatarRadius = 0;
-    private int selectedTag;
 
     //
     // UI
@@ -344,7 +343,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         headerView_tagbar = timelineTagbar.getView();
         getListView().addHeaderView(headerView_tagbar);
         timelineTagbar.setListener(this);
-        timelineTagbar.updateIndicatesVisibility(selectedTag);
+        timelineTagbar.updateIndicatesVisibility(getMomentTag());
     }
 
     /**

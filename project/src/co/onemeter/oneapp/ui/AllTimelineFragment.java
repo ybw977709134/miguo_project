@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import co.onemeter.oneapp.R;
-import com.androidquery.AQuery;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import org.wowtalk.api.Moment;
 import org.wowtalk.api.WowMomentWebServerIF;
@@ -21,7 +20,7 @@ public class AllTimelineFragment extends TimelineFragment {
     private View dialogBackground;
     private View headerView;
     private int originalHeaderViewsCount = 0;
-    private TimelineFilterOnClickListener timelineFilterOnClickListener;
+    private TimelineDropdownFilter timelineDropdownFilter;
     private PullToRefreshListView ptrListView;
 
     @Override
@@ -57,8 +56,8 @@ public class AllTimelineFragment extends TimelineFragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (timelineFilterOnClickListener.isShowingDialog()) {
-            timelineFilterOnClickListener.tryDismissAll();
+        if (timelineDropdownFilter.isShowingDialog()) {
+            timelineDropdownFilter.tryDismissAll();
         }
     }
 
@@ -66,19 +65,13 @@ public class AllTimelineFragment extends TimelineFragment {
     protected void setupListHeaderView() {
         if (headerView == null || getListView().getHeaderViewsCount() == originalHeaderViewsCount) {
             originalHeaderViewsCount = getListView().getHeaderViewsCount();
-            headerView = LayoutInflater.from(getActivity())
-                    .inflate(R.layout.timeline_filter, null);
-            getListView().addHeaderView(headerView);
-            AQuery q = new AQuery(headerView);
-            timelineFilterOnClickListener = new TimelineFilterOnClickListener(
-                    dialogBackground,
-                    headerView,
-                    headerView.findViewById(R.id.btn_sender),
-                    headerView.findViewById(R.id.btn_cat)
+            timelineDropdownFilter = new TimelineDropdownFilter(
+                    getActivity(),
+                    dialogBackground
             );
-            timelineFilterOnClickListener.setOnFilterChangedListener(this);
-            q.find(R.id.btn_sender).clicked(timelineFilterOnClickListener);
-            q.find(R.id.btn_cat).clicked(timelineFilterOnClickListener);
+            headerView = timelineDropdownFilter.getView();
+            getListView().addHeaderView(headerView);
+            timelineDropdownFilter.setOnFilterChangedListener(this);
         }
     }
 

@@ -125,7 +125,7 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
     public void onTagChanged(int index) {
         selectedTag = index;
         fillListView(loadLocalMoments(tagIdxFromUiToDb(selectedTag)));
-        Toast.makeText(getActivity(), "tag: " + index, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "tag: " + index, Toast.LENGTH_SHORT).show();
     }
 
     /**

@@ -4,16 +4,18 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 
 /**
- * <p>响应时间线页面（{@link co.onemeter.oneapp.ui.AllTimelineFragment}）上的过滤器的点击事件。</p>
+ * <p>时间线的下拉列表过滤器。</p>
  * Created by pzy on 10/15/14.
  */
-public class TimelineFilterOnClickListener implements View.OnClickListener {
+public class TimelineDropdownFilter {
+    private final View view;
     View dialogBackground;
     View anchorView;
     Context context;
@@ -27,59 +29,26 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
 
     /**
      * @param dialogBackground 作为对话框下方的屏幕背景，一般为半透明的黑色。
-     * @param anchorView 对话现在在它的下方。
-     * @param btnSender 筛选发送者的按钮。
-     * @param btnCategory 筛选类型的按钮。
      */
-    public TimelineFilterOnClickListener(
-            View dialogBackground,
-            View anchorView,
-            View btnSender, View btnCategory) {
+    public TimelineDropdownFilter(
+            Context context,
+            View dialogBackground) {
+        this.context = context;
+        view = LayoutInflater.from(context).inflate(R.layout.timeline_filter, null);
         this.dialogBackground = dialogBackground;
-        this.anchorView = anchorView;
-        context = anchorView.getContext();
-        this.btnSender = btnSender;
-        this.btnCategory = btnCategory;
+        this.anchorView = view;
+        this.btnSender = view.findViewById(R.id.btn_sender);
+        this.btnCategory = view.findViewById(R.id.btn_cat);
+        btnSender.setOnClickListener(clickListener);
+        btnCategory.setOnClickListener(clickListener);
+    }
+
+    public View getView() {
+        return view;
     }
 
     public void setOnFilterChangedListener(OnTimelineFilterChangedListener l) {
         onFilterChangedListener = l;
-    }
-
-    @Override
-    public void onClick(View v) {
-        PopupWindow dlgToShow = null;
-        if (v == btnSender) {
-            // toggle dialog
-            if (dlgSender != null && dlgSender.isShowing()) {
-                dismissSenderDialog();
-            } else {
-                if (dlgCat != null && dlgCat.isShowing()) {
-                    dismissCatDialog();
-                }
-                if (dlgSender == null) {
-                    dlgSender = createSenderDialog();
-                }
-                dlgToShow = dlgSender;
-            }
-        } else if (v == btnCategory) {
-            // toggle dialog
-            if (dlgCat != null && dlgCat.isShowing()) {
-                dismissCatDialog();
-            } else {
-                if (dlgSender != null && dlgSender.isShowing()) {
-                    dismissSenderDialog();
-                }
-                if (dlgCat == null) {
-                    dlgCat = createCategoryDialog();
-                }
-                dlgToShow = dlgCat;
-            }
-        }
-
-        if (dlgToShow != null) {
-            showDialog(dlgToShow, v instanceof TextView ? (TextView) v : null);
-        }
     }
 
     private void setRightDrawable(TextView textView, int drawableResId) {
@@ -249,4 +218,42 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
         location.bottom = location.top + v.getHeight();
         return location;
     }
+
+    private final View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            PopupWindow dlgToShow = null;
+            if (v == btnSender) {
+                // toggle dialog
+                if (dlgSender != null && dlgSender.isShowing()) {
+                    dismissSenderDialog();
+                } else {
+                    if (dlgCat != null && dlgCat.isShowing()) {
+                        dismissCatDialog();
+                    }
+                    if (dlgSender == null) {
+                        dlgSender = createSenderDialog();
+                    }
+                    dlgToShow = dlgSender;
+                }
+            } else if (v == btnCategory) {
+                // toggle dialog
+                if (dlgCat != null && dlgCat.isShowing()) {
+                    dismissCatDialog();
+                } else {
+                    if (dlgSender != null && dlgSender.isShowing()) {
+                        dismissSenderDialog();
+                    }
+                    if (dlgCat == null) {
+                        dlgCat = createCategoryDialog();
+                    }
+                    dlgToShow = dlgCat;
+                }
+            }
+
+            if (dlgToShow != null) {
+                showDialog(dlgToShow, v instanceof TextView ? (TextView) v : null);
+            }
+        }
+    };
 }

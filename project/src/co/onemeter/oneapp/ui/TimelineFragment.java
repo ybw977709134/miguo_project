@@ -3,9 +3,12 @@ package co.onemeter.oneapp.ui;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.widget.ListView;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.Moment;
@@ -16,7 +19,7 @@ import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 import java.util.ArrayList;
 
 /**
- * <p>浏览我发布的动态。</p>
+ * <p>浏览动态。</p>
  * Created by pzy on 10/13/14.
  */
 public abstract class TimelineFragment extends ListFragment implements MomentAdapter.ReplyDelegate, TimelineFilterOnClickListener.OnFilterChangedListener {
@@ -84,28 +87,20 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
     }
 
     private void checkNewMoments() {
-        new AsyncTask<Void, Void, Integer>() {
-            @Override
-            protected Integer doInBackground(Void... params) {
-                return loadRemoteMoments();
-            }
-
-            @Override
-            protected void onPostExecute(Integer errno) {
-                if (errno == ErrorCode.OK) {
-                    ArrayList<Moment> lst = loadLocalMoments(tagIdxFromUiToDb(selectedTag));
-                    fillListView(lst);
-                } else {
-                    Toast.makeText(getActivity(), R.string.moments_check_failed, Toast.LENGTH_SHORT).show();
-                }
-            }
-        }.execute((Void)null);
+        new RefreshMomentsTask().execute((Void) null);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         setupListHeaderView();
+
+        PullToRefreshListView listView = getPullToRefreshListView();
+        if (listView != null) {
+            PtrListener l = new PtrListener();
+            listView.setOnPullEventListener(l);
+            listView.setOnRefreshListener(l);
+        }
     }
 
     @Override
@@ -133,6 +128,15 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
         Toast.makeText(getActivity(), "tag: " + index, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * 如果使用了 {@link com.handmark.pulltorefresh.widget.PullToRefreshListView}，请重写此方法，以便在这里设置事件
+     * 处理过程。
+     * @return
+     */
+    protected PullToRefreshListView getPullToRefreshListView() {
+        return null;
+    }
+
     public int getMomentTag() {
         return selectedTag;
     }
@@ -145,5 +149,49 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
      */
     private int tagIdxFromUiToDb(int uiTagIdx) {
         return uiTagIdx < 0 ? uiTagIdx : uiTagIdx - 1;
+    }
+
+    private class RefreshMomentsTask extends AsyncTask<Void, Void, Integer> {
+        @Override
+        protected Integer doInBackground(Void... params) {
+            return loadRemoteMoments();
+        }
+
+        @Override
+        protected void onPostExecute(Integer errno) {
+            if (errno == ErrorCode.OK) {
+                ArrayList<Moment> lst = loadLocalMoments(tagIdxFromUiToDb(selectedTag));
+                fillListView(lst);
+            } else {
+                Toast.makeText(getActivity(), R.string.moments_check_failed, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private class PtrListener implements PullToRefreshListView.OnRefreshListener,
+            PullToRefreshBase.OnPullEventListener<ListView> {
+
+        @Override
+        public void onPullEvent(PullToRefreshBase<ListView> refreshView,
+                                PullToRefreshBase.State state,
+                                PullToRefreshBase.Mode direction) {
+
+        }
+
+        @Override
+        public void onPullScaleChanged(float scale) {
+
+        }
+
+        @Override
+        public void onRefresh(final PullToRefreshBase refreshView) {
+            new RefreshMomentsTask(){
+                @Override
+                protected void onPostExecute(Integer errno) {
+                    super.onPostExecute(errno);
+                    refreshView.onRefreshComplete();
+                }
+            }.execute((Void)null);
+        }
     }
 }

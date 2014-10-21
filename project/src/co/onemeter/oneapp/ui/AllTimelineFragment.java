@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import org.wowtalk.api.Moment;
 import org.wowtalk.api.WowMomentWebServerIF;
 
@@ -21,10 +22,12 @@ public class AllTimelineFragment extends TimelineFragment {
     private View headerView;
     private int originalHeaderViewsCount = 0;
     private TimelineFilterOnClickListener timelineFilterOnClickListener;
+    private PullToRefreshListView ptrListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_timeline, container, false);
+        ptrListView = (PullToRefreshListView) view.findViewById(R.id.ptr_list);
         dialogBackground = view.findViewById(R.id.dialog_container);
         dialogBackground.setVisibility(View.GONE);
         return view;
@@ -77,5 +80,10 @@ public class AllTimelineFragment extends TimelineFragment {
             q.find(R.id.btn_sender).clicked(timelineFilterOnClickListener);
             q.find(R.id.btn_cat).clicked(timelineFilterOnClickListener);
         }
+    }
+
+    @Override
+    protected PullToRefreshListView getPullToRefreshListView() {
+        return ptrListView;
     }
 }

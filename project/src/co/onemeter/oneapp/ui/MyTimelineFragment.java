@@ -44,7 +44,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
     //
     // UI
     //
-    private PullToRefreshListView listView;
+    private PullToRefreshListView ptrListView;
     private View dialogBackground;
     // 相册封面（含头像）
     private View headerView_albumCover;
@@ -59,7 +59,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_timeline, container, false);
-        listView = (PullToRefreshListView) view.findViewById(R.id.list);
+        ptrListView = (PullToRefreshListView) view.findViewById(R.id.ptr_list);
         dialogBackground = view.findViewById(R.id.dialog_container);
         dialogBackground.setVisibility(View.GONE);
         return view;
@@ -150,7 +150,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
             displayAlbumCover(albumCoverImageView);
 
         // bind event handlers
-        listView.setOnPullEventListener(new OnPullEventListener(imgPtrRefreshIcon));
+        ptrListView.setOnPullEventListener(new OnPullEventListener(imgPtrRefreshIcon));
         albumCoverImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -381,7 +381,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         bg.setLayoutParams(lp);
 
         int headerHideHeight = (int)(height * 0.28f);
-        listView.setRefreshableViewMarginTop(-headerHideHeight);
+        ptrListView.setRefreshableViewMarginTop(-headerHideHeight);
 
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) PtrIcon.getLayoutParams();
         if (rlp != null) {
@@ -389,7 +389,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         }
         bg.requestLayout();
 
-        listView.setHeaderPullThreshold(0);
+        ptrListView.setHeaderPullThreshold(0);
     }
 
     private void hidePtrIcon(View view) {
@@ -547,5 +547,10 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
                 }
             }
         }.execute((Void)null);
+    }
+
+    @Override
+    protected PullToRefreshListView getPullToRefreshListView() {
+        return ptrListView;
     }
 }

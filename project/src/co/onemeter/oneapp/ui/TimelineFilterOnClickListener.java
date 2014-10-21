@@ -23,12 +23,7 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
     int selectedCatIdx = 0;
     PopupWindow dlgSender;
     PopupWindow dlgCat;
-    OnFilterChangedListener onFilterChangedListener;
-
-    public interface OnFilterChangedListener {
-        public void onSenderChanged(int index);
-        public void onCategoryChanged(int index);
-    }
+    OnTimelineFilterChangedListener onFilterChangedListener;
 
     /**
      * @param dialogBackground 作为对话框下方的屏幕背景，一般为半透明的黑色。
@@ -47,7 +42,7 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
         this.btnCategory = btnCategory;
     }
 
-    public void setOnFilterChangedListener(OnFilterChangedListener l) {
+    public void setOnFilterChangedListener(OnTimelineFilterChangedListener l) {
         onFilterChangedListener = l;
     }
 
@@ -230,7 +225,7 @@ public class TimelineFilterOnClickListener implements View.OnClickListener {
                     selectedCatIdx = position;
                     dismissCatDialog();
                     if (onFilterChangedListener != null) {
-                        onFilterChangedListener.onCategoryChanged(position);
+                        onFilterChangedListener.onTagChanged(position);
                     }
                 }
             };

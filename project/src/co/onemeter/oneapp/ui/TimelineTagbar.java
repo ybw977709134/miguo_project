@@ -12,7 +12,7 @@ import com.androidquery.AQuery;
  */
 public class TimelineTagbar {
     private final View view;
-    private TimelineFilterOnClickListener.OnFilterChangedListener listener;
+    private OnTimelineFilterChangedListener listener;
     private View[] indicates;
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -43,7 +43,7 @@ public class TimelineTagbar {
             updateIndicatesVisibility(index);
 
             if (listener != null) {
-                listener.onCategoryChanged(index);
+                listener.onTagChanged(index);
             }
         }
     };
@@ -79,7 +79,7 @@ public class TimelineTagbar {
         return view;
     }
 
-    public void setListener(TimelineFilterOnClickListener.OnFilterChangedListener l) {
+    public void setListener(OnTimelineFilterChangedListener l) {
         listener = l;
     }
 }

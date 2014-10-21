@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * <p>浏览动态。</p>
  * Created by pzy on 10/13/14.
  */
-public abstract class TimelineFragment extends ListFragment implements MomentAdapter.ReplyDelegate, TimelineFilterOnClickListener.OnFilterChangedListener {
+public abstract class TimelineFragment extends ListFragment implements MomentAdapter.ReplyDelegate, OnTimelineFilterChangedListener {
     protected Database dbHelper;
     private MomentAdapter adapter;
     // selected tag index on UI
@@ -122,7 +122,7 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
     }
 
     @Override
-    public void onCategoryChanged(int index) {
+    public void onTagChanged(int index) {
         selectedTag = index;
         fillListView(loadLocalMoments(tagIdxFromUiToDb(selectedTag)));
         Toast.makeText(getActivity(), "tag: " + index, Toast.LENGTH_SHORT).show();

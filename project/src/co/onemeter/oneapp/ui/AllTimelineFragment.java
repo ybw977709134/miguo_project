@@ -25,7 +25,7 @@ public class AllTimelineFragment extends TimelineFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_all_timeline, container, false);
+        View view = inflater.inflate(R.layout.fragment_timeline, container, false);
         ptrListView = (PullToRefreshListView) view.findViewById(R.id.ptr_list);
         dialogBackground = view.findViewById(R.id.dialog_container);
         dialogBackground.setVisibility(View.GONE);

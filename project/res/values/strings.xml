@@ -701,4 +701,10 @@
 	<string name="timeline_filter_sender">分享者</string>
 	<string name="timeline_filter_category">分类</string>
 	<string name="moments_check_failed">无法获取最新动态</string>
+	<string name="moment_add_text">文字</string>
+	<string name="moment_add_pic">相册</string>
+	<string name="moment_add_camera">拍照</string>
+	<string name="moment_add_question">问答</string>
+	<string name="moment_add_vote">投票</string>
+	<string name="moment_add_video">视频</string>
 </resources>

@@ -1,6 +1,7 @@
 package co.onemeter.oneapp.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -12,7 +13,6 @@ import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.Review;
 import org.wowtalk.api.WowMomentWebServerIF;
 import org.wowtalk.ui.GlobalValue;
-import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;
 
@@ -22,10 +22,13 @@ import java.util.ArrayList;
  */
 public class TimelineActivity extends FragmentActivity implements View.OnClickListener {
 
+    private static final int REQ_CREATE_MOMENT = 124;
     private static TimelineActivity instance;
-    AllTimelineFragment allTimelineFragment;
-    MyTimelineFragment myTimelineFragment;
-    AQuery q = new AQuery(this);
+
+    private AllTimelineFragment allTimelineFragment;
+    private MyTimelineFragment myTimelineFragment;
+    private View newMomentPanel;
+    private AQuery q = new AQuery(this);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,14 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         q.find(R.id.btn_all).clicked(this);
         q.find(R.id.btn_me).clicked(this);
         q.find(R.id.title_edit).clicked(this);
+        q.find(R.id.vg_new_text).clicked(this);
+        q.find(R.id.vg_new_pic).clicked(this);
+        q.find(R.id.vg_new_camera).clicked(this);
+        q.find(R.id.vg_new_question).clicked(this);
+        q.find(R.id.vg_new_vote).clicked(this);
+        q.find(R.id.vg_new_video).clicked(this);
+
+        newMomentPanel = q.find(R.id.new_moment_panel).clicked(this).getView();
 
         allTimelineFragment =  new AllTimelineFragment();
         myTimelineFragment = new MyTimelineFragment();
@@ -42,26 +53,49 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         args.putString("uid", PrefUtil.getInstance(this).getUid());
         myTimelineFragment.setArguments(args);
 
+        hideNewMomentPanel();
+
         switchToAll();
+
+        instance = this;
     }
 
     public static TimelineActivity instance() {
         if (instance == null) {
-            instance = new TimelineActivity();
+            instance = new TimelineActivity(); // XXX silly
         }
         return instance;
     }
 
     public boolean handleBackPress() {
-        // TODO
+        if (isNewMomentPanelShowing()) {
+            hideNewMomentPanel();
+            return true;
+        }
         return false;
+    }
+
+    private boolean isNewMomentPanelShowing() {
+        return newMomentPanel != null && newMomentPanel.getVisibility() == View.VISIBLE;
+    }
+
+    private void hideNewMomentPanel() {
+        newMomentPanel.setVisibility(View.GONE);
+    }
+
+    private void toggleNewMomentPanel() {
+        newMomentPanel.setVisibility(isNewMomentPanelShowing() ?
+                View.GONE : View.VISIBLE);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.title_edit:
-                new MessageBox(this).show(null, getString(R.string.not_implemented));
+                toggleNewMomentPanel();
+                break;
+            case R.id.new_moment_panel:
+                hideNewMomentPanel();
                 break;
             case R.id.btn_all:
                 switchToAll();
@@ -69,7 +103,24 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
             case R.id.btn_me:
                 switchToMy();
                 break;
+            case R.id.vg_new_text:
+            case R.id.vg_new_pic:
+            case R.id.vg_new_camera:
+            case R.id.vg_new_question:
+            case R.id.vg_new_vote:
+            case R.id.vg_new_video:
+                gotoCreateMoment();
+                hideNewMomentPanel();
+                break;
         }
+    }
+
+    private void gotoCreateMoment() {
+        // TODO consider moment tag
+        long maxTimeStamp=0; // TODO
+        Intent intent = new Intent(this, CreateMomentActivity.class);
+        intent.putExtra(CreateMomentActivity.EXTRA_KEY_MOMENT_MAX_TIMESTAMP,maxTimeStamp);
+        startActivityForResult(intent, REQ_CREATE_MOMENT);
     }
 
     private void switchToAll() {

@@ -3,6 +3,7 @@
           android:versionCode="1"
           android:versionName="1.0.0" >
 
+	<!-- 在 Android 2.3 上，PullToRefreshListView 产生 stack overflow 错误。 -->
 	<uses-sdk
 		android:minSdkVersion="11"
 		android:targetSdkVersion="17" />

@@ -37,10 +37,6 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
         if (savedInstanceState != null) {
             selectedTag = savedInstanceState.getInt("selectedTag");
         }
-
-        // load moments
-        setupListAdapter(loadLocalMoments(tagIdxFromUiToDb(selectedTag)));
-        checkNewMoments();
     }
 
     @Override
@@ -93,7 +89,12 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
     @Override
     public void onResume() {
         super.onResume();
+
         setupListHeaderView();
+
+        // load moments
+        setupListAdapter(loadLocalMoments(tagIdxFromUiToDb(selectedTag)));
+        checkNewMoments();
 
         PullToRefreshListView listView = getPullToRefreshListView();
         if (listView != null) {
@@ -113,6 +114,10 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
         new MessageBox(getActivity()).show(null, getString(R.string.not_implemented));
     }
 
+    /**
+     * Possible error:
+     * java.lang.IllegalStateException: Cannot add header view to list -- setAdapter has already been called.
+     */
     protected abstract void setupListHeaderView();
 
     @Override

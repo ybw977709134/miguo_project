@@ -19,20 +19,18 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-
-import com.umeng.analytics.MobclickAgent;
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.IDBTableChangeListener;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
-import org.wowtalk.ui.msg.RoundedImageView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.adapter.ContactListAdapter;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
+import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.Buddy;
+import org.wowtalk.api.Database;
+import org.wowtalk.api.IDBTableChangeListener;
+import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.PhotoDisplayHelper;
+import org.wowtalk.ui.msg.RoundedImageView;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -473,9 +471,6 @@ public class MultiSelectActivity extends Activity implements OnClickListener {
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
-        if (!PrefUtil.getInstance(MultiSelectActivity.this).isContactsUptodateAfterLogin()) {
-            mMsgBox.showWait();
-        }
         Database.addDBTableChangeListener(Database.DUMMY_TBL_FINISH_LOAD_CONTACTS,mFinishLoadBuddiesObserver);
     }
 

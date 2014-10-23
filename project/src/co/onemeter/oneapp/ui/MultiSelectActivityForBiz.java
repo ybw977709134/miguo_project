@@ -1,40 +1,11 @@
 package co.onemeter.oneapp.ui;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.api.GroupMember;
-import org.wowtalk.api.IDBTableChangeListener;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.GlobalValue;
-import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
-import org.wowtalk.ui.msg.RoundedImageView;
-import co.onemeter.oneapp.Constants;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.contacts.adapter.ContactGroupIterationAdapter;
-import co.onemeter.oneapp.contacts.adapter.ContactListAdapter;
-import co.onemeter.oneapp.contacts.model.Person;
-import co.onemeter.oneapp.ui.SideBar.OnTouchingLetterChangedListener;
-
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Parcelable;
+import android.os.*;
 import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -47,22 +18,26 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Filter;
-import android.widget.GridView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
-
+import co.onemeter.oneapp.Constants;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.contacts.adapter.ContactGroupIterationAdapter;
+import co.onemeter.oneapp.contacts.adapter.ContactListAdapter;
+import co.onemeter.oneapp.contacts.model.Person;
+import co.onemeter.oneapp.ui.SideBar.OnTouchingLetterChangedListener;
 import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.GlobalValue;
+import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.PhotoDisplayHelper;
+import org.wowtalk.ui.msg.RoundedImageView;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 public class MultiSelectActivityForBiz extends Activity implements OnClickListener, OnTouchingLetterChangedListener {
 	private class SelectedAdapter extends BaseAdapter {
@@ -416,6 +391,7 @@ public class MultiSelectActivityForBiz extends Activity implements OnClickListen
                     mHandler.sendEmptyMessage(HANDLER_DISMISS_WAIT);
                     getCurrentChatGroup();
                     getFrequentContacts();
+                    getLocalNormalContacts();
                     getContactsListFromLocal();
                     getSearchedContacts();
                 }
@@ -679,6 +655,7 @@ public class MultiSelectActivityForBiz extends Activity implements OnClickListen
             public void run() {
                 getCurrentChatGroup();
                 getFrequentContacts();
+                getLocalNormalContacts();
                 getContactsListFromLocal();
                 getSearchedContacts();
             }
@@ -1047,6 +1024,32 @@ public class MultiSelectActivityForBiz extends Activity implements OnClickListen
             rootChatRoom.childGroups.add(favoriteGroup);
         }
         return rootChatRoom;
+    }
+
+    private void getLocalNormalContacts() {
+        ArrayList<Buddy> members =
+                mDbHelper.fetchNormalBuddies();
+
+        mContactsAll = new ArrayList<Person>();
+        Person temPerson = null;
+        for (Buddy buddy : members) {
+            // 结果中不包含自己
+            if (!mMyOwnId.equals(buddy.userID)) {
+                temPerson = Person.fromBuddy(buddy);
+                if (mSelectedPersonIds.contains(buddy.userID)) {
+                    temPerson.setSelected(true);
+                }
+                mContactsAll.add(temPerson);
+            }
+        }
+
+        int endIndex = LOAD_COUNT_PER_TIME >= mContactsAll.size()
+                ? mContactsAll.size() : LOAD_COUNT_PER_TIME;
+        List<Person> subList = mContactsAll.subList(0, endIndex);
+        mContacts = new ArrayList<Person>();
+        mContacts.addAll(subList);
+
+        mHandler.sendEmptyMessage(HANDLER_CONTACTS_LIST);
     }
 
     /**

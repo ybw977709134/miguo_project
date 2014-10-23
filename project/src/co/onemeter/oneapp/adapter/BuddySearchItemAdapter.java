@@ -13,15 +13,16 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import co.onemeter.oneapp.R;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
-import co.onemeter.oneapp.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -160,4 +161,20 @@ public class BuddySearchItemAdapter extends BaseAdapter {
             }
         }.execute((Void)null);
     }
+
+    public void clear() {
+        buddyList.clear();
+        notifyDataSetChanged();
+    }
+
+    public void add(Buddy b) {
+        buddyList.add(b);
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<Buddy> lst) {
+        buddyList.addAll(lst);
+        notifyDataSetChanged();
+    }
+
 }

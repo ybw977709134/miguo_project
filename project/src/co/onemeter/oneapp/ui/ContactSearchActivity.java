@@ -102,14 +102,20 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
             if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
                 if(!buddySearchContent.equals(curSearchTxt)) {
-                    searchedBuddyList.clear();
-                    if (buddyAdapter != null)
-                        buddyAdapter.notifyDataSetChanged();
+                    if (buddyAdapter != null) {
+                        buddyAdapter.clear();
+                    } else {
+                        searchedBuddyList.clear();
+                    }
                 }
                 buddySearchContent=edtSearchContent.getText().toString();
             } else {
                 if(!groupSearchContent.equals(curSearchTxt)) {
-                    searchedGroupRoomList.clear();
+                    if (groupAdapter != null) {
+                        groupAdapter.clear();
+                    } else {
+                        searchedGroupRoomList.clear();
+                    }
                 }
                 groupSearchContent=edtSearchContent.getText().toString();
             }
@@ -127,21 +133,32 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
 		new AsyncTask<Void, Integer, Void>() {
 
+            ArrayList<GroupChatRoom> results = new ArrayList<GroupChatRoom>();
+
 			@Override
 			protected Void doInBackground(Void... params) {
 //				GroupChatRoom groupWithThatShortID = null;
-                searchedGroupRoomList.clear();
+                if (groupAdapter != null)
+                    groupAdapter.clear();
+                else
+                    searchedGroupRoomList.clear();
 //				if(groupWithThatShortID != null) {
 //                    searchedGroupRoomList.add(groupWithThatShortID);
 //				}
-				mWebif.fGroupChat_Search(keyword, searchedGroupRoomList);
+				mWebif.fGroupChat_Search(keyword, results);
 				return null;
 			}
 			
 			@Override
 			protected void onPostExecute(Void v) {
                 mMsgBox.dismissWait();
-				fShowGroupResult();
+                if (groupAdapter != null) {
+                    groupAdapter.addAll(results);
+                    setSearchResultStatus();
+                } else {
+                    searchedGroupRoomList.addAll(results);
+                    fShowGroupResult();
+                }
 			}
 			
 		}.execute((Void)null);
@@ -154,14 +171,17 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
 		new AsyncTask<Void, Integer, Void>() {
 			int errno = ErrorCode.OK;
+            ArrayList<Buddy> results = new ArrayList<Buddy>();
 
 			@Override
 			protected Void doInBackground(Void... arg0) {
 //				buddy = new Buddy();
-                searchedBuddyList.clear();
                 if (buddyAdapter != null)
-                    buddyAdapter.notifyDataSetChanged();
-				errno = mWebif.fSearchBuddy(wowtalkId,Buddy.ACCOUNT_TYPE_NORMAL, searchedBuddyList);
+                    buddyAdapter.clear();
+                else
+                    searchedBuddyList.clear();
+
+				errno = mWebif.fSearchBuddy(wowtalkId,Buddy.ACCOUNT_TYPE_NORMAL, results);
 
 //                mAllowAdd = errno == ErrorCode.OK
 //                        && !Utils.isNullOrEmpty(buddy.userID)
@@ -184,11 +204,14 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 			protected void onPostExecute(Void v) {
                 mMsgBox.dismissWait();
 
-                if (buddyAdapter != null)
-                    buddyAdapter.notifyDataSetChanged();
-				if (errno == ErrorCode.OK) {
-					fShowBuddyResult();
-				} else if (errno == ErrorCode.USER_NOT_EXISTS) {
+                if (buddyAdapter != null) {
+                    buddyAdapter.addAll(results);
+                    setSearchResultStatus();
+                } else {
+                    searchedBuddyList.addAll(results);
+                    fShowBuddyResult();
+                }
+				if (errno == ErrorCode.USER_NOT_EXISTS) {
                     mMsgBox.toast(R.string.login_user_not_exists);
 				}
 			}

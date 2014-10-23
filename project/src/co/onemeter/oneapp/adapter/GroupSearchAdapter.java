@@ -10,11 +10,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import co.onemeter.oneapp.R;
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.ui.PhotoDisplayHelper;
-import co.onemeter.oneapp.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GroupSearchAdapter extends BaseAdapter {
 
@@ -84,4 +85,18 @@ public class GroupSearchAdapter extends BaseAdapter {
 		TextView txtID;
 	}
 
+    public void clear() {
+        groupRooms.clear();
+        notifyDataSetChanged();
+    }
+
+    public void add(GroupChatRoom b) {
+        groupRooms.add(b);
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<GroupChatRoom> lst) {
+        groupRooms.addAll(lst);
+        notifyDataSetChanged();
+    }
 }

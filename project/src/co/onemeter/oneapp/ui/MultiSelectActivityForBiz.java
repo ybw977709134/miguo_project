@@ -831,7 +831,7 @@ public class MultiSelectActivityForBiz extends Activity implements OnClickListen
         mSelectedPerson.toArray(persons);
 
         // mSelectedPerson doesn't contain myself).
-        if(1 == mSelectedPerson.size()) {
+        if(1 == mSelectedPerson.size() && TextUtils.isEmpty(mOriginalGid)) {
             Intent data = new Intent();
             data.putExtra("is_group_chat", false);
             data.putExtra("buddy_id", mSelectedPerson.get(0).getID());

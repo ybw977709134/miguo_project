@@ -638,7 +638,7 @@ public class WowTalkWebServerIF {
         if(isAuthEmpty(uid, password))
 			return ErrorCode.INVALID_ARGUMENT;
 
-		final String action = "remove_buddy_from_group";
+		final String action = "remove_group_member";
 		String postStr = "action=" + action
 				+ "&uid=" + Utils.urlencodeUtf8(uid) 
 				+ "&password=" + Utils.urlencodeUtf8(password) 

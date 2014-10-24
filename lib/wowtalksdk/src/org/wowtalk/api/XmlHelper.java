@@ -3,7 +3,6 @@ package org.wowtalk.api;
 import android.content.Context;
 import android.graphics.PointF;
 import android.text.TextUtils;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.wowtalk.Log;
@@ -31,7 +30,7 @@ public class XmlHelper {
         if(e != null && WFile.isValidExt(e.getTextContent())) {
             wf.setExt(e.getTextContent());
         } else {
-            Log.e("bad media ext: " + e.getTextContent() + ", xml: " + mediaNode.toString());
+            Log.e("bad media ext: " + (e == null ? "null" : e.getTextContent()) + ", xml: " + mediaNode.toString());
             return null;
         }
 

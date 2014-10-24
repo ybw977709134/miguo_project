@@ -95,12 +95,14 @@
 				android:gravity="center_vertical"
 				android:orientation="horizontal">
 				<LinearLayout
+					android:id="@+id/vg_study"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:gravity="center"
 					android:orientation="vertical">
 					<ImageButton
+						android:id="@+id/btn_study"
 						android:layout_width="@dimen/home_icon_size"
 						android:layout_height="@dimen/home_icon_size"
 						android:background="@null"
@@ -112,12 +114,14 @@
 						android:text="@string/home_button_expand"/>
 				</LinearLayout>
 				<LinearLayout
+					android:id="@+id/vg_event"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:gravity="center"
 					android:orientation="vertical">
 					<ImageButton
+						android:id="@+id/btn_event"
 						android:layout_width="@dimen/home_icon_size"
 						android:layout_height="@dimen/home_icon_size"
 						android:background="@null"
@@ -129,12 +133,14 @@
 						android:text="@string/home_button_events"/>
 				</LinearLayout>
 				<LinearLayout
+					android:id="@+id/vg_grow"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:gravity="center"
 					android:orientation="vertical">
 					<ImageButton
+						android:id="@+id/btn_grow"
 						android:layout_width="@dimen/home_icon_size"
 						android:layout_height="@dimen/home_icon_size"
 						android:background="@null"
@@ -165,12 +171,14 @@
 				android:gravity="center_vertical"
 				android:orientation="horizontal">
 				<LinearLayout
+					android:id="@+id/vg_bouns"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:gravity="center"
 					android:orientation="vertical">
 					<ImageButton
+						android:id="@+id/btn_bouns"
 						android:layout_width="@dimen/home_icon_size"
 						android:layout_height="@dimen/home_icon_size"
 						android:background="@null"

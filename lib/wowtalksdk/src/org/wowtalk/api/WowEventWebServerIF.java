@@ -296,7 +296,7 @@ public class WowEventWebServerIF {
 			return ErrorCode.INVALID_ARGUMENT;
 		
 		int errno = ErrorCode.BAD_RESPONSE;
-		String[] actions = new String[] {"get_latest_events"};
+		String[] actions = new String[] {"get_all_events"};
 
 		for(String action :  actions) {
 			String postStr = "action=" + action
@@ -319,7 +319,7 @@ public class WowEventWebServerIF {
                     ArrayList<WEvent> eventsFromServer=new ArrayList<WEvent>();
 					Element resultElement = Utils.getFirstElementByTagName(root, action); 
 					if(resultElement != null) {
-						NodeList eventNodes = resultElement.getElementsByTagName("item");
+						NodeList eventNodes = resultElement.getElementsByTagName("event");
 						if(eventNodes != null && eventNodes.getLength() > 0) {
 
 							for(int i = 0, n = eventNodes.getLength(); i < n; ++i) {

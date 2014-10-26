@@ -116,7 +116,7 @@
     <string name="friends_moment_comment_me">我</string>
     <string name="favoriteGroupsSort_failure">排序失败</string>
 
-	<string name="events_all">全部活动</string>
+	<string name="events_all">乐趣活动</string>
 	<string name="events_official">官方活动</string>
 	<string name="events_my">我发起的活动</string>
 	<string name="events_applied">已报名的活动</string>
@@ -707,4 +707,7 @@
 	<string name="moment_add_question">问答</string>
 	<string name="moment_add_vote">投票</string>
 	<string name="moment_add_video">视频</string>
+	<string name="event_filter_host">主办方</string>
+	<string name="event_filter_type">类型</string>
+	<string name="event_filter_time">时间</string>
 </resources>

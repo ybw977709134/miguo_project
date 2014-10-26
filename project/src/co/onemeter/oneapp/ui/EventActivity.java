@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView.ScaleType;
+import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.Log;
 import org.wowtalk.api.*;
@@ -25,8 +26,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class EventActivity extends Activity implements OnClickListener{
-	private class EventAdapter extends BaseAdapter {
+public class EventActivity extends Activity implements OnClickListener, DropdownMenu.OnDropdownMenuItemClickListener {
+    private class EventAdapter extends BaseAdapter {
 
 		private LayoutInflater inflater;
 		private ArrayList<WEvent> eventList;
@@ -244,12 +245,15 @@ public class EventActivity extends Activity implements OnClickListener{
 	
 	private Database mDb = null;
 
+    private DropdownMenu tf;
+
+
 //	public static EventActivity instance() {
 //		if (instance == null)
 //				return null;
 //		return instance;
 //	}
-	
+
 	protected void refresh() {
 		this.runOnUiThread(new Runnable(){
 			@Override
@@ -282,6 +286,30 @@ public class EventActivity extends Activity implements OnClickListener{
                 fGointoASpecificEvent(acts.get(position));
             }
         });
+
+        View c = findViewById(R.id.dialog_container);
+        c.setVisibility(View.INVISIBLE);
+        tf = new DropdownMenu(this, R.layout.event_filter,
+                new int[]{ R.id.btn_host, R.id.btn_type, R.id.btn_time },
+                c) {
+            @Override
+            protected String[] getSubItems(int itemId) {
+                switch (itemId) {
+                    case R.id.btn_host:
+                        return getResources().getStringArray(R.array.event_host);
+                    case R.id.btn_type:
+                        return getResources().getStringArray(R.array.event_type);
+                    case R.id.btn_time:
+                        return getResources().getStringArray(R.array.event_time);
+                }
+                return new String[0];
+            }
+        };
+        tf.setOnFilterChangedListener(this);
+        lvEvent.addHeaderView(tf.getView());
+
+        AQuery q = new AQuery(this);
+        q.find(R.id.title_left).clicked(this);
 	}
 	
 	private void downloadLatestEvents() {
@@ -403,24 +431,25 @@ public class EventActivity extends Activity implements OnClickListener{
 		categoryPopup.showAsDropDown(mNavBar, (getWindowManager().getDefaultDisplay().getWidth() - categoryPopup.getWidth()) / 2, 0);
 		categoryPopup.update();
 	}
-	
-	
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.right_button:
-			Intent detailIntent = new Intent(EventActivity.this, CreateEventActivity.class);
-			startActivity(detailIntent);
 
-			break;
-		case R.id.title_text:
-            fShowPopup();
-			break;
-		
-		default:
-			break;
-		}
-	}
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.right_button:
+                Intent detailIntent = new Intent(EventActivity.this, CreateEventActivity.class);
+                startActivity(detailIntent);
+                break;
+            case R.id.title_left:
+                onBackPressed();
+                break;
+            case R.id.title_text:
+                fShowPopup();
+                break;
+            default:
+                break;
+        }
+    }
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -455,5 +484,19 @@ public class EventActivity extends Activity implements OnClickListener{
 		super.onPause();
         MobclickAgent.onPause(this);
 	}
+
+    @Override
+    public void onBackPressed() {
+        if (tf != null && tf.isShowingDialog()) {
+            tf.tryDismissAll();
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onDropdownMenuItemClick(int subMenuResId, int itemIdx) {
+        Toast.makeText(this, subMenuResId + "/" + itemIdx, Toast.LENGTH_SHORT).show();
+    }
 
 }

@@ -15,12 +15,12 @@ import java.util.ArrayList;
  * <p>浏览所有人的动态。</p>
  * Created by pzy on 10/13/14.
  */
-public class AllTimelineFragment extends TimelineFragment {
+public class AllTimelineFragment extends TimelineFragment implements DropdownMenu.OnDropdownMenuItemClickListener {
 
     private View dialogBackground;
     private View headerView;
     private int originalHeaderViewsCount = 0;
-    private TimelineDropdownFilter timelineDropdownFilter;
+    private DropdownMenu timelineDropdownFilter;
     private PullToRefreshListView ptrListView;
 
     @Override
@@ -65,10 +65,22 @@ public class AllTimelineFragment extends TimelineFragment {
     protected void setupListHeaderView() {
         if (headerView == null || getListView().getHeaderViewsCount() == originalHeaderViewsCount) {
             originalHeaderViewsCount = getListView().getHeaderViewsCount();
-            timelineDropdownFilter = new TimelineDropdownFilter(
-                    getActivity(),
-                    dialogBackground
-            );
+            timelineDropdownFilter =
+                    new DropdownMenu(getActivity(),
+                            R.layout.timeline_filter,
+                            new int[]{R.id.btn_sender, R.id.btn_cat},
+                            dialogBackground) {
+                        @Override
+                        protected String[] getSubItems(int subMenuResId) {
+                            switch (subMenuResId) {
+                                case R.id.btn_sender:
+                                    return getResources().getStringArray(R.array.timeline_senders);
+                                case R.id.btn_cat:
+                                    return getResources().getStringArray(R.array.timeline_categories);
+                            }
+                            return new String[0];
+                        }
+                    };
             headerView = timelineDropdownFilter.getView();
             getListView().addHeaderView(headerView);
             timelineDropdownFilter.setOnFilterChangedListener(this);
@@ -78,5 +90,17 @@ public class AllTimelineFragment extends TimelineFragment {
     @Override
     protected PullToRefreshListView getPullToRefreshListView() {
         return ptrListView;
+    }
+
+    @Override
+    public void onDropdownMenuItemClick(int subMenuResId, int itemIdx) {
+        switch (subMenuResId) {
+            case R.id.btn_sender:
+                onSenderChanged(itemIdx);
+                break;
+            case R.id.btn_cat:
+                onTagChanged(itemIdx);
+                break;
+        }
     }
 }

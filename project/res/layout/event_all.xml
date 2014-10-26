@@ -11,6 +11,14 @@
             android:layout_alignParentTop="true"
             android:background="@drawable/navbar_bg">
 
+	    <ImageButton
+		    android:id="@+id/title_left"
+		    android:layout_height="50dp"
+		    android:layout_width="50dp"
+		    android:layout_alignParentLeft="true"
+		    android:background="@null"
+		    android:src="@drawable/nav_back_selector_green"/>
+
         <!-- as now does not create event locally,no need this button-->
         <ImageButton
                 android:id="@+id/right_button"
@@ -51,7 +59,7 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
             android:layout_below="@+id/title_bar">
@@ -62,12 +70,15 @@
                 android:layout_width="fill_parent"
                 android:cacheColorHint="@null"
                 android:divider="@drawable/divider_320"/>
-    </LinearLayout>
 
-    <ImageView
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:layout_below="@+id/title_bar"
-            android:background="@drawable/shadow_under"/>
+	    <View
+		    android:id="@+id/dialog_container"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:background="#a0000000"
+		    android:clickable="true"
+		    android:layout_marginTop="0dp" >
+	    </View>
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -9,45 +9,63 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import co.onemeter.oneapp.R;
+import com.androidquery.AQuery;
+
+import java.util.HashMap;
 
 /**
- * <p>时间线的下拉列表过滤器。</p>
+ * <p>下拉列表，适用于“时间线”和“乐趣活动”页面，作为过滤器。</p>
  * Created by pzy on 10/15/14.
  */
-public class TimelineDropdownFilter {
+public abstract class DropdownMenu {
+
+    public interface OnDropdownMenuItemClickListener {
+        public void onDropdownMenuItemClick(int subMenuResId, int itemIdx);
+    }
+
+    private final int[] menuItemResIds;
+    private int selectedMenuItemResId;
+    // menuItemResId => item index
+    HashMap<Integer, Integer> selectedItemIdx = new HashMap<Integer, Integer>();
+
     private final View view;
+    Context context;
     View dialogBackground;
     View anchorView;
-    Context context;
-    View btnSender;
-    View btnCategory;
-    int selectedSenderIdx = 0;
-    int selectedCatIdx = 0;
-    PopupWindow dlgSender;
-    PopupWindow dlgCat;
-    OnTimelineFilterChangedListener onFilterChangedListener;
+    PopupWindow subMenuDlg;
+    OnDropdownMenuItemClickListener onFilterChangedListener;
 
     /**
      * @param dialogBackground 作为对话框下方的屏幕背景，一般为半透明的黑色。
      */
-    public TimelineDropdownFilter(
+    public DropdownMenu(
             Context context,
+            int layoutResId,
+            int[] menuItemResIds,
             View dialogBackground) {
         this.context = context;
-        view = LayoutInflater.from(context).inflate(R.layout.timeline_filter, null);
+        view = LayoutInflater.from(context).inflate(layoutResId, null);
+        this.menuItemResIds = menuItemResIds;
         this.dialogBackground = dialogBackground;
         this.anchorView = view;
-        this.btnSender = view.findViewById(R.id.btn_sender);
-        this.btnCategory = view.findViewById(R.id.btn_cat);
-        btnSender.setOnClickListener(clickListener);
-        btnCategory.setOnClickListener(clickListener);
+
+        for (int r : menuItemResIds) {
+            selectedItemIdx.put(r, 0);
+        }
+
+        AQuery q = new AQuery(view);
+        for (int r : menuItemResIds) {
+            q.find(r).clicked(clickListener);
+        }
     }
+
+    protected abstract String[] getSubItems(int itemId);
 
     public View getView() {
         return view;
     }
 
-    public void setOnFilterChangedListener(OnTimelineFilterChangedListener l) {
+    public void setOnFilterChangedListener(OnDropdownMenuItemClickListener l) {
         onFilterChangedListener = l;
     }
 
@@ -87,45 +105,21 @@ public class TimelineDropdownFilter {
         }
     }
 
-    private void dismissCatDialog() {
-        dlgCat.dismiss();
-        dlgCat = null;
-        dialogBackground.setVisibility(View.GONE);
-        if (btnCategory instanceof TextView) {
-            setCollapsedButtonSyle((TextView) btnCategory);
-        }
-    }
-
-    private void dismissSenderDialog() {
-        dlgSender.dismiss();
-        dlgSender = null;
-        dialogBackground.setVisibility(View.GONE);
-        if (btnSender instanceof TextView) {
-            setCollapsedButtonSyle((TextView) btnSender);
-        }
-    }
-
     public void tryDismissAll() {
-        if (dlgSender != null) {
-            dlgSender.dismiss();
-        }
-        if (dlgCat != null) {
-            dlgCat.dismiss();
+        if (subMenuDlg != null) {
+            subMenuDlg.dismiss();
         }
 
         dialogBackground.setVisibility(View.GONE);
 
-        if (btnCategory instanceof TextView) {
-            setCollapsedButtonSyle((TextView) btnCategory);
-        }
-        if (btnSender instanceof TextView) {
-            setCollapsedButtonSyle((TextView) btnSender);
+        AQuery q = new AQuery(view);
+        for (int r : menuItemResIds) {
+            setCollapsedButtonSyle(q.find(r).getTextView());
         }
     }
 
     public boolean isShowingDialog() {
-        return (dlgSender != null && dlgSender.isShowing())
-                || (dlgCat != null && dlgCat.isShowing());
+        return (subMenuDlg != null && subMenuDlg.isShowing());
     }
 
     private static PopupWindow createListDialog(
@@ -161,40 +155,22 @@ public class TimelineDropdownFilter {
         );
     }
 
-    private PopupWindow createSenderDialog() {
+    private PopupWindow createSubMenu(int menuItemResId) {
+        selectedMenuItemResId = menuItemResId;
         return createListDialog(context,
-                context.getResources().getStringArray(R.array.timeline_senders),
-                selectedSenderIdx,
-                onSenderListItemClickListener);
-    }
-
-    private PopupWindow createCategoryDialog() {
-        return createListDialog(context,
-                context.getResources().getStringArray(R.array.timeline_categories),
-                selectedCatIdx,
+                getSubItems(menuItemResId),
+                selectedItemIdx.get(menuItemResId),
                 onCatListItemClickListener);
     }
-
-    private AdapterView.OnItemClickListener onSenderListItemClickListener =
-            new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    selectedSenderIdx = position;
-                    dismissSenderDialog();
-                    if (onFilterChangedListener != null) {
-                        onFilterChangedListener.onSenderChanged(position);
-                    }
-                }
-            };
 
     private AdapterView.OnItemClickListener onCatListItemClickListener =
             new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    selectedCatIdx = position;
-                    dismissCatDialog();
+                    selectedItemIdx.put(selectedMenuItemResId, position);
+                    tryDismissAll();
                     if (onFilterChangedListener != null) {
-                        onFilterChangedListener.onTagChanged(position);
+                        onFilterChangedListener.onDropdownMenuItemClick(selectedMenuItemResId, position);
                     }
                 }
             };
@@ -222,37 +198,11 @@ public class TimelineDropdownFilter {
     private final View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            PopupWindow dlgToShow = null;
-            if (v == btnSender) {
-                // toggle dialog
-                if (dlgSender != null && dlgSender.isShowing()) {
-                    dismissSenderDialog();
-                } else {
-                    if (dlgCat != null && dlgCat.isShowing()) {
-                        dismissCatDialog();
-                    }
-                    if (dlgSender == null) {
-                        dlgSender = createSenderDialog();
-                    }
-                    dlgToShow = dlgSender;
-                }
-            } else if (v == btnCategory) {
-                // toggle dialog
-                if (dlgCat != null && dlgCat.isShowing()) {
-                    dismissCatDialog();
-                } else {
-                    if (dlgSender != null && dlgSender.isShowing()) {
-                        dismissSenderDialog();
-                    }
-                    if (dlgCat == null) {
-                        dlgCat = createCategoryDialog();
-                    }
-                    dlgToShow = dlgCat;
-                }
-            }
-
-            if (dlgToShow != null) {
-                showDialog(dlgToShow, v instanceof TextView ? (TextView) v : null);
+            if (isShowingDialog()) {
+                tryDismissAll();
+            } else {
+                subMenuDlg = createSubMenu(v.getId());
+                showDialog(subMenuDlg, v instanceof TextView ? (TextView) v : null);
             }
         }
     };

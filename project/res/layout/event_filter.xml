@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Timeline 页面的过滤器，用于筛选动态的发布者、类别。 -->
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@color/background"
+	android:weightSum="3">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:layout_weight="1" >
+		<TextView
+			android:id="@+id/btn_host"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="10dp"
+			android:gravity="center"
+			android:drawablePadding="5dp"
+			android:drawableRight="@drawable/timeline_dropdown_mark_collapsed"
+			android:textColor="@color/text_gray1"
+			android:text="@string/event_filter_host"/>
+	</RelativeLayout>
+
+	<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="10dp"
+		android:background="@drawable/timeline_divider_v"/>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:layout_weight="1" >
+		<TextView
+			android:id="@+id/btn_type"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="10dp"
+			android:gravity="center"
+			android:drawablePadding="5dp"
+			android:drawableRight="@drawable/timeline_dropdown_mark_collapsed"
+			android:textColor="@color/text_gray1"
+			android:text="@string/event_filter_type"/>
+	</RelativeLayout>
+
+	<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="10dp"
+		android:background="@drawable/timeline_divider_v"/>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:layout_weight="1" >
+		<TextView
+			android:id="@+id/btn_time"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="10dp"
+			android:gravity="center"
+			android:drawablePadding="5dp"
+			android:drawableRight="@drawable/timeline_dropdown_mark_collapsed"
+			android:textColor="@color/text_gray1"
+			android:text="@string/event_filter_time"/>
+	</RelativeLayout>
+</LinearLayout>

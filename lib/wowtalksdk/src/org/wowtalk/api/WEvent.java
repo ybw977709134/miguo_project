@@ -15,6 +15,8 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
     public String id;
     public String catetoryName;
     public String owner_uid;
+    /** 主办方 */
+    public String host;
     public String title;
     public String description;
     public int event_type;
@@ -36,6 +38,7 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
 
 
     public Date startTime;
+    public Date endTime;
     public Date createdTime;
 
 
@@ -91,8 +94,6 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
 	public int size;
 
 
-
-
     public WEvent() {
     	
     }
@@ -120,6 +121,7 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
 		dest.writeTypedList(multimedias == null ? new ArrayList<WFile>() : multimedias);
 		dest.writeInt(needWork ? 1 : 0);
 		dest.writeString(owner_uid);
+        dest.writeString(host);
 		dest.writeInt(privacy_level);
 		dest.writeTypedList(reviews == null ? new ArrayList<Review>() : reviews);
 		dest.writeInt(size);
@@ -161,6 +163,7 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
 			source.readTypedList(a.multimedias, WFile.CREATOR);
 			a.needWork = source.readInt() == 1;
 			a.owner_uid = source.readString();
+            a.host = source.readString();
 			a.privacy_level = source.readInt();
 			a.reviews = new ArrayList<Review>();
 			source.readTypedList(a.reviews, Review.CREATOR);

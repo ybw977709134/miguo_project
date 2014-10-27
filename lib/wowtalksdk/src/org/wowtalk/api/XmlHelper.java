@@ -115,11 +115,15 @@ public class XmlHelper {
         if(e != null)
             a.owner_uid = e.getTextContent();
 
-        e = Utils.getFirstElementByTagName(eventNode, "event_title");
+        e = Utils.getFirstElementByTagName(eventNode, "owner_name");
+        if(e != null)
+            a.host = e.getTextContent();
+
+        e = Utils.getFirstElementByTagName(eventNode, "text_title");
         if(e != null)
             a.title = e.getTextContent();
 
-        e = Utils.getFirstElementByTagName(eventNode, "event_desc");
+        e = Utils.getFirstElementByTagName(eventNode, "text_content");
         if(e != null)
             a.description = e.getTextContent();
 
@@ -144,7 +148,7 @@ public class XmlHelper {
             a.contactEmail = e.getTextContent();
         }
 
-        e = Utils.getFirstElementByTagName(eventNode, "place");
+        e = Utils.getFirstElementByTagName(eventNode, "area");
         if(e != null)
             a.address = e.getTextContent();
 
@@ -169,6 +173,17 @@ public class XmlHelper {
         e = Utils.getFirstElementByTagName(eventNode, "start_date");
         if(e != null) {
             a.event_start_date = e.getTextContent();
+        }
+
+        e = Utils.getFirstElementByTagName(eventNode, "start_timestamp");
+        if(e != null) {
+            a.startTime = new Date(1000 * Utils.tryParseLong(e.getTextContent(), 0));
+            a.event_start_date = new SimpleDateFormat("yyyy-MM-dd").format(a.startTime);
+        }
+
+        e = Utils.getFirstElementByTagName(eventNode, "end_timestamp");
+        if(e != null) {
+            a.endTime = new Date(1000 * Utils.tryParseLong(e.getTextContent(), 0));
         }
 
         e = Utils.getFirstElementByTagName(eventNode, "deadline");
@@ -196,10 +211,6 @@ public class XmlHelper {
         if(e != null)
             a.createdTime = new Date(1000 * Utils.tryParseLong(e.getTextContent(), 0));
 
-
-        e = Utils.getFirstElementByTagName(eventNode, "startdate");
-        if(e != null)
-            a.startTime = new Date(1000 * Utils.tryParseLong(e.getTextContent(), 0));
 
 
         e = Utils.getFirstElementByTagName(eventNode, "member_count");

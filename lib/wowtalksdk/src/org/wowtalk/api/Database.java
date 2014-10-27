@@ -4509,9 +4509,11 @@ public class Database {
 		values.put("membership", e.membership);
 		values.put("needWork", e.needWork ? 1 : 0);
 		values.put("owner_uid", e.owner_uid);
+        values.put("host", e.host);
 		values.put("privacy_level", e.privacy_level);
 		values.put("size", e.size);
 		values.put("startTime", e.startTime == null ? 0 : e.startTime.getTime());
+        values.put("endTime", e.endTime == null ? 0 : e.endTime.getTime());
 		values.put("target_user_type", e.target_user_type);
 		values.put("title", e.title);
         values.put("contact_email",e.contactEmail);
@@ -4741,9 +4743,11 @@ public class Database {
 				"membership",
 				"needWork",
 				"owner_uid",
+                "host",
 				"privacy_level",
 				"size",
 				"startTime",
+                "endTime",
 				"target_user_type",
 				"title",
                 "contact_email",
@@ -4784,9 +4788,11 @@ public class Database {
 			e.membership = cur.getInt(++i);
 			e.needWork = cur.getInt(++i) == 1;
 			e.owner_uid = cur.getString(++i);
+            e.host = cur.getString(++i);
 			e.privacy_level = cur.getInt(++i);
 			e.size = cur.getInt(++i);
 			e.startTime = new Date(cur.getLong(++i));
+            e.endTime = new Date(cur.getLong(++i));
 			e.target_user_type = cur.getInt(++i);
 			e.title = cur.getString(++i);
             e.contactEmail = cur.getString(++i);
@@ -6012,7 +6018,7 @@ public class Database {
 
 class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME_PRE = GlobalSetting.DATABASE_NAME;
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     public int flagIndex;
     private Context mContext;
 
@@ -6142,9 +6148,11 @@ class DatabaseHelper extends SQLiteOpenHelper {
 			+ "`membership` INTEGER,"
 			+ "`needWork` INTEGER,"
 			+ "`owner_uid` TEXT,"
+            + "`host` TEXT,"
 			+ "`privacy_level` INTEGER,"
 			+ "`size` INTEGER,"
 			+ "`startTime` INTEGER,"
+            + "`endTime` INTEGER,"
 			+ "`target_user_type` INTEGER,"
 			+ "`title` TEXT,"
             + "`contact_email` TEXT,"
@@ -6378,6 +6386,15 @@ class DatabaseHelper extends SQLiteOpenHelper {
             database.execSQL(DATABASE_CREATE_TBL_CHATMESSAGE_READED);
 
             oldVersion++;
+        }
+
+        if (oldVersion == 4) {
+            // 添加 endTime 字段到 event 表
+            database.execSQL("ALTER TABLE event ADD COLUMN endTime INTEGER AFTER startTime;");
+            database.execSQL("UPDATE event SET endTime=startTime;");
+            // 添加 host 字段到 event 表
+            database.execSQL("ALTER TABLE event ADD COLUMN host TEXT AFTER owner_uid;");
+            ++oldVersion;
         }
     }
 }

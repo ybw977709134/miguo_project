@@ -23,6 +23,7 @@ import org.wowtalk.ui.PhotoDisplayHelper;
 import co.onemeter.oneapp.R;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -68,17 +69,24 @@ public class EventActivity extends Activity implements OnClickListener, Dropdown
 			} else {
 				lView = convertView;
 			}
+            AQuery q = new AQuery(lView);
+
 			TextView txtTitle = (TextView) lView.findViewById(R.id.event_title);
 			txtTitle.setText(act.title);
 
 			TextView txtTime = (TextView) lView.findViewById(R.id.event_time);
-			txtTime.setText(String.format(getResources().getString(R.string.event_time), act.event_start_date+"-"+act.event_dead_line));
+			txtTime.setText(String.format(getResources().getString(R.string.event_time),
+                    new SimpleDateFormat("MM月dd日 HH:mm").format(act.startTime)
+                            + "-"
+                            + new SimpleDateFormat("HH:mm").format(act.endTime)));
 			TextView txtPlace = (TextView) lView.findViewById(R.id.event_place);
 			txtPlace.setText(String.format(getResources().getString(R.string.event_place), act.address));
 			TextView txtCount = (TextView) lView.findViewById(R.id.event_count);
 			txtCount.setText(String.format(getResources().getString(R.string.event_member_count), act.capacity));
 			TextView txtIntroduce = (TextView) lView.findViewById(R.id.event_introduce);
 			txtIntroduce.setText(act.description);
+            q.find(R.id.event_host).text(
+                    String.format(getString(R.string.event_host), act.host));
 			ImageView imgPhoto = (ImageView) lView.findViewById(R.id.event_photo);
 			// display first photo
 			boolean hasPhoto = false;

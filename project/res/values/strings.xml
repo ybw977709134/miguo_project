@@ -123,6 +123,7 @@
 	<string name="events_joined">已参加的活动</string>
 	<string name="event_time">时间: %s</string>
 	<string name="event_place">地点: %s</string>
+	<string name="event_host">主办方: %s</string>
 	<string name="event_cost">费用: %s金币</string>
 	<string name="event_member_count">人数: %s</string>
 	<string name="event_kind">类型: %s</string>

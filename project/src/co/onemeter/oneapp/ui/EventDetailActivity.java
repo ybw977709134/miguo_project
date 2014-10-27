@@ -14,16 +14,17 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
+import co.onemeter.oneapp.R;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.ImageViewActivity;
 import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.R;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Timer;
 
@@ -288,7 +289,10 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         tvMailSendTo.setOnClickListener(this);
 
         txtEventTitle.setText(eventDetail.title);
-        txtTime.setText(String.format(getResources().getString(R.string.event_time), eventDetail.event_start_date+"-"+eventDetail.event_dead_line));
+        txtTime.setText(String.format(getResources().getString(R.string.event_time),
+                new SimpleDateFormat("MM月dd日 HH:mm").format(eventDetail.startTime)
+                        + "-"
+                        + new SimpleDateFormat("HH:mm").format(eventDetail.endTime)));
         txtPlace.setText(String.format(getResources().getString(R.string.event_place), eventDetail.address));
         txtKind.setText(String.format(getResources().getString(R.string.event_kind), eventDetail.catetoryName));
         txtCost.setText(String.format(getResources().getString(R.string.event_cost), eventDetail.costGolds));

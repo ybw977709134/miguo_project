@@ -15,17 +15,12 @@
             android:layout_width="50dp"
             android:layout_alignParentLeft="true"
             android:background="@null"
-            android:src="@drawable/nav_back_selector"/>
-        <ImageView 
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_toRightOf="@+id/title_back"
-            android:background="@drawable/navbar_div"/>
-        <TextView 
+            android:src="@drawable/nav_back_selector_green"/>
+        <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_centerInParent="true"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="20sp"
             android:text="@string/event_details"/>
@@ -62,7 +57,8 @@
                     android:layout_margin="10dp"
                     android:textColor="@color/black"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+	                android:text="dummy title"/>
                 <ImageView 
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
@@ -78,32 +74,29 @@
                         android:id="@+id/event_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/event_blue"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textAppearance="@android:style/TextAppearance.Small"
+                        android:text="dummy time"/>
 
                     <TextView
                         android:id="@+id/event_place"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        android:textAppearance="@android:style/TextAppearance.Small"
+                        android:text="dummy place"/>
 
                     <TextView
                         android:id="@+id/event_kind"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        android:textAppearance="@android:style/TextAppearance.Small"
+                        android:text="dummy type"/>
 
                     <TextView
                         android:id="@+id/event_cost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:visibility="gone"/>
+                        android:textAppearance="@android:style/TextAppearance.Small"
+                        android:text="dummy cost"/>
                 </LinearLayout>
                 
                 <ImageView 
@@ -132,9 +125,8 @@
                         android:layout_marginLeft="7dp"
                         android:text="@string/event_play_video"
                         android:textColor="@color/black"
-                        android:background="@drawable/timeline_player_bg_right"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:background="@drawable/timeline_player_bg_right" />
 
                     <ImageView
                             android:layout_height="wrap_content"
@@ -154,9 +146,8 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="10dp"
                         android:text="@string/event_detail_introduce"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/detail_introduce"
@@ -187,8 +178,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="left|top"
                             android:text="@string/bao_ming"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
+                            android:textAppearance="@android:style/TextAppearance.Medium"
                             android:textColor="@color/black"/>
                     <LinearLayout
                             android:layout_width="fill_parent"

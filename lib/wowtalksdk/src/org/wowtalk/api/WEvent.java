@@ -126,6 +126,7 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
 		dest.writeTypedList(reviews == null ? new ArrayList<Review>() : reviews);
 		dest.writeInt(size);
 		dest.writeLong(startTime == null ? 0 : startTime.getTime());
+        dest.writeLong(endTime == null ? 0 : endTime.getTime());
 		dest.writeInt(target_user_type);
 		dest.writeString(title);
         dest.writeString(contactEmail);
@@ -169,6 +170,7 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
 			source.readTypedList(a.reviews, Review.CREATOR);
 			a.size = source.readInt();
 			a.startTime = new Date(source.readLong());
+            a.endTime = new Date(source.readLong());
 			a.target_user_type = source.readInt();
 			a.title = source.readString();
             a.contactEmail=source.readString();

@@ -148,7 +148,7 @@
 			        android:singleLine="true"
 			        android:textSize="@dimen/msg_composer_media_txt_ind_size"
 			        android:textColor="@color/msg_composer_media_txt_color"
-			        android:text="@string/input_doodle"/>
+			        android:text="@string/input_picvoice"/>
 	        </LinearLayout>
             <LinearLayout
                     android:id="@+id/media_layout_pictext_item"
@@ -171,7 +171,7 @@
                         android:singleLine="true"
                         android:textSize="@dimen/msg_composer_media_txt_ind_size"
                         android:textColor="@color/msg_composer_media_txt_color"
-                        android:text="@string/input_doodle"/>
+                        android:text="@string/input_pictext"/>
             </LinearLayout>
 
             <LinearLayout

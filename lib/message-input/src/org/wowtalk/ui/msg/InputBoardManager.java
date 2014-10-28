@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -17,15 +18,14 @@ import android.util.DisplayMetrics;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-
 import org.wowtalk.Log;
 import org.wowtalk.api.Moment;
 import org.wowtalk.ui.MediaInputHelper;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 
 /**
@@ -120,12 +120,16 @@ public class InputBoardManager implements Parcelable,
      */
     public static final int REQ_INPUT_PHOTO = 80872;
 
+    private static final int REQ_INPUT_PHOTO_FOR_DOODLE = 80873;
+    private static final int REQ_INPUT_DOODLE = 80874;
+
+
     /**
      * Activity request code for inputting location.
      *
      * Client Activity can change its value to avoid conflict.
      */
-    public static final int REQ_INPUT_LOC = 80873;
+    public static final int REQ_INPUT_LOC = 80875;
 
     private Activity mContext;
     private ViewGroup mContainer;
@@ -495,7 +499,7 @@ public class InputBoardManager implements Parcelable,
             }
             setInputMode(FLAG_SHOW_STAMP);
         } else if (i == R.id.btn_input_pic) {
-            inputImage();
+            inputImage(REQ_INPUT_PHOTO);
 
         } else if (i == R.id.btn_input_video) {
             inputVideo();
@@ -526,13 +530,13 @@ public class InputBoardManager implements Parcelable,
         }
     }
 
-    private void inputImage() {
+    private void inputImage(int activityReqCode) {
         if (mMediaInputHelper == null) {
             mMediaInputHelper = new MediaInputHelper(mChangeAppsListener);
         } else {
             mMediaInputHelper.setChangeAppsListener(mChangeAppsListener);
         }
-        mMediaInputHelper.inputImage(mContext, REQ_INPUT_PHOTO, null);
+        mMediaInputHelper.inputImage(mContext, activityReqCode, null);
     }
 
     private void inputVideo() {
@@ -545,7 +549,7 @@ public class InputBoardManager implements Parcelable,
     }
 
     private void inputDoodle() {
-
+        inputImage(REQ_INPUT_PHOTO_FOR_DOODLE);
     }
 
     private void inputLocation() {
@@ -1144,6 +1148,49 @@ public class InputBoardManager implements Parcelable,
                     result = true;
                 }
             }
+            break;
+        case REQ_INPUT_DOODLE: {
+            String[] photoPath = new String[2];
+            photoPath[1] = data.getStringExtra(DoodleActivity.EXTRA_OUTPUT_FILENAME);
+
+            // generate thumbnail
+            File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_THUMNAIL, ".jpg");
+            if (f != null) {
+                photoPath[0] = f.getAbsolutePath();
+                Bitmap thumbnail = BmpUtils.decodeFile(photoPath[1],
+                        PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT);
+                try {
+                    FileOutputStream fos = new FileOutputStream(photoPath[0]);
+                    thumbnail.compress(Bitmap.CompressFormat.JPEG, 9, fos);
+                    fos.close();
+                } catch (java.io.IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            mResultHandler.onPhotoInputted(photoPath[0], photoPath[1]);
+            result = true;
+            break;
+        }
+        case REQ_INPUT_PHOTO_FOR_DOODLE:
+            if (null != mMediaInputHelper) {
+                String[] photoPath = new String[2];
+                if (mMediaInputHelper.handleImageResult(
+                        mContext,
+                        data,
+                        PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
+                        PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
+                        photoPath)) {
+                    mContext.startActivityForResult(
+                            new Intent(mContext, DoodleActivity.class)
+                                    .putExtra(DoodleActivity.EXTRA_MAX_WIDTH, PHOTO_SEND_WIDTH)
+                                    .putExtra(DoodleActivity.EXTRA_MAX_HEIGHT, PHOTO_SEND_HEIGHT)
+                                    .putExtra(DoodleActivity.EXTRA_BACKGROUND_FILENAME, photoPath[1]),
+                            REQ_INPUT_DOODLE
+                    );
+                }
+            }
+            result = true;
             break;
         default:
             break;

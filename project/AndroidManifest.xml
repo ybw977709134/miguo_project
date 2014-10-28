@@ -379,6 +379,10 @@
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
+			android:name="org.wowtalk.ui.msg.DoodleActivity"
+			android:screenOrientation="portrait" >
+		</activity>
+		<activity
 			android:name=".ui.NearbyActivity"
 			android:screenOrientation="portrait">
 		</activity>

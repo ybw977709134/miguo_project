@@ -284,8 +284,6 @@ public class EventActivity extends Activity implements OnClickListener, Dropdown
         ibRight.setOnClickListener(this);
 		txtTitle.setOnClickListener(this);
 
-        fSetShownEvents();
-
 		lvEvent.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
@@ -315,6 +313,8 @@ public class EventActivity extends Activity implements OnClickListener, Dropdown
         };
         tf.setOnFilterChangedListener(this);
         lvEvent.addHeaderView(tf.getView());
+
+        fSetShownEvents();
 
         AQuery q = new AQuery(this);
         q.find(R.id.title_left).clicked(this);

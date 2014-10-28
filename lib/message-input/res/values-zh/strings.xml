@@ -19,4 +19,7 @@
     <string name="input_video_chat">视频通话</string>
     <string name="send_location">发送位置</string>
     <string name="media_record_not_avaliable">无法获取录音设备</string>
+	<string name="input_doodle">手写板</string>
+	<string name="input_pictext">图文</string>
+	<string name="input_picvoice">图音</string>
 </resources>

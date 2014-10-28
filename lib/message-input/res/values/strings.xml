@@ -19,4 +19,7 @@
     <string name="input_video_chat">Video Chat</string>
     <string name="send_location">Send Location</string>
     <string name="media_record_not_avaliable">Media record not avaliable</string>
+	<string name="input_doodle">Doodle</string>
+	<string name="input_pictext">Pic + Text</string>
+	<string name="input_picvoice">Pic + Voice</string>
 </resources>

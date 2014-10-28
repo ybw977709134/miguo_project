@@ -302,10 +302,12 @@ public class InputBoardManager implements Parcelable,
         mBtnEmotion.setOnClickListener(this);
         layoutMediaWrapper.findViewById(R.id.btn_input_pic).setOnClickListener(this);
         layoutMediaWrapper.findViewById(R.id.btn_input_video).setOnClickListener(this);
-        layoutMediaWrapper.findViewById(R.id.btn_input_loc).setOnClickListener(this);
+        layoutMediaWrapper.findViewById(R.id.btn_input_doodle).setOnClickListener(this);
         layoutMediaWrapper.findViewById(R.id.btn_input_voice).setOnClickListener(this);
         layoutMediaWrapper.findViewById(R.id.btn_free_call).setOnClickListener(this);
         layoutMediaWrapper.findViewById(R.id.btn_video_chat).setOnClickListener(this);
+        layoutMediaWrapper.findViewById(R.id.btn_input_pictext).setOnClickListener(this);
+        layoutMediaWrapper.findViewById(R.id.btn_input_picvoice).setOnClickListener(this);
 
         // check mic availability
 //        PackageManager pm = mContext.getPackageManager();
@@ -497,10 +499,12 @@ public class InputBoardManager implements Parcelable,
 
         } else if (i == R.id.btn_input_video) {
             inputVideo();
-
-        } else if (i == R.id.btn_input_loc) {
-            inputLocation();
-
+        } else if (i == R.id.btn_input_doodle) {
+            inputDoodle();
+        } else if (i == R.id.btn_input_pictext) {
+            Toast.makeText(mContext, "not implemented", Toast.LENGTH_SHORT).show();
+        } else if (i == R.id.btn_input_picvoice) {
+            Toast.makeText(mContext, "not implemented", Toast.LENGTH_SHORT).show();
         } else if (i == R.id.btn_input_voice) {// replace text inputbox with hold-to-speak button
             PackageManager pm = mContext.getPackageManager();
             if (!pm.hasSystemFeature(PackageManager.FEATURE_MICROPHONE)) {
@@ -538,6 +542,10 @@ public class InputBoardManager implements Parcelable,
             mMediaInputHelper.setChangeAppsListener(mChangeAppsListener);
         }
         mMediaInputHelper.inputVideo(mContext, REQ_INPUT_VIDEO);
+    }
+
+    private void inputDoodle() {
+
     }
 
     private void inputLocation() {
@@ -594,8 +602,6 @@ public class InputBoardManager implements Parcelable,
 
     public void setLayoutForFamily() {
         layoutTextInnerWrapper.setVisibility(View.GONE);
-        mRootView.findViewById(R.id.layoutMedia).findViewById(R.id.media_layout_loc_item).setVisibility(View.INVISIBLE);
-        mRootView.findViewById(R.id.layoutMedia).findViewById(R.id.media_layout_input_voice_item).setVisibility(View.INVISIBLE);
         mRootView.findViewById(R.id.family_layout_top_img).setVisibility(View.VISIBLE);
         mRootView.findViewById(R.id.family_layout_top_img).setOnClickListener(this);
 

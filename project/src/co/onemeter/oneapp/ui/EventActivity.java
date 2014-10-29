@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class EventActivity extends Activity implements OnClickListener, DropdownMenu.OnDropdownMenuItemClickListener {
+public class EventActivity extends Activity implements OnClickListener, MenuBar.OnDropdownMenuItemClickListener {
     private class EventAdapter extends BaseAdapter {
 
 		private LayoutInflater inflater;
@@ -253,7 +253,7 @@ public class EventActivity extends Activity implements OnClickListener, Dropdown
 	
 	private Database mDb = null;
 
-    private DropdownMenu tf;
+    private MenuBar tf;
 
 
 //	public static EventActivity instance() {
@@ -295,7 +295,7 @@ public class EventActivity extends Activity implements OnClickListener, Dropdown
 
         View c = findViewById(R.id.dialog_container);
         c.setVisibility(View.INVISIBLE);
-        tf = new DropdownMenu(this, R.layout.event_filter,
+        tf = new MenuBar(this, R.layout.event_filter,
                 new int[]{ R.id.btn_host, R.id.btn_type, R.id.btn_time },
                 c) {
             @Override

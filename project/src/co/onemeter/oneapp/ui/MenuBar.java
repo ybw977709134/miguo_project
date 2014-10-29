@@ -17,7 +17,7 @@ import java.util.HashMap;
  * <p>下拉列表，适用于“时间线”和“乐趣活动”页面，作为过滤器。</p>
  * Created by pzy on 10/15/14.
  */
-public abstract class DropdownMenu {
+public abstract class MenuBar {
 
     public interface OnDropdownMenuItemClickListener {
         public void onDropdownMenuItemClick(int subMenuResId, int itemIdx);
@@ -38,7 +38,7 @@ public abstract class DropdownMenu {
     /**
      * @param dialogBackground 作为对话框下方的屏幕背景，一般为半透明的黑色。
      */
-    public DropdownMenu(
+    public MenuBar(
             Context context,
             int layoutResId,
             int[] menuItemResIds,

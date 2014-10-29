@@ -15,12 +15,12 @@ import java.util.ArrayList;
  * <p>浏览所有人的动态。</p>
  * Created by pzy on 10/13/14.
  */
-public class AllTimelineFragment extends TimelineFragment implements DropdownMenu.OnDropdownMenuItemClickListener {
+public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnDropdownMenuItemClickListener {
 
     private View dialogBackground;
     private View headerView;
     private int originalHeaderViewsCount = 0;
-    private DropdownMenu timelineDropdownFilter;
+    private MenuBar timelineDropdownFilter;
     private PullToRefreshListView ptrListView;
 
     @Override
@@ -66,7 +66,7 @@ public class AllTimelineFragment extends TimelineFragment implements DropdownMen
         if (headerView == null || getListView().getHeaderViewsCount() == originalHeaderViewsCount) {
             originalHeaderViewsCount = getListView().getHeaderViewsCount();
             timelineDropdownFilter =
-                    new DropdownMenu(getActivity(),
+                    new MenuBar(getActivity(),
                             R.layout.timeline_filter,
                             new int[]{R.id.btn_sender, R.id.btn_cat},
                             dialogBackground) {

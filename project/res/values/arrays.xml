@@ -64,11 +64,6 @@
 		<item>老师</item>
 		<item>同学</item>
 	</string-array>
-	<string-array name="event_host">
-		<item>主办方1</item>
-		<item>主办方2</item>
-		<item>主办方3</item>
-	</string-array>
 	<string-array name="event_type">
 		<item>乐趣活动-type11</item>
 		<item>乐趣活动-type12</item>

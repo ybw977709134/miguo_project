@@ -15,30 +15,32 @@ import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView.ScaleType;
+import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.Log;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.PhotoDisplayHelper;
-import co.onemeter.oneapp.R;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EventActivity extends Activity implements OnClickListener, MenuBar.OnDropdownMenuItemClickListener {
     private class EventAdapter extends BaseAdapter {
 
 		private LayoutInflater inflater;
-		private ArrayList<WEvent> eventList;
+		private CopyOnWriteArrayList<WEvent> eventList;
 		
 		// hold file id, to avoid redundant downloading.
 		private HashSet<String> mDownloadingLocks = new HashSet<String>();
 		
 		public EventAdapter(Context context, ArrayList<WEvent> list) {
 			inflater = LayoutInflater.from(context);
-			this.eventList = list;
+			this.eventList = new CopyOnWriteArrayList<WEvent>(list);
 		}
 		@Override
 		public int getCount() {
@@ -56,7 +58,8 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 		}
 		
 		public void setDataSource(ArrayList<WEvent> list) {
-            eventList = list;
+            this.eventList = new CopyOnWriteArrayList<WEvent>(list);
+            notifyDataSetChanged();
 		}
 		
 		@Override
@@ -185,8 +188,51 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 			}
  			return lView;
 		}
-		
-	}
+
+        public void clear() {
+            eventList.clear();
+            notifyDataSetChanged();
+        }
+
+        public void addAll(List<WEvent> items) {
+            eventList.addAll(items);
+            notifyDataSetChanged();
+        }
+    }
+
+    private class FilterBar extends MenuBar {
+
+        public String[] hosts;
+
+        /**
+         * @param context
+         * @param layoutResId
+         * @param menuItemResIds
+         * @param dialogBackground 作为对话框下方的屏幕背景，一般为半透明的黑色。
+         */
+        public FilterBar(Context context, int layoutResId, int[] menuItemResIds, View dialogBackground) {
+            super(context, layoutResId, menuItemResIds, dialogBackground);
+        }
+
+        @Override
+        protected String[] getSubItems(int itemId) {
+            switch (itemId) {
+                case R.id.btn_host:
+                    String[] a = getDistinctHosts();
+                    hosts = new String[1 + a.length];
+                    hosts[0] = getString(R.string.event_filter_host_all);
+                    for (int i = 0; i < a.length; ++i) {
+                        hosts[1 + i] = a[i];
+                    }
+                    return hosts;
+                case R.id.btn_type:
+                    return getResources().getStringArray(R.array.event_type);
+                case R.id.btn_time:
+                    return getResources().getStringArray(R.array.event_time);
+            }
+            return new String[0];
+        }
+    }
 	
 	private class EventCategoryAdapter extends BaseAdapter {
 
@@ -253,7 +299,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 	
 	private Database mDb = null;
 
-    private MenuBar tf;
+    private FilterBar tf;
 
 
 //	public static EventActivity instance() {
@@ -295,22 +341,9 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 
         View c = findViewById(R.id.dialog_container);
         c.setVisibility(View.INVISIBLE);
-        tf = new MenuBar(this, R.layout.event_filter,
+        tf = new FilterBar(this, R.layout.event_filter,
                 new int[]{ R.id.btn_host, R.id.btn_type, R.id.btn_time },
-                c) {
-            @Override
-            protected String[] getSubItems(int itemId) {
-                switch (itemId) {
-                    case R.id.btn_host:
-                        return getResources().getStringArray(R.array.event_host);
-                    case R.id.btn_type:
-                        return getResources().getStringArray(R.array.event_type);
-                    case R.id.btn_time:
-                        return getResources().getStringArray(R.array.event_time);
-                }
-                return new String[0];
-            }
-        };
+                c);
         tf.setOnFilterChangedListener(this);
         lvEvent.addHeaderView(tf.getView());
 
@@ -504,7 +537,31 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 
     @Override
     public void onDropdownMenuItemClick(int subMenuResId, int itemIdx) {
+        if (subMenuResId == R.id.btn_host) {
+            if (itemIdx == 0) {
+                eventAdapter.setDataSource(acts);
+            } else {
+                ArrayList<WEvent> filtered = new ArrayList<WEvent>();
+                String selectedHost = tf.hosts != null && itemIdx >= 0 && itemIdx < tf.hosts.length ?
+                        tf.hosts[itemIdx] : null;
+                for (WEvent e : acts) {
+                    if (TextUtils.equals(selectedHost, e.host)) {
+                        filtered.add(e);
+                    }
+                }
+                eventAdapter.setDataSource(filtered);
+            }
+            return;
+        }
+
         Toast.makeText(this, subMenuResId + "/" + itemIdx, Toast.LENGTH_SHORT).show();
     }
 
+    private String[] getDistinctHosts() {
+        HashSet<String> hosts = new HashSet<String>();
+        for (WEvent e : acts) {
+            hosts.add(e.host);
+        }
+        return hosts.toArray(new String[hosts.size()]);
+    }
 }

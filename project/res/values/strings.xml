@@ -711,4 +711,5 @@
 	<string name="event_filter_host">主办方</string>
 	<string name="event_filter_type">类型</string>
 	<string name="event_filter_time">时间</string>
+	<string name="event_filter_host_all">全部</string>
 </resources>

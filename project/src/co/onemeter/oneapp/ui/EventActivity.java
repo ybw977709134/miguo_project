@@ -289,7 +289,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position,
                                     long id) {
-                fGointoASpecificEvent(acts.get(position));
+                fGointoASpecificEvent((WEvent) lvEvent.getItemAtPosition(position));
             }
         });
 

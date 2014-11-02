@@ -511,7 +511,7 @@
     <string name="msg_date_format_with_year">yyyy年MM月dd日</string>
     <string name="msg_date_format_without_year">MM月dd日</string>
     <string name="change_nickname">更改名字</string>
-    <string name="change_nickname_empty">名字不能为空</string>
+    <string name="input_single_line_text_empty_not_allowed">不接受空值</string>
     <string name="change_nickname_info">好名字(长度小于30个字符)可以让好友更容易记住你。</string>
     <string name="edit_status">编辑签名</string>
     <string name="edit_status_length_oom">签名字数已超过上限，请重新修改</string>

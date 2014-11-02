@@ -179,8 +179,10 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
                 break;
             case R.id.boxNick:
             {
-                Intent i = new Intent(MyInfoActivity.this, InputNameActivity.class);
-                i.putExtra("name", mPrefUtil.getMyNickName());
+                Intent i = new Intent(MyInfoActivity.this, InputPlainTextActivity.class)
+                        .putExtra(InputPlainTextActivity.EXTRA_VALUE, mPrefUtil.getMyNickName())
+                        .putExtra(InputPlainTextActivity.EXTRA_TITLE, getString(R.string.change_nickname))
+                        .putExtra(InputPlainTextActivity.EXTRA_DESCRIPTION, getString(R.string.change_nickname_info));
                 startActivityForResult(i, REQ_INPUT_NICK);
             }
             break;
@@ -419,7 +421,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 		if (resultCode == RESULT_OK) {
             switch (requestCode) {
             case REQ_INPUT_NICK:
-                updateMyNick(data.getExtras().getString("text"));
+                updateMyNick(data.getExtras().getString(InputPlainTextActivity.EXTRA_VALUE));
                 break;
             case REQ_INPUT_PHOTO:
                 String[] path = new String[2];

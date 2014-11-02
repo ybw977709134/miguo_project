@@ -191,9 +191,9 @@ public class XmlHelper {
             a.event_dead_line = e.getTextContent();
         }
 
-        e = Utils.getFirstElementByTagName(eventNode, "membership");
+        e = Utils.getFirstElementByTagName(eventNode, "is_joined");
         if(e != null)
-            a.membership = Utils.tryParseInt(e.getTextContent(), 0);
+            a.membership = Utils.tryParseInt(e.getTextContent(), WEvent.MEMBER_SHIP_NOT_JOIN);
 
         e = Utils.getFirstElementByTagName(eventNode, "timestamp");
         if(e != null) {

@@ -304,7 +304,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
             layoutDetail.setVisibility(View.GONE);
         }
 
-        if(WEvent.MEMBER_SHIP_GOING == eventDetail.membership) {
+        if(WEvent.MEMBER_SHIP_JOINED == eventDetail.membership) {
             btnSignup.setEnabled(false);
             btnSignup.setText(R.string.event_signed_up);
         }

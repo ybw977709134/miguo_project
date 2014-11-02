@@ -4456,7 +4456,7 @@ public class Database {
             return;
         }
         ContentValues values = new ContentValues();
-        values.put("membership", WEvent.MEMBER_SHIP_GOING);
+        values.put("membership", WEvent.MEMBER_SHIP_JOINED);
 
         int ret=database.update(TBL_EVENT, values,"id=?", new String[] { eventId });
 
@@ -4702,11 +4702,11 @@ public class Database {
 	}
 
     public ArrayList<WEvent> fetchNotJoinedEvents() {
-        return fetchEvents("membership <> "+WEvent.MEMBER_SHIP_GOING, null);
+        return fetchEvents("membership <> "+WEvent.MEMBER_SHIP_JOINED, null);
     }
 
 	public ArrayList<WEvent> fetchJoinedEvents() {
-		return fetchEvents("membership="+WEvent.MEMBER_SHIP_GOING, null);
+		return fetchEvents("membership="+WEvent.MEMBER_SHIP_JOINED, null);
 	}
 
 	public ArrayList<WEvent> fetchAppliedEvents() {

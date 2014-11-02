@@ -52,8 +52,7 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
     public final static int EVENT_TYPE_WITH_DETAIL=1;
 
     public final static int MEMBER_SHIP_NOT_JOIN=0;
-    public final static int MEMBER_SHIP_POSSIBLE_GO=1;
-    public final static int MEMBER_SHIP_GOING=2;
+    public final static int MEMBER_SHIP_JOINED =1;
     
     public final static int PRIVACY_LEVEL_UNDEFINED = -1;
     /**

@@ -898,7 +898,7 @@ public class WowEventWebServerIF {
         if(uid == null || password == null || event_id == null)
             return ErrorCode.INVALID_ARGUMENT;
 
-        final String action = "join_the_event";
+        final String action = "join_event";
         String postStr = "action=" + action
                 + "&uid=" + Utils.urlencodeUtf8(uid)
                 + "&password=" + Utils.urlencodeUtf8(password)

@@ -226,7 +226,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
                     }
                     return hosts;
                 case R.id.btn_type:
-                    return getResources().getStringArray(R.array.event_type);
+                    return getResources().getStringArray(R.array.event_category_text);
                 case R.id.btn_time:
                     return getResources().getStringArray(R.array.event_time);
             }

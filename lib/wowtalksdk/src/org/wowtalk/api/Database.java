@@ -4498,7 +4498,6 @@ public class Database {
 		values.put("allowReview", e.allowReview ? 1 : 0);
 		values.put("capacity", e.capacity);
 		values.put("catetoryId", e.catetoryId);
-		values.put("catetoryName", e.catetoryName);
 		values.put("costGolds", e.costGolds);
 		values.put("createdTime", e.createdTime == null ? 0 :e.createdTime.getTime());
 		values.put("description", e.description);
@@ -4732,7 +4731,6 @@ public class Database {
 				"allowReview",
 				"capacity",
 				"catetoryId",
-				"catetoryName",
 				"costGolds",
 				"createdTime",
 				"description",
@@ -4777,7 +4775,6 @@ public class Database {
 			e.allowReview = cur.getInt(++i) == 1;
 			e.capacity = cur.getInt(++i);
 			e.catetoryId = cur.getString(++i);
-			e.catetoryName = cur.getString(++i);
 			e.costGolds = cur.getInt(++i);
 			e.createdTime = new Date(cur.getLong(++i));
 			e.description = cur.getString(++i);
@@ -6138,7 +6135,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
 			+ "`allowReview` INTEGER,"
 			+ "`capacity` INTEGER,"
 			+ "`catetoryId` TEXT,"
-			+ "`catetoryName` TEXT,"
 			+ "`costGolds` INTEGER,"
 			+ "`createdTime` INTEGER,"
 			+ "`description` TEXT,"

@@ -107,10 +107,6 @@ public class XmlHelper {
         if(e != null)
             a.id = e.getTextContent();
 
-        e = Utils.getFirstElementByTagName(eventNode, "event_creator");
-        if(e != null)
-            a.catetoryName = e.getTextContent();
-
         e = Utils.getFirstElementByTagName(eventNode, "owner_id");
         if(e != null)
             a.owner_uid = e.getTextContent();

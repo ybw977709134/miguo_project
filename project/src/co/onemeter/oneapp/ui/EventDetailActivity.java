@@ -106,7 +106,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 	private TextView txtEventTitle;
 	private TextView txtTime;
 	private TextView txtPlace;
-	private TextView txtKind;
+	private TextView txtCategory;
 	private TextView txtCost;
     private TextView tvMailSendTo;
 	
@@ -268,7 +268,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 		txtEventTitle = (TextView) findViewById(R.id.event_title);
 		txtTime = (TextView) findViewById(R.id.event_time);
 		txtPlace = (TextView) findViewById(R.id.event_place);
-		txtKind = (TextView) findViewById(R.id.event_kind);
+		txtCategory = (TextView) findViewById(R.id.event_category);
         txtCost = (TextView) findViewById(R.id.event_cost);
 		
 		btnVoice = (ImageButton) findViewById(R.id.event_voice_button);
@@ -294,7 +294,8 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                         + "-"
                         + new SimpleDateFormat("HH:mm").format(eventDetail.endTime)));
         txtPlace.setText(String.format(getResources().getString(R.string.event_place), eventDetail.address));
-        txtKind.setText(String.format(getResources().getString(R.string.event_kind), eventDetail.catetoryName));
+        txtCategory.setText(String.format(getResources().getString(R.string.event_kind),
+                WEventUiHelper.getEventCatetoryText(this, eventDetail.category)));
         txtCost.setText(String.format(getResources().getString(R.string.event_cost), eventDetail.costGolds));
         txtDetailIntroduce.setText(eventDetail.description);
         tvMailSendTo.setText(eventDetail.contactEmail);

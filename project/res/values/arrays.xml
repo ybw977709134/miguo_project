@@ -64,10 +64,15 @@
 		<item>老师</item>
 		<item>同学</item>
 	</string-array>
-	<string-array name="event_type">
-		<item>乐趣活动-type11</item>
-		<item>乐趣活动-type12</item>
-		<item>乐趣活动-type13</item>
+	<string-array name="event_category_name">
+		<item>qa</item>
+		<item>vote</item>
+		<item>offline</item>
+	</string-array>
+	<string-array name="event_category_text">
+		<item>问答</item>
+		<item>投票</item>
+		<item>线下活动</item>
 	</string-array>
 	<string-array name="event_time">
 		<item>一周内</item>

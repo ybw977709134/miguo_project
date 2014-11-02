@@ -13,7 +13,6 @@ import java.util.Iterator;
 public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
 
     public String id;
-    public String catetoryName;
     public String owner_uid;
     /** 主办方 */
     public String host;
@@ -108,7 +107,6 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
 		dest.writeInt(allowReview ? 1 : 0);
 		dest.writeInt(capacity);
 		dest.writeString(catetoryId);
-		dest.writeString(catetoryName);
 		dest.writeInt(costGolds);
 		dest.writeLong(createdTime == null ? 0 : createdTime.getTime());
 		dest.writeString(description);
@@ -150,7 +148,6 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
 			a.allowReview = source.readInt() == 1;
 			a.capacity = source.readInt();
 			a.catetoryId = source.readString();
-			a.catetoryName = source.readString();
 			a.costGolds = source.readInt();
 			a.createdTime = new Date(source.readLong());
 			a.description = source.readString();

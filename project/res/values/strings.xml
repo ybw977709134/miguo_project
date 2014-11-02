@@ -126,7 +126,7 @@
 	<string name="event_host">主办方: %s</string>
 	<string name="event_cost">费用: %s金币</string>
 	<string name="event_member_count">人数: %s</string>
-	<string name="event_kind">类型: %s</string>
+	<string name="event_category">类型: %s</string>
 	<string name="event_details">活动详情</string>
 	<string name="event_play_video">播放语音介绍</string>
 	<string name="event_detail_introduce">详细说明:</string>

@@ -62,6 +62,14 @@
 					android:textAppearance="@android:style/TextAppearance.Small" />
 
 				<TextView
+					android:id="@+id/event_category"
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:text="dummy category"
+					android:textColor="@color/text_gray2"
+					android:textAppearance="@android:style/TextAppearance.Small" />
+
+				<TextView
 					android:id="@+id/event_host"
 					android:layout_height="wrap_content"
 					android:layout_width="wrap_content"

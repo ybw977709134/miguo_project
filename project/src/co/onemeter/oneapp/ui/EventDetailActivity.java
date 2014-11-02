@@ -294,7 +294,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                         + "-"
                         + new SimpleDateFormat("HH:mm").format(eventDetail.endTime)));
         txtPlace.setText(String.format(getResources().getString(R.string.event_place), eventDetail.address));
-        txtCategory.setText(String.format(getResources().getString(R.string.event_kind),
+        txtCategory.setText(String.format(getResources().getString(R.string.event_category),
                 WEventUiHelper.getEventCatetoryText(this, eventDetail.category)));
         txtCost.setText(String.format(getResources().getString(R.string.event_cost), eventDetail.costGolds));
         txtDetailIntroduce.setText(eventDetail.description);

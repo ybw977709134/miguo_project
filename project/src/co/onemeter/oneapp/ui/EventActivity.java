@@ -217,7 +217,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         @Override
         protected String[] getSubItems(int itemId) {
             switch (itemId) {
-                case R.id.btn_host:
+                case R.id.btn_host: {
                     String[] a = getDistinctHosts();
                     hosts = new String[1 + a.length];
                     hosts[0] = getString(R.string.event_filter_host_all);
@@ -225,8 +225,10 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
                         hosts[1 + i] = a[i];
                     }
                     return hosts;
-                case R.id.btn_type:
+                }
+                case R.id.btn_type: {
                     return getResources().getStringArray(R.array.event_category_text);
+                }
                 case R.id.btn_time:
                     return getResources().getStringArray(R.array.event_time);
             }
@@ -546,6 +548,20 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
                         tf.hosts[itemIdx] : null;
                 for (WEvent e : acts) {
                     if (TextUtils.equals(selectedHost, e.host)) {
+                        filtered.add(e);
+                    }
+                }
+                eventAdapter.setDataSource(filtered);
+            }
+            return;
+        } else if (subMenuResId == R.id.btn_type) {
+            if (itemIdx == 0) {
+                eventAdapter.setDataSource(acts);
+            } else {
+                ArrayList<WEvent> filtered = new ArrayList<WEvent>();
+                String selectedCat = WEventUiHelper.getCategoryNameByIndex(this, itemIdx);
+                for (WEvent e : acts) {
+                    if (TextUtils.equals(selectedCat, e.category)) {
                         filtered.add(e);
                     }
                 }

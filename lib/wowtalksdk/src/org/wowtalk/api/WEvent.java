@@ -27,6 +27,7 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
     public float latitude = 0;
     public float longitude = 0;
     public String tag;
+    /** category name, not category literal for human reading. */
     public String category;
     public String event_start_date;
     public String event_dead_line;

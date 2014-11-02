@@ -13,6 +13,11 @@ public class WEventUiHelper {
     private static HashMap<String, Integer> catName2Idx;
     private static HashMap<Integer, String> catIdx2Text;
 
+    public static String getCategoryNameByIndex(Context context, int index) {
+        String[] names = context.getResources().getStringArray(R.array.event_category_name);
+        return index >= 0 && index < names.length ? names[index] : null;
+    }
+
     /**
      * 获取乐趣活动的类型的文本。
      * @param context

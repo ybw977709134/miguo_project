@@ -20,6 +20,7 @@ import java.util.HashMap;
 public abstract class MenuBar {
 
     public interface OnDropdownMenuItemClickListener {
+        public void onDropdownMenuShow(int subMenuResId);
         public void onDropdownMenuItemClick(int subMenuResId, int itemIdx);
     }
 
@@ -201,6 +202,9 @@ public abstract class MenuBar {
             if (isShowingDialog()) {
                 tryDismissAll();
             } else {
+                if (onFilterChangedListener != null) {
+                    onFilterChangedListener.onDropdownMenuShow(v.getId());
+                }
                 subMenuDlg = createSubMenu(v.getId());
                 showDialog(subMenuDlg, v instanceof TextView ? (TextView) v : null);
             }

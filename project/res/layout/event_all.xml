@@ -19,22 +19,13 @@
 		    android:background="@null"
 		    android:src="@drawable/nav_back_selector_green"/>
 
-        <!-- as now does not create event locally,no need this button-->
         <ImageButton
                 android:id="@+id/right_button"
                 android:layout_height="50dp"
                 android:layout_width="50dp"
                 android:layout_alignParentRight="true"
                 android:background="@null"
-                android:src="@drawable/nav_add_selector"
-                android:visibility="gone"/>
-
-        <ImageView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_toLeftOf="@+id/right_button"
-                android:background="@drawable/navbar_div"
-                android:visibility="gone"/>
+                android:src="@drawable/icon_add_green" />
 
         <LinearLayout
                 android:layout_height="wrap_content"
@@ -79,6 +70,119 @@
 		    android:clickable="true"
 		    android:layout_marginTop="0dp" >
 	    </View>
+
     </RelativeLayout>
 
+	<!-- create new event -->
+	<RelativeLayout
+		android:id="@+id/new_event_panel"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@+id/title_bar"
+		android:background="@color/black_30">
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@color/bg_color">
+
+			<!-- 竖直分隔线 -->
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="120dp"
+				android:paddingTop="@dimen/padding_medium"
+				android:paddingBottom="@dimen/padding_medium"
+				android:orientation="horizontal" >
+				<ImageView
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"/>
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="match_parent"
+					android:background="@drawable/timeline_divider_v"/>
+				<ImageView
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"/>
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="match_parent"
+					android:background="@drawable/timeline_divider_v"/>
+				<ImageView
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"/>
+			</LinearLayout>
+
+			<!-- 两行按钮，以及水平分隔线 -->
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical" >
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:minHeight="100dp"
+					android:weightSum="3">
+					<FrameLayout
+						android:id="@+id/vg_new_qa"
+						android:layout_weight="1"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:paddingBottom="20dp">
+						<ImageView
+							android:layout_width="match_parent"
+							android:layout_height="match_parent"
+							android:layout_margin="20dp"
+							android:src="@drawable/event_create_qa"/>
+						<TextView
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:text="@string/event_create_qa"
+							android:textColor="@color/text_gray1"
+							android:gravity="center"
+							android:layout_gravity="bottom"/>
+					</FrameLayout>
+					<FrameLayout
+						android:id="@+id/vg_new_vote"
+						android:layout_weight="1"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:paddingBottom="20dp">
+						<ImageView
+							android:layout_width="match_parent"
+							android:layout_height="match_parent"
+							android:layout_margin="20dp"
+							android:src="@drawable/event_create_vote"/>
+						<TextView
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:text="@string/event_create_vote"
+							android:textColor="@color/text_gray1"
+							android:gravity="center"
+							android:layout_gravity="bottom"/>
+					</FrameLayout>
+					<FrameLayout
+						android:id="@+id/vg_new_offline"
+						android:layout_weight="1"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:paddingBottom="20dp">
+						<ImageView
+							android:layout_width="match_parent"
+							android:layout_height="match_parent"
+							android:layout_margin="20dp"
+							android:src="@drawable/event_create_offline"/>
+						<TextView
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:text="@string/event_create_offline"
+							android:textColor="@color/text_gray1"
+							android:gravity="center"
+							android:layout_gravity="bottom"/>
+					</FrameLayout>
+				</LinearLayout>
+			</LinearLayout>
+		</RelativeLayout>
+	</RelativeLayout>
 </RelativeLayout>

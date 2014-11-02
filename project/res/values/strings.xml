@@ -713,4 +713,7 @@
 	<string name="event_filter_time">时间</string>
 	<string name="event_filter_host_all">全部</string>
 	<string name="event_filter_category_all">全部</string>
+	<string name="event_create_qa">问答</string>
+	<string name="event_create_vote">投票</string>
+	<string name="event_create_offline">线下活动</string>
 </resources>

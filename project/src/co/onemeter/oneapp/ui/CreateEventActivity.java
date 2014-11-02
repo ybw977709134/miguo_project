@@ -1,26 +1,32 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
-import com.umeng.analytics.MobclickAgent;
-import org.wowtalk.api.*;
-import org.wowtalk.ui.MediaInputHelper;
-import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.msg.Utils;
 import co.onemeter.oneapp.R;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
+import com.androidquery.AQuery;
+import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.WEvent;
+import org.wowtalk.api.WowEventWebServerIF;
 
 public class CreateEventActivity extends Activity implements OnClickListener {
+    public static final String EXTRA_PAGE_TITLE = "page_title";
+    public static final String EXTRA_EVENT_CATEGORY = "event_cat";
+
+    private static final int REQ_INPUT_TITLE = 123;
+    private static final int REQ_INPUT_CATEGORY = 124;
+    private static final int REQ_INPUT_TIME = 125;
+    private static final int REQ_INPUT_PLACE = 126;
+    private static final int REQ_INPUT_DESC = 127;
+
+    private WEvent wevent = new WEvent();
+
     private boolean isAllDay = false;
     private boolean allowReview = false;
     private boolean needToUpdateMulti = false;
@@ -46,7 +52,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
 
     private EditText edtContent;
 
-    private void initView() {
+    private void initView(Bundle bundle) {
         btnTitleBack = (ImageButton) findViewById(R.id.title_back);
         btnTitleConfirm = (ImageButton) findViewById(R.id.title_confirm);
 
@@ -85,10 +91,41 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         findViewById(R.id.layout_coins).setOnClickListener(this);
         findViewById(R.id.layout_addphoto).setOnClickListener(this);
         findViewById(R.id.layout_addaudio).setOnClickListener(this);
+
+        if (bundle != null) {
+            setTitle(bundle.getString(EXTRA_PAGE_TITLE));
+        } else {
+            setTitle("");
+        }
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        new AQuery(this).find(R.id.title_text).text(title);
     }
 
     private void createEvent() {
+        updateData();
+        new AsyncTask<WEvent, Void, Integer>() {
+            Context context;
 
+            @Override
+            protected Integer doInBackground(WEvent... wEvents) {
+                context = CreateEventActivity.this;
+                WowEventWebServerIF web = WowEventWebServerIF.getInstance(context);
+                return web.fAdd(wEvents[0]);
+            }
+
+            @Override
+            protected void onPostExecute(Integer errno) {
+                if (errno == ErrorCode.OK) {
+                    finish();
+                } else {
+                    Toast.makeText(context, R.string.operation_failed, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.execute(wevent);
     }
 
     @Override
@@ -99,7 +136,12 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
-        initView();
+        Bundle b = savedInstanceState == null ? getIntent().getExtras() : savedInstanceState;
+        if (b != null) {
+            wevent.category = b.getString(EXTRA_EVENT_CATEGORY);
+        }
+
+        initView(b);
     }
 
     @Override
@@ -121,6 +163,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                 finish();
                 break;
             case R.id.title_confirm:
+                createEvent();
                 break;
             case R.id.img_allday:
                 isAllDay = !isAllDay;
@@ -134,9 +177,18 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                 needToUpdateMulti = !needToUpdateMulti;
                 imgNeedToUpdateMulti.setImageResource(needToUpdateMulti ? R.drawable.switch_on : R.drawable.switch_off);
                 break;
-            case R.id.layout_title:
+            case R.id.layout_title: {
+                startActivityForResult(
+                        new Intent(this, InputPlainTextActivity.class)
+                                .putExtra(InputPlainTextActivity.EXTRA_TITLE, getString(R.string.event_title)),
+                        REQ_INPUT_TITLE);
                 break;
+            }
             case R.id.layout_loc:
+                startActivityForResult(
+                        new Intent(this, InputPlainTextActivity.class)
+                                .putExtra(InputPlainTextActivity.EXTRA_TITLE, getString(R.string.event_loc)),
+                        REQ_INPUT_PLACE);
                 break;
             case R.id.layout_starttime:
                 break;
@@ -159,5 +211,45 @@ public class CreateEventActivity extends Activity implements OnClickListener {
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(resultCode, resultCode, data);
+
+        if (resultCode != RESULT_OK)
+            return;
+
+        switch (requestCode) {
+            case REQ_INPUT_TITLE:
+                wevent.title = data.getStringExtra(InputPlainTextActivity.EXTRA_VALUE);
+                updateUI();
+                break;
+            case REQ_INPUT_DESC:
+                wevent.description = data.getStringExtra(InputPlainTextActivity.EXTRA_VALUE);
+                updateUI();
+                break;
+            case REQ_INPUT_PLACE:
+                wevent.address = data.getStringExtra(InputPlainTextActivity.EXTRA_VALUE);
+                updateUI();
+                break;
+        }
+    }
+
+    private void updateUI() {
+        if (wevent == null)
+            return;
+
+        txtTitle.setText(wevent.title);
+        txtLoc.setText(wevent.description);
+        txtLoc.setText(wevent.address);
+    }
+
+    private void updateData() {
+        if (wevent == null)
+            return;
+
+        AQuery q = new AQuery(this);
+        wevent.description = q.find(R.id.edt_content).getText().toString();
     }
 }

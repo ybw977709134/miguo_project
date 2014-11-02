@@ -9,7 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="@dimen/title_bar_height"
         android:layout_alignParentTop="true"
-        android:background="@drawable/navbar_bg" >
+        android:background="@drawable/home_bg_navbar" >
 
         <ImageButton
             android:id="@+id/title_back"
@@ -18,6 +18,15 @@
             android:layout_alignParentLeft="true"
             android:background="@null"
             android:src="@drawable/nav_back_selector" />
+
+	    <TextView
+		    android:id="@+id/title_text"
+		    android:layout_height="wrap_content"
+		    android:layout_width="wrap_content"
+		    style="@style/page_title"
+		    android:textStyle="normal"
+		    android:textColor="@color/white"
+		    android:text="dummy title"/>
 
         <ImageButton
             android:id="@+id/title_confirm"

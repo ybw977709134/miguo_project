@@ -400,7 +400,7 @@
 			android:screenOrientation="portrait">
 		</activity>
 		<activity
-			android:name=".ui.InputNameActivity"
+			android:name=".ui.InputPlainTextActivity"
 			android:screenOrientation="portrait">
 		</activity>
         <activity

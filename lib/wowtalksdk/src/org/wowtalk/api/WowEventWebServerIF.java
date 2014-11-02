@@ -505,7 +505,8 @@ public class WowEventWebServerIF {
 				+ "&latitude=" + data.latitude 
 				+ "&longitude=" + data.longitude 
 				+ "&area=" + Utils.urlencodeUtf8(data.address)
-				+ "&startdate=" + (data.startTime != null ? data.startTime.getTime() / 1000 : 0) 
+                + "&category=" + Utils.urlencodeUtf8(data.category)
+				+ "&startdate=" + (data.startTime != null ? data.startTime.getTime() / 1000 : 0)
 				+ "&max_member=" + data.capacity
 				+ "&is_official=" + (data.isOfficial ? 1 : 0)
 				+ "&allow_review=" + (data.allowReview ? 1 : 0) 

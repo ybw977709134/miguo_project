@@ -93,6 +93,10 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
     }
 
     @Override
+    public void onDropdownMenuShow(int subMenuResId) {
+    }
+
+    @Override
     public void onDropdownMenuItemClick(int subMenuResId, int itemIdx) {
         switch (subMenuResId) {
             case R.id.btn_sender:

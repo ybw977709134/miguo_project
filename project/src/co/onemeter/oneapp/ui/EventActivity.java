@@ -294,6 +294,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 	private ImageButton ibRight;
 	private ListView lvEvent;
 	private TextView txtTitle;
+    private View newEventPanel;
 
 	private ArrayList<WEvent> acts;
 	private EventCategoryAdapter categroyAdapter;
@@ -331,6 +332,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         ibRight = (ImageButton) findViewById(R.id.right_button);
 		txtTitle = (TextView) findViewById(R.id.title_text);
 		lvEvent = (ListView) findViewById(R.id.event_list);
+        newEventPanel = findViewById(R.id.new_event_panel);
 
         ibRight.setOnClickListener(this);
 		txtTitle.setOnClickListener(this);
@@ -353,9 +355,16 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         lvEvent.addHeaderView(tf.getView());
 
         fSetShownEvents();
+        hideNewEventPanel();
 
         AQuery q = new AQuery(this);
         q.find(R.id.title_left).clicked(this);
+        q.find(R.id.vg_new_qa).clicked(this);
+        q.find(R.id.vg_new_vote).clicked(this);
+        q.find(R.id.vg_new_offline).clicked(this);
+        q.find(R.id.new_event_panel).clicked(this);
+
+        // TODO control create moment button visibility according to user type.
 	}
 	
 	private void downloadLatestEvents() {
@@ -483,8 +492,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.right_button:
-                Intent detailIntent = new Intent(EventActivity.this, CreateEventActivity.class);
-                startActivity(detailIntent);
+                toogleNewEventPanel();
                 break;
             case R.id.title_left:
                 onBackPressed();
@@ -492,12 +500,57 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
             case R.id.title_text:
                 fShowPopup();
                 break;
+            case R.id.vg_new_qa:
+                gotoCreateEvent("qa");
+                hideNewEventPanel();
+                break;
+            case R.id.vg_new_vote:
+                gotoCreateEvent("vote");
+                hideNewEventPanel();
+                break;
+            case R.id.vg_new_offline:
+                gotoCreateEvent("offline");
+                hideNewEventPanel();
+                break;
+            case R.id.new_event_panel:
+                hideNewEventPanel();
+                break;
             default:
                 break;
         }
     }
 
-	@Override
+    private void gotoCreateEvent(String cat) {
+        startActivity(new Intent(EventActivity.this, CreateEventActivity.class)
+                .putExtra(CreateEventActivity.EXTRA_EVENT_CATEGORY, cat)
+                .putExtra(CreateEventActivity.EXTRA_PAGE_TITLE,
+                        WEventUiHelper.getEventCatetoryText(this, cat)));
+    }
+
+    private void toogleNewEventPanel() {
+        if (isNewEventPanelVisible()) {
+            hideNewEventPanel();
+        } else {
+            showNewEventPanel();
+        }
+    }
+
+    private void showNewEventPanel() {
+        if (tf != null && tf.isShowingDialog()) {
+            tf.tryDismissAll();
+        }
+        newEventPanel.setVisibility(View.VISIBLE);
+    }
+
+    private void hideNewEventPanel() {
+        newEventPanel.setVisibility(View.GONE);
+    }
+
+    private boolean isNewEventPanelVisible() {
+        return newEventPanel.getVisibility() == View.VISIBLE;
+    }
+
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.event_all);
@@ -537,7 +590,17 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
             tf.tryDismissAll();
             return;
         }
+        if (isNewEventPanelVisible()) {
+            hideNewEventPanel();
+            return;
+        }
         super.onBackPressed();
+    }
+
+    @Override
+    public void onDropdownMenuShow(int subMenuResId) {
+        if (isNewEventPanelVisible())
+            hideNewEventPanel();
     }
 
     @Override

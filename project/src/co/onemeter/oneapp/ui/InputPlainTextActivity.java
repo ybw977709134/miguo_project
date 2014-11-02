@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 
@@ -33,7 +35,7 @@ public class InputPlainTextActivity extends Activity {
 
     private ImageButton btnTitleBack;
     private ImageButton btnTitleConfirm;
-    private EditText edtName;
+    private EditText edtValue;
 
     private String defaultValue = "";
     private boolean allowEmpty = false;
@@ -41,7 +43,7 @@ public class InputPlainTextActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.input_singleline_text);
+        setContentView(R.layout.input_plain_text);
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
@@ -66,17 +68,25 @@ public class InputPlainTextActivity extends Activity {
 
         btnTitleBack = (ImageButton) findViewById(R.id.title_back);
         btnTitleConfirm = (ImageButton) findViewById(R.id.title_confirm);
-        edtName = (EditText) findViewById(R.id.edt_value);
+        edtValue = (EditText) findViewById(R.id.edt_value);
 
-        edtName.setText(defaultValue);
+        edtValue.setText(defaultValue);
         q.find(R.id.txt_desc).text(desc);
         setTitle(title);
 
-        CharSequence text = edtName.getText();
+        CharSequence text = edtValue.getText();
         if (text instanceof Spannable) {
             Spannable spanText = (Spannable) text;
             Selection.setSelection(spanText, text.length());
         }
+
+        edtValue.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                onDone();
+                return false;
+            }
+        });
 
         btnTitleBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,20 +98,24 @@ public class InputPlainTextActivity extends Activity {
         btnTitleConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = edtName.getText().toString();
-                if (!allowEmpty && TextUtils.isEmpty(name)) {
-                    MessageBox msgBox = new MessageBox(InputPlainTextActivity.this);
-                    msgBox.toast(R.string.input_single_line_text_empty_not_allowed);
-                    return;
-                }
-                Intent intent = new Intent();
-                Bundle bundle = new Bundle();
-                bundle.putString(EXTRA_VALUE, name);
-                intent.putExtras(bundle);
-                setResult(RESULT_OK, intent);
-                finish();
+                onDone();
             }
         });
+    }
+
+    private void onDone() {
+        String name = edtValue.getText().toString();
+        if (!allowEmpty && TextUtils.isEmpty(name)) {
+            MessageBox msgBox = new MessageBox(this);
+            msgBox.toast(R.string.input_single_line_text_empty_not_allowed);
+            return;
+        }
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putString(EXTRA_VALUE, name);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override

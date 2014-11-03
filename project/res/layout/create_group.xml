@@ -123,6 +123,39 @@
                         android:background="@drawable/table_arrow"/>
                 </RelativeLayout>
 
+	            <ImageView
+		            android:layout_height="wrap_content"
+		            android:layout_width="fill_parent"
+		            android:background="@drawable/divider_320"/>
+	            <LinearLayout
+		            android:id="@+id/layout_category"
+		            android:layout_height="50dp"
+		            android:layout_width="fill_parent"
+		            android:orientation="horizontal">
+		            <TextView
+			            android:layout_height="wrap_content"
+			            android:layout_width="0dp"
+			            android:layout_weight="1"
+			            android:layout_gravity="center_vertical"
+			            android:paddingLeft="10dp"
+			            android:singleLine="true"
+			            android:textColor="@color/black"
+			            android:textStyle="bold"
+			            android:textSize="18sp"
+			            android:text="@string/group_category"/>
+		            <TextView
+			            android:id="@+id/txt_category"
+			            android:layout_height="wrap_content"
+			            android:layout_width="0dp"
+			            android:layout_weight="2"
+			            android:layout_gravity="center_vertical"
+			            android:paddingRight="10dp"
+			            android:gravity="right"
+			            android:drawableRight="@drawable/table_arrow"
+			            android:drawablePadding="10dp"
+			            android:textColor="@color/gray"
+			            android:textSize="18sp"/>
+	            </LinearLayout>
 
             </LinearLayout>
 
@@ -131,7 +164,8 @@
                 android:layout_width="fill_parent"
                 android:layout_margin="10dp"
                 android:background="@drawable/table_white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+	            android:visibility="gone">
                 <LinearLayout 
                     android:id="@+id/layout_place"
                     android:layout_height="50dp"
@@ -158,39 +192,6 @@
                         android:gravity="right"
                         android:drawablePadding="10dp"
                         android:drawableRight="@drawable/table_arrow"
-                        android:textColor="@color/gray"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-                <ImageView 
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:background="@drawable/divider"/>
-                <LinearLayout 
-                    android:id="@+id/layout_category"
-                    android:layout_height="50dp"
-                    android:layout_width="fill_parent"
-                    android:orientation="horizontal">
-                    <TextView 
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
-                        android:paddingLeft="10dp"
-                        android:singleLine="true"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:text="@string/group_category"/>
-                    <TextView 
-                        android:id="@+id/txt_category"
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:layout_weight="2"
-                        android:layout_gravity="center_vertical"
-                        android:paddingRight="10dp"
-                        android:gravity="right"
-                        android:drawableRight="@drawable/table_arrow"
-                        android:drawablePadding="10dp"
                         android:textColor="@color/gray"
                         android:textSize="18sp"/>
                 </LinearLayout>

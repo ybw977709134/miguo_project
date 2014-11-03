@@ -33,7 +33,7 @@ public class EmotionBoard implements FaceTypeAdapter.OnFaceTypeSelectedListener 
 	/**
 	 * emotion type, Stamp.TYPEID_* constants
 	 */
-	private int currEmotionType = Stamp.TYPEID_IMAGE;
+	private int currEmotionType = Stamp.TYPEID_KAOMOJI;
 	/**
 	 * stamp position index in ListView. 0-based.
 	 */
@@ -74,10 +74,7 @@ public class EmotionBoard implements FaceTypeAdapter.OnFaceTypeSelectedListener 
                 Stamp.getPackId(mContext, currEmotionType, mCurrStampIndex),
                 null, mOnStampSelectedListener);
         mStampListView.setAdapter(mStampAdapter);
-        mKaomojiListView.setVisibility(View.GONE);
-        mVgEmojiDivHorizontal.setVisibility(View.GONE);
-        mStampListView.setVisibility(View.VISIBLE);
-
+        updateComponentVisibility();
 	}
 	
 	public boolean isPrepared() {
@@ -117,16 +114,15 @@ public class EmotionBoard implements FaceTypeAdapter.OnFaceTypeSelectedListener 
             public void onClick(View v) {
                 switch (currEmotionType) {
                 case Stamp.TYPEID_KAOMOJI:
-                    currEmotionType = Stamp.TYPEID_IMAGE;
-                    mCurrStampIndex = 0;
-                    btnFaceType.setBackgroundResource(R.drawable.stamp1);
-                    mEmotionTypeAdapter.setSelected(0);
-                    mEmotionTypeAdapter.setEmotionType(currEmotionType);
-                    mEmotionTypeAdapter.notifyDataSetChanged();
-                    loadStamp();
-                    mKaomojiListView.setVisibility(View.GONE);
-                    mVgEmojiDivHorizontal.setVisibility(View.GONE);
-                    mStampListView.setVisibility(View.VISIBLE);
+                    if (false) { // disable this type
+                        currEmotionType = Stamp.TYPEID_IMAGE;
+                        mCurrStampIndex = 0;
+                        btnFaceType.setBackgroundResource(R.drawable.stamp1);
+                        mEmotionTypeAdapter.setSelected(0);
+                        mEmotionTypeAdapter.setEmotionType(currEmotionType);
+                        mEmotionTypeAdapter.notifyDataSetChanged();
+                        loadStamp();
+                    }
                     break;
                 case Stamp.TYPEID_IMAGE:
                     // TODO 暂时没有anime类型，所以直接切到kaomoji
@@ -137,9 +133,6 @@ public class EmotionBoard implements FaceTypeAdapter.OnFaceTypeSelectedListener 
 //                    mEmotionTypeAdapter.setEmotionType(currEmotionType);
 //                    mEmotionTypeAdapter.notifyDataSetChanged();
 //                    loadStamp();
-//                    mKaomojiListView.setVisibility(View.GONE);
-//                    mVgEmojiDivHorizontal.setVisibility(View.GONE);
-//                    mStampListView.setVisibility(View.VISIBLE);
 //                    break;
                 case Stamp.TYPEID_ANIME:
                     currEmotionType = Stamp.TYPEID_KAOMOJI;
@@ -149,21 +142,17 @@ public class EmotionBoard implements FaceTypeAdapter.OnFaceTypeSelectedListener 
                     mEmotionTypeAdapter.setEmotionType(currEmotionType);
                     mEmotionTypeAdapter.notifyDataSetChanged();
                     loadKaomoji();
-                    mKaomojiListView.setVisibility(View.VISIBLE);
-                    mVgEmojiDivHorizontal.setVisibility(View.GONE);
-                    mStampListView.setVisibility(View.GONE);
                     break;
                 default:
                     break;
                 }
+                updateComponentVisibility();
             }
         });
 
-//		currEmotionType = Stamp.TYPEID_KAOMOJI;
-//		loadKaomoji();
-
-        currEmotionType = Stamp.TYPEID_IMAGE;
-        loadStamp();
+        // activate default face type.
+        OnFaceTypeSelected(currEmotionType, 0);
+        updateComponentVisibility();
 
         prepared = true;
     }
@@ -346,4 +335,26 @@ public class EmotionBoard implements FaceTypeAdapter.OnFaceTypeSelectedListener 
             break;
         }
 	}
+
+    private void updateComponentVisibility() {
+        switch (currEmotionType) {
+            case Stamp.TYPEID_IMAGE:
+                mKaomojiListView.setVisibility(View.GONE);
+                mVgEmojiDivHorizontal.setVisibility(View.GONE);
+                mStampListView.setVisibility(View.VISIBLE);
+                break;
+            case Stamp.TYPEID_ANIME:
+                mKaomojiListView.setVisibility(View.GONE);
+                mVgEmojiDivHorizontal.setVisibility(View.GONE);
+                mStampListView.setVisibility(View.VISIBLE);
+                break;
+            case Stamp.TYPEID_KAOMOJI:
+                mKaomojiListView.setVisibility(View.VISIBLE);
+                mVgEmojiDivHorizontal.setVisibility(View.GONE);
+                mStampListView.setVisibility(View.GONE);
+                break;
+            default:
+                break;
+        }
+    }
 }

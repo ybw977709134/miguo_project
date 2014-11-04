@@ -909,7 +909,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             return;
         }
         if (text.length() > MomentActivity.COMMENT_MOST_WORDS) {
-            mMsgBox.toast(R.string.moments_comment_oom);
+            mMsgBox.toast(String.format(getString(R.string.moments_comment_oom), MomentActivity.COMMENT_MOST_WORDS));
             return;
         }
         mInputMgr.setSoftKeyboardVisibility(false);

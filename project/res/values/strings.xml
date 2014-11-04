@@ -247,9 +247,9 @@
 	<string name="moments_liked">已赞</string>
 	<string name="moments_comment">评论</string>
 	<string name="moments_reply">回复</string>
-    <string name="moments_comment_hint">评论（最多280个字符）</string>
-    <string name="moments_reply_hint">回复 %s （最多280个字符）</string>
-    <string name="moments_comment_oom">评论最多只能包含280个字符</string>
+    <string name="moments_comment_hint">评论（最多%d个字符）</string>
+    <string name="moments_reply_hint">回复 %1$s （最多%2$d个字符）</string>
+    <string name="moments_comment_oom">评论最多只能包含%d个字符</string>
 	<string name="moments_think_is_good"> 觉得很赞</string>
 	<string name="moments_here_to_display_signature">此处显示签名</string>
     <string name="moments_voice_recording">录音中</string>

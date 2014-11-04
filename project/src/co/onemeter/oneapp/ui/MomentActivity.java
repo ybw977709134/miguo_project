@@ -44,7 +44,7 @@ public class MomentActivity extends Activity
         InputBoardManager.InputResultHandler, InputBoardManager.ChangeToOtherAppsListener,
         MomentAdapter.LoadDelegate {
 
-    public static final int COMMENT_MOST_WORDS = 280;
+    public static final int COMMENT_MOST_WORDS = 260;
     private static final int HANDLER_HEAD_CONTENT_MYINFO = 1;
     private static final int HANDLER_TITLE_SINGLE = 2;
     private static final int HANDLER_TITLE_ALL = 3;
@@ -2913,10 +2913,12 @@ public class MomentActivity extends Activity
 
         String title;
         if (replyTo == null)
-            title = activity.getString(R.string.moments_comment_hint);
+            title = String.format(activity.getString(R.string.moments_comment_hint),
+                    COMMENT_MOST_WORDS);
         else
             title = String.format(activity.getResources().getString(R.string.moments_reply_hint),
-                    replyTo.nickname);
+                    replyTo.nickname,
+                    COMMENT_MOST_WORDS);
 
         inputMgr.show(InputBoardManager.FLAG_SHOW_TEXT);
         inputMgr.setInputHint(title);
@@ -2951,7 +2953,7 @@ public class MomentActivity extends Activity
             mMsgBox.toast(R.string.comment_content_cannot_empty);
             return;
         } else if (text.length() > COMMENT_MOST_WORDS) {
-            mMsgBox.toast(R.string.moments_comment_oom);
+            mMsgBox.toast(String.format(getString(R.string.moments_comment_oom), COMMENT_MOST_WORDS));
             return;
         }
         if (mInputMgr == null)

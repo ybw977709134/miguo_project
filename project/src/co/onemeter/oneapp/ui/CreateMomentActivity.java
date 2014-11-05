@@ -1,7 +1,6 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,8 +14,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.LocationHelper;
+import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
@@ -24,10 +25,8 @@ import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
-import org.wowtalk.ui.msg.TimerTextView;
 import org.wowtalk.ui.msg.InputBoardManager;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.utils.LocationHelper;
+import org.wowtalk.ui.msg.TimerTextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -58,12 +57,27 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
     private static final int PHOTO_THUMB_HEIGHT = 200;
 
     public final static String EXTRA_KEY_MOMENT_MAX_TIMESTAMP="moment_max_timestamp";
+    /** 附带的媒体类型，值为 MEDIA_TYPE_* 常量。 */
+    public final static String EXTRA_MEDIA_TYPE = "media_type";
     public final static String EXTRA_KEY_MOMENT_TAG_ID="moment_tag_id";
     public final static String ALIAS_ID_PREFIX="moment_alias_id_";
 
-    private ImageView btnCamera;
-    private ImageView btnLoc;
-    private ImageView btnMic;
+    /** 媒体类型。*/
+    public final static int MEDIA_TYPE_PLAIN_TEXT = 0;
+    /** 媒体类型。*/
+    public final static int MEDIA_TYPE_PIC_ALBUM = 1;
+    /** 媒体类型。*/
+    public final static int MEDIA_TYPE_PIC_CAMERA = 10;
+    /** 媒体类型。*/
+    public final static int MEDIA_TYPE_VIDEO = 2;
+    /** 媒体类型。*/
+    public final static int MEDIA_TYPE_QA = 3;
+    /** 媒体类型。*/
+    public final static int MEDIA_TYPE_VOTE = 4;
+    /** 媒体类型。*/
+    public final static int MEDIA_TYPE_VOICE = 5;
+    /** 媒体类型。*/
+    public final static int MEDIA_TYPE_LOC = 6;
 
 //    private FrameLayout mFrame;
 
@@ -87,8 +101,8 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
     private ImageView micImage;
     private Button micBtn;
     private LinearLayout micDone;
-    private Button micPlay;
-    private Button micDelete;
+    private View micPlay;
+    private View micDelete;
 
 	private Moment moment = new Moment();
 	private MediaInputHelper mediaHelper;
@@ -100,6 +114,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
     private MediaPlayer mPlayer;
     private LocationHelper locationHelper;
 
+    private int mediaType;
     private boolean mLocationOn = false;
     private boolean mIsLongClickRecord = false;
 
@@ -127,18 +142,44 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
 	};
 
 	private void initView() {
+        AQuery q = new AQuery(this);
+
+        int[] layoutIds = new int[] {
+                R.id.vg_input_loc,
+                R.id.vg_input_pic,
+                R.id.vg_input_video,
+                R.id.vg_input_voice };
+        for (int id : layoutIds) {
+            q.find(id).visibility(View.GONE);
+        }
+        switch (mediaType) {
+            case MEDIA_TYPE_PIC_ALBUM:
+            case MEDIA_TYPE_PIC_CAMERA:
+                q.find(R.id.vg_input_pic).visible();
+                break;
+            case MEDIA_TYPE_VIDEO:
+                q.find(R.id.vg_input_video).visible();
+                break;
+            case MEDIA_TYPE_VOICE:
+                q.find(R.id.vg_input_voice).visible();
+                break;
+            case MEDIA_TYPE_LOC:
+                q.find(R.id.vg_input_loc).visible();
+                break;
+        }
+
+        q.find(R.id.btn_take_video).clicked(this);
+        q.find(R.id.btn_pick_video).clicked(this);
+
 //        mFrame = (FrameLayout) findViewById(R.id.frame);
         layoutPic = (LinearLayout) findViewById(R.id.pic_layout);
         hGridInnerLaout = (LinearLayout) findViewById(R.id.hgrid_inner_layout);
         resizeLayout = (YQResizeLayout) findViewById(R.id.resizeLayout);
 		btnTitleBack = (ImageButton) findViewById(R.id.title_back);
 		btnTitleConfirm = (ImageButton) findViewById(R.id.title_confirm);
-		edtContent = (EditText) findViewById(R.id.moment_content);
+		edtContent = (EditText) findViewById(R.id.txt_moment_content);
         locationSearchingLayout = (LinearLayout) findViewById(R.id.location_searching_layout);
         txtAddress = (TextView) findViewById(R.id.txt_address);
-		btnCamera = (ImageView) findViewById(R.id.btn_camera);
-		btnLoc = (ImageView) findViewById(R.id.btn_loc);
-		btnMic = (ImageView) findViewById(R.id.btn_mic);
         imgNone = (ImageView) findViewById(R.id.img_none);
 		btnTakePhoto = (Button) findViewById(R.id.btn_take_pic);
 		btnPickImage = (Button) findViewById(R.id.btn_pick_photo);
@@ -151,14 +192,11 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         micImage = (ImageView) findViewById(R.id.mic_image);
         micBtn = (Button) findViewById(R.id.mic_btn);
         micDone = (LinearLayout) findViewById(R.id.mic_done);
-        micPlay = (Button) findViewById(R.id.btn_play);
-        micDelete = (Button) findViewById(R.id.btn_delete);
+        micPlay = findViewById(R.id.btn_play);
+        micDelete = findViewById(R.id.btn_delete);
 
 		btnTitleBack.setOnClickListener(this);
 		btnTitleConfirm.setOnClickListener(this);
-		btnCamera.setOnClickListener(this);
-		btnLoc.setOnClickListener(this);
-		btnMic.setOnClickListener(this);
 		btnTakePhoto.setOnClickListener(this);
 		btnPickImage.setOnClickListener(this);
         micBtn.setOnClickListener(this);
@@ -202,7 +240,6 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                     case MotionEvent.ACTION_CANCEL:
                         if (mIsLongClickRecord){
                             mIsLongClickRecord = false;
-                            btnMic.setImageResource(R.drawable.write_icon_mic_a);
                             micBtn.setText(getResources().getString(R.string.moments_voice_hold_to_speak));
                             micStatus.setText(getString(R.string.moments_voice_done));
                             micDone.setVisibility(View.VISIBLE);
@@ -286,40 +323,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         }
     }
 
-    private void showPicLayout() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(edtContent.getWindowToken(), 0);
-        layoutPic.setVisibility(View.VISIBLE);
-        layoutMic.setVisibility(View.GONE);
-//        btnCamera.setBackgroundColor(getResources().getColor(R.color.bg_gray4));
-//        btnMic.setBackgroundColor(getResources().getColor(R.color.bg_gray1));
-        btnCamera.setBackgroundColor(getResources().getColor(R.color.bg_gray4));
-        btnMic.setBackgroundResource(0);
-    }
-
-    private void showMicLayout() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(edtContent.getWindowToken(), 0);
-        layoutPic.setVisibility(View.GONE);
-        layoutMic.setVisibility(View.VISIBLE);
-//        btnCamera.setBackgroundColor(getResources().getColor(R.color.bg_gray1));
-//        btnMic.setBackgroundColor(getResources().getColor(R.color.bg_gray4));
-        btnCamera.setBackgroundResource(0);
-        btnMic.setBackgroundColor(getResources().getColor(R.color.bg_gray4));
-        if (mLastVoiceFile == null || !mLastVoiceFile.exists()) {
-            micImage.setVisibility(View.VISIBLE);
-            micInfo.setVisibility(View.GONE);
-            micBtn.setVisibility(View.VISIBLE);
-            micDone.setVisibility(View.GONE);
-        } else {
-            micImage.setVisibility(View.GONE);
-            micInfo.setVisibility(View.VISIBLE);
-            micBtn.setVisibility(View.GONE);
-            micDone.setVisibility(View.VISIBLE);
-        }
-    }
-
-//    private void notifyMicChanged() {
+    //    private void notifyMicChanged() {
 //
 //    }
 
@@ -749,55 +753,32 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         }
         intent.putStringArrayListExtra("list", listPath);
         startActivityForResult(intent, REQ_INPUT_PHOTO);
+    }
+
+    private void pickVideo() {
+        Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
 	}
 	
 	private void refreshCameraView() {
-		if (listPhoto == null || listPhoto.size() == 0) {
-            btnCamera.setImageResource(R.drawable.write_icon_camera);
-		} else {
-			btnCamera.setImageResource(R.drawable.write_icon_camera_a);
-		}
 	}
 	
 	private void refreshLocationView() {
-        btnLoc.setImageResource(mLocationOn ? R.drawable.write_icon_location_a
-                : R.drawable.write_icon_location);
 	}
 
     @Override
 	public void onClick(View v) {
-		switch(v.getId()) {
-		case R.id.title_back:
-            releaseMediaFiles();
-			finish();
-			break;
-		case R.id.title_confirm:
-			createMoment();
-			break;
-		case R.id.btn_camera:
-            showPicLayout();
-			break;
-		case R.id.btn_loc:
-            mLocationOn = !mLocationOn;
-            refreshLocationView();
-            if (mLocationOn) {
-//                getLocation();
-                locationSearchingLayout.setVisibility(View.VISIBLE);
-                txtAddress.setVisibility(View.GONE);
-                locationHelper.getLocationWithAMap(true);
-            } else {
-                locationSearchingLayout.setVisibility(View.GONE);
-                txtAddress.setVisibility(View.GONE);
-            }
-			break;
-		case R.id.btn_mic:
-            showMicLayout();
-			break;
-        case R.id.mic_btn:
-
-            break;
-        case R.id.btn_play:
-            playMicVoice();
+        switch(v.getId()) {
+            case R.id.title_back:
+                releaseMediaFiles();
+                finish();
+                break;
+            case R.id.title_confirm:
+                createMoment();
+                break;
+            case R.id.mic_btn:
+                break;
+            case R.id.btn_play:
+                playMicVoice();
 //            mPlayer = new MediaPlayer();
 //            try {
 //                mPlayer.setDataSource(mLastVoiceFile.getAbsolutePath());
@@ -814,40 +795,59 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
 //            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
-            break;
-        case R.id.btn_delete:
-            btnMic.setImageResource(R.drawable.write_icon_mic);
-            // stop the playing media.
+                break;
+            case R.id.btn_delete:
+                // stop the playing media.
 //            if (null != mPlayer && mPlayer.isPlaying()) {
 //                mPlayer.stop();
 //                mPlayer.release();
 //            }
-            micTime.setMaxElapse(-1);
-            stopMicVoice();
-            removeVoiceFromMoment();
-            if (mLastVoiceFile != null && mLastVoiceFile.exists()) {
-                mLastVoiceFile.delete();
-                mLastVoiceFile = null;
-            }
-            micInfo.setVisibility(View.GONE);
-            micImage.setVisibility(View.VISIBLE);
-            micBtn.setVisibility(View.VISIBLE);
-            micDone.setVisibility(View.GONE);
-            break;
-		case R.id.btn_take_pic:
-		    if (listPhoto.size() == TOTAL_PHOTO_ALLOWED) {
-		        mMsgBox.toast(String.format(getString(R.string.settings_account_moment_take_photos_oom), TOTAL_PHOTO_ALLOWED));
-		        return;
-		    }
-            mediaHelper.takePhoto(CreateMomentActivity.this, REQ_TAKE_PHOTO);
-			break;
-		case R.id.btn_pick_photo:
-			pickPhoto();
-			break;
-		default:
-			break;
-		}
-	}
+                micTime.setMaxElapse(-1);
+                stopMicVoice();
+                removeVoiceFromMoment();
+                if (mLastVoiceFile != null && mLastVoiceFile.exists()) {
+                    mLastVoiceFile.delete();
+                    mLastVoiceFile = null;
+                }
+                micInfo.setVisibility(View.GONE);
+                micImage.setVisibility(View.VISIBLE);
+                micBtn.setVisibility(View.VISIBLE);
+                micDone.setVisibility(View.GONE);
+                break;
+            case R.id.btn_take_pic:
+                if (listPhoto.size() == TOTAL_PHOTO_ALLOWED) {
+                    mMsgBox.toast(String.format(getString(R.string.settings_account_moment_take_photos_oom), TOTAL_PHOTO_ALLOWED));
+                    return;
+                }
+                mediaHelper.takePhoto(CreateMomentActivity.this, REQ_TAKE_PHOTO);
+                break;
+            case R.id.btn_pick_photo:
+                pickPhoto();
+                break;
+            case R.id.btn_take_video:
+                Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btn_pick_video:
+                pickVideo();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void requireLoc() {
+        mLocationOn = !mLocationOn;
+        refreshLocationView();
+        if (mLocationOn) {
+//                getLocation();
+            locationSearchingLayout.setVisibility(View.VISIBLE);
+            txtAddress.setVisibility(View.GONE);
+            locationHelper.getLocationWithAMap(true);
+        } else {
+            locationSearchingLayout.setVisibility(View.GONE);
+            txtAddress.setVisibility(View.GONE);
+        }
+    }
 
     private void stopMicVoice() {
         if (null != mPlayer) {
@@ -919,7 +919,11 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
 
         mMsgBox = new MessageBox(this);
         mDb = new Database(this);
+
+        getData(savedInstanceState == null ? getIntent().getExtras() : savedInstanceState);
+
 		initView();
+
         locationHelper = new LocationHelper(this);
         locationHelper.setOnLocationGotListener(new LocationHelper.OnLocationGotListener() {
             @Override
@@ -961,7 +965,6 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                     File aFile=new File(lastVoiceFilePath);
                     if(null != aFile && aFile.exists()) {
                         mLastVoiceFile=aFile;
-                        btnMic.setImageResource(R.drawable.write_icon_mic_a);
                         micTime.setText("00:00");
                     }
                 }
@@ -989,7 +992,6 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                 e.printStackTrace();
             }
 
-            btnCamera.performClick();
             notifyFileChanged(false);
         } else {
             mediaHelper = new MediaInputHelper(this);
@@ -997,12 +999,19 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         }
 	}
 
+    private void getData(Bundle bundle) {
+        if (bundle != null) {
+            mediaType = bundle.getInt(EXTRA_MEDIA_TYPE, MEDIA_TYPE_PLAIN_TEXT);
+        }
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putParcelable("media_helper", mediaHelper);
         outState.putParcelableArrayList("list_photo",listPhoto);
+        outState.putInt(EXTRA_MEDIA_TYPE, mediaType);
 
         if(null != mLastVoiceFile && mLastVoiceFile.exists()) {
             outState.putString("last_voice_file",mLastVoiceFile.getAbsolutePath());

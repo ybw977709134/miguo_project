@@ -104,22 +104,37 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                 switchToMy();
                 break;
             case R.id.vg_new_text:
+                gotoCreateMoment(CreateMomentActivity.MEDIA_TYPE_PLAIN_TEXT);
+                hideNewMomentPanel();
+                break;
             case R.id.vg_new_pic:
+                gotoCreateMoment(CreateMomentActivity.MEDIA_TYPE_PIC_ALBUM);
+                hideNewMomentPanel();
+                break;
             case R.id.vg_new_camera:
+                gotoCreateMoment(CreateMomentActivity.MEDIA_TYPE_PIC_CAMERA);
+                hideNewMomentPanel();
+                break;
             case R.id.vg_new_question:
+                gotoCreateMoment(CreateMomentActivity.MEDIA_TYPE_QA);
+                hideNewMomentPanel();
+                break;
             case R.id.vg_new_vote:
+                gotoCreateMoment(CreateMomentActivity.MEDIA_TYPE_VOTE);
+                hideNewMomentPanel();
+                break;
             case R.id.vg_new_video:
-                gotoCreateMoment();
+                gotoCreateMoment(CreateMomentActivity.MEDIA_TYPE_VIDEO);
                 hideNewMomentPanel();
                 break;
         }
     }
 
-    private void gotoCreateMoment() {
-        // TODO consider moment tag
+    private void gotoCreateMoment(int mediaType) {
         long maxTimeStamp=0; // TODO
-        Intent intent = new Intent(this, CreateMomentActivity.class);
-        intent.putExtra(CreateMomentActivity.EXTRA_KEY_MOMENT_MAX_TIMESTAMP,maxTimeStamp);
+        Intent intent = new Intent(this, CreateMomentActivity.class)
+                .putExtra(CreateMomentActivity.EXTRA_MEDIA_TYPE, mediaType)
+                .putExtra(CreateMomentActivity.EXTRA_KEY_MOMENT_MAX_TIMESTAMP, maxTimeStamp);
         startActivityForResult(intent, REQ_CREATE_MOMENT);
     }
 

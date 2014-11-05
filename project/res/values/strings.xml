@@ -237,6 +237,7 @@
 	<string name="moments_my">成长日记</string>
 	<string name="moments_compose">编写动态</string>
 	<string name="moments_compose_camera">拍照</string>
+	<string name="moments_compose_camera_video">摄像</string>
 	<string name="moments_compose_gallery">相册</string>
 	<string name="moments_compose_hint">写点什么呢？</string>
     <string name="moments_compose_hint_status">最近在忙点什么?</string>

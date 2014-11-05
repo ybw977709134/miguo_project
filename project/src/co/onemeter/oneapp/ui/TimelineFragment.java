@@ -3,7 +3,6 @@ package co.onemeter.oneapp.ui;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.widget.ListView;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
@@ -22,7 +21,9 @@ import java.util.ArrayList;
  * <p>浏览动态。</p>
  * Created by pzy on 10/13/14.
  */
-public abstract class TimelineFragment extends ListFragment implements MomentAdapter.ReplyDelegate, OnTimelineFilterChangedListener {
+public abstract class TimelineFragment extends ListFragment
+        implements MomentAdapter.ReplyDelegate, OnTimelineFilterChangedListener,
+        PullToRefreshListView.OnRefreshListener {
     protected Database dbHelper;
     private MomentAdapter adapter;
     // selected tag index on UI
@@ -98,9 +99,7 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
 
         PullToRefreshListView listView = getPullToRefreshListView();
         if (listView != null) {
-            PtrListener l = new PtrListener();
-            listView.setOnPullEventListener(l);
-            listView.setOnRefreshListener(l);
+            listView.setOnRefreshListener(this);
         }
     }
 
@@ -173,30 +172,14 @@ public abstract class TimelineFragment extends ListFragment implements MomentAda
         }
     }
 
-    private class PtrListener implements PullToRefreshListView.OnRefreshListener,
-            PullToRefreshBase.OnPullEventListener<ListView> {
-
-        @Override
-        public void onPullEvent(PullToRefreshBase<ListView> refreshView,
-                                PullToRefreshBase.State state,
-                                PullToRefreshBase.Mode direction) {
-
-        }
-
-        @Override
-        public void onPullScaleChanged(float scale) {
-
-        }
-
-        @Override
-        public void onRefresh(final PullToRefreshBase refreshView) {
-            new RefreshMomentsTask(){
-                @Override
-                protected void onPostExecute(Integer errno) {
-                    super.onPostExecute(errno);
-                    refreshView.onRefreshComplete();
-                }
-            }.execute((Void)null);
-        }
+    @Override
+    public void onRefresh(final PullToRefreshBase refreshView) {
+        new RefreshMomentsTask(){
+            @Override
+            protected void onPostExecute(Integer errno) {
+                super.onPostExecute(errno);
+                refreshView.onRefreshComplete();
+            }
+        }.execute((Void)null);
     }
 }

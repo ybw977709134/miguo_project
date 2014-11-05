@@ -401,6 +401,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
                     avaliableHeight/4, rlp.bottomMargin);
             view.setLayoutParams(rlp);
         }
+        view.setVisibility(View.INVISIBLE);
     }
 
     private void showPtrIcon(View view) {

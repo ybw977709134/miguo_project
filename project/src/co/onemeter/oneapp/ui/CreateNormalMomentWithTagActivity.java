@@ -59,7 +59,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
     private final static int ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY=2;
     private final static int ACTIVITY_REQ_ID_SHARE_RANGE_SELECT=3;
 
-    private ArrayList<CreateMomentActivity.WPhoto> listPhoto;
+    private ArrayList<CreateMomentActivity.WMediaFile> listPhoto;
 
     private static CreateNormalMomentWithTagActivity instance;
 
@@ -343,7 +343,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 
 
         mediaHelper = new MediaInputHelper(this);
-        listPhoto = new ArrayList<CreateMomentActivity.WPhoto>();
+        listPhoto = new ArrayList<CreateMomentActivity.WMediaFile>();
 
         surveyOptions=new ArrayList<String>();
         isSuveyMultiSelectable=false;
@@ -909,7 +909,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
             @Override
             public void run() {
                 if(null != listPhoto) {
-                    for(CreateMomentActivity.WPhoto aWPhoto : listPhoto) {
+                    for(CreateMomentActivity.WMediaFile aWPhoto : listPhoto) {
                         deleteWPhotoFile(aWPhoto);
                     }
                 }
@@ -945,7 +945,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                             return;
                         }
                         int i = 0;
-                        for (CreateMomentActivity.WPhoto photo : listPhoto) {
+                        for (CreateMomentActivity.WMediaFile photo : listPhoto) {
                             if (!photo.isFromGallery) {
                                 i++;
                             }
@@ -953,7 +953,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                         Intent intent = new Intent(CreateNormalMomentWithTagActivity.this, SelectPhotoActivity.class);
                         intent.putExtra("num", CreateMomentActivity.TOTAL_PHOTO_ALLOWED - i);
                         ArrayList<String> listPath = new ArrayList<String>();
-                        for (CreateMomentActivity.WPhoto photo : listPhoto) {
+                        for (CreateMomentActivity.WMediaFile photo : listPhoto) {
                             if (photo.isFromGallery) {
                                 listPath.add(photo.galleryPath);
                             }
@@ -1237,7 +1237,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         }
     }
 
-    private void addPhoto2moment(CreateMomentActivity.WPhoto aPhoto) {
+    private void addPhoto2moment(CreateMomentActivity.WMediaFile aPhoto) {
         for(WFile aFile : moment.multimedias) {
             if(aFile.localPath.equals(aPhoto.localPath)) {
                 Log.w("duplicate photo add 2 momet, omit");
@@ -1254,7 +1254,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         copyFileForMomentMultimedia(f);
     }
 
-    private void removePhotoFromMoment(CreateMomentActivity.WPhoto aPhoto) {
+    private void removePhotoFromMoment(CreateMomentActivity.WMediaFile aPhoto) {
         WFile file2remove=null;
         for(WFile aFile : moment.multimedias) {
             if(aFile.localPath.equals(aPhoto.localPath)) {
@@ -1321,14 +1321,14 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 Bitmap bmp=bmpDrawable.getBitmap();
                 BmpUtils.recycleABitmap(bmp);
 
-                deleteWPhotoFile((CreateMomentActivity.WPhoto)view.getTag());
+                deleteWPhotoFile((CreateMomentActivity.WMediaFile)view.getTag());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void deleteWPhotoFile(CreateMomentActivity.WPhoto aWPhoto) {
+    private void deleteWPhotoFile(CreateMomentActivity.WMediaFile aWPhoto) {
         if(null != aWPhoto) {
             Database.deleteAFile(aWPhoto.localPath);
         }
@@ -1363,7 +1363,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         } else {
             addedImgLayout.removeAllViews();
             recycleStoredBitmapDrawable();
-            for(CreateMomentActivity.WPhoto aPhoto : listPhoto) {
+            for(CreateMomentActivity.WMediaFile aPhoto : listPhoto) {
                 removePhotoFromMoment(aPhoto);
             }
 //            moment.multimedias.clear();
@@ -1397,7 +1397,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
     }
 
     private void deleteAImage(View view) {
-        CreateMomentActivity.WPhoto path = (CreateMomentActivity.WPhoto) view.getTag();
+        CreateMomentActivity.WMediaFile path = (CreateMomentActivity.WMediaFile) view.getTag();
         listPhoto.remove(path);
 
         removePhotoFromMoment(path);
@@ -1441,8 +1441,8 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
             case ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY:
                 if (resultCode == RESULT_OK) {
                     ArrayList<String> listPath = data.getStringArrayListExtra("list");
-                    ArrayList<CreateMomentActivity.WPhoto> photo2add = new ArrayList<CreateMomentActivity.WPhoto>();
-                    ArrayList<CreateMomentActivity.WPhoto> photo2del = new ArrayList<CreateMomentActivity.WPhoto>();
+                    ArrayList<CreateMomentActivity.WMediaFile> photo2add = new ArrayList<CreateMomentActivity.WMediaFile>();
+                    ArrayList<CreateMomentActivity.WMediaFile> photo2del = new ArrayList<CreateMomentActivity.WMediaFile>();
                     for (int i = 0; i < listPhoto.size(); i++) {
                         boolean needAdd=false;
                         if (!listPhoto.get(i).isFromGallery) {
@@ -1462,7 +1462,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                         }
                     }
 
-                    for(CreateMomentActivity.WPhoto aPhoto : photo2del) {
+                    for(CreateMomentActivity.WMediaFile aPhoto : photo2del) {
                         deleteAImage(aPhoto.relativeView);
                     }
                     listPhoto = photo2add;
@@ -1473,7 +1473,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                         @Override
                         protected Void doInBackground(ArrayList<String>... params) {
                             for (String path : params[0]) {
-                                CreateMomentActivity.WPhoto photo = new CreateMomentActivity.WPhoto();
+                                CreateMomentActivity.WMediaFile photo = new CreateMomentActivity.WMediaFile();
                                 Bitmap bmp = BmpUtils.decodeFile(path, CreateMomentActivity.PHOTO_SEND_WIDTH, CreateMomentActivity.PHOTO_SEND_HEIGHT);
                                 File file = MediaInputHelper.makeOutputMediaFile(
                                         MediaInputHelper.MEDIA_TYPE_IMAGE, ".jpg");
@@ -1525,7 +1525,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                             } else {
                                 Log.e("handle image error");
                             }
-                            CreateMomentActivity.WPhoto photo = new CreateMomentActivity.WPhoto();
+                            CreateMomentActivity.WMediaFile photo = new CreateMomentActivity.WMediaFile();
                             photo.localPath = path[0];
                             photo.isFromGallery = false;
                             listPhoto.add(photo);

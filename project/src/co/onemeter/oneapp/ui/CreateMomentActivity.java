@@ -44,9 +44,12 @@ import java.util.LinkedList;
  */
 public class CreateMomentActivity extends Activity implements OnClickListener, InputBoardManager.ChangeToOtherAppsListener {
 
-    private final int REQ_TAKE_PHOTO = 98;
-	private final int REQ_INPUT_PHOTO = 99;
-    private final int MSG_RESIZE = 102;
+    private static final int REQ_INPUT_VIDEO_TAKE = 90;
+    private static final int REQ_INPUT_VIDEO_PICK = 91;
+    private static final int REQ_TAKE_PHOTO = 98;
+	private static final int REQ_INPUT_PHOTO = 99;
+
+    private static final int MSG_RESIZE = 102;
     public static final int TOTAL_PHOTO_ALLOWED = 9;
 
     private final int BIGGER = 103;
@@ -107,7 +110,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
 	private Moment moment = new Moment();
 	private MediaInputHelper mediaHelper;
 //	private String[] path = new String[2];
-    private ArrayList<WPhoto> listPhoto;
+    private ArrayList<WMediaFile> listPhoto;
 
     private MediaRecorder mRecorder;
     private File mLastVoiceFile;
@@ -145,6 +148,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         AQuery q = new AQuery(this);
 
         int[] layoutIds = new int[] {
+                R.id.vg_gallery,
                 R.id.vg_input_loc,
                 R.id.vg_input_pic,
                 R.id.vg_input_video,
@@ -155,9 +159,11 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         switch (mediaType) {
             case MEDIA_TYPE_PIC_ALBUM:
             case MEDIA_TYPE_PIC_CAMERA:
+                q.find(R.id.vg_gallery).visible();
                 q.find(R.id.vg_input_pic).visible();
                 break;
             case MEDIA_TYPE_VIDEO:
+                q.find(R.id.vg_gallery).visible();
                 q.find(R.id.vg_input_video).visible();
                 break;
             case MEDIA_TYPE_VOICE:
@@ -220,7 +226,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         micBtn.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                if(startRecording()) {
+                if (startRecording()) {
                     mIsLongClickRecord = true;
                     micImage.setVisibility(View.GONE);
                     micInfo.setVisibility(View.VISIBLE);
@@ -238,7 +244,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                         break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
-                        if (mIsLongClickRecord){
+                        if (mIsLongClickRecord) {
                             mIsLongClickRecord = false;
                             micBtn.setText(getResources().getString(R.string.moments_voice_hold_to_speak));
                             micStatus.setText(getString(R.string.moments_voice_done));
@@ -339,13 +345,13 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         bmpDrawableList.clear();
     }
 
-    private void copyFileForMomentMultimedia(WFile aFile) {
+    private void copyFileForMomentMultimedia(WMediaFile aFile) {
         String destFilePath = PhotoDisplayHelper.makeLocalFilePath(
                 aFile.fileid, aFile.getExt());
         FileUtils.copyFile(aFile.localPath, destFilePath);
 
         // make thumbnail
-        if (null != aFile.thumb_fileid) {
+        if (null != aFile.thumb_fileid && null == aFile.localThumbnailPath && aFile.isPhoto) {
             Bitmap thumb = BmpUtils.decodeFile(aFile.localPath, 200, 200, true);
             aFile.localThumbnailPath = PhotoDisplayHelper.makeLocalFilePath(
                     aFile.thumb_fileid, aFile.getExt());
@@ -367,24 +373,22 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         }
     }
 
-    private void addPhoto2moment(WPhoto aPhoto) {
+    private void addMedia2moment(WMediaFile aPhoto) {
         for(WFile aFile : moment.multimedias) {
             if(aFile.localPath.equals(aPhoto.localPath)) {
                 Log.w("duplicate photo add 2 momet, omit");
                 return;
             }
         }
-        String ext = FileUtils.getExt(aPhoto.localPath);
-        String fakeFileId = String.valueOf(Math.random());
-        WFile f = new WFile(ext, fakeFileId, null, aPhoto.localPath);
-        f.thumb_fileid = String.valueOf(Math.random());
-        f.remoteDir = GlobalSetting.S3_MOMENT_FILE_DIR;
-        moment.multimedias.add(f);
-
-        copyFileForMomentMultimedia(f);
+        aPhoto.setExt(FileUtils.getExt(aPhoto.localPath));
+        aPhoto.fileid = String.valueOf(Math.random());
+        aPhoto.thumb_fileid = String.valueOf(Math.random());
+        aPhoto.remoteDir = GlobalSetting.S3_MOMENT_FILE_DIR;
+        moment.multimedias.add(aPhoto);
+        copyFileForMomentMultimedia(aPhoto);
     }
 
-    private void removePhotoFromMoment(WPhoto aPhoto) {
+    private void removePhotoFromMoment(WMediaFile aPhoto) {
         WFile file2remove=null;
         for(WFile aFile : moment.multimedias) {
             if(aFile.localPath.equals(aPhoto.localPath)) {
@@ -416,7 +420,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                 mPlayer.release();
                 mPlayer = null;
             }
-            WFile f = new WFile(ext, fakeFileId, duration, localFilename);
+            WMediaFile f = new WMediaFile(ext, fakeFileId, duration, localFilename);
             f.remoteDir = GlobalSetting.S3_MOMENT_FILE_DIR;
             moment.multimedias.add(f);
 
@@ -453,10 +457,10 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         if (isAdded) {
             final View view = LayoutInflater.from(this).inflate(R.layout.listitem_moment_image, hGridInnerLaout, false);
             final ImageView imgPhoto = (ImageView) view.findViewById(R.id.img_photo);
-            imgPhoto.setImageDrawable(new BitmapDrawable(getResources(), listPhoto.get(listPhoto.size() - 1).localPath));
+            imgPhoto.setImageDrawable(new BitmapDrawable(getResources(), listPhoto.get(listPhoto.size() - 1).localThumbnailPath));
             bmpDrawableList.add((BitmapDrawable)imgPhoto.getDrawable());
 
-            addPhoto2moment(listPhoto.get(listPhoto.size() - 1));
+            addMedia2moment(listPhoto.get(listPhoto.size() - 1));
             listPhoto.get(listPhoto.size() - 1).relativeView=view;
 
             ImageButton imgDelete = (ImageButton) view.findViewById(R.id.btn_delete);
@@ -482,10 +486,10 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
             for (int i = 0; i < fileNum; i++) {
                 final View view = LayoutInflater.from(this).inflate(R.layout.listitem_moment_image, hGridInnerLaout, false);
                 final ImageView imgPhoto = (ImageView) view.findViewById(R.id.img_photo);
-                imgPhoto.setImageDrawable(new BitmapDrawable(getResources(), listPhoto.get(i).localPath));
+                imgPhoto.setImageDrawable(new BitmapDrawable(getResources(), listPhoto.get(i).localThumbnailPath));
                 bmpDrawableList.add((BitmapDrawable)imgPhoto.getDrawable());
 
-                addPhoto2moment(listPhoto.get(i));
+                addMedia2moment(listPhoto.get(i));
                 listPhoto.get(i).relativeView=view;
 
                 ImageButton imgDelete = (ImageButton) view.findViewById(R.id.btn_delete);
@@ -507,7 +511,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
     }
 
     private void deleteAImage(View view) {
-        WPhoto path = (WPhoto) view.getTag();
+        WMediaFile path = (WMediaFile) view.getTag();
         listPhoto.remove(path);
 
         removePhotoFromMoment(path);
@@ -528,14 +532,14 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                 Bitmap bmp=bmpDrawable.getBitmap();
                 BmpUtils.recycleABitmap(bmp);
 
-                deleteWPhotoFile((WPhoto)view.getTag());
+                deleteWPhotoFile((WMediaFile)view.getTag());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void deleteWPhotoFile(WPhoto aWPhoto) {
+    private void deleteWPhotoFile(WMediaFile aWPhoto) {
         if(null != aWPhoto) {
             Database.deleteAFile(aWPhoto.localPath);
         }
@@ -546,7 +550,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
             @Override
             public void run() {
                 if(null != listPhoto) {
-                    for(WPhoto aWPhoto : listPhoto) {
+                    for(WMediaFile aWPhoto : listPhoto) {
                         deleteWPhotoFile(aWPhoto);
                     }
                 }
@@ -739,14 +743,14 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
     private void pickPhoto() {
         Intent intent = new Intent(CreateMomentActivity.this, SelectPhotoActivity.class);
         int i = 0;
-        for (WPhoto photo : listPhoto) {
+        for (WMediaFile photo : listPhoto) {
             if (!photo.isFromGallery) {
                 i++;
             }
         }
         intent.putExtra("num", TOTAL_PHOTO_ALLOWED - i);
         ArrayList<String> listPath = new ArrayList<String>();
-        for (WPhoto photo : listPhoto) {
+        for (WMediaFile photo : listPhoto) {
             if (photo.isFromGallery) {
                 listPath.add(photo.galleryPath);
             }
@@ -755,10 +759,6 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         startActivityForResult(intent, REQ_INPUT_PHOTO);
     }
 
-    private void pickVideo() {
-        Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
-	}
-	
 	private void refreshCameraView() {
 	}
 	
@@ -825,10 +825,10 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                 pickPhoto();
                 break;
             case R.id.btn_take_video:
-                Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+                mediaHelper.takeVideo(this, REQ_INPUT_VIDEO_TAKE);
                 break;
             case R.id.btn_pick_video:
-                pickVideo();
+                mediaHelper.pickVideo(this, REQ_INPUT_VIDEO_PICK);
                 break;
             default:
                 break;
@@ -995,7 +995,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
             notifyFileChanged(false);
         } else {
             mediaHelper = new MediaInputHelper(this);
-            listPhoto = new ArrayList<WPhoto>();
+            listPhoto = new ArrayList<WMediaFile>();
         }
 	}
 
@@ -1045,117 +1045,180 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch(requestCode) {
-		case REQ_INPUT_PHOTO:
-			if (resultCode == RESULT_OK) {
-                ArrayList<String> listPath = data.getStringArrayListExtra("list");
-                ArrayList<WPhoto> photos = new ArrayList<WPhoto>();
-                ArrayList<WPhoto> photo2del = new ArrayList<WPhoto>();
-                for (int i = 0; i < listPhoto.size(); i++) {
-                    boolean needAdd=false;
-                    if (!listPhoto.get(i).isFromGallery) {
-                        needAdd=true;
-                    } else {
-                        if(listPath.contains(listPhoto.get(i).galleryPath)) {
-                            listPath.remove(listPhoto.get(i).galleryPath);
+            case REQ_INPUT_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    ArrayList<String> listPath = data.getStringArrayListExtra("list");
+                    ArrayList<WMediaFile> photos = new ArrayList<WMediaFile>();
+                    ArrayList<WMediaFile> photo2del = new ArrayList<WMediaFile>();
+                    for (int i = 0; i < listPhoto.size(); i++) {
+                        boolean needAdd=false;
+                        if (!listPhoto.get(i).isFromGallery) {
                             needAdd=true;
                         } else {
-                            //not contained,delete this
-                            photo2del.add(listPhoto.get(i));
-                        }
-                    }
-
-                    if(needAdd) {
-                        photos.add(listPhoto.get(i));
-                    }
-                }
-
-                for(WPhoto aPhoto : photo2del) {
-                    deleteAImage(aPhoto.relativeView);
-                }
-                listPhoto = photos;
-                mMsgBox.showWait();
-                new AsyncTask<ArrayList<String>, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(ArrayList<String>... params) {
-                        for (String path : params[0]) {
-                            WPhoto photo = new WPhoto();
-                            Bitmap bmp = BmpUtils.decodeFile(path, PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT);
-                            File file = MediaInputHelper.makeOutputMediaFile(
-                                    MediaInputHelper.MEDIA_TYPE_IMAGE, ".jpg");
-                            try {
-                                OutputStream os = new FileOutputStream(file);
-                                bmp.compress(Bitmap.CompressFormat.JPEG, 90, os);
-                                os.close();
-
-                                BmpUtils.recycleABitmap(bmp);
-
-                                photo.localPath = file.getAbsolutePath();
-                                photo.galleryPath = path;
-                                photo.isFromGallery = true;
-                                listPhoto.add(photo);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            if(listPath.contains(listPhoto.get(i).galleryPath)) {
+                                listPath.remove(listPhoto.get(i).galleryPath);
+                                needAdd=true;
+                            } else {
+                                //not contained,delete this
+                                photo2del.add(listPhoto.get(i));
                             }
-
-                            publishProgress((Void)null);
                         }
-                        return null;
+
+                        if(needAdd) {
+                            photos.add(listPhoto.get(i));
+                        }
                     }
 
-                    @Override
-                    protected void onProgressUpdate(Void... errno) {
-                        instance.notifyFileChanged(true);
+                    for(WMediaFile aPhoto : photo2del) {
+                        deleteAImage(aPhoto.relativeView);
                     }
+                    listPhoto = photos;
+                    mMsgBox.showWait();
+                    new AsyncTask<ArrayList<String>, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(ArrayList<String>... params) {
+                            for (String path : params[0]) {
+                                WMediaFile photo = new WMediaFile(true);
+                                Bitmap bmp = BmpUtils.decodeFile(path, PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT);
+                                File file = MediaInputHelper.makeOutputMediaFile(
+                                        MediaInputHelper.MEDIA_TYPE_IMAGE, ".jpg");
+                                try {
+                                    OutputStream os = new FileOutputStream(file);
+                                    bmp.compress(Bitmap.CompressFormat.JPEG, 90, os);
+                                    os.close();
 
-                    @Override
-                    protected void onPostExecute(Void errno) {
-                        mMsgBox.dismissWait();
-                        instance.notifyFileChanged(false);
-                    }
-                }.execute(listPath);
-			}
-			break;
-        case REQ_TAKE_PHOTO:
-            if (resultCode == RESULT_OK) {
+                                    BmpUtils.recycleABitmap(bmp);
+
+                                    photo.localPath = photo.localThumbnailPath = file.getAbsolutePath();
+                                    photo.galleryPath = path;
+                                    photo.isFromGallery = true;
+                                    listPhoto.add(photo);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                publishProgress((Void)null);
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void onProgressUpdate(Void... errno) {
+                            instance.notifyFileChanged(true);
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void errno) {
+                            mMsgBox.dismissWait();
+                            instance.notifyFileChanged(false);
+                        }
+                    }.execute(listPath);
+                }
+                break;
+            case REQ_TAKE_PHOTO:
+                if (resultCode == RESULT_OK) {
 //                layoutPic.setVisibility(View.VISIBLE);
 
-                new AsyncTask<Intent, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Intent... params) {
-                        String[] path = new String[2];
-                        boolean handleImageRet=mediaHelper.handleImageResult(CreateMomentActivity.this, params[0],
-                                PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
-                                0, 0,
-                                path);
-                        if(handleImageRet) {
-                            Log.i("handle result ok,path[0]="+path[0]);
-                        } else {
-                            Log.e("handle image error");
+                    new AsyncTask<Intent, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Intent... params) {
+                            String[] path = new String[2];
+                            boolean handleImageRet=mediaHelper.handleImageResult(CreateMomentActivity.this, params[0],
+                                    PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
+                                    PHOTO_THUMB_WIDTH, PHOTO_THUMB_HEIGHT,
+                                    path);
+                            if(handleImageRet) {
+                                Log.i("handle result ok,path[0]="+path[0]);
+                            } else {
+                                Log.e("handle image error");
+                            }
+                            WMediaFile photo = new WMediaFile(true);
+                            photo.localPath = path[0];
+                            photo.localThumbnailPath = path[1];
+                            photo.isFromGallery = false;
+                            listPhoto.add(photo);
+                            return null;
                         }
-                        WPhoto photo = new WPhoto();
-                        photo.localPath = path[0];
-                        photo.isFromGallery = false;
-                        listPhoto.add(photo);
-                        return null;
-                    }
 
-                    @Override
-                    protected void onPostExecute(Void errno) {
-                        instance.notifyFileChanged(true);
-                    }
-                }.execute(data);
-            }
-            break;
-		default:
-			break;
-		}
+                        @Override
+                        protected void onPostExecute(Void errno) {
+                            instance.notifyFileChanged(true);
+                        }
+                    }.execute(data);
+                }
+                break;
+            case REQ_INPUT_VIDEO_PICK:
+                if (resultCode == RESULT_OK) {
+                    handleVideoResult(data, true);
+                }
+                break;
+            case REQ_INPUT_VIDEO_TAKE:
+                if (resultCode == RESULT_OK) {
+                    handleVideoResult(data, false);
+                }
+                break;
+            default:
+                break;
+        }
 	}
 
-    public static class WPhoto extends WFile {
+    private void handleVideoResult(Intent data, final boolean isFromGallery) {
+        new AsyncTask<Intent, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Intent... params) {
+                String[] path = new String[2];
+                boolean handleRet=mediaHelper.handleVideoResult(CreateMomentActivity.this, params[0],
+                        PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
+                        PHOTO_THUMB_WIDTH, PHOTO_THUMB_HEIGHT,
+                        path);
+                if(handleRet) {
+                    Log.i("handle result ok,path[0]=" + path[0]);
+                } else {
+                    Log.e("handle video error");
+                }
+                if (new File(path[0]).exists()) {
+                    WMediaFile photo = new WMediaFile();
+                    photo.localPath = path[0];
+                    photo.localThumbnailPath = path[1];
+                    photo.isFromGallery = isFromGallery;
+                    listPhoto.add(photo);
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean ok) {
+                if (ok)
+                    instance.notifyFileChanged(true);
+                else
+                    new MessageBox(CreateMomentActivity.this).toast(R.string.msg_operation_failed);
+            }
+        }.execute(data);
+    }
+
+    public static class WMediaFile extends WFile {
+        public boolean isPhoto = false;
         boolean isFromGallery;
         String galleryPath;
 
         View relativeView;
+
+        public WMediaFile() {
+            isPhoto = false;
+        }
+
+        public WMediaFile(boolean photo) {
+            isPhoto = photo;
+        }
+
+        public WMediaFile(String ext, String fileid, String thumb_fileid, String localPath) {
+            super(ext, fileid, thumb_fileid, localPath);
+        }
+
+        public WMediaFile(String ext, String fileid, int duration, String localPath) {
+            super(ext, fileid, duration, localPath);
+        }
 
         @Override
         public int describeContents() {
@@ -1167,6 +1230,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
             super.writeToParcel(parcel, i);
             parcel.writeInt(isFromGallery ? 1 : 0);
             parcel.writeString(galleryPath);
+            parcel.writeInt(isPhoto ? 1 : 0);
         }
 
         @Override
@@ -1174,6 +1238,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
             super.loadFromParcel(parcel);
             isFromGallery = parcel.readInt() == 1;
             galleryPath = parcel.readString();
+            isPhoto = parcel.readInt() == 1;
         }
     }
 

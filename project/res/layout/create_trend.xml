@@ -99,38 +99,41 @@
 				android:visibility="gone"/>
 		</RelativeLayout>
 
+		<!-- 显示已经输入的图片和视频 -->
+		<FrameLayout
+			android:id="@+id/vg_gallery"
+			android:layout_height="140dp"
+			android:layout_width="fill_parent">
+			<HorizontalScrollView
+				android:id="@+id/mGrid"
+				android:layout_height="wrap_content"
+				android:layout_width="fill_parent"
+				android:layout_gravity="center_vertical"
+				android:scrollbars="none"
+				android:visibility="visible">
+				<LinearLayout
+					android:id="@+id/hgrid_inner_layout"
+					android:layout_height="110dp"
+					android:layout_width="fill_parent"
+					android:dividerPadding="10dp"
+					android:orientation="horizontal">
+				</LinearLayout>
+
+			</HorizontalScrollView>
+			<ImageView
+				android:id="@+id/img_none"
+				android:layout_height="110dp"
+				android:layout_width="170dp"
+				android:layout_gravity="center"
+				android:background="@drawable/write_noimage"/>
+		</FrameLayout>
+
 		<LinearLayout
 			android:id="@+id/vg_input_pic"
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent"
 			android:orientation="vertical"
 			android:visibility="visible">
-			<FrameLayout
-				android:layout_height="140dp"
-				android:layout_width="fill_parent">
-				<HorizontalScrollView
-					android:id="@+id/mGrid"
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:layout_gravity="center_vertical"
-					android:scrollbars="none"
-					android:visibility="visible">
-					<LinearLayout
-						android:id="@+id/hgrid_inner_layout"
-						android:layout_height="110dp"
-						android:layout_width="fill_parent"
-						android:dividerPadding="10dp"
-						android:orientation="horizontal">
-					</LinearLayout>
-
-				</HorizontalScrollView>
-				<ImageView
-					android:id="@+id/img_none"
-					android:layout_height="110dp"
-					android:layout_width="170dp"
-					android:layout_gravity="center"
-					android:background="@drawable/write_noimage"/>
-			</FrameLayout>
 			<LinearLayout
 				android:layout_height="wrap_content"
 				android:layout_width="fill_parent"
@@ -167,32 +170,6 @@
 			android:layout_width="fill_parent"
 			android:orientation="vertical"
 			android:visibility="visible">
-			<FrameLayout
-				android:layout_height="140dp"
-				android:layout_width="fill_parent">
-				<HorizontalScrollView
-					android:id="@+id/mGrid_video"
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:layout_gravity="center_vertical"
-					android:scrollbars="none"
-					android:visibility="visible">
-					<LinearLayout
-						android:id="@+id/hgrid_inner_layout_video"
-						android:layout_height="110dp"
-						android:layout_width="fill_parent"
-						android:dividerPadding="10dp"
-						android:orientation="horizontal">
-					</LinearLayout>
-
-				</HorizontalScrollView>
-				<ImageView
-					android:id="@+id/img_none_video"
-					android:layout_height="110dp"
-					android:layout_width="170dp"
-					android:layout_gravity="center"
-					android:background="@drawable/write_noimage"/>
-			</FrameLayout>
 			<LinearLayout
 				android:layout_height="wrap_content"
 				android:layout_width="fill_parent"

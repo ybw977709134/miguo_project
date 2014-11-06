@@ -262,37 +262,61 @@ public class MediaInputHelper implements Parcelable {
             }
         }
     }
-	
-	public void inputVideo(Activity activity, int requestCode) {
+
+    public void inputVideo(Activity activity, int requestCode) {
+        fixVideoPath(activity);
+        mChangeAppsListener.changeToOtherApps();
+        Intent pickIntent = new Intent();
+        pickIntent.setType("video/*");
+        pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+        PackageManager pm = activity.getPackageManager();
+        if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            Intent recoderIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            mLastVideoUri = Uri.fromFile(makeOutputMediaFile(MEDIA_TYPE_VIDEO, null)); // create a file to save the image
+            recoderIntent.putExtra(MediaStore.EXTRA_OUTPUT, mLastVideoUri); // set the image file name
+            recoderIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0); // low resolution
+            recoderIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 1200);
+
+            String pickTitle = "Select or take a new video"; // Or get from strings.xml
+            Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
+            chooserIntent.putExtra (
+                    Intent.EXTRA_INITIAL_INTENTS,
+                    new Intent[] { recoderIntent }
+            );
+
+            activity.startActivityForResult(chooserIntent, requestCode);
+        } else {
+            activity.startActivityForResult(pickIntent, requestCode);
+        }
+    }
+
+	public void pickVideo(Activity activity, int requestCode) {
         fixVideoPath(activity);
         mChangeAppsListener.changeToOtherApps();
 		Intent pickIntent = new Intent();
 		pickIntent.setType("video/*");
 		pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-
-		PackageManager pm = activity.getPackageManager();
-		if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-			Intent recoderIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-			mLastVideoUri = Uri.fromFile(makeOutputMediaFile(MEDIA_TYPE_VIDEO, null)); // create a file to save the image
-			recoderIntent.putExtra(MediaStore.EXTRA_OUTPUT, mLastVideoUri); // set the image file name
-			recoderIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0); // low resolution
-			recoderIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 1200);
-
-			String pickTitle = "Select or take a new video"; // Or get from strings.xml
-			Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
-			chooserIntent.putExtra (
-					Intent.EXTRA_INITIAL_INTENTS, 
-					new Intent[] { recoderIntent }
-					);
-
-			activity.startActivityForResult(chooserIntent, requestCode);
-		} else {
-			activity.startActivityForResult(pickIntent, requestCode);
-		}
+        activity.startActivityForResult(pickIntent, requestCode);
 	}
-	
 
-	/**
+
+    public void takeVideo(Activity activity, int requestCode) {
+        fixVideoPath(activity);
+        mChangeAppsListener.changeToOtherApps();
+
+        PackageManager pm = activity.getPackageManager();
+        if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            Intent recoderIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            mLastVideoUri = Uri.fromFile(makeOutputMediaFile(MEDIA_TYPE_VIDEO, null)); // create a file to save the image
+            recoderIntent.putExtra(MediaStore.EXTRA_OUTPUT, mLastVideoUri); // set the image file name
+            recoderIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0); // low resolution
+            recoderIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 1200);
+            activity.startActivityForResult(recoderIntent, requestCode);
+        }
+    }
+
+    /**
 	 * Call me in Activity.onActivityResult() if the requestCode matches and
 	 * resultCode equals Activity.RESULT_OK.
 	 * 

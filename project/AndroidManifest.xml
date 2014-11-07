@@ -65,10 +65,10 @@
             android:name="UMENG_APPKEY"/>
 
 		<!-- WowTalkService 在 x86 上不能运行。
-		 -->
 		<service
 			android:name="org.wowtalk.WowTalkService"
 			android:label="WowTalk Notification Center" />
+		 -->
 
 		<service
 			android:name=".ui.DownloadingAndUploadingService"

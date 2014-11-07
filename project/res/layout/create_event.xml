@@ -73,7 +73,6 @@
                         android:layout_width="0dp"
                         android:layout_weight="2"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginRight="10dp"
                         android:drawableRight="@drawable/table_arrow"/>
                 </LinearLayout>
                 <ImageView
@@ -100,7 +99,6 @@
                         android:layout_width="0dp"
                         android:layout_weight="2"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginRight="10dp"
                         android:drawableRight="@drawable/table_arrow"/>
                 </LinearLayout>
             </LinearLayout>
@@ -125,13 +123,13 @@
                         android:textSize="18sp"
                         android:textColor="@color/black"
                         android:text="@string/event_startdate"/>
-                    <TextView
+
+	                <TextView
                         android:id="@+id/txt_start_time"
                         android:layout_height="wrap_content"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginRight="10dp"
                         android:drawableRight="@drawable/table_arrow"
                         android:drawablePadding="10dp"/>
                 </LinearLayout>
@@ -157,19 +155,19 @@
                         android:id="@+id/txt_end_time"
                         android:layout_height="wrap_content"
                         android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginRight="10dp"
                         android:drawableRight="@drawable/table_arrow"
-                        android:drawablePadding="10dp"
-                        android:textSize="18sp"/>
+                        android:drawablePadding="10dp" />
                 </LinearLayout>
 
                 <ImageView
+	                android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:background="@drawable/divider"/>
                 <RelativeLayout
+	                android:visibility="gone"
                     android:layout_height="@dimen/table_cell_white_height"
                     android:layout_width="fill_parent">
                     <TextView
@@ -192,10 +190,12 @@
                         android:background="@drawable/switch_on"/>
                 </RelativeLayout>
                 <ImageView
+	                android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:background="@drawable/divider"/>
                 <LinearLayout
+	                android:visibility="gone"
                     android:id="@+id/layout_repeat"
                     android:layout_height="@dimen/table_cell_white_height"
                     android:layout_width="fill_parent"
@@ -215,7 +215,6 @@
                         android:layout_width="0dp"
                         android:layout_weight="2"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginRight="10dp"
                         android:drawableRight="@drawable/table_arrow"
                         android:drawablePadding="10dp"
                         android:textSize="18sp"/>
@@ -223,6 +222,7 @@
             </LinearLayout>
 
             <LinearLayout
+	            android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:layout_margin="10dp"
@@ -252,11 +252,13 @@
                         android:textSize="18sp"/>
                 </LinearLayout>
                 <ImageView
+	                android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:background="@drawable/divider"/>
                 <LinearLayout
                     android:id="@+id/layout_targetuser"
+                    android:visibility="gone"
                     android:layout_height="@dimen/table_cell_white_height"
                     android:layout_width="fill_parent"
                     android:orientation="horizontal">
@@ -304,16 +306,17 @@
                         android:id="@+id/txt_capacity"
                         android:layout_height="wrap_content"
                         android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginRight="10dp"
-                        android:textSize="18sp"/>
+						android:drawableRight="@drawable/table_arrow"
+						android:drawablePadding="10dp" />
                 </LinearLayout>
                 <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:background="@drawable/divider"/>
                 <RelativeLayout
+	                android:visibility="gone"
                     android:layout_height="@dimen/table_cell_white_height"
                     android:layout_width="fill_parent">
                     <TextView
@@ -336,10 +339,12 @@
                         android:background="@drawable/switch_on"/>
                 </RelativeLayout>
                 <ImageView
+	                android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:background="@drawable/divider"/>
                 <RelativeLayout
+	                android:visibility="gone"
                     android:layout_height="@dimen/table_cell_white_height"
                     android:layout_width="fill_parent">
                     <TextView
@@ -361,6 +366,7 @@
                         android:background="@drawable/switch_off"/>
                 </RelativeLayout>
                 <ImageView
+	                android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:background="@drawable/divider"/>
@@ -382,23 +388,15 @@
                         android:id="@+id/txt_coins"
                         android:layout_height="wrap_content"
                         android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginRight="10dp"
-                        android:textSize="18sp"/>
+                        android:drawableRight="@drawable/table_arrow"
+                        android:drawablePadding="10dp" />
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:gravity="center_horizontal"
-                android:textSize="18sp"
-                android:text="@string/event_info1"/>
-
             <LinearLayout
+	            android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:layout_margin="10dp"
@@ -463,16 +461,7 @@
                 android:gravity="top|left"
                 android:background="@drawable/table_white"
                 android:padding="10dp"
-                android:text="15-500"/>
-
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:gravity="center_horizontal"
-                android:textSize="18sp"
-                android:text="@string/event_info2"/>
+                android:hint="@string/event_info2" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

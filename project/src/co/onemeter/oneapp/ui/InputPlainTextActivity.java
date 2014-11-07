@@ -11,11 +11,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.R;
 
 /**
  * User: jianxd
@@ -32,6 +31,7 @@ public class InputPlainTextActivity extends Activity {
     public static final String EXTRA_DESCRIPTION = "desc";
     /** allow empty? */
     public static final String EXTRA_ALLOW_EMPTY = "allowempty";
+    public static final String EXTRA_INPUTTYPE = "inputtype";
 
     private ImageButton btnTitleBack;
     private ImageButton btnTitleConfirm;
@@ -50,6 +50,7 @@ public class InputPlainTextActivity extends Activity {
 
         String title = "";
         String desc = "";
+        int inputType = -1;
 
         Bundle b;
         if (savedInstanceState != null) {
@@ -60,6 +61,7 @@ public class InputPlainTextActivity extends Activity {
         if (b != null) {
             allowEmpty = b.getBoolean(EXTRA_ALLOW_EMPTY);
             defaultValue = b.getString(EXTRA_VALUE);
+            inputType = b.getInt(EXTRA_INPUTTYPE, -1);
             title = b.getString(EXTRA_TITLE);
             desc = b.getString(EXTRA_DESCRIPTION);
         }
@@ -71,6 +73,9 @@ public class InputPlainTextActivity extends Activity {
         edtValue = (EditText) findViewById(R.id.edt_value);
 
         edtValue.setText(defaultValue);
+        if (inputType != -1)
+            edtValue.setInputType(inputType);
+
         q.find(R.id.txt_desc).text(desc);
         setTitle(title);
 

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -15,6 +17,9 @@ import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WEvent;
 import org.wowtalk.api.WowEventWebServerIF;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class CreateEventActivity extends Activity implements OnClickListener {
     public static final String EXTRA_PAGE_TITLE = "page_title";
     public static final String EXTRA_EVENT_CATEGORY = "event_cat";
@@ -24,6 +29,8 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     private static final int REQ_INPUT_TIME = 125;
     private static final int REQ_INPUT_PLACE = 126;
     private static final int REQ_INPUT_DESC = 127;
+    private static final int REQ_INPUT_COINS = 128;
+    private static final int REQ_INPUT_CAPACITY = 129;
 
     private WEvent wevent = new WEvent();
 
@@ -36,15 +43,6 @@ public class CreateEventActivity extends Activity implements OnClickListener {
 
     private TextView txtTitle;
     private TextView txtLoc;
-    private TextView txtStartTime;
-    private TextView txtEndTime;
-    private TextView txtRepeat;
-    private TextView txtOpenLevel;
-    private TextView txtTargetUser;
-    private TextView txtCapacity;
-    private TextView txtCoins;
-    private TextView txtAddPhoto;
-    private TextView txtAddAudio;
 
     private ImageView imgAllDay;
     private ImageView imgAllowReview;
@@ -53,21 +51,17 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     private EditText edtContent;
 
     private void initView(Bundle bundle) {
+        AQuery q = new AQuery(this);
+        q.find(R.id.layout_starttime).clicked(this);
+        q.find(R.id.layout_endtime).clicked(this);
+        q.find(R.id.layout_capacity).clicked(this);
+        q.find(R.id.layout_coins).clicked(this);
+
         btnTitleBack = (ImageButton) findViewById(R.id.title_back);
         btnTitleConfirm = (ImageButton) findViewById(R.id.title_confirm);
 
         txtTitle = (TextView) findViewById(R.id.txt_title);
         txtLoc = (TextView) findViewById(R.id.txt_loc);
-        txtStartTime = (TextView) findViewById(R.id.txt_start_time);
-        txtEndTime = (TextView) findViewById(R.id.txt_end_time);
-        txtRepeat = (TextView) findViewById(R.id.txt_repeat);
-        txtOpenLevel = (TextView) findViewById(R.id.txt_open_level);
-        txtTargetUser = (TextView) findViewById(R.id.txt_targetuser);
-        txtCapacity = (TextView) findViewById(R.id.txt_capacity);
-        txtCoins = (TextView) findViewById(R.id.txt_coins);
-        txtAddPhoto = (TextView) findViewById(R.id.txt_addphoto);
-        txtAddAudio = (TextView) findViewById(R.id.txt_addaudio);
-
 
         imgAllDay = (ImageView) findViewById(R.id.img_allday);
         imgAllowReview = (ImageView) findViewById(R.id.img_allowreview);
@@ -191,8 +185,22 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                         REQ_INPUT_PLACE);
                 break;
             case R.id.layout_starttime:
+                DateTimeInputHelper.inputStartDateTime(this, new DateTimeInputHelper.OnDateTimeSetListener() {
+                    @Override
+                    public void onDateTimeResult(Calendar result) {
+                        wevent.startTime = result.getTime();
+                        updateUI();
+                    }
+                });
                 break;
             case R.id.layout_endtime:
+                DateTimeInputHelper.inputStartDateTime(this, new DateTimeInputHelper.OnDateTimeSetListener() {
+                    @Override
+                    public void onDateTimeResult(Calendar result) {
+                        wevent.endTime = result.getTime();
+                        updateUI();
+                    }
+                });
                 break;
             case R.id.layout_repeat:
                 break;
@@ -201,8 +209,20 @@ public class CreateEventActivity extends Activity implements OnClickListener {
             case R.id.layout_targetuser:
                 break;
             case R.id.layout_capacity:
+                startActivityForResult(
+                        new Intent(this, InputPlainTextActivity.class)
+                                .putExtra(InputPlainTextActivity.EXTRA_TITLE, getString(R.string.event_capacity))
+                                .putExtra(InputPlainTextActivity.EXTRA_ALLOW_EMPTY, true)
+                                .putExtra(InputPlainTextActivity.EXTRA_INPUTTYPE, InputType.TYPE_CLASS_NUMBER),
+                        REQ_INPUT_CAPACITY);
                 break;
             case R.id.layout_coins:
+                startActivityForResult(
+                        new Intent(this, InputPlainTextActivity.class)
+                                .putExtra(InputPlainTextActivity.EXTRA_TITLE, getString(R.string.event_coins))
+                                .putExtra(InputPlainTextActivity.EXTRA_ALLOW_EMPTY, true)
+                                .putExtra(InputPlainTextActivity.EXTRA_INPUTTYPE, InputType.TYPE_CLASS_NUMBER),
+                        REQ_INPUT_COINS);
                 break;
             case R.id.layout_addphoto:
                 break;
@@ -233,6 +253,30 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                 wevent.address = data.getStringExtra(InputPlainTextActivity.EXTRA_VALUE);
                 updateUI();
                 break;
+            case REQ_INPUT_CAPACITY : {
+                String s = data.getStringExtra(InputPlainTextActivity.EXTRA_VALUE);
+                wevent.capacity = 0;
+                if (!TextUtils.isEmpty(s)) {
+                    try {
+                        wevent.capacity = Integer.parseInt(s);
+                    } catch (Exception e) {
+                    }
+                }
+                updateUI();
+                break;
+            }
+            case REQ_INPUT_COINS : {
+                String s = data.getStringExtra(InputPlainTextActivity.EXTRA_VALUE);
+                wevent.costGolds = 0;
+                if (!TextUtils.isEmpty(s)) {
+                    try {
+                        wevent.costGolds = Integer.parseInt(s);
+                    } catch (Exception e) {
+                    }
+                }
+                updateUI();
+                break;
+            }
         }
     }
 
@@ -243,6 +287,23 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         txtTitle.setText(wevent.title);
         txtLoc.setText(wevent.description);
         txtLoc.setText(wevent.address);
+
+        AQuery q = new AQuery(this);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        if (wevent.startTime != null) {
+            q.find(R.id.txt_start_time).text(sdf.format(wevent.startTime));
+        }
+        if (wevent.endTime != null) {
+            q.find(R.id.txt_end_time).text(sdf.format(wevent.endTime));
+        }
+
+        q.find(R.id.txt_coins).text(wevent.costGolds > 0 ?
+                Integer.toString(wevent.costGolds) :
+                getString(R.string.event_not_limited));
+        q.find(R.id.txt_capacity).text(wevent.capacity > 0 ?
+                Integer.toString(wevent.capacity) :
+                getString(R.string.event_not_limited));
     }
 
     private void updateData() {

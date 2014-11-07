@@ -492,7 +492,11 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.right_button:
-                toogleNewEventPanel();
+                final int plan = 2;
+                if (plan == 1)
+                    toogleNewEventPanel();
+                else
+                    gotoCreateEvent("offline");
                 break;
             case R.id.title_left:
                 onBackPressed();

@@ -718,4 +718,6 @@
 	<string name="event_create_vote">投票</string>
 	<string name="event_create_offline">线下活动</string>
 	<string name="event_not_limited">不限</string>
+	<string name="title_add_class">添加课堂</string>
+	<string name="invite_code">邀请码</string>
 </resources>

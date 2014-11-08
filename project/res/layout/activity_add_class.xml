@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:background="@color/bg_gray1"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+	<RelativeLayout
+		android:id="@+id/title_bar"
+		android:layout_width="fill_parent"
+		android:layout_height="@dimen/title_bar_height"
+		android:layout_alignParentTop="true"
+		android:background="@drawable/home_bg_navbar">
+		<ImageButton
+			android:id="@+id/title_back"
+			android:layout_height="50dp"
+			android:layout_width="50dp"
+			android:layout_alignParentLeft="true"
+			android:background="@null"
+			android:src="@drawable/nav_back_selector"/>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
+			android:text="@string/title_add_class"
+			style="@style/page_title_dark"/>
+	</RelativeLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:layout_marginTop="30dp"
+		android:padding="20dp">
+
+		<EditText
+			android:id="@+id/txt_code"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="@string/invite_code"
+			style="@style/inputbox_green"/>
+
+		<Button
+			android:id="@+id/btn_add"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/padding_medium"
+			android:text="@string/add"
+			style="@style/button_green"/>
+	</LinearLayout>
+</LinearLayout>

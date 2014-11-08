@@ -15,7 +15,7 @@
 			android:layout_alignParentTop="true"
 			android:background="@drawable/home_bg_navbar">
 			<ImageButton
-				android:id="@+id/title_back"
+				android:id="@+id/btn_add"
 				android:layout_height="50dp"
 				android:layout_width="50dp"
 				android:layout_alignParentRight="true"

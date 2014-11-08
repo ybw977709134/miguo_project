@@ -136,6 +136,19 @@
         <item name="android:background">@drawable/btn_blue_selector</item>
     </style>
 
+	<style name="button_green">
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">18sp</item>
+		<item name="android:padding">@dimen/padding_medium</item>
+		<item name="android:background">@drawable/btn_green_selector</item>
+	</style>
+
+	<style name="inputbox_green" parent="@android:style/Widget.EditText">
+		<item name="android:textColor">@color/default_text</item>
+		<item name="android:background">@drawable/login_input_selector</item>
+		<item name="android:padding">@dimen/padding_medium</item>
+	</style>
+
     <style name="inputbox_white" parent="@android:style/Widget.EditText">
 	    <item name="android:textColor">@color/default_text</item>
 	    <item name="android:background">@drawable/sms_text_field</item>
@@ -232,4 +245,5 @@
         <item name="android:windowBackground">@drawable/android_notification_bg</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
+
 </resources>

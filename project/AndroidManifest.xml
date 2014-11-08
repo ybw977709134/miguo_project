@@ -501,6 +501,7 @@
         </activity>
 		<activity android:name=".ui.HomeActivity"/>
 		<activity android:name=".ui.TimelineActivity"/>
+		<activity android:name=".ui.AddClassActivity"/>
 	</application>
 
 </manifest>

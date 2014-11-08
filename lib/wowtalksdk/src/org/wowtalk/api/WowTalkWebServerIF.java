@@ -1158,6 +1158,8 @@ public class WowTalkWebServerIF {
 				errno = 0;
 
 				if(result != null) {
+                    configS3();
+
                     sPrefUtil.setWowtalkIdChanged(true);
                     sPrefUtil.setPasswordChanged(true);
 
@@ -1322,7 +1324,16 @@ public class WowTalkWebServerIF {
         return errno;
     }
 
-	/**
+    private void configS3() {
+        sPrefUtil.setUseS3(GlobalSetting.USE_S3);
+        if (GlobalSetting.USE_S3) {
+            sPrefUtil.setS3Uid(GlobalSetting.S3_ACCESS_KEY_ID);
+            sPrefUtil.setS3Pwd(GlobalSetting.S3_SECRET_KEY);
+            sPrefUtil.setS3Bucket(GlobalSetting.S3_BUCKET);
+        }
+    }
+
+    /**
 	 * @param result Buddy, output uid,domain,password,wowtalkId
 	 * @return
 	 */
@@ -1339,6 +1350,7 @@ public class WowTalkWebServerIF {
 			String errorStr = errorElement.getFirstChild().getNodeValue();
 			if (errorStr.equals("0")) {
 				clearLocalData();
+                configS3();
 
                 sPrefUtil.setWowtalkIdChanged(false);
                 sPrefUtil.setPasswordChanged(false);

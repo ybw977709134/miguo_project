@@ -15,9 +15,11 @@ import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WEvent;
+import org.wowtalk.api.WFile;
 import org.wowtalk.api.WowEventWebServerIF;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CreateEventActivity extends Activity implements OnClickListener {
@@ -31,6 +33,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     private static final int REQ_INPUT_DESC = 127;
     private static final int REQ_INPUT_COINS = 128;
     private static final int REQ_INPUT_CAPACITY = 129;
+    private static final int REQ_INPUT_IMAGE = 130;
 
     private WEvent wevent = new WEvent();
 
@@ -40,10 +43,9 @@ public class CreateEventActivity extends Activity implements OnClickListener {
 
     private ImageButton btnTitleBack;
     private ImageButton btnTitleConfirm;
-
+    private ImageVideoInputWidget imageInputWidget;
     private TextView txtTitle;
     private TextView txtLoc;
-
     private ImageView imgAllDay;
     private ImageView imgAllowReview;
     private ImageView imgNeedToUpdateMulti;
@@ -56,6 +58,9 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         q.find(R.id.layout_endtime).clicked(this);
         q.find(R.id.layout_capacity).clicked(this);
         q.find(R.id.layout_coins).clicked(this);
+
+        imageInputWidget = (ImageVideoInputWidget) q.find(R.id.image_input_widget).getView();
+        imageInputWidget.setup(this, ImageVideoInputWidget.MediaType.Photo, REQ_INPUT_IMAGE);
 
         btnTitleBack = (ImageButton) findViewById(R.id.title_back);
         btnTitleConfirm = (ImageButton) findViewById(R.id.title_confirm);
@@ -136,6 +141,16 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         }
 
         initView(b);
+
+        if (savedInstanceState != null) {
+            imageInputWidget.restoreInstanceState(savedInstanceState);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        imageInputWidget.saveInstanceState(outState);
     }
 
     @Override
@@ -277,6 +292,10 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                 updateUI();
                 break;
             }
+            case REQ_INPUT_IMAGE: {
+                imageInputWidget.handleActivityResult(REQ_INPUT_IMAGE, resultCode, data);
+                break;
+            }
         }
     }
 
@@ -312,5 +331,9 @@ public class CreateEventActivity extends Activity implements OnClickListener {
 
         AQuery q = new AQuery(this);
         wevent.description = q.find(R.id.edt_content).getText().toString();
+        wevent.multimedias = new ArrayList<WFile>(imageInputWidget.getItemCount());
+        for (int i = 0; i < imageInputWidget.getItemCount(); ++i) {
+            wevent.multimedias.add(imageInputWidget.getItem(i));
+        }
     }
 }

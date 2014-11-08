@@ -52,7 +52,10 @@ public class MediaInputHelper implements Parcelable {
 	private Uri mLastImageUri = null;
 	private Uri mLastVideoUri;
 	private ChangeToOtherAppsListener mChangeAppsListener;
-	
+
+    public MediaInputHelper() {
+    }
+
 	public MediaInputHelper(ChangeToOtherAppsListener changeAppsListener) {
 	    mChangeAppsListener = changeAppsListener;
 	}
@@ -69,7 +72,8 @@ public class MediaInputHelper implements Parcelable {
      */
 	public void inputImage(Activity activity, int requestCode, String title) {
 
-        mChangeAppsListener.changeToOtherApps();
+        if (mChangeAppsListener != null)
+            mChangeAppsListener.changeToOtherApps();
         mLastImageUri = Uri.fromFile(makeOutputMediaFile(MEDIA_TYPE_IMAGE, ".jpg")); // create a file to save the image
 
         Intent getContentIntent = new Intent();
@@ -98,7 +102,8 @@ public class MediaInputHelper implements Parcelable {
 	}
 
     public void pickPhoto(Activity activity, int requestCode) {
-        mChangeAppsListener.changeToOtherApps();
+        if (mChangeAppsListener != null)
+            mChangeAppsListener.changeToOtherApps();
         Intent pickIntent = new Intent();
         pickIntent.setType("image/*");
         pickIntent.setAction(Intent.ACTION_GET_CONTENT);
@@ -109,7 +114,8 @@ public class MediaInputHelper implements Parcelable {
         mLastImageUri = Uri.fromFile(makeOutputMediaFile(MEDIA_TYPE_IMAGE, ".jpg"));
         PackageManager pm = activity.getPackageManager();
         if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            mChangeAppsListener.changeToOtherApps();
+            if (mChangeAppsListener != null)
+                mChangeAppsListener.changeToOtherApps();
             Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mLastImageUri);
             takePhotoIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.name());
@@ -265,7 +271,8 @@ public class MediaInputHelper implements Parcelable {
 
     public void inputVideo(Activity activity, int requestCode) {
         fixVideoPath(activity);
-        mChangeAppsListener.changeToOtherApps();
+        if (mChangeAppsListener != null)
+            mChangeAppsListener.changeToOtherApps();
         Intent pickIntent = new Intent();
         pickIntent.setType("video/*");
         pickIntent.setAction(Intent.ACTION_GET_CONTENT);
@@ -293,7 +300,8 @@ public class MediaInputHelper implements Parcelable {
 
 	public void pickVideo(Activity activity, int requestCode) {
         fixVideoPath(activity);
-        mChangeAppsListener.changeToOtherApps();
+        if (mChangeAppsListener != null)
+            mChangeAppsListener.changeToOtherApps();
 		Intent pickIntent = new Intent();
 		pickIntent.setType("video/*");
 		pickIntent.setAction(Intent.ACTION_GET_CONTENT);
@@ -303,7 +311,8 @@ public class MediaInputHelper implements Parcelable {
 
     public void takeVideo(Activity activity, int requestCode) {
         fixVideoPath(activity);
-        mChangeAppsListener.changeToOtherApps();
+        if (mChangeAppsListener != null)
+            mChangeAppsListener.changeToOtherApps();
 
         PackageManager pm = activity.getPackageManager();
         if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {

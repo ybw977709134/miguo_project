@@ -25,8 +25,10 @@ import java.util.HashMap;
 public class ImageVideoInputWidget extends HorizontalScrollView {
 
     // key for saving instance state of MediaInputHelper.
-    private static final String INSTANCE_STATE_KEY_MEDIA_INPUT_HELPER = "465d472ae381d";
-    private static final int VIEW_TAG_FILEID = 1;
+    private static final String INSTANCE_STATE_KEY_MEDIA_INPUT_HELPER = "465d472ae381d_mihelper";
+    private static final String INSTANCE_STATE_KEY_MEDIA_TYPE = "465d472ae381d_mtype";
+    private static final String INSTANCE_STATE_KEY_FILES = "465d472ae381d_files";
+    private static final String INSTANCE_STATE_KEY_GRID_SIZE = "465d472ae381d_gridsize";
 
     private static final int PHOTO_SEND_WIDTH = 600;
     private static final int PHOTO_SEND_HEIGHT = 600;
@@ -42,6 +44,7 @@ public class ImageVideoInputWidget extends HorizontalScrollView {
     private int requestCode;
     private ArrayList<WFile> files = new ArrayList<WFile>();
     private HashMap<String, ImageView> grids = new HashMap<String, ImageView>();
+    private int gridSize;
 
     public enum MediaType {
         Photo,
@@ -131,10 +134,19 @@ public class ImageVideoInputWidget extends HorizontalScrollView {
      */
     public void saveInstanceState(Bundle outState) {
         outState.putParcelable(INSTANCE_STATE_KEY_MEDIA_INPUT_HELPER, inputHelper);
+        outState.putString(INSTANCE_STATE_KEY_MEDIA_TYPE, mediaType.name());
+        outState.putParcelableArrayList(INSTANCE_STATE_KEY_FILES, files);
+        outState.putInt(INSTANCE_STATE_KEY_GRID_SIZE, gridSize);
     }
 
     public void restoreInstanceState(Bundle savedInstanceState) {
         inputHelper = savedInstanceState.getParcelable(INSTANCE_STATE_KEY_MEDIA_INPUT_HELPER);
+        mediaType = MediaType.valueOf(savedInstanceState.getString(INSTANCE_STATE_KEY_MEDIA_TYPE));
+        files = savedInstanceState.getParcelableArrayList(INSTANCE_STATE_KEY_FILES);
+        gridSize = savedInstanceState.getInt(INSTANCE_STATE_KEY_GRID_SIZE, 0);
+        for (WFile f : files) {
+            appendThumbnail(f);
+        }
     }
 
     /**
@@ -180,11 +192,11 @@ public class ImageVideoInputWidget extends HorizontalScrollView {
         v.setImageBitmap(BitmapFactory.decodeFile(f.localThumbnailPath));
 
         // set the same size as dummy icon
-        Rect rect = dummyGrid.getDrawable().getBounds();
-        MarginLayoutParams lp = new LinearLayout.LayoutParams(
-                rect.width(),
-                rect.height()
-        );
+        if (gridSize == 0) {
+            Rect rect = dummyGrid.getDrawable().getBounds();
+            gridSize = rect.width();
+        }
+        MarginLayoutParams lp = new LinearLayout.LayoutParams(gridSize, gridSize);
         lp.rightMargin = ((MarginLayoutParams)dummyGrid.getLayoutParams()).rightMargin;
         v.setLayoutParams(lp);
         v.setScaleType(ImageView.ScaleType.CENTER_CROP);

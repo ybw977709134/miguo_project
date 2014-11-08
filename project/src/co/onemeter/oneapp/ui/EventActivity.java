@@ -1,6 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -241,69 +240,17 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
             return new String[0];
         }
     }
-	
-	private class EventCategoryAdapter extends BaseAdapter {
 
-		public EventCategoryAdapter() {
-			
-		}
+    public static final String EVENT_DETAIL_BUNDLE = "event_detail_id";
 
-		@Override
-		public int getCount() {
-			return eventCategories.length;
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return eventCategories[position];
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			View lView = null;
-			if (convertView == null) {
-				lView = LayoutInflater.from(EventActivity.this).inflate(R.layout.listitem_popup, null);
-			} else {
-				lView = convertView;
-			}
-			TextView eventCategory = (TextView) lView.findViewById(R.id.group_name);
-			eventCategory.setText(getResources().getString(eventCategories[position]));
-			if (txtTitle.getText().equals(getResources().getString(eventCategories[position]))) {
-				eventCategory.setTextColor(getResources().getColor(R.color.blue));
-			} else {
-				eventCategory.setTextColor(getResources().getColor(R.color.gray));
-			}
-			return lView;
-		}
-		
-	}
-	public static final String EVENT_DETAIL_BUNDLE = "event_detail_id";
-	
-	private static final int[] eventCategories = {
-		R.string.events_all,
-//		R.string.events_official,
-//		R.string.events_applied,
-		R.string.events_joined,
-        R.string.events_not_joined,
-//		R.string.events_my
-	};
-
-	private RelativeLayout mNavBar;
 	private ImageButton ibRight;
 	private ListView lvEvent;
 	private TextView txtTitle;
     private View newEventPanel;
 
 	private ArrayList<WEvent> acts;
-	private EventCategoryAdapter categroyAdapter;
 	private EventAdapter eventAdapter;
-	private PopupWindow categoryPopup;
-	
+
 //	private static EventActivity instance;
 	
 	private Database mDb = null;
@@ -331,7 +278,6 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 //	}
 	
 	private void initView() {
-		mNavBar = (RelativeLayout) findViewById(R.id.title_bar);
         ibRight = (ImageButton) findViewById(R.id.right_button);
 		txtTitle = (TextView) findViewById(R.id.title_text);
 		lvEvent = (ListView) findViewById(R.id.event_list);
@@ -455,41 +401,6 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 	}
 
     private int curEventGroupToShow=0;
-	private void fShowPopup() {
-		View lView = LayoutInflater.from(this).inflate(R.layout.popup_list, null);
-
-        ListView lvEventCategory=(ListView) lView.findViewById(R.id.list_group);
-        lvEventCategory.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                txtTitle.setText(getResources().getString(eventCategories[position]));
-                categoryPopup.dismiss();
-                curEventGroupToShow=position;
-                fSetShownEvents();
-            }
-        });
-
-
-		if (categroyAdapter == null) {
-			categroyAdapter = new EventCategoryAdapter();
-			lvEventCategory.setAdapter(categroyAdapter);
-		}
-        categroyAdapter.notifyDataSetChanged();
-
-		if (categoryPopup == null) {
-//			categoryPopup = new PopupWindow(lView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            categoryPopup = Utils.getFixedPopupWindow(lView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		}
-		categoryPopup.setFocusable(true);
-		categoryPopup.setOutsideTouchable(true);
-		categoryPopup.setBackgroundDrawable(new BitmapDrawable());
-		categoryPopup.setWidth(DensityUtil.dip2px(EventActivity.this, 250));
-		categoryPopup.showAsDropDown(mNavBar, (getWindowManager().getDefaultDisplay().getWidth() - categoryPopup.getWidth()) / 2, 0);
-		categoryPopup.update();
-	}
-
 
     @Override
     public void onClick(View v) {
@@ -505,7 +416,6 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
                 onBackPressed();
                 break;
             case R.id.title_text:
-                fShowPopup();
                 break;
             case R.id.vg_new_qa:
                 gotoCreateEvent("qa");

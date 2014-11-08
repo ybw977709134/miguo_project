@@ -13,14 +13,12 @@ import android.widget.*;
 import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.WEvent;
-import org.wowtalk.api.WFile;
-import org.wowtalk.api.WowEventWebServerIF;
+import org.wowtalk.api.*;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class CreateEventActivity extends Activity implements OnClickListener {
     public static final String EXTRA_PAGE_TITLE = "page_title";
@@ -112,8 +110,36 @@ public class CreateEventActivity extends Activity implements OnClickListener {
             @Override
             protected Integer doInBackground(WEvent... wEvents) {
                 context = CreateEventActivity.this;
-                WowEventWebServerIF web = WowEventWebServerIF.getInstance(context);
-                return web.fAdd(wEvents[0]);
+                final WEvent e = wEvents[0];
+                final WowEventWebServerIF eventweb = WowEventWebServerIF.getInstance(context);
+
+                // create event record
+                int errno = eventweb.fAdd(e);
+
+                // upload multi medias
+                if (errno == ErrorCode.OK && e.multimedias != null && !e.multimedias.isEmpty()) {
+                    for (WFile f : e.multimedias) {
+                        f.remoteDir = WEvent.MEDIA_FILE_REMOTE_DIR;
+                    }
+
+                    MediaFilesBatchUploader.upload(context,
+                            e.multimedias, new MediaFilesBatchUploader.OnMediaFilesUploadedListener() {
+                                @Override
+                                public void onAllMediaFilesUploaded(List<WFile> files) {
+                                    for (WFile f : files) {
+                                        eventweb.fUploadMultimedia(
+                                                e.id, f.getExt(), f.fileid, f.thumb_fileid, f.duration);
+                                    }
+                                }
+
+                                @Override
+                                public void onMediaFilesUploadFailed(List<WFile> files) {
+
+                                }
+                            });
+                }
+
+                return errno;
             }
 
             @Override
@@ -336,4 +362,5 @@ public class CreateEventActivity extends Activity implements OnClickListener {
             wevent.multimedias.add(imageInputWidget.getItem(i));
         }
     }
+
 }

@@ -125,7 +125,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 							new AsyncTask<WFile, Integer, Void> () {
 
 								WFile f = null;
-								boolean ok = true;
+								boolean ok = false;
 								
 								@Override
 								protected Void doInBackground(WFile... arg0) {
@@ -133,7 +133,9 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 									f = arg0[0];
 									
 									WowTalkWebServerIF.getInstance(EventActivity.this)
-									.fGetFileFromServer(f.thumb_fileid,
+									.fGetFileFromServer(
+                                            f.thumb_fileid,
+                                            WEvent.MEDIA_FILE_REMOTE_DIR,
 											new NetworkIFDelegate(){
 
 										@Override
@@ -153,7 +155,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 										public void setProgress(int arg0, int arg1) {
 										}
 
-									}, 0, f.localThumbnailPath);
+									}, 0, f.localThumbnailPath, null);
 									return null;
 								}
 								

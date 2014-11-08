@@ -235,17 +235,21 @@ public class XmlHelper {
         if(e != null)
             a.allowReview = "1".equals(e.getTextContent());
 
-
-
-
-
-
-
         NodeList mediaList = eventNode.getElementsByTagName("multimedia");
         _parseMedias(mediaList, a);
 
         NodeList reviewNodes = eventNode.getElementsByTagName("review");
         _parseReviews(reviewNodes, a);
+
+        // set event thumbnail as first media's thumbnail.
+        if (a.thumbNail == null && a.multimedias != null && !a.multimedias.isEmpty()) {
+            for (WFile f : a.multimedias) {
+                if (!TextUtils.isEmpty(f.thumb_fileid)) {
+                    a.thumbNail = f.thumb_fileid;
+                    break;
+                }
+            }
+        }
 
         return a;
     }

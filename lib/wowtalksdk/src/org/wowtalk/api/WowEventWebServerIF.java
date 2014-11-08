@@ -507,13 +507,36 @@ public class WowEventWebServerIF {
 				+ "&area=" + Utils.urlencodeUtf8(data.address)
                 + "&category=" + Utils.urlencodeUtf8(data.category)
 				+ "&startdate=" + (data.startTime != null ? data.startTime.getTime() / 1000 : 0)
+                + "&enddate=" + (data.endTime != null ? data.endTime.getTime() / 1000 : 0)
 				+ "&max_member=" + data.capacity
 				+ "&is_official=" + (data.isOfficial ? 1 : 0)
 				+ "&allow_review=" + (data.allowReview ? 1 : 0) 
 				+ "&need_work=" + (data.needWork ? 1 : 0);
 		if(data.privacy_level != WEvent.PRIVACY_LEVEL_UNDEFINED)
 			postStr += "&privacy_level=" + data.privacy_level;
-		return _doRequestWithoutResponse(postStr);
+
+        // HTTP request
+
+        int errno = ErrorCode.UNKNOWN;
+
+        Connect2 connect2 = new Connect2();
+        Element root = connect2.Post(postStr);
+
+        if (root != null) {
+            NodeList errorList = root.getElementsByTagName("err_no");
+            Element errorElement = (Element) errorList.item(0);
+            String errorStr = errorElement.getFirstChild().getNodeValue();
+
+            if (errorStr.equals("0")) {
+                errno = 0;
+
+                NodeList eventIdNodes = root.getElementsByTagName("event_id");
+                data.id = eventIdNodes.item(0).getTextContent();
+            } else {
+                errno = Integer.parseInt(errorStr);
+            }
+        }
+        return errno;
     }
 
     /**
@@ -550,12 +573,14 @@ public class WowEventWebServerIF {
      * @param event_id
      * @param multimedia_content_type
      * @param multimedia_content_path
+     * @param multimedia_thumbnail_path empty for voice
      * @param duration for voice/video
 	 * @return errno
      */
     public int fUploadMultimedia(String event_id,
     		String multimedia_content_type,
             String multimedia_content_path,
+            String multimedia_thumbnail_path,
             int duration) {
 		String uid = mPrefUtil.getUid();
 		String password = mPrefUtil.getPassword();
@@ -569,6 +594,7 @@ public class WowEventWebServerIF {
 				+ "&event_id=" + Utils.urlencodeUtf8(event_id) 
 				+ "&multimedia_content_type=" + Utils.urlencodeUtf8(multimedia_content_type) 
 				+ "&multimedia_content_path=" + Utils.urlencodeUtf8(multimedia_content_path)
+                + "&multimedia_thumbnail_path=" + Utils.urlencodeUtf8(multimedia_thumbnail_path)
                 + "&duration=" + duration
 				+ "&lang=" + Locale.getDefault().getLanguage();
 		return _doRequestWithoutResponse(postStr);

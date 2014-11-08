@@ -11,6 +11,8 @@ import java.util.Iterator;
  * 活动
  */
 public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
+    /** 多媒体附件的上传目录。*/
+    public final static String MEDIA_FILE_REMOTE_DIR = GlobalSetting.S3_UPLOAD_FILE_DIR;
 
     public String id;
     public String owner_uid;

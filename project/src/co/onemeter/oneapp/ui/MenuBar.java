@@ -127,11 +127,11 @@ public abstract class MenuBar {
             Context context,
             String[] items, final int selectedIdx,
             final AdapterView.OnItemClickListener onItemClickListener) {
-        View dlgView = View.inflate(context, R.layout.timeline_filter_category_list, null);
+        View dlgView = View.inflate(context, R.layout.menubar_list, null);
         final ListView lv = ((ListView)dlgView.findViewById(android.R.id.list));
         lv.setAdapter(
                 new ArrayAdapter<String>(context,
-                        R.layout.timeline_filter_category_list_item,
+                        R.layout.menubar_list_item,
                         android.R.id.text1,
                         items) {
                     @Override
@@ -139,7 +139,7 @@ public abstract class MenuBar {
                         View v = super.getView(position, convertView, parent);
                         TextView tv = (TextView) v.findViewById(android.R.id.text1);
                         Drawable rightDrawable = selectedIdx == position
-                                ? getContext().getResources().getDrawable(R.drawable.timeline_filter_list_checkmark)
+                                ? getContext().getResources().getDrawable(R.drawable.menubar_list_checkmark)
                                 : null;
                         if (rightDrawable != null) {
                             rightDrawable.setBounds(0, 0, rightDrawable.getIntrinsicWidth(), rightDrawable.getIntrinsicHeight());

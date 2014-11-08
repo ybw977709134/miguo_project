@@ -6,7 +6,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:background="@color/background"
-	android:weightSum="3">
+	android:weightSum="2">
 
 	<RelativeLayout
 		android:layout_width="match_parent"
@@ -14,7 +14,7 @@
 		android:gravity="center"
 		android:layout_weight="1" >
 		<TextView
-			android:id="@+id/btn_host"
+			android:id="@+id/btn_filter1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:padding="10dp"
@@ -22,7 +22,7 @@
 			android:drawablePadding="5dp"
 			android:drawableRight="@drawable/timeline_dropdown_mark_collapsed"
 			android:textColor="@color/text_gray1"
-			android:text="@string/event_filter_host"/>
+			android:text="@string/event_filter1"/>
 	</RelativeLayout>
 
 	<ImageView
@@ -38,7 +38,7 @@
 		android:gravity="center"
 		android:layout_weight="1" >
 		<TextView
-			android:id="@+id/btn_type"
+			android:id="@+id/btn_filter2"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:padding="10dp"
@@ -46,30 +46,6 @@
 			android:drawablePadding="5dp"
 			android:drawableRight="@drawable/timeline_dropdown_mark_collapsed"
 			android:textColor="@color/text_gray1"
-			android:text="@string/event_filter_type"/>
-	</RelativeLayout>
-
-	<ImageView
-		android:layout_width="wrap_content"
-		android:layout_height="match_parent"
-		android:layout_marginTop="10dp"
-		android:layout_marginBottom="10dp"
-		android:background="@drawable/timeline_divider_v"/>
-
-	<RelativeLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="center"
-		android:layout_weight="1" >
-		<TextView
-			android:id="@+id/btn_time"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:padding="10dp"
-			android:gravity="center"
-			android:drawablePadding="5dp"
-			android:drawableRight="@drawable/timeline_dropdown_mark_collapsed"
-			android:textColor="@color/text_gray1"
-			android:text="@string/event_filter_time"/>
+			android:text="@string/event_filter2"/>
 	</RelativeLayout>
 </LinearLayout>

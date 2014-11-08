@@ -25,6 +25,7 @@ import org.wowtalk.ui.PhotoDisplayHelper;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -222,20 +223,20 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         @Override
         protected String[] getSubItems(int itemId) {
             switch (itemId) {
-                case R.id.btn_host: {
-                    String[] a = getDistinctHosts();
-                    hosts = new String[1 + a.length];
-                    hosts[0] = getString(R.string.event_filter_host_all);
-                    for (int i = 0; i < a.length; ++i) {
-                        hosts[1 + i] = a[i];
-                    }
-                    return hosts;
+                case R.id.btn_filter1: {
+                    return new String[]{
+                            getString(R.string.event_filter1_all),
+                            getString(R.string.event_filter1_joind),
+                            getString(R.string.event_filter1_my),
+                    };
                 }
-                case R.id.btn_type: {
-                    return getResources().getStringArray(R.array.event_category_text);
+                case R.id.btn_filter2: {
+                    return new String[]{
+                            getString(R.string.event_filter2_comingsoon),
+                            getString(R.string.event_filter2_onging),
+                            getString(R.string.event_filter2_expired),
+                    };
                 }
-                case R.id.btn_time:
-                    return getResources().getStringArray(R.array.event_time);
             }
             return new String[0];
         }
@@ -351,7 +352,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         View c = findViewById(R.id.dialog_container);
         c.setVisibility(View.INVISIBLE);
         tf = new FilterBar(this, R.layout.event_filter,
-                new int[]{ R.id.btn_host, R.id.btn_type, R.id.btn_time },
+                new int[]{ R.id.btn_filter1, R.id.btn_filter2 },
                 c);
         tf.setOnFilterChangedListener(this);
         lvEvent.addHeaderView(tf.getView());
@@ -611,29 +612,50 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 
     @Override
     public void onDropdownMenuItemClick(int subMenuResId, int itemIdx) {
-        if (subMenuResId == R.id.btn_host) {
+        if (subMenuResId == R.id.btn_filter1) {
             if (itemIdx == 0) {
                 eventAdapter.setDataSource(acts);
-            } else {
+            } else if (itemIdx == 1) { // joined
                 ArrayList<WEvent> filtered = new ArrayList<WEvent>();
-                String selectedHost = tf.hosts != null && itemIdx >= 0 && itemIdx < tf.hosts.length ?
-                        tf.hosts[itemIdx] : null;
                 for (WEvent e : acts) {
-                    if (TextUtils.equals(selectedHost, e.host)) {
+                    if (e.membership == WEvent.MEMBER_SHIP_JOINED) {
+                        filtered.add(e);
+                    }
+                }
+                eventAdapter.setDataSource(filtered);
+            } else if (itemIdx == 2) { // my
+                ArrayList<WEvent> filtered = new ArrayList<WEvent>();
+                String myUid = PrefUtil.getInstance(this).getUid();
+                for (WEvent e : acts) {
+                    if (TextUtils.equals(myUid, e.owner_uid)) {
                         filtered.add(e);
                     }
                 }
                 eventAdapter.setDataSource(filtered);
             }
             return;
-        } else if (subMenuResId == R.id.btn_type) {
+        } else if (subMenuResId == R.id.btn_filter2) {
+            long now = Calendar.getInstance().getTimeInMillis();
             if (itemIdx == 0) {
-                eventAdapter.setDataSource(acts);
-            } else {
                 ArrayList<WEvent> filtered = new ArrayList<WEvent>();
-                String selectedCat = WEventUiHelper.getCategoryNameByIndex(this, itemIdx);
                 for (WEvent e : acts) {
-                    if (TextUtils.equals(selectedCat, e.category)) {
+                    if (e.startTime.getTime() > now) {
+                        filtered.add(e);
+                    }
+                }
+                eventAdapter.setDataSource(filtered);
+            } else if (itemIdx == 1) { // on going
+                ArrayList<WEvent> filtered = new ArrayList<WEvent>();
+                for (WEvent e : acts) {
+                    if (e.startTime.getTime() < now && e.endTime.getTime() > now) {
+                        filtered.add(e);
+                    }
+                }
+                eventAdapter.setDataSource(filtered);
+            } else if (itemIdx == 2) { // expired
+                ArrayList<WEvent> filtered = new ArrayList<WEvent>();
+                for (WEvent e : acts) {
+                    if (e.endTime.getTime() < now) {
                         filtered.add(e);
                     }
                 }
@@ -645,11 +667,4 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         Toast.makeText(this, subMenuResId + "/" + itemIdx, Toast.LENGTH_SHORT).show();
     }
 
-    private String[] getDistinctHosts() {
-        HashSet<String> hosts = new HashSet<String>();
-        for (WEvent e : acts) {
-            hosts.add(e.host);
-        }
-        return hosts.toArray(new String[hosts.size()]);
-    }
 }

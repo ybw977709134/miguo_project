@@ -78,8 +78,4 @@
 		<item>投票</item>
 		<item>线下活动</item>
 	</string-array>
-	<string-array name="event_time">
-		<item>一周内</item>
-		<item>一月内</item>
-	</string-array>
 </resources>

@@ -126,16 +126,16 @@ public abstract class MenuBar {
     private static PopupWindow createListDialog(
             Context context,
             String[] items, final int selectedIdx,
-            AdapterView.OnItemClickListener onItemClickListener) {
+            final AdapterView.OnItemClickListener onItemClickListener) {
         View dlgView = View.inflate(context, R.layout.timeline_filter_category_list, null);
-        ListView lv = ((ListView)dlgView.findViewById(android.R.id.list));
+        final ListView lv = ((ListView)dlgView.findViewById(android.R.id.list));
         lv.setAdapter(
                 new ArrayAdapter<String>(context,
                         R.layout.timeline_filter_category_list_item,
                         android.R.id.text1,
                         items) {
                     @Override
-                    public View getView(int position, View convertView, ViewGroup parent) {
+                    public View getView(final int position, View convertView, ViewGroup parent) {
                         View v = super.getView(position, convertView, parent);
                         TextView tv = (TextView) v.findViewById(android.R.id.text1);
                         Drawable rightDrawable = selectedIdx == position
@@ -145,14 +145,30 @@ public abstract class MenuBar {
                             rightDrawable.setBounds(0, 0, rightDrawable.getIntrinsicWidth(), rightDrawable.getIntrinsicHeight());
                         }
                         tv.setCompoundDrawables(null, null,  rightDrawable, null);
+
+                        // WORKAROUND: ListView in a Popup WIndow, onItemClick not fired.
+                        v.setOnClickListener(new View.OnClickListener() {
+
+                            @Override
+                            public void onClick(View v) {
+                                /*
+                                 *  as every row is still receiving their touches
+                                 *  we can use this to manually trigger onItemClick
+                                 *  since it doesn't firing in popupWindow.setFocusable(false)
+                                 */
+                                onItemClickListener.onItemClick(lv, v, position, getItemId(position));
+
+                            }
+                        });
                         return v;
                     }
                 }
         );
-        lv.setOnItemClickListener(onItemClickListener);
+        // lv.setOnItemClickListener(onItemClickListener); // triggered by OnClickListener
         return new PopupWindow(dlgView,
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                false // too many side-effect if pop window is fousable.
         );
     }
 

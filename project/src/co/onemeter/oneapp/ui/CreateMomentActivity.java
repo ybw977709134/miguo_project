@@ -89,7 +89,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
 //	private String[] path = new String[2];
     private ArrayList<WMediaFile> listPhoto;
 
-    private ImageVideoInputWidget imageVideoInputWidget;
+    private ImageVideoInputWidget imageInputWidget;
     private MediaRecorder mRecorder;
     private File mLastVoiceFile;
     private MediaPlayer mPlayer;
@@ -156,11 +156,11 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         btnVoiceRecord = q.find(R.id.btn_voice_record).clicked(this).getTextView();
         btnVoicePreview = (TimerTextView) q.find(R.id.btn_voice_preview).clicked(this).visibility(View.GONE).getView();
         btnVoiceDel = q.find(R.id.btn_voice_del).clicked(this).visibility(View.GONE).getView();
-        imageVideoInputWidget = (ImageVideoInputWidget) q.find(R.id.vg_input_imagevideo).getView();
+        imageInputWidget = (ImageVideoInputWidget) q.find(R.id.vg_input_imagevideo).getView();
 
         q.find(R.id.btn_loc).clicked(this);
 
-        imageVideoInputWidget.setup(this, ImageVideoInputWidget.MediaType.Photo, REQ_IMAGE);
+        imageInputWidget.setup(this, ImageVideoInputWidget.MediaType.Photo, REQ_IMAGE);
 
 //        mFrame = (FrameLayout) findViewById(R.id.frame);
         resizeLayout = (YQResizeLayout) findViewById(R.id.resizeLayout);
@@ -381,13 +381,22 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         }).start();
     }
 
+    private void updateData() {
+        moment.text = edtContent.getText().toString();
+
+        moment.multimedias = new ArrayList<WFile>(imageInputWidget.getItemCount());
+        for (int i = 0; i < imageInputWidget.getItemCount(); ++i) {
+            moment.multimedias.add(imageInputWidget.getItem(i));
+        }
+    }
+
     private void createMoment() {
-        String content = edtContent.getText().toString();
-        if (content.length() > CreateNormalMomentWithTagActivity.MOMENTS_WORDS_OVER) {
+        updateData();
+
+        if (moment.text.length() > CreateNormalMomentWithTagActivity.MOMENTS_WORDS_OVER) {
             mMsgBox.show(null, getString(R.string.moments_words_over_failed));
             return;
         }
-        moment.text = content;
         if (Utils.isNullOrEmpty(moment.text)
                 && (listPhoto == null || listPhoto.isEmpty())
                 && (mLastVoiceFile == null || !mLastVoiceFile.exists())) {
@@ -600,7 +609,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
 		initView();
 
         if (savedInstanceState != null) {
-            imageVideoInputWidget.restoreInstanceState(savedInstanceState);
+            imageInputWidget.restoreInstanceState(savedInstanceState);
         }
 
         locationHelper = new LocationHelper(this);
@@ -676,7 +685,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        imageVideoInputWidget.saveInstanceState(outState);
+        imageInputWidget.saveInstanceState(outState);
 
         outState.putParcelableArrayList("list_photo",listPhoto);
         outState.putInt(EXTRA_MEDIA_FLAGS, mediaFlag);
@@ -715,7 +724,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
 		switch(requestCode) {
             case REQ_IMAGE:
                 if (resultCode == RESULT_OK) {
-                    imageVideoInputWidget.handleActivityResult(requestCode, resultCode, data);
+                    imageInputWidget.handleActivityResult(requestCode, resultCode, data);
                 }
                 break;
             default:

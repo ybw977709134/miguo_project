@@ -300,8 +300,9 @@ public class WowEventWebServerIF {
 
 		for(String action :  actions) {
 			String postStr = "action=" + action
-					+ "&uid=" + Utils.urlencodeUtf8(uid) 
-					+ "&password=" + Utils.urlencodeUtf8(password);
+                    + "&uid=" + Utils.urlencodeUtf8(uid)
+                    + "&password=" + Utils.urlencodeUtf8(password)
+                    + "&get_finished_event_only=0";
 			Connect2 connect2 = new Connect2();
 			Element root = connect2.Post(postStr);
 //            root=fixEventForTest(action);

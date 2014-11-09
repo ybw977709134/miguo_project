@@ -729,4 +729,5 @@
 	<string name="moment_add_touch_to_record">按下录音（最大120秒）</string>
 	<string name="moment_add_touch_to_loc">加入当前位置信息</string>
 	<string name="moment_add_touch_to_stop_record">点击停止录音</string>
+	<string name="moment_add_locating">正在获取位置信息…</string>
 </resources>

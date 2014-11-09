@@ -99,6 +99,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
     private String pageTitle;
     private boolean mLocationOn = false;
     private boolean mIsRecordingVoice = false;
+    private Location lastLoc;
 
     private MessageBox mMsgBox;
 
@@ -157,7 +158,6 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         btnVoicePreview = (TimerTextView) q.find(R.id.btn_voice_preview).clicked(this).visibility(View.GONE).getView();
         btnVoiceDel = q.find(R.id.btn_voice_del).clicked(this).visibility(View.GONE).getView();
         imageInputWidget = (ImageVideoInputWidget) q.find(R.id.vg_input_imagevideo).getView();
-
         q.find(R.id.btn_loc).clicked(this);
 
         imageInputWidget.setup(this, ImageVideoInputWidget.MediaType.Photo, REQ_IMAGE);
@@ -388,6 +388,11 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         for (int i = 0; i < imageInputWidget.getItemCount(); ++i) {
             moment.multimedias.add(imageInputWidget.getItem(i));
         }
+
+        if (!mLocationOn) {
+            moment.place = null;
+            moment.latitude = moment.longitude = 0;
+        }
     }
 
     private void createMoment() {
@@ -454,6 +459,27 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
 	}
 
     private void refreshLocationView() {
+        TextView v = new AQuery(this).find(R.id.btn_loc).getTextView();
+        if (mLocationOn) {
+            if (lastLoc != null) {
+                // got location
+                v.setCompoundDrawablesWithIntrinsicBounds(
+                        getResources().getDrawable(R.drawable.timeline_location_a),
+                        null, null, null);
+                v.setText(moment.place);
+            } else {
+                // locating
+                v.setCompoundDrawablesWithIntrinsicBounds(
+                        getResources().getDrawable(R.drawable.timeline_location),
+                        null, null, null);
+                v.setText(R.string.moment_add_locating);
+            }
+        } else {
+            v.setCompoundDrawablesWithIntrinsicBounds(
+                    getResources().getDrawable(R.drawable.timeline_location),
+                    null, null, null);
+            v.setText(R.string.moment_add_touch_to_loc);
+        }
 	}
 
     @Override
@@ -497,6 +523,9 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                 }
                 break;
             }
+            case R.id.btn_loc:
+                toggleLocation();
+                break;
             default:
                 break;
         }
@@ -518,11 +547,10 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         return duration;
     }
 
-    private void requireLoc() {
+    private void toggleLocation() {
         mLocationOn = !mLocationOn;
         refreshLocationView();
         if (mLocationOn) {
-//                getLocation();
             locationHelper.getLocationWithAMap(true);
         } else {
         }
@@ -618,9 +646,11 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
             public void onLocationGot(Location location, String strAddress) {
                 moment.place = strAddress;
                 if (null != location) {
+                    lastLoc = location;
                     moment.latitude = location.getLatitude();
                     moment.longitude = location.getLongitude();
                 }
+                refreshLocationView();
             }
 
             @Override

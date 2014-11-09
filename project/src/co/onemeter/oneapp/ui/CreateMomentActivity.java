@@ -228,6 +228,19 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                 mRecorder.stop();
                 mRecorder.release();
                 mRecorder = null;
+
+                btnVoiceRecord.setVisibility(View.GONE);
+                btnVoicePreview.setVisibility(View.VISIBLE);
+                btnVoiceDel.setVisibility(View.VISIBLE);
+
+                btnVoiceRecord.setCompoundDrawablesWithIntrinsicBounds(
+                        getResources().getDrawable(R.drawable.timeline_record), null, null, null);
+                btnVoiceRecord.setText(getResources().getString(R.string.moment_add_touch_to_record));
+
+                int duration = getVoiceDuration();
+
+                btnVoicePreview.setMaxElapse(duration);
+                btnVoicePreview.setMaxTime();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -453,22 +466,8 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                         btnVoiceRecord.setText(getResources().getString(R.string.moment_add_touch_to_stop_record));
                     }
                 } else { // stop record
-                    stopRecording();
                     mIsRecordingVoice = false;
-
-                    btnVoiceRecord.setVisibility(View.GONE);
-                    btnVoicePreview.setVisibility(View.VISIBLE);
-                    btnVoiceDel.setVisibility(View.VISIBLE);
-
-                    btnVoiceRecord.setCompoundDrawablesWithIntrinsicBounds(
-                            getResources().getDrawable(R.drawable.timeline_record), null, null, null);
-                    btnVoiceRecord.setText(getResources().getString(R.string.moment_add_touch_to_record));
-
-                    int duration = getVoiceDuration();
-
-                    btnVoicePreview.setMaxElapse(duration);
-                    btnVoicePreview.setMaxTime();
-
+                    stopRecording();
                     addVoice2moment();
                 }
                 break;
@@ -522,6 +521,9 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
 
     private void stopMicVoice() {
         if (null != mPlayer) {
+            btnVoicePreview.setCompoundDrawablesWithIntrinsicBounds(
+                    getResources().getDrawable(R.drawable.timeline_play),
+                    null, null, null);
             btnVoicePreview.stop();
             btnVoicePreview.setMaxTime();
             mPlayer.release();
@@ -544,7 +546,6 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                     mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mediaPlayer) {
-
                             stopMicVoice();
                         }
                     });
@@ -558,6 +559,9 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
             protected void onPostExecute(Void errno) {
                 btnVoicePreview.reset();
                 btnVoicePreview.start();
+                btnVoicePreview.setCompoundDrawablesWithIntrinsicBounds(
+                        getResources().getDrawable(R.drawable.timeline_stop),
+                        null, null, null);
                 mPlayer.start();
             }
         }.execute((Void) null);

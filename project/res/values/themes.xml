@@ -11,7 +11,7 @@
         <item name="smsButton">@style/btn_sms_black</item>
         <item name="contactButton">@style/btn_contact_black</item>
         <item name="settingsButton">@style/btn_settings_black</item>
-        <item name="button">@style/button_black</item>
+        <item name="button">@style/button_blue</item>
         <item name="inputbox">@style/inputbox_black</item>
         <item name="selected">@style/selected_black</item>
         <item name="unselected">@style/unselected_black</item>

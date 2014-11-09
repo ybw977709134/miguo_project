@@ -173,7 +173,7 @@
 	<string name="settings_age">年龄</string>
 	<string name="settings_change_field">更改%s</string>
 	<string name="settings_account">帐号设置</string>
-	<string name="settings_wowid_pagetitle">设置公司 ID</string>
+	<string name="settings_wowid_pagetitle">设置用户 ID</string>
 	<string name="settings_account_wowid">用户 ID</string>
 	<string name="settings_account_pwd">密码设定</string>
 	<string name="settings_account_phone">手机号</string>
@@ -219,7 +219,7 @@
     <string name="manage_account_switch_failure">切换帐号失败</string>
     <string name="manage_account_delete_confirm">删除帐号 %s</string>
     <string name="aboutpage_feedback">反馈</string>
-    <string name="aboutpage_feedback_subject">反馈--Wowtalk企业版</string>
+    <string name="aboutpage_feedback_subject">反馈--一米家校</string>
 	<string name="accountsetting_bindphone_email_set_pwd_first">未设置密码，请设置密码后进行绑定操作</string>
     <string name="privacysetting_others_can_add_me">别人可以加我</string>
     <string name="privacysetting_auth_is_needed">好友需要验证</string>
@@ -227,9 +227,9 @@
     <string name="privacysetting_failure">隐私设置失败</string>
     <string name="setting_send_email">发送邮件</string>
     <string name="setting_send_sms">发送短信</string>
-    <string name="setting_tell_friend_sms_content">我正在使用WowTalk企业版，加入我吧！</string>
-    <string name="setting_tell_friend_email_subject">一起使用WowTalk企业版吧</string>
-    <string name="setting_tell_friend_email_content">我正在使用WowTalk企业版，加入我吧！</string>
+    <string name="setting_tell_friend_sms_content">我正在使用一米家校，加入我吧！</string>
+    <string name="setting_tell_friend_email_subject">一起使用一米家校吧</string>
+    <string name="setting_tell_friend_email_content">我正在使用一米家校，加入我吧！</string>
     <string name="inputsimpletext_empty">%s不能为空</string>
     <string name="inputsimpletext_failure">更改%s失败</string>
 

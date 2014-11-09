@@ -2,13 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_gray1" >
+    android:background="@color/background" >
     <RelativeLayout 
         android:id="@+id/title_bar"
         android:layout_height="@dimen/title_bar_height"
         android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
-        android:background="@drawable/navbar_bg">
+        android:background="@drawable/home_bg_navbar">
         <ImageButton
             android:id="@+id/title_back"
             android:layout_height="50dp"
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:layout_margin="10dp"
-                android:background="@drawable/table_white"
+                android:background="@drawable/btn_white"
                 android:orientation="vertical">
 	            <LinearLayout
 		            android:id="@+id/box_old"
@@ -64,9 +64,7 @@
 			            android:background="@null"
 			            android:hint="@string/input_old_login_password"/>
 		            <ImageView
-			            android:layout_height="wrap_content"
-			            android:layout_width="fill_parent"
-			            android:background="@drawable/divider"/>
+			            style="@style/standard_list_divider"/>
 	            </LinearLayout>
                 <EditText
                 	android:id="@+id/edt_pwd"
@@ -79,10 +77,8 @@
                 	android:background="@null"
                 	android:hint="@string/input_login_password"/>
                 <ImageView
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:background="@drawable/divider"/>
-                <EditText 
+	                style="@style/standard_list_divider"/>
+                <EditText
                     android:id="@+id/edt_confirm"
                     android:layout_height="45dp"
                     android:layout_width="fill_parent"

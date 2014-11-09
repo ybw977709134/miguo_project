@@ -149,11 +149,11 @@ public class PrivacySettingActivity extends Activity implements OnClickListener{
         mOthersCanAddMeBtn.setBackgroundResource(mIsOthersCanAddMe ? R.drawable.switch_on_little : R.drawable.switch_off_little);
         // display or hide the authNeeded layout
         if (mIsOthersCanAddMe) {
-            mOthersLayout.setBackgroundResource(R.drawable.group_list_bg_begin);
+//            mOthersLayout.setBackgroundResource(R.drawable.group_list_bg_begin);
             mDivImageView.setVisibility(View.VISIBLE);
             mAuthLayout.setVisibility(View.VISIBLE);
         } else {
-            mOthersLayout.setBackgroundResource(R.drawable.group_list_bg_single);
+//            mOthersLayout.setBackgroundResource(R.drawable.group_list_bg_single);
             mDivImageView.setVisibility(View.GONE);
             mAuthLayout.setVisibility(View.GONE);
         }

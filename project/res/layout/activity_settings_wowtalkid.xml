@@ -8,7 +8,7 @@
         android:layout_height="@dimen/title_bar_height"
         android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
-        android:background="@drawable/navbar_bg">
+        android:background="@drawable/home_bg_navbar">
         <ImageButton
             android:id="@+id/title_back"
             android:layout_height="50dp"
@@ -42,17 +42,15 @@
         <RelativeLayout
             android:layout_height="50dp"
             android:layout_width="fill_parent"
-            android:layout_margin="10dp"
-            android:background="@drawable/sms_text_field">
+            android:layout_margin="10dp">
             <EditText
                 android:id="@+id/edt_wowtalkid"
                 android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
                 android:singleLine="true"
+                style="@style/inputbox_white"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:background="@null"
-                android:textColor="@color/default_text"/>
+                android:paddingRight="10dp"/>
             <ImageButton
                 android:id="@+id/field_clear"
                 android:layout_height="20dp"

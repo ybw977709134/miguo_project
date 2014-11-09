@@ -10,7 +10,7 @@
 		android:layout_height="@dimen/title_bar_height"
 		android:layout_width="fill_parent"
 		android:layout_alignParentTop="true"
-		android:background="@drawable/navbar_bg">
+		android:background="@drawable/home_bg_navbar">
 		<ImageButton
 			android:id="@+id/title_left"
 			android:layout_height="50dp"
@@ -25,7 +25,7 @@
 			android:layout_width="50dp"
 			android:layout_alignParentRight="true"
 			android:background="@null"
-			android:src="@drawable/icon_add_green"/>
+			android:src="@drawable/nav_add_selector"/>
 		<LinearLayout
 			android:id="@+id/btn_layout"
 			android:layout_height="wrap_content"

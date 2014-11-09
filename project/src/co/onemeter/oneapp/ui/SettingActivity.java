@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.AppUpgradeTask;
+import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
@@ -96,6 +97,18 @@ public class SettingActivity extends Activity implements OnClickListener {
     private void initView() {
 		imgPhoto = (ImageView) findViewById(R.id.img_thumbnail);
 
+        AQuery q = new AQuery(this);
+
+        q.find(R.id.img_thumbnail).clicked(this);
+        q.find(R.id.settings_myinfo).clicked(this);
+        q.find(R.id.settings_my_qrcode).clicked(this);
+        q.find(R.id.settings_account).clicked(this);
+        q.find(R.id.settings_privacy).clicked(this);
+        q.find(R.id.settings_upgrade_check_for_updates).clicked(this);
+        q.find(R.id.settings_tell_friend).clicked(this);
+        q.find(R.id.settings_rate).clicked(this);
+        q.find(R.id.settings_about).clicked(this);
+
         updateNoticeStatus();
 	}
 
@@ -119,8 +132,11 @@ public class SettingActivity extends Activity implements OnClickListener {
         Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.img_thumbnail:
-                intent.setClass(SettingActivity.this, MyInfoActivity.class);
-                startActivity(intent);
+            case R.id.settings_myinfo:
+                startActivity(intent.setClass(SettingActivity.this, MyInfoActivity.class));
+                break;
+            case R.id.settings_my_qrcode:
+                startActivity(new Intent(this,MyQRCodeActivity.class));
                 break;
             case R.id.settings_account:
                 if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
@@ -135,8 +151,7 @@ public class SettingActivity extends Activity implements OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.settings_about:
-                intent.setClass(SettingActivity.this, AboutPage.class);
-                startActivity(intent);
+                startActivity(intent.setClass(SettingActivity.this, AboutPage.class));
                 break;
             case R.id.settings_tell_friend:
                 tellFriend(v);
@@ -144,21 +159,21 @@ public class SettingActivity extends Activity implements OnClickListener {
             case R.id.logout:
                 logoutAccount();
                 break;
-            /*
-            case R.id.rate_us:
-                Intent rateIntent = new Intent(Intent.ACTION_VIEW);
-                rateIntent.setData(Uri.parse("market://details?id=" + getPackageName()));
-                if (this.getPackageManager().queryIntentActivities(rateIntent, 0).size() != 0) {
-                    AppStatusService.setIsMonitoring(false);
-                    startActivity(rateIntent);
+            case R.id.settings_rate:
+                if (true) {
+                    mMsgBox.toast(R.string.not_implemented);
                 } else {
-                    mMsgBox.toast("device not suport");
+                    Intent rateIntent = new Intent(Intent.ACTION_VIEW);
+                    rateIntent.setData(Uri.parse("market://details?id=" + getPackageName()));
+                    if (this.getPackageManager().queryIntentActivities(rateIntent, 0).size() != 0) {
+                        AppStatusService.setIsMonitoring(false);
+                        startActivity(rateIntent);
+                    } else {
+                        mMsgBox.toast("device not suport");
+                    }
                 }
                 break;
-                */
-            /*
-            case R.id.check_for_updates:
-                mNewUpdateView.setVisibility(View.GONE);
+            case R.id.settings_upgrade_check_for_updates:
                 StartActivity.instance().changeNewUpdateFlagView(View.GONE);
                 if (null != mUpgradeTask && mUpgradeTask.isExecuting()) {
                     new AlertDialog.Builder(this)
@@ -177,7 +192,6 @@ public class SettingActivity extends Activity implements OnClickListener {
                     checkForUpdates();
                 }
                 break;
-                */
             default:
                 break;
         }
@@ -263,13 +277,19 @@ public class SettingActivity extends Activity implements OnClickListener {
                                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
-                                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                                            intent.setData(Uri.parse("market://details?id=" + getPackageName()));
-                                            if (getPackageManager().queryIntentActivities(intent, 0).size() != 0) {
-                                                AppStatusService.setIsMonitoring(false);
-                                                startActivity(intent);
-                                            } else {
-                                                mMsgBox.toast(R.string.settings_upgrade_no_market);
+                                            if (true) { // go to download web page
+                                                startActivity(new Intent(
+                                                        Intent.ACTION_VIEW,
+                                                        Uri.parse("http://www.onemeter.co/dl/")));
+                                            } else { // go to market
+                                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                                intent.setData(Uri.parse("market://details?id=" + getPackageName()));
+                                                if (getPackageManager().queryIntentActivities(intent, 0).size() != 0) {
+                                                    AppStatusService.setIsMonitoring(false);
+                                                    startActivity(intent);
+                                                } else {
+                                                    mMsgBox.toast(R.string.settings_upgrade_no_market);
+                                                }
                                             }
                                         }
                                     })

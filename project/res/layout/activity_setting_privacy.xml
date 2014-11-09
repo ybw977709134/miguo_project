@@ -2,13 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/white" >
+    android:background="@color/background" >
     <RelativeLayout 
         android:id="@+id/title_bar"
         android:layout_height="50dp"
         android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
-        android:background="@drawable/navbar_bg">
+        android:background="@drawable/home_bg_navbar">
         <ImageButton 
             android:id="@+id/title_back"
             android:layout_height="50dp"
@@ -16,11 +16,6 @@
             android:layout_alignParentLeft="true"
             android:background="@null"
             android:src="@drawable/nav_back_selector"/>
-        <ImageView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_toRightOf="@+id/title_back"
-            android:background="@drawable/navbar_div"/>
         <ImageButton
             android:id="@+id/title_confirm"
             android:layout_height="50dp"
@@ -28,12 +23,7 @@
             android:layout_alignParentRight="true"
             android:background="@null"
             android:src="@drawable/nav_confirm_selector"/>
-        <ImageView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_toLeftOf="@id/title_confirm"
-            android:background="@drawable/navbar_div"/>
-        <TextView 
+        <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_centerInParent="true"
@@ -61,7 +51,7 @@
                 android:layout_height="50dp"
                 android:layout_width="fill_parent"
                 android:orientation="horizontal"
-                android:background="@drawable/group_list_bg_begin">
+                android:background="@drawable/btn_white">
                 <TextView 
                     android:layout_height="fill_parent"
                     android:layout_width="wrap_content"
@@ -84,16 +74,14 @@
                     android:layout_marginRight="10dp"/>
             </RelativeLayout>
             <ImageView
-                android:id="@+id/div_others_and_auth"
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:background="@drawable/table_divider_white"/>
+	            android:id="@+id/div_others_and_auth"
+	            style="@style/standard_list_divider"/>
             <RelativeLayout
                 android:id="@+id/auth_is_needed_layout"
                 android:layout_height="50dp"
                 android:layout_width="fill_parent"
                 android:orientation="horizontal"
-                android:background="@drawable/group_list_bg_end">
+                android:background="@drawable/btn_white">
                 <TextView 
                     android:layout_height="fill_parent"
                     android:layout_width="wrap_content"
@@ -121,7 +109,7 @@
             android:layout_height="50dp"
             android:layout_width="fill_parent"
             android:layout_margin="10dp"
-            android:background="@drawable/group_list_bg_single">
+            android:background="@drawable/btn_white">
             <TextView 
                 android:layout_height="fill_parent"
                 android:layout_width="wrap_content"
@@ -145,9 +133,4 @@
     </RelativeLayout>
     </LinearLayout>
 	</ScrollView>
-    <ImageView 
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:layout_below="@+id/title_bar"
-        android:background="@drawable/shadow_under"/>
 </RelativeLayout>

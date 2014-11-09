@@ -31,16 +31,12 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 	private TextView txtPwdSetting;
 	private TextView txtPhonenumber;
 	private TextView txtEmail;
-	private TextView txtWeibo;
-	private TextView txtWeixin;
 	private Button btnLogout;
 	
 	private LinearLayout mWowTalkId;
 	private LinearLayout mPassword;
 	private LinearLayout mBindPhone;
 	private LinearLayout mBindEmail;
-	private LinearLayout mBindWeibo;
-	private LinearLayout mBindWeixin;
 	private String[] binds = new String[2];
 	private static AccountSettingActivity instance;
 
@@ -61,14 +57,10 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 		txtPwdSetting = (TextView) findViewById(R.id.pwd_text);
 		txtPhonenumber = (TextView) findViewById(R.id.phonenumber_text);
 		txtEmail = (TextView) findViewById(R.id.email_text);
-		txtWeibo = (TextView) findViewById(R.id.weibo_text);
-		txtWeixin = (TextView) findViewById(R.id.weixin_text);
 		mWowTalkId = (LinearLayout) findViewById(R.id.layout_id);
 		mPassword = (LinearLayout) findViewById(R.id.layout_password);
 		mBindPhone = (LinearLayout) findViewById(R.id.layout_phone);
 		mBindEmail = (LinearLayout) findViewById(R.id.layout_email);
-		mBindWeibo = (LinearLayout) findViewById(R.id.layout_weibo);
-		mBindWeixin = (LinearLayout) findViewById(R.id.layout_weixin);
 		txtPwdSetting.setText(getResources().getString(R.string.settings_account_not_set));
 		txtPwdSetting.setTextColor(getResources().getColor(R.color.setting_orange));
 		
@@ -78,8 +70,6 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 		mPassword.setOnClickListener(this);
 		mBindPhone.setOnClickListener(this);
 		mBindEmail.setOnClickListener(this);
-		mBindWeibo.setOnClickListener(this);
-		mBindWeixin.setOnClickListener(this);
 	}
 	
 	private void fetchData() {
@@ -227,8 +217,6 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
                 startActivity(bindEmailIntent);
             }
 			break;
-		case R.id.layout_weibo:
-		case R.id.layout_weixin:
 		default:
 			mMsgBox.toast(R.string.not_implemented);
 			break;

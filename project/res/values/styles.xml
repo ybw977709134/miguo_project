@@ -128,7 +128,7 @@
 
     <style name="button_white">
         <item name="android:textColor">#FF000000</item>
-        <item name="android:background">@drawable/btn_blue_selector</item>
+        <item name="android:background">@drawable/btn_white_selector</item>
     </style>
 
     <style name="button_black">
@@ -151,7 +151,7 @@
 
     <style name="inputbox_white" parent="@android:style/Widget.EditText">
 	    <item name="android:textColor">@color/default_text</item>
-	    <item name="android:background">@drawable/sms_text_field</item>
+	    <item name="android:background">@drawable/btn_white</item>
     </style>
 
     <style name="inputbox_black" parent="@android:style/Widget.EditText">

@@ -44,6 +44,7 @@
 		android:id="@+id/multi_layout"
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent"
+		android:padding="@dimen/padding_medium"
 		android:layout_below="@+id/title_bar"
 		android:orientation="vertical">
 
@@ -54,7 +55,7 @@
 			android:layout_below="@+id/title_bar"
 			android:padding="5dp"
 			android:gravity="top"
-			android:background="@null"
+			style="@style/inputbox_white"
 			android:hint="@string/moments_compose_hint"
 			android:textColorHint="@color/gray"
 			android:textColor="@color/black"/>
@@ -64,226 +65,66 @@
 			android:layout_height="wrap_content"
 			android:background="@drawable/timeline_divider_h"/>
 
+		<co.onemeter.oneapp.ui.ImageVideoInputWidget
+			android:id="@+id/vg_input_imagevideo"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:padding="@dimen/padding_small"
+			android:layout_marginTop="@dimen/padding_large"
+		    android:background="@color/white"
+			>
+		</co.onemeter.oneapp.ui.ImageVideoInputWidget>
+
+		<LinearLayout
+			android:id="@+id/vg_input_voice"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			android:layout_marginTop="@dimen/padding_large"
+			android:orientation="horizontal">
+			<Button
+				android:id="@+id/btn_voice_record"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:padding="@dimen/padding_medium"
+				android:drawableLeft="@drawable/timeline_record"
+				android:drawablePadding="@dimen/padding_medium"
+				android:text="@string/moment_add_touch_to_record"
+				style="@style/button_white" />
+			<org.wowtalk.ui.msg.TimerTextView
+				android:id="@+id/btn_voice_preview"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:padding="@dimen/padding_medium"
+				android:drawableLeft="@drawable/timeline_play"
+				android:drawablePadding="@dimen/padding_medium"
+				android:text="00:08"
+				style="@style/button_white" />
+			<ImageButton
+				android:id="@+id/btn_voice_del"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:padding="@dimen/padding_medium"
+				android:layout_marginLeft="@dimen/padding_medium"
+				android:src="@drawable/timeline_close"
+				style="@style/button_white" />
+		</LinearLayout>
+
 		<RelativeLayout
 			android:id="@+id/vg_input_loc"
 			android:layout_height="wrap_content"
 			android:paddingLeft="5dp"
 			android:paddingRight="5dp"
 			android:layout_width="fill_parent">
-			<LinearLayout
-				android:id="@+id/location_searching_layout"
-				android:layout_height="wrap_content"
+			<Button
+				android:id="@+id/btn_loc"
 				android:layout_width="wrap_content"
-				android:orientation="horizontal" >
-				<ProgressBar
-					android:id="@+id/progress"
-					android:layout_height="20dp"
-					android:layout_width="20dp"
-					android:scrollbarStyle="insideInset"
-					android:visibility="visible"/>
-				<TextView
-					android:layout_height="wrap_content"
-					android:layout_width="wrap_content"
-					android:textSize="15sp"
-					android:textColor="@color/black"
-					android:text="@string/getting_location_info"/>
-			</LinearLayout>
-			<TextView
-				android:id="@+id/txt_address"
 				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:drawableLeft="@drawable/write_location_smail"
-				android:drawablePadding="3dp"
-				android:textColor="@color/black"
-				android:textSize="15sp"
-				android:singleLine="true"
-				android:visibility="gone"/>
+				android:layout_marginTop="@dimen/padding_large"
+				android:padding="@dimen/padding_medium"
+				android:drawableLeft="@drawable/timeline_location"
+				android:drawablePadding="@dimen/padding_medium"
+				android:text="@string/moment_add_touch_to_loc"
+				style="@style/button_white" />
 		</RelativeLayout>
-
-		<!-- 显示已经输入的图片和视频 -->
-		<FrameLayout
-			android:id="@+id/vg_gallery"
-			android:layout_height="140dp"
-			android:layout_width="fill_parent">
-			<HorizontalScrollView
-				android:id="@+id/mGrid"
-				android:layout_height="wrap_content"
-				android:layout_width="fill_parent"
-				android:layout_gravity="center_vertical"
-				android:scrollbars="none"
-				android:visibility="visible">
-				<LinearLayout
-					android:id="@+id/hgrid_inner_layout"
-					android:layout_height="110dp"
-					android:layout_width="fill_parent"
-					android:dividerPadding="10dp"
-					android:orientation="horizontal">
-				</LinearLayout>
-
-			</HorizontalScrollView>
-			<ImageView
-				android:id="@+id/img_none"
-				android:layout_height="110dp"
-				android:layout_width="170dp"
-				android:layout_gravity="center"
-				android:background="@drawable/write_noimage"/>
-		</FrameLayout>
-
-		<LinearLayout
-			android:id="@+id/vg_input_pic"
-			android:layout_height="wrap_content"
-			android:layout_width="fill_parent"
-			android:orientation="vertical"
-			android:visibility="visible">
-			<LinearLayout
-				android:layout_height="wrap_content"
-				android:layout_width="fill_parent"
-				android:layout_marginBottom="15dp"
-				android:paddingLeft="15dp"
-				android:paddingRight="15dp"
-				android:orientation="horizontal">
-				<Button
-					android:id="@+id/btn_take_pic"
-					android:layout_height="fill_parent"
-					android:layout_width="0dp"
-					android:layout_weight="1"
-					android:layout_marginRight="7.5dp"
-					android:background="@drawable/btn_gray_selector"
-					android:textSize="20sp"
-					android:textColor="@color/default_text"
-					android:text="@string/moments_compose_camera"/>
-				<Button
-					android:id="@+id/btn_pick_photo"
-					android:layout_height="fill_parent"
-					android:layout_width="0dp"
-					android:layout_weight="1"
-					android:layout_marginLeft="7.5dp"
-					android:textSize="20sp"
-					android:background="@drawable/btn_gray_selector"
-					android:textColor="@color/default_text"
-					android:text="@string/moments_compose_gallery_image"/>
-			</LinearLayout>
-		</LinearLayout>
-
-		<LinearLayout
-			android:id="@+id/vg_input_video"
-			android:layout_height="wrap_content"
-			android:layout_width="fill_parent"
-			android:orientation="vertical"
-			android:visibility="visible">
-			<LinearLayout
-				android:layout_height="wrap_content"
-				android:layout_width="fill_parent"
-				android:layout_marginBottom="15dp"
-				android:paddingLeft="15dp"
-				android:paddingRight="15dp"
-				android:orientation="horizontal">
-				<Button
-					android:id="@+id/btn_take_video"
-					android:layout_height="fill_parent"
-					android:layout_width="0dp"
-					android:layout_weight="1"
-					android:layout_marginRight="7.5dp"
-					android:background="@drawable/btn_gray_selector"
-					android:textSize="20sp"
-					android:textColor="@color/default_text"
-					android:text="@string/moments_compose_camera_video"/>
-				<Button
-					android:id="@+id/btn_pick_video"
-					android:layout_height="fill_parent"
-					android:layout_width="0dp"
-					android:layout_weight="1"
-					android:layout_marginLeft="7.5dp"
-					android:textSize="20sp"
-					android:background="@drawable/btn_gray_selector"
-					android:textColor="@color/default_text"
-					android:text="@string/moments_compose_gallery_video"/>
-			</LinearLayout>
-		</LinearLayout>
-		<LinearLayout
-			android:id="@+id/vg_input_voice"
-			android:layout_height="wrap_content"
-			android:layout_width="fill_parent"
-			android:orientation="vertical">
-			<FrameLayout
-				android:layout_height="140dp"
-				android:layout_width="fill_parent">
-				<LinearLayout
-					android:id="@+id/mic_info"
-					android:layout_height="fill_parent"
-					android:layout_width="fill_parent"
-					android:orientation="vertical">
-					<TextView
-						android:id="@+id/mic_status"
-						android:layout_height="wrap_content"
-						android:layout_width="fill_parent"
-						android:layout_weight="1"
-						android:gravity="center_vertical|center_horizontal"
-						android:textColor="@color/black"
-						android:textSize="20dp"
-						android:text="Done!"/>
-					<org.wowtalk.ui.msg.TimerTextView
-						android:id="@+id/mic_time"
-						android:layout_height="wrap_content"
-						android:layout_width="fill_parent"
-						android:layout_weight="4"
-						android:gravity="center_vertical|center_horizontal"
-						android:textColor="@color/black"
-						android:textSize="50sp"
-						android:text="00:12"/>
-				</LinearLayout>
-				<ImageView
-					android:id="@+id/mic_image"
-					android:layout_height="110dp"
-					android:layout_width="170dp"
-					android:layout_gravity="center"
-					android:background="@drawable/write_mic_bg"/>
-			</FrameLayout>
-
-			<FrameLayout
-				android:layout_height="wrap_content"
-				android:layout_width="fill_parent"
-				android:layout_marginBottom="15dp">
-				<Button
-					android:id="@+id/mic_btn"
-					android:layout_height="wrap_content"
-					android:layout_width="wrap_content"
-					android:layout_gravity="center"
-					android:minWidth="200dp"
-					android:background="@drawable/btn_gray"
-					android:textSize="20sp"
-					android:textColor="@color/black"
-					android:text="@string/moments_voice_hold_to_speak"/>
-				<LinearLayout
-					android:id="@+id/mic_done"
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:paddingLeft="15dp"
-					android:paddingRight="15dp"
-					android:visibility="gone"
-					android:orientation="horizontal">
-					<Button
-						android:id="@+id/btn_play"
-						android:layout_height="wrap_content"
-						android:layout_width="0dp"
-						android:layout_weight="1"
-						android:layout_marginRight="7.5dp"
-						android:background="@drawable/btn_blue_selector"
-						android:textColor="@color/default_text"
-						android:textSize="20sp"
-						android:text="@string/play"/>
-					<Button
-						android:id="@+id/btn_delete"
-						android:layout_height="wrap_content"
-						android:layout_width="0dp"
-						android:layout_weight="1"
-						android:layout_marginLeft="7.5dp"
-						android:background="@drawable/btn_gray_selector"
-						android:textSize="20sp"
-						android:textColor="@color/default_text"
-						android:text="@string/contacts_local_delete"/>
-				</LinearLayout>
-			</FrameLayout>
-		</LinearLayout>
 	</LinearLayout>
 </co.onemeter.oneapp.ui.YQResizeLayout>

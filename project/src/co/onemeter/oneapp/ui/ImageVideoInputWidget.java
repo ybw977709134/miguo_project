@@ -19,8 +19,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * 允许用户输入多个图片和视频的小部件。
+ * 允许用户输入多个图片和视频的小部件。用法：
+ * <ul>
+ *     <li>{@link #setup(android.app.Activity, co.onemeter.oneapp.ui.ImageVideoInputWidget.MediaType, int)}</li>
+ *     <li>in {@link Activity#onSaveInstanceState(android.os.Bundle)} call {@link #saveInstanceState(android.os.Bundle)}</li>
+ *     <li>in {@link Activity#onCreate(android.os.Bundle)} call {@link #restoreInstanceState(android.os.Bundle)}</li>
+ *     <li>in {@link android.app.Activity#onActivityResult(int, int, android.content.Intent)} call
+ *     {@link #handleActivityResult(int, int, android.content.Intent)}</li>
+ * </ul>
+ *
  * Created by pzy on 11/8/14.
+ *
+ * TODO
+ *  # max count
+ *  # hint
  */
 public class ImageVideoInputWidget extends HorizontalScrollView {
 

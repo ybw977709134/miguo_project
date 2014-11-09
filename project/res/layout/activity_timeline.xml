@@ -72,7 +72,7 @@
 			<!-- 竖直分隔线 -->
 			<LinearLayout
 				android:layout_width="match_parent"
-				android:layout_height="240dp"
+				android:layout_height="210dp"
 				android:paddingTop="@dimen/padding_medium"
 				android:paddingBottom="@dimen/padding_medium"
 				android:orientation="horizontal" >
@@ -109,75 +109,6 @@
 					android:minHeight="100dp"
 					android:weightSum="3">
 					<FrameLayout
-						android:id="@+id/vg_new_text"
-						android:layout_weight="1"
-						android:layout_width="match_parent"
-						android:layout_height="match_parent"
-						android:paddingBottom="20dp">
-						<ImageView
-							android:layout_width="match_parent"
-							android:layout_height="match_parent"
-							android:layout_margin="20dp"
-							android:src="@drawable/share_new_text"/>
-						<TextView
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:text="@string/moment_add_text"
-							android:textColor="@color/text_gray1"
-							android:gravity="center"
-							android:layout_gravity="bottom"/>
-					</FrameLayout>
-					<FrameLayout
-						android:id="@+id/vg_new_pic"
-						android:layout_weight="1"
-						android:layout_width="match_parent"
-						android:layout_height="match_parent"
-						android:paddingBottom="20dp">
-						<ImageView
-							android:layout_width="match_parent"
-							android:layout_height="match_parent"
-							android:layout_margin="20dp"
-							android:src="@drawable/share_new_pic"/>
-						<TextView
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:text="@string/moment_add_pic"
-							android:textColor="@color/text_gray1"
-							android:gravity="center"
-							android:layout_gravity="bottom"/>
-					</FrameLayout>
-					<FrameLayout
-						android:id="@+id/vg_new_camera"
-						android:layout_weight="1"
-						android:layout_width="match_parent"
-						android:layout_height="match_parent"
-						android:paddingBottom="20dp">
-						<ImageView
-							android:layout_width="match_parent"
-							android:layout_height="match_parent"
-							android:layout_margin="20dp"
-							android:src="@drawable/share_new_camera"/>
-						<TextView
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:text="@string/moment_add_camera"
-							android:textColor="@color/text_gray1"
-							android:gravity="center"
-							android:layout_gravity="bottom"/>
-					</FrameLayout>
-				</LinearLayout>
-				<ImageView
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:paddingLeft="@dimen/padding_medium"
-					android:paddingRight="@dimen/padding_medium"
-					android:background="@drawable/timeline_divider_h"/>
-				<LinearLayout
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:minHeight="100dp"
-					android:weightSum="3">
-					<FrameLayout
 						android:id="@+id/vg_new_question"
 						android:layout_weight="1"
 						android:layout_width="match_parent"
@@ -197,6 +128,56 @@
 							android:layout_gravity="bottom"/>
 					</FrameLayout>
 					<FrameLayout
+						android:id="@+id/vg_new_study"
+						android:layout_weight="1"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:paddingBottom="20dp">
+						<ImageView
+							android:layout_width="match_parent"
+							android:layout_height="match_parent"
+							android:layout_margin="20dp"
+							android:src="@drawable/share_new_study"/>
+						<TextView
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:text="@string/moment_add_study"
+							android:textColor="@color/text_gray1"
+							android:gravity="center"
+							android:layout_gravity="bottom"/>
+					</FrameLayout>
+					<FrameLayout
+						android:id="@+id/vg_new_life"
+						android:layout_weight="1"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:paddingBottom="20dp">
+						<ImageView
+							android:layout_width="match_parent"
+							android:layout_height="match_parent"
+							android:layout_margin="20dp"
+							android:src="@drawable/share_new_life"/>
+						<TextView
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:text="@string/moment_add_life"
+							android:textColor="@color/text_gray1"
+							android:gravity="center"
+							android:layout_gravity="bottom"/>
+					</FrameLayout>
+				</LinearLayout>
+				<ImageView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingLeft="@dimen/padding_medium"
+					android:paddingRight="@dimen/padding_medium"
+					android:background="@drawable/timeline_divider_h"/>
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:minHeight="100dp"
+					android:weightSum="3">
+					<FrameLayout
 						android:id="@+id/vg_new_vote"
 						android:layout_weight="1"
 						android:layout_width="match_parent"
@@ -211,6 +192,25 @@
 							android:layout_width="match_parent"
 							android:layout_height="wrap_content"
 							android:text="@string/moment_add_vote"
+							android:textColor="@color/text_gray1"
+							android:gravity="center"
+							android:layout_gravity="bottom"/>
+					</FrameLayout>
+					<FrameLayout
+						android:id="@+id/vg_new_notice"
+						android:layout_weight="1"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:paddingBottom="20dp">
+						<ImageView
+							android:layout_width="match_parent"
+							android:layout_height="match_parent"
+							android:layout_margin="20dp"
+							android:src="@drawable/share_new_notice"/>
+						<TextView
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:text="@string/moment_add_notice"
 							android:textColor="@color/text_gray1"
 							android:gravity="center"
 							android:layout_gravity="bottom"/>

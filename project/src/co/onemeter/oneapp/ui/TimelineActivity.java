@@ -8,10 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.Review;
-import org.wowtalk.api.WowMomentWebServerIF;
+import org.wowtalk.api.*;
 import org.wowtalk.ui.GlobalValue;
 
 import java.util.ArrayList;
@@ -38,11 +35,11 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         q.find(R.id.btn_all).clicked(this);
         q.find(R.id.btn_me).clicked(this);
         q.find(R.id.title_edit).clicked(this);
-        q.find(R.id.vg_new_text).clicked(this);
-        q.find(R.id.vg_new_pic).clicked(this);
-        q.find(R.id.vg_new_camera).clicked(this);
         q.find(R.id.vg_new_question).clicked(this);
+        q.find(R.id.vg_new_study).clicked(this);
+        q.find(R.id.vg_new_life).clicked(this);
         q.find(R.id.vg_new_vote).clicked(this);
+        q.find(R.id.vg_new_notice).clicked(this);
         q.find(R.id.vg_new_video).clicked(this);
 
         newMomentPanel = q.find(R.id.new_moment_panel).clicked(this).getView();
@@ -103,37 +100,53 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
             case R.id.btn_me:
                 switchToMy();
                 break;
-            case R.id.vg_new_text:
-                gotoCreateMoment(CreateMomentActivity.MEDIA_TYPE_PLAIN_TEXT);
+            case R.id.vg_new_study:
+                gotoCreateMoment(Moment.SERVER_MOMENT_TAG_FOR_STUDY,
+                        CreateMomentActivity.MEDIA_FLAG_ALL,
+                        getString(R.string.moment_add_study));
                 hideNewMomentPanel();
                 break;
-            case R.id.vg_new_pic:
-                gotoCreateMoment(CreateMomentActivity.MEDIA_TYPE_PIC_ALBUM);
+            case R.id.vg_new_life:
+                gotoCreateMoment(Moment.SERVER_MOMENT_TAG_FOR_LIFE,
+                        CreateMomentActivity.MEDIA_FLAG_ALL,
+                        getString(R.string.moment_add_life));
                 hideNewMomentPanel();
                 break;
-            case R.id.vg_new_camera:
-                gotoCreateMoment(CreateMomentActivity.MEDIA_TYPE_PIC_CAMERA);
+            case R.id.vg_new_notice:
+                gotoCreateMoment(Moment.SERVER_MOMENT_TAG_FOR_NOTICE,
+                        CreateMomentActivity.MEDIA_FLAG_ALL,
+                        getString(R.string.moment_add_study));
                 hideNewMomentPanel();
                 break;
             case R.id.vg_new_question:
-                gotoCreateMoment(CreateMomentActivity.MEDIA_TYPE_QA);
+                gotoCreateMoment(Moment.SERVER_MOMENT_TAG_FOR_QA,
+                        CreateMomentActivity.MEDIA_FLAG_ALL,
+                        getString(R.string.moment_add_question));
                 hideNewMomentPanel();
                 break;
             case R.id.vg_new_vote:
-                gotoCreateMoment(CreateMomentActivity.MEDIA_TYPE_VOTE);
+                gotoCreateMoment(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE,
+                        CreateMomentActivity.MEDIA_FLAG_ALL,
+                        getString(R.string.moment_add_vote));
                 hideNewMomentPanel();
                 break;
             case R.id.vg_new_video:
-                gotoCreateMoment(CreateMomentActivity.MEDIA_TYPE_VIDEO);
+                gotoCreateMoment(Moment.SERVER_MOMENT_TAG_FOR_VIDEO,
+                        CreateMomentActivity.MEDIA_FLAG_PLAIN_TEXT
+                                | CreateMomentActivity.MEDIA_FLAG_VIDEO
+                                | CreateMomentActivity.MEDIA_FLAG_LOC,
+                        getString(R.string.moment_add_video));
                 hideNewMomentPanel();
                 break;
         }
     }
 
-    private void gotoCreateMoment(int mediaType) {
+    private void gotoCreateMoment(String tag, int mediaType, String pageTitle) {
         long maxTimeStamp=0; // TODO
         Intent intent = new Intent(this, CreateMomentActivity.class)
-                .putExtra(CreateMomentActivity.EXTRA_MEDIA_TYPE, mediaType)
+                .putExtra(CreateMomentActivity.EXTRA_SERVER_MOMENT_TAG, tag)
+                .putExtra(CreateMomentActivity.EXTRA_MEDIA_FLAGS, mediaType)
+                .putExtra(CreateMomentActivity.EXTRA_PAGE_TITLE, pageTitle)
                 .putExtra(CreateMomentActivity.EXTRA_KEY_MOMENT_MAX_TIMESTAMP, maxTimeStamp);
         startActivityForResult(intent, REQ_CREATE_MOMENT);
     }

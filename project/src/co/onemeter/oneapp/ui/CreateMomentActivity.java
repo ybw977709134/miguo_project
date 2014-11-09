@@ -60,27 +60,26 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
     private static final int PHOTO_THUMB_HEIGHT = 200;
 
     public final static String EXTRA_KEY_MOMENT_MAX_TIMESTAMP="moment_max_timestamp";
-    /** 附带的媒体类型，值为 MEDIA_TYPE_* 常量。 */
-    public final static String EXTRA_MEDIA_TYPE = "media_type";
+    public final static String EXTRA_PAGE_TITLE = "pagetitle";
+    /** moment tag, refer to {@link Moment#SERVER_MOMENT_TAG_FOR_QA} */
+    public final static String EXTRA_SERVER_MOMENT_TAG = "category";
+    /** 允许附带的媒体类型，值为 MEDIA_FLAG_* 常量的位组合。 */
+    public final static String EXTRA_MEDIA_FLAGS = "media_type";
     public final static String EXTRA_KEY_MOMENT_TAG_ID="moment_tag_id";
     public final static String ALIAS_ID_PREFIX="moment_alias_id_";
 
     /** 媒体类型。*/
-    public final static int MEDIA_TYPE_PLAIN_TEXT = 0;
+    public final static int MEDIA_FLAG_PLAIN_TEXT = 1;
     /** 媒体类型。*/
-    public final static int MEDIA_TYPE_PIC_ALBUM = 1;
+    public final static int MEDIA_FLAG_IMAGE = 2;
     /** 媒体类型。*/
-    public final static int MEDIA_TYPE_PIC_CAMERA = 10;
+    public final static int MEDIA_FLAG_VIDEO = 4;
     /** 媒体类型。*/
-    public final static int MEDIA_TYPE_VIDEO = 2;
+    public final static int MEDIA_FLAG_VOICE = 8;
     /** 媒体类型。*/
-    public final static int MEDIA_TYPE_QA = 3;
+    public final static int MEDIA_FLAG_LOC = 16;
     /** 媒体类型。*/
-    public final static int MEDIA_TYPE_VOTE = 4;
-    /** 媒体类型。*/
-    public final static int MEDIA_TYPE_VOICE = 5;
-    /** 媒体类型。*/
-    public final static int MEDIA_TYPE_LOC = 6;
+    public final static int MEDIA_FLAG_ALL = 0xFFFFFFFF;
 
 //    private FrameLayout mFrame;
 
@@ -117,7 +116,8 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
     private MediaPlayer mPlayer;
     private LocationHelper locationHelper;
 
-    private int mediaType;
+    private int mediaFlag;
+    private String pageTitle;
     private boolean mLocationOn = false;
     private boolean mIsLongClickRecord = false;
 
@@ -144,8 +144,17 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
 		}
 	};
 
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        new AQuery(this).find(R.id.title_text).text(pageTitle);
+    }
+
 	private void initView() {
         AQuery q = new AQuery(this);
+
+        if (!TextUtils.isEmpty(pageTitle))
+            setTitle(pageTitle);
 
         int[] layoutIds = new int[] {
                 R.id.vg_gallery,
@@ -156,22 +165,19 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         for (int id : layoutIds) {
             q.find(id).visibility(View.GONE);
         }
-        switch (mediaType) {
-            case MEDIA_TYPE_PIC_ALBUM:
-            case MEDIA_TYPE_PIC_CAMERA:
-                q.find(R.id.vg_gallery).visible();
-                q.find(R.id.vg_input_pic).visible();
-                break;
-            case MEDIA_TYPE_VIDEO:
-                q.find(R.id.vg_gallery).visible();
-                q.find(R.id.vg_input_video).visible();
-                break;
-            case MEDIA_TYPE_VOICE:
-                q.find(R.id.vg_input_voice).visible();
-                break;
-            case MEDIA_TYPE_LOC:
-                q.find(R.id.vg_input_loc).visible();
-                break;
+        if ((mediaFlag & MEDIA_FLAG_IMAGE) != 0) {
+            q.find(R.id.vg_gallery).visible();
+            q.find(R.id.vg_input_pic).visible();
+        }
+        if ((mediaFlag & MEDIA_FLAG_VIDEO) != 0) {
+            q.find(R.id.vg_gallery).visible();
+            q.find(R.id.vg_input_video).visible();
+        }
+        if ((mediaFlag & MEDIA_FLAG_VOICE) != 0) {
+            q.find(R.id.vg_input_voice).visible();
+        }
+        if ((mediaFlag & MEDIA_FLAG_LOC) != 0) {
+            q.find(R.id.vg_input_loc).visible();
         }
 
         q.find(R.id.btn_take_video).clicked(this);
@@ -910,7 +916,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.create_trend);
+		setContentView(R.layout.create_moment);
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
@@ -1001,7 +1007,9 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
 
     private void getData(Bundle bundle) {
         if (bundle != null) {
-            mediaType = bundle.getInt(EXTRA_MEDIA_TYPE, MEDIA_TYPE_PLAIN_TEXT);
+            mediaFlag = bundle.getInt(EXTRA_MEDIA_FLAGS, MEDIA_FLAG_PLAIN_TEXT);
+            moment.tag = bundle.getString(EXTRA_SERVER_MOMENT_TAG);
+            pageTitle = bundle.getString(EXTRA_PAGE_TITLE);
         }
     }
 
@@ -1011,7 +1019,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
 
         outState.putParcelable("media_helper", mediaHelper);
         outState.putParcelableArrayList("list_photo",listPhoto);
-        outState.putInt(EXTRA_MEDIA_TYPE, mediaType);
+        outState.putInt(EXTRA_MEDIA_FLAGS, mediaFlag);
 
         if(null != mLastVoiceFile && mLastVoiceFile.exists()) {
             outState.putString("last_voice_file",mLastVoiceFile.getAbsolutePath());

@@ -239,6 +239,8 @@
 	<string name="moments_compose_camera">拍照</string>
 	<string name="moments_compose_camera_video">摄像</string>
 	<string name="moments_compose_gallery">相册</string>
+	<string name="moments_compose_gallery_image">选择照片</string>
+	<string name="moments_compose_gallery_video">选择视频</string>
 	<string name="moments_compose_hint">写点什么呢？</string>
     <string name="moments_compose_hint_status">最近在忙点什么?</string>
     <string name="moments_compose_hint_qa">要提问什么吗?</string>
@@ -704,11 +706,12 @@
 	<string name="timeline_filter_category">分类</string>
 	<string name="moments_check_failed">无法获取最新动态</string>
 	<string name="moment_add_text">文字</string>
-	<string name="moment_add_pic">相册</string>
-	<string name="moment_add_camera">拍照</string>
+	<string name="moment_add_life">生活</string>
+	<string name="moment_add_study">学习</string>
 	<string name="moment_add_question">问答</string>
 	<string name="moment_add_vote">投票</string>
-	<string name="moment_add_video">视频</string>
+	<string name="moment_add_notice">通知</string>
+	<string name="moment_add_video">视频教程</string>
 	<string name="event_filter2">时间</string>
 	<string name="event_filter1">参与</string>
 	<string name="event_filter1_all">所有活动</string>

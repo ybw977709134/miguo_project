@@ -148,12 +148,12 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 //            ivMomentOpLeftDiv.setVisibility(View.VISIBLE);
 //        }
 
-        if(!TextUtils.isEmpty(moment.tag) && moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_QA)) {
+        if(!TextUtils.isEmpty(moment.tag) && moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_QA)) {
 //            layoutLike.setVisibility(View.GONE);
             layoutComment.setVisibility(View.GONE);
             layoutAnswer.setVisibility(View.VISIBLE);
         }
-        if(Moment.SERER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag) || Moment.SERER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
+        if(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag) || Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
 //            layoutLike.setVisibility(View.GONE);
             layoutComment.setVisibility(View.VISIBLE);
             layoutAnswer.setVisibility(View.GONE);

@@ -496,22 +496,22 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
     public static void setTagdesc(final Context context,final Moment moment,ImageView iv,TextView tv,
                                   LinearLayout voteSurveyLayout,final LinearLayoutAsListView lvSurveyOptions,final ArrayList<String> choosed,final Button btnSurvey) {
-        if(TextUtils.isEmpty(moment.tag) || moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_LIFE)) {
+        if(TextUtils.isEmpty(moment.tag) || moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_LIFE)) {
             iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_life));
             tv.setText(R.string.moment_tag_life);
-        } else if (moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_QA)) {
+        } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_QA)) {
             iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_qa));
             tv.setText(R.string.moment_tag_qa);
-        } else if (moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_NOTICE)) {
+        } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_NOTICE)) {
             iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_notice));
             tv.setText(R.string.moment_tag_notice);
-        } else if (moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_SURVEY_SINGLE) || moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_SURVEY_MULTI)) {
+        } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE) || moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI)) {
             iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_survey));
             tv.setText(R.string.moment_tag_survey);
-        } else if (moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_STUDY)) {
+        } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_STUDY)) {
             iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_study));
             tv.setText(R.string.moment_tag_study);
-        } else if (moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_VIDEO)) {
+        } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_VIDEO)) {
             iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_video));
             tv.setText(R.string.moment_tag_video);
         }
@@ -520,7 +520,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     }
 
     private static void setSurveyInfo(final Context context,final Moment moment,final LinearLayout voteSurveyLayout,final LinearLayoutAsListView lvSurveyOptions,final ArrayList<String> choosed,final Button btnSurvey) {
-        if(Moment.SERER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag) || Moment.SERER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
+        if(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag) || Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
             moment.showVoteInfo();
 
             voteSurveyLayout.setVisibility(View.VISIBLE);
@@ -666,7 +666,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     }
 
     private void setTagDescInfo(final ViewHolder holder,final Moment moment) {
-        if((Moment.SERER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag) || Moment.SERER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) &&
+        if((Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag) || Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) &&
                 null == surveyMomentChoosedItemList.get(moment.id)) {
             surveyMomentChoosedItemList.put(moment.id,new ArrayList<String>());
         }
@@ -733,11 +733,11 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     private void setupOpButtons(final ViewHolder holder,final Moment moment,final int position,
                                 ArrayList<Review> likeReview,ArrayList<Review> commentReview) {
         if (!TextUtils.isEmpty(moment.tag) &&
-                (moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_QA))) {
+                (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_QA))) {
             holder.layoutLike.setVisibility(View.VISIBLE);
             holder.layoutComment.setVisibility(View.GONE);
             holder.layoutAnswer.setVisibility(View.VISIBLE);
-        } else if (Moment.SERER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag) || Moment.SERER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
+        } else if (Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag) || Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
             holder.layoutLike.setVisibility(View.VISIBLE);
             holder.layoutComment.setVisibility(View.VISIBLE);
             holder.layoutAnswer.setVisibility(View.GONE);
@@ -869,7 +869,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //        final LinearLayout layoutAnswer=(LinearLayout) contentView.findViewById(R.id.layout_answer);
 //
 //        if(!TextUtils.isEmpty(moment.tag) &&
-//                (moment.tag.equals(Moment.SERER_MOMENT_TAG_FOR_QA))) {
+//                (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_QA))) {
 //            layoutLike.setVisibility(View.GONE);
 //            layoutComment.setVisibility(View.GONE);
 //            layoutAnswer.setVisibility(View.VISIBLE);

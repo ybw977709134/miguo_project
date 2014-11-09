@@ -552,26 +552,26 @@ public class MomentActivity extends Activity
             case TAG_ALL_IDX:
                 break;
             case TAG_NOTICE_IDX:
-                tag=Moment.SERER_MOMENT_TAG_FOR_LIFE;
+                tag=Moment.SERVER_MOMENT_TAG_FOR_LIFE;
                 break;
             case TAG_QA_IDX:
-                tag=Moment.SERER_MOMENT_TAG_FOR_QA;
+                tag=Moment.SERVER_MOMENT_TAG_FOR_QA;
                 break;
             case TAG_SURVEY_IDX:
                 if(surveyMultiSelect) {
-                    tag=Moment.SERER_MOMENT_TAG_FOR_SURVEY_MULTI;
+                    tag=Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI;
                 } else {
-                    tag=Moment.SERER_MOMENT_TAG_FOR_SURVEY_SINGLE;
+                    tag=Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE;
                 }
                 break;
             case TAG_STUDY_IDX:
-                tag=Moment.SERER_MOMENT_TAG_FOR_NOTICE;
+                tag=Moment.SERVER_MOMENT_TAG_FOR_NOTICE;
                 break;
             case TAG_LIFE_IDX:
-                tag=Moment.SERER_MOMENT_TAG_FOR_STUDY;
+                tag=Moment.SERVER_MOMENT_TAG_FOR_STUDY;
                 break;
             case TAG_VIDEO_IDX:
-                tag=Moment.SERER_MOMENT_TAG_FOR_VIDEO;
+                tag=Moment.SERVER_MOMENT_TAG_FOR_VIDEO;
                 break;
             default:
                 break;

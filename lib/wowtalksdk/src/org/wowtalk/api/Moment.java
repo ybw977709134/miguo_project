@@ -26,13 +26,13 @@ public class Moment implements Parcelable, IHasMultimedia, IHasReview {
     public Buddy owner;
 	public boolean likedByMe;
 
-    public final static String SERER_MOMENT_TAG_FOR_NOTICE ="0";
-    public final static String SERER_MOMENT_TAG_FOR_QA="1";
-    public final static String SERER_MOMENT_TAG_FOR_STUDY ="2";
-    public final static String SERER_MOMENT_TAG_FOR_LIFE ="3";
-    public final static String SERER_MOMENT_TAG_FOR_SURVEY_SINGLE="4";
-    public final static String SERER_MOMENT_TAG_FOR_SURVEY_MULTI="41";
-    public final static String SERER_MOMENT_TAG_FOR_VIDEO ="5";
+    public final static String SERVER_MOMENT_TAG_FOR_NOTICE ="0";
+    public final static String SERVER_MOMENT_TAG_FOR_QA ="1";
+    public final static String SERVER_MOMENT_TAG_FOR_STUDY ="2";
+    public final static String SERVER_MOMENT_TAG_FOR_LIFE ="3";
+    public final static String SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE ="4";
+    public final static String SERVER_MOMENT_TAG_FOR_SURVEY_MULTI ="41";
+    public final static String SERVER_MOMENT_TAG_FOR_VIDEO ="5";
 
     public String tag="";
 

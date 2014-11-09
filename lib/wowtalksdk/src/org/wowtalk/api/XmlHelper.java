@@ -622,7 +622,7 @@ public class XmlHelper {
         if (optionNodes == null || moment == null)
             return;
 
-        if(Moment.SERER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
+        if(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
             moment.isSurveyAllowMultiSelect=true;
         } else {
             moment.isSurveyAllowMultiSelect=false;

@@ -577,9 +577,9 @@ public class InputBoardManager implements Parcelable,
                 mBtnEmotion.setBackgroundResource(momentUnlikeDrawableResId);
             }
 //            if(likeRelateMoment.likedByMe ||
-//                    Moment.SERER_MOMENT_TAG_FOR_QA.equals(likeRelateMoment.tag) ||
-//                    Moment.SERER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(likeRelateMoment.tag) ||
-//                    Moment.SERER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(likeRelateMoment.tag)) {
+//                    Moment.SERVER_MOMENT_TAG_FOR_QA.equals(likeRelateMoment.tag) ||
+//                    Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(likeRelateMoment.tag) ||
+//                    Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(likeRelateMoment.tag)) {
 //                mBtnEmotion.setVisibility(View.GONE);
 //            } else {
 //                mBtnEmotion.setVisibility(View.VISIBLE);

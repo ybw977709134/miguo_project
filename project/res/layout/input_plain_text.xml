@@ -48,7 +48,7 @@
                 android:layout_marginRight="15dp"
                 android:maxLength="80"
                 android:singleLine="true"
-                android:background="@drawable/table_white"
+                style="@style/inputbox_white"
                 android:imeOptions="actionDone"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"/>

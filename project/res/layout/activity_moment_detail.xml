@@ -64,7 +64,7 @@
                     android:paddingLeft="@dimen/padding_medium"
                     android:paddingBottom="@dimen/padding_small"
                     android:orientation="horizontal">
-                    <org.wowtalk.ui.msg.RoundedImageView
+	                <co.onemeter.oneapp.ui.CircleImageView
                         android:id="@+id/img_photo"
                         android:layout_height="50dp"
                         android:layout_width="50dp"

@@ -12,8 +12,6 @@ import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.AppUpgradeTask;
 import com.umeng.analytics.MobclickAgent;
@@ -35,18 +33,7 @@ public class SettingActivity extends Activity implements OnClickListener {
     private static final int MSG_LOGOUT_SUCCESS = 100;
     private static final int HANDLER_GET_ACCOUNT_UNREAD_COUNT = 1;
 
-	private RelativeLayout mInformation;
-	private RelativeLayout mAccount;
-
-    private TextView mName;
-	private TextView mPrivacy;
-	private TextView mPlugin;
-	private TextView mTellFriend;
-	private TextView mAboutus;
-    private TextView mLogout;
-
 	private ImageView imgPhoto;
-	private TextView txtPwdState;
 	private MessageBox mMsgBox;
 
     private WowTalkWebServerIF mWeb;
@@ -107,28 +94,9 @@ public class SettingActivity extends Activity implements OnClickListener {
     };
 
     private void initView() {
-		mInformation = (RelativeLayout) findViewById(R.id.information);
-		mAccount = (RelativeLayout) findViewById(R.id.account);
-        mName = (TextView)findViewById(R.id.txt_name);
-		mPrivacy = (TextView) findViewById(R.id.privacy);
-		mPlugin = (TextView) findViewById(R.id.plug_in);
-		mTellFriend = (TextView) findViewById(R.id.tell_friend);
-		mAboutus = (TextView) findViewById(R.id.about_us);
-        mLogout = (TextView) findViewById(R.id.logout);
 		imgPhoto = (ImageView) findViewById(R.id.img_thumbnail);
-		txtPwdState = (TextView) findViewById(R.id.pwd_state);
 
         updateNoticeStatus();
-
-		mInformation.setOnClickListener(this);
-        imgPhoto.setOnClickListener(this);
-		mAccount.setOnClickListener(this);
-		mPrivacy.setOnClickListener(this);
-		mPlugin.setOnClickListener(this);
-		mTellFriend.setOnClickListener(this);
-		mAboutus.setOnClickListener(this);
-        mLogout.setOnClickListener(this);
-        findViewById(R.id.emergency_contact).setOnClickListener(this);
 	}
 
     private void updateNoticeStatus() {
@@ -150,16 +118,11 @@ public class SettingActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
-            case R.id.emergency_contact:
-                intent.setClass(SettingActivity.this, EmergencyContactActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.information:
             case R.id.img_thumbnail:
                 intent.setClass(SettingActivity.this, MyInfoActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.account:
+            case R.id.settings_account:
                 if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
                     intent.setClass(SettingActivity.this, AccountSettingActivity_biz.class);
                 } else {
@@ -167,20 +130,15 @@ public class SettingActivity extends Activity implements OnClickListener {
                 }
                 startActivity(intent);
                 break;
-            case R.id.trends:
-                MomentActivity.launchMy(SettingActivity.this);
-                break;
-            case R.id.privacy:
+            case R.id.settings_privacy:
                 intent.setClass(SettingActivity.this, PrivacySettingActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.about_us:
+            case R.id.settings_about:
                 intent.setClass(SettingActivity.this, AboutPage.class);
                 startActivity(intent);
                 break;
-            case R.id.plug_in:
-                break;
-            case R.id.tell_friend:
+            case R.id.settings_tell_friend:
                 tellFriend(v);
                 break;
             case R.id.logout:
@@ -348,16 +306,10 @@ public class SettingActivity extends Activity implements OnClickListener {
 		super.onResume();
         MobclickAgent.onResume(this);
         AppStatusService.setIsMonitoring(true);
-		if (PrefUtil.getInstance(this).getMyPasswordChangedState()) {
-			txtPwdState.setVisibility(View.GONE);
-		} else {
-			txtPwdState.setVisibility(View.VISIBLE);
-		}
 		Buddy me = new Buddy();
 		me.userID = PrefUtil.getInstance(this).getUid();
 		me.photoUploadedTimeStamp = PrefUtil.getInstance(this).getMyPhotoUploadedTimestamp();
 		PhotoDisplayHelper.displayPhoto(this, imgPhoto, R.drawable.default_avatar_90, me, true);
-        mName.setText(mPrefUtil.getMyNickName());
 
         updateNoticeStatus();
         setAccountData();

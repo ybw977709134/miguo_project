@@ -68,7 +68,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="5dp"
         android:layout_toRightOf="@+id/listItem_checkbox">
-        <org.wowtalk.ui.msg.RoundedImageView
+	    <co.onemeter.oneapp.ui.CircleImageView
         	android:id="@+id/contactPhoto"
         	android:layout_width="50dp"
         	android:layout_height="50dp"

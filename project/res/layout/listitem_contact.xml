@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_gravity="center_vertical">
-            <org.wowtalk.ui.msg.RoundedImageView 
+	        <co.onemeter.oneapp.ui.CircleImageView
                 android:id="@+id/contact_photo"
                 android:layout_height="@dimen/contact_icon_size"
                 android:layout_width="@dimen/contact_icon_size"

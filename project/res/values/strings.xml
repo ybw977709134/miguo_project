@@ -20,7 +20,7 @@
 	<string name="tab_contacts">小伙伴</string>
 	<string name="tab_friends">好友圈</string>
 	<string name="tab_events">活动</string>
-	<string name="tab_settings">更多</string>
+	<string name="tab_settings">设置</string>
 
     <string name="title_group_apply">入群请求</string>
 
@@ -153,7 +153,7 @@
     <string name="event_info1">人数限制为0时表示无限制\n报名费用为0时表示不收取报名费</string>
     <string name="event_info2">活动介绍可以帮助其他用户更好地了解此活动，请不要过于简略。</string>
 
-    <string name="settings_myinfo">我的资料</string>
+    <string name="settings_myinfo">个人信息</string>
     <string name="my_treasure">我的百宝箱</string>
     <string name="settings_account_online"> 在线 </string>
     <string name="settings_account_unread_count"> %d 条未读 </string>
@@ -163,7 +163,7 @@
     <string name="settings_tell_friend">告诉朋友</string>
     <string name="settings_rate">评价我们</string>
     <string name="settings_about_us">关于我们</string>
-	<string name="settings_pagetitle">个人中心</string>
+	<string name="settings_pagetitle">设置</string>
     <string name="settings_about">关于</string>
 	<string name="settings_profile">个人资料</string>
 	<string name="settings_avatar">头像</string>
@@ -730,4 +730,5 @@
 	<string name="moment_add_touch_to_loc">加入当前位置信息</string>
 	<string name="moment_add_touch_to_stop_record">点击停止录音</string>
 	<string name="moment_add_locating">正在获取位置信息…</string>
+	<string name="settings_my_qrcode">我的二维码</string>
 </resources>

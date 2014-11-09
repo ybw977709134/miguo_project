@@ -112,8 +112,6 @@
 		<RelativeLayout
 			android:id="@+id/vg_input_loc"
 			android:layout_height="wrap_content"
-			android:paddingLeft="5dp"
-			android:paddingRight="5dp"
 			android:layout_width="fill_parent">
 			<Button
 				android:id="@+id/btn_loc"

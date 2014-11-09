@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/white" >
+    android:background="@color/background" >
 
     <RelativeLayout
         android:id="@+id/title_bar"
@@ -51,12 +51,14 @@
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:layout_margin="10dp"
-                android:background="@drawable/table_white"
+                android:background="@color/white"
                 android:orientation="vertical">
                 <LinearLayout
                     android:id="@+id/layout_title"
                     android:layout_height="@dimen/table_cell_white_height"
                     android:layout_width="fill_parent"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="@dimen/padding_medium"
                     android:orientation="horizontal">
                     <TextView
                         android:layout_height="wrap_content"
@@ -83,6 +85,8 @@
                     android:id="@+id/layout_loc"
                     android:layout_height="@dimen/table_cell_white_height"
                     android:layout_width="fill_parent"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="@dimen/padding_medium"
                     android:orientation="horizontal">
                     <TextView
                         android:layout_height="wrap_content"
@@ -107,12 +111,14 @@
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:layout_margin="10dp"
-                android:background="@drawable/table_white"
+                android:background="@color/white"
                 android:orientation="vertical">
                 <LinearLayout
                     android:id="@+id/layout_starttime"
                     android:layout_height="@dimen/table_cell_white_height"
                     android:layout_width="fill_parent"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="@dimen/padding_medium"
                     android:orientation="horizontal">
                     <TextView
                         android:layout_height="wrap_content"
@@ -141,6 +147,8 @@
                     android:id="@+id/layout_endtime"
                     android:layout_height="@dimen/table_cell_white_height"
                     android:layout_width="fill_parent"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="@dimen/padding_medium"
                     android:orientation="horizontal">
                     <TextView
                         android:layout_height="wrap_content"
@@ -286,12 +294,14 @@
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:layout_margin="10dp"
-                android:background="@drawable/table_white"
+                android:background="@color/white"
                 android:orientation="vertical">
                 <LinearLayout
                     android:id="@+id/layout_capacity"
                     android:layout_height="@dimen/table_cell_white_height"
                     android:layout_width="fill_parent"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="@dimen/padding_medium"
                     android:orientation="horizontal">
                     <TextView
                         android:layout_height="wrap_content"
@@ -374,6 +384,8 @@
                     android:id="@+id/layout_coins"
                     android:layout_height="@dimen/table_cell_white_height"
                     android:layout_width="fill_parent"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="@dimen/padding_medium"
                     android:orientation="horizontal">
                     <TextView
                         android:layout_height="wrap_content"
@@ -400,34 +412,12 @@
                 android:layout_width="fill_parent"
                 android:layout_margin="10dp"
                 android:orientation="vertical">
-                <LinearLayout
-                    android:id="@+id/layout_addphoto"
-                    android:layout_height="@dimen/table_cell_white_height"
-                    android:layout_width="fill_parent"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:text="@string/event_addphoto"/>
-                    <TextView
-                        android:id="@+id/txt_addphoto"
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:layout_weight="2"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="10dp"
-                        android:textSize="18sp"/>
-                </LinearLayout>
 	            <co.onemeter.oneapp.ui.ImageVideoInputWidget
 		            android:id="@+id/image_input_widget"
 		            android:layout_width="match_parent"
 		            android:layout_height="wrap_content"
-		            android:layout_marginLeft="10dp" >
+		            android:padding="@dimen/padding_small"
+		            android:background="@color/white">
 
 				</co.onemeter.oneapp.ui.ImageVideoInputWidget>
                 <ImageView
@@ -467,9 +457,9 @@
                 android:layout_width="fill_parent"
                 android:layout_margin="10dp"
                 android:gravity="top|left"
-                android:background="@drawable/table_white"
+                style="@style/inputbox_white"
                 android:padding="10dp"
-                android:hint="@string/event_info2" />
+                android:hint="@string/event_desc" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

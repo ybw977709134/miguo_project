@@ -4,7 +4,7 @@
 	xmlns:circleImageView="http://schemas.android.com/apk/res/co.onemeter.oneapp"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:background="@color/white"
+	android:background="@color/background"
 	android:orientation="vertical"
 	android:focusableInTouchMode="true">
 
@@ -30,352 +30,97 @@
 		android:layout_below="@+id/title_bar">
 
 		<LinearLayout
-			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			android:layout_marginTop="@dimen/setting_items_padding"
 			android:orientation="vertical">
 
-			<LinearLayout
-				android:layout_height="wrap_content"
-				android:layout_width="fill_parent"
-				android:background="@drawable/table_white"
-				android:visibility="gone"
-				android:orientation="vertical">
+			<ImageView
+				style="@style/standard_list_divider"/>
 
-				<ImageView
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:background="@drawable/divider"/>
-
-				<RelativeLayout
-					android:id="@+id/account"
-					android:layout_width="fill_parent"
-					android:layout_height="50dp"
-					android:paddingLeft="10dp"
-					android:paddingRight="10dp"
-					android:clickable="true">
-					<ImageView
-						android:id="@+id/arrow"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_alignParentRight="true"
-						android:layout_centerVertical="true"
-						android:layout_marginLeft="14dp"
-						android:background="@null"
-						android:src="@drawable/table_arrow"/>
-
-					<TextView
-						android:layout_width="wrap_content"
-						android:layout_height="match_parent"
-						android:gravity="center_vertical"
-						android:layout_alignParentLeft="true"
-						android:drawablePadding="@dimen/setting_txt_offset_to_icon"
-						android:drawableLeft="@drawable/table_account"
-						android:text="@string/settings_account_set"
-						android:textColor="@color/black"
-						android:textStyle="bold"
-						android:textSize="18sp"/>
-
-					<TextView
-						android:id="@+id/pwd_state"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_centerVertical="true"
-						android:layout_toLeftOf="@+id/arrow"
-						android:text="密码未设定"
-						android:textColor="@color/setting_orange"
-						android:textSize="18sp"/>
-
-				</RelativeLayout>
-
-				<ImageView
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:visibility="gone"
-					android:background="@drawable/divider"/>
-
+			<RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
 				<TextView
-					android:id="@+id/privacy"
-					android:layout_width="fill_parent"
-					android:layout_height="50dp"
-					android:gravity="center_vertical"
-					android:paddingLeft="10dp"
-					android:paddingRight="10dp"
-					android:drawableRight="@drawable/table_arrow"
-					android:text="@string/settings_privacy"
-					android:textColor="@color/black"
-					android:textStyle="bold"
-					android:textSize="18sp"
-					android:visibility="gone"
-					android:clickable="true"/>
-			</LinearLayout>
+					android:id="@+id/settings_myinfo"
+					android:text="@string/settings_myinfo"
+					style="@style/standard_list_item_with_arrow"/>
 
-			<LinearLayout
-				android:layout_height="wrap_content"
-				android:layout_width="fill_parent"
-				android:layout_marginTop="@dimen/setting_items_padding"
-				android:orientation="vertical">
+				<co.onemeter.oneapp.ui.CircleImageView
+					android:id="@+id/img_thumbnail"
+					android:layout_width="40dp"
+					android:layout_height="40dp"
+					android:layout_centerVertical="true"
+					android:layout_alignParentRight="true"
+					android:layout_marginRight="40dp"
+					android:src="@drawable/default_avatar_90" />
+			</RelativeLayout>
 
-				<RelativeLayout
-					android:id="@+id/information"
-					android:layout_width="fill_parent"
-					android:layout_height="100dp"
-					android:paddingLeft="10dp"
-					android:paddingRight="10dp"
-					android:gravity="center_vertical"
-					android:clickable="true">
-
-					<co.onemeter.oneapp.ui.CircleImageView
-						android:id="@+id/img_thumbnail"
-						android:layout_height="100dp"
-						android:layout_width="100dp"
-						circleImageView:circle_border_width="2dp"
-						android:layout_alignParentLeft="true"
-						android:layout_centerVertical="true"
-						android:clickable="true"
-						android:src="@drawable/default_avatar_90" />
-
-					<ImageButton
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_alignParentRight="true"
-						android:layout_centerVertical="true"
-						android:layout_marginLeft="14dp"
-						android:background="@null"
-						android:src="@drawable/table_arrow"/>
-
-					<TextView
-						android:id="@+id/txt_name"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_toRightOf="@+id/img_thumbnail"
-						android:layout_marginLeft="@dimen/setting_txt_offset_to_icon"
-						android:layout_centerVertical="true"
-						android:text="@string/settings_myinfo"
-						android:textColor="@color/black"
-						android:textStyle="bold"
-						android:textSize="18sp"/>
-				</RelativeLayout>
-
-				<ImageView
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:background="@drawable/divider"/>
-
-				<TextView
-					android:layout_width="fill_parent"
-					android:layout_height="50dp"
-					android:gravity="center_vertical"
-					android:paddingLeft="10dp"
-					android:paddingRight="10dp"
-					android:drawablePadding="@dimen/setting_txt_offset_to_icon"
-					android:drawableRight="@drawable/table_arrow"
-					android:text="@string/my_treasure"
-					android:textColor="@color/black"
-					android:textStyle="bold"
-					android:textSize="18sp"
-					android:clickable="true"/>
-
-				<ImageView
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:layout_marginLeft="10dp"
-					android:background="@drawable/divider"/>
-
-				<TextView
-					android:layout_width="fill_parent"
-					android:layout_height="50dp"
-					android:gravity="center_vertical"
-					android:paddingLeft="10dp"
-					android:paddingRight="10dp"
-					android:drawablePadding="@dimen/setting_txt_offset_to_icon"
-					android:drawableRight="@drawable/table_arrow"
-					android:text="@string/my_store"
-					android:textColor="@color/black"
-					android:textStyle="bold"
-					android:textSize="18sp"
-					android:clickable="true"/>
-
-				<ImageView
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:layout_marginLeft="10dp"
-					android:background="@drawable/divider"/>
-				<TextView
-					android:layout_width="fill_parent"
-					android:layout_height="50dp"
-					android:gravity="center_vertical"
-					android:paddingLeft="10dp"
-					android:paddingRight="10dp"
-					android:drawablePadding="@dimen/setting_txt_offset_to_icon"
-					android:drawableRight="@drawable/table_arrow"
-					android:text="@string/my_bonus_qa"
-					android:textColor="@color/black"
-					android:textStyle="bold"
-					android:textSize="18sp"
-					android:clickable="true"/>
-
-				<ImageView
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:layout_marginLeft="10dp"
-					android:background="@drawable/divider"/>
-				<TextView
-					android:layout_width="fill_parent"
-					android:layout_height="50dp"
-					android:gravity="center_vertical"
-					android:paddingLeft="10dp"
-					android:paddingRight="10dp"
-					android:drawablePadding="@dimen/setting_txt_offset_to_icon"
-					android:drawableRight="@drawable/table_arrow"
-					android:text="@string/my_funny_school"
-					android:textColor="@color/black"
-					android:textStyle="bold"
-					android:textSize="18sp"
-					android:clickable="true"/>
-
-				<ImageView
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:layout_marginLeft="10dp"
-					android:background="@drawable/divider"/>
-				<TextView
-					android:layout_width="fill_parent"
-					android:layout_height="50dp"
-					android:gravity="center_vertical"
-					android:paddingLeft="10dp"
-					android:paddingRight="10dp"
-					android:drawablePadding="@dimen/setting_txt_offset_to_icon"
-					android:drawableRight="@drawable/table_arrow"
-					android:text="@string/my_lesson_history"
-					android:textColor="@color/black"
-					android:textStyle="bold"
-					android:textSize="18sp"
-					android:clickable="true"/>
-
-				<ImageView
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:layout_marginLeft="10dp"
-					android:background="@drawable/divider"/>
-
-				<TextView
-					android:id="@+id/about_us"
-					android:layout_width="fill_parent"
-					android:layout_height="50dp"
-					android:gravity="center_vertical"
-					android:paddingLeft="10dp"
-					android:paddingRight="10dp"
-					android:drawablePadding="@dimen/setting_txt_offset_to_icon"
-					android:drawableRight="@drawable/table_arrow"
-					android:text="@string/settings_about"
-					android:textColor="@color/black"
-					android:textStyle="bold"
-					android:textSize="18sp"
-					android:clickable="true"/>
-
-			</LinearLayout>
-
-			<LinearLayout
-				android:layout_height="50dp"
-				android:layout_width="fill_parent"
-				android:layout_marginTop="@dimen/setting_items_padding"
-				android:background="@drawable/table_white"
-				android:orientation="vertical"
-				android:visibility="gone">
-				<TextView
-					android:id="@+id/emergency_contact"
-					android:layout_height="match_parent"
-					android:layout_width="fill_parent"
-					android:drawablePadding="@dimen/setting_txt_offset_to_icon"
-					android:drawableLeft="@drawable/table_disaster"
-					android:drawableRight="@drawable/table_arrow"
-					android:paddingLeft="10dp"
-					android:paddingRight="10dp"
-					android:gravity="center_vertical"
-					android:textColor="@color/black"
-					android:textSize="18sp"
-					android:textStyle="bold"
-					android:text="@string/emergency_contact_txt"
-					android:clickable="true"/>
-			</LinearLayout>
+			<ImageView
+				style="@style/standard_list_divider"/>
 
 			<TextView
-				android:id="@+id/plug_in"
-				android:layout_height="50dp"
-				android:layout_width="fill_parent"
-				android:layout_marginTop="@dimen/setting_items_padding"
-				android:paddingLeft="10dp"
-				android:paddingRight="10dp"
-				android:gravity="center_vertical"
-				android:drawableRight="@drawable/table_arrow"
-				android:background="@drawable/group_list_bg_single"
-				android:textColor="@color/black"
-				android:textStyle="bold"
-				android:textSize="18sp"
-				android:text="插件"
-				android:visibility="gone"
-				android:clickable="true"/>
+				android:id="@+id/settings_my_qrcode"
+				android:text="@string/settings_my_qrcode"
+				style="@style/standard_list_item_with_arrow"/>
 
-			<LinearLayout
-				android:layout_height="wrap_content"
-				android:layout_width="fill_parent"
-				android:layout_marginTop="@dimen/setting_items_padding"
-				android:layout_marginBottom="@dimen/setting_items_padding"
-				android:orientation="vertical">
+			<ImageView
+				style="@style/standard_list_divider"/>
 
-				<ImageView
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:visibility="gone"
-					android:background="@drawable/divider"/>
-				<TextView
-					android:id="@+id/tell_friend"
-					android:layout_width="fill_parent"
-					android:layout_height="50dp"
-					android:gravity="center_vertical"
-					android:paddingLeft="10dp"
-					android:paddingRight="10dp"
-					android:drawableRight="@drawable/table_arrow"
-					android:text="@string/settings_tell_friend"
-					android:textColor="@color/black"
-					android:textStyle="bold"
-					android:textSize="18sp"
-					android:clickable="true"
-					android:visibility="gone"/>
+			<TextView
+				android:id="@+id/settings_account"
+				android:text="@string/settings_account"
+				style="@style/standard_list_item_with_arrow"/>
 
-				<ImageView
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:layout_marginLeft="10dp"
-					android:background="@drawable/divider"/>
+			<ImageView
+				style="@style/standard_list_divider"/>
 
+			<TextView
+				android:id="@+id/settings_privacy"
+				android:text="@string/settings_privacy"
+				style="@style/standard_list_item_with_arrow"/>
 
-				<ImageView
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:background="@drawable/divider"/>
+			<ImageView
+				style="@style/standard_list_divider"/>
 
-				<TextView
-					android:id="@+id/logout"
-					android:layout_height="50dp"
-					android:layout_width="fill_parent"
-					android:paddingLeft="10dp"
-					android:paddingRight="10dp"
-					android:drawablePadding="@dimen/setting_txt_offset_to_icon"
-					android:textSize="18sp"
-					android:textStyle="bold"
-					android:background="@drawable/menu_view_middle_selector"
-					android:textColor="@color/red"
-					android:gravity="center"
-					android:text="@string/manage_account_logout"
-					android:clickable="true"/>
-				<ImageView
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:background="@drawable/divider"/>
-			</LinearLayout>
+			<ImageView
+				android:layout_marginTop="@dimen/padding_large"
+				style="@style/standard_list_divider"/>
+
+			<TextView
+				android:id="@+id/settings_upgrade_check_for_updates"
+				android:text="@string/settings_upgrade_check_for_updates"
+				style="@style/standard_list_item_with_arrow"/>
+
+			<ImageView
+				style="@style/standard_list_divider"/>
+
+			<TextView
+				android:id="@+id/settings_tell_friend"
+				android:text="@string/settings_tell_friend"
+				style="@style/standard_list_item_with_arrow"/>
+
+			<ImageView
+				style="@style/standard_list_divider"/>
+
+			<TextView
+				android:id="@+id/settings_rate"
+				android:text="@string/settings_rate"
+				style="@style/standard_list_item_with_arrow"/>
+
+			<ImageView
+				style="@style/standard_list_divider"/>
+
+			<TextView
+				android:id="@+id/settings_about"
+				android:text="@string/settings_about"
+				style="@style/standard_list_item_with_arrow"/>
+
+			<ImageView
+				style="@style/standard_list_divider"/>
 
 		</LinearLayout>
+
 	</ScrollView>
 
 </RelativeLayout>

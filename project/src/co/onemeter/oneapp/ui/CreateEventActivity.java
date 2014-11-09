@@ -86,7 +86,6 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         findViewById(R.id.layout_targetuser).setOnClickListener(this);
         findViewById(R.id.layout_capacity).setOnClickListener(this);
         findViewById(R.id.layout_coins).setOnClickListener(this);
-        findViewById(R.id.layout_addphoto).setOnClickListener(this);
         findViewById(R.id.layout_addaudio).setOnClickListener(this);
 
         if (bundle != null) {
@@ -264,8 +263,6 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                                 .putExtra(InputPlainTextActivity.EXTRA_ALLOW_EMPTY, true)
                                 .putExtra(InputPlainTextActivity.EXTRA_INPUTTYPE, InputType.TYPE_CLASS_NUMBER),
                         REQ_INPUT_COINS);
-                break;
-            case R.id.layout_addphoto:
                 break;
             case R.id.layout_addaudio:
                 break;

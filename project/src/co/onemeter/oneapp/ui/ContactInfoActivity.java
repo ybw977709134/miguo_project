@@ -590,7 +590,6 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 //                CallMainActivity.startNewOutGoingCall(ContactInfoActivity.this, buddy.userID, buddy.nickName, false);
                 showCallPop();
                 break;
-            //case R.id.img_thumbnail_mask:
             case R.id.img_thumbnail:
                 ImageViewActivity.launch(this, buddy);
                 break;

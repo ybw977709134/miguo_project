@@ -55,17 +55,14 @@
                     android:layout_marginRight="10dp"
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true">
-                    <org.wowtalk.ui.msg.RoundedImageView 
+	                <co.onemeter.oneapp.ui.CircleImageView
                         android:id="@+id/img_thumbnail"
                         android:layout_height="match_parent"
                         android:layout_width="match_parent"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:scaleType="fitCenter"
                         android:clickable="true"
-                        roundedImgView:corner_radius="@dimen/rounded_img_view_cornor_radius"
-                        roundedImgView:border_width="@dimen/rounded_img_view_border_width"
-                        roundedImgView:border_color="@color/rounded_img_view_border_color"
+                        android:src="@drawable/default_avatar_90"
                         roundedImgView:click_dim="true"/>
 <!--
                     <ImageView
@@ -77,12 +74,6 @@
                         android:scaleType="fitCenter"
                         android:background="@drawable/default_avatar_90"/>
  -->
-                    <ImageView
-	                    android:id="@+id/img_thumbnail_mask"
-                        android:layout_height="fill_parent"
-                        android:layout_width="fill_parent"
-                        android:background="@drawable/photo_frame"
-                        android:visibility="gone"/>
                     <ImageView
                         android:id="@+id/avatar_bar"
                         android:layout_height="wrap_content"

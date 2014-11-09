@@ -5,10 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
-import org.wowtalk.ui.GlobalValue;
-import org.wowtalk.ui.msg.RoundedImageView;
 import co.onemeter.oneapp.R;
+import org.wowtalk.ui.GlobalValue;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +49,7 @@ public class FunctionAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listitem_contact_function, parent, false);
         }
-        RoundedImageView imgView = (RoundedImageView) convertView.findViewById(R.id.contact_photo);
+        ImageView imgView = (ImageView) convertView.findViewById(R.id.contact_photo);
         TextView txtName = (TextView) convertView.findViewById(R.id.txt_name);
         TextView txtInfo = (TextView) convertView.findViewById(R.id.new_info);
         imgView.setImageResource(list.get(position).get("image"));

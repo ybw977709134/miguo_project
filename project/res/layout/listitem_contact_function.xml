@@ -6,17 +6,13 @@
                 android:layout_height="60dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp">
-    <org.wowtalk.ui.msg.RoundedImageView
+	<co.onemeter.oneapp.ui.CircleImageView
         android:id="@+id/contact_photo"
         android:layout_height="@dimen/contact_icon_size"
         android:layout_width="@dimen/contact_icon_size"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"
-        roundedImgView:corner_radius="@dimen/rounded_img_view_cornor_radius"
-        roundedImgView:border_width="@dimen/rounded_img_view_border_width"
-        roundedImgView:border_color="@color/rounded_img_view_border_color"
-        roundedImgView:click_dim="false"
         android:clickable="false"
         android:src="@drawable/default_avatar_90"/>
     <TextView

@@ -39,7 +39,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:hint="@string/invite_code"
-			style="@style/inputbox_green"/>
+			style="@style/inputbox_white"/>
 
 		<Button
 			android:id="@+id/btn_add"

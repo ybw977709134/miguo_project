@@ -6,18 +6,17 @@ import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.adapter.GroupMembersGridAdapter;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.*;
 import org.wowtalk.ui.msg.MessageComposerActivityBase;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.adapter.GroupMembersGridAdapter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -131,7 +130,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 		btnTitleSetting.setOnClickListener(this);
         btnTitleMore.setOnClickListener(this);
 		btnGroupChat.setOnClickListener(this);
-		findViewById(R.id.img_thumbnail_mask).setOnClickListener(this);
+		findViewById(R.id.img_thumbnail).setOnClickListener(this);
 		findViewById(R.id.message_history_layout).setOnClickListener(this);
         vgPendingMembers.setVisibility(View.GONE);
 	}
@@ -158,7 +157,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 		case R.id.group_chat_button:
 			MessageComposerActivity.launchToChatWithGroup(this, MessageComposerActivity.class, groupRoom);
 			break;
-		case R.id.img_thumbnail_mask:
+		case R.id.img_thumbnail:
             ImageViewActivity.launch(this, groupRoom);
 			break;
 		default:

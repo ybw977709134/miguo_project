@@ -13,6 +13,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.*;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.adapter.MomentAdapter;
+import co.onemeter.oneapp.utils.MyUrlSpanHelper;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
@@ -20,12 +23,8 @@ import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 import org.wowtalk.ui.msg.InputBoardManager;
-import org.wowtalk.ui.msg.RoundedImageView;
 import org.wowtalk.ui.msg.Stamp;
 import org.wowtalk.ui.msg.TimerTextView;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.adapter.MomentAdapter;
-import co.onemeter.oneapp.utils.MyUrlSpanHelper;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -47,7 +46,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 
     private ImageButton btnTitleBack;
 
-    private RoundedImageView imgPhoto;
+    private ImageView imgPhoto;
     private TextView txtName;
     private TextView txtTime;
     private TextView txtDate;
@@ -113,7 +112,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     private void initView() {
         btnTitleBack = (ImageButton) findViewById(R.id.title_back);
 
-        imgPhoto = (RoundedImageView) findViewById(R.id.img_photo);
+        imgPhoto = (ImageView) findViewById(R.id.img_photo);
         txtContent = (TextView) findViewById(R.id.txt_content);
         txtName = (TextView) findViewById(R.id.txt_name);
         txtTime = (TextView) findViewById(R.id.txt_time);

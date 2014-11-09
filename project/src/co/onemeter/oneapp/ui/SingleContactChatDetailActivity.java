@@ -10,15 +10,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.contacts.model.Person;
 import com.umeng.analytics.MobclickAgent;
-import org.wowtalk.api.*;
+import org.wowtalk.api.Buddy;
+import org.wowtalk.api.Database;
+import org.wowtalk.api.PrefUtil;
 import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
-import org.wowtalk.ui.msg.RoundedImageView;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.contacts.model.Person;
 
 import java.util.ArrayList;
 
@@ -76,20 +77,16 @@ public class SingleContactChatDetailActivity extends Activity implements OnClick
                 convertView = LayoutInflater.from(SingleContactChatDetailActivity.this).inflate(R.layout.listitem_groupchat_member,
                         parent, false);
             }
-            RoundedImageView imgPhoto = (RoundedImageView) convertView.findViewById(R.id.img_photo);
+            ImageView imgPhoto = (ImageView) convertView.findViewById(R.id.img_photo);
             ImageView imgDelete = (ImageView) convertView.findViewById(R.id.img_delete);
             TextView txtName = (TextView) convertView.findViewById(R.id.txt_name);
-            imgPhoto.setBorderColor(getResources().getColor(R.color.bg_gray1));
-            imgPhoto.setCornerRadius(RoundedImageView.DEFAULT_RADIUS);
             imgPhoto.setOnClickListener(listener);
             if (position < chatMembers.size() - 1) {
                 Buddy buddy = chatMembers.get(position);
                 PhotoDisplayHelper.displayPhoto(SingleContactChatDetailActivity.this, imgPhoto, R.drawable.default_avatar_90, buddy, true);
                 txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
             } else {
-                imgPhoto.setBorderColor(getResources().getColor(R.color.transparent));
-                imgPhoto.setCornerRadius(0);
-                PhotoDisplayHelper.displayPhoto(SingleContactChatDetailActivity.this, imgPhoto, R.drawable.chat_invite, new Buddy(), true);
+                PhotoDisplayHelper.displayPhoto(SingleContactChatDetailActivity.this, imgPhoto, R.drawable.add_member, new Buddy(), true);
                 txtName.setText(getResources().getString(R.string.add));
             }
             imgDelete.setVisibility(View.GONE);

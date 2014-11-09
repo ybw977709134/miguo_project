@@ -29,7 +29,7 @@
                         android:layout_toLeftOf="@+id/moment_tag_layout"
                         android:orientation="horizontal">
 
-                    <org.wowtalk.ui.msg.RoundedImageView
+	                <co.onemeter.oneapp.ui.CircleImageView
                             android:id="@+id/img_thumbnail"
                             android:layout_height="50dp"
                             android:layout_width="50dp"

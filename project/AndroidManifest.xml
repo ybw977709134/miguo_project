@@ -298,10 +298,6 @@
             android:screenOrientation="portrait" >
         </activity>
 		<activity
-			android:name=".ui.FriendsActivity"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
 			android:name=".ui.MomentActivity"
 			android:screenOrientation="portrait" >
 		</activity>

@@ -10,7 +10,7 @@
 		android:layout_height="@dimen/title_bar_height"
 		android:layout_width="fill_parent"
 		android:layout_alignParentTop="true"
-		android:background="@drawable/home_bg_navbar">
+		android:background="@drawable/contacts_bg_navbar">
 		<ImageButton
 			android:id="@+id/title_left"
 			android:layout_height="50dp"
@@ -36,17 +36,17 @@
 				android:id="@+id/btn_all"
 				android:layout_height="wrap_content"
 				android:layout_width="70dp"
-				android:background="@drawable/tab_button_left"
+				android:background="@drawable/tab_button_left_white"
 				android:textSize="14sp"
-				android:textColor="@color/text_gray1"
+				android:textColor="@color/white"
 				android:text="@string/moments_all"/>
 			<Button
 				android:id="@+id/btn_me"
 				android:layout_height="wrap_content"
 				android:layout_width="70dp"
-				android:background="@drawable/tab_button_right"
+				android:background="@drawable/tab_button_right_white"
 				android:textSize="14sp"
-				android:textColor="@color/text_gray1"
+				android:textColor="@color/white"
 				android:text="@string/moments_my"/>
 		</LinearLayout>
 	</RelativeLayout>

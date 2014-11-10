@@ -152,16 +152,16 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     }
 
     private void switchToAll() {
-        q.find(R.id.btn_all).background(R.drawable.tab_button_left_a).textColorId(R.color.white);
-        q.find(R.id.btn_me).background(R.drawable.tab_button_right).textColorId(R.color.text_gray1);
+        q.find(R.id.btn_all).background(R.drawable.tab_button_left_white_a).textColorId(R.color.blue);
+        q.find(R.id.btn_me).background(R.drawable.tab_button_right_white).textColorId(R.color.white);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, allTimelineFragment)
                 .commit();
     }
 
     private void switchToMy() {
-        q.find(R.id.btn_all).background(R.drawable.tab_button_left).textColorId(R.color.text_gray1);
-        q.find(R.id.btn_me).background(R.drawable.tab_button_right_a).textColorId(R.color.white);
+        q.find(R.id.btn_all).background(R.drawable.tab_button_left_white).textColorId(R.color.white);
+        q.find(R.id.btn_me).background(R.drawable.tab_button_right_white_a).textColorId(R.color.blue);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, myTimelineFragment)
                 .commit();

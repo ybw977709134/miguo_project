@@ -263,9 +263,9 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
             imgTabHome.setImageResource(R.drawable.tabbar_home_blue);
 			break;
 		case TAB_FRIENDS:
-			txtTabFriend.setTextColor(getResources().getColor(R.color.tabbar_color_geeen));
+			txtTabFriend.setTextColor(getResources().getColor(R.color.tabbar_color_blue));
 			imgTabFriends.setImageResource(R.drawable.tabbar_feed_a);
-            imgTabHome.setImageResource(R.drawable.tabbar_home_green);
+            imgTabHome.setImageResource(R.drawable.tabbar_home_blue);
 			break;
 		case TAB_HOME:
 			txtTabHome.setTextColor(getResources().getColor(R.color.tabbar_color_geeen));

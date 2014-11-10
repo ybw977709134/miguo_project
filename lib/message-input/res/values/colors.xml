@@ -5,7 +5,11 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="gray">#b3b3b3</color>
-    <color name="blue">#01477A</color>
+    <color name="blue">#25AAFA</color>
+	<color name="green">#00C630</color>
+	<color name="text_darkgray">#1f2223</color>
+	<color name="text_gray">#666</color>
+
     <color name="default_text">#333</color>
     <color name="default_subtext">#4d4d4d</color>
     <color name="contact_subtitle">#4d4d4d</color>

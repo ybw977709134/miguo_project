@@ -875,7 +875,18 @@ public class WowEventWebServerIF {
 		// Construct data
 		try {
 
-			if(mPrefUtil.isUseS3()){
+            if (mPrefUtil.isUseOss()) {
+                OssDownloader downloader = new OssDownloader(
+                        mPrefUtil.getOssUid(),
+                        mPrefUtil.getOssKey(),
+                        mPrefUtil.getOssBucket());
+                if (outputFilepath == null) {
+                    outputFilepath = Database.makeLocalFilePath(event_id, "bin");
+                }
+                downloader.setup(delegate, tag);
+                downloader.execute(new String[] { outputFilepath });
+            }
+			else if(mPrefUtil.isUseS3()){
 				S3FileDownloader downloadFile = new S3FileDownloader(mContext);
 				downloadFile.setup(delegate, tag, outputFilepath);
 				downloadFile.downloadActivityLogo(event_id);

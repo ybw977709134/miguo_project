@@ -790,6 +790,24 @@ public class PrefUtil {
         editor.commit();
     }
 
+    /** Use Aliyun OSS as storage service. */
+    public boolean isUseOss() {
+        return true;
+    }
+
+    public String getOssUid() {
+        return "u9HhKKGaN779cDQQ";
+    }
+
+    public String getOssKey() {
+        return "E67LFFrjqeSQ4FKmVFhXgpACUrSgEf";
+    }
+
+    public String getOssBucket() {
+        return GlobalSetting.S3_BUCKET;
+    }
+
+    /** Use Amazon S3 as storage service. */
     public boolean isUseS3() {
         return sPref.getBoolean(USE_S3, false);
     }

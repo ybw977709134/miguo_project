@@ -3330,7 +3330,18 @@ public class WowTalkWebServerIF {
 		}
 		// Construct data
 		try {
-			if(sPrefUtil.isUseS3()){
+			if (sPrefUtil.isUseOss()) {
+				OssDownloader downloader = new OssDownloader(
+						sPrefUtil.getOssUid(),
+						sPrefUtil.getOssKey(),
+						sPrefUtil.getOssBucket());
+				if (outputFilepath == null) {
+					outputFilepath = Database.makeLocalFilePath(userID, "bin");
+				}
+				downloader.setup(delegate, tag);
+				downloader.execute(new String[] { outputFilepath });
+			}
+			else if(sPrefUtil.isUseS3()){
 				S3FileDownloader downloadFile = new S3FileDownloader(mContext);
 				downloadFile.setup(delegate, tag, outputFilepath);
 				downloadFile.downloadPhoto(userID);
@@ -3392,7 +3403,18 @@ public class WowTalkWebServerIF {
 		// Construct data
 		try {
 
-			if(sPrefUtil.isUseS3()){
+			if (sPrefUtil.isUseOss()) {
+				OssDownloader downloader = new OssDownloader(
+						sPrefUtil.getOssUid(),
+						sPrefUtil.getOssKey(),
+						sPrefUtil.getOssBucket());
+				if (outputFilepath == null) {
+					outputFilepath = Database.makeLocalFilePath(userID, "bin");
+				}
+				downloader.setup(delegate, tag);
+				downloader.execute(new String[] { outputFilepath });
+			}
+			else if(sPrefUtil.isUseS3()){
 				S3FileDownloader downloadFile = new S3FileDownloader(mContext);
 				downloadFile.setup(delegate, tag, outputFilepath);
 				downloadFile.downloadThumbnail(userID);
@@ -3530,7 +3552,18 @@ public class WowTalkWebServerIF {
 
 		// Construct data
 		try {
-			if(sPrefUtil.isUseS3()){
+			if (sPrefUtil.isUseOss()) {
+				OssDownloader downloader = new OssDownloader(
+						sPrefUtil.getOssUid(),
+						sPrefUtil.getOssKey(),
+						sPrefUtil.getOssBucket());
+				if (outputFilepath == null) {
+					outputFilepath = Database.makeLocalFilePath(fileID, "bin");
+				}
+				downloader.setup(delegate, tag);
+				downloader.execute(new String[] { outputFilepath });
+			}
+			else if(sPrefUtil.isUseS3()){
 
 				S3FileDownloader downloadFile = new S3FileDownloader(mContext);
 				downloadFile.cancelFlag = cancelFlag;
@@ -3705,7 +3738,17 @@ public class WowTalkWebServerIF {
 		// Construct data
 
 		try {
-			if(sPrefUtil.isUseS3()){
+			if (sPrefUtil.isUseOss()) {
+
+				OssUploader uploader = new OssUploader(
+						sPrefUtil.getOssUid(),
+						sPrefUtil.getOssKey(),
+						sPrefUtil.getOssBucket());
+				uploader.setup(delegate, tag);
+				String key = UUID.randomUUID().toString();
+				uploader.execute(new String[]{key, filepath});
+			}
+			else if(sPrefUtil.isUseS3()){
 				S3FileUploader uploadFile = new S3FileUploader(sPrefUtil);
 				uploadFile.setup(delegate, tag, filepath);
 				uploadFile.uploadFile(targetDir);
@@ -3759,7 +3802,18 @@ public class WowTalkWebServerIF {
 		}
 		// Construct data
 		try {
-			if(sPrefUtil.isUseS3()){
+			if (sPrefUtil.isUseOss()) {
+				OssDownloader downloader = new OssDownloader(
+						sPrefUtil.getOssUid(),
+						sPrefUtil.getOssKey(),
+						sPrefUtil.getOssBucket());
+				if (outputFilepath == null) {
+					outputFilepath = Database.makeLocalFilePath(fileID, "bin");
+				}
+				downloader.setup(delegate, tag);
+				downloader.execute(new String[] { outputFilepath });
+			}
+			else if(sPrefUtil.isUseS3()){
 
 				S3FileDownloader downloadFile = new S3FileDownloader(mContext);
 				downloadFile.setup(delegate, tag, outputFilepath);

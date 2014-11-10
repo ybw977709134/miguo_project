@@ -825,10 +825,10 @@ public class Database {
             for(Buddy aBuddy : allBuddy) {
                 //for test only
 //                if(aBuddy.wowtalkID.equals("522849998d8f8")) {
-//                    aBuddy.setAccountType(Buddy.ACCOUNT_TYPE_FAMILY);
+//                    aBuddy.setAccountType(Buddy.ACCOUNT_TYPE_TEACHER);
 //                    storeNewBuddyWithUpdate(aBuddy);
 //                }
-                if(aBuddy.getAccountType() == Buddy.ACCOUNT_TYPE_NORMAL) {
+                if(aBuddy.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT) {
                     normalBuddy.add(aBuddy);
                 }
             }
@@ -846,7 +846,7 @@ public class Database {
         ArrayList<Buddy> allBuddy=fetchAllBuddies();
         if(null != allBuddy) {
             for(Buddy aBuddy : allBuddy) {
-                if(aBuddy.getAccountType() == Buddy.ACCOUNT_TYPE_FAMILY) {
+                if(aBuddy.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
                     familyBuddy.add(aBuddy);
                 }
             }

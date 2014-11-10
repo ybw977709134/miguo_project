@@ -38,10 +38,10 @@ public class Buddy implements IHasPhoto, Parcelable {
      * 公司发通知的admin帐号（虚拟的buddy）
      */
     public static final int ACCOUNT_TYPE_NOTICE_MAN = 0;
-    /** User type: Normal user. */
-    public static final int ACCOUNT_TYPE_NORMAL = 1;
-    //family user
-    public static final int ACCOUNT_TYPE_FAMILY = 2;
+    /** User type: Student. */
+    public static final int ACCOUNT_TYPE_STUDENT = 1;
+    /** User type: Teacher. */
+    public static final int ACCOUNT_TYPE_TEACHER = 2;
     /** User type: Unknown(not initialized). */
     public static final int ACCOUNT_TYPE_NULL = 9;
 
@@ -466,16 +466,16 @@ public class Buddy implements IHasPhoto, Parcelable {
      * User type.
      */
     public int getAccountType() {
-//        Assert.assertTrue(accountType == ACCOUNT_TYPE_NORMAL
+//        Assert.assertTrue(accountType == ACCOUNT_TYPE_STUDENT
 //                || accountType == ACCOUNT_TYPE_PUBLIC
 //                || accountType == ACCOUNT_TYPE_NULL);
         return accountType;
     }
 
     public void setAccountType(int accountType) {
-        if (accountType == ACCOUNT_TYPE_NORMAL
+        if (accountType == ACCOUNT_TYPE_STUDENT
                 || accountType == ACCOUNT_TYPE_PUBLIC
-                || accountType == ACCOUNT_TYPE_FAMILY) {
+                || accountType == ACCOUNT_TYPE_TEACHER) {
             this.accountType = accountType;
         } else {
             this.accountType = ACCOUNT_TYPE_NULL;
@@ -514,8 +514,8 @@ public class Buddy implements IHasPhoto, Parcelable {
             case ACCOUNT_TYPE_NULL:
                 at = "ACCOUNT_TYPE_NULL";
                 break;
-            case ACCOUNT_TYPE_NORMAL:
-                at = "ACCOUNT_TYPE_NORMAL";
+            case ACCOUNT_TYPE_STUDENT:
+                at = "ACCOUNT_TYPE_STUDENT";
                 break;
             case ACCOUNT_TYPE_PUBLIC:
                 at = "ACCOUNT_TYPE_PUBLIC";

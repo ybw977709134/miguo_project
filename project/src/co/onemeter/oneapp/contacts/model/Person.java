@@ -95,7 +95,7 @@ public class Person implements IHasPhoto, Parcelable{
         } else {
             person.sexFlag = SEX_UNKNOWN;
         }
-        if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_NORMAL) {
+        if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT) {
             person.accountType = Person.ACCOUNT_TYPE_NORMAL;
         } else {
             person.accountType = Person.ACCOUNT_TYPE_PUBLIC;

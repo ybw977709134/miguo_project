@@ -39,7 +39,6 @@ import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 
 /**
  * Do SMS chat here.
@@ -980,7 +979,7 @@ public abstract class MessageComposerActivityBase extends Activity
                 mIsNoticeMessage = true;
                 mInputMgr.setIsWithMultimediaMethod(false);
                 mInputMgr.setIsWithCallMethod(false);
-            } else if (null != b && b.getAccountType() == Buddy.ACCOUNT_TYPE_FAMILY) {
+            } else if (null != b && b.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
                 mInputMgr.setIsWithMultimediaMethod(true);
                 mInputMgr.setIsWithCallMethod(true);
             }
@@ -1029,7 +1028,7 @@ public abstract class MessageComposerActivityBase extends Activity
         }
         mInputMgr.setCanSendMsg(mCanSendMsg == CAN_SEND_MSG_OK);
 
-        if (null != b && b.getAccountType() == Buddy.ACCOUNT_TYPE_FAMILY) {
+        if (null != b && b.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
             mInputMgr.show(InputBoardManager.FLAG_SHOW_MEDIA);
             mInputMgr.setLayoutForFamily();
         } else {
@@ -1065,7 +1064,7 @@ public abstract class MessageComposerActivityBase extends Activity
 
         if (mInputMgr != null && mInputMgr.showingFlags() != InputBoardManager.FLAG_SHOW_TEXT) {
             boolean needReset=false;
-            if(null != b && b.getAccountType() == Buddy.ACCOUNT_TYPE_FAMILY) {
+            if(null != b && b.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
                 if(View.VISIBLE == mInputMgr.getMediaLayoutVisibility()) {
                     needReset=true;
                 }
@@ -1126,7 +1125,7 @@ public abstract class MessageComposerActivityBase extends Activity
             mInputMgr.setIsWithCallMethod(false);
         }
 
-        if (null != buddy && buddy.getAccountType() == Buddy.ACCOUNT_TYPE_FAMILY) {
+        if (null != buddy && buddy.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
             mInputMgr.show(InputBoardManager.FLAG_SHOW_MEDIA);
             mInputMgr.setLayoutForFamily();
         } else {

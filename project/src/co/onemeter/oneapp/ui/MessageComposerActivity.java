@@ -1,15 +1,12 @@
 package co.onemeter.oneapp.ui;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.umeng.analytics.MobclickAgent;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
 import co.onemeter.oneapp.contacts.model.Person;
@@ -110,7 +107,7 @@ public class MessageComposerActivity extends org.wowtalk.ui.msg.MessageComposerA
         Database db = new Database(this);
         Buddy target = db.buddyWithUserID(_targetUID);
         // update the single chat title
-        if (null != target && target.getAccountType() == Buddy.ACCOUNT_TYPE_NORMAL) {
+        if (null != target && target.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT) {
             _targetGlobalPhoneNumber = TextUtils.isEmpty(target.alias) ? target.nickName : target.alias;
         }
 

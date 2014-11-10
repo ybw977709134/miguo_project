@@ -181,7 +181,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
                 else
                     searchedBuddyList.clear();
 
-				errno = mWebif.fSearchBuddy(wowtalkId,Buddy.ACCOUNT_TYPE_NORMAL, results);
+				errno = mWebif.fSearchBuddy(wowtalkId,Buddy.ACCOUNT_TYPE_STUDENT, results);
 
 //                mAllowAdd = errno == ErrorCode.OK
 //                        && !Utils.isNullOrEmpty(buddy.userID)

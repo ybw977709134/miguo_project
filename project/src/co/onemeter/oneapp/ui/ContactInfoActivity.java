@@ -411,7 +411,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         findViewById(R.id.btn_goto_moments).setOnClickListener(this);
 
         //if family buddy,no moment layout
-        if(buddy.getAccountType() == Buddy.ACCOUNT_TYPE_FAMILY) {
+        if(buddy.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
             findViewById(R.id.layout3).setVisibility(View.GONE);
             findViewById(R.id.btn_goto_moments).setVisibility(View.GONE);
         }

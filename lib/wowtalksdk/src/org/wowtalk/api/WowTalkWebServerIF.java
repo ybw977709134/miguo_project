@@ -785,7 +785,7 @@ public class WowTalkWebServerIF {
 							GroupMember b = new GroupMember(null, group_id);
                             XmlHelper.parseGroupMember(buddyNode, b);
                             b.setLevel(GroupMember.LEVEL_PENDING);
-                            b.setAccountType(Buddy.ACCOUNT_TYPE_NORMAL);
+                            b.setAccountType(Buddy.ACCOUNT_TYPE_STUDENT);
 							result.add(b);
 						}
 					}
@@ -4073,7 +4073,7 @@ public class WowTalkWebServerIF {
 						GroupMember buddyTmp = new GroupMember(null, groupID);
                         XmlHelper.parseGroupMember(user, buddyTmp);
 						buddyTmp.isBlocked = true;
-                        buddyTmp.setAccountType(Buddy.ACCOUNT_TYPE_NORMAL);
+                        buddyTmp.setAccountType(Buddy.ACCOUNT_TYPE_STUDENT);
 
 						Log.i("get blocked buddy:", buddyTmp.userID + ","
 								+ buddyTmp.nickName);
@@ -4135,7 +4135,7 @@ public class WowTalkWebServerIF {
                             GroupMember buddyTmp = new GroupMember(null, groupID);
                             XmlHelper.parseGroupMember(user, buddyTmp);
                             buddyTmp.isBlocked = true;
-                            buddyTmp.setAccountType(Buddy.ACCOUNT_TYPE_NORMAL);
+                            buddyTmp.setAccountType(Buddy.ACCOUNT_TYPE_STUDENT);
 
                             Log.d("get blocked buddy:", buddyTmp.userID + ","
                                     + buddyTmp.nickName);

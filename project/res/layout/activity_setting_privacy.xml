@@ -8,7 +8,7 @@
         android:layout_height="50dp"
         android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
-        style="?attr/titleBar">
+        style="?attr/navbar">
         <ImageButton 
             android:id="@+id/title_back"
             android:layout_height="50dp"

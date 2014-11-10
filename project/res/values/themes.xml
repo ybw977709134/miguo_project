@@ -41,17 +41,18 @@
         <item name="confirmButton">@style/confirm_white</item>
         <item name="checked">@style/checked_white</item>
         <item name="unchecked">@style/unchecked_white</item>
+	    <item name="navbar_title">@style/page_title_dark</item>
     </style>
 
 	<style name="Theme.Red" parent="Theme.White">
-		<item name="titleBar">@style/title_bar_red</item>
+		<item name="navbar">@style/title_bar_red</item>
 	</style>
 
 	<style name="Theme.Green" parent="Theme.White">
-		<item name="titleBar">@style/title_bar_green</item>
+		<item name="navbar">@style/title_bar_green</item>
 	</style>
 
 	<style name="Theme.Blue" parent="Theme.White">
-		<item name="titleBar">@style/title_bar_blue</item>
+		<item name="navbar">@style/title_bar_blue</item>
 	</style>
 </resources>

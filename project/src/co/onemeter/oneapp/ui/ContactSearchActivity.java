@@ -331,20 +331,20 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 		if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
             edtSearchContent.setText(buddySearchContent);
 
-			btnSearchPerson.setBackgroundResource(R.drawable.tab_button_left_a);
-			btnSearchGroup.setBackgroundResource(R.drawable.tab_button_right);
-			btnSearchPerson.setTextColor(getResources().getColor(R.color.white));
-			btnSearchGroup.setTextColor(getResources().getColor(R.color.login_input_font));
+			btnSearchPerson.setBackgroundResource(R.drawable.tab_button_left_white_a);
+			btnSearchGroup.setBackgroundResource(R.drawable.tab_button_right_white);
+			btnSearchPerson.setTextColor(getResources().getColor(R.color.blue));
+			btnSearchGroup.setTextColor(getResources().getColor(R.color.white));
 //			mPersonLayout.setVisibility(View.GONE);
 //			mGroupLayout.setVisibility(View.GONE);
 
 			edtSearchContent.setHint(R.string.contacts_search_buddy_hint);
 		} else {
             edtSearchContent.setText(groupSearchContent);
-			btnSearchPerson.setBackgroundResource(R.drawable.tab_button_left);
-			btnSearchGroup.setBackgroundResource(R.drawable.tab_button_right_a);
-			btnSearchPerson.setTextColor(getResources().getColor(R.color.login_input_font));
-			btnSearchGroup.setTextColor(getResources().getColor(R.color.white));
+			btnSearchPerson.setBackgroundResource(R.drawable.tab_button_left_white);
+			btnSearchGroup.setBackgroundResource(R.drawable.tab_button_right_white_a);
+			btnSearchPerson.setTextColor(getResources().getColor(R.color.white));
+			btnSearchGroup.setTextColor(getResources().getColor(R.color.blue));
 //			mPersonLayout.setVisibility(View.GONE);
 //			mGroupLayout.setVisibility(View.GONE);
 

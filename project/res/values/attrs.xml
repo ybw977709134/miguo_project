@@ -21,7 +21,10 @@
     <attr name="checked" format="reference"></attr>
     <attr name="unchecked" format="reference"></attr>
     <attr name="drawableStart" format="integer" />
-	<attr name="titleBar" format="reference"/>
+
+	<!-- title bar -->
+	<attr name="navbar" format="reference"/>
+	<attr name="navbar_title" format="reference"/>
 
     <declare-styleable name="SideBar">
         <attr name="textSize"/>

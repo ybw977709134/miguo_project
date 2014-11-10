@@ -10,7 +10,7 @@
 		android:layout_height="@dimen/title_bar_height"
 		android:layout_width="fill_parent"
 		android:layout_alignParentTop="true"
-		style="?attr/titleBar">
+		style="?attr/navbar">
 		<ImageButton
 			android:id="@+id/title_back"
 			android:layout_height="50dp"
@@ -28,20 +28,20 @@
 			<Button
 				android:id="@+id/search_person"
 				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-                android:maxWidth="100dp"
+				android:layout_width="70dp"
                 android:lines="1"
-				android:textColor="@color/white"
-				android:textSize="15sp"
+                android:background="@drawable/tab_button_left_white_a"
+				android:textColor="@color/green"
+				android:textSize="14sp"
 				android:text="@string/contacts_search_buddy"/>
 			<Button
 				android:id="@+id/search_group"
 				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-                android:maxWidth="100dp"
+				android:layout_width="70dp"
                 android:lines="1"
+                android:background="@drawable/tab_button_right_white"
 				android:textColor="@color/white"
-				android:textSize="15sp"
+				android:textSize="14sp"
 				android:text="@string/contacts_search_group"/>
 		</LinearLayout>
         <TextView

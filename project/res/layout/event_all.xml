@@ -9,7 +9,7 @@
             android:layout_height="@dimen/title_bar_height"
             android:layout_width="fill_parent"
             android:layout_alignParentTop="true"
-            android:background="@drawable/navbar_bg">
+            style="?attr/navbar">
 
 	    <ImageButton
 		    android:id="@+id/title_left"
@@ -17,7 +17,7 @@
 		    android:layout_width="50dp"
 		    android:layout_alignParentLeft="true"
 		    android:background="@null"
-		    android:src="@drawable/nav_back_selector_green"/>
+		    android:src="@drawable/nav_back_selector"/>
 
         <ImageButton
                 android:id="@+id/right_button"
@@ -25,7 +25,7 @@
                 android:layout_width="50dp"
                 android:layout_alignParentRight="true"
                 android:background="@null"
-                android:src="@drawable/icon_add_green" />
+                android:src="@drawable/nav_add" />
 
         <LinearLayout
                 android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
                     android:id="@+id/title_text"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    style="@style/page_title"
+                    style="@style/page_title_dark"
                     android:textStyle="bold"
                     android:text="@string/events_all"/>
         </LinearLayout>

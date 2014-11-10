@@ -712,8 +712,8 @@
 	<string name="moment_add_vote">投票</string>
 	<string name="moment_add_notice">通知</string>
 	<string name="moment_add_video">视频教程</string>
-	<string name="event_filter2">时间</string>
-	<string name="event_filter1">参与</string>
+	<string name="event_filter2">活动状态</string>
+	<string name="event_filter1">报名状态</string>
 	<string name="event_filter1_all">所有活动</string>
 	<string name="event_filter1_joind">已报名活动</string>
 	<string name="event_filter1_my">我发布的活动</string>

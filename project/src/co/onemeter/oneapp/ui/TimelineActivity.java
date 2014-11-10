@@ -31,6 +31,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+        instance = this;
 
         q.find(R.id.btn_all).clicked(this);
         q.find(R.id.btn_me).clicked(this);
@@ -50,11 +51,9 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         args.putString("uid", PrefUtil.getInstance(this).getUid());
         myTimelineFragment.setArguments(args);
 
+        hideUnavailableNewMomentButtons();
         hideNewMomentPanel();
-
         switchToAll();
-
-        instance = this;
     }
 
     public static TimelineActivity instance() {
@@ -83,6 +82,13 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     private void toggleNewMomentPanel() {
         newMomentPanel.setVisibility(isNewMomentPanelShowing() ?
                 View.GONE : View.VISIBLE);
+    }
+
+    private void hideUnavailableNewMomentButtons() {
+        if (Buddy.ACCOUNT_TYPE_TEACHER != PrefUtil.getInstance(this).getMyAccountType()) {
+            q.find(R.id.vg_new_notice).invisible();
+            q.find(R.id.vg_new_video).invisible();
+        }
     }
 
     @Override

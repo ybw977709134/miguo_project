@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
+ * @deprecated use {@link co.onemeter.oneapp.ui.CreateNormalMomentWithTagActivity} instead.
  * 发布动态时：
  * 1）动态文本提交成功后即返回；
  * 2）多媒体附件在后台服务中上传；

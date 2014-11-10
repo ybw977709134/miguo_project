@@ -107,54 +107,38 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                 switchToMy();
                 break;
             case R.id.vg_new_study:
-                gotoCreateMoment(Moment.SERVER_MOMENT_TAG_FOR_STUDY,
-                        CreateMomentActivity.MEDIA_FLAG_ALL,
-                        getString(R.string.moment_add_study));
+                gotoCreateMoment(MomentActivity.TAG_STUDY_IDX);
                 hideNewMomentPanel();
                 break;
             case R.id.vg_new_life:
-                gotoCreateMoment(Moment.SERVER_MOMENT_TAG_FOR_LIFE,
-                        CreateMomentActivity.MEDIA_FLAG_ALL,
-                        getString(R.string.moment_add_life));
+                gotoCreateMoment(MomentActivity.TAG_LIFE_IDX);
                 hideNewMomentPanel();
                 break;
             case R.id.vg_new_notice:
-                gotoCreateMoment(Moment.SERVER_MOMENT_TAG_FOR_NOTICE,
-                        CreateMomentActivity.MEDIA_FLAG_ALL,
-                        getString(R.string.moment_add_study));
+                gotoCreateMoment(MomentActivity.TAG_NOTICE_IDX);
                 hideNewMomentPanel();
                 break;
             case R.id.vg_new_question:
-                gotoCreateMoment(Moment.SERVER_MOMENT_TAG_FOR_QA,
-                        CreateMomentActivity.MEDIA_FLAG_ALL,
-                        getString(R.string.moment_add_question));
+                gotoCreateMoment(MomentActivity.TAG_QA_IDX);
                 hideNewMomentPanel();
                 break;
             case R.id.vg_new_vote:
-                gotoCreateMoment(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE,
-                        CreateMomentActivity.MEDIA_FLAG_ALL,
-                        getString(R.string.moment_add_vote));
+                gotoCreateMoment(MomentActivity.TAG_SURVEY_IDX);
                 hideNewMomentPanel();
                 break;
             case R.id.vg_new_video:
-                gotoCreateMoment(Moment.SERVER_MOMENT_TAG_FOR_VIDEO,
-                        CreateMomentActivity.MEDIA_FLAG_PLAIN_TEXT
-                                | CreateMomentActivity.MEDIA_FLAG_VIDEO
-                                | CreateMomentActivity.MEDIA_FLAG_LOC,
-                        getString(R.string.moment_add_video));
+                gotoCreateMoment(MomentActivity.TAG_VIDEO_IDX);
                 hideNewMomentPanel();
                 break;
         }
     }
 
-    private void gotoCreateMoment(String tag, int mediaType, String pageTitle) {
-        long maxTimeStamp=0; // TODO
-        Intent intent = new Intent(this, CreateMomentActivity.class)
-                .putExtra(CreateMomentActivity.EXTRA_SERVER_MOMENT_TAG, tag)
-                .putExtra(CreateMomentActivity.EXTRA_MEDIA_FLAGS, mediaType)
-                .putExtra(CreateMomentActivity.EXTRA_PAGE_TITLE, pageTitle)
-                .putExtra(CreateMomentActivity.EXTRA_KEY_MOMENT_MAX_TIMESTAMP, maxTimeStamp);
-        startActivityForResult(intent, REQ_CREATE_MOMENT);
+    private void gotoCreateMoment(int tagIdx) {
+        startActivityForResult(
+                new Intent(this, CreateNormalMomentWithTagActivity.class)
+                        .putExtra(CreateMomentActivity.EXTRA_KEY_MOMENT_TAG_ID, tagIdx),
+                REQ_CREATE_MOMENT
+        );
     }
 
     private void switchToAll() {

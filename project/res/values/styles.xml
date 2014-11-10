@@ -1,5 +1,9 @@
 <resources>
 	<style name="title_bar">
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">@dimen/title_bar_height</item>
+		<item name="android:minHeight">@dimen/title_bar_height</item>
+		<item name="android:maxHeight">@dimen/title_bar_height</item>
 	</style>
 
 	<style name="title_bar_red" parent="title_bar">
@@ -15,12 +19,12 @@
 	</style>
 
 	<style name="page_title">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
 		<item name="android:layout_centerInParent">true</item>
 		<item name="android:textSize">20sp</item>
 		<item name="android:textColor">@color/text_gray1</item>
 		<item name="android:textStyle">bold</item>
-		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">wrap_content</item>
 	</style>
 
 	<!-- 深色背景中的页面标题。-->

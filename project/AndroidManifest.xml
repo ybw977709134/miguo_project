@@ -563,6 +563,12 @@
 		<activity android:name=".ui.AddClassActivity"
 		          android:theme="@style/Theme.Green"
 			/>
+		<activity android:name=".ui.HomeworkActivity"
+		          android:theme="@style/Theme.Green"
+			/>
+		<activity android:name=".ui.MyClassesActivity"
+		          android:theme="@style/Theme.Green"
+			/>
 	</application>
 
 </manifest>

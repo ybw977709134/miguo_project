@@ -731,4 +731,6 @@
 	<string name="moment_add_touch_to_stop_record">点击停止录音</string>
 	<string name="moment_add_locating">正在获取位置信息…</string>
 	<string name="settings_my_qrcode">我的二维码</string>
+	<string name="homework_title">课后作业</string>
+	<string name="myclasses_title">我的课堂</string>
 </resources>

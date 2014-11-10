@@ -36,7 +36,7 @@
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:contentDescription="@null"
-                        android:background="@drawable/chat_icon_voice_selector"/>
+                        android:background="@drawable/chat_icon_voice"/>
 
                 <TextView
                         android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:contentDescription="@null"
-                        android:background="@drawable/chat_icon_photo_selector"/>
+                        android:background="@drawable/chat_icon_photo"/>
 
                 <TextView
                         android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
 			        android:layout_width="64dp"
 			        android:layout_height="64dp"
 			        android:contentDescription="@null"
-			        android:background="@drawable/chat_icon_video_selector"/>
+			        android:background="@drawable/chat_icon_video"/>
 
 		        <TextView
 			        android:layout_height="wrap_content"
@@ -94,6 +94,38 @@
 			        android:textColor="@color/msg_composer_media_txt_color"
 			        android:text="@string/input_video"/>
 	        </LinearLayout>
+
+	        <LinearLayout
+		        android:id="@+id/media_layout_input_loc_item"
+		        android:layout_height="match_parent"
+		        android:layout_width="0dp"
+		        android:layout_weight="1"
+		        android:gravity="center"
+		        android:orientation="vertical">
+
+		        <ImageButton
+			        android:id="@+id/btn_input_loc"
+			        android:layout_width="64dp"
+			        android:layout_height="64dp"
+			        android:contentDescription="@null"
+			        android:background="@drawable/chat_icon_location"/>
+
+		        <TextView
+			        android:layout_height="wrap_content"
+			        android:layout_width="wrap_content"
+			        android:singleLine="true"
+			        android:textSize="@dimen/msg_composer_media_txt_ind_size"
+			        android:textColor="@color/msg_composer_media_txt_color"
+			        android:text="@string/input_location"/>
+	        </LinearLayout>
+        </TableRow>
+
+        <TableRow
+                android:id="@+id/tableRow2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:visibility="visible">
 
 	        <LinearLayout
 		        android:id="@+id/media_layout_doodle_item"
@@ -108,7 +140,7 @@
 			        android:layout_width="64dp"
 			        android:layout_height="64dp"
 			        android:contentDescription="@null"
-			        android:background="@drawable/chat_icon_doodle_selector"/>
+			        android:background="@drawable/chat_icon_doodle"/>
 
 		        <TextView
 			        android:layout_height="wrap_content"
@@ -118,15 +150,6 @@
 			        android:textColor="@color/msg_composer_media_txt_color"
 			        android:text="@string/input_doodle"/>
 	        </LinearLayout>
-        </TableRow>
-
-        <TableRow
-                android:id="@+id/tableRow2"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:visibility="visible">
-
 	        <LinearLayout
 		        android:id="@+id/media_layout_picvoice_item"
 		        android:layout_height="match_parent"
@@ -140,7 +163,7 @@
 			        android:layout_width="64dp"
 			        android:layout_height="64dp"
 			        android:contentDescription="@null"
-			        android:background="@drawable/chat_icon_picvoice_selector"/>
+			        android:background="@drawable/chat_icon_picvoice"/>
 
 		        <TextView
 			        android:layout_height="wrap_content"
@@ -150,29 +173,6 @@
 			        android:textColor="@color/msg_composer_media_txt_color"
 			        android:text="@string/input_picvoice"/>
 	        </LinearLayout>
-            <LinearLayout
-                    android:id="@+id/media_layout_pictext_item"
-                    android:layout_height="match_parent"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                <ImageButton
-                        android:id="@+id/btn_input_pictext"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:contentDescription="@null"
-                        android:background="@drawable/chat_icon_pictext_selector"/>
-
-                <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:singleLine="true"
-                        android:textSize="@dimen/msg_composer_media_txt_ind_size"
-                        android:textColor="@color/msg_composer_media_txt_color"
-                        android:text="@string/input_pictext"/>
-            </LinearLayout>
 
             <LinearLayout
                     android:id="@+id/layout_freecall"
@@ -187,7 +187,7 @@
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:contentDescription="@null"
-                        android:background="@drawable/chat_icon_call_selector"/>
+                        android:background="@drawable/chat_icon_call"/>
 
                 <TextView
                         android:layout_height="wrap_content"
@@ -211,7 +211,7 @@
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:contentDescription="@null"
-                        android:background="@drawable/chat_icon_videochat_selector"/>
+                        android:background="@drawable/chat_icon_videochat"/>
 
                 <TextView
                         android:layout_height="wrap_content"

@@ -310,8 +310,8 @@ public class InputBoardManager implements Parcelable,
         layoutMediaWrapper.findViewById(R.id.btn_input_voice).setOnClickListener(this);
         layoutMediaWrapper.findViewById(R.id.btn_free_call).setOnClickListener(this);
         layoutMediaWrapper.findViewById(R.id.btn_video_chat).setOnClickListener(this);
-        layoutMediaWrapper.findViewById(R.id.btn_input_pictext).setOnClickListener(this);
         layoutMediaWrapper.findViewById(R.id.btn_input_picvoice).setOnClickListener(this);
+        layoutMediaWrapper.findViewById(R.id.btn_input_loc).setOnClickListener(this);
 
         // check mic availability
 //        PackageManager pm = mContext.getPackageManager();
@@ -505,17 +505,17 @@ public class InputBoardManager implements Parcelable,
             inputVideo();
         } else if (i == R.id.btn_input_doodle) {
             inputDoodle();
-        } else if (i == R.id.btn_input_pictext) {
-            Toast.makeText(mContext, "not implemented", Toast.LENGTH_SHORT).show();
         } else if (i == R.id.btn_input_picvoice) {
             Toast.makeText(mContext, "not implemented", Toast.LENGTH_SHORT).show();
         } else if (i == R.id.btn_input_voice) {// replace text inputbox with hold-to-speak button
             PackageManager pm = mContext.getPackageManager();
             if (!pm.hasSystemFeature(PackageManager.FEATURE_MICROPHONE)) {
-                Toast.makeText(mContext,R.string.media_record_not_avaliable,Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, R.string.media_record_not_avaliable, Toast.LENGTH_SHORT).show();
             } else {
                 setInputMode(FLAG_SHOW_VOICE);
             }
+        } else if (i == R.id.btn_input_loc) {
+            inputLocation();
         } else if (i == R.id.txt_content) {
             setInputMode(FLAG_SHOW_TEXT);
 

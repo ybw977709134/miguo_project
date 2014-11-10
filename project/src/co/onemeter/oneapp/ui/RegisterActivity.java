@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
+import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
@@ -182,6 +183,8 @@ public class RegisterActivity extends Activity implements OnClickListener{
 		
 		final String strUserName = edtAccount.getText().toString();
 		final String strPassword = edtPwd.getText().toString();
+        final int userType = new AQuery(this).find(R.id.rad_teacher).isChecked() ?
+                Buddy.ACCOUNT_TYPE_TEACHER : Buddy.ACCOUNT_TYPE_STUDENT;
 
         if (!Utils.verifyWowTalkId(strUserName)) {
             mMsgBox.show(null, getString(R.string.setting_wowtalkid_format_error));
@@ -201,7 +204,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 				public void run() {
                     String oldUId = PrefUtil.getInstance(RegisterActivity.this).getPrevUid();
                     int result = WowTalkWebServerIF.getInstance(RegisterActivity.this)
-                            .fRegister(strUserName, strPassword, buddy);
+                            .fRegister(strUserName, strPassword, userType, buddy);
 					Log.i("register, the result_code is " + result);
 
 					Message msg = Message.obtain();

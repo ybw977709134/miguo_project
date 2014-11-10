@@ -1058,6 +1058,7 @@ public class WowTalkWebServerIF {
 	 * 
 	 * @param wowtalk_id
 	 * @param password
+     * @param userType refer to {@link Buddy#ACCOUNT_TYPE_STUDENT}.
 	 * @return error no.
 	 * @see
 	 * <ul>
@@ -1067,7 +1068,7 @@ public class WowTalkWebServerIF {
 	 * <li>fGetPhotoForUserID() get my avatar；</li>
 	 * </ul>
 	 */
-	public int fRegister(String wowtalk_id, String password, Buddy result) {
+	public int fRegister(String wowtalk_id, String password, int userType, Buddy result) {
         if(isAuthEmpty(wowtalk_id, password))
 			return ErrorCode.INVALID_ARGUMENT;
 
@@ -1075,6 +1076,7 @@ public class WowTalkWebServerIF {
 		String postStr = "action=" + action
 				+ "&user=" + Utils.urlencodeUtf8(wowtalk_id)
 				+ "&plain_password=" + Utils.urlencodeUtf8(password)
+                + "&user_type=" + userType
 				+ "&lang=" + Locale.getDefault().getLanguage();
 
 		Connect2 connect2 = new Connect2();

@@ -26,6 +26,9 @@
 	<attr name="navbar" format="reference"/>
 	<attr name="navbar_title" format="reference"/>
 
+	<!-- radio button -->
+	<attr name="radio" format="reference"/>
+
     <declare-styleable name="SideBar">
         <attr name="textSize"/>
         <attr name="drawableStart" />

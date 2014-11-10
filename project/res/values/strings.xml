@@ -349,8 +349,8 @@
     <string name="look_into_bbs">查看讨论版</string>
     <string name="event_apply">报名</string>
     <string name="logo_name">一米家校</string>
-    <string name="account_hint">用户名/邮箱</string>
-    <string name="passWord_hint">密码</string>
+    <string name="account_hint">请输入你的ID</string>
+    <string name="passWord_hint">请输入密码</string>
     <string name="login_failed">登陆失败</string>
     <string name="login_user_cannot_be_null">用户名不能为空，请输入用户名</string>
     <string name="login_pwd_cannot_be_null">密码不能为空，请输入密码</string>
@@ -363,7 +363,7 @@
     <string name="automatically_registered">自动注册</string>
     <string name="input_yuanqu_account">请输入WowTalk ID</string>
     <string name="input_password">请输入密码</string>
-    <string name="input_password_again">请再次输入密码</string>
+    <string name="input_password_again">确认密码</string>
     <string name="create_account">创建帐号</string>
     <string name="withdraw_password">取回密码</string>
     <string name="withdraw_password_text">点击下一步，我们将会向您选择的邮箱或手机号码发送验证码</string>
@@ -733,4 +733,7 @@
 	<string name="settings_my_qrcode">我的二维码</string>
 	<string name="homework_title">课后作业</string>
 	<string name="myclasses_title">我的课堂</string>
+	<string name="register_user_type">帐号类型</string>
+	<string name="register_user_type_teacher">老师</string>
+	<string name="register_user_type_student">学生</string>
 </resources>

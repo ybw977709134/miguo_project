@@ -46,13 +46,16 @@
 
 	<style name="Theme.Red" parent="Theme.White">
 		<item name="navbar">@style/title_bar_red</item>
+		<item name="radio">@style/standard_radio_green</item>
 	</style>
 
 	<style name="Theme.Green" parent="Theme.White">
 		<item name="navbar">@style/title_bar_green</item>
+		<item name="radio">@style/standard_radio_green</item>
 	</style>
 
 	<style name="Theme.Blue" parent="Theme.White">
 		<item name="navbar">@style/title_bar_blue</item>
+		<item name="radio">@style/standard_radio_green</item>
 	</style>
 </resources>

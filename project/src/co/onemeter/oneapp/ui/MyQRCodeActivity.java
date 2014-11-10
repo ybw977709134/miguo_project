@@ -12,6 +12,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.Utils;
 import com.zxing.encoding.EncodingHandler;
 import org.json.JSONObject;
 import org.wowtalk.api.Buddy;
@@ -21,8 +23,6 @@ import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.ImageViewActivity;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.utils.Utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,12 +42,19 @@ public class MyQRCodeActivity extends Activity implements View.OnClickListener{
     private MessageBox mMsgbBox;
 
     private Bitmap QRCodeBitmap;
+    private int themeResId;
 
+    public final static String EXTRA_THEME_RESID = "theme";
     public final static int    MY_QR_CODE_PHOTO_DEF_SIZE=300;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getData(savedInstanceState != null ? savedInstanceState : getIntent().getExtras());
+
+        if (themeResId > 0)
+            setTheme(themeResId);
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
@@ -60,6 +67,10 @@ public class MyQRCodeActivity extends Activity implements View.OnClickListener{
         mMsgbBox = new MessageBox(this);
 
         initView();
+    }
+
+    private void getData(Bundle arg) {
+        themeResId = arg.getInt(EXTRA_THEME_RESID);
     }
 
     private void initView() {

@@ -136,7 +136,8 @@ public class SettingActivity extends Activity implements OnClickListener {
                 startActivity(intent.setClass(SettingActivity.this, MyInfoActivity.class));
                 break;
             case R.id.settings_my_qrcode:
-                startActivity(new Intent(this,MyQRCodeActivity.class));
+                startActivity(new Intent(this,MyQRCodeActivity.class)
+                        .putExtra(MyQRCodeActivity.EXTRA_THEME_RESID, R.style.Theme_Green));
                 break;
             case R.id.settings_account:
                 if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {

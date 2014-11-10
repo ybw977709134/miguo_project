@@ -54,6 +54,7 @@ public class ContactAddActivity extends Activity implements OnClickListener{
                 break;
             case R.id.scan_qr_code:
                 Intent scanIntent = new Intent(ContactAddActivity.this, ScanQRCodeActivity.class);
+                scanIntent.putExtra(ScanQRCodeActivity.EXTRA_THEME_RESID, R.style.Theme_Blue);
                 scanIntent.putExtra(CaptureActivity.ACTIVITY_ARG_WITH_LAYOUT,true);
                 scanIntent.putExtra(CaptureActivity.ACTIVITY_ARG_LAYOUT_ID,R.layout.scan_qr_code_layout);
                 scanIntent.putExtra(CaptureActivity.ACTIVITY_ARG_FINISH_AFTER_DECODE,false);

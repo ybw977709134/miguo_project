@@ -43,4 +43,15 @@
         <item name="unchecked">@style/unchecked_white</item>
     </style>
 
+	<style name="Theme.Red" parent="Theme.White">
+		<item name="titleBar">@style/title_bar_red</item>
+	</style>
+
+	<style name="Theme.Green" parent="Theme.White">
+		<item name="titleBar">@style/title_bar_green</item>
+	</style>
+
+	<style name="Theme.Blue" parent="Theme.White">
+		<item name="titleBar">@style/title_bar_blue</item>
+	</style>
 </resources>

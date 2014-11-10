@@ -39,6 +39,8 @@ import co.onemeter.oneapp.utils.Utils;
  * To change this template use File | Settings | File Templates.
  */
 public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickListener{
+    public final static String EXTRA_THEME_RESID = "theme";
+
     private ImageView ivInitLighterAnimMask;
     private ImageView ivBottomFlash;
     private boolean isInitAnimComingLighterShuttered=false;
@@ -86,12 +88,17 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
 //    private Camera camera;
 
     private final static int INTENT_ID_PICK_PHOTO=3;
+    private int themeResId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        getData(savedInstanceState != null ? savedInstanceState : getIntent().getExtras());
 
-//        setContentView(R.layout.scan_qr_code_layout);
+        if (themeResId > 0)
+            setTheme(themeResId);
+
+        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.scan_qr_code_layout); // passed to parent
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
@@ -100,6 +107,10 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
         mWebif = WowTalkWebServerIF.getInstance(this);
 
         initView();
+    }
+
+    private void getData(Bundle arg) {
+        themeResId = arg.getInt(EXTRA_THEME_RESID);
     }
 
     private void initView() {
@@ -275,6 +286,7 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
                 break;
             case R.id.scan_qr_code_bottom_btn_qrcode:
                 Intent intentView = new Intent(this,MyQRCodeActivity.class);
+                intentView.putExtra(MyQRCodeActivity.EXTRA_THEME_RESID, themeResId);
                 startActivity(intentView);
                 break;
         }

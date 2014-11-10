@@ -1,5 +1,18 @@
 <resources>
+	<style name="title_bar">
+	</style>
 
+	<style name="title_bar_red" parent="title_bar">
+		<item name="android:background">@drawable/messages_bg_navbar</item>
+	</style>
+
+	<style name="title_bar_green" parent="title_bar">
+		<item name="android:background">@drawable/home_bg_navbar</item>
+	</style>
+
+	<style name="title_bar_blue" parent="title_bar">
+		<item name="android:background">@drawable/contacts_bg_navbar</item>
+	</style>
 
 	<style name="page_title">
 		<item name="android:layout_centerInParent">true</item>

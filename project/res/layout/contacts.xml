@@ -14,7 +14,7 @@
 		android:layout_alignParentTop="true"
 		android:focusable="true"
 		android:focusableInTouchMode="true"
-		android:background="@drawable/contacts_bg_navbar">
+		style="?attr/titleBar">
 
 		<ImageButton
 			android:id="@+id/contact_add"

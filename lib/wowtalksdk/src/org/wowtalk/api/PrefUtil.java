@@ -1,14 +1,5 @@
 package org.wowtalk.api;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -16,6 +7,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.*;
 
 /**
  * SharedPreference说明：
@@ -58,6 +53,7 @@ public class PrefUtil {
     public static final String MY_EMAIL = "MY_EMAIL";
     public static final String MY_JOB_TITLE = "MY_JOB_TITLE";
     public static final String MY_EMPLOYEE_ID = "MY_EMPLOYEE_ID";
+    public static final String MY_ACCOUNT_TYPE = "MY_ACCOUNT_TYPE";
     public static final String MY_PHOTO_UPLOADED_TIMESTAMP = "MY_PHOTO_UPLOADED_TIMESTAMP";
     public static final String WOWTALK_ID = "MY_WOWTALK_ID";
     private static final String PASSWORD_HASHED_FOR_SIP = "password_preference"; // for sip
@@ -1033,6 +1029,10 @@ public class PrefUtil {
 
     public String getMyWowtalkID() {
         return sPref.getString(WOWTALK_ID, "");
+    }
+
+    public int getMyAccountType() {
+        return sPref.getInt(MY_ACCOUNT_TYPE, Buddy.ACCOUNT_TYPE_NULL);
     }
 
     public void setPasswordChanged(boolean isChanged) {

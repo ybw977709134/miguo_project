@@ -1733,6 +1733,7 @@ public class WowTalkWebServerIF {
 				editor.putString(PrefUtil.MY_EMAIL, me.getEmail());
 				editor.putString(PrefUtil.MY_JOB_TITLE, me.jobTitle);
 				editor.putString(PrefUtil.MY_EMPLOYEE_ID, me.employeeId);
+                editor.putInt(PrefUtil.MY_ACCOUNT_TYPE, me.getAccountType());
 
 				editor.commit();
 

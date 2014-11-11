@@ -5,16 +5,12 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.text.TextUtils;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.wowtalk.Log;
 
 import java.io.*;
-import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -3215,30 +3211,12 @@ public class WowTalkWebServerIF {
 			return;
 		}
 
-		// Construct data
-		try {
-			if(sPrefUtil.isUseS3()){
-				S3FileUploader uploadFile = new S3FileUploader(sPrefUtil);
-				uploadFile.setup(delegate, tag, filePath);
-				uploadFile.uploadProfilePhoto();
-			}
-			else{
-				List<NameValuePair> postData = new ArrayList<NameValuePair>(2);
-				postData.add(new BasicNameValuePair(URLEncoder.encode("uid",
-						"UTF-8"), URLEncoder.encode(strUID, "UTF-8")));
-				postData.add(new BasicNameValuePair(URLEncoder.encode("password",
-						"UTF-8"), URLEncoder.encode(strPwd, "UTF-8")));
-				postData.add(new BasicNameValuePair(URLEncoder.encode("action",
-						"UTF-8"), URLEncoder.encode("update_my_photo", "UTF-8")));
-
-				UploadFile uploadFile = new UploadFile();
-				uploadFile.setup(delegate, tag, filePath);
-				uploadFile.execute(postData);
-			}
-
-		} catch (Exception e) {
-			Log.e("fPostMyPhoto failed");
-		}
+		RemoteFileService.upload(mContext,
+				filePath,
+				GlobalSetting.S3_PROFILE_PHOTO_DIR,
+				strUID,
+				delegate,
+				tag);
 	}
 
 	/**
@@ -3266,30 +3244,12 @@ public class WowTalkWebServerIF {
 			return;
 		}
 
-		// Construct data
-		try {
-			if(sPrefUtil.isUseS3()){
-				S3FileUploader uploadFile = new S3FileUploader(sPrefUtil);
-				uploadFile.setup(delegate, tag, filePath);
-				uploadFile.uploadProfileThumbnail();
-			}
-			else{
-				List<NameValuePair> postData = new ArrayList<NameValuePair>(2);
-				postData.add(new BasicNameValuePair(URLEncoder.encode("uid",
-						"UTF-8"), URLEncoder.encode(strUID, "UTF-8")));
-				postData.add(new BasicNameValuePair(URLEncoder.encode("password",
-						"UTF-8"), URLEncoder.encode(strPwd, "UTF-8")));
-				postData.add(new BasicNameValuePair(URLEncoder.encode("action",
-						"UTF-8"), URLEncoder.encode("update_my_thumbnail", "UTF-8")));
-
-				UploadFile uploadFile = new UploadFile();
-				uploadFile.setup(delegate, tag, filePath);
-				uploadFile.execute(postData);
-			}
-
-		} catch (Exception e) {
-			Log.e("fPostMyPhoto failed");
-		}
+		RemoteFileService.upload(mContext,
+				filePath,
+				GlobalSetting.S3_PROFILE_THUMBNAIL_DIR,
+				strUID,
+				delegate,
+				tag);
 	}
 
 
@@ -3328,42 +3288,13 @@ public class WowTalkWebServerIF {
 			Log.w("fGetPhotoForUserID: UserID invalid");
 			return;
 		}
-		// Construct data
-		try {
-			if (sPrefUtil.isUseOss()) {
-				OssDownloader downloader = new OssDownloader(
-						sPrefUtil.getOssUid(),
-						sPrefUtil.getOssKey(),
-						sPrefUtil.getOssBucket());
-				if (outputFilepath == null) {
-					outputFilepath = Database.makeLocalFilePath(userID, "bin");
-				}
-				downloader.setup(delegate, tag);
-				downloader.execute(new String[] { outputFilepath });
-			}
-			else if(sPrefUtil.isUseS3()){
-				S3FileDownloader downloadFile = new S3FileDownloader(mContext);
-				downloadFile.setup(delegate, tag, outputFilepath);
-				downloadFile.downloadPhoto(userID);
-			}
-			else{
-				String postData = URLEncoder.encode("uid", "UTF-8") + "="
-						+ URLEncoder.encode(userID, "UTF-8");
-				postData += "&" + URLEncoder.encode("action", "UTF-8") + "="
-						+ URLEncoder.encode("get_photo", "UTF-8");
-				DownloadFile downloadFile = new DownloadFile();
-				downloadFile.setup(delegate, tag, null);
-				downloadFile.execute(postData);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			Log.w("fGetPhotoForUserID failed");
-		}
-
+		RemoteFileService.download(mContext,
+				outputFilepath,
+				GlobalSetting.S3_PROFILE_PHOTO_DIR,
+				userID,
+				delegate,
+				tag);
 	}
-
-
 
 	/**
 	 * Get thumbnail for uid from server 指定したユーザidの画像Thumbnailをゲット
@@ -3400,39 +3331,13 @@ public class WowTalkWebServerIF {
 			Log.w("fGetPhotoForUserID: UserID invalid");
 			return;
 		}
-		// Construct data
-		try {
 
-			if (sPrefUtil.isUseOss()) {
-				OssDownloader downloader = new OssDownloader(
-						sPrefUtil.getOssUid(),
-						sPrefUtil.getOssKey(),
-						sPrefUtil.getOssBucket());
-				if (outputFilepath == null) {
-					outputFilepath = Database.makeLocalFilePath(userID, "bin");
-				}
-				downloader.setup(delegate, tag);
-				downloader.execute(new String[] { outputFilepath });
-			}
-			else if(sPrefUtil.isUseS3()){
-				S3FileDownloader downloadFile = new S3FileDownloader(mContext);
-				downloadFile.setup(delegate, tag, outputFilepath);
-				downloadFile.downloadThumbnail(userID);
-			}
-			else{
-				String postData = URLEncoder.encode("uid", "UTF-8") + "="
-						+ URLEncoder.encode(userID, "UTF-8");
-				postData += "&" + URLEncoder.encode("action", "UTF-8") + "="
-						+ URLEncoder.encode("get_thumbnail", "UTF-8");
-				DownloadFile downloadFile = new DownloadFile();
-				downloadFile.setup(delegate, tag, null);
-				downloadFile.execute(postData);
-			}
-
-		} catch (Exception e) {
-			Log.e("fGetThumbnailForUserID failed");
-		}
-
+		RemoteFileService.download(mContext,
+				outputFilepath,
+				GlobalSetting.S3_PROFILE_THUMBNAIL_DIR,
+				userID,
+				delegate,
+				tag);
 	}
 
     public void fPostGroupPhoto(String groupid, String filePath, NetworkIFDelegate delegate,
@@ -3456,33 +3361,12 @@ public class WowTalkWebServerIF {
 			return;
 		}
 
-		// Construct data
-		try {
-			if(sPrefUtil.isUseS3()){
-				S3FileUploader uploadFile = new S3FileUploader(sPrefUtil);
-				uploadFile.setup(delegate, tag, filePath);
-				if(isThumbnail)
-					uploadFile.uploadGroupThumbnail(groupid);
-				else
-					uploadFile.uploadGroupPhoto(groupid);
-			}
-			else{
-				List<NameValuePair> postData = new ArrayList<NameValuePair>(2);
-				postData.add(new BasicNameValuePair(URLEncoder.encode("uid",
-						"UTF-8"), URLEncoder.encode(strUID, "UTF-8")));
-				postData.add(new BasicNameValuePair(URLEncoder.encode("password",
-						"UTF-8"), URLEncoder.encode(strPwd, "UTF-8")));
-				postData.add(new BasicNameValuePair(URLEncoder.encode("action",
-						"UTF-8"), URLEncoder.encode("update_my_thumbnail", "UTF-8")));
-
-				UploadFile uploadFile = new UploadFile();
-				uploadFile.setup(delegate, tag, filePath);
-				uploadFile.execute(postData);
-			}
-
-		} catch (Exception e) {
-			Log.e("fPostMyPhoto failed");
-		}
+		RemoteFileService.upload(mContext,
+				filePath,
+				isThumbnail ? GlobalSetting.S3_PROFILE_THUMBNAIL_DIR : GlobalSetting.S3_PROFILE_PHOTO_DIR,
+				groupid,
+				delegate,
+				tag);
 	}
 
 
@@ -3550,45 +3434,12 @@ public class WowTalkWebServerIF {
 			return;
 		}
 
-		// Construct data
-		try {
-			if (sPrefUtil.isUseOss()) {
-				OssDownloader downloader = new OssDownloader(
-						sPrefUtil.getOssUid(),
-						sPrefUtil.getOssKey(),
-						sPrefUtil.getOssBucket());
-				if (outputFilepath == null) {
-					outputFilepath = Database.makeLocalFilePath(fileID, "bin");
-				}
-				downloader.setup(delegate, tag);
-				downloader.execute(new String[] { outputFilepath });
-			}
-			else if(sPrefUtil.isUseS3()){
-
-				S3FileDownloader downloadFile = new S3FileDownloader(mContext);
-				downloadFile.cancelFlag = cancelFlag;
-				downloadFile.setup(delegate, tag, outputFilepath);
-				downloadFile.downloadFile(fileID, fileDir);
-			}
-			else{
-				String postData = URLEncoder.encode("uid", "UTF-8") + "="
-						+ URLEncoder.encode(strUID, "UTF-8");
-				postData += "&" + URLEncoder.encode("password", "UTF-8") + "="
-						+ URLEncoder.encode(strPwd, "UTF-8");
-				postData += "&" + URLEncoder.encode("file_id", "UTF-8") + "="
-						+ URLEncoder.encode(fileID, "UTF-8");
-				postData += "&" + URLEncoder.encode("action", "UTF-8") + "="
-						+ URLEncoder.encode("get_file", "UTF-8");
-
-				DownloadFile downloadFile = new DownloadFile();
-				downloadFile.setup(delegate, tag, null);
-				downloadFile.execute(postData);
-			}
-
-		} catch (Exception e) {
-			Log.e("fGetFileFromServer failed");
-		}
-
+		RemoteFileService.download(mContext,
+				outputFilepath,
+				fileDir,
+				fileID,
+				delegate,
+				tag);
 	}
 
 	/**
@@ -3735,42 +3586,13 @@ public class WowTalkWebServerIF {
 			return;
 		}
 
-		// Construct data
-
-		try {
-			if (sPrefUtil.isUseOss()) {
-
-				OssUploader uploader = new OssUploader(
-						sPrefUtil.getOssUid(),
-						sPrefUtil.getOssKey(),
-						sPrefUtil.getOssBucket());
-				uploader.setup(delegate, tag);
-				String key = UUID.randomUUID().toString();
-				uploader.execute(new String[]{key, filepath});
-			}
-			else if(sPrefUtil.isUseS3()){
-				S3FileUploader uploadFile = new S3FileUploader(sPrefUtil);
-				uploadFile.setup(delegate, tag, filepath);
-				uploadFile.uploadFile(targetDir);
-			}
-			else{
-				List<NameValuePair> postData = new ArrayList<NameValuePair>(2);
-				postData.add(new BasicNameValuePair(URLEncoder.encode("uid",
-						"UTF-8"), URLEncoder.encode(strUID, "UTF-8")));
-				postData.add(new BasicNameValuePair(URLEncoder.encode("password",
-						"UTF-8"), URLEncoder.encode(strPwd, "UTF-8")));
-				postData.add(new BasicNameValuePair(URLEncoder.encode("action",
-						"UTF-8"), URLEncoder.encode("upload_file", "UTF-8")));
-
-				UploadFile uploadFile = new UploadFile();
-				uploadFile.setup(delegate, tag, filepath);
-				uploadFile.execute(postData);
-			}
-		} catch (Exception e) {
-			Log.e("fPostFileToServer failed");
-		}
-
-
+		String fileId = UUID.randomUUID().toString();
+		RemoteFileService.upload(mContext,
+				filepath,
+				targetDir,
+				fileId,
+				delegate,
+				tag);
 	}
 
 
@@ -3800,48 +3622,14 @@ public class WowTalkWebServerIF {
 			Log.w("fGetFileFromShop: file_id invalid");
 			return;
 		}
-		// Construct data
-		try {
-			if (sPrefUtil.isUseOss()) {
-				OssDownloader downloader = new OssDownloader(
-						sPrefUtil.getOssUid(),
-						sPrefUtil.getOssKey(),
-						sPrefUtil.getOssBucket());
-				if (outputFilepath == null) {
-					outputFilepath = Database.makeLocalFilePath(fileID, "bin");
-				}
-				downloader.setup(delegate, tag);
-				downloader.execute(new String[] { outputFilepath });
-			}
-			else if(sPrefUtil.isUseS3()){
 
-				S3FileDownloader downloadFile = new S3FileDownloader(mContext);
-				downloadFile.setup(delegate, tag, outputFilepath);
-				downloadFile.downloadFileFromShop(fileID);
-			}
-			else{
-				String postData = URLEncoder.encode("uid", "UTF-8") + "="
-						+ URLEncoder.encode(strUID, "UTF-8");
-				postData += "&" + URLEncoder.encode("password", "UTF-8") + "="
-						+ URLEncoder.encode(strPwd, "UTF-8");
-				postData += "&" + URLEncoder.encode("file_id", "UTF-8") + "="
-						+ URLEncoder.encode(fileID, "UTF-8");
-				postData += "&" + URLEncoder.encode("action", "UTF-8") + "="
-						+ URLEncoder.encode("get_file_from_shop", "UTF-8");
-
-				DownloadFile downloadFile = new DownloadFile();
-				downloadFile.setup(delegate, tag, null);
-				downloadFile.execute(postData);
-			}
-
-		} catch (Exception e) {
-			Log.e("fGetFileFromShop failed");
-		}
-
+		RemoteFileService.download(mContext,
+				outputFilepath,
+				GlobalSetting.S3_SHOP_DIR,
+				fileID,
+				delegate,
+				tag);
 	}
-
-
-
 
 	/**
 	 * Create a group chat room 

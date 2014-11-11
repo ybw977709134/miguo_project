@@ -2,8 +2,6 @@ package org.wowtalk.api;
 
 import android.content.Context;
 import android.text.TextUtils;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -14,9 +12,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -813,102 +809,8 @@ public class WowEventWebServerIF {
 		}
 		return errno;
 	}
-	
-	/**
-	 * 为活动上传一个图标。
-	 * 
-	 * @param event_id
-	 * @param filePath
-	 * @param delegate
-	 * @param tag
-	 */
-	public void fSetLogo(String event_id, String filePath,
-			NetworkIFDelegate delegate, int tag) {
 
-		String strUID = mPrefUtil.getUid();
-		String strPwd = mPrefUtil.getPassword();
-
-		if (strUID == null || strPwd.equals("")) {
-			Log.e("fPostMyThumbnail: UserID and password invalid");
-			return;
-		}
-
-		if (filePath == null || filePath.equals("")) {
-			Log.e("fPostMyThumbnail: filePath invalid");
-			return;
-		}
-
-		// Construct data
-		try {
-			if(mPrefUtil.isUseS3()){
-				S3FileUploader uploadFile = new S3FileUploader(mPrefUtil);
-				uploadFile.setup(delegate, tag, filePath);
-				uploadFile.uploadActivityLogo(event_id);
-			}
-			else{
-				List<NameValuePair> postData = new ArrayList<NameValuePair>(2);
-				postData.add(new BasicNameValuePair(URLEncoder.encode("uid",
-						"UTF-8"), URLEncoder.encode(strUID, "UTF-8")));
-				postData.add(new BasicNameValuePair(URLEncoder.encode("password",
-						"UTF-8"), URLEncoder.encode(strPwd, "UTF-8")));
-				postData.add(new BasicNameValuePair(URLEncoder.encode("event_id",
-						"UTF-8"), URLEncoder.encode(event_id, "UTF-8")));
-				postData.add(new BasicNameValuePair(URLEncoder.encode("action",
-						"UTF-8"), URLEncoder.encode("update_my_thumbnail", "UTF-8")));
-
-				UploadFile uploadFile = new UploadFile();
-				uploadFile.setup(delegate, tag, filePath);
-				uploadFile.execute(postData);
-			}
-
-		} catch (Exception e) {
-			Log.e("fPostThumbnail for activity failed");
-		}
-	}
-	
-	public void fGetLogo(String event_id,
-			NetworkIFDelegate delegate, int tag,String outputFilepath) {
-		if(Utils.isNullOrEmpty(event_id)) {
-			Log.e("fGetLogo: acitivity_id invalid");
-			return;
-		}
-		// Construct data
-		try {
-
-            if (mPrefUtil.isUseOss()) {
-                OssDownloader downloader = new OssDownloader(
-                        mPrefUtil.getOssUid(),
-                        mPrefUtil.getOssKey(),
-                        mPrefUtil.getOssBucket());
-                if (outputFilepath == null) {
-                    outputFilepath = Database.makeLocalFilePath(event_id, "bin");
-                }
-                downloader.setup(delegate, tag);
-                downloader.execute(new String[] { outputFilepath });
-            }
-			else if(mPrefUtil.isUseS3()){
-				S3FileDownloader downloadFile = new S3FileDownloader(mContext);
-				downloadFile.setup(delegate, tag, outputFilepath);
-				downloadFile.downloadActivityLogo(event_id);
-			}
-			else{
-				String postData = URLEncoder.encode("uid", "UTF-8") + "="
-						+ URLEncoder.encode(event_id, "UTF-8");
-				postData += "&" + URLEncoder.encode("action", "UTF-8") + "="
-						+ URLEncoder.encode("get_thumbnail", "UTF-8")
-						+ "&event_id=" + URLEncoder.encode(event_id, "UTF-8");
-				DownloadFile downloadFile = new DownloadFile();
-				downloadFile.setup(delegate, tag, null);
-				downloadFile.execute(postData);
-			}
-
-		} catch (Exception e) {
-			Log.e("fGetLogo failed");
-		}
-
-	}
-
-	/**
+    /**
 	 * Ask for joining a event.
 	 * 
 	 * @param event_id

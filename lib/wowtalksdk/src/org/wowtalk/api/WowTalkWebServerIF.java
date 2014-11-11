@@ -4133,7 +4133,7 @@ public class WowTalkWebServerIF {
             postStr += "&place=" + Utils.urlencodeUtf8(g.place);
 
         if (0 < g.getPhotoUploadedTimestamp())
-            postStr += "&photo_timestamp=" + g.getPhotoUploadedTimestamp();
+            postStr += "&upload_photo_timestamp=" + g.getPhotoUploadedTimestamp();
 
         if (null != g.groupStatus)
             postStr += "&status=" + Utils.urlencodeUtf8(g.groupStatus);

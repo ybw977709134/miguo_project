@@ -9,11 +9,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import co.onemeter.oneapp.R;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
@@ -21,9 +21,8 @@ import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.FileUtils;
-import org.wowtalk.ui.msg.RoundedImageView;
 import org.wowtalk.ui.msg.InputBoardManager;
-import co.onemeter.oneapp.R;
+import org.wowtalk.ui.msg.RoundedImageView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -315,7 +314,7 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
         }
     }
 
-    private void updateGroupThumbnail(GroupChatRoom group) {
+    private void updateGroupThumbnail(final GroupChatRoom group) {
 
         if (null == path[0] || null == path[1])
             return;
@@ -353,6 +352,8 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
                 .fPostGroupPhoto(groupId, path[1], new NetworkIFDelegate() {
                     @Override
                     public void didFinishNetworkIFCommunication(int i, byte[] bytes) {
+                        WowTalkWebServerIF.getInstance(CreateGroupActivity.this)
+                                .fGroupChat_UpdateInfo(group);
                     }
 
                     @Override

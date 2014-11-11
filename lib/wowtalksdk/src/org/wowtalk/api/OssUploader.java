@@ -32,7 +32,7 @@ public class OssUploader extends
 		AsyncTask<String, Integer, String> {
 	private static final String TAG = "OssUploader";
 
-	private static final String BOUNDARY = "----------V2ymHFg03ehbqgZCaKO6jy";
+	private static final String BOUNDARY = "9431149156168";
 
 	private final String accessKeyId;
 	private final String accessKeySerect;
@@ -57,14 +57,14 @@ public class OssUploader extends
 		StringBuffer res = new StringBuffer("--").append(BOUNDARY).append(
 				"\r\n");
 		for (NameValuePair nv : postData) {
-			res.append("Content-Disposition: form-data; name=\"")
-					.append(nv.getName()).append("\"\r\n").append("\r\n")
-					.append(nv.getValue()).append("\r\n").append("--")
-					.append(BOUNDARY).append("\r\n");
+			res.append(String.format(
+					"Content-Disposition: form-data; name=\"%s\"\r\n\r\n%s\r\n--%s\r\n",
+					nv.getName(), nv.getValue(), BOUNDARY));
 		}
-		res.append("Content-Disposition: form-data; name=\"")
-				.append("file").append("\"; filename=\"").append(fileName)
-				.append("\r\n\r\n");
+		res.append(String.format(
+				"Content-Disposition: form-data; name=\"file\"; filename=\"%s\"\r\n\r\n",
+				fileName));
+		Log.i(TAG, " post data: ", res.toString());
 		return res.toString();
 	}
 
@@ -75,13 +75,14 @@ public class OssUploader extends
 
 		List<NameValuePair> postData = new ArrayList<NameValuePair>(10);
 		postData.add(new BasicNameValuePair("OSSAccessKeyId", accessKeyId));
-		postData.add(new BasicNameValuePair("policy", getPolicy()));
-		postData.add(new BasicNameValuePair("Signature", getSignature()));
+		String policy = getPolicy();
+		postData.add(new BasicNameValuePair("policy", policy));
+		postData.add(new BasicNameValuePair("Signature", getSignature(policy)));
 		postData.add(new BasicNameValuePair("key", key));
 
 		// TODO file last
 
-		Log.e(TAG, "start...............................");
+		Log.e(TAG, " start...............................");
 
 		int bytesRead, bytesAvailable, bufferSize;
 		byte[] buffer;
@@ -101,7 +102,7 @@ public class OssUploader extends
 
 			File inputFile = new File(filename);
 			long fileLength = inputFile.length();
-			Log.e(TAG, "upload file length:", fileLength);
+			Log.e(TAG, " upload file length:", fileLength);
 			OutputStream os = conn.getOutputStream();
 			os.write(createBoundaryMessage(postData, inputFile.getName()).getBytes());
 
@@ -134,33 +135,35 @@ public class OssUploader extends
 			os.flush();
 			os.close();
 
-			// download the response from server
+			// read response from server
+			// response code may be 204
+			boolean requestOk = conn.getResponseCode() / 200 == 1;
+
 			BufferedReader r = new BufferedReader(new InputStreamReader(
-					conn.getResponseCode() == 200 ? conn.getInputStream() : conn.getErrorStream(),
+					requestOk ? conn.getInputStream() : conn.getErrorStream(),
 					"UTF-8"));
 			StringBuilder resStr = new StringBuilder();
 			String line;
 			while ((line = r.readLine()) != null) {
 				resStr.append(line);
 			}
+			Log.e(TAG, " response: ", resStr.toString());
 
-			String xmlStr = resStr.toString();
-			Log.e(TAG, "response: ", xmlStr);
-
-			Element root = parseXml(xmlStr);
-
-			if (conn.getResponseCode() == 200) {
+			if (requestOk) {
+				Log.e(TAG, " upload succeed. ");
 				if (networkIFDelegate != null)
 					networkIFDelegate.didFinishNetworkIFCommunication(tag, key.getBytes());
 			} else {
+				String xmlStr = resStr.toString();
+				Element root = parseXml(xmlStr);
 				String err = root.getElementsByTagName("Message").item(0).getTextContent();
-				Log.e(TAG, "upload failed: ", err);
+				Log.e(TAG, " upload failed: ", err);
 				if (networkIFDelegate != null)
 					networkIFDelegate.didFailNetworkIFCommunication(tag, err.getBytes());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Log.e("HttpMultipartRequest:", e.toString());
+			Log.e(TAG, " HttpMultipartRequest:", e.toString());
 			if(networkIFDelegate!=null) networkIFDelegate.didFailNetworkIFCommunication(tag, e.toString().getBytes());
 		} finally {
 			if (conn != null)
@@ -193,8 +196,10 @@ public class OssUploader extends
 		return doc.getDocumentElement();
 	}
 
-	private String getSignature() {
-		return HmacSHA1Signature.create().computeSignature(accessKeySerect, getPolicy());
+	private String getSignature(String policy) {
+		String result = HmacSHA1Signature.create().computeSignature(accessKeySerect, policy);
+		Log.i(TAG, " get signature:", result);
+		return result;
 	}
 
 	private String getPolicy() {
@@ -211,11 +216,20 @@ public class OssUploader extends
 			conditions.put(bucket);
 
 			root.put("conditions", conditions);
+			String json = root.toString();
+			String result = Base64.encodeToString(json.getBytes("UTF-8"), Base64.URL_SAFE);
+			result = result.replace("\n", "");
+			Log.i(TAG, " get policy json:", json);
+			Log.i(TAG, " get policy base64:", result);
+			return result;
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		String json = root.toString();
-		return Base64.encodeToString(json.getBytes(), Base64.DEFAULT);
+		catch (UnsupportedEncodingException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override
@@ -229,7 +243,6 @@ public class OssUploader extends
 	@Override
 	protected void onProgressUpdate(Integer... progress) {
 		super.onProgressUpdate(progress);
-		// Log.e("onProgressUpdate",progress[0]);
 		if (networkIFDelegate != null) {
 			networkIFDelegate.setProgress(tag, progress[0]);
 		}

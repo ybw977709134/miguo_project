@@ -804,7 +804,7 @@ public class PrefUtil {
     }
 
     public String getOssBucket() {
-        return GlobalSetting.S3_BUCKET;
+        return "om-im-product";
     }
 
     /** Use Amazon S3 as storage service. */

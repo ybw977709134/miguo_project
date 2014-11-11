@@ -17,8 +17,6 @@ import java.net.URL;
 class OssDownloader extends AsyncTask<String, Integer, String> {
 	private static final String TAG = "OssDownloader";
 
-	private static final String BOUNDARY = "----------V2ymHFg03ehbqgZCaKO6jy";
-
 	private final String accessKeyId;
 	private final String accessKeySerect;
 	private final String bucketName;

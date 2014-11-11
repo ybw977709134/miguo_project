@@ -2025,6 +2025,12 @@ public class WowTalkWebServerIF {
             postStr += "&employee_id=" + Utils.urlencodeUtf8(data.employeeId);
             ++cnt;
         }
+		if(0 != (Buddy.FIELD_FLAG_PHOTO & whichValid)) {
+			long ts = Calendar.getInstance().getTimeInMillis() / 1000;
+			editor.putString(PrefUtil.MY_PHOTO_UPLOADED_TIMESTAMP, Long.toString(ts));
+			postStr += "&upload_photo_timestamp=" + ts;
+			++cnt;
+		}
 
 		if(cnt > 0) {
 			if(connect2 == null)

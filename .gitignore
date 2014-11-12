@@ -2,3 +2,5 @@ out
 tester
 .idea/workspace.xml
 .directory
+*.apk
+proguard_logs

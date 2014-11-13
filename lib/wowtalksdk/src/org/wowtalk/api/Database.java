@@ -814,6 +814,10 @@ public class Database {
 		return list;
 	}
 
+    /**
+     * Teachers and students
+     * @return
+     */
     public ArrayList<Buddy> fetchNormalBuddies() {
         ArrayList<Buddy> normalBuddy=new ArrayList<Buddy>();
         if (isDBUnavailable()) {
@@ -828,7 +832,8 @@ public class Database {
 //                    aBuddy.setAccountType(Buddy.ACCOUNT_TYPE_TEACHER);
 //                    storeNewBuddyWithUpdate(aBuddy);
 //                }
-                if(aBuddy.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT) {
+                if(Buddy.ACCOUNT_TYPE_STUDENT == aBuddy.getAccountType()
+                        || Buddy.ACCOUNT_TYPE_TEACHER == aBuddy.getAccountType()) {
                     normalBuddy.add(aBuddy);
                 }
             }

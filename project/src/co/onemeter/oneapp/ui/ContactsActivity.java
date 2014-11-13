@@ -41,8 +41,6 @@ public class ContactsActivity extends Activity implements OnClickListener,
 	 */
 	private static final int HANDLER_LOCAL_BUDDIES_LOADED = 2;
 
-    private static final int HANDLER_LOCAL_FAMILY_MEMBER_LOADED = 3;
-
 	private ImageButton btnTitleAdd;
 	private TextView txtTitleCurrentGroup;
 	private EditText etSearch;
@@ -66,8 +64,6 @@ public class ContactsActivity extends Activity implements OnClickListener,
 	private ContactGroupAdapter groupsAdapter;
     private FunctionAdapter fucAdapter;
 	private ArrayList<GroupChatRoom> groupRooms;
-
-    private ArrayList<Buddy> familyMemberList;
 
 	private WowTalkWebServerIF mWebif = null;
     private PrefUtil mPrefUtil;
@@ -125,29 +121,6 @@ public class ContactsActivity extends Activity implements OnClickListener,
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case HANDLER_LOCAL_FAMILY_MEMBER_LOADED:
-                    if(null == familyMemberList || familyMemberList.size() == 0) {
-                        findViewById(R.id.tv_family_friend).setVisibility(View.GONE);
-                        findViewById(R.id.family_friend_list).setVisibility(View.GONE);
-                    } else {
-                        findViewById(R.id.tv_family_friend).setVisibility(View.VISIBLE);
-                        findViewById(R.id.family_friend_list).setVisibility(View.VISIBLE);
-
-                        //ADD adapter
-                        ListView lvFamilyContact=(ListView) findViewById(R.id.family_friend_list);
-                        lvFamilyContact.setAdapter(new FamilyContactAdapter(ContactsActivity.this,familyMemberList));
-                        ListHeightUtil.setListHeight(lvFamilyContact);
-                        lvFamilyContact.setOnItemClickListener(new OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-                                ContactInfoActivity.launch(
-                                        ContactsActivity.this,
-                                        familyMemberList.get(pos).userID,
-                                        ContactInfoActivity.BUDDY_TYPE_IS_FRIEND);
-                            }
-                        });
-                    }
-                    break;
                 case HANDLER_LOCAL_GROUPS_LOADED:
                     if (groupRooms == null || groupRooms.size() == 0) {
                         findViewById(R.id.group_indicator).setVisibility(View.GONE);
@@ -356,19 +329,6 @@ public class ContactsActivity extends Activity implements OnClickListener,
 		}).start();
 	}
 
-    private void getFamilyMemberFromLocal() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final Database dbHelper = new Database(ContactsActivity.this);
-
-                familyMemberList=dbHelper.fetchFamilyBuddies();
-
-                mHandler.sendEmptyMessage(HANDLER_LOCAL_FAMILY_MEMBER_LOADED);
-            }
-        }).start();
-    }
-	
 	private void getMyGroupsFromLocal() {
 
         new Thread(new Runnable() {
@@ -557,7 +517,6 @@ public class ContactsActivity extends Activity implements OnClickListener,
 
         getMyGroupsFromLocal();
         getMyBuddyListFromLocal();
-        getFamilyMemberFromLocal();
         Database.addDBTableChangeListener(Database.TBL_BUDDIES,contactBuddyObserver);
         Database.addDBTableChangeListener(Database.TBL_GROUP,contactGroupObserver);
         Database.addDBTableChangeListener(Database.TBL_PENDING_REQUESTS,pendingRequestObserver);

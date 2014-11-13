@@ -179,12 +179,14 @@
                 <TextView
                         android:id="@+id/tv_family_friend"
                         style="@style/contact_subtitle"
+                        android:visibility="gone"
                         android:text="@string/family_friend_title"/>
 
                 <ListView
                         android:id="@+id/family_friend_list"
                         android:layout_height="wrap_content"
                         android:layout_width="fill_parent"
+                        android:visibility="gone"
                         android:cacheColorHint="@null"
                         android:divider="@null"/>
 

@@ -1028,12 +1028,13 @@ public abstract class MessageComposerActivityBase extends Activity
         }
         mInputMgr.setCanSendMsg(mCanSendMsg == CAN_SEND_MSG_OK);
 
-        if (null != b && b.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
-            mInputMgr.show(InputBoardManager.FLAG_SHOW_MEDIA);
-            mInputMgr.setLayoutForFamily();
-        } else {
-            mInputMgr.show(InputBoardManager.FLAG_SHOW_TEXT);
-        }
+//        if (null != b && b.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+//            mInputMgr.show(InputBoardManager.FLAG_SHOW_MEDIA);
+//            mInputMgr.setLayoutForFamily();
+//        } else {
+//            mInputMgr.show(InputBoardManager.FLAG_SHOW_TEXT);
+//        }
+        mInputMgr.show(InputBoardManager.FLAG_SHOW_TEXT);
 
 		/*
 		 * refresh unread message shown on StartActivity

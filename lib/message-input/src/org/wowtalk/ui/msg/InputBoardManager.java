@@ -504,9 +504,10 @@ public class InputBoardManager implements Parcelable,
         } else if (i == R.id.btn_input_video) {
             inputVideo();
         } else if (i == R.id.btn_input_doodle) {
-            inputDoodle();
+            Toast.makeText(mContext, "即将推出", Toast.LENGTH_SHORT).show();
+//            inputDoodle();
         } else if (i == R.id.btn_input_picvoice) {
-            Toast.makeText(mContext, "not implemented", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "即将推出", Toast.LENGTH_SHORT).show();
         } else if (i == R.id.btn_input_voice) {// replace text inputbox with hold-to-speak button
             PackageManager pm = mContext.getPackageManager();
             if (!pm.hasSystemFeature(PackageManager.FEATURE_MICROPHONE)) {

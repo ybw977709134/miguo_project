@@ -1,0 +1,41 @@
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+out/
+
+# Local configuration file (sdk path, etc)
+local.properties
+lint.xml
+workspace.xml
+.iml
+
+# Eclipse project files
+.classpath
+.project
+
+# Mac specific
+*.DS_Store*
+
+# proguard
+/project/proguard/
+
+# misc
+jarlist.cache
+proguard_logs/
+.directory
+cp2www.sh
+build.log
+/tmp/
+/dev_tools/wowtalkdb
+tags
+.idea/uiDesigner.xml

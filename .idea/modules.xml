@@ -9,9 +9,9 @@
       <module fileurl="file://$PROJECT_DIR$/lib/message-input/message-input.iml" filepath="$PROJECT_DIR$/lib/message-input/message-input.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/messagebox/messagebox.iml" filepath="$PROJECT_DIR$/lib/messagebox/messagebox.iml" />
       <module fileurl="file://$PROJECT_DIR$/project/oneapp.iml" filepath="$PROJECT_DIR$/project/oneapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib/paint_android/paint_android.iml" filepath="$PROJECT_DIR$/lib/paint_android/paint_android.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/pulltorefresh/pulltorefresh.iml" filepath="$PROJECT_DIR$/lib/pulltorefresh/pulltorefresh.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/wowtalksdk/wowtalksdk.iml" filepath="$PROJECT_DIR$/lib/wowtalksdk/wowtalksdk.iml" />
     </modules>
   </component>
 </project>
-

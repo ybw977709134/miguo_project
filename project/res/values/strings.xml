@@ -167,10 +167,11 @@
     <string name="settings_about">关于</string>
 	<string name="settings_profile">个人资料</string>
 	<string name="settings_avatar">头像</string>
+	<string name="settings_account_type">用户类型</string>
 	<string name="settings_name">名字</string>
 	<string name="settings_pinyin">发音</string>
 	<string name="settings_sex">性别</string>
-	<string name="settings_age">年龄</string>
+	<string name="settings_age">生日</string>
 	<string name="settings_change_field">更改%s</string>
 	<string name="settings_account">帐号设置</string>
 	<string name="settings_wowid_pagetitle">设置用户 ID</string>

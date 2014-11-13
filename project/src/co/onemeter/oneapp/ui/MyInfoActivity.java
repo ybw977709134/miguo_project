@@ -33,7 +33,7 @@ import java.util.Iterator;
 
 public class MyInfoActivity extends Activity implements OnClickListener, InputBoardManager.ChangeToOtherAppsListener {
 	private ImageButton btnTitleBack;
-	private TextView txtNick,txtSex,txtAge,txtArea,txtStatus;
+	private TextView mPersonType, txtNick,txtSex,txtAge,txtArea,txtStatus;
 	private TextView mPronunciationText;
 	private TextView mDeptText;
 	private TextView mJobTitleText;
@@ -102,6 +102,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
     private void initView() {
 		btnTitleBack = (ImageButton) findViewById(R.id.title_back);
 		progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+        mPersonType = (TextView)findViewById(R.id.person_account_type);
 		txtNick=(TextView)findViewById(R.id.person_name);
 		mPronunciationText = (TextView)findViewById(R.id.pronunciation);
 		txtSex=(TextView)findViewById(R.id.person_sex);
@@ -649,7 +650,12 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 		}
 	}
 
-	private void displayPeronalInfo() {
+    private void displayPeronalInfo() {
+        if (Buddy.ACCOUNT_TYPE_STUDENT == mPrefUtil.getMyAccountType()) {
+            mPersonType.setText(R.string.register_user_type_student);
+        } else if (Buddy.ACCOUNT_TYPE_TEACHER == mPrefUtil.getMyAccountType()) {
+            mPersonType.setText(R.string.register_user_type_teacher);
+        }
 		txtNick.setText(mPrefUtil.getMyNickName());
 		mPronunciationText.setText(mPrefUtil.getMyPronunciation());
 		try {

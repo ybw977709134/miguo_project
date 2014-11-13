@@ -3022,7 +3022,12 @@ public class WowTalkWebServerIF {
         String postStr = "action=search_buddy&uid=" + Utils.urlencodeUtf8(strUID) + "&password="
                 + Utils.urlencodeUtf8(strPwd) + "&q=" + Utils.urlencodeUtf8(q);
         if (accountType != null) {
-            postStr += "&acc_type=" + accountType;
+            // 搜索学生或老师
+            if (Buddy.ACCOUNT_TYPE_STUDENT == accountType) {
+                postStr += "&acc_type[]=1 & acc_type[]=2";
+            } else {
+                postStr += "&acc_type=" + accountType;
+            }
         }
 
         Connect2 connect2 = new Connect2();

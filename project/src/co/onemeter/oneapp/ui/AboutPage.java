@@ -18,7 +18,7 @@ import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 
 public class AboutPage extends Activity implements OnClickListener{
-    private static final String SUPPORT_EMAIL_ADD = "support@wowtech-inc.com";
+    private static final String SUPPORT_EMAIL_ADD = "support@onemeter.co";
 
     private ImageButton btnTitleBack;
     private TextView txtVersion;

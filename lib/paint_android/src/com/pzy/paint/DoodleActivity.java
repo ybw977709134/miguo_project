@@ -2,10 +2,8 @@ package com.pzy.paint;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.graphics.*;
 import android.graphics.Bitmap.Config;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +26,8 @@ public class DoodleActivity extends Activity {
     String outFilename;
     int width = 1280;
     int height = 800;
+
+    Point canvasSize;
 
     // stroke attrs
     int strokeWidth = 10;
@@ -146,7 +146,8 @@ public class DoodleActivity extends Activity {
         super.onPause();
         try {
             if (outFilename != null) {
-                Bitmap outBmp = bmp.copy(Config.ARGB_8888, true);
+                Rect canvasSize = surfaceView.getCanvasRect();
+                Bitmap outBmp = Bitmap.createBitmap(canvasSize.width(), canvasSize.height(), Config.ARGB_8888);
                 Canvas c = new Canvas(outBmp);
                 surfaceView.draw(c);
                 outBmp.compress(Bitmap.CompressFormat.JPEG, 90, new FileOutputStream(outFilename));
@@ -165,6 +166,9 @@ public class DoodleActivity extends Activity {
         if (bmp == null) {
             bmp = Bitmap.createBitmap(width, height, Config.ARGB_8888);
         }
+
+        width = bmp.getWidth();
+        height = bmp.getHeight();
 
         surfaceView.setBackgroundBmp(bmp);
     }

@@ -1,10 +1,7 @@
 package com.pzy.paint;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -53,6 +50,7 @@ public class DoodleSurfaceView extends SurfaceView
     Object drawSignal = new Object();
     private Paint paint = new Paint();
     private Bitmap backgroundBmp;
+    private Rect canvasRect;
 
     public DoodleSurfaceView(Context context) {
         super(context, null, 0);
@@ -92,10 +90,22 @@ public class DoodleSurfaceView extends SurfaceView
 
         final int bgcolor = 0xffddcc44;
 
-        if (backgroundBmp != null)
-            canvas.drawBitmap(backgroundBmp, 0, 0, paint);
-        else
+        if (backgroundBmp != null) {
+            Rect src = new Rect(0, 0, backgroundBmp.getWidth(), backgroundBmp.getHeight());
+            if (canvasRect == null) {
+                canvasRect = new Rect(0, 0, canvas.getWidth(), canvas.getHeight());
+                float hw1 = (float) src.height() / src.width();
+                float hw2 = (float) canvasRect.height() / canvasRect.width();
+                if (hw1 < hw2) {
+                    canvasRect.bottom = (int) (canvasRect.width() * hw1);
+                } else if (hw1 > hw2) {
+                    canvasRect.right = (int) (canvasRect.height() / hw1);
+                }
+            }
+            canvas.drawBitmap(backgroundBmp, src, canvasRect, paint);
+        } else {
             canvas.drawColor(bgcolor);
+        }
 
         synchronized (strokes) {
 
@@ -150,6 +160,10 @@ public class DoodleSurfaceView extends SurfaceView
             }
         }
         return true;
+    }
+
+    public Rect getCanvasRect() {
+        return canvasRect;
     }
 
     private float[] getCurrStrokePnts() {

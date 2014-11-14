@@ -16,7 +16,7 @@ public class MyActivity extends Activity {
         setContentView(R.layout.main);
         startActivityForResult(
                 new Intent(this, DoodleActivity.class)
-                .putExtra(DoodleActivity.EXTRA_BACKGROUND_FILENAME, "/sdcard/tmp/titanic_i_see_you_3060.jpg")
+                .putExtra(DoodleActivity.EXTRA_BACKGROUND_FILENAME, "/sdcard/tmp/doodle_bg.jpg")
                 .putExtra(DoodleActivity.EXTRA_OUTPUT_FILENAME, "/sdcard/tmp/doodle.jpg"),
                 REQ_DOODLE
         );

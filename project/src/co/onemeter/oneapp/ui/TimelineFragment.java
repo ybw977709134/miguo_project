@@ -121,8 +121,8 @@ public abstract class TimelineFragment extends ListFragment
 
     @Override
     public void onSenderChanged(int index) {
-        Toast.makeText(getActivity(),
-                "sender: " + index, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(),
+//                "sender: " + index, Toast.LENGTH_SHORT).show();
     }
 
     @Override

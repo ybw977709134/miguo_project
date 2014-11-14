@@ -41,8 +41,8 @@ public class DoodleSurfaceView extends SurfaceView
     }
 
     private static final String TAG = "DoodleSurfaceView";
-    LinkedList<float[]> strokes = new LinkedList<float[]>();
-    LinkedList<Float> currStroke = new LinkedList<Float>();
+    LinkedList<Path> strokes = new LinkedList<Path>();
+    Path currStroke = new Path();
     LinkedList<StrokeAttr> strokeAttrs = new LinkedList<StrokeAttr>();
     StrokeAttr currStrokeAttr = new StrokeAttr();
     float prevX, prevY;
@@ -90,6 +90,9 @@ public class DoodleSurfaceView extends SurfaceView
 
         final int bgcolor = 0xffddcc44;
 
+        // draw background bmp
+
+        paint.setAlpha(255);
         if (backgroundBmp != null) {
             Rect src = new Rect(0, 0, backgroundBmp.getWidth(), backgroundBmp.getHeight());
             if (canvasRect == null) {
@@ -107,15 +110,22 @@ public class DoodleSurfaceView extends SurfaceView
             canvas.drawColor(bgcolor);
         }
 
+        //
+        // draw strokes
+        //
+
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+
         synchronized (strokes) {
 
             Iterator<StrokeAttr> i = strokeAttrs.iterator();
-            for (float[] pnts : strokes) {
+            for (Path path: strokes) {
                 StrokeAttr a = i.next();
                 paint.setStrokeWidth(a.width);
                 paint.setColor(a.color);
                 paint.setAlpha(a.opacity);
-                canvas.drawLines(pnts, paint);
+                canvas.drawPath(path, paint);
             }
         }
 
@@ -124,7 +134,7 @@ public class DoodleSurfaceView extends SurfaceView
             paint.setStrokeWidth(a.width);
             paint.setColor(a.color);
             paint.setAlpha(a.opacity);
-            canvas.drawLines(getCurrStrokePnts(), paint);
+            canvas.drawPath(currStroke, paint);
         }
     }
 
@@ -134,16 +144,10 @@ public class DoodleSurfaceView extends SurfaceView
             synchronized (currStroke) {
                 // 在同一个位置，有可能连续发生多次 ACTION_MOVE，虽然压力可能不同，但只要坐标相同，就不再采纳。
                 if (currStroke.isEmpty()) {
-                    currStroke.add(event.getX());
-                    currStroke.add(event.getY());
+                    currStroke.moveTo(event.getX(), event.getY());
                     setDirty();
                 } else if ((int)prevX != (int)event.getX() || (int)prevY != (int)event.getY()) {
-                    if (currStroke.size() % 4 == 0) {
-                        currStroke.add(prevX);
-                        currStroke.add(prevY);
-                    }
-                    currStroke.add(event.getX());
-                    currStroke.add(event.getY());
+                    currStroke.lineTo(event.getX(), event.getY());
                     setDirty();
                 }
                 prevX = event.getX();
@@ -152,9 +156,9 @@ public class DoodleSurfaceView extends SurfaceView
         }
         else if (event.getAction() == MotionEvent.ACTION_UP) {
             synchronized (strokes) {
-                strokes.add(getCurrStrokePnts());
+                strokes.add(currStroke);
                 strokeAttrs.add(currStrokeAttr);
-                currStroke = new LinkedList<Float>();
+                currStroke = new Path();
                 currStrokeAttr = currStrokeAttr.clone();
                 setDirty();
             }
@@ -164,16 +168,6 @@ public class DoodleSurfaceView extends SurfaceView
 
     public Rect getCanvasRect() {
         return canvasRect;
-    }
-
-    private float[] getCurrStrokePnts() {
-        float[] pnts = new float[currStroke.size()];
-        int i = 0;
-        for (float coord : currStroke) {
-            pnts[i] = coord;
-            ++i;
-        }
-        return pnts;
     }
 
     private void setDirty() {
@@ -189,7 +183,7 @@ public class DoodleSurfaceView extends SurfaceView
         }
 
         synchronized (currStroke) {
-            currStroke.clear();
+            currStroke = new Path();
         }
 
         setDirty();

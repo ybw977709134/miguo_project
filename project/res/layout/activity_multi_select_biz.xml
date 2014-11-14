@@ -17,6 +17,7 @@
             android:layout_width="50dp"
             android:layout_alignParentLeft="true"
             android:background="@null"
+            android:visibility="invisible"
             android:src="@drawable/nav_group_list_selector"/>
 		<ImageButton
             android:id="@+id/title_back"

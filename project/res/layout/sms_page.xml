@@ -15,7 +15,7 @@
             android:layout_width="50dp"
             android:layout_alignParentRight="true"
             android:background="@null"
-            android:src="@drawable/nav_create_chat_selector"/>
+            android:src="@drawable/icon_add_white"/>
         <TextView
 	        android:id="@+id/txtSmsTitle"
             android:layout_height="wrap_content"

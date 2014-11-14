@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">Paint</string>
+	<string name="paint_app_name">Paint</string>
 	<string name="stroke_width">笔尖宽度</string>
 	<string name="stoke_opacity">不透明度</string>
 	<string name="stroke_color">颜色</string>

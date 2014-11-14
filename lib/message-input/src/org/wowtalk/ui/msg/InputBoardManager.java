@@ -1156,17 +1156,17 @@ public class InputBoardManager implements Parcelable,
             break;
         case REQ_INPUT_DOODLE: {
             String[] photoPath = new String[2];
-            photoPath[1] = doodleOutFilename;
+            photoPath[0] = doodleOutFilename;
 
             // generate thumbnail
             File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_THUMNAIL, ".jpg");
             if (f != null) {
-                photoPath[0] = f.getAbsolutePath();
-                Bitmap thumbnail = BmpUtils.decodeFile(photoPath[1],
+                photoPath[1] = f.getAbsolutePath();
+                Bitmap thumbnail = BmpUtils.decodeFile(photoPath[0],
                         PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT);
                 try {
-                    FileOutputStream fos = new FileOutputStream(photoPath[0]);
-                    thumbnail.compress(Bitmap.CompressFormat.JPEG, 9, fos);
+                    FileOutputStream fos = new FileOutputStream(photoPath[1]);
+                    thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, fos);
                     fos.close();
                 } catch (java.io.IOException e) {
                     e.printStackTrace();

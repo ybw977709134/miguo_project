@@ -5371,25 +5371,39 @@ public class Database {
      * @param tag Tag index, 0 means not limited
      * @return
      */
-    public ArrayList<Moment> fetchMomentsOfSingleBuddy(String uid, long maxTimestamp, int count, int tag) {
+    public ArrayList<Moment> fetchMomentsOfSingleBuddy(String uid, long maxTimestamp, int count, String tag) {
         String[] selection = new String[3];
         selection[0] = "owner_uid=?";
         selection[1] = (maxTimestamp > 0) ? "timestamp<?" : "1";
-        selection[2] = (tag != -1) ? "tag=?" : "1";
+        // tag == -1 全部
+        if ("-1".equals(tag)) {
+            selection[2] = "1";
+        } else if (Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(tag)) {
+            // 投票分单选和多选
+            selection[2] = "tag=? or tag=?";
+        } else {
+            selection[2] = "tag=?";
+        }
 
         ArrayList<String> args = new ArrayList<String>();
         args.add(uid);
         if (maxTimestamp > 0) {
             args.add(String.valueOf(maxTimestamp));
         }
-        if (tag != -1) {
-            args.add(String.valueOf(tag));
+        if (!"-1".equals(tag)) {
+            if (Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(tag)) {
+                // 投票分单选和多选
+                args.add(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE);
+                args.add(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI);
+            } else {
+                args.add(tag);
+            }
         }
         return fetchMoments(TextUtils.join(" AND ", selection), args.toArray(new String[args.size()]), count);
     }
 
     public ArrayList<Moment> fetchMomentsOfSingleBuddy(String uid, long maxTimestamp, int count) {
-        return fetchMomentsOfSingleBuddy(uid, maxTimestamp, count, -1);
+        return fetchMomentsOfSingleBuddy(uid, maxTimestamp, count, "-1");
     }
 
     /**
@@ -5399,22 +5413,36 @@ public class Database {
      * @param count
      * @return
      */
-    public ArrayList<Moment> fetchMomentsOfAllBuddies(long maxTimestamp, int count, int tag) {
+    public ArrayList<Moment> fetchMomentsOfAllBuddies(long maxTimestamp, int count, String tag) {
         String[] selection = new String[2];
         selection[0] = (maxTimestamp > 0) ? "timestamp<?" : "1";
-        selection[1] = (tag != -1) ? "tag=?" : "1";
+        // tag == -1 全部
+        if ("-1".equals(tag)) {
+            selection[1] = "1";
+        } else if (Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(tag)) {
+            // 投票分单选和多选
+            selection[1] = "tag=? or tag=?";
+        } else {
+            selection[1] = "tag=?";
+        }
 
         ArrayList<String> args = new ArrayList<String>();
         if (maxTimestamp > 0) {
             args.add(String.valueOf(maxTimestamp));
         }
-        if (tag != -1) {
-            args.add(String.valueOf(tag));
+        if (!"-1".equals(tag)) {
+            if (Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(tag)) {
+                // 投票分单选和多选
+                args.add(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE);
+                args.add(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI);
+            } else {
+                args.add(tag);
+            }
         }
         return fetchMoments(TextUtils.join(" AND ", selection), args.toArray(new String[args.size()]), count);
     }
     public ArrayList<Moment> fetchMomentsOfAllBuddies(long maxTimestamp, int count) {
-        return fetchMomentsOfAllBuddies(maxTimestamp, count, -1);
+        return fetchMomentsOfAllBuddies(maxTimestamp, count, "-1");
     }
 
     public ArrayList<Moment> fetchMomentsOfFavorite(long maxTimestamp, int count) {

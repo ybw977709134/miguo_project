@@ -38,7 +38,7 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
     }
 
     @Override
-    protected ArrayList<Moment> loadLocalMoments(int tag) {
+    protected ArrayList<Moment> loadLocalMoments(String tag) {
         return dbHelper.fetchMomentsOfAllBuddies(0, 20, tag);
     }
 

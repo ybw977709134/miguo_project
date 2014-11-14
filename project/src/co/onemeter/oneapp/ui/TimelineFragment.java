@@ -51,7 +51,7 @@ public abstract class TimelineFragment extends ListFragment
      * @param tag Tag index. -1 means not limited.
      * @return
      */
-    protected abstract ArrayList<Moment> loadLocalMoments(int tag);
+    protected abstract ArrayList<Moment> loadLocalMoments(String tag);
 
     /**
      * Load moments from web server.
@@ -151,8 +151,43 @@ public abstract class TimelineFragment extends ListFragment
      * @param uiTagIdx
      * @return
      */
-    private int tagIdxFromUiToDb(int uiTagIdx) {
-        return uiTagIdx < 0 ? uiTagIdx : uiTagIdx - 1;
+    private String tagIdxFromUiToDb(int uiTagIdx) {
+        // tag与数据库对应
+        String tag = "-1";
+        switch (uiTagIdx) {
+        case 0:
+            // 全部
+            tag = "-1";
+            break;
+        case 1:
+            // 通知
+            tag = Moment.SERVER_MOMENT_TAG_FOR_NOTICE;
+            break;
+        case 2:
+            // 问答
+            tag = Moment.SERVER_MOMENT_TAG_FOR_QA;
+            break;
+        case 3:
+            // 学习
+            tag = Moment.SERVER_MOMENT_TAG_FOR_STUDY;
+            break;
+        case 4:
+            // 生活
+            tag = Moment.SERVER_MOMENT_TAG_FOR_LIFE;
+            break;
+        case 5:
+            // 投票
+            // 此处有两个值，数据库中处理
+            tag = Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE;
+            break;
+        case 6:
+            // 视频
+            tag = Moment.SERVER_MOMENT_TAG_FOR_VIDEO;
+            break;
+        default:
+            break;
+        }
+        return tag;
     }
 
     private class RefreshMomentsTask extends AsyncTask<Void, Void, Integer> {

@@ -414,7 +414,7 @@
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
-			android:name="org.wowtalk.ui.msg.DoodleActivity"
+			android:name="com.pzy.paint.DoodleActivity"
 			android:theme="@style/Theme.Red"
 			android:screenOrientation="portrait" >
 		</activity>

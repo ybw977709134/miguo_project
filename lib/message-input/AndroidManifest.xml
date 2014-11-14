@@ -35,7 +35,6 @@
             android:name="org.wowtalk.ui.msg.PickLocActivity"
             android:screenOrientation="portrait" >
         </activity>
-	    <activity android:name=".DoodleActivity"/>
     </application>
 
 </manifest>

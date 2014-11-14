@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<style name="palette_grid">
+		<item name="android:layout_width">30dp</item>
+		<item name="android:layout_height">30dp</item>
+		<item name="android:layout_margin">1dp</item>
+	</style>
+
+	<style name="palette_grid_01" parent="palette_grid">
+		<item name="android:background">#f00</item>
+	</style>
+
+	<style name="palette_grid_02" parent="palette_grid">
+		<item name="android:background">#f0f</item>
+	</style>
+
+	<style name="palette_grid_03" parent="palette_grid">
+		<item name="android:background">#00f</item>
+	</style>
+
+	<style name="palette_grid_04" parent="palette_grid">
+		<item name="android:background">#0ff</item>
+	</style>
+
+	<style name="palette_grid_05" parent="palette_grid">
+		<item name="android:background">#0f0</item>
+	</style>
+
+	<style name="palette_grid_06" parent="palette_grid">
+		<item name="android:background">#ff0</item>
+	</style>
+
+	<style name="palette_grid_07" parent="palette_grid">
+		<item name="android:background">#000</item>
+	</style>
+</resources>

@@ -82,6 +82,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="paint_android" />
   </component>
 </module>
-

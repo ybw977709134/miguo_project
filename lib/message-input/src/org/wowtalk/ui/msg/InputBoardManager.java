@@ -20,13 +20,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.pzy.paint.DoodleActivity;
 import org.wowtalk.Log;
+import org.wowtalk.api.Database;
 import org.wowtalk.api.Moment;
 import org.wowtalk.ui.MediaInputHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * Let user input text, voice, image, video, location, emotion, etc.
@@ -186,6 +189,8 @@ public class InputBoardManager implements Parcelable,
 
     // used in onHeightChanged()
     private Runnable mRunnableOnResize;
+
+    private String doodleOutFilename;
 
     /**
      * @param context need to be able to receive Activity result.
@@ -504,10 +509,9 @@ public class InputBoardManager implements Parcelable,
         } else if (i == R.id.btn_input_video) {
             inputVideo();
         } else if (i == R.id.btn_input_doodle) {
-            Toast.makeText(mContext, "即将推出", Toast.LENGTH_SHORT).show();
-//            inputDoodle();
+            inputDoodle();
         } else if (i == R.id.btn_input_picvoice) {
-            Toast.makeText(mContext, "即将推出", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "not implemented", Toast.LENGTH_SHORT).show();
         } else if (i == R.id.btn_input_voice) {// replace text inputbox with hold-to-speak button
             PackageManager pm = mContext.getPackageManager();
             if (!pm.hasSystemFeature(PackageManager.FEATURE_MICROPHONE)) {
@@ -1152,7 +1156,7 @@ public class InputBoardManager implements Parcelable,
             break;
         case REQ_INPUT_DOODLE: {
             String[] photoPath = new String[2];
-            photoPath[1] = data.getStringExtra(DoodleActivity.EXTRA_OUTPUT_FILENAME);
+            photoPath[1] = doodleOutFilename;
 
             // generate thumbnail
             File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_THUMNAIL, ".jpg");
@@ -1182,11 +1186,13 @@ public class InputBoardManager implements Parcelable,
                         PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
                         PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
                         photoPath)) {
+                    doodleOutFilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
                     mContext.startActivityForResult(
                             new Intent(mContext, DoodleActivity.class)
                                     .putExtra(DoodleActivity.EXTRA_MAX_WIDTH, PHOTO_SEND_WIDTH)
                                     .putExtra(DoodleActivity.EXTRA_MAX_HEIGHT, PHOTO_SEND_HEIGHT)
-                                    .putExtra(DoodleActivity.EXTRA_BACKGROUND_FILENAME, photoPath[1]),
+                                    .putExtra(DoodleActivity.EXTRA_BACKGROUND_FILENAME, photoPath[0])
+                                    .putExtra(DoodleActivity.EXTRA_OUTPUT_FILENAME, doodleOutFilename),
                             REQ_INPUT_DOODLE
                     );
                 }

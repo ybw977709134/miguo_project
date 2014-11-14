@@ -91,6 +91,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
             q.find(R.id.event_category).text(
                     String.format(getString(R.string.event_category),
                             WEventUiHelper.getEventCatetoryText(getBaseContext(), act.category)));
+            q.find(R.id.event_category).visibility(View.GONE);
             q.find(R.id.event_host).text(
                     String.format(getString(R.string.event_host), act.host));
 			ImageView imgPhoto = (ImageView) lView.findViewById(R.id.event_photo);

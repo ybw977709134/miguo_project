@@ -296,6 +296,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         txtPlace.setText(String.format(getResources().getString(R.string.event_place), eventDetail.address));
         txtCategory.setText(String.format(getResources().getString(R.string.event_category),
                 WEventUiHelper.getEventCatetoryText(this, eventDetail.category)));
+        txtCategory.setVisibility(View.GONE);
         txtCost.setText(String.format(getResources().getString(R.string.event_cost), eventDetail.costGolds));
         txtDetailIntroduce.setText(eventDetail.description);
         tvMailSendTo.setText(eventDetail.contactEmail);

@@ -41,6 +41,10 @@ public abstract class TimelineFragment extends ListFragment
         if (savedInstanceState != null) {
             selectedTag = savedInstanceState.getInt("selectedTag");
         }
+
+        // load moments
+        setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag)));
+        checkNewMoments();
     }
 
     @Override
@@ -106,10 +110,6 @@ public abstract class TimelineFragment extends ListFragment
         super.onResume();
 
         setupListHeaderView();
-
-        // load moments
-        setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag)));
-        checkNewMoments();
 
         PullToRefreshListView listView = getPullToRefreshListView();
         if (listView != null) {

@@ -107,4 +107,13 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
                 break;
         }
     }
+
+    @Override
+    public boolean handleBackPress() {
+        if (timelineDropdownFilter.isShowingDialog()) {
+            timelineDropdownFilter.tryDismissAll();
+            return true;
+        }
+        return false;
+    }
 }

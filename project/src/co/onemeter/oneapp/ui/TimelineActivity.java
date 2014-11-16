@@ -57,15 +57,15 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     }
 
     public static TimelineActivity instance() {
-        if (instance == null) {
-            instance = new TimelineActivity(); // XXX silly
-        }
         return instance;
     }
 
     public boolean handleBackPress() {
         if (isNewMomentPanelShowing()) {
             hideNewMomentPanel();
+            return true;
+        }
+        if (allTimelineFragment.handleBackPress() || myTimelineFragment.handleBackPress()) {
             return true;
         }
         return false;

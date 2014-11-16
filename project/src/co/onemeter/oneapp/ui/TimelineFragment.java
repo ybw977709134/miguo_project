@@ -280,4 +280,12 @@ public abstract class TimelineFragment extends ListFragment
         }.execute(maxTimestamp);
         return true;
     }
+
+    /**
+     * Handle back press event.
+     * @return true if the event is consumed.
+     */
+    public boolean handleBackPress() {
+        return false;
+    }
 }

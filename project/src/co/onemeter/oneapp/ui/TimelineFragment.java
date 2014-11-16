@@ -23,11 +23,14 @@ import java.util.ArrayList;
  */
 public abstract class TimelineFragment extends ListFragment
         implements MomentAdapter.ReplyDelegate, OnTimelineFilterChangedListener,
-        PullToRefreshListView.OnRefreshListener {
+        PullToRefreshListView.OnRefreshListener, MomentAdapter.LoadDelegate {
+    protected static final int PAGE_SIZE = 10;
     protected Database dbHelper;
     private MomentAdapter adapter;
     // selected tag index on UI
     private int selectedTag = 0;
+    // record max timestamp for convenience of loading more
+    private long maxTimestamp = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,18 +54,27 @@ public abstract class TimelineFragment extends ListFragment
      * @param tag Tag index. -1 means not limited.
      * @return
      */
-    protected abstract ArrayList<Moment> loadLocalMoments(String tag);
+    protected abstract ArrayList<Moment> loadLocalMoments(long maxTimestmap, String tag);
 
     /**
      * Load moments from web server.
+     * @param maxTimestamp 0 means now.
      * @return {@link org.wowtalk.api.ErrorCode}
      */
-    protected abstract int loadRemoteMoments();
+    protected abstract int loadRemoteMoments(long maxTimestamp);
 
-    private void fillListView(ArrayList<Moment> lst) {
+    /**
+     * fill/append/clear list view, set visibility of the "load more" item.
+     * @param lst
+     * @param append append or replace?
+     */
+    private void fillListView(ArrayList<Moment> lst, boolean append) {
+        maxTimestamp = lst.isEmpty() ? 0 : lst.get(lst.size() - 1).timestamp;
         if (adapter != null) {
-            adapter.clear();
+            if (!append)
+                adapter.clear();
             adapter.addAll(lst);
+            adapter.setShowLoadMoreAsLastItem(!append || lst.size() >= PAGE_SIZE);
             adapter.notifyDataSetChanged();
         } else {
             setupListAdapter(lst);
@@ -80,11 +92,13 @@ public abstract class TimelineFragment extends ListFragment
                 this,
                 null,
                 new MessageBox(getActivity()));
+        adapter.setShowLoadMoreAsLastItem(!items.isEmpty());
+        adapter.setLoadDelegate(this);
         setListAdapter(adapter);
     }
 
     private void checkNewMoments() {
-        new RefreshMomentsTask().execute((Void) null);
+        new RefreshMomentsTask().execute(Long.valueOf(0));
     }
 
     @Override
@@ -94,7 +108,7 @@ public abstract class TimelineFragment extends ListFragment
         setupListHeaderView();
 
         // load moments
-        setupListAdapter(loadLocalMoments(tagIdxFromUiToDb(selectedTag)));
+        setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag)));
         checkNewMoments();
 
         PullToRefreshListView listView = getPullToRefreshListView();
@@ -128,7 +142,7 @@ public abstract class TimelineFragment extends ListFragment
     @Override
     public void onTagChanged(int index) {
         selectedTag = index;
-        fillListView(loadLocalMoments(tagIdxFromUiToDb(selectedTag)));
+        fillListView(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag)), false);
         //Toast.makeText(getActivity(), "tag: " + index, Toast.LENGTH_SHORT).show();
     }
 
@@ -190,17 +204,23 @@ public abstract class TimelineFragment extends ListFragment
         return tag;
     }
 
-    private class RefreshMomentsTask extends AsyncTask<Void, Void, Integer> {
+    /**
+     * Params[0] should be max timestamp.
+     */
+    private class RefreshMomentsTask extends AsyncTask<Long, Void, Integer> {
+        long maxTimestamp;
+
         @Override
-        protected Integer doInBackground(Void... params) {
-            return loadRemoteMoments();
+        protected Integer doInBackground(Long... params) {
+            maxTimestamp = params[0];
+            return loadRemoteMoments(maxTimestamp);
         }
 
         @Override
         protected void onPostExecute(Integer errno) {
             if (errno == ErrorCode.OK) {
-                ArrayList<Moment> lst = loadLocalMoments(tagIdxFromUiToDb(selectedTag));
-                fillListView(lst);
+                ArrayList<Moment> lst = loadLocalMoments(maxTimestamp, tagIdxFromUiToDb(selectedTag));
+                fillListView(lst, maxTimestamp > 0);
             } else {
                 Toast.makeText(getActivity(), R.string.moments_check_failed, Toast.LENGTH_SHORT).show();
             }
@@ -215,6 +235,18 @@ public abstract class TimelineFragment extends ListFragment
                 super.onPostExecute(errno);
                 refreshView.onRefreshComplete();
             }
-        }.execute((Void)null);
+        }.execute(Long.valueOf(0));
+    }
+
+    @Override
+    public boolean onLoadMore() {
+        new RefreshMomentsTask(){
+            @Override
+            protected void onPostExecute(Integer errno) {
+                super.onPostExecute(errno);
+                adapter.notifyLoadingCompleted();
+            }
+        }.execute(maxTimestamp);
+        return true;
     }
 }

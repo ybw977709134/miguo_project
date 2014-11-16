@@ -79,14 +79,14 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
     }
 
     @Override
-    protected ArrayList<Moment> loadLocalMoments(String tag) {
-        return dbHelper.fetchMomentsOfSingleBuddy(uid(), 0, 20, tag);
+    protected ArrayList<Moment> loadLocalMoments(long maxTimestamp, String tag) {
+        return dbHelper.fetchMomentsOfSingleBuddy(uid(), maxTimestamp, PAGE_SIZE, tag);
     }
 
     @Override
-    protected int loadRemoteMoments() {
+    protected int loadRemoteMoments(long maxTimestamp) {
         WowMomentWebServerIF web = WowMomentWebServerIF.getInstance(getActivity());
-        return web.fGetMomentsOfBuddy(uid(), 0, 20, true);
+        return web.fGetMomentsOfBuddy(uid(), maxTimestamp, PAGE_SIZE, true);
     }
 
     @Override

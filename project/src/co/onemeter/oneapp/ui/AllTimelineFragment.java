@@ -38,14 +38,14 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
     }
 
     @Override
-    protected ArrayList<Moment> loadLocalMoments(String tag) {
-        return dbHelper.fetchMomentsOfAllBuddies(0, 20, tag);
+    protected ArrayList<Moment> loadLocalMoments(long maxTimestamp, String tag) {
+        return dbHelper.fetchMomentsOfAllBuddies(maxTimestamp, PAGE_SIZE, tag);
     }
 
     @Override
-    protected int loadRemoteMoments() {
+    protected int loadRemoteMoments(long maxTimestamp) {
         WowMomentWebServerIF web = WowMomentWebServerIF.getInstance(getActivity());
-        return web.fGetMomentsOfAll(0, 20, true);
+        return web.fGetMomentsOfAll(maxTimestamp, PAGE_SIZE, true);
     }
 
     @Override

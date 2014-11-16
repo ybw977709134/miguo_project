@@ -35,10 +35,11 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         /**
          *
          * @param position Moment 在列表中的位置
-         * @param momentId
+         * @param moment
          * @param replyTo
+         * @param like 这是一个“赞”
          */
-        public void replyToMoment( int position, String momentId, Review replyTo);
+        public void replyToMoment(int position, Moment moment, Review replyTo, boolean like);
     }
 
     public interface LoadDelegate {
@@ -808,9 +809,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         holder.layoutLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MomentActivity a = MomentActivity.instance();
-                if (a != null)
-                    a.doLikeMoment_async(moment);
+                if (mReplyDelegate != null) {
+                    mReplyDelegate.replyToMoment(position, moment, null, true);
+                }
             }
         });
         holder.btnComment.setOnClickListener(new View.OnClickListener() {
@@ -823,7 +824,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             @Override
             public void onClick(View v) {
                 if (mReplyDelegate != null) {
-                    mReplyDelegate.replyToMoment(position, moment.id, null);
+                    mReplyDelegate.replyToMoment(position, moment, null, false);
                 }
             }
         });
@@ -1786,13 +1787,13 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
      * @param layout
      * @param reviews
      * @param momentPosition
-     * @param momentId
+     * @param moment
      * @param mReplyDelegate
      * @return actual count of reviews being displayed.
      */
     public static int setViewForCommentReview(
             final Context context, LinearLayout layout, final ArrayList<Review> reviews,
-            final int momentPosition, final String momentId,
+            final int momentPosition, final Moment moment,
             final ReplyDelegate mReplyDelegate) {
 
         layout.removeAllViews();
@@ -1852,7 +1853,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                         @Override
                         public void onClick(View v) {
                             if (mReplyDelegate != null) {
-                                mReplyDelegate.replyToMoment(momentPosition, momentId, review);
+                                mReplyDelegate.replyToMoment(momentPosition, moment, review, false);
                             }
                         }
                     });

@@ -220,7 +220,7 @@ public class MomentActivity extends Activity
         return instance;
     }
 
-    public void doLikeMoment_async(final Moment moment) {
+    private void doLikeMoment_async(final Moment moment) {
         if(moment.likedByMe) {
             Review likeReview=null;
             for(Review aReview : moment.reviews) {
@@ -2739,18 +2739,23 @@ public class MomentActivity extends Activity
      * Perform replying action.
      */
     @Override
-    public void replyToMoment(int momentPosition, final String momentId, final Review replyTo) {
+    public void replyToMoment(int momentPosition, final Moment moment, final Review replyTo, boolean like) {
+        if (like) {
+            doLikeMoment_async(momentsAll.get(momentPosition));
+            return;
+        }
+
         if (mMenu == null)
             mMenu = new BottomButtonBoard(this, findViewById(android.R.id.content));
         else
             mMenu.clearView();
 
         if (replyTo == null) {
-            replyToMoment_helper(momentPosition, momentId, replyTo, this, this,
-                    this, getLikeBtnClickListener(MomentActivity.this,momentId));
+            replyToMoment_helper(momentPosition, moment.id, replyTo, this, this,
+                    this, getLikeBtnClickListener(MomentActivity.this,moment.id));
         } else {
-            doWithReview(momentPosition, momentId, replyTo, mMenu, this, this,
-                    this, onMomentReviewDeleteListener, getLikeBtnClickListener(MomentActivity.this, momentId));
+            doWithReview(momentPosition, moment.id, replyTo, mMenu, this, this,
+                    this, onMomentReviewDeleteListener, getLikeBtnClickListener(MomentActivity.this, moment.id));
         }
     }
 

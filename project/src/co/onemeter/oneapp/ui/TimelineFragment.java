@@ -1,5 +1,7 @@
 package co.onemeter.oneapp.ui;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -8,10 +10,7 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.Moment;
-import org.wowtalk.api.Review;
+import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 
@@ -25,6 +24,7 @@ public abstract class TimelineFragment extends ListFragment
         implements MomentAdapter.ReplyDelegate, OnTimelineFilterChangedListener,
         PullToRefreshListView.OnRefreshListener, MomentAdapter.LoadDelegate {
     protected static final int PAGE_SIZE = 10;
+    private static final int REQ_COMMENT = 123;
     protected Database dbHelper;
     private MomentAdapter adapter;
     // selected tag index on UI
@@ -123,8 +123,39 @@ public abstract class TimelineFragment extends ListFragment
     }
 
     @Override
-    public void replyToMoment(int position, String momentId, Review replyTo) {
-        new MessageBox(getActivity()).show(null, getString(R.string.not_implemented));
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_COMMENT && resultCode == Activity.RESULT_OK) {
+            // TODO refresh views
+        }
+    }
+
+    @Override
+    public void replyToMoment(int position, final Moment moment, Review replyTo, boolean like) {
+        if (like) {
+            new AsyncTask<String, Void, Integer>() {
+                Review r = new Review();
+                @Override
+                protected Integer doInBackground(String... params) {
+                    WowMomentWebServerIF web = WowMomentWebServerIF.getInstance(getActivity());
+                    return web.fReviewMoment(params[0], Review.TYPE_LIKE, null, null, r);
+                }
+
+                @Override
+                protected void onPostExecute(Integer errcode) {
+                    if (errcode == ErrorCode.OK) {
+                        moment.likedByMe = true;
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            }.execute(moment.id);
+        } else {
+            startActivityForResult(
+                    new Intent(this.getActivity(), MomentDetailActivity.class)
+                            .putExtra("moment", moment),
+                    REQ_COMMENT
+            );
+        }
     }
 
     /**

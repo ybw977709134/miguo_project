@@ -180,7 +180,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         layoutComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replyToMoment(-1, moment.id, null);
+                replyToMoment(-1, moment, null, false);
             }
         });
 
@@ -778,7 +778,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         showVoiceFile(voiceFile);
         MomentAdapter.setImageLayout(this, mImageResizer, photoFiles, imageTable);
         int nlikers = MomentAdapter.setViewForLikeReview(this, txtLikeName, moment.reviews);
-        int nReviews = MomentAdapter.setViewForCommentReview(this, commentLayout, moment.reviews, -1, moment.id, this);
+        int nReviews = MomentAdapter.setViewForCommentReview(this, commentLayout, moment.reviews, -1, moment, this);
 
         txtLikeName.setVisibility(nlikers > 0 ? View.VISIBLE : View.GONE);
         reviewLayout.setVisibility(nlikers + nReviews > 0 ? View.VISIBLE : View.GONE);
@@ -856,18 +856,18 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     }
 
     @Override
-    public void replyToMoment(int momentPosition, final String momentId, final Review replyTo) {
+    public void replyToMoment(int momentPosition, final Moment moment, final Review replyTo, boolean like) {
         if (mMenu == null)
             mMenu = new BottomButtonBoard(this, findViewById(android.R.id.content));
         else
             mMenu.clearView();
 
         if (replyTo == null) {
-            MomentActivity.replyToMoment_helper(-1, momentId, replyTo, this,
-                    this, this, getLikeBtnClickListener(momentId));
+            MomentActivity.replyToMoment_helper(-1, moment.id, replyTo, this,
+                    this, this, getLikeBtnClickListener(moment.id));
         } else {
-            MomentActivity.doWithReview(-1, momentId, replyTo, mMenu, this, this,
-                    this, onMomentReviewDeleteListener, getLikeBtnClickListener(momentId));
+            MomentActivity.doWithReview(-1, moment.id, replyTo, mMenu, this, this,
+                    this, onMomentReviewDeleteListener, getLikeBtnClickListener(moment.id));
         }
     }
 

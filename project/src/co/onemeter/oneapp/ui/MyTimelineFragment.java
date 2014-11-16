@@ -101,11 +101,6 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
     }
 
     @Override
-    public void replyToMoment(int position, String momentId, Review replyTo) {
-
-    }
-
-    @Override
     protected void setupListHeaderView() {
         if (headerView_tagbar == null || getListView().getHeaderViewsCount() == originalHeaderViewsCount) {
             originalHeaderViewsCount = getListView().getHeaderViewsCount();

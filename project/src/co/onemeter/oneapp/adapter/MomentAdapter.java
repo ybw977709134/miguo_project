@@ -284,10 +284,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                MomentDetailActivity.launch(context, moment);
-                if(!MomentActivity.instance().handleItemClick()) {
-                    MomentDetailActivity.launch(context, moment);
-                }
+                MomentDetailActivity.launch(context, moment);
+//                if(!MomentActivity.instance().handleItemClick()) {
+//                    MomentDetailActivity.launch(context, moment);
+//                }
             }
         });
 
@@ -326,7 +326,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.imgThumbnail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MomentActivity.launch(context, moment.owner.userID);
+                    TimelineActivity.launch(context, moment.owner.userID, moment.owner.nickName);
                 }
             });
         }
@@ -975,7 +975,8 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                     Intent newReviewsIntent = new Intent(context, NewReviewsActivity.class);
                     newReviewsIntent.putExtra(NewReviewsActivity.EXTRA_KEY_HOSTTYPE,
                             NewReviewsActivity.EXTRA_VALUE_HOSTTYPE_MOMENT);
-                    ((Activity)context).startActivityForResult(newReviewsIntent,MomentActivity.ACTIVITY_REQ_ID_NEW_REVIEWS);
+                    ((Activity)context).startActivity(newReviewsIntent);
+//                    ((Activity)context).startActivityForResult(newReviewsIntent,MomentActivity.ACTIVITY_REQ_ID_NEW_REVIEWS);
                 }
             };
             newReviewView.setOnClickListener(listener);
@@ -1013,7 +1014,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 @Override
                 public void onClick(View view) {
                     String myUid = PrefUtil.getInstance(context).getUid();
-                    MomentActivity.launch(context, myUid);
+                    TimelineActivity.launch(context, myUid, null);
                 }
             });
         } catch (Exception e) {
@@ -1036,7 +1037,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                     ivAdd.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            MomentActivity.instance().showCreateOptionWithTag();
+//                            MomentActivity.instance().showCreateOptionWithTag();
                         }
                     });
                 }
@@ -1758,7 +1759,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                         new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MomentActivity.launch(context, review.uid);
+                        TimelineActivity.launch(context, review.uid, review.nickname);
                     }
                 });
             } else {
@@ -1819,7 +1820,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                         new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MomentActivity.launch(context, review.uid);
+                        TimelineActivity.launch(context, review.uid, review.nickname);
                     }
                 });
             } else {
@@ -1840,7 +1841,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                MomentActivity.launch(context, review.replyToUid);
+                                TimelineActivity.launch(context, review.replyToUid, review.replyToNickname);
                             }
                         });
             }

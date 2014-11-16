@@ -1,14 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.io.File;
-
-import org.wowtalk.api.GlobalSetting;
-import org.wowtalk.api.NetworkIFDelegate;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.MediaInputHelper;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.MomentActivity.BeginUploadAlbumCover;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,8 +8,15 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.ui.TimelineActivity.BeginUploadAlbumCover;
 import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.GlobalSetting;
+import org.wowtalk.api.NetworkIFDelegate;
+import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.ui.MediaInputHelper;
+
+import java.io.File;
 
 public class AlbumCoverChangeActivity extends Activity implements OnClickListener {
 
@@ -91,7 +89,7 @@ public class AlbumCoverChangeActivity extends Activity implements OnClickListene
             protected Void doInBackground(String... params) {
                 try {
                     mWebIF.fPostFileToServer(params[0], GlobalSetting.S3_MOMENT_FILE_DIR, sNetworkIFDelegate,
-                            MomentActivity.NETWORK_TAG_UPLOADING_ALBUMCOVER);
+                            TimelineActivity.NETWORK_TAG_UPLOADING_ALBUMCOVER);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

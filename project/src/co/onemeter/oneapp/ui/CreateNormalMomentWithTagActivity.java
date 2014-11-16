@@ -179,7 +179,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 ++validSurveyNumber;
             }
         }
-        if(MomentActivity.TAG_SURVEY_IDX==tagType && validSurveyNumber<MIN_OPTIONS_NUM_FOR_SURVEY) {
+        if(TimelineActivity.TAG_SURVEY_IDX==tagType && validSurveyNumber<MIN_OPTIONS_NUM_FOR_SURVEY) {
             return false;
         }
 
@@ -279,18 +279,18 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         mMsgBox = new MessageBox(this);
         mDb = new Database(this);
 
-        tagType=getIntent().getIntExtra(CreateMomentActivity.EXTRA_KEY_MOMENT_TAG_ID,MomentActivity.TAG_NOTICE_IDX);
+        tagType=getIntent().getIntExtra(CreateMomentActivity.EXTRA_KEY_MOMENT_TAG_ID,TimelineActivity.TAG_NOTICE_IDX);
         switch (tagType) {
-        case MomentActivity.TAG_NOTICE_IDX:
+        case TimelineActivity.TAG_NOTICE_IDX:
             etMomentMsgContent.setHint(R.string.moments_compose_hint_status);
             break;
-        case MomentActivity.TAG_QA_IDX:
+        case TimelineActivity.TAG_QA_IDX:
             etMomentMsgContent.setHint(R.string.moments_compose_hint_qa);
             break;
-        case MomentActivity.TAG_SURVEY_IDX:
+        case TimelineActivity.TAG_SURVEY_IDX:
             etMomentMsgContent.setHint(R.string.moments_compose_hint_survey);
             break;
-        case MomentActivity.TAG_STUDY_IDX:
+        case TimelineActivity.TAG_STUDY_IDX:
             etMomentMsgContent.setHint(R.string.moments_compose_hint_report);
             break;
         default:
@@ -301,7 +301,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         tvShareRange=(TextView) findViewById(R.id.tv_share_range);
 
         TextView tvTitle=(TextView) findViewById(R.id.title_txt);
-        String tagName=MomentActivity.getSelectedTagLocalDesc(this, tagType);
+        String tagName=TimelineActivity.getSelectedTagLocalDesc(this, tagType);
         tvTitle.setText(String.format(getString(R.string.new_moment_title),tagName));
 
         findViewById(R.id.title_back).setOnClickListener(this);
@@ -396,13 +396,13 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
             }
         }
 
-        if(MomentActivity.TAG_NOTICE_IDX == tagType) {
+        if(TimelineActivity.TAG_NOTICE_IDX == tagType) {
             findViewById(R.id.location_layout).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.location_layout).setVisibility(View.GONE);
         }
         //if survey,set survey visible
-        if(MomentActivity.TAG_SURVEY_IDX == tagType) {
+        if(TimelineActivity.TAG_SURVEY_IDX == tagType) {
             findViewById(R.id.survey_layout).setVisibility(View.VISIBLE);
 //            findViewById(R.id.location_layout).setVisibility(View.GONE);
 
@@ -1092,7 +1092,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
             moment.timestamp = getIntent().getLongExtra(CreateMomentActivity.EXTRA_KEY_MOMENT_MAX_TIMESTAMP,0)+1;
             Log.w("local moment timestamp set to "+moment.timestamp);
 
-            if(MomentActivity.TAG_SURVEY_IDX==tagType) {
+            if(TimelineActivity.TAG_SURVEY_IDX==tagType) {
                 if(surveyOptions.size() < MIN_OPTIONS_NUM_FOR_SURVEY) {
 //                    mMsgBox.toast(String.format(getString(R.string.inputsimpletext_empty),getString(R.string.survey_option)));
                     mMsgBox.toast(String.format(getString(R.string.survey_option_at_least_2),MIN_OPTIONS_NUM_FOR_SURVEY));
@@ -1132,7 +1132,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 }
             }
 
-            moment.tag=MomentActivity.getSelectedTagServerDesc(CreateNormalMomentWithTagActivity.this,tagType,isSuveyMultiSelectable);
+            moment.tag=TimelineActivity.getSelectedTagServerDesc(CreateNormalMomentWithTagActivity.this,tagType,isSuveyMultiSelectable);
 
             //share range is used local now
             if(getString(R.string.share_range_public).equals(tvShareRange.getText())) {
@@ -1166,9 +1166,9 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                         @Override
                         public void run() {
                             int errno=ErrorCode.UNKNOWN;
-                            if(MomentActivity.TAG_SURVEY_IDX == tagType) {
+                            if(TimelineActivity.TAG_SURVEY_IDX == tagType) {
                                 errno = WowMomentWebServerIF.getInstance(CreateNormalMomentWithTagActivity.this).fAddMomentForSurvey(moment);
-                            } else if (MomentActivity.TAG_VIDEO_IDX == tagType) {
+                            } else if (TimelineActivity.TAG_VIDEO_IDX == tagType) {
                                 //not implemented now
                                 throw new IllegalArgumentException();
                             } else {

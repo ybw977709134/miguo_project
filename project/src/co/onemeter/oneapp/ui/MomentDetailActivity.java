@@ -41,8 +41,8 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         MomentAdapter.ReplyDelegate, InputBoardManager.InputResultHandler, InputBoardManager.ChangeToOtherAppsListener {
 
     private static final String IMAGE_CACHE_DIR = "image";
-    private static final String EXTRA_REPLY_TO_MOMENT_ID = "reply_to_moment_id";
-    private static final String EXTRA_REPLY_TO_REVIEW = "reply_to_review_id";
+    public static final String EXTRA_REPLY_TO_MOMENT_ID = "reply_to_moment_id";
+    public static final String EXTRA_REPLY_TO_REVIEW = "reply_to_review_id";
 
     private ImageButton btnTitleBack;
 
@@ -87,7 +87,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 
     private ArrayList<String> surveyMomentSelectedItem=new ArrayList<String>();
 
-    private MomentActivity.OnMomentReviewDeleteListener onMomentReviewDeleteListener;
+    private TimelineActivity.OnMomentReviewDeleteListener onMomentReviewDeleteListener;
 
     private final static int MSG_ID_MOMENT_DELETE_WITH_DELAY_FINISH=1;
     private Handler mHandler=new Handler () {
@@ -223,7 +223,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                 }
             }
             if(null != likeReview) {
-                MomentActivity.deleteMomentReview(this,moment.id,likeReview,onMomentReviewDeleteListener);
+                TimelineActivity.deleteMomentReview(this,moment.id,likeReview,onMomentReviewDeleteListener);
             } else {
                 Log.e("delete like review null");
             }
@@ -516,7 +516,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 //                confirmDeleteMoment();
                 break;
             case R.id.img_photo:
-                MomentActivity.launch(this, moment.owner.userID);
+                TimelineActivity.launch(this, moment.owner.userID, moment.owner.nickName);
                 break;
             case R.id.moment_favorite_layout:
                 MomentAdapter.triggerMomentFavorite(this,moment,ivMomentFavorite);
@@ -642,7 +642,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
-        onMomentReviewDeleteListener=new MomentActivity.OnMomentReviewDeleteListener() {
+        onMomentReviewDeleteListener=new TimelineActivity.OnMomentReviewDeleteListener() {
             @Override
             public void onMomentDelete(String momentId, Review review) {
                 momentObserver.onDBTableChanged(Database.TBL_MOMENT);
@@ -863,10 +863,10 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             mMenu.clearView();
 
         if (replyTo == null) {
-            MomentActivity.replyToMoment_helper(-1, moment.id, replyTo, this,
+            TimelineActivity.replyToMoment_helper(-1, moment.id, replyTo, this,
                     this, this, getLikeBtnClickListener(moment.id));
         } else {
-            MomentActivity.doWithReview(-1, moment.id, replyTo, mMenu, this, this,
+            TimelineActivity.doWithReview(-1, moment.id, replyTo, mMenu, this, this,
                     this, onMomentReviewDeleteListener, getLikeBtnClickListener(moment.id));
         }
     }
@@ -907,8 +907,8 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             mMsgBox.toast(R.string.comment_content_cannot_empty);
             return;
         }
-        if (text.length() > MomentActivity.COMMENT_MOST_WORDS) {
-            mMsgBox.toast(String.format(getString(R.string.moments_comment_oom), MomentActivity.COMMENT_MOST_WORDS));
+        if (text.length() > TimelineActivity.COMMENT_MOST_WORDS) {
+            mMsgBox.toast(String.format(getString(R.string.moments_comment_oom), TimelineActivity.COMMENT_MOST_WORDS));
             return;
         }
         mInputMgr.setSoftKeyboardVisibility(false);

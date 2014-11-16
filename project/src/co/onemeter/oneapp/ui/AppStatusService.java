@@ -1,15 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.util.List;
-
-import org.wowtalk.Log;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowMomentWebServerIF;
-import org.wowtalk.api.WowTalkVoipIF;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.GlobalValue;
-import co.onemeter.oneapp.Constants;
-
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.Service;
@@ -17,6 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import co.onemeter.oneapp.Constants;
+import org.wowtalk.Log;
+import org.wowtalk.api.PrefUtil;
+import org.wowtalk.api.WowMomentWebServerIF;
+import org.wowtalk.api.WowTalkVoipIF;
+import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.ui.GlobalValue;
+
+import java.util.List;
 
 public class AppStatusService extends Service {
 
@@ -111,7 +110,7 @@ public class AppStatusService extends Service {
 //                    LoginActivity.downloadContactsAndGroups(AppStatusService.this);
                     mWebIF.getLatestChatTargets(0, SmsActivity.LIMIT_COUNT_PER_PAGE, true);
                     // timeline
-                    mMomentIF.fGetMomentsOfAll(0, MomentActivity.PAGE_SIZE, true);
+                    mMomentIF.fGetMomentsOfAll(0, TimelineFragment.PAGE_SIZE, true);
                 }
             }).start();
         }

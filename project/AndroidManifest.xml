@@ -324,11 +324,6 @@
             android:screenOrientation="portrait" >
         </activity>
 		<activity
-			android:name=".ui.MomentActivity"
-			android:theme="@style/Theme.Blue"
-			android:screenOrientation="portrait" >
-		</activity>
-        <activity
             android:name=".ui.AlbumCoverChangeActivity"
             android:screenOrientation="portrait" >
         </activity>

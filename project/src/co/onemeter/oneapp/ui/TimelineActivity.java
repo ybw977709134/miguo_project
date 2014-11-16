@@ -1,15 +1,20 @@
 package co.onemeter.oneapp.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
 import org.wowtalk.api.*;
+import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.GlobalValue;
+import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.msg.InputBoardManager;
 
 import java.util.ArrayList;
 
@@ -19,6 +24,21 @@ import java.util.ArrayList;
  */
 public class TimelineActivity extends FragmentActivity implements View.OnClickListener {
 
+    /** optional moment owner's uid */
+    public static final String EXTRA_UID = "uid";
+    /** If page title is empty, buttons will show instead. */
+    public static final String EXTRA_PAGE_TITLE = "title";
+    public static final int COMMENT_MOST_WORDS = 260;
+    public static final int NETWORK_TAG_UPLOADING_ALBUMCOVER = 123;
+
+    private final static int TAG_ALL_IDX=0;
+    public final static int TAG_NOTICE_IDX =1;
+    public final static int TAG_QA_IDX=2;
+    public final static int TAG_STUDY_IDX =3;
+    public final static int TAG_SURVEY_IDX=4;
+    public final static int TAG_LIFE_IDX =5;
+    public final static int TAG_VIDEO_IDX =6;
+
     private static final int REQ_CREATE_MOMENT = 124;
     private static TimelineActivity instance;
 
@@ -26,6 +46,8 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     private MyTimelineFragment myTimelineFragment;
     private View newMomentPanel;
     private AQuery q = new AQuery(this);
+    private String uid;
+    private String pageTitle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,19 +67,48 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
 
         newMomentPanel = q.find(R.id.new_moment_panel).clicked(this).getView();
 
+        getData(savedInstanceState == null ? getIntent().getExtras() : savedInstanceState);
+
         allTimelineFragment =  new AllTimelineFragment();
         myTimelineFragment = new MyTimelineFragment();
         Bundle args = new Bundle();
-        args.putString("uid", PrefUtil.getInstance(this).getUid());
+        args.putString(MyTimelineFragment.EXTRA_UID,
+                uid != null ? uid : PrefUtil.getInstance(this).getUid());
         myTimelineFragment.setArguments(args);
 
         hideUnavailableNewMomentButtons();
         hideNewMomentPanel();
-        switchToAll();
+
+        if (uid != null) {
+            switchToSingle();
+        } else {
+            switchToAll();
+        }
+
+        setTitle(pageTitle);
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        if (title != null) {
+            q.find(R.id.btn_layout).invisible();
+            q.find(R.id.title_text).visible().text(title);
+        } else {
+            q.find(R.id.btn_layout).visible();
+            q.find(R.id.title_text).invisible();
+        }
     }
 
     public static TimelineActivity instance() {
         return instance;
+    }
+
+    private void getData(Bundle state) {
+        if (state != null) {
+            uid = state.getString(EXTRA_UID);
+            pageTitle = state.getString(EXTRA_PAGE_TITLE);
+        }
     }
 
     public boolean handleBackPress() {
@@ -104,30 +155,30 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                 switchToAll();
                 break;
             case R.id.btn_me:
-                switchToMy();
+                switchToSingle();
                 break;
             case R.id.vg_new_study:
-                gotoCreateMoment(MomentActivity.TAG_STUDY_IDX);
+                gotoCreateMoment(TAG_STUDY_IDX);
                 hideNewMomentPanel();
                 break;
             case R.id.vg_new_life:
-                gotoCreateMoment(MomentActivity.TAG_LIFE_IDX);
+                gotoCreateMoment(TAG_LIFE_IDX);
                 hideNewMomentPanel();
                 break;
             case R.id.vg_new_notice:
-                gotoCreateMoment(MomentActivity.TAG_NOTICE_IDX);
+                gotoCreateMoment(TAG_NOTICE_IDX);
                 hideNewMomentPanel();
                 break;
             case R.id.vg_new_question:
-                gotoCreateMoment(MomentActivity.TAG_QA_IDX);
+                gotoCreateMoment(TAG_QA_IDX);
                 hideNewMomentPanel();
                 break;
             case R.id.vg_new_vote:
-                gotoCreateMoment(MomentActivity.TAG_SURVEY_IDX);
+                gotoCreateMoment(TAG_SURVEY_IDX);
                 hideNewMomentPanel();
                 break;
             case R.id.vg_new_video:
-                gotoCreateMoment(MomentActivity.TAG_VIDEO_IDX);
+                gotoCreateMoment(TAG_VIDEO_IDX);
                 hideNewMomentPanel();
                 break;
         }
@@ -149,12 +200,35 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                 .commit();
     }
 
-    private void switchToMy() {
+    private void switchToSingle() {
         q.find(R.id.btn_all).background(R.drawable.tab_button_left_white).textColorId(R.color.white);
         q.find(R.id.btn_me).background(R.drawable.tab_button_right_white_a).textColorId(R.color.blue);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, myTimelineFragment)
                 .commit();
+    }
+
+    public static void launch(Context context, String uid, String pageTitle) {
+        Intent intent = new Intent(context, TimelineActivity.class);
+        intent.putExtra(EXTRA_UID, uid);
+        intent.putExtra(EXTRA_PAGE_TITLE, pageTitle);
+        context.startActivity(intent);
+    }
+
+    /**
+     * Request to check new reviews again.
+     */
+//    public static void requestCheckNewReviews() {
+//        // just invalidate the last check timestamp will be done
+//        mLastCheckReviewTime = INVALID_TIMESTAMP_VALUE;
+//    }
+
+    interface BeginUploadAlbumCover {
+        void onBeginUploadCover(String filePath);
+    }
+
+    public interface OnMomentReviewDeleteListener {
+        void onMomentDelete(String momentId, Review review);
     }
 
     /**
@@ -178,5 +252,226 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
             }
             return ErrorCode.OK;
         }
-    };
+    }
+
+    public static String getSelectedTagServerDesc(Context context,int tagIdx,boolean surveyMultiSelect) {
+        String tag="";
+        switch(tagIdx) {
+            case TAG_ALL_IDX:
+                break;
+            case TAG_NOTICE_IDX:
+                tag=Moment.SERVER_MOMENT_TAG_FOR_NOTICE;
+                break;
+            case TAG_QA_IDX:
+                tag=Moment.SERVER_MOMENT_TAG_FOR_QA;
+                break;
+            case TAG_SURVEY_IDX:
+                if(surveyMultiSelect) {
+                    tag=Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI;
+                } else {
+                    tag=Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE;
+                }
+                break;
+            case TAG_STUDY_IDX:
+                tag=Moment.SERVER_MOMENT_TAG_FOR_STUDY;
+                break;
+            case TAG_LIFE_IDX:
+                tag=Moment.SERVER_MOMENT_TAG_FOR_LIFE;
+                break;
+            case TAG_VIDEO_IDX:
+                tag=Moment.SERVER_MOMENT_TAG_FOR_VIDEO;
+                break;
+            default:
+                break;
+        }
+        return tag;
+    }
+
+    public static void deleteMomentReview(final Activity activity,final String momentId, final Review replyTo,final OnMomentReviewDeleteListener momentReviewDelListener) {
+        final MessageBox msgBox = new MessageBox(activity);
+        msgBox.showWait();
+        new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... params) {
+                WowMomentWebServerIF mMomentWeb = WowMomentWebServerIF.getInstance(activity);
+                return mMomentWeb.fDeleteMomentReview(momentId,replyTo);
+            }
+
+            @Override
+            protected void onPostExecute(Integer errno) {
+                msgBox.dismissWait();
+
+                if(errno == ErrorCode.OK) {
+                    if(null != momentReviewDelListener) {
+                        momentReviewDelListener.onMomentDelete(momentId,replyTo);
+                    }
+//                                        if(null != instance) {
+//                                            instance.deleteAReview(momentId,replyTo);
+//                                        }
+                } else {
+                    msgBox.toast(R.string.msg_operation_failed);
+                }
+            }
+        }.execute((Void)null);
+    }
+
+    public static String getSelectedTagLocalDesc(Context context,int tagIdx) {
+        String tag="";
+        switch(tagIdx) {
+            case TAG_ALL_IDX:
+                break;
+            case TAG_NOTICE_IDX:
+                tag=context.getString(R.string.moment_tag_notice);
+                break;
+            case TAG_QA_IDX:
+                tag=context.getString(R.string.moment_tag_qa);
+                break;
+            case TAG_SURVEY_IDX:
+                tag=context.getString(R.string.moment_tag_survey);
+                break;
+            case TAG_STUDY_IDX:
+                tag=context.getString(R.string.moment_tag_study);
+                break;
+            case TAG_LIFE_IDX:
+                tag=context.getString(R.string.moment_tag_life);
+                break;
+            case TAG_VIDEO_IDX:
+                tag=context.getString(R.string.moment_tag_video);
+                break;
+            default:
+                break;
+        }
+        return tag;
+    }
+
+    public static void replyToMoment_helper(int momentPosition, String momentId, Review replyTo,
+                                            Activity activity,
+                                            InputBoardManager.InputResultHandler handler,
+                                            InputBoardManager.ChangeToOtherAppsListener changeAppsListener,
+                                            View.OnClickListener onLikeClickListener) {
+        InputBoardManager inputMgr = handler.getInputBoardMangager();
+
+        Database db = new Database(activity);
+        final Moment moment=db.fetchMoment(momentId);
+
+        if (inputMgr == null) {
+            inputMgr = new InputBoardManager(activity,
+                    (ViewGroup)activity.findViewById(R.id.input_board_holder),
+                    handler, changeAppsListener);
+            inputMgr.setIsWithMultimediaMethod(false);
+            inputMgr.drawableResId().open = R.drawable.sms_add_btn;
+            inputMgr.drawableResId().close = R.drawable.sms_close_btn;
+
+            inputMgr.drawableResId().gotoEmotion = R.drawable.timeline_like_btn;
+//            inputMgr.drawableResId().gotoEmotion = R.drawable.sms_kaomoji_btn;
+            inputMgr.drawableResId().keyboard = R.drawable.sms_keyboard;
+            inputMgr.drawableResId().voiceNormal = R.drawable.sms_voice_btn;
+            inputMgr.drawableResId().voicePressed = R.drawable.sms_voice_btn_p;
+
+            inputMgr.setMomentLikeDrawable(R.drawable.timeline_like_btn,R.drawable.timeline_like_btn_a);
+            handler.setInputBoardMangager(inputMgr);
+        }
+        if (inputMgr == null) {
+            return;
+        }
+
+        String title;
+        if (replyTo == null)
+            title = String.format(activity.getString(R.string.moments_comment_hint),
+                    TimelineActivity.COMMENT_MOST_WORDS);
+        else
+            title = String.format(activity.getResources().getString(R.string.moments_reply_hint),
+                    replyTo.nickname,
+                    TimelineActivity.COMMENT_MOST_WORDS);
+
+        inputMgr.show(InputBoardManager.FLAG_SHOW_TEXT);
+        inputMgr.setInputHint(title);
+//        inputMgr.extra().putInt(MomentDetailActivity.EXTRA_REPLY_TO_MOMENT_POS, momentPosition);
+        inputMgr.extra().putString(MomentDetailActivity.EXTRA_REPLY_TO_MOMENT_ID, momentId);
+        inputMgr.extra().putParcelable(MomentDetailActivity.EXTRA_REPLY_TO_REVIEW, replyTo);
+//
+        inputMgr.setLayoutForTimelineMoment(moment,onLikeClickListener);
+    }
+
+    /**
+     * 用户可以对评论做什么？
+     *
+     * @param momentPosition position in list
+     * @param momentId
+     * @param replyTo
+     * @param menu
+     * @param activity
+     * @param handler
+     */
+    public static void doWithReview(
+            final int momentPosition, final String momentId, final Review replyTo,
+            final BottomButtonBoard menu,
+            final Activity activity,
+            final InputBoardManager.InputResultHandler handler,
+            final InputBoardManager.ChangeToOtherAppsListener chageAppsListener,
+            final TimelineActivity.OnMomentReviewDeleteListener momentReviewDelListener,
+            final View.OnClickListener onLikeBtnClickListener) {
+
+        // 除了回复评论，还可以对评论的内容进行操作
+
+        final InputBoardManager inputMgr = handler.getInputBoardMangager();
+        if (inputMgr != null)
+            inputMgr.setSoftKeyboardVisibility(false);
+
+        menu.add(activity.getString(R.string.moments_reply), BottomButtonBoard.BUTTON_BLUE,
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        replyToMoment_helper(momentPosition, momentId, replyTo, activity, handler,
+                                chageAppsListener, onLikeBtnClickListener);
+                        menu.dismiss();
+                    }
+                });
+
+        //if review is made by me or moment is mine, add delete item
+        String myUserId = PrefUtil.getInstance(activity).getUid();
+
+        Database db = new Database(activity);
+        Moment replyMoment=db.fetchMoment(momentId);
+        if (myUserId.equals(replyTo.uid) || (null != replyMoment && replyMoment.owner.userID.equals(myUserId))) {
+            menu.add(activity.getString(R.string.contacts_local_delete), BottomButtonBoard.BUTTON_BLUE,
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+//                            final MessageBox msgBox = new MessageBox(activity);
+                            menu.dismiss();
+                            deleteMomentReview(activity,momentId,replyTo,momentReviewDelListener);
+//                            msgBox.showWait();
+//                            new AsyncTask<Void, Void, Integer>() {
+//                                @Override
+//                                protected Integer doInBackground(Void... params) {
+//                                    WowMomentWebServerIF mMomentWeb = WowMomentWebServerIF.getInstance(activity);
+//                                    return mMomentWeb.fDeleteMomentReview(momentId,replyTo);
+//                                }
+//
+//                                @Override
+//                                protected void onPostExecute(Integer errno) {
+//                                    msgBox.dismissWait();
+//
+//                                    if(errno == ErrorCode.OK) {
+//                                        if(null != momentReviewDelListener) {
+//                                            momentReviewDelListener.onMomentDelete(momentId,replyTo);
+//                                        }
+////                                        if(null != instance) {
+////                                            instance.deleteAReview(momentId,replyTo);
+////                                        }
+//                                    } else {
+//                                        msgBox.toast(R.string.msg_operation_failed);
+//                                    }
+//                                }
+//                            }.execute((Void)null);
+                        }
+                    });
+        }
+
+
+        TextOperationHelper.fillMenu(activity, menu, replyTo.text, true);
+
+        menu.show();
+    }
 }

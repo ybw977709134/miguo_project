@@ -31,11 +31,12 @@ import java.util.Iterator;
  * Created by pzy on 10/13/14.
  */
 public class MyTimelineFragment extends TimelineFragment implements InputBoardManager.ChangeToOtherAppsListener {
+    public static final String EXTRA_UID = "uid";
     private int originalHeaderViewsCount = 0;
     private InputBoardManager mInputMgr;
     private MediaInputHelper mMediaInput;
     private String mInputedPhotoPathForAlbumcover;
-    private MomentActivity.BeginUploadAlbumCover mBeginUploadAlbumCover;
+    private TimelineActivity.BeginUploadAlbumCover mBeginUploadAlbumCover;
     private NetworkIFDelegate albumCoverNetworkDelegate;
     private AlbumCover mAlbumCover;
     private int establishedAlbumCoverHeight = 0;
@@ -75,7 +76,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
 
     private String uid() {
         Bundle args = getArguments();
-        return args != null ? args.getString("uid") : null;
+        return args != null ? args.getString(EXTRA_UID) : null;
     }
 
     @Override
@@ -193,7 +194,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         return false;
     }
 
-    private class UploadCoverListener implements MomentActivity.BeginUploadAlbumCover {
+    private class UploadCoverListener implements TimelineActivity.BeginUploadAlbumCover {
         private ProgressBar progressBar;
 
         public UploadCoverListener(ProgressBar progressBar) {

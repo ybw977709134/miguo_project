@@ -473,7 +473,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
             mLayout3.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MomentActivity.launch(ContactInfoActivity.this, buddy.userID);
+                    TimelineActivity.launch(ContactInfoActivity.this, buddy.userID, buddy.nickName);
                 }
             });
             mLayout3.setVisibility(View.VISIBLE);
@@ -615,7 +615,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                 }
                 break;
             case R.id.btn_goto_moments:
-                MomentActivity.launch(this, buddy.userID);
+                TimelineActivity.launch(this, buddy.userID, buddy.nickName);
                 break;
             default:
                 break;

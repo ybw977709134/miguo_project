@@ -323,7 +323,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 @Override
                 protected Void doInBackground(Void... arg0) {
                     WowTalkWebServerIF.getInstance(EventDetailActivity.this)
-                            .fGetFileFromServer(aFile.thumb_fileid, GlobalSetting.S3_MOMENT_FILE_DIR,new NetworkIFDelegate(){
+                            .fGetFileFromServer(aFile.thumb_fileid, WEvent.MEDIA_FILE_REMOTE_DIR,new NetworkIFDelegate(){
                                 @Override
                                 public void didFailNetworkIFCommunication(int arg0, byte[] arg1) {
                                     ok = false;

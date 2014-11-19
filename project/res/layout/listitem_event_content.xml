@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="@dimen/padding_medium"
+    android:orientation="vertical"
+    tools:showIn="@layout/listitem_event">
+
+    <TextView
+        android:id="@+id/event_title"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginBottom="@dimen/padding_large"
+        android:text="dummy title"
+        android:textColor="@color/text_gray1"
+        android:textAppearance="@android:style/TextAppearance.Medium"/>
+
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginRight="@dimen/padding_medium">
+
+        <ImageView
+            android:id="@+id/event_photo"
+            android:layout_height="100dp"
+            android:layout_width="100dp"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/feed_default_pic"/>
+
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_toRightOf="@id/event_photo"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/event_time"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="@dimen/padding_tiny"
+                android:text="dummy time"
+                android:textAppearance="@android:style/TextAppearance.Small"/>
+
+            <TextView
+                android:id="@+id/event_place"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="@dimen/padding_tiny"
+                android:text="dummy place"
+                android:textAppearance="@android:style/TextAppearance.Small"/>
+
+            <TextView
+                android:id="@+id/event_category"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="@dimen/padding_tiny"
+                android:text="dummy category"
+                android:textAppearance="@android:style/TextAppearance.Small"/>
+
+            <TextView
+                android:id="@+id/event_host"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="@dimen/padding_tiny"
+                android:text="dummy host"
+                android:textAppearance="@android:style/TextAppearance.Small"/>
+
+            <TextView
+                android:id="@+id/event_count"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="@dimen/padding_tiny"
+                android:text="dummy count"
+                android:textAppearance="@android:style/TextAppearance.Small"/>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

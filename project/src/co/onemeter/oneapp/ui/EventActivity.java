@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,6 +34,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EventActivity extends Activity implements OnClickListener, MenuBar.OnDropdownMenuItemClickListener {
     private class EventAdapter extends BaseAdapter {
+
+        private final static int VIEWTYPE_NORMAL = 0;
+        private final static int VIEWTYPE_LAST = 1;
 
 		private LayoutInflater inflater;
 		private CopyOnWriteArrayList<WEvent> eventList;
@@ -61,39 +67,64 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
             this.eventList = new CopyOnWriteArrayList<WEvent>(list);
             notifyDataSetChanged();
 		}
+
+        @Override
+        public int getViewTypeCount() {
+            return 2;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position < getCount() - 1 ? VIEWTYPE_NORMAL : VIEWTYPE_LAST;
+        }
 		
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			View lView = null;
+			View lView;
 			WEvent act = eventList.get(position);
-//			lView = inflater.inflate(R.layout.listitem_event, null);
 			if (convertView == null) {
-				lView = inflater.inflate(R.layout.listitem_event, null);
+                lView = inflater.inflate(
+                        getItemViewType(position) == VIEWTYPE_NORMAL
+                                ? R.layout.listitem_event
+                                : R.layout.listitem_event_last
+                        , null);
 			} else {
 				lView = convertView;
 			}
             AQuery q = new AQuery(lView);
 
-			TextView txtTitle = (TextView) lView.findViewById(R.id.event_title);
-			txtTitle.setText(act.title);
+            // title
+            q.find(R.id.event_title).text(act.title);
 
-			TextView txtTime = (TextView) lView.findViewById(R.id.event_time);
-			txtTime.setText(String.format(getResources().getString(R.string.event_time),
-                    new SimpleDateFormat("MM月dd日 HH:mm").format(act.startTime)
-                            + "-"
-                            + new SimpleDateFormat("HH:mm").format(act.endTime)));
-			TextView txtPlace = (TextView) lView.findViewById(R.id.event_place);
-			txtPlace.setText(String.format(getResources().getString(R.string.event_place), act.address));
-			TextView txtCount = (TextView) lView.findViewById(R.id.event_count);
-			txtCount.setText(String.format(getResources().getString(R.string.event_member_count), act.capacity));
-			TextView txtIntroduce = (TextView) lView.findViewById(R.id.event_introduce);
-			txtIntroduce.setText(act.description);
-            q.find(R.id.event_category).text(
-                    String.format(getString(R.string.event_category),
-                            WEventUiHelper.getEventCatetoryText(getBaseContext(), act.category)));
-            q.find(R.id.event_category).visibility(View.GONE);
-            q.find(R.id.event_host).text(
-                    String.format(getString(R.string.event_host), act.host));
+            // time
+            q.find(R.id.event_time).text(formatField(
+                            getResources().getString(R.string.event_time_label),
+                            new SimpleDateFormat("MM月dd日 HH:mm").format(act.startTime)
+                                    + "-"
+                                    + new SimpleDateFormat("HH:mm").format(act.endTime)));
+
+            // place
+            q.find(R.id.event_place).text(formatField(
+                    getResources().getString(R.string.event_place_label),
+                    act.address));
+
+            // member count
+            q.find(R.id.event_count).text(formatField(
+                    getResources().getString(R.string.event_member_count_label),
+                    String.format(getResources().getString(R.string.event_member_count_value), act.joinedMemberCount),
+                    getResources().getColor(R.color.text_gray3),
+                    getResources().getColor(R.color.text_red)));
+
+            // category
+            q.find(R.id.event_category).text(formatField(
+                    getString(R.string.event_category_label),
+                    WEventUiHelper.getEventCatetoryText(getBaseContext(), act.category)));
+
+            // host
+            q.find(R.id.event_host).text(formatField(
+                    getString(R.string.event_host_label),
+                    act.host));
+
 			ImageView imgPhoto = (ImageView) lView.findViewById(R.id.event_photo);
 			// display first photo
 			boolean hasPhoto = false;
@@ -218,6 +249,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
          */
         public FilterBar(Context context, int layoutResId, int[] menuItemResIds, View dialogBackground) {
             super(context, layoutResId, menuItemResIds, dialogBackground);
+            setBackgroundColor(getResources().getColor(R.color.white));
         }
 
         @Override
@@ -578,4 +610,26 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         Toast.makeText(this, subMenuResId + "/" + itemIdx, Toast.LENGTH_SHORT).show();
     }
 
+    private Spannable formatField(String label, String value)
+    {
+        return formatField(label, value,
+                getResources().getColor(R.color.text_gray3),
+                getResources().getColor(R.color.text_gray2));
+    }
+
+    private Spannable formatField(String label, String value, int color1, int color2)
+    {
+        int start = 0;
+        SpannableStringBuilder str = new SpannableStringBuilder(label == null ? "" : label);
+        str.append(": ");
+        int end = str.length();
+        str.setSpan(new ForegroundColorSpan(color1),
+                start, end, 0);
+        start = end;
+        str.append(value == null ? "" : value);
+        end = str.length();
+        str.setSpan(new ForegroundColorSpan(color2),
+                start, end, 0);
+        return str;
+    }
 }

@@ -20,7 +20,9 @@
 	<color name="text_orange">#F3943A</color>
 	<color name="text_gray1">#333333</color>
 	<color name="text_gray2">#666666</color>
-	<color name="text_gray3">#808080</color>
+	<color name="text_gray3">#999</color>
+	<color name="text_red">#ffe71326</color>
+
     <color name="red">#ff0000</color>
 
     <color name="moment_light_gray_bg">#dadada</color>

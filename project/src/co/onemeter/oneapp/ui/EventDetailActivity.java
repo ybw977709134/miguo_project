@@ -289,15 +289,15 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         tvMailSendTo.setOnClickListener(this);
 
         txtEventTitle.setText(eventDetail.title);
-        txtTime.setText(String.format(getResources().getString(R.string.event_time),
+        txtTime.setText(String.format(getString(R.string.event_time_label),
                 new SimpleDateFormat("MM月dd日 HH:mm").format(eventDetail.startTime)
                         + "-"
                         + new SimpleDateFormat("HH:mm").format(eventDetail.endTime)));
-        txtPlace.setText(String.format(getResources().getString(R.string.event_place), eventDetail.address));
-        txtCategory.setText(String.format(getResources().getString(R.string.event_category),
+        txtPlace.setText(String.format(getString(R.string.event_place_label), eventDetail.address));
+        txtCategory.setText(String.format(getString(R.string.event_category_label),
                 WEventUiHelper.getEventCatetoryText(this, eventDetail.category)));
         txtCategory.setVisibility(View.GONE);
-        txtCost.setText(String.format(getResources().getString(R.string.event_cost), eventDetail.costGolds));
+        txtCost.setText(String.format(getString(R.string.event_cost), eventDetail.costGolds));
         txtDetailIntroduce.setText(eventDetail.description);
         tvMailSendTo.setText(eventDetail.contactEmail);
 

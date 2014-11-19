@@ -1,6 +1,7 @@
 package co.onemeter.oneapp.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
@@ -35,6 +36,7 @@ public abstract class MenuBar {
     View anchorView;
     PopupWindow subMenuDlg;
     OnDropdownMenuItemClickListener onFilterChangedListener;
+    private int backgroundColor = Color.WHITE;
 
     /**
      * @param dialogBackground 作为对话框下方的屏幕背景，一般为半透明的黑色。
@@ -126,8 +128,10 @@ public abstract class MenuBar {
     private static PopupWindow createListDialog(
             Context context,
             String[] items, final int selectedIdx,
-            final AdapterView.OnItemClickListener onItemClickListener) {
+            final AdapterView.OnItemClickListener onItemClickListener,
+            final int backgroundColor) {
         View dlgView = View.inflate(context, R.layout.menubar_list, null);
+        dlgView.setBackgroundColor(backgroundColor);
         final ListView lv = ((ListView)dlgView.findViewById(android.R.id.list));
         lv.setAdapter(
                 new ArrayAdapter<String>(context,
@@ -137,6 +141,7 @@ public abstract class MenuBar {
                     @Override
                     public View getView(final int position, View convertView, ViewGroup parent) {
                         View v = super.getView(position, convertView, parent);
+                        v.setBackgroundColor(backgroundColor);
                         TextView tv = (TextView) v.findViewById(android.R.id.text1);
                         Drawable rightDrawable = selectedIdx == position
                                 ? getContext().getResources().getDrawable(R.drawable.menubar_list_checkmark)
@@ -177,7 +182,8 @@ public abstract class MenuBar {
         return createListDialog(context,
                 getSubItems(menuItemResId),
                 selectedItemIdx.get(menuItemResId),
-                onCatListItemClickListener);
+                onCatListItemClickListener,
+                backgroundColor);
     }
 
     private AdapterView.OnItemClickListener onCatListItemClickListener =
@@ -210,6 +216,10 @@ public abstract class MenuBar {
         location.right = location.left + v.getWidth();
         location.bottom = location.top + v.getHeight();
         return location;
+    }
+
+    public void setBackgroundColor(int color) {
+        backgroundColor = color;
     }
 
     private final View.OnClickListener clickListener = new View.OnClickListener() {

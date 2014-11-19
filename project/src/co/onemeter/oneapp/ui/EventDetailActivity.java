@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import co.onemeter.oneapp.R;
+import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.ImageViewActivity;
@@ -103,21 +103,8 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 	private ImageButton btnTitleBack;
 	
 	private Gallery gallery;
-	private TextView txtEventTitle;
-	private TextView txtTime;
-	private TextView txtPlace;
-	private TextView txtCategory;
-	private TextView txtCost;
-    private TextView tvMailSendTo;
-	
-	private ImageButton btnVoice;
-	private TextView txtVoiceDesc;
-	
 	private TextView txtDetailIntroduce;
-	
-	private Button btnSignup;
-	private Button btnBBS;
-	
+
 //	private MediaPlayer mPlayer;
 	
 //	private WEvent event;
@@ -130,94 +117,8 @@ public class EventDetailActivity extends Activity implements OnClickListener {
     private MessageBox mMsgBox;
 
     private MediaPlayerWraper mediaPlayerWraper;
-	
-	private void doStartPlayingAudio() {
-        if(!mediaSoundPath.equals(mediaPlayerWraper.getPlayingMediaPath())) {
-            mediaPlayerWraper.stop();
-            mediaPlayerWraper.setPlayingTimeTV(txtVoiceDesc,true);
-            mediaPlayerWraper.setWraperListener(new MediaPlayerWraper.MediaPlayerWraperListener() {
-                @Override
-                public void onPlayFail(String path) {
-                    btnVoice.setImageResource(R.drawable.timeline_player_play);
-                }
 
-                @Override
-                public void onPlayBegin(String path) {
-                    btnVoice.setImageResource(R.drawable.timeline_player_stop);
-                }
-
-                @Override
-                public void onPlayComplete(String path) {
-                    btnVoice.setImageResource(R.drawable.timeline_player_play);
-                }
-            });
-            mediaPlayerWraper.triggerPlayer(mediaSoundPath,0);
-        } else {
-            //second trigger,stop
-            mediaPlayerWraper.triggerPlayer(mediaSoundPath,0);
-        }
-
-//		Log.i("YUANQU", "start player");
-//		if (_isPlayingAudio ||  null == mediaSoundPath)
-//			return;
-//		try {
-//			if (mPlayer == null) {
-//				mPlayer = new MediaPlayer();
-//				mPlayer.setOnCompletionListener(new OnCompletionListener() {
-//
-//					@Override
-//					public void onCompletion(MediaPlayer mp) {
-//						// TODO Auto-generated method stub
-//						//doStopPlayingAudio();
-//						timer.cancel();
-//						mp.stop();
-//						mp.release();
-//						mp = null;
-//                        btnVoice.setBackgroundResource(R.drawable.timeline_play);
-//					}
-//				});
-//
-//				try {
-//					//mPlayer = MediaPlayer.create(this, R.raw.ringback);
-////					final String path = eventDetail.multimedias.get(0).localPath; // XXX check ext
-//                    final String path = mediaSoundPath;
-//					Uri uri = Uri.parse(path);
-//					mPlayer = new MediaPlayer().create(this, uri);
-//					int duration = mPlayer.getDuration();
-//					mPlayer.getCurrentPosition();
-//					System.out.println("duration :" + duration);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//				mPlayer.prepare();
-//				//mPlayer.setLooping(true);
-//			}
-//            btnVoice.setBackgroundResource(R.drawable.timeline_stop);
-//			mPlayer.start();
-////			timer.schedule(new TimerTask() {
-////
-////				@Override
-////				public void run() {
-////					// TODO Auto-generated method stub
-////					if (mPlayer.getCurrentPosition() % 1000 > 900 && mPlayer.getCurrentPosition() % 1000 < 1100) {
-////						Message msg = Message.obtain();
-////						msg.what = mPlayer.getCurrentPosition();
-////						handler.sendMessage(msg);
-////					}
-//////					if (mPlayer.getCurrentPosition() > 3000) {
-//////						this.cancel();
-//////					}
-////				}
-////			}, 0, 200);
-//
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}
-//		_isPlayingAudio = true;
-		
-	}
-	
-	private void doStopPlayingAudio() {
+    private void doStopPlayingAudio() {
         mediaPlayerWraper.stop();
 //		if (!_isPlayingAudio || null == mediaSoundPath)
 //			return;
@@ -235,7 +136,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 //		_isPlayingAudio = false;
 	}
 	
-//	private void fFetchEventDetailByID(String actionId) {
+//	private void fFetchEventDetailByID(String eventDetailionId) {
 //
 //	}
 
@@ -248,68 +149,64 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 break;
             }
         }
-
-        LinearLayout voiceLayout=(LinearLayout) findViewById(R.id.event_detail_voice_layout);
-        if(!existSoundMedia) {
-            voiceLayout.setVisibility(View.GONE);
-//            btnVoice.setBackgroundColor(R.color.gray);
-//            btnVoice.setImageResource(R.drawable.play_n);
-//            txtVoiceDesc.setTextColor(R.color.gray);
-        } else {
-            voiceLayout.setVisibility(View.VISIBLE);
-        }
     }
 
 	private void initView() {
 		initGallery();
 
-
 		btnTitleBack = (ImageButton) findViewById(R.id.title_back);
-		txtEventTitle = (TextView) findViewById(R.id.event_title);
-		txtTime = (TextView) findViewById(R.id.event_time);
-		txtPlace = (TextView) findViewById(R.id.event_place);
-		txtCategory = (TextView) findViewById(R.id.event_category);
-        txtCost = (TextView) findViewById(R.id.event_cost);
-		
-		btnVoice = (ImageButton) findViewById(R.id.event_voice_button);
-        txtVoiceDesc = (TextView) findViewById(R.id.event_voice_text);
-		
 		txtDetailIntroduce = (TextView) findViewById(R.id.detail_introduce);
-		
-		btnSignup = (Button) findViewById(R.id.signup_button);
-		btnBBS = (Button) findViewById(R.id.bbs_button);
 
-        tvMailSendTo=(TextView) findViewById(R.id.mail_send_to);
-
-		
 		btnTitleBack.setOnClickListener(this);
-		btnVoice.setOnClickListener(this);
-		btnSignup.setOnClickListener(this);
-		btnBBS.setOnClickListener(this);
-        tvMailSendTo.setOnClickListener(this);
 
-        txtEventTitle.setText(eventDetail.title);
-        txtTime.setText(String.format(getString(R.string.event_time_label),
+        AQuery q = new AQuery(this);
+        WEventUiHelper helper = new WEventUiHelper(this);
+
+        // title
+        q.find(R.id.event_title).text(eventDetail.title);
+
+        // time
+        q.find(R.id.event_time).text(helper.formatField(
+                getResources().getString(R.string.event_time_label),
                 new SimpleDateFormat("MM月dd日 HH:mm").format(eventDetail.startTime)
                         + "-"
                         + new SimpleDateFormat("HH:mm").format(eventDetail.endTime)));
-        txtPlace.setText(String.format(getString(R.string.event_place_label), eventDetail.address));
-        txtCategory.setText(String.format(getString(R.string.event_category_label),
-                WEventUiHelper.getEventCatetoryText(this, eventDetail.category)));
-        txtCategory.setVisibility(View.GONE);
-        txtCost.setText(String.format(getString(R.string.event_cost), eventDetail.costGolds));
+
+        // place
+        q.find(R.id.event_place).text(helper.formatField(
+                getResources().getString(R.string.event_place_label),
+                eventDetail.address));
+
+        // member count
+        q.find(R.id.event_count).text(helper.formatField(
+                getResources().getString(R.string.event_member_count_label),
+                String.format(getResources().getString(R.string.event_member_count_value), eventDetail.joinedMemberCount),
+                getResources().getColor(R.color.text_gray3),
+                getResources().getColor(R.color.text_red)));
+
+        // cost
+        q.find(R.id.event_cost).text(helper.formatField(
+                getResources().getString(R.string.event_cost_label),
+                String.format(getResources().getString(R.string.event_cost_value), eventDetail.costGolds),
+                getResources().getColor(R.color.text_gray3),
+                getResources().getColor(R.color.text_red)));
+
+        // category
+        q.find(R.id.event_category).text(helper.formatField(
+                getString(R.string.event_category_label),
+                WEventUiHelper.getEventCatetoryText(getBaseContext(), eventDetail.category)));
+
+        // host
+        q.find(R.id.event_host).text(helper.formatField(
+                getString(R.string.event_host_label),
+                eventDetail.host));
+
+        // tel
+        q.find(R.id.event_tel).text(helper.formatField(
+                getString(R.string.event_tel_label),
+                eventDetail.contactEmail));
+
         txtDetailIntroduce.setText(eventDetail.description);
-        tvMailSendTo.setText(eventDetail.contactEmail);
-
-        if(WEvent.EVENT_TYPE_SIMPLE == eventDetail.event_type) {
-            LinearLayout layoutDetail=(LinearLayout) findViewById(R.id.bao_ming_more_info_layout);
-            layoutDetail.setVisibility(View.GONE);
-        }
-
-        if(WEvent.MEMBER_SHIP_JOINED == eventDetail.membership) {
-            btnSignup.setEnabled(false);
-            btnSignup.setText(R.string.event_signed_up);
-        }
 
         fixMediaSoundStatus();
 	}
@@ -410,29 +307,6 @@ public class EventDetailActivity extends Activity implements OnClickListener {
             case R.id.title_back:
                 finish();
                 break;
-            case R.id.event_voice_button:
-//                if (_isPlayingAudio) {
-//                    doStopPlayingAudio();
-//                } else {
-//                    doStartPlayingAudio();
-//                }
-                doStartPlayingAudio();
-                break;
-            case R.id.signup_button:
-//			Intent signIntent = new Intent(EventDetailActivity.this, EventApplyActivity.class);
-//			signIntent.putExtra(INTENT_EXTRA_SIGNUP, eventDetail.id);
-//			startActivity(signIntent);
-                requireToJoinEvent();
-                break;
-            case R.id.bbs_button:
-//			Intent bbsIntent = new Intent();
-//			startActivity(bbsIntent);
-                break;
-            case R.id.mail_send_to:
-                sendEmailByIntent(new String[]{tvMailSendTo.getText().toString()},
-                        getString(R.string.require_to_join_event)+" "+eventDetail.title,
-                        "");
-                break;
             default:
                 break;
         }
@@ -452,13 +326,15 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         final String name;
         final String phoneNumber;
         if(WEvent.EVENT_TYPE_WITH_DETAIL == eventDetail.event_type) {
-            name=((EditText) findViewById(R.id.edt_name)).getText().toString();
-            phoneNumber=((EditText) findViewById(R.id.edt_name)).getText().toString();
-
-            if(TextUtils.isEmpty(name) || TextUtils.isEmpty(phoneNumber)) {
-                mMsgBox.toast(R.string.event_detail_send_detail_can_not_empty);
-                return;
-            }
+            name="";
+            phoneNumber="";
+//            name=((EditText) findViewById(R.id.edt_name)).getText().toString();
+//            phoneNumber=((EditText) findViewById(R.id.edt_name)).getText().toString();
+//
+//            if(TextUtils.isEmpty(name) || TextUtils.isEmpty(phoneNumber)) {
+//                mMsgBox.toast(R.string.event_detail_send_detail_can_not_empty);
+//                return;
+//            }
         } else {
             name="";
             phoneNumber="";
@@ -488,8 +364,6 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
                 if(ErrorCode.OK == result) {
                     mMsgBox.toast(R.string.require_join_event_success);
-
-                    btnSignup.setText(R.string.event_signed_up);
                 } else {
                     mMsgBox.toast(R.string.require_join_event_fail);
                 }

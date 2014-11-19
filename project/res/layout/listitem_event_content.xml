@@ -43,43 +43,28 @@
 
             <TextView
                 android:id="@+id/event_time"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_margin="@dimen/padding_tiny"
                 android:text="dummy time"
-                android:textAppearance="@android:style/TextAppearance.Small"/>
+                style="@style/event_field_small"/>
 
             <TextView
                 android:id="@+id/event_place"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_margin="@dimen/padding_tiny"
                 android:text="dummy place"
-                android:textAppearance="@android:style/TextAppearance.Small"/>
+                style="@style/event_field_small"/>
 
             <TextView
                 android:id="@+id/event_category"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_margin="@dimen/padding_tiny"
                 android:text="dummy category"
-                android:textAppearance="@android:style/TextAppearance.Small"/>
+                style="@style/event_field_small"/>
 
             <TextView
                 android:id="@+id/event_host"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_margin="@dimen/padding_tiny"
                 android:text="dummy host"
-                android:textAppearance="@android:style/TextAppearance.Small"/>
+                style="@style/event_field_small"/>
 
             <TextView
                 android:id="@+id/event_count"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_margin="@dimen/padding_tiny"
                 android:text="dummy count"
-                android:textAppearance="@android:style/TextAppearance.Small"/>
+                style="@style/event_field_small"/>
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

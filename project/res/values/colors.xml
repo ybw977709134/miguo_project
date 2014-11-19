@@ -18,10 +18,11 @@
 
 	<color name="text_blue1">#3485CA</color>
 	<color name="text_orange">#F3943A</color>
-	<color name="text_gray1">#333333</color>
-	<color name="text_gray2">#666666</color>
-	<color name="text_gray3">#999</color>
 	<color name="text_red">#ffe71326</color>
+	<color name="text_gray1">#333</color>
+	<color name="text_gray2">#666</color>
+	<color name="text_gray3">#999</color>
+	<color name="text_gray4">#DDD</color>
 
     <color name="red">#ff0000</color>
 

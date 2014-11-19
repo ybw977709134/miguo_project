@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white" >
-    <RelativeLayout 
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white" >
+    <RelativeLayout
         android:id="@+id/title_bar"
         android:layout_height="@dimen/title_bar_height"
         android:layout_width="fill_parent"
@@ -17,11 +17,13 @@
             android:background="@null"
             android:src="@drawable/nav_back_selector"/>
         <TextView
-	        style="?attr/navbar_title"
-            android:text="@string/event_details"/>
-        
+            style="?attr/navbar_title"
+            android:text="@string/event_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
     </RelativeLayout>
-    
+
     <ScrollView
         android:id="@+id/sv_main"
         android:layout_width="fill_parent"
@@ -32,249 +34,97 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
-            <Gallery 
+
+            <TextView
+                android:id="@+id/event_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="dummy title"/>
+            <ImageView
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:background="@drawable/divider_320"/>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/event_time"
+                    android:text="dummy time"
+                    style="@style/event_field_large"/>
+                <ImageView
+                    style="@style/standard_list_divider"/>
+
+                <TextView
+                    android:id="@+id/event_place"
+                    android:text="dummy place"
+                    style="@style/event_field_large"/>
+                <ImageView
+                    style="@style/standard_list_divider"/>
+
+                <TextView
+                    android:id="@+id/event_cost"
+                    android:text="dummy cost"
+                    style="@style/event_field_large"/>
+                <ImageView
+                    style="@style/standard_list_divider"/>
+
+                <TextView
+                    android:id="@+id/event_host"
+                    android:text="dummy host"
+                    style="@style/event_field_large"/>
+                <ImageView
+                    style="@style/standard_list_divider"/>
+
+                <TextView
+                    android:id="@+id/event_category"
+                    android:text="dummy type"
+                    style="@style/event_field_large"/>
+                <ImageView
+                    style="@style/standard_list_divider"/>
+
+                <TextView
+                    android:id="@+id/event_tel"
+                    android:text="dummy tel"
+                    style="@style/event_field_large"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:text="@string/event_pics"
+                style="@style/event_section_title"/>
+
+            <Gallery
                 android:id="@+id/gallery"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:spacing="7dp"/>
-            
-            <LinearLayout 
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:orientation="vertical"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true">
-
-                <TextView
-                    android:id="@+id/event_title"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-	                android:text="dummy title"/>
-                <ImageView 
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:background="@drawable/divider_320"/>
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:id="@+id/event_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@android:style/TextAppearance.Small"
-                        android:text="dummy time"/>
-
-                    <TextView
-                        android:id="@+id/event_place"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@android:style/TextAppearance.Small"
-                        android:text="dummy place"/>
-
-                    <TextView
-                        android:id="@+id/event_category"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@android:style/TextAppearance.Small"
-                        android:text="dummy type"/>
-
-                    <TextView
-                        android:id="@+id/event_cost"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@android:style/TextAppearance.Small"
-                        android:text="dummy cost"/>
-                </LinearLayout>
-                
-                <ImageView 
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:background="@drawable/divider_320"/>
-
-                <LinearLayout
-                    android:id="@+id/event_detail_voice_layout"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:layout_margin="10dp"
-                    android:orientation="horizontal" >
-
-                    <ImageButton
-                        android:id="@+id/event_voice_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/timeline_play" />
-
-                    <TextView
-                        android:id="@+id/event_voice_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="7dp"
-                        android:text="@string/event_play_video"
-                        android:textColor="@color/black"
-                        android:textAppearance="@android:style/TextAppearance.Medium"
-                        android:background="@drawable/timeline_player_bg_right" />
-
-                    <ImageView
-                            android:layout_height="wrap_content"
-                            android:layout_width="fill_parent"
-                            android:background="@drawable/divider_320"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/event_detail_introduce"
-                        android:textAppearance="@android:style/TextAppearance.Medium"
-                        android:textColor="@color/black"/>
-
-                    <TextView
-                        android:id="@+id/detail_introduce"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="15sp"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-                
-                <ImageView 
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:background="@drawable/divider_320"/>
-
-                <LinearLayout
-                        android:id="@+id/bao_ming_more_info_layout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:orientation="vertical"
-                        android:layout_marginTop="10dp">
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|top"
-                            android:text="@string/bao_ming"
-                            android:textAppearance="@android:style/TextAppearance.Medium"
-                            android:textColor="@color/black"/>
-                    <LinearLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:background="@drawable/table_white">
-                        <EditText
-                                android:id="@+id/edt_name"
-                                android:layout_height="45dp"
-                                android:layout_width="fill_parent"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:singleLine="true"
-                                android:background="@null"
-                                android:hint="@string/event_input_name_hint"/>
-                        <ImageView
-                                android:layout_height="wrap_content"
-                                android:layout_width="fill_parent"
-                                android:background="@drawable/table_divider_white"/>
-                        <EditText
-                                android:id="@+id/edt_phone"
-                                android:layout_height="45dp"
-                                android:layout_width="fill_parent"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:singleLine="true"
-                                android:background="@null"
-                                android:hint="@string/event_input_phone_hint"/>
-                    </LinearLayout>
-
-                    <TextView
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:text="@string/event_more_desc"
-                            android:textSize="15sp"
-                            android:textColor="@color/black"/>
-                    <TextView
-                            android:id="@+id/tv_more_desc"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"/>
-
-                    <TextView
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:text="@string/event_more_send_to"
-                            android:textSize="15sp"
-                            android:textColor="@color/black"/>
-                    <TextView
-                            android:id="@+id/mail_send_to"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:textColor="@color/blue"/>
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="vertical">
-                <Button
-                        android:id="@+id/signup_button"
-                        android:layout_width="fill_parent"
-                        android:layout_height="55dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:text="@string/want_to_sing_up"
-                        android:textStyle="bold"
-                        android:textSize="20sp"
-                        android:textColor="@color/white"
-                        android:background="@drawable/btn_large_blue_selector" />
-
-                <Button
-                        android:id="@+id/bbs_button"
-                        android:layout_width="fill_parent"
-                        android:layout_height="55dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:text="@string/look_into_bbs"
-                        android:textStyle="bold"
-                        android:textSize="20sp"
-                        android:textColor="@color/gray"
-                        android:background="@drawable/btn_large_gray_selector"
-                        android:visibility="gone"/>
-            </LinearLayout>
 
             <ImageView
-                    android:layout_width="fill_parent"
-                    android:layout_height="20dp"
-                    android:src="@null"/>
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:background="@drawable/divider_320"/>
+
+            <TextView
+                android:text="@string/event_detail_introduce"
+                style="@style/event_section_title"/>
+
+            <TextView
+                android:id="@+id/detail_introduce"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:padding="@dimen/padding_medium"
+                android:text="dummy description"
+                android:textAppearance="@android:style/TextAppearance.Medium"
+                android:textColor="@color/text_gray2" />
         </LinearLayout>
     </ScrollView>
-
-
-
 </RelativeLayout>

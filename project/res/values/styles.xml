@@ -317,4 +317,31 @@
 		<item name="android:background">@drawable/shadow_under</item>
 	</style>
 
+    <!-- 活动列表页面中，显示活动的一个字段的文本样式 -->
+    <style name="event_field_small">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_margin">@dimen/padding_tiny</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+    </style>
+
+    <!-- 活动详情页面中，显示活动的一个字段的文本样式 -->
+    <style name="event_field_large">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_margin">@dimen/padding_medium</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+    </style>
+
+    <style name="event_section_title">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:paddingLeft">@dimen/padding_large</item>
+        <item name="android:paddingTop">@dimen/padding_small</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@color/text_gray4</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:textColor">@color/text_gray2</item>
+    </style>
+
 </resources>

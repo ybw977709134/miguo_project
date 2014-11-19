@@ -149,7 +149,8 @@ public class OssClient {
 			} else {
 				String xmlStr = resStr.toString();
 				Element root = parseXml(xmlStr);
-				String err = root.getElementsByTagName("Message").item(0).getTextContent();
+				String err = root.getElementsByTagName("Code").item(0).getTextContent()
+						+ ": " + root.getElementsByTagName("Message").item(0).getTextContent();
 				Log.e(TAG, " upload failed: ", err);
 				if (callback != null)
 					callback.didFailNetworkIFCommunication(callbackTag, err.getBytes());
@@ -221,7 +222,8 @@ public class OssClient {
 				Log.i(TAG, " response: ", resStr.toString());
 				String xmlStr = resStr.toString();
 				Element root = parseXml(xmlStr);
-				String err = root.getElementsByTagName("Message").item(0).getTextContent();
+				String err = root.getElementsByTagName("Code").item(0).getTextContent()
+						+ ": " + root.getElementsByTagName("Message").item(0).getTextContent();
 				Log.e(TAG, " download failed: ", err);
 				if (callback != null)
 					callback.didFailNetworkIFCommunication(callbackTag, err.getBytes());

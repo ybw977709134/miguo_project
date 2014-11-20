@@ -128,20 +128,14 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 			ImageView imgPhoto = (ImageView) lView.findViewById(R.id.event_photo);
 			// display first photo
 			boolean hasPhoto = false;
-			if(act.multimedias != null && !act.multimedias.isEmpty() && !TextUtils.isEmpty(act.thumbNail)) {
+			if(act.multimedias != null && !act.multimedias.isEmpty()) {
+                // display first image as event cover
 				for(WFile f : act.multimedias) {
-                    if(!f.thumb_fileid.equals(act.thumbNail)) {
-                        //only show thumbnail here
-                        continue;
-                    }
-//					f.setExt("jpg"); // XXX
 					if("jpg".equalsIgnoreCase(f.getExt())
 							|| "jpeg".equalsIgnoreCase(f.getExt())
 							|| "bmp".equalsIgnoreCase(f.getExt())
 							|| "png".equalsIgnoreCase(f.getExt())) {
 						hasPhoto = true;
-
-
 
 						if(!Utils.isNullOrEmpty(f.localThumbnailPath) && new File(f.localThumbnailPath).exists()) {
 							imgPhoto.setScaleType(ScaleType.CENTER_CROP);
@@ -196,15 +190,6 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 									mDownloadingLocks.remove(f.thumb_fileid);
 									Log.i("download complete, fileid=" + f.thumb_fileid + ", result=" + ok);
 									if(ok) {
-										// save localPath into db
-//										Database db = new Database(EventActivity.this);
-//										db.open();
-//										if(!db.updateEventMediaPath(f.fileid, f.localPath)) {
-//											Log.e("failed to updateEventMediaPath: "
-//													+ "fileid=" + f.fileid
-//													+ ", localPath=" + f.localPath);
-//										}
-
 										// 调用 imgPhoto.setImageDrawable() 貌似不管用，可能是因为
 										// 现在显示的已经不是原来的View了。
 										refresh();
@@ -213,11 +198,11 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 
 							}.execute(f);
 						}
+                        break;
 					}
 				}
 			}
 			
-//			View photoWrapper = lView.findViewById(R.id.photoWrapper);
 			if(!hasPhoto) {
                 imgPhoto.setVisibility(View.GONE);
 			} else {

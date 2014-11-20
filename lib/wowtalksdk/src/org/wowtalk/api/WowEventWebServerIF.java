@@ -366,7 +366,7 @@ public class WowEventWebServerIF {
         long curEventTimeStamp;
         for(WEvent aEvent : allLocalEvents) {
             try {
-                curEventTimeStamp=Long.valueOf(aEvent.timeStamp);
+                curEventTimeStamp= TextUtils.isEmpty(aEvent.timeStamp) ? 0 : Long.valueOf(aEvent.timeStamp);
 
                 if(curEventTimeStamp>timestampMin &&
                         curEventTimeStamp<timestampMax &&

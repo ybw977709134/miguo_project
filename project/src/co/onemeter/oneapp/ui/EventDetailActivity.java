@@ -1,157 +1,42 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
-import org.wowtalk.api.*;
+import org.wowtalk.api.NetworkIFDelegate;
+import org.wowtalk.api.WEvent;
+import org.wowtalk.api.WFile;
+import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.ImageViewActivity;
-import org.wowtalk.ui.MessageBox;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Timer;
 
 public class EventDetailActivity extends Activity implements OnClickListener {
-	private class GalleryAdapter extends BaseAdapter {
-		private Context context;
+    private static final int NUM_COLUMNS = 4;
 
-//        private ArrayList<String> imagePathListFromAsset=new ArrayList<String>();
-        private ArrayList<String> imagePathListFromEvent=null;
-
-//		public GalleryAdapter(Context context) {
-//			this.context = context;
-//
-//            for(int i=0; i<4; ++i) {
-//                imagePathListFromAsset.add("pseudo_photo_landscape" + (i+1) + ".jpg");
-//            }
-//		}
-
-        public GalleryAdapter(Context context,ArrayList<String> imageList) {
-            this.context = context;
-
-            imagePathListFromEvent=imageList;
-        }
-
-		@Override
-		public int getCount() {
-            return Integer.MAX_VALUE;
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return position;
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-//			AssetManager am = getAssets();
-			InputStream in = null;
-            Drawable drawable;
-
-            ImageView imageView;
-            if(null == convertView) {
-                convertView=LayoutInflater.from(context).inflate(R.layout.event_detail_gallery_item_layout, null);
-            }
-            imageView=(ImageView)convertView.findViewById(R.id.content_image);
-
-			try {
-//                if(null == imagePathListFromEvent) {
-//                    in = am.open("pseudo_photo_landscape" + (position % 4 + 1) + ".jpg");
-//                    drawable = Drawable.createFromStream(in, null);
-//                    imageView.setImageDrawable(drawable);
-//                } else {
-                    if(new File(imagePathListFromEvent.get(position%imagePathListFromEvent.size())).exists()) {
-                        in = new FileInputStream(imagePathListFromEvent.get(position%imagePathListFromEvent.size()));
-                        drawable = Drawable.createFromStream(in, null);
-                        imageView.setImageDrawable(drawable);
-                    } else {
-                        imageView.setImageResource(R.drawable.feed_default_pic);
-                    }
-//                }
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			return convertView;
-		}
-		
-	}
-	public static final String INTENT_EXTRA_SIGNUP = "intent_extra_signup";
+    public static final String INTENT_EXTRA_SIGNUP = "intent_extra_signup";
 	
 	private ImageButton btnTitleBack;
-	
-	private Gallery gallery;
 	private TextView txtDetailIntroduce;
-
-//	private MediaPlayer mPlayer;
-	
-//	private WEvent event;
 	private WEvent eventDetail;
 
-    private String mediaSoundPath;
-//	private boolean _isPlayingAudio = false;
-	
-	private Timer timer = new Timer();
-    private MessageBox mMsgBox;
-
-    private MediaPlayerWraper mediaPlayerWraper;
-
-    private void doStopPlayingAudio() {
-        mediaPlayerWraper.stop();
-//		if (!_isPlayingAudio || null == mediaSoundPath)
-//			return;
-//		try {
-//            btnVoice.setBackgroundResource(R.drawable.timeline_play);
-//
-//			if (mPlayer != null) {
-//				mPlayer.stop();
-//				mPlayer.release();
-//				mPlayer = null;
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		_isPlayingAudio = false;
-	}
-	
-//	private void fFetchEventDetailByID(String eventDetailionId) {
-//
-//	}
-
-    private void fixMediaSoundStatus() {
-        boolean existSoundMedia=false;
-        for(int i=0; i<eventDetail.multimedias.size(); ++i) {
-            if(eventDetail.multimedias.get(i).localPath.matches("\\*\\.(mp4|m4a|aac|3gpp|avi|wav)$")) {
-                mediaSoundPath=eventDetail.multimedias.get(i).localPath;
-                existSoundMedia=true;
-                break;
-            }
-        }
-    }
-
-	private void initView() {
+    private void initView() {
 		initGallery();
 
 		btnTitleBack = (ImageButton) findViewById(R.id.title_back);
@@ -207,11 +92,9 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 eventDetail.contactEmail));
 
         txtDetailIntroduce.setText(eventDetail.description);
-
-        fixMediaSoundStatus();
 	}
 
-    private void tryLoadEventThumbImageFromServer(final WFile aFile) {
+    private void tryLoadEventThumbImageFromServer(final WFile aFile, final ImageView imageView) {
         if(!new File(aFile.localThumbnailPath).exists()) {
 
             new AsyncTask<Void, Integer, Void> () {
@@ -244,7 +127,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 protected void onPostExecute(Void v) {
                     org.wowtalk.Log.i("download complete, fileid=" + aFile.fileid + ", result=" + ok);
                     if(ok) {
-                        galleryAdapter.notifyDataSetChanged();
+                        displayThumnail(aFile.localThumbnailPath, imageView);
                     }
                 }
 
@@ -259,49 +142,89 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 fileName.endsWith(".png");
     }
 
-    private GalleryAdapter galleryAdapter;
 	private void initGallery() {
-		if (gallery == null) {
-			gallery = (Gallery) findViewById(R.id.gallery);
-		}
+		ViewGroup gallery = (ViewGroup) findViewById(R.id.images_grid);
 
-        ArrayList<String> eventImageList=new ArrayList<String>();
-        if(null != eventDetail.multimedias) {
+        int numImages = 0;
+
+        if(null != eventDetail.multimedias && !eventDetail.multimedias.isEmpty()) {
+            ArrayList<String> eventImageList=new ArrayList<String>();
+
+            LinearLayout row = addImageRow(gallery);
             for(WFile aFile : eventDetail.multimedias) {
-                if(isFileAPhoto(aFile.localPath)) {
-                    tryLoadEventThumbImageFromServer(aFile);
+                String filename = aFile.localThumbnailPath;
+                if (!isFileAPhoto(filename))
+                    continue;
+                eventImageList.add(aFile.localThumbnailPath);
 
-                    eventImageList.add(aFile.localThumbnailPath);
+                // create image view
+                ImageView imageView = addImageView(row, numImages);
+
+                // set image source
+                if (!displayThumnail(filename, imageView)) {
+                    imageView.setImageResource(R.drawable.feed_default_pic);
+                    tryLoadEventThumbImageFromServer(aFile, imageView);
+                }
+
+                if (++numImages % NUM_COLUMNS == 0) {
+                    row = addImageRow(gallery);
                 }
             }
         }
 
-        if(eventImageList.size() > 0) {
-            galleryAdapter=new GalleryAdapter(this,eventImageList);
-            gallery.setAdapter(galleryAdapter);
-        } else {
-            gallery.setVisibility(View.GONE);
-            return;
-//            galleryAdapter=new GalleryAdapter(this);
-//            gallery.setAdapter(galleryAdapter);
+        if (numImages == 0) {
+            new AQuery(this).find(R.id.images_section).visibility(View.GONE);
         }
-
-		gallery.setSelection(Integer.MAX_VALUE / 2, false);
-		gallery.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View v, int position,
-					long id) {
-                ImageViewActivity.launch(EventDetailActivity.this,
-                        position%eventDetail.multimedias.size(),
-                        eventDetail.multimedias,
-                        ImageViewActivity.UPDATE_WITH_CHAT_MESSAGE);
-			}
-
-		});
 	}
 
-	@Override
+    private boolean displayThumnail(String filename, ImageView imageView) {
+        boolean ok = false;
+        try {
+            if (new File(filename).exists()) {
+                InputStream in = new FileInputStream(filename);
+                Drawable drawable = Drawable.createFromStream(in, null);
+                imageView.setImageDrawable(drawable);
+                ok = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ok;
+    }
+
+    private ImageView addImageView(LinearLayout row, final int position) {
+        int padding = 10;
+        int width = (GlobalValue.screenW - (NUM_COLUMNS + 1) * padding) / NUM_COLUMNS;
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, width);
+        lp.setMargins(padding, padding, position < NUM_COLUMNS - 1 ? 0 : padding, padding);
+
+        ImageView imageView = new ImageView(this);
+        imageView.setLayoutParams(lp);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        row.addView(imageView);
+
+        imageView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImageViewActivity.launch(EventDetailActivity.this,
+                        position,
+                        eventDetail.multimedias,
+                        ImageViewActivity.UPDATE_WITH_CHAT_MESSAGE);
+            }
+        });
+        return imageView;
+    }
+
+    private LinearLayout addImageRow(ViewGroup gallery) {
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        gallery.addView(row);
+        return row;
+    }
+
+    @Override
 	public void onClick(View v) {
         switch (v.getId()) {
             case R.id.title_back:
@@ -312,85 +235,20 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         }
     }
 
-    private void sendEmailByIntent(String[] destMails,String subject,String content) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_EMAIL, destMails);
-        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
-        intent.putExtra(Intent.EXTRA_TEXT, content);
-        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(""));
-        intent.setType("text/plain");
-        startActivity(Intent.createChooser(intent, getString(R.string.title_send_mail)));
-    }
-
-    private void requireToJoinEvent() {
-        final String name;
-        final String phoneNumber;
-        if(WEvent.EVENT_TYPE_WITH_DETAIL == eventDetail.event_type) {
-            name="";
-            phoneNumber="";
-//            name=((EditText) findViewById(R.id.edt_name)).getText().toString();
-//            phoneNumber=((EditText) findViewById(R.id.edt_name)).getText().toString();
-//
-//            if(TextUtils.isEmpty(name) || TextUtils.isEmpty(phoneNumber)) {
-//                mMsgBox.toast(R.string.event_detail_send_detail_can_not_empty);
-//                return;
-//            }
-        } else {
-            name="";
-            phoneNumber="";
-        }
-
-        mMsgBox.showWait();
-
-        new AsyncTask<Void, Integer, Integer>() {
-
-            @Override
-            protected Integer doInBackground(Void... params) {
-                int errno = ErrorCode.UNKNOWN;
-
-                if(WEvent.EVENT_TYPE_SIMPLE == eventDetail.event_type) {
-                    errno=WowEventWebServerIF.getInstance(EventDetailActivity.this).fJoinEvent(eventDetail.id);
-                } else if (WEvent.EVENT_TYPE_WITH_DETAIL == eventDetail.event_type) {
-                    errno=WowEventWebServerIF.getInstance(EventDetailActivity.this).fJoinEventWithDetail(eventDetail.id,
-                            name,
-                            phoneNumber,
-                            "");
-                }
-                return errno;
-            }
-            @Override
-            protected void onPostExecute(Integer result) {
-                mMsgBox.dismissWait();
-
-                if(ErrorCode.OK == result) {
-                    mMsgBox.toast(R.string.require_join_event_success);
-                } else {
-                    mMsgBox.toast(R.string.require_join_event_fail);
-                }
-            }
-        }.execute((Void)null);
-    }
-
-	@Override
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.event_detail);
 
-        mMsgBox = new MessageBox(this);
-        mediaPlayerWraper=new MediaPlayerWraper(this);
-
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
-		if (getIntent() == null)
-			return;
         eventDetail = getIntent().getExtras().getParcelable(EventActivity.EVENT_DETAIL_BUNDLE);
-		
-		initView();
-		if (eventDetail == null)
-			return;
 
-		
+        if (eventDetail == null)
+            return;
+
+		initView();
 	}
 
     @Override
@@ -404,11 +262,4 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         super.onPause();
         MobclickAgent.onPause(this);
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        doStopPlayingAudio();
-    }
-
 }

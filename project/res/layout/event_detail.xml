@@ -97,15 +97,21 @@
 
             </LinearLayout>
 
-            <TextView
-                android:text="@string/event_pics"
-                style="@style/event_section_title"/>
-
-            <Gallery
-                android:id="@+id/gallery"
+            <LinearLayout
+                android:id="@+id/images_section"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:spacing="7dp"/>
+                android:orientation="vertical">
+                <TextView
+                    android:text="@string/event_pics"
+                    style="@style/event_section_title"/>
+                <LinearLayout
+                    android:id="@+id/images_grid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                </LinearLayout>
+			</LinearLayout>
 
             <ImageView
                 android:layout_height="wrap_content"

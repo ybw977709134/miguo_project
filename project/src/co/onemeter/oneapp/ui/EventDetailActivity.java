@@ -94,45 +94,43 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         txtDetailIntroduce.setText(eventDetail.description);
 	}
 
-    private void tryLoadEventThumbImageFromServer(final WFile aFile, final ImageView imageView) {
-        if(!new File(aFile.localThumbnailPath).exists()) {
+    private void downloadImage(final WFile aFile, final boolean thumbnail, final ImageView imageView) {
 
-            new AsyncTask<Void, Integer, Void> () {
-                boolean ok = true;
+        new AsyncTask<Void, Integer, Void> () {
+            boolean ok = true;
 
-                @Override
-                protected Void doInBackground(Void... arg0) {
-                    WowTalkWebServerIF.getInstance(EventDetailActivity.this)
-                            .fGetFileFromServer(aFile.thumb_fileid, WEvent.MEDIA_FILE_REMOTE_DIR,new NetworkIFDelegate(){
-                                @Override
-                                public void didFailNetworkIFCommunication(int arg0, byte[] arg1) {
-                                    ok = false;
-                                    org.wowtalk.Log.e("AvatarUtils.displayPhoto() failed to download: "
-                                            + new String(arg1).toString());
-                                }
-                                @Override
-                                public void didFinishNetworkIFCommunication(int arg0, byte[] arg1) {
-                                    ok = true;
-                                    org.wowtalk.Log.i("AvatarUtils.displayPhoto() succeed");
-                                }
-                                @Override
-                                public void setProgress(int arg0, int arg1) {
-                                }
+            @Override
+            protected Void doInBackground(Void... arg0) {
+                WowTalkWebServerIF.getInstance(EventDetailActivity.this)
+                        .fGetFileFromServer(thumbnail ? aFile.thumb_fileid : aFile.fileid,
+                                WEvent.MEDIA_FILE_REMOTE_DIR, new NetworkIFDelegate(){
+                                    @Override
+                                    public void didFailNetworkIFCommunication(int arg0, byte[] arg1) {
+                                        ok = false;
+                                    }
+                                    @Override
+                                    public void didFinishNetworkIFCommunication(int arg0, byte[] arg1) {
+                                        ok = true;
+                                    }
+                                    @Override
+                                    public void setProgress(int arg0, int arg1) {
+                                    }
 
-                            }, 0, aFile.localThumbnailPath,null);
-                    return null;
+                                },
+                                0,
+                                thumbnail ? aFile.localThumbnailPath : aFile.localPath,
+                                null);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void v) {
+                if(ok) {
+                    displayImage(thumbnail ? aFile.localThumbnailPath : aFile.localPath, imageView);
                 }
+            }
 
-                @Override
-                protected void onPostExecute(Void v) {
-                    org.wowtalk.Log.i("download complete, fileid=" + aFile.fileid + ", result=" + ok);
-                    if(ok) {
-                        displayThumnail(aFile.localThumbnailPath, imageView);
-                    }
-                }
-
-            }.execute((Void)null);
-        }
+        }.execute((Void)null);
     }
 
     private boolean isFileAPhoto(String fileName) {
@@ -155,15 +153,26 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 String filename = aFile.localThumbnailPath;
                 if (!isFileAPhoto(filename))
                     continue;
-                eventImageList.add(aFile.localThumbnailPath);
 
-                // create image view
-                ImageView imageView = addImageView(row, numImages);
+                // display big image
+                if (numImages == 0) {
+                    ImageView imageView = (ImageView)findViewById(R.id.image_cover);
+                    if (!displayImage(aFile.localPath, imageView)) {
+                        downloadImage(aFile, false, imageView);
+                    }
+                }
+                // else
+                {
+                    eventImageList.add(aFile.localThumbnailPath);
 
-                // set image source
-                if (!displayThumnail(filename, imageView)) {
-                    imageView.setImageResource(R.drawable.feed_default_pic);
-                    tryLoadEventThumbImageFromServer(aFile, imageView);
+                    // create image view
+                    ImageView imageView = addImageView(row, numImages);
+
+                    // set image source
+                    if (!displayImage(filename, imageView)) {
+                        imageView.setImageResource(R.drawable.feed_default_pic);
+                        downloadImage(aFile, true, imageView);
+                    }
                 }
 
                 if (++numImages % NUM_COLUMNS == 0) {
@@ -177,7 +186,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         }
 	}
 
-    private boolean displayThumnail(String filename, ImageView imageView) {
+    private boolean displayImage(String filename, ImageView imageView) {
         boolean ok = false;
         try {
             if (new File(filename).exists()) {

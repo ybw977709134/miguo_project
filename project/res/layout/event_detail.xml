@@ -35,15 +35,27 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/event_title"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:text="dummy title"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/image_cover"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"/>
+                <TextView
+                    android:id="@+id/event_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:padding="@dimen/padding_medium"
+                    android:textAppearance="@android:style/TextAppearance.Medium"
+                    android:background="@color/black_30"
+                    android:textColor="@color/white"
+                    android:text="dummy title"/>
+			</RelativeLayout>
+
             <ImageView
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"

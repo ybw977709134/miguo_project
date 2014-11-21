@@ -327,7 +327,6 @@
 	<style name="standard_list_divider">
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_marginLeft">10dp</item>
 		<item name="android:background">@drawable/timeline_divider_h</item>
 	</style>
 

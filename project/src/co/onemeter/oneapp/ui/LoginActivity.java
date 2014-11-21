@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import co.onemeter.oneapp.R;
+import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.GlobalValue;
@@ -42,13 +43,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 	private static final int MSG_USER_NOT_EXISTS = 104;
 	private static final int MSG_AUTH = 105;
 	private static final int MSG_LOGIN_FAILED = 106;
-
-    private RelativeLayout mTitleBar;
-    private ImageButton mTitleBack;
-	private TextView txtForgetPwd;
-	private Button btnLogin;
-
-    private View mSignUp;
 
 	private EditText edtAccount;
 	private EditText edtPassword;
@@ -200,20 +194,15 @@ public class LoginActivity extends Activity implements OnClickListener {
 	};
 
     private void initView() {
-        mTitleBar = (RelativeLayout) findViewById(R.id.title_bar);
-        mTitleBar.setVisibility(mIsAddAccount ? View.VISIBLE : View.GONE);
-        mTitleBack = (ImageButton) findViewById(R.id.title_back);
-        txtForgetPwd = (TextView) findViewById(R.id.forgotPassWord);
-        btnLogin = (Button) findViewById(R.id.loginButton);
-        mSignUp = findViewById(R.id.registerButton);
+        AQuery q = new AQuery(this);
+
 		edtAccount = (EditText) findViewById(R.id.accountInput);
 		edtPassword = (EditText) findViewById(R.id.passWordInput);
         fieldClear = (ImageButton) findViewById(R.id.field_clear);
 
-        mTitleBack.setOnClickListener(this);
-		btnLogin.setOnClickListener(this);
-		txtForgetPwd.setOnClickListener(this);
-        mSignUp.setOnClickListener(this);
+        q.find(R.id.forgotPassWord).clicked(this);
+        q.find(R.id.login_username).clicked(this);
+        q.find(R.id.login_qrcode).clicked(this);
         fieldClear.setOnClickListener(this);
 
 		edtAccount.addTextChangedListener(new TextWatcher() {
@@ -279,11 +268,12 @@ public class LoginActivity extends Activity implements OnClickListener {
         case R.id.title_back:
             finish();
             break;
-		case R.id.loginButton:
+		case R.id.login_username:
 			login();
 			break;
-		case R.id.registerButton:
-			fGotoRegister();
+		case R.id.login_qrcode:
+            new MessageBox(this).toast(R.string.not_implemented);
+			//fGotoRegister();
 			break;
 		case R.id.forgotPassWord:
 			fGotoFetchPwd();

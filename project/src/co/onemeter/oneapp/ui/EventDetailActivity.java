@@ -63,11 +63,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 eventDetail.address));
 
         // member count
-        q.find(R.id.event_count).text(helper.formatField(
-                getResources().getString(R.string.event_member_count_label),
-                String.format(getResources().getString(R.string.event_member_count_value), eventDetail.joinedMemberCount),
-                getResources().getColor(R.color.text_gray3),
-                getResources().getColor(R.color.text_red)));
+        q.find(R.id.event_count).text(Integer.toString(eventDetail.joinedMemberCount));
 
         // cost
         q.find(R.id.event_cost).text(helper.formatField(

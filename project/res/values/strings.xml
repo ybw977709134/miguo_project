@@ -129,6 +129,7 @@
     <string name="event_cost_value">%s积分</string>
     <string name="event_member_count_label">报名 </string>
 	<string name="event_member_count_value">%s人</string>
+    <string name="event_joined_count_suffix">人报名</string>
 	<string name="event_category_label">类型</string>
 	<string name="event_details">活动详情</string>
 	<string name="event_play_video">播放语音介绍</string>

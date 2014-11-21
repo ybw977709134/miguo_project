@@ -13,19 +13,13 @@
 
 	    <ImageButton
 		    android:id="@+id/title_left"
-		    android:layout_height="50dp"
-		    android:layout_width="50dp"
-		    android:layout_alignParentLeft="true"
-		    android:background="@null"
-		    android:src="@drawable/nav_back_selector"/>
+		    android:src="@drawable/nav_back_selector"
+		    style="?attr/navbar_btn_left"/>
 
         <ImageButton
-                android:id="@+id/right_button"
-                android:layout_height="50dp"
-                android:layout_width="50dp"
-                android:layout_alignParentRight="true"
-                android:background="@null"
-                android:src="@drawable/nav_add" />
+	        android:id="@+id/right_button"
+	        android:src="@drawable/nav_add"
+	        style="?attr/navbar_btn_right"/>
 
 	    <TextView
 		    android:id="@+id/title_text"

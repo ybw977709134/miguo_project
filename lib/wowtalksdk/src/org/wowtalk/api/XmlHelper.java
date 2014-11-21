@@ -127,7 +127,7 @@ public class XmlHelper {
         if(e != null)
             a.event_type = Utils.tryParseInt(e.getTextContent(), 0);
 
-        e = Utils.getFirstElementByTagName(eventNode, "joined_member");
+        e = Utils.getFirstElementByTagName(eventNode, "member_count");
         if(e != null)
             a.joinedMemberCount = Utils.tryParseInt(e.getTextContent(), 0);
 

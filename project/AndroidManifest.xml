@@ -564,6 +564,7 @@
 		<activity android:name=".ui.MyClassesActivity"
 		          android:theme="@style/Theme.Green"
 			/>
+		<activity android:name=".ui.LoginInvitedActivity"/>
 	</application>
 
 </manifest>

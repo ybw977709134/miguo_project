@@ -44,7 +44,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 	private static final int MSG_AUTH = 105;
 	private static final int MSG_LOGIN_FAILED = 106;
 
-	private EditText edtAccount;
+    private static final int REQ_SCAN = 123;
+
+    private EditText edtAccount;
 	private EditText edtPassword;
     private ImageButton fieldClear;
 
@@ -272,8 +274,12 @@ public class LoginActivity extends Activity implements OnClickListener {
 			login();
 			break;
 		case R.id.login_qrcode:
-            new MessageBox(this).toast(R.string.not_implemented);
-			//fGotoRegister();
+            startActivityForResult(new Intent(this, ScanQRCodeActivity.class)
+                            .putExtra(ScanQRCodeActivity.EXTRA_THEME_RESID, R.style.Theme_Green)
+                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_WITH_LAYOUT, true)
+                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_LAYOUT_ID, R.layout.scan_qr_code_layout)
+                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_FINISH_AFTER_DECODE, false),
+                    REQ_SCAN);
 			break;
 		case R.id.forgotPassWord:
 			fGotoFetchPwd();
@@ -368,45 +374,12 @@ public class LoginActivity extends Activity implements OnClickListener {
 		
 	}
 
-	private void fGotoRegister() {
-		Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-		startActivity(registerIntent);
-	}
-	
-	private void fGotoFetchPwd() {
+    private void fGotoFetchPwd() {
 		Intent fetchIntent = new Intent(LoginActivity.this, Withdraw1Activity.class);
 		startActivity(fetchIntent);
 	}
-	
-	private void fAutoRegister() {
-        mMsgBox.showWait();
-		new Thread(new Runnable() {
 
-			@Override
-			public void run() {
-                String oldUId = mPrefUtil.getPrevUid();
-				int result = mWebIF.fLoginWithAutoCreatedUser(buddy);
-				Message msg = Message.obtain();
-				if (result == ErrorCode.OK) {
-					msg.what = MSG_AUTO_REGISTER_SUCCESS;
-					msg.obj = oldUId;
-					mHandler.sendMessage(msg);
-				} else {
-                    LoginActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mMsgBox.dismissWait();
-                        }
-
-                    });
-                    mMsgBox.toast(R.string.operation_failed);
-                }
-			}
-			
-		}).start();
-	}
-	
-	@Override
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);

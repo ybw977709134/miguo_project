@@ -25,6 +25,9 @@
 	<!-- title bar -->
 	<attr name="navbar" format="reference"/>
 	<attr name="navbar_title" format="reference"/>
+    <attr name="navbar_btn_left" format="reference"/>
+    <attr name="navbar_btn_right" format="reference"/>
+    <attr name="navbar_txt_right" format="reference"/>
 
 	<!-- radio button -->
 	<attr name="radio" format="reference"/>

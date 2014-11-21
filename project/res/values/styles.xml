@@ -32,6 +32,30 @@
 	    <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="navbar_btn_left">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="navbar_btn_right">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="navbar_txt_right">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:paddingRight">@dimen/padding_medium</item>
+    </style>
+
     <style name="contact_subtitle">
         <!-- Contact Page / list view group title -->
         <item name="android:layout_height">wrap_content</item>

@@ -42,6 +42,9 @@
         <item name="checked">@style/checked_white</item>
         <item name="unchecked">@style/unchecked_white</item>
 	    <item name="navbar_title">@style/page_title_dark</item>
+        <item name="navbar_btn_left">@style/navbar_btn_left</item>
+        <item name="navbar_btn_right">@style/navbar_btn_right</item>
+        <item name="navbar_txt_right">@style/navbar_txt_right</item>
     </style>
 
 	<style name="Theme.Red" parent="Theme.White">

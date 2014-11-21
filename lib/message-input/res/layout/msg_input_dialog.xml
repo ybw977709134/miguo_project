@@ -87,7 +87,7 @@
                         android:minHeight="@dimen/dimen_40"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-						android:background="@drawable/btn_blue_selector"
+						android:background="@drawable/msg_btn_blue_selector"
 						android:text="@string/send"
 						android:textColor="@color/white"
 						android:textSize="18sp" />
@@ -100,7 +100,7 @@
 					android:layout_marginLeft="5dp"
 					android:layout_toRightOf="@+id/btn_toggle_media"
                     android:layout_centerVertical="true"
-					android:background="@drawable/btn_blue_selector"
+					android:background="@drawable/msg_btn_blue_selector"
 					android:text="@string/hold_to_speak"
 					android:textColor="@color/white"
 					android:textSize="18sp"

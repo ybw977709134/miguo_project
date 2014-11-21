@@ -22,7 +22,6 @@ import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.Log;
 import org.wowtalk.api.*;
-import org.wowtalk.ui.PhotoDisplayHelper;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -365,13 +364,8 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
     }
 
     private void fixEventLocalPath() {
-        for(WEvent aEvent : acts) {
-            if(null != aEvent.multimedias) {
-                for(WFile f : aEvent.multimedias) {
-                    f.localThumbnailPath=PhotoDisplayHelper.makeLocalFilePath(f.thumb_fileid, f.getExt());
-                    f.localPath=PhotoDisplayHelper.makeLocalFilePath(f.fileid, f.getExt());
-                }
-            }
+        for(WEvent e : acts) {
+            WEventUiHelper.fixMediaLocalPath(e);
         }
     }
 	

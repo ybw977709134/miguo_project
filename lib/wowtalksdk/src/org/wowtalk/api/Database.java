@@ -4695,6 +4695,13 @@ public class Database {
 		return fetchEvents(null, null);
 	}
 
+    public WEvent fetchEvent(String id) {
+        List<WEvent> lst = fetchEvents("id=?", new String[]{id});
+        if (!lst.isEmpty())
+            return lst.get(0);
+        return null;
+    }
+
 	public ArrayList<WEvent> fetchOfficialEvents() {
 		return fetchEvents("isOfficial=1", null);
 	}

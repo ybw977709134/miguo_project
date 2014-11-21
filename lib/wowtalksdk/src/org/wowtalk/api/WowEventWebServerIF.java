@@ -339,6 +339,57 @@ public class WowEventWebServerIF {
 		return errno;
 	}
 
+	public int fGetEventInfo(String event_id) {
+        String uid = mPrefUtil.getUid();
+        String password = mPrefUtil.getPassword();
+        if(uid == null || password == null)
+            return ErrorCode.INVALID_ARGUMENT;
+
+        int errno = ErrorCode.BAD_RESPONSE;
+
+        String action = "get_event_info";
+        String postStr = "action=" + action
+                + "&uid=" + Utils.urlencodeUtf8(uid)
+                + "&password=" + Utils.urlencodeUtf8(password)
+                + "&event_id=" + Utils.urlencodeUtf8(event_id);
+        Connect2 connect2 = new Connect2();
+        Element root = connect2.Post(postStr);
+
+        if (root != null) {
+            NodeList errorList = root.getElementsByTagName("err_no");
+            Element errorElement = (Element) errorList.item(0);
+            String errorStr = errorElement.getFirstChild().getNodeValue();
+
+            if (errorStr.equals("0")) {
+                errno = ErrorCode.OK;
+
+                Database dbHelper = new Database(mContext);
+
+                ArrayList<WEvent> eventsFromServer=new ArrayList<WEvent>();
+                Element resultElement = Utils.getFirstElementByTagName(root, action);
+                if(resultElement != null) {
+                    NodeList eventNodes = resultElement.getElementsByTagName("event");
+                    if(eventNodes != null && eventNodes.getLength() > 0) {
+
+                        for(int i = 0, n = eventNodes.getLength(); i < n; ++i) {
+                            Element eventNode = (Element)eventNodes.item(i);
+                            WEvent a = XmlHelper.parseWEvent(eventNode);
+                            if(a != null && !Utils.isNullOrEmpty(a.id)) {
+                                dbHelper.storeEvent(a);
+                                eventsFromServer.add(a);
+                            }
+                        }
+                    }
+
+                    clearLocalEvents(eventsFromServer,"");
+                }
+            } else {
+                errno = Integer.parseInt(errorStr);
+            }
+        }
+        return errno;
+    }
+
     private final static int DEF_EVENTS_FROM_SERVER_COUNT=20;
     private void clearLocalEvents(ArrayList<WEvent> eventFromServer,String timestamp) {
         long timestampMax;

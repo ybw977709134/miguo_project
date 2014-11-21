@@ -7,19 +7,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
-import org.wowtalk.api.NetworkIFDelegate;
-import org.wowtalk.api.WEvent;
-import org.wowtalk.api.WFile;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.*;
 import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.ImageViewActivity;
+import org.wowtalk.ui.MessageBox;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,63 +28,8 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
     public static final String INTENT_EXTRA_SIGNUP = "intent_extra_signup";
 	
-	private ImageButton btnTitleBack;
-	private TextView txtDetailIntroduce;
 	private WEvent eventDetail;
-
-    private void initView() {
-		initGallery();
-
-		btnTitleBack = (ImageButton) findViewById(R.id.title_back);
-		txtDetailIntroduce = (TextView) findViewById(R.id.detail_introduce);
-
-		btnTitleBack.setOnClickListener(this);
-
-        AQuery q = new AQuery(this);
-        WEventUiHelper helper = new WEventUiHelper(this);
-
-        // title
-        q.find(R.id.event_title).text(eventDetail.title);
-
-        // time
-        q.find(R.id.event_time).text(helper.formatField(
-                getResources().getString(R.string.event_time_label),
-                new SimpleDateFormat("MM月dd日 HH:mm").format(eventDetail.startTime)
-                        + "-"
-                        + new SimpleDateFormat("HH:mm").format(eventDetail.endTime)));
-
-        // place
-        q.find(R.id.event_place).text(helper.formatField(
-                getResources().getString(R.string.event_place_label),
-                eventDetail.address));
-
-        // member count
-        q.find(R.id.event_count).text(Integer.toString(eventDetail.joinedMemberCount));
-
-        // cost
-        q.find(R.id.event_cost).text(helper.formatField(
-                getResources().getString(R.string.event_cost_label),
-                String.format(getResources().getString(R.string.event_cost_value), eventDetail.costGolds),
-                getResources().getColor(R.color.text_gray3),
-                getResources().getColor(R.color.text_red)));
-
-        // category
-        q.find(R.id.event_category).text(helper.formatField(
-                getString(R.string.event_category_label),
-                WEventUiHelper.getEventCatetoryText(getBaseContext(), eventDetail.category)));
-
-        // host
-        q.find(R.id.event_host).text(helper.formatField(
-                getString(R.string.event_host_label),
-                eventDetail.host));
-
-        // tel
-        q.find(R.id.event_tel).text(helper.formatField(
-                getString(R.string.event_tel_label),
-                eventDetail.contactEmail));
-
-        txtDetailIntroduce.setText(eventDetail.description);
-	}
+    private MessageBox msgbox;
 
     private void downloadImage(final WFile aFile, final boolean thumbnail, final ImageView imageView) {
 
@@ -232,8 +173,11 @@ public class EventDetailActivity extends Activity implements OnClickListener {
     @Override
 	public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.title_back:
+            case R.id.left_button:
                 finish();
+                break;
+            case R.id.right_button:
+                joinEvent();
                 break;
             default:
                 break;
@@ -253,6 +197,8 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         if (eventDetail == null)
             return;
 
+        msgbox = new MessageBox(this);
+
 		initView();
 	}
 
@@ -267,4 +213,117 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         super.onPause();
         MobclickAgent.onPause(this);
     }
+
+    private void joinEvent() {
+        msgbox.showWait();
+        new AsyncTask<Void, Void, Integer>(){
+
+            @Override
+            protected Integer doInBackground(Void... voids) {
+                WowEventWebServerIF web = WowEventWebServerIF.getInstance(EventDetailActivity.this);
+                return web.fJoinEvent(eventDetail.id);
+            }
+
+            @Override
+            public void onPostExecute(Integer errno) {
+                msgbox.dismissWait();
+                if (errno == ErrorCode.OK) {
+                    msgbox.toast(R.string.require_join_event_success);
+                    refresh(false);
+                } else {
+                    msgbox.toast(R.string.require_join_event_fail);
+                }
+            }
+        }.execute((Void)null);
+    }
+
+    private void refresh(final boolean showProgressBar) {
+        if (showProgressBar)
+            msgbox.showWait();
+
+        new AsyncTask<Void, Void, Integer>(){
+
+            @Override
+            protected Integer doInBackground(Void... voids) {
+                WowEventWebServerIF web = WowEventWebServerIF.getInstance(EventDetailActivity.this);
+                return web.fGetEventInfo(eventDetail.id);
+            }
+
+            @Override
+            public void onPostExecute(Integer errno) {
+                if (showProgressBar)
+                    msgbox.dismissWait();
+                if (errno == ErrorCode.OK) {
+                    WEvent e = new Database(EventDetailActivity.this).fetchEvent(eventDetail.id);
+                    if (e != null) {
+                        WEventUiHelper.fixMediaLocalPath(e);
+                        eventDetail = e;
+                        updateUI();
+                    }
+                }
+            }
+        }.execute((Void)null);
+    }
+
+    private void updateUI() {
+        initGallery();
+        displayEventAttributes();
+    }
+
+    private void initView() {
+
+        AQuery q = new AQuery(this);
+        q.find(R.id.left_button).clicked(this);
+        q.find(R.id.right_button).clicked(this);
+
+        updateUI();
+    }
+
+    private void displayEventAttributes() {
+        AQuery q = new AQuery(this);
+        WEventUiHelper helper = new WEventUiHelper(this);
+
+        // title
+        q.find(R.id.event_title).text(eventDetail.title);
+
+        // time
+        q.find(R.id.event_time).text(helper.formatField(
+                getResources().getString(R.string.event_time_label),
+                new SimpleDateFormat("MM月dd日 HH:mm").format(eventDetail.startTime)
+                        + "-"
+                        + new SimpleDateFormat("HH:mm").format(eventDetail.endTime)));
+
+        // place
+        q.find(R.id.event_place).text(helper.formatField(
+                getResources().getString(R.string.event_place_label),
+                eventDetail.address));
+
+        // member count
+        q.find(R.id.event_count).text(Integer.toString(eventDetail.joinedMemberCount));
+
+        // cost
+        q.find(R.id.event_cost).text(helper.formatField(
+                getResources().getString(R.string.event_cost_label),
+                String.format(getResources().getString(R.string.event_cost_value), eventDetail.costGolds),
+                getResources().getColor(R.color.text_gray3),
+                getResources().getColor(R.color.text_red)));
+
+        // category
+        q.find(R.id.event_category).text(helper.formatField(
+                getString(R.string.event_category_label),
+                WEventUiHelper.getEventCatetoryText(getBaseContext(), eventDetail.category)));
+
+        // host
+        q.find(R.id.event_host).text(helper.formatField(
+                getString(R.string.event_host_label),
+                eventDetail.host));
+
+        // tel
+        q.find(R.id.event_tel).text(helper.formatField(
+                getString(R.string.event_tel_label),
+                eventDetail.contactEmail));
+
+        q.find(R.id.detail_introduce).text(eventDetail.description);
+    }
+
 }

@@ -5,6 +5,9 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import co.onemeter.oneapp.R;
+import org.wowtalk.api.WEvent;
+import org.wowtalk.api.WFile;
+import org.wowtalk.ui.PhotoDisplayHelper;
 
 import java.util.HashMap;
 
@@ -72,5 +75,14 @@ public class WEventUiHelper {
         str.setSpan(new ForegroundColorSpan(color2),
                 start, end, 0);
         return str;
+    }
+
+    public static void fixMediaLocalPath(WEvent e) {
+        if(null != e.multimedias) {
+            for(WFile f : e.multimedias) {
+                f.localThumbnailPath = PhotoDisplayHelper.makeLocalFilePath(f.thumb_fileid, f.getExt());
+                f.localPath = PhotoDisplayHelper.makeLocalFilePath(f.fileid, f.getExt());
+            }
+        }
     }
 }

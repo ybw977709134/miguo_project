@@ -56,6 +56,40 @@ public class BottomButtonBoard {
         popupWindow.setOutsideTouchable(false);
     }
 
+    /**
+     * @param context
+     * @param provider
+     * @param anchorView
+     * @return null if there's no menu item.
+     */
+    public static BottomButtonBoard create(
+            final Context context,
+            final OptionsMenuProvider provider,
+            View anchorView) {
+        BottomButtonBoard bottomBoard = null; // clear
+
+        String[] items = provider.getOptionsMenuItems(context);
+        if (items != null && items.length > 0) {
+            bottomBoard = new BottomButtonBoard(context, anchorView);
+
+            for (int i = 0; i < items.length; ++i) {
+                final int position = i;
+                final BottomButtonBoard finalBottomBoard = bottomBoard;
+                bottomBoard.add(items[i],
+                        BUTTON_BLUE, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                finalBottomBoard.dismiss();
+                                provider.onOptionsItemSelected(position);
+                            }
+                        });
+            }
+
+            bottomBoard.addCancelBtn(context.getString(R.string.close));
+        }
+        return bottomBoard;
+    }
+
 //    public void setTitle(String title, int visibility) {
 //        txtTitle.setVisibility(visibility);
 //        txtTitle.setText(title);
@@ -195,5 +229,20 @@ public class BottomButtonBoard {
         if (!popupWindow.isShowing())
             return;
         popupWindow.dismiss();
+    }
+
+    /**
+     * <p>Fragment可以实现这个接口，然后Activity根据这个接口创建菜单，从而达到类似于
+     * {@link android.app.ActionBar} 的效果。</p>
+     * Created by pzy on 11/22/14.
+     */
+    public static interface OptionsMenuProvider {
+        /**
+         * @param context 由于这个方法可能调用得很早（比如在 {@link android.app.Activity#onCreate}
+         *                中，Fragment 尚未附加到 Activity 上，所以它无法通过 getActivity() 获得 Context。
+         * @return
+         */
+        public String[] getOptionsMenuItems(Context context);
+        public boolean onOptionsItemSelected(int position);
     }
 }

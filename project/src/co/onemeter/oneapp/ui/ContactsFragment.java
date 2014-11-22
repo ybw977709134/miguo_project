@@ -25,6 +25,7 @@ import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
+import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;
@@ -36,7 +37,8 @@ import java.util.List;
  * 显示我的联系人。
  */
 public class ContactsFragment extends Fragment implements OnClickListener,
-					SideBar.OnTouchingLetterChangedListener{
+        SideBar.OnTouchingLetterChangedListener,
+        BottomButtonBoard.OptionsMenuProvider {
 	private static final int REQ_LAUNCH_GROUP = 123;
 
 	/**
@@ -568,4 +570,27 @@ public class ContactsFragment extends Fragment implements OnClickListener,
         return false;
     }
 
+    @Override
+    public String[] getOptionsMenuItems(Context context) {
+        return new String[] {
+                context.getString(R.string.friends_add),
+                context.getString(R.string.refresh_from_server) };
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(int position) {
+        switch (position) {
+            case 0:
+                Intent addIntent = new Intent(
+                        getActivity(),
+                        ContactAddActivity.class);
+                startActivity(addIntent);
+                return true;
+            case 1:
+                refresh();
+                return true;
+            default:
+                return false;
+        }
+    }
 }

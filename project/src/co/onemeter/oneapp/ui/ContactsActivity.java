@@ -1,7 +1,7 @@
 package co.onemeter.oneapp.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import co.onemeter.oneapp.R;
@@ -60,7 +60,11 @@ public class ContactsActivity extends FragmentActivity implements View.OnClickLi
         }
 
         setTitle(pageTitle);
-        initMenu();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -125,6 +129,7 @@ public class ContactsActivity extends FragmentActivity implements View.OnClickLi
                 .replace(R.id.fragment_container, contactsFragment)
                 .commit();
         activatedTab = TAB_CONTACTS;
+        updateMenu();
     }
 
     private void switchToSchool() {
@@ -134,36 +139,30 @@ public class ContactsActivity extends FragmentActivity implements View.OnClickLi
                 .replace(R.id.fragment_container, schoolMatesFragment)
                 .commit();
         activatedTab = TAB_SCHOOL;
+        updateMenu();
     }
 
-    private void initMenu() {
-        bottomBoard = new BottomButtonBoard(this,
-                findViewById(R.id.navbar_btn_right));
-        bottomBoard.add(getString(R.string.friends_add),
-                BottomButtonBoard.BUTTON_BLUE, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent addIntent = new Intent(
-                                ContactsActivity.this,
-                                ContactAddActivity.class);
-                        startActivity(addIntent);
-                        bottomBoard.dismiss();
-                    }
-                });
-        bottomBoard.add(getString(R.string.refresh_from_server),
-                BottomButtonBoard.BUTTON_BLUE, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        bottomBoard.dismiss();
-                        if (activatedTab == TAB_CONTACTS) {
-                            contactsFragment.refresh();
-                        } else if (activatedTab == TAB_SCHOOL) {
-                           schoolMatesFragment.refresh();
-                        }
-                    }
-                });
-        bottomBoard.addCancelBtn(getString(R.string.close));
-
+    private void updateMenu() {
+        Fragment f = currFragment();
+        if (f instanceof BottomButtonBoard.OptionsMenuProvider
+                && null != (bottomBoard = BottomButtonBoard.create(
+                this,
+                (BottomButtonBoard.OptionsMenuProvider)f,
+                findViewById(R.id.navbar_btn_right)))) {
+            q.find(R.id.navbar_btn_right).visible();
+        } else {
+            q.find(R.id.navbar_btn_right).invisible();
+        }
     }
+
+    private Fragment currFragment() {
+        if (activatedTab == TAB_CONTACTS) {
+            return contactsFragment;
+        } else if (activatedTab == TAB_SCHOOL) {
+            return schoolMatesFragment;
+        }
+        return null;
+    }
+
 }
 

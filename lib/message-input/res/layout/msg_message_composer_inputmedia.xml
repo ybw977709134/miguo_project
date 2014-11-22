@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:orientation="horizontal"
-            android:background="@color/background"
+            android:background="@color/libmsg_background"
             android:padding="@dimen/multimedia_btn_margin">
 
         <TableRow

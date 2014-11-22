@@ -16,7 +16,7 @@
                 android:id="@+id/faces_layout"
                 android:layout_width="fill_parent"
                 android:layout_height="150dp"
-                android:background="@color/background" >
+                android:background="@color/libmsg_background" >
 
             <HorizontalScrollView
                     android:id="@+id/hscroll_view"

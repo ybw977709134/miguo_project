@@ -364,6 +364,7 @@
     <string name="login_others">使用其它方式登录</string>
     <string name="login_qrcode">扫描二维码登录</string>
 	<string name="login_signup">使用ID注册</string>
+    <string name="login_hint_invite_code">邀请码</string>
     <string name="register_scan_code">二维码</string>
 	<string name="register_invite_code">邀请码</string>
 	<string name="register_do">注册</string>

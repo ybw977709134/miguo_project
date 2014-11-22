@@ -59,8 +59,7 @@
 					android:textColor="@color/text_gray3"
 					android:singleLine="true"
 					android:imeOptions="actionNext"
-					android:shadowColor="@color/white"
-					android:hint="@string/account_hint"
+					android:hint="@string/login_hint_invite_code"
 					android:textSize="17sp" />
 
 				<ImageView

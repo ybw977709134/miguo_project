@@ -203,12 +203,6 @@
         <item name="android:singleLine">true</item>
     </style>
 
-	<style name="inputbox_green" parent="@android:style/Widget.EditText">
-		<item name="android:textColor">@color/default_text</item>
-		<item name="android:background">@drawable/login_input_selector</item>
-		<item name="android:padding">@dimen/padding_medium</item>
-	</style>
-
     <style name="inputbox_white" parent="@android:style/Widget.EditText">
 	    <item name="android:textColor">@color/default_text</item>
 	    <item name="android:background">@drawable/btn_white</item>

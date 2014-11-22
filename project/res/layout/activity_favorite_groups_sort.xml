@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:yuanqu="http://schemas.android.com/apk/res/co.onemeter.oneapp"
-	xmlns:dslv="http://schemas.android.com/apk/res/co.onemeter.oneapp"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:id="@+id/layout"
-	android:orientation="vertical"
-	android:background="@color/bg_gray1">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dslv="http://schemas.android.com/apk/res/co.onemeter.oneapp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/layout"
+    android:orientation="vertical"
+    android:background="@color/bg_gray1">
 
 	<RelativeLayout
 		android:id="@+id/title_bar"

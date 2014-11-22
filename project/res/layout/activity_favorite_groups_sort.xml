@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/layout"
     android:orientation="vertical"
-    android:background="@color/bg_gray1">
+    android:background="@color/background">
 
 	<RelativeLayout
 		android:id="@+id/title_bar"
@@ -59,6 +59,6 @@
         android:dividerHeight="1dp"
         android:background="@drawable/table_white"
         dslv:float_alpha="0.6"
-        dslv:float_background_color="@color/bg_gray1"
+        dslv:float_background_color="@color/background"
         dslv:drag_handle_id="@id/sort_image_view_layout"/>
 </RelativeLayout>

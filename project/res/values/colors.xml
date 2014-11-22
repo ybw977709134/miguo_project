@@ -13,11 +13,7 @@
 	<color name="orange">#ff7200</color>
 
 	<!-- background gray -->
-	<color name="bg_gray1">#E6E6E6</color>
-	<color name="bg_gray2">#EDEDED</color>
-	<color name="bg_gray3">#F2F2F2</color>
-	<color name="bg_gray4">#FAFAFA</color>
-	<color name="background">@color/bg_gray1</color>
+	<color name="background">#E6E6E6</color>
 
 	<!-- text gray -->
 	<color name="text_gray1">#333</color>

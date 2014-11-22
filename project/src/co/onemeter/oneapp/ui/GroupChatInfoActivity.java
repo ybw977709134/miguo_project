@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -125,7 +124,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 			RoundedImageView imgPhoto = (RoundedImageView) convertView.findViewById(R.id.img_photo);
 			ImageView imgDelete = (ImageView) convertView.findViewById(R.id.img_delete);
 			TextView txtName = (TextView) convertView.findViewById(R.id.txt_name);
-            imgPhoto.setBorderColor(getResources().getColor(R.color.bg_gray1));
+            imgPhoto.setBorderColor(getResources().getColor(R.color.background));
             imgPhoto.setCornerRadius(RoundedImageView.DEFAULT_RADIUS);
             imgPhoto.setOnClickListener(listener);
 			if (_isDeleteMode) {

@@ -8,7 +8,7 @@
     <ImageView
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:src="@color/color_bfbfbf"/>
+            android:src="@color/libmsg_color_bfbfbf"/>
 
     <TableLayout
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                         android:layout_width="wrap_content"
                         android:singleLine="true"
                         android:textSize="@dimen/msg_composer_media_txt_ind_size"
-                        android:textColor="@color/msg_composer_media_txt_color"
+                        android:textColor="@color/ligmsg_composer_media_txt_color"
                         android:text="@string/input_voice"/>
             </LinearLayout>
 
@@ -67,7 +67,7 @@
                         android:layout_width="wrap_content"
                         android:singleLine="true"
                         android:textSize="@dimen/msg_composer_media_txt_ind_size"
-                        android:textColor="@color/msg_composer_media_txt_color"
+                        android:textColor="@color/ligmsg_composer_media_txt_color"
                         android:text="@string/input_photo"/>
             </LinearLayout>
 
@@ -91,7 +91,7 @@
 			        android:layout_width="wrap_content"
 			        android:singleLine="true"
 			        android:textSize="@dimen/msg_composer_media_txt_ind_size"
-			        android:textColor="@color/msg_composer_media_txt_color"
+			        android:textColor="@color/ligmsg_composer_media_txt_color"
 			        android:text="@string/input_video"/>
 	        </LinearLayout>
 
@@ -115,7 +115,7 @@
 			        android:layout_width="wrap_content"
 			        android:singleLine="true"
 			        android:textSize="@dimen/msg_composer_media_txt_ind_size"
-			        android:textColor="@color/msg_composer_media_txt_color"
+			        android:textColor="@color/ligmsg_composer_media_txt_color"
 			        android:text="@string/input_location"/>
 	        </LinearLayout>
         </TableRow>
@@ -147,7 +147,7 @@
 			        android:layout_width="wrap_content"
 			        android:singleLine="true"
 			        android:textSize="@dimen/msg_composer_media_txt_ind_size"
-			        android:textColor="@color/msg_composer_media_txt_color"
+			        android:textColor="@color/ligmsg_composer_media_txt_color"
 			        android:text="@string/input_doodle"/>
 	        </LinearLayout>
 	        <LinearLayout
@@ -170,7 +170,7 @@
 			        android:layout_width="wrap_content"
 			        android:singleLine="true"
 			        android:textSize="@dimen/msg_composer_media_txt_ind_size"
-			        android:textColor="@color/msg_composer_media_txt_color"
+			        android:textColor="@color/ligmsg_composer_media_txt_color"
 			        android:text="@string/input_picvoice"/>
 	        </LinearLayout>
 
@@ -194,7 +194,7 @@
                         android:layout_width="wrap_content"
                         android:singleLine="true"
                         android:textSize="@dimen/msg_composer_media_txt_ind_size"
-                        android:textColor="@color/msg_composer_media_txt_color"
+                        android:textColor="@color/ligmsg_composer_media_txt_color"
                         android:text="@string/input_free_call"/>
             </LinearLayout>
 
@@ -218,7 +218,7 @@
                         android:layout_width="wrap_content"
                         android:singleLine="true"
                         android:textSize="@dimen/msg_composer_media_txt_ind_size"
-                        android:textColor="@color/msg_composer_media_txt_color"
+                        android:textColor="@color/ligmsg_composer_media_txt_color"
                         android:text="@string/input_video_chat"/>
             </LinearLayout>
         </TableRow>

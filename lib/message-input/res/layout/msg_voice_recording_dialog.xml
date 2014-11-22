@@ -8,7 +8,7 @@
         android:id="@+id/indicatorBg"
         android:layout_height="50dp"
         android:layout_width="fill_parent"
-        android:background="@color/button_normal"
+        android:background="@color/libmsg_button_normal"
         android:alpha="0.6">
         <TextView
             android:id="@+id/txt_indicator"
@@ -18,7 +18,7 @@
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/chat_voice_delete_icon"
             android:drawablePadding="10dp"
-            android:textColor="@color/white"
+            android:textColor="@color/libmsg_white"
             android:textSize="15sp"
             android:text="@string/msg_drag_to_upside_to_cancel"/>
     </FrameLayout>
@@ -26,13 +26,13 @@
         android:id="@+id/timerBg"
         android:layout_height="150dp"
         android:layout_width="fill_parent"
-        android:background="@color/chat_right_font1">
+        android:background="@color/libmsg_chat_right_font1">
         <org.wowtalk.ui.msg.TimerTextView
             android:id="@+id/txt_timer"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_centerInParent="true"
-            android:textColor="@color/black"
+            android:textColor="@color/libmsg_black"
             android:textSize="50sp"
             android:text="00:13"/>
     </RelativeLayout>

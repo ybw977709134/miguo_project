@@ -30,7 +30,7 @@
             android:text="@string/send_location"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@color/white"/>
+            android:textColor="@color/libmsg_white"/>
 
     <ImageButton
             android:id="@+id/btn_done"

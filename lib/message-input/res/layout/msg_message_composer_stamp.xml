@@ -7,7 +7,7 @@
     <ImageView
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:src="@color/color_bfbfbf"
+            android:src="@color/libmsg_color_bfbfbf"
             android:layout_alignParentTop="true"/>
     <RelativeLayout
             android:layout_width="fill_parent"
@@ -36,7 +36,7 @@
                             android:columnWidth="150dp"
                             android:gravity="center"
                             android:horizontalSpacing="2dp"
-                            android:listSelector="@color/black"
+                            android:listSelector="@color/libmsg_black"
                             android:numColumns="auto_fit"
                             android:stretchMode="spacingWidthUniform"
                             android:verticalSpacing="2dp" />
@@ -85,14 +85,14 @@
             <ImageView
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"
-                    android:src="@color/color_bfbfbf"
+                    android:src="@color/libmsg_color_bfbfbf"
                     android:layout_alignParentTop="true"/>
 
             <LinearLayout
                     android:id="@+id/face_config"
                     android:layout_width="fill_parent"
                     android:layout_height="41dp"
-                    android:background="@color/color_e6e6e6"
+                    android:background="@color/libmsg_color_e6e6e6"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingBottom="3dp"
@@ -122,7 +122,7 @@
                                 android:columnWidth="35dp"
                                 android:gravity="center"
                                 android:horizontalSpacing="3dp"
-                                android:listSelector="@color/black"
+                                android:listSelector="@color/libmsg_black"
                                 android:numColumns="auto_fit"
                                 android:scrollbars="none"
                                 android:stretchMode="spacingWidthUniform" />

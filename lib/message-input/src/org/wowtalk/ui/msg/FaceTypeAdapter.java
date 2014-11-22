@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import org.wowtalk.ui.msg.R;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -158,10 +157,10 @@ public class FaceTypeAdapter extends BaseAdapter{
             holder.stampView.setVisibility(View.GONE);
 			if (mCurrStampPackIndex == position) {
 			    holder.KMJTV.setBackgroundColor(0);
-			    holder.KMJTV.setTextColor(mContext.getResources().getColor(R.color.wowtalk_blue));
+			    holder.KMJTV.setTextColor(mContext.getResources().getColor(R.color.libmsg_wowtalk_blue));
 			} else {
 			    holder.KMJTV.setBackgroundColor(0);
-			    holder.KMJTV.setTextColor(mContext.getResources().getColor(R.color.wowtalk_gray));
+			    holder.KMJTV.setTextColor(mContext.getResources().getColor(R.color.libmsg_wowtalk_gray));
 			}
 			switch (position) {
 			case 0:

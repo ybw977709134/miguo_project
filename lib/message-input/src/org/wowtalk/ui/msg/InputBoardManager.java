@@ -353,7 +353,7 @@ public class InputBoardManager implements Parcelable,
                 switch(arg1.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         mIsOnDeleteView = false;
-                        mIndicatorBg.setBackgroundColor(mContext.getResources().getColor(R.color.sms_voice_indicator_send));
+                        mIndicatorBg.setBackgroundColor(mContext.getResources().getColor(R.color.libmsg_sms_voice_indicator_send));
                         mIndicatorText.setText(R.string.msg_drag_to_upside_to_cancel);
                         btnSpeak.setText(R.string.msg_release_to_send);
                         btnSpeak.setBackgroundResource(mDrawableResId.voicePressed);
@@ -391,11 +391,11 @@ public class InputBoardManager implements Parcelable,
                     case MotionEvent.ACTION_MOVE:
                         if (arg1.getY() < -height) {
                             mIsOnDeleteView = true;
-                            mIndicatorBg.setBackgroundColor(mContext.getResources().getColor(R.color.sms_voice_indicator_delete));
+                            mIndicatorBg.setBackgroundColor(mContext.getResources().getColor(R.color.libmsg_sms_voice_indicator_delete));
                             mIndicatorText.setText(R.string.msg_release_to_cancel_send);
                         } else {
                             mIsOnDeleteView = false;
-                            mIndicatorBg.setBackgroundColor(mContext.getResources().getColor(R.color.sms_voice_indicator_send));
+                            mIndicatorBg.setBackgroundColor(mContext.getResources().getColor(R.color.libmsg_sms_voice_indicator_send));
                             mIndicatorText.setText(R.string.msg_drag_to_upside_to_cancel);
                         }
                         break;

@@ -17,12 +17,12 @@
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/layoutVoice"
                 android:orientation="vertical"
-                android:background="@color/color_e6e6e6">
+                android:background="@color/libmsg_color_e6e6e6">
 
             <ImageView
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"
-                    android:src="@color/color_bfbfbf"/>
+                    android:src="@color/libmsg_color_bfbfbf"/>
 			<RelativeLayout
 				android:id="@+id/layoutTextInnerWrapper"
 				android:layout_width="fill_parent"
@@ -75,7 +75,7 @@
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
 						android:background="@drawable/text_field"
-						android:textColor="@color/black"
+						android:textColor="@color/libmsg_black"
 						android:textSize="17sp" />
 
 					<Button
@@ -89,7 +89,7 @@
                         android:paddingRight="5dp"
 						android:background="@drawable/msg_btn_blue_selector"
 						android:text="@string/send"
-						android:textColor="@color/white"
+						android:textColor="@color/libmsg_white"
 						android:textSize="18sp" />
 				</RelativeLayout>
 
@@ -102,7 +102,7 @@
                     android:layout_centerVertical="true"
 					android:background="@drawable/msg_btn_blue_selector"
 					android:text="@string/hold_to_speak"
-					android:textColor="@color/white"
+					android:textColor="@color/libmsg_white"
 					android:textSize="18sp"
 					android:visibility="invisible" />
 			</RelativeLayout>
@@ -112,7 +112,7 @@
                     android:layout_width="fill_parent"
                     android:src="@drawable/sms_unfold_btn"
                     android:scaleType="center"
-                    android:background="@color/gray"
+                    android:background="@color/libmsg_gray"
                     android:visibility="gone"/>
 		</LinearLayout>
 

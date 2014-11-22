@@ -24,6 +24,7 @@
 	<color name="text_gray2">#666</color>
 	<color name="text_gray3">#999</color>
 	<color name="text_gray4">#ccc</color>
+	<color name="text_hint">@color/text_gray4</color>
 	<color name="default_text">@color/text_gray1</color>
 	<color name="default_subtext">@color/text_gray2</color>
 

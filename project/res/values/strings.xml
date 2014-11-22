@@ -14,7 +14,7 @@
 
     <string name="registration_logging">连接中...</string>
     <string name="registration_failed">一米家校(连接解除)</string>
-    <string name="registration_success"></string>
+    <string name="registration_success"/>
 
 	<string name="tab_sms">消息</string>
 	<string name="tab_contacts">小伙伴</string>
@@ -336,7 +336,7 @@
     <string name="free_call">免费电话</string>
     <string name="cancel_call">取消呼叫</string>
     <string name="call_missed">未接来电</string>
-    <string name="require_for_video_call"></string>
+    <string name="require_for_video_call"/>
     <string name="group_introduce_hint">请输入群组简介</string>
     <string name="create_groups">创建群组</string>
     <string name="group_name">群组名称</string>
@@ -501,7 +501,7 @@
     <string name="apns_voice">[音频]</string>
     <string name="apns_video">[视频]</string>
     <string name="apns_loc">[位置信息]</string>
-	<string name="weekday_name"></string>
+	<string name="weekday_name"/>
     <string name="contact_subtitle_func">功能</string>
     <string name="contact_subtitle_group">群组</string>
 	<string name="action_change_photo">修改照片</string>

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="page" format="reference"></attr>
-    <attr name="backButton" format="reference"></attr>
-    <attr name="addButton" format="reference"></attr>
-    <attr name="deleteButton" format="reference"></attr>
-    <attr name="editButton" format="reference"></attr>
-    <attr name="listButton" format="reference"></attr>
-    <attr name="phoneButton" format="reference"></attr>
-    <attr name="smsButton" format="reference"></attr>
-    <attr name="contactButton" format="reference"></attr>
-    <attr name="settingsButton" format="reference"></attr>
-    <attr name="label" format="reference"></attr>
-    <attr name="wowtalk_text" format="reference"></attr>
-    <attr name="button" format="reference"></attr>
-    <attr name="inputbox" format="reference"></attr>
-    <attr name="selected" format="reference"></attr>
-    <attr name="unselected" format="reference"></attr>
-    <attr name="confirmButton" format="reference"></attr>
-    <attr name="checked" format="reference"></attr>
-    <attr name="unchecked" format="reference"></attr>
+    <attr name="page" format="reference"/>
+    <attr name="backButton" format="reference"/>
+    <attr name="addButton" format="reference"/>
+    <attr name="deleteButton" format="reference"/>
+    <attr name="editButton" format="reference"/>
+    <attr name="listButton" format="reference"/>
+    <attr name="phoneButton" format="reference"/>
+    <attr name="smsButton" format="reference"/>
+    <attr name="contactButton" format="reference"/>
+    <attr name="settingsButton" format="reference"/>
+    <attr name="label" format="reference"/>
+    <attr name="wowtalk_text" format="reference"/>
+    <attr name="button" format="reference"/>
+    <attr name="inputbox" format="reference"/>
+    <attr name="selected" format="reference"/>
+    <attr name="unselected" format="reference"/>
+    <attr name="confirmButton" format="reference"/>
+    <attr name="checked" format="reference"/>
+    <attr name="unchecked" format="reference"/>
     <attr name="drawableStart" format="integer" />
 
 	<!-- title bar -->

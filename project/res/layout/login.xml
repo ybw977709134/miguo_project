@@ -50,15 +50,9 @@
 
 				<EditText
 					android:id="@+id/accountInput"
-					android:layout_width="fill_parent"
-					android:layout_height="50dp"
-					android:background="@null"
-					android:textColor="@color/text_gray3"
-					android:singleLine="true"
+					style="@style/inputbox_borderless"
 					android:imeOptions="actionNext"
-					android:shadowColor="@color/white"
-					android:hint="@string/account_hint"
-					android:textSize="17sp" />
+					android:hint="@string/account_hint"/>
 
 				<ImageView
 					style="@style/standard_list_divider"/>
@@ -68,15 +62,10 @@
 					android:layout_width="fill_parent">
 					<EditText
 						android:id="@+id/passWordInput"
-						android:layout_width="fill_parent"
-						android:layout_height="50dp"
-						android:background="@null"
-						android:textColor="@color/text_gray3"
+						style="@style/inputbox_borderless"
 						android:hint="@string/passWord_hint"
-						android:singleLine="true"
 						android:imeOptions="actionDone"
-						android:inputType="textPassword"
-						android:textSize="17sp" />
+						android:inputType="textPassword" />
 					<ImageButton
 						android:id="@+id/field_clear"
 						android:layout_height="20dp"

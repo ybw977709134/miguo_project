@@ -51,17 +51,9 @@
 
 				<EditText
 					android:id="@+id/txt_invite_code"
-					android:layout_width="fill_parent"
-					android:layout_height="50dp"
-					android:paddingLeft="@dimen/padding_medium"
-					android:paddingRight="@dimen/padding_medium"
-					android:background="@null"
-					android:textColor="@color/text_gray3"
-					android:textColorHint="@color/text_gray4"
-					android:singleLine="true"
-					android:imeOptions="actionNext"
-					android:hint="@string/login_hint_invite_code"
-					android:textSize="17sp" />
+					style="@style/inputbox_borderless"
+					android:imeOptions="actionDone"
+					android:hint="@string/login_hint_invite_code"/>
 
 				<ImageView
 					style="@style/standard_list_divider"/>

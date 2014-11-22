@@ -302,15 +302,8 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 		mHost.setOnTabChangedListener(this);
 			
 		mSmsIntent = new Intent(StartActivity.this, SmsActivity.class);
-		if (GlobalValue.RELEASE_AS_WOWCITY) {
-		    mContactIntent = new Intent(StartActivity.this, ContactsActivity.class);
-		} else if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
-		    mContactIntent = new Intent(StartActivity.this, ContactsActivityForBiz.class);
-		}
-		// TODO temp
-//		mFriendIntent = new Intent(StartActivity.this, FriendsActivity.class);
+        mContactIntent = new Intent(StartActivity.this, ContactsActivity.class);
 		mFriendIntent = new Intent(StartActivity.this, TimelineActivity.class);
-//        mHomeIntent = new Intent(StartActivity.this, EventActivity.class);
         mHomeIntent = new Intent(StartActivity.this, HomeActivity.class);
 		mSettingIntent = new Intent(StartActivity.this, SettingActivity.class);
 		
@@ -320,7 +313,6 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 		mHost.addTab(buildTabSpec(String.valueOf(TAB_HOME), getResources().getString(R.string.app_name), R.drawable.ic_action_search, mHomeIntent));
 		mHost.addTab(buildTabSpec(String.valueOf(TAB_SETTING), getResources().getString(R.string.app_name), R.drawable.ic_action_search, mSettingIntent));
 		
-//		final int tabNum = PrefUtil.getInstance(this).getDefaultTabNum();
         _selectedTabIndex=TAB_SMS;
 	}
 	

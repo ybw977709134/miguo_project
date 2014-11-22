@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@color/background" >
+	<RelativeLayout
+		android:id="@+id/title_bar"
+		android:layout_height="@dimen/title_bar_height"
+		android:layout_width="fill_parent"
+		android:layout_alignParentTop="true"
+		style="?attr/navbar">
+		<ImageButton
+			android:id="@+id/navbar_btn_left"
+			style="@style/navbar_btn_left"
+			android:visibility="gone"/>
+		<ImageButton
+			android:id="@+id/navbar_btn_right"
+			style="@style/navbar_btn_right"
+			android:src="@drawable/nav_add_selector"/>
+		<LinearLayout
+			android:id="@+id/btn_layout"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:layout_centerInParent="true"
+			android:orientation="horizontal">
+			<Button
+				android:id="@+id/btn_contacts"
+				android:layout_height="wrap_content"
+				android:layout_width="70dp"
+				android:background="@drawable/tab_button_left_white"
+				android:textSize="14sp"
+				android:textColor="@color/white"
+				android:text="@string/contacts_tab_friends"/>
+			<Button
+				android:id="@+id/btn_school"
+				android:layout_height="wrap_content"
+				android:layout_width="70dp"
+				android:background="@drawable/tab_button_right_white"
+				android:textSize="14sp"
+				android:textColor="@color/white"
+				android:text="@string/contacts_tab_school"/>
+		</LinearLayout>
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:id="@+id/fragment_container"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_below="@+id/title_bar" />
+
+</RelativeLayout>

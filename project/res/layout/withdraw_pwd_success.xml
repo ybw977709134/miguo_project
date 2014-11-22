@@ -90,7 +90,7 @@
             android:shadowColor="@color/white_80"
             android:shadowDy="1"
             android:textSize="17sp"
-            android:textColor="@color/login_gray_btn_font"
+            android:textColor="@color/text_gray1"
             android:text="@string/back"/>
         <Button 
             android:id="@+id/btn_done"

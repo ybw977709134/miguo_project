@@ -68,7 +68,7 @@ public class GroupSearchAdapter extends BaseAdapter {
 			}
 		}
 		ssb.setSpan(new ForegroundColorSpan(
-                context.getResources().getColor(R.color.group_search_blue)),
+                context.getResources().getColor(R.color.blue)),
                 start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 		holder.txtName.setText(ssb);
 		holder.txtID.setText(String.format(context.getResources().getString(

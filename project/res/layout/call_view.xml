@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/wowtalk_darkgray" >
+    android:background="@color/text_gray2" >
     <LinearLayout 
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
                         android:layout_width="wrap_content"
                         android:layout_gravity="left"
                         android:textSize="15sp"
-                        android:textColor="@color/blue_color_3299ff"
+                        android:textColor="@color/blue"
                         android:textStyle="bold"/>
                     <org.wowtalk.ui.component.IncallTimer
                         android:id="@+id/call_timer"
@@ -57,7 +57,7 @@
                         android:layout_gravity="left"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        android:textColor="@color/blue_color_3299ff"
+                        android:textColor="@color/blue"
                         android:visibility="visible"/>
                 </FrameLayout>
                 <co.onemeter.oneapp.utils.AlwaysMarqueeTextView

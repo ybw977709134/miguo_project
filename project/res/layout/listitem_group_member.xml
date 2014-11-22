@@ -49,6 +49,6 @@
         android:gravity="center_horizontal"
         android:singleLine="true"
         android:textSize="13sp"
-        android:textColor="@color/login_gray_btn_font"/>
+        android:textColor="@color/text_gray1"/>
 
 </RelativeLayout>

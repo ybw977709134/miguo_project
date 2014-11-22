@@ -27,7 +27,7 @@
         android:layout_marginTop="5dp"
         android:gravity="center_vertical"
         android:text="2012/12/21"
-        android:textColor="@color/blue_color_3299ff"
+        android:textColor="@color/blue"
         android:textSize="13sp" />
 
     <TextView

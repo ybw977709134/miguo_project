@@ -16,7 +16,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="@dimen/share_range_limited_dep_height"
-                android:background="@color/group_search_blue"
+                android:background="@color/blue"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:orientation="horizontal">
@@ -48,7 +48,7 @@
                 android:layout_weight="1"
                 android:layout_height="@dimen/share_range_limited_dep_height"
                 android:layout_marginLeft="10dp"
-                android:background="@color/group_search_blue"
+                android:background="@color/blue"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:orientation="horizontal">

@@ -164,7 +164,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="left"
                             android:textSize="20sp"
-                            android:textColor="@color/wowtalk_darkgray"/>
+                            android:textColor="@color/text_gray1"/>
                 </LinearLayout>
 
                 <EditText

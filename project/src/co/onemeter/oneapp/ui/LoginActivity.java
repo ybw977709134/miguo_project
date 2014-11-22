@@ -207,38 +207,14 @@ public class LoginActivity extends Activity implements OnClickListener {
         q.find(R.id.login_qrcode).clicked(this);
         fieldClear.setOnClickListener(this);
 
-		edtAccount.addTextChangedListener(new TextWatcher() {
-			
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if (s.length() == 0) {
-					edtAccount.setTextColor(getResources().getColor(R.color.login_hint_font));
-				} else {
-                    edtAccount.setTextColor(getResources().getColor(R.color.login_input_font));
-				}
-			}
-			
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				
-			}
-			
-			@Override
-			public void afterTextChanged(Editable s) {
-				
-			}
-		});
 		edtPassword.addTextChangedListener(new TextWatcher() {
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (s.length() == 0) {
                     fieldClear.setVisibility(View.GONE);
-					edtPassword.setTextColor(getResources().getColor(R.color.login_hint_font));
 				} else {
                     fieldClear.setVisibility(View.VISIBLE);
-                    edtPassword.setTextColor(getResources().getColor(R.color.login_input_font));
 				}
 			}
 			

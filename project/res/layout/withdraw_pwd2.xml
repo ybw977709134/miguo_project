@@ -84,7 +84,7 @@
             android:layout_marginRight="7dp"
             android:background="@drawable/btn_gray_medium_selector"
             android:gravity="center"
-            android:textColor="@color/login_gray_btn_font"
+            android:textColor="@color/text_gray1"
             android:textSize="17sp"
             android:text="@string/back"/>
         <Button 

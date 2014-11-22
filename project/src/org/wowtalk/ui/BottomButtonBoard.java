@@ -72,7 +72,7 @@ public class BottomButtonBoard {
         Button button = new Button(mContext);
         switch (btnStyle) {
         case BUTTON_BLUE:
-            button.setTextColor(res.getColor(R.color.menu_color_blue));
+            button.setTextColor(res.getColor(R.color.blue));
             break;
         case BUTTON_RED:
             button.setTextColor(res.getColor(R.color.red));
@@ -106,7 +106,7 @@ public class BottomButtonBoard {
         Resources res = mContext.getResources();
         Button button = new Button(mContext);
         button.setBackgroundResource(R.drawable.menu_view_full_selector);
-        button.setTextColor(res.getColor(R.color.menu_color_blue));
+        button.setTextColor(res.getColor(R.color.blue));
         button.setText(text);
         button.setSingleLine();
         button.setEllipsize(TruncateAt.MIDDLE);

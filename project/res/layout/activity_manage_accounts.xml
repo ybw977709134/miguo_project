@@ -56,7 +56,7 @@
                 android:layout_height="40dp"
                 android:layout_below="@id/accounts_listview"
                 android:background="@drawable/menu_view_middle_selector"
-                android:textColor="@color/menu_color_blue"
+                android:textColor="@color/blue"
                 android:textSize="20sp"
                 android:gravity="center"
                 android:text="@string/manage_account_add"/>

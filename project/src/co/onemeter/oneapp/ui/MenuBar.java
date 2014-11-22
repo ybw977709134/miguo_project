@@ -84,7 +84,7 @@ public abstract class MenuBar {
     }
 
     private void setExpandedButtonSyle(TextView button) {
-        button.setTextColor(context.getResources().getColor(R.color.logo_green));
+        button.setTextColor(context.getResources().getColor(R.color.green));
         setRightDrawable(button, R.drawable.timeline_dropdown_mark_expanded);
     }
 

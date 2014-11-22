@@ -112,7 +112,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
                     getResources().getString(R.string.event_member_count_label),
                     String.format(getResources().getString(R.string.event_member_count_value), act.joinedMemberCount),
                     getResources().getColor(R.color.text_gray3),
-                    getResources().getColor(R.color.text_red)));
+                    getResources().getColor(R.color.red)));
 
             // category
             q.find(R.id.event_category).text(formatField(

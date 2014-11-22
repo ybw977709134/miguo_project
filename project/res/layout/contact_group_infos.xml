@@ -96,7 +96,7 @@
                         android:shadowColor="@color/black"
                         android:shadowDy="1"
                         android:textSize="12sp"
-                        android:textColor="@color/info_font"
+                        android:textColor="@color/text_gray3"
                         android:visibility="gone"
                         android:text="@string/contact_info_group_short_id"/>
                     <Button 
@@ -134,7 +134,7 @@
                         android:paddingLeft="10dp"
                         android:gravity="center_vertical"
                         android:textSize="17sp"
-                        android:textColor="@color/info_table_font"
+                        android:textColor="@color/text_gray2"
                         android:textStyle="bold"
                         android:text="@string/place"/>
                     <TextView 
@@ -166,7 +166,7 @@
                         android:paddingLeft="10dp"
                         android:textSize="17sp"
                         android:textStyle="bold"
-                        android:textColor="@color/info_table_font"
+                        android:textColor="@color/text_gray2"
                         android:text="@string/distance"/>
                     <TextView 
                         android:id="@+id/distance_text"
@@ -197,7 +197,7 @@
                         android:gravity="center_vertical"
                         android:textSize="17sp"
                         android:textStyle="bold"
-                        android:textColor="@color/info_table_font"
+                        android:textColor="@color/text_gray2"
                         android:text="@string/group_category"/>
                     <TextView
                         android:id="@+id/category_text"
@@ -224,7 +224,7 @@
                     android:paddingLeft="10dp"
                     android:textSize="17sp"
                     android:textStyle="bold"
-                    android:textColor="@color/info_table_font"
+                    android:textColor="@color/text_gray2"
                     android:text="@string/group_introduce"/>
                 <TextView 
                     android:id="@+id/group_introduce"
@@ -253,7 +253,7 @@
                     android:drawableRight="@drawable/table_arrow"
                     android:textSize="17sp"
                     android:textStyle="bold"
-                    android:textColor="@color/info_table_font"
+                    android:textColor="@color/text_gray2"
                     android:text="@string/cat_message_history"/>
             </RelativeLayout>
 
@@ -271,7 +271,7 @@
 			        android:layout_marginLeft="10dp"
 			        android:textSize="17sp"
 			        android:textStyle="bold"
-			        android:textColor="@color/info_table_font"
+			        android:textColor="@color/text_gray2"
 			        android:text="@string/group_members"/>
 		        <co.onemeter.oneapp.ui.YQGridView
 			        android:id="@+id/grid_members"
@@ -296,7 +296,7 @@
 			        android:gravity="center"
 			        android:textSize="17sp"
 			        android:textStyle="bold"
-			        android:textColor="@color/info_table_font"
+			        android:textColor="@color/text_gray2"
 			        android:text="@string/see_all"
 			        android:visibility="gone"/>
 	        </LinearLayout>
@@ -317,7 +317,7 @@
                     android:paddingLeft="10dp"
                     android:textSize="17sp"
                     android:textStyle="bold"
-                    android:textColor="@color/info_table_font"
+                    android:textColor="@color/text_gray2"
                     android:text="@string/group_pending_members"/>
                 <co.onemeter.oneapp.ui.YQGridView
                     android:id="@+id/grid_pending_members"
@@ -344,7 +344,7 @@
                     android:paddingLeft="10dp"
                     android:textSize="17sp"
                     android:textStyle="bold"
-                    android:textColor="@color/info_table_font"
+                    android:textColor="@color/text_gray2"
                     android:text="@string/group_events"/>
             </LinearLayout>
         </LinearLayout>

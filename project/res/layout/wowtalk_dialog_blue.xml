@@ -3,7 +3,7 @@
     android:id="@+id/layout_wowtalk_dialog_blue"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/wowtalk_blue"
+    android:background="@color/blue"
     android:orientation="vertical">
 
     <TextView

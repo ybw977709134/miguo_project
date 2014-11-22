@@ -106,7 +106,7 @@
         <!-- Contact Page / list view -->
         <item name="android:textSize">18sp</item>
         <item name="android:singleLine">true</item>
-        <item name="android:textColor">@color/group_member_counts_gray</item>
+        <item name="android:textColor">@color/text_gray3</item>
     </style>
 
     <style name="btn_back_white">
@@ -260,7 +260,7 @@
 	<style name="moment_user_name">
 		<item name="android:textStyle">bold</item>
 		<item name="android:textSize">18sp</item>
-		<item name="android:textColor">@color/event_blue</item>
+		<item name="android:textColor">@color/blue</item>
 	</style>
 
 	<style name="moment_datetime">
@@ -302,12 +302,12 @@
 	</style>
 
 	<style name="standard_text_darkgray">
-		<item name="android:textColor">@color/text_darkgray</item>
+		<item name="android:textColor">@color/text_gray1</item>
 		<item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
 	</style>
 
 	<style name="standard_text_gray">
-		<item name="android:textColor">@color/text_gray</item>
+		<item name="android:textColor">@color/text_gray2</item>
 		<item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
 	</style>
 

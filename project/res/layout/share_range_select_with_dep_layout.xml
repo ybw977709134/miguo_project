@@ -121,7 +121,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:text="@string/click_to_add_department"
-                        android:background="@color/wowtalk_gray"/>
+                        android:background="@color/text_gray3"/>
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

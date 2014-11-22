@@ -382,7 +382,7 @@ public class MessageHistoryActivity extends Activity implements OnClickListener,
             mLastPageImage.setVisibility(View.VISIBLE);
             break;
         case HeightAwareRelativeLayout.KEYBOARD_STATE_SHOW:
-            mCurrentPageView.setTextColor(getResources().getColor(R.color.text_blue1));
+            mCurrentPageView.setTextColor(getResources().getColor(R.color.blue));
             mCurrentPageView.setSelection(mCurrentPageView.getText().length());
             mFirstPageImage.setVisibility(View.INVISIBLE);
             mPreviousImage.setVisibility(View.INVISIBLE);

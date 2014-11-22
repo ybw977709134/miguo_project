@@ -128,7 +128,7 @@ public class BuddySearchItemAdapter extends BaseAdapter {
             }
         }
         ssb.setSpan(new ForegroundColorSpan(
-                contextRef.getResources().getColor(R.color.group_search_blue)),
+                contextRef.getResources().getColor(R.color.blue)),
                 start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 
         tvName.setText(ssb);

@@ -44,7 +44,7 @@
         android:background="@drawable/btn_large_gray_selector"
         android:shadowColor="@color/white_80"
         android:shadowDy="1"
-        android:textColor="@color/login_gray_btn_font"
+        android:textColor="@color/text_gray1"
         android:textSize="17sp"
         android:text="@string/back"/>
 </RelativeLayout>

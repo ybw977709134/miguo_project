@@ -93,7 +93,7 @@
             android:layout_width="fill_parent"
             android:layout_below="@+id/title_bar"
             style="@style/page"
-            ptr:ptrHeaderBackground="@color/wowtalk_darkgray"
+            ptr:ptrHeaderBackground="@color/text_gray2"
             ptr:ptrAnimationStyle="rotate"
             ptr:ptrDrawable="@drawable/transparent_10x10"
             ptr:ptrHeaderTextColor="@color/transparent"

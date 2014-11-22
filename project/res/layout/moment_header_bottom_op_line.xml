@@ -212,6 +212,6 @@
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:layout_marginBottom="3dp"
-            android:src="@color/color_cccccc"
+            android:src="@color/text_gray4"
             android:scaleType="fitXY"/>
 </LinearLayout>

@@ -48,7 +48,7 @@
             android:layout_marginLeft="5dp"
             android:gravity="top|left"
             android:text="name"
-            android:textColor="@color/wowtalk_blue"
+            android:textColor="@color/blue"
             android:textSize="13sp"
             android:visibility="gone"
             android:layout_toRightOf="@+id/frame_photo"

@@ -161,7 +161,7 @@
                         android:shadowDy="1"
                         android:singleLine="true"
                         android:textSize="16sp"
-                        android:textColor="@color/info_font"
+                        android:textColor="@color/text_gray3"
                         android:text="pinyin"/>
                 </RelativeLayout>
             </RelativeLayout>
@@ -180,7 +180,7 @@
                     android:layout_weight="1"
                     android:paddingLeft="10dp"
                     android:gravity="center_vertical"
-                    android:textColor="@color/info_table_font"
+                    android:textColor="@color/text_gray2"
                     android:textStyle="bold"
                     android:textSize="17sp"
                     android:text="@string/signature"/>
@@ -220,7 +220,7 @@
                         android:layout_weight="1"
                         android:paddingLeft="10dp"
                         android:gravity="center_vertical"
-                        android:textColor="@color/info_table_font"
+                        android:textColor="@color/text_gray2"
                         android:textStyle="bold"
                         android:textSize="17sp"
                         android:text="@string/contactinfo_department"/>
@@ -267,7 +267,7 @@
                         android:layout_weight="1"
                         android:paddingLeft="10dp"
                         android:gravity="center_vertical"
-                        android:textColor="@color/info_table_font"
+                        android:textColor="@color/text_gray2"
                         android:textStyle="bold"
                         android:textSize="17sp"
                         android:text="@string/contactinfo_job_title"/>
@@ -303,7 +303,7 @@
                         android:layout_weight="1"
                         android:paddingLeft="10dp"
                         android:gravity="center_vertical"
-                        android:textColor="@color/info_table_font"
+                        android:textColor="@color/text_gray2"
                         android:textStyle="bold"
                         android:textSize="17sp"
                         android:text="@string/contactinfo_phone"/>
@@ -334,7 +334,7 @@
                         android:layout_weight="1"
                         android:paddingLeft="10dp"
                         android:gravity="center_vertical"
-                        android:textColor="@color/info_table_font"
+                        android:textColor="@color/text_gray2"
                         android:textStyle="bold"
                         android:textSize="17sp"
                         android:text="@string/contactinfo_mobile"/>
@@ -365,7 +365,7 @@
                         android:layout_weight="1"
                         android:paddingLeft="10dp"
                         android:gravity="center_vertical"
-                        android:textColor="@color/info_table_font"
+                        android:textColor="@color/text_gray2"
                         android:textStyle="bold"
                         android:textSize="17sp"
                         android:text="@string/contactinfo_email"/>
@@ -401,7 +401,7 @@
                         android:layout_weight="1"
                         android:paddingLeft="10dp"
                         android:gravity="center_vertical"
-                        android:textColor="@color/info_table_font"
+                        android:textColor="@color/text_gray2"
                         android:textStyle="bold"
                         android:textSize="17sp"
                         android:text="@string/contactinfo_branch_store"/>
@@ -437,7 +437,7 @@
                         android:layout_weight="1"
                         android:paddingLeft="10dp"
                         android:gravity="center_vertical"
-                        android:textColor="@color/info_table_font"
+                        android:textColor="@color/text_gray2"
                         android:textStyle="bold"
                         android:textSize="17sp"
                         android:text="@string/contactinfo_employee_id"/>
@@ -465,7 +465,7 @@
                     android:layout_width="wrap_content"
                     android:layout_marginTop="10dp"
                     android:paddingLeft="10dp"
-                    android:textColor="@color/info_table_font"
+                    android:textColor="@color/text_gray2"
                     android:textSize="17sp"
                     android:textStyle="bold"
                     android:text="@string/friends_moments_pagetitle"/>

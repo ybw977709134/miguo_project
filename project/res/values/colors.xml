@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="background">#eee</color>
-	<color name="logo_green">#00c630</color>
+	<!-- basic colors -->
+	<color name="transparent">#0000</color>
+	<color name="white">#FFF</color>
+	<color name="white_80">#cdffffff</color>
+	<color name="black">#000</color>
+	<color name="black_30">#77000000</color>
+	<color name="gray">#b3b3b3</color>
+	<color name="red">#e71326</color>
+	<color name="green">#00c630</color>
+	<color name="blue">#ff1badfa</color>
+	<color name="orange">#ff7200</color>
 
-	<color name="tabbar_color_red">#ffe71326</color>
-	<color name="tabbar_color_geeen">#ff00c630</color>
-	<color name="tabbar_color_blue">#ff1badfa</color>
-
-	<color name="group_member_counts_gray">#b3b3b3</color>
-	<color name="group_iteration_item_bg">#DD505050</color>
-	<color name="login_hint_font">#515151</color>
-    <color name="voice_play_btn_bg">#558fc8</color>
-    <color name="voice_play_duration_bg">#d3e2f0</color>
+	<!-- background gray -->
 	<color name="bg_gray1">#E6E6E6</color>
 	<color name="bg_gray2">#EDEDED</color>
 	<color name="bg_gray3">#F2F2F2</color>
 	<color name="bg_gray4">#FAFAFA</color>
+	<color name="background">@color/bg_gray1</color>
 
-	<color name="text_blue1">#3485CA</color>
-	<color name="text_orange">#F3943A</color>
-	<color name="text_red">#ffe71326</color>
+	<!-- text gray -->
 	<color name="text_gray1">#333</color>
 	<color name="text_gray2">#666</color>
 	<color name="text_gray3">#999</color>
-	<color name="text_gray4">#DDD</color>
+	<color name="text_gray4">#ccc</color>
+	<color name="default_text">@color/text_gray1</color>
+	<color name="default_subtext">@color/text_gray2</color>
 
-    <color name="red">#ff0000</color>
-
-    <color name="moment_light_gray_bg">#dadada</color>
+	<!-- misc -->
 
     <color name="moment_tag_life">#3299ff</color>
     <color name="moment_tag_qa">#fd8216</color>
@@ -35,13 +35,19 @@
     <color name="moment_tag_notice">#ff3737</color>
     <color name="moment_tag_study">#9b59b6</color>
     <color name="moment_tag_video">#34495e</color>
-    <color name="blue_color_3299ff">#3299ff</color>
-    <color name="color_333333">#333333</color>
-    <color name="color_cccccc">#cccccc</color>
-    <color name="menu_color_blue">#389BFF</color>
 
-	<drawable name="color_drawable_gray">#808080</drawable>
-    <drawable name="color_drawable_orange">#ff5500</drawable>
-    <drawable name="color_drawable_transparent">#00000000</drawable>
-    <drawable name="color_drawable_blue">#3485CA</drawable>
+	<color name="group_iteration_item_bg">#DD505050</color>
+	<color name="contact_subtitle">#4d4d4d</color>
+	<color name="sms_gray">#4c4c4c</color>
+	<color name="login_hint_font">#515151</color>
+	<color name="login_input_font">#515151</color>
+	<color name="login_bottom_font">#808080</color>
+	<color name="sms_left_font">#01477a</color>
+	<color name="sms_left_date">#a8bfcf</color>
+	<color name="sms_right_date">#bfbfbf</color>
+	<color name="rounded_img_view_border_color">#e0e0e0</color>
+	<color name="avatar_border">#999</color>
+	<color name="voice_play_btn_bg">#558fc8</color>
+	<color name="voice_play_duration_bg">#d3e2f0</color>
+
 </resources>

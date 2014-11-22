@@ -1,7 +1,6 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,9 +17,7 @@ import org.wowtalk.api.Database;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkVoipIF;
 import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 
 public class AccountSettingActivity_biz extends Activity implements OnClickListener{
@@ -55,7 +52,7 @@ public class AccountSettingActivity_biz extends Activity implements OnClickListe
 		txtPwdSetting = (TextView) findViewById(R.id.pwd_text);
 		mPassword = (LinearLayout) findViewById(R.id.layout_password);
 		txtPwdSetting.setText(getResources().getString(R.string.settings_account_not_set));
-		txtPwdSetting.setTextColor(getResources().getColor(R.color.setting_orange));
+		txtPwdSetting.setTextColor(getResources().getColor(R.color.orange));
 		
 		btnTitleBack.setOnClickListener(this);
 		btnLogout.setOnClickListener(this);
@@ -71,7 +68,7 @@ public class AccountSettingActivity_biz extends Activity implements OnClickListe
             txtPwdSetting.setTextColor(getResources().getColor(R.color.text_gray3));
 		} else {
             txtPwdSetting.setText(getResources().getString(R.string.settings_account_not_set));
-            txtPwdSetting.setTextColor(getResources().getColor(R.color.text_orange));
+            txtPwdSetting.setTextColor(getResources().getColor(R.color.orange));
 		}
 
         if (mPrefUtil.getMyWowtalkIdChangedState()) {

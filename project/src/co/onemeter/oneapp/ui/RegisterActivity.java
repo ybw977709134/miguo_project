@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -83,75 +81,6 @@ public class RegisterActivity extends Activity implements OnClickListener{
 		
 		btnBack.setOnClickListener(this);
 		btnCreate.setOnClickListener(this);
-		
-		edtAccount.addTextChangedListener(new TextWatcher() {
-			
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if (s.length() == 0) {
-					edtAccount.setTextColor(getResources().getColor(R.color.login_hint_font));
-				} else {
-                    edtAccount.setTextColor(getResources().getColor(R.color.login_input_font));
-				}
-			}
-			
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				
-			}
-			
-			@Override
-			public void afterTextChanged(Editable s) {
-				
-			}
-		});
-		
-		edtPwd.addTextChangedListener(new TextWatcher() {
-			
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if (s.length() == 0) {
-					edtPwd.setTextColor(getResources().getColor(R.color.login_hint_font));
-				} else {
-                    edtPwd.setTextColor(getResources().getColor(R.color.login_input_font));
-				}
-			}
-			
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				
-			}
-			
-			@Override
-			public void afterTextChanged(Editable s) {
-				
-			}
-		});
-		
-		edtPwdConfirm.addTextChangedListener(new TextWatcher() {
-			
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if (s.length() == 0) {
-					edtPwdConfirm.setTextColor(getResources().getColor(R.color.login_hint_font));
-				} else {
-                    edtPwdConfirm.setTextColor(getResources().getColor(R.color.login_input_font));
-				}
-			}
-			
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				
-			}
-			
-			@Override
-			public void afterTextChanged(Editable s) {
-				
-			}
-		});
 	}
 
     private void loginRequire(final String oldUId) {

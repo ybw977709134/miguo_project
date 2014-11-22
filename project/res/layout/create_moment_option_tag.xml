@@ -32,7 +32,7 @@
                     android:gravity="center"
                     android:text="@string/moment_tag_notice"
                     android:textSize="@dimen/create_moment_option_tag_txt_size"
-                    android:textColor="@color/color_333333"/>
+                    android:textColor="@color/text_gray1"/>
         </LinearLayout>
 
         <ImageView
@@ -59,7 +59,7 @@
                     android:gravity="center"
                     android:text="@string/moment_tag_qa"
                     android:textSize="@dimen/create_moment_option_tag_txt_size"
-                    android:textColor="@color/color_333333"/>
+                    android:textColor="@color/text_gray1"/>
         </LinearLayout>
 
         <ImageView
@@ -86,7 +86,7 @@
                     android:gravity="center"
                     android:text="@string/moment_tag_study"
                     android:textSize="@dimen/create_moment_option_tag_txt_size"
-                    android:textColor="@color/color_333333"/>
+                    android:textColor="@color/text_gray1"/>
         </LinearLayout>
 
         <ImageView
@@ -113,7 +113,7 @@
 			    android:gravity="center"
 			    android:text="@string/moment_tag_survey"
 			    android:textSize="@dimen/create_moment_option_tag_txt_size"
-			    android:textColor="@color/color_333333"/>
+			    android:textColor="@color/text_gray1"/>
 	    </LinearLayout>
 
 	    <ImageView
@@ -140,7 +140,7 @@
 			    android:gravity="center"
 			    android:text="@string/moment_tag_life"
 			    android:textSize="@dimen/create_moment_option_tag_txt_size"
-			    android:textColor="@color/color_333333"/>
+			    android:textColor="@color/text_gray1"/>
 	    </LinearLayout>
 
 	    <ImageView
@@ -167,7 +167,7 @@
 			    android:gravity="center"
 			    android:text="@string/moment_tag_video"
 			    android:textSize="@dimen/create_moment_option_tag_txt_size"
-			    android:textColor="@color/color_333333"/>
+			    android:textColor="@color/text_gray1"/>
 	    </LinearLayout>
 
     </LinearLayout>

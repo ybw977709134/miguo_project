@@ -62,7 +62,7 @@
                             android:layout_width="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:textColor="@color/about_font_gray"
+                            android:textColor="@color/text_gray3"
                             android:textSize="18sp"
                             android:text="@string/version_info"/>
                     <TextView
@@ -71,7 +71,7 @@
                             android:layout_width="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            android:textColor="@color/about_font_gray"
+                            android:textColor="@color/text_gray3"
                             android:textSize="18sp"/>
                 </RelativeLayout>
                 <ImageView
@@ -92,7 +92,7 @@
                             android:layout_width="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:textColor="@color/about_font_gray"
+                            android:textColor="@color/text_gray3"
                             android:textSize="18sp"
                             android:text="@string/aboutpage_feedback"/>
                     <ImageView
@@ -129,7 +129,7 @@
                     android:layout_marginBottom="15sp"
                     android:layout_above="@id/btn_support"
                     android:shadowDy="1"
-                    android:textColor="@color/about_font_gray"
+                    android:textColor="@color/text_gray3"
                     android:textSize="15sp"
                     android:text="Version 1.0.0"/>
             -->
@@ -148,7 +148,7 @@
                 android:gravity="center"
                 android:shadowColor="@color/black"
                 android:shadowDy="1"
-                android:textColor="@color/about_font_gray"
+                android:textColor="@color/text_gray3"
                 android:textSize="15sp"
                 android:text="@string/copyright_info"/>
         </LinearLayout>

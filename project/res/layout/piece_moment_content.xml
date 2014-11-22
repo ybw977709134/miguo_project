@@ -34,7 +34,7 @@
             <FrameLayout
                     android:layout_height="50dp"
                     android:layout_width="50dp"
-                    android:background="@color/text_blue1"
+                    android:background="@color/blue"
                     android:layout_gravity="center_vertical">
                 <ImageView
                         android:id="@+id/btn_play"
@@ -86,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_gravity="left"
                     android:textSize="15sp"
-                    android:textColor="@color/event_blue"/>
+                    android:textColor="@color/blue"/>
             <!--<ListView-->
             <!--android:id="@+id/vote_survey_options"-->
             <!--android:layout_height="wrap_content"-->

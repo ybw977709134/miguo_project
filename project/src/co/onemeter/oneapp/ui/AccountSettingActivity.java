@@ -62,7 +62,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 		mBindPhone = (LinearLayout) findViewById(R.id.layout_phone);
 		mBindEmail = (LinearLayout) findViewById(R.id.layout_email);
 		txtPwdSetting.setText(getResources().getString(R.string.settings_account_not_set));
-		txtPwdSetting.setTextColor(getResources().getColor(R.color.setting_orange));
+		txtPwdSetting.setTextColor(getResources().getColor(R.color.orange));
 		
 		btnTitleBack.setOnClickListener(this);
 		btnLogout.setOnClickListener(this);
@@ -76,18 +76,18 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 
 		if (mPrefUtil.getMyPasswordChangedState()) {
             txtPwdSetting.setText(getResources().getString(R.string.settings_account_setted));
-            txtPwdSetting.setTextColor(getResources().getColor(R.color.default_text));
+            txtPwdSetting.setTextColor(getResources().getColor(R.color.text_gray1));
 		} else {
             txtPwdSetting.setText(getResources().getString(R.string.settings_account_not_set));
-            txtPwdSetting.setTextColor(getResources().getColor(R.color.setting_orange));
+            txtPwdSetting.setTextColor(getResources().getColor(R.color.orange));
 		}
 
         if (mPrefUtil.getMyWowtalkIdChangedState()) {
             txtYuanquID.setText(mPrefUtil.getMyWowtalkID());
-            txtYuanquID.setTextColor(getResources().getColor(R.color.default_text));
+            txtYuanquID.setTextColor(getResources().getColor(R.color.text_gray1));
         } else {
             txtYuanquID.setText(getResources().getString(R.string.settings_account_not_set));
-            txtYuanquID.setTextColor(getResources().getColor(R.color.setting_orange));
+            txtYuanquID.setTextColor(getResources().getColor(R.color.orange));
         }
 	}
 	

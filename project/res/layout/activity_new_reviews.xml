@@ -63,7 +63,7 @@
 		android:cacheColorHint="@null"
 		android:layout_below="@+id/title_bar"
 		android:layout_gravity="left|center_vertical"
-        android:divider="@color/color_cccccc"
+        android:divider="@color/text_gray4"
             android:dividerHeight="2dp"/>
 
 	<TextView

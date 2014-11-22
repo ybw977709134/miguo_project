@@ -129,7 +129,7 @@
                         <ImageView
                             android:layout_height="1dp"
                             android:layout_width="fill_parent"
-                            android:background="@color/color_cccccc"/>
+                            android:background="@color/text_gray4"/>
 						<RelativeLayout
 						    android:id="@+id/frequent_contacts_arrow_layout"
 						    android:layout_width="fill_parent"

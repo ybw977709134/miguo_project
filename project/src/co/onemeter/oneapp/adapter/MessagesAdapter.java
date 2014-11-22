@@ -40,7 +40,7 @@ public class MessagesAdapter extends BaseAdapter {
 		log_msg = data;
 		mContext = aContext;
 		mDbHelper = Database.open(mContext);
-		mBlockColor = aContext.getResources().getColor(R.color.wowtalk_blue);
+		mBlockColor = aContext.getResources().getColor(R.color.blue);
         mInflater = (LayoutInflater)aContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mPhotoDisplayHelper = new PhotoDisplayHelper(mContext);
         mPhotoDisplayHelper.addImageCache(new ImageCache.ImageCacheParams(mContext, "thumb"));

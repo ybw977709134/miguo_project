@@ -11,6 +11,6 @@
         android:gravity="center_vertical|left"
         android:paddingLeft="7dp"
         android:textSize="20sp"
-        android:textColor="@color/login_gray_btn_font"/>
+        android:textColor="@color/text_gray1"/>
 
 </LinearLayout>

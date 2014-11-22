@@ -30,7 +30,7 @@
             android:gravity="center"
             android:text="@string/no_moment_desc_all"
             android:textSize="20sp"
-            android:textColor="@color/wowtalk_darkgray"/>
+            android:textColor="@color/text_gray2"/>
     <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -82,7 +82,7 @@
         <ImageView
                 android:layout_height="match_parent"
                 android:layout_width="1dp"
-                android:src="@color/event_blue"
+                android:src="@color/blue"
                 android:scaleType="fitXY"
                 android:visibility="gone"/>
         <FrameLayout

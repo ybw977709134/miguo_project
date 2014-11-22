@@ -58,7 +58,7 @@
 				android:gravity="center"
 				android:layout_marginBottom="40dp"
 				android:textSize="25sp"
-				android:textColor="@color/logo_green"
+				android:textColor="@color/green"
 				android:text="@string/logo_name"/>
 
 			<LinearLayout
@@ -170,7 +170,7 @@
 							android:layout_weight="1"
 							android:layout_gravity="center_horizontal"
 							style="?attr/radio"
-							android:textColor="@color/text_gray"
+							android:textColor="@color/text_gray2"
 							android:text="@string/register_user_type_teacher"/>
 						<RadioButton
 							android:id="@+id/rad_student"
@@ -178,7 +178,7 @@
 							android:layout_height="wrap_content"
 							android:layout_weight="1"
 							style="?attr/radio"
-							android:textColor="@color/text_gray"
+							android:textColor="@color/text_gray2"
 							android:checked="true"
 							android:text="@string/register_user_type_student"/>
 					</RadioGroup>

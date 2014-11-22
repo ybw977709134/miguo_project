@@ -1,20 +1,18 @@
 package org.wowtalk.ui;
 
 
-import co.onemeter.oneapp.R;
-
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+import co.onemeter.oneapp.R;
 
 
 public class WowTalkDialogBlue  {
@@ -42,7 +40,7 @@ public class WowTalkDialogBlue  {
 		final View viewWowTalkDialogBlue = mInflater.inflate(R.layout.wowtalk_dialog_blue, null);
 		TextView txt_title= (TextView) viewWowTalkDialogBlue.findViewById(R.id.txt_title);
 		ListView lv_choices = (ListView) viewWowTalkDialogBlue.findViewById(R.id.lv_choices);
-		int bgcolor = R.color.wowtalk_blue;
+		int bgcolor = R.color.blue;
 		viewWowTalkDialogBlue.setBackgroundColor(bgcolor);
 		lv_choices.setDivider(new ColorDrawable(bgcolor));
 		lv_choices.setCacheColorHint(bgcolor);

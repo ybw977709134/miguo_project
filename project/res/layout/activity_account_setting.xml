@@ -63,7 +63,7 @@
 						android:gravity="center_vertical|right"
 						android:drawablePadding="10dp"
 						android:drawableRight="@drawable/table_arrow"
-						android:textColor="@color/setting_orange"
+						android:textColor="@color/orange"
 						android:textSize="18sp"/>
 				</LinearLayout>
 				<ImageView
@@ -95,7 +95,7 @@
 						android:gravity="center_vertical|right"
 						android:drawablePadding="10dp"
 						android:drawableRight="@drawable/table_arrow"
-						android:textColor="@color/setting_orange"
+						android:textColor="@color/orange"
 						android:textSize="18sp"/>
 				</LinearLayout>
 			</LinearLayout>

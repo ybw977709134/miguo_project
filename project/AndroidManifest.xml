@@ -551,20 +551,27 @@
         </activity>
 		<activity android:name=".ui.HomeActivity"
 		          android:theme="@style/Theme.Green"
+		          android:screenOrientation="portrait"
 			/>
 		<activity android:name=".ui.TimelineActivity"
 		          android:theme="@style/Theme.Blue"
+		          android:screenOrientation="portrait"
 			/>
 		<activity android:name=".ui.AddClassActivity"
 		          android:theme="@style/Theme.Green"
+		          android:screenOrientation="portrait"
 			/>
 		<activity android:name=".ui.HomeworkActivity"
 		          android:theme="@style/Theme.Green"
+		          android:screenOrientation="portrait"
 			/>
 		<activity android:name=".ui.MyClassesActivity"
 		          android:theme="@style/Theme.Green"
+		          android:screenOrientation="portrait"
 			/>
-		<activity android:name=".ui.LoginInvitedActivity"/>
+		<activity android:name=".ui.LoginInvitedActivity"
+		          android:screenOrientation="portrait"
+			/>
 	</application>
 
 </manifest>

@@ -43,10 +43,11 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginBottom="@dimen/padding_large"
-				android:paddingLeft="@dimen/padding_medium"
-				android:paddingRight="@dimen/padding_medium"
 				android:background="@color/white"
 				android:orientation="vertical" >
+
+				<ImageView
+					style="@style/standard_list_divider"/>
 
 				<EditText
 					android:id="@+id/accountInput"
@@ -55,6 +56,8 @@
 					android:hint="@string/account_hint"/>
 
 				<ImageView
+					android:layout_marginLeft="@dimen/padding_medium"
+					android:layout_marginRight="@dimen/padding_medium"
 					style="@style/standard_list_divider"/>
 
 				<RelativeLayout
@@ -65,7 +68,7 @@
 						style="@style/inputbox_borderless"
 						android:hint="@string/passWord_hint"
 						android:imeOptions="actionDone"
-						android:inputType="textPassword" />
+						android:inputType="textPassword"/>
 					<ImageButton
 						android:id="@+id/field_clear"
 						android:layout_height="20dp"
@@ -77,6 +80,9 @@
 						android:background="@drawable/field_clear"/>
 
 				</RelativeLayout>
+
+				<ImageView
+					style="@style/standard_list_divider"/>
 
 			</LinearLayout>
 

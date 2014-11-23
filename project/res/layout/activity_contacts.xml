@@ -18,7 +18,7 @@
 		<ImageButton
 			android:id="@+id/navbar_btn_right"
 			style="@style/navbar_btn_right"
-			android:src="@drawable/nav_add_selector"/>
+			android:src="@drawable/nav_more_selector"/>
 		<LinearLayout
 			android:id="@+id/btn_layout"
 			android:layout_height="wrap_content"

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background_dark" >
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background_light" >
     <RelativeLayout
         android:id="@+id/title_bar"
         android:layout_height="@dimen/title_bar_height"
         android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
         style="?attr/navbar">
-        <ImageButton 
+        <ImageButton
             android:id="@+id/title_back"
             android:layout_height="50dp"
             android:layout_width="50dp"
@@ -26,132 +26,131 @@
             android:textSize="20sp"
             android:text="@string/settings_about"/>
     </RelativeLayout>
-    <RelativeLayout 
+    <LinearLayout
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:layout_below="@+id/title_bar"
+        android:layout_marginTop="@dimen/login_logo_margin_top"
         android:orientation="vertical">
-        <RelativeLayout 
+        <ImageView
+            android:id="@+id/text_wowtalkforbiz"
             android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/login_logo"
+            android:scaleType="centerInside"/>
+        <TextView
+            android:id="@+id/logo_view"
             android:layout_width="fill_parent"
-            android:layout_centerInParent="true">
-            <ImageView
-                android:id="@+id/text_wowtalkforbiz"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/login_logo"
-                android:scaleType="centerInside"/>
-            <LinearLayout
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="60dp"
-                    android:layout_below="@id/text_wowtalkforbiz"
-                    android:background="@drawable/menu_view_middle"
-                    android:orientation="vertical">
-                <RelativeLayout
-                        android:layout_height="45dp"
-                        android:layout_width="match_parent"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:orientation="horizontal">
-                    <TextView
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:textColor="@color/text_gray3"
-                            android:textSize="18sp"
-                            android:text="@string/version_info"/>
-                    <TextView
-                            android:id="@+id/txt_version"
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:textColor="@color/text_gray3"
-                            android:textSize="18sp"/>
-                </RelativeLayout>
-                <ImageView
-                        android:layout_height="wrap_content"
-                        android:layout_width="fill_parent"
-                        android:layout_marginLeft="10dp"
-                        android:background="@drawable/divider"/>
-                <RelativeLayout
-                        android:id="@+id/app_support_layout"
-                        android:layout_height="45dp"
-                        android:layout_width="match_parent"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:background="@drawable/menu_view_middle_selector"
-                        android:orientation="horizontal">
-                    <TextView
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:textColor="@color/text_gray3"
-                            android:textSize="18sp"
-                            android:text="@string/aboutpage_feedback"/>
-                    <ImageView
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:background="@drawable/table_arrow"/>
-                </RelativeLayout>
-            </LinearLayout>
-            <!--
-            <Button
-                android:id="@+id/btn_support"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:minWidth="150dp"
-                android:minHeight="50dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="25sp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:background="@drawable/btn_blue_selector"
-                android:textColor="@color/white"
-                android:textSize="23sp"
-                android:text="@string/aboutpage_feedback"/>
-            <TextView
-                    android:id="@+id/txt_version"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="center_horizontal"
-                    android:shadowColor="@color/black"
-                    android:layout_marginBottom="15sp"
-                    android:layout_above="@id/btn_support"
-                    android:shadowDy="1"
-                    android:textColor="@color/text_gray3"
-                    android:textSize="15sp"
-                    android:text="Version 1.0.0"/>
-            -->
-        </RelativeLayout>
-        <LinearLayout
-            android:id="@+id/layout_bottom"
             android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:layout_alignParentBottom="true"
-            android:gravity="center_horizontal|bottom"
-            android:orientation="vertical">
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/login_logo_margin_bottom"
+            android:textSize="25sp"
+            android:textColor="@color/green"
+            android:text="@string/logo_name"/>
+        <ImageView
+            style="@style/standard_list_divider"/>
+        <RelativeLayout
+            android:layout_height="45dp"
+            android:layout_width="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:orientation="horizontal">
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:gravity="center"
-                android:shadowColor="@color/black"
-                android:shadowDy="1"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
                 android:textColor="@color/text_gray3"
-                android:textSize="15sp"
-                android:text="@string/copyright_info"/>
-        </LinearLayout>
-    </RelativeLayout>
+                android:textSize="18sp"
+                android:text="@string/version_info"/>
+            <TextView
+                android:id="@+id/txt_version"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/text_gray3"
+                android:textSize="18sp"/>
+        </RelativeLayout>
+        <ImageView
+            style="@style/standard_list_divider"/>
+        <RelativeLayout
+            android:id="@+id/app_support_layout"
+            android:layout_height="45dp"
+            android:layout_width="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/menu_view_middle_selector"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/text_gray3"
+                android:textSize="18sp"
+                android:text="@string/aboutpage_feedback"/>
+            <ImageView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/table_arrow"/>
+        </RelativeLayout>
+        <ImageView
+            style="@style/standard_list_divider"/>
+        <!--
+		<Button
+			android:id="@+id/btn_support"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:minWidth="150dp"
+			android:minHeight="50dp"
+			android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true"
+			android:layout_marginBottom="25sp"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp"
+			android:background="@drawable/btn_blue_selector"
+			android:textColor="@color/white"
+			android:textSize="23sp"
+			android:text="@string/aboutpage_feedback"/>
+		<TextView
+				android:id="@+id/txt_version"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_centerHorizontal="true"
+				android:gravity="center_horizontal"
+				android:shadowColor="@color/black"
+				android:layout_marginBottom="15sp"
+				android:layout_above="@id/btn_support"
+				android:shadowDy="1"
+				android:textColor="@color/text_gray3"
+				android:textSize="15sp"
+				android:text="Version 1.0.0"/>
+		-->
+    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/layout_bottom"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal|bottom"
+        android:orientation="vertical">
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:shadowColor="@color/black"
+            android:shadowDy="1"
+            android:textColor="@color/text_gray3"
+            android:textSize="15sp"
+            android:text="@string/copyright_info"/>
+    </LinearLayout>
 </RelativeLayout>

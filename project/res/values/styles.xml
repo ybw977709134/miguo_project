@@ -325,7 +325,7 @@
 		<item name="android:drawableRight">@drawable/table_arrow</item>
 		<item name="android:textColor">@color/black</item>
 		<item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
-		<item name="android:background">@drawable/btn_white_selector</item>
+		<item name="android:background">@drawable/menu_view_middle_selector</item>
 		<item name="android:clickable">true</item>
 	</style>
 

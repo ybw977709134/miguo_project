@@ -4,7 +4,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical"
-	android:background="@color/white">
+	android:background="@color/background_light">
 
 	<RelativeLayout
 		android:layout_height="fill_parent"
@@ -40,7 +40,7 @@
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent"
 					android:cacheColorHint="@null"
-                    android:background="@color/white"
+                    android:background="@color/background_light"
 					android:divider="@drawable/divider_h"/>
 
                 <TextView

@@ -10,7 +10,7 @@
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:layout_below="@id/title_bar"
-		android:layout_marginTop="50dp"
+		android:layout_marginTop="@dimen/login_logo_margin_top"
 		android:gravity="center" >
 
 		<LinearLayout
@@ -34,7 +34,7 @@
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_horizontal"
 				android:gravity="center"
-				android:layout_marginBottom="40dp"
+				android:layout_marginBottom="@dimen/login_logo_margin_bottom"
 				android:textSize="25sp"
 				android:textColor="@color/green"
 				android:text="@string/logo_name"/>
@@ -86,21 +86,15 @@
 
 			</LinearLayout>
 
-			<LinearLayout
-				android:layout_width="fill_parent"
+			<TextView
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:gravity="right"
-				android:paddingLeft="14dp"
-				android:paddingRight="14dp" >
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="@string/forgotPassWord"
-					android:id="@+id/forgotPassWord"
-					android:layout_gravity="right"
-					android:layout_marginBottom="10dp"
-					android:textColor="@color/text_gray2"/>
-			</LinearLayout>
+				android:text="@string/forgotPassWord"
+				android:id="@+id/forgotPassWord"
+				android:layout_gravity="right"
+				android:layout_marginRight="@dimen/padding_large"
+				android:layout_marginBottom="@dimen/padding_large"
+				android:textColor="@color/text_gray3"/>
 
 			<Button
 				android:id="@+id/login_username"
@@ -134,6 +128,7 @@
 					android:paddingLeft="@dimen/padding_medium"
 					android:paddingRight="@dimen/padding_medium"
 					android:background="@color/background"
+					android:textColor="@color/text_gray3"
 					android:text="@string/login_otherwise"/>
 			</RelativeLayout>
 

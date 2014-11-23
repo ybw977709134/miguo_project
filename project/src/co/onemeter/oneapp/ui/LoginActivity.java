@@ -351,7 +351,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 
     private void fGotoFetchPwd() {
-		Intent fetchIntent = new Intent(LoginActivity.this, Withdraw1Activity.class);
+		Intent fetchIntent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
 		startActivity(fetchIntent);
 	}
 

@@ -572,6 +572,9 @@
 		<activity android:name=".ui.LoginInvitedActivity"
 		          android:screenOrientation="portrait"
 			/>
+		<activity android:name=".ui.ForgetPasswordActivity"
+		          android:screenOrientation="portrait"
+			/>
 	</application>
 
 </manifest>

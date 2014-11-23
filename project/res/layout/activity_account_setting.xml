@@ -34,24 +34,20 @@
 			<LinearLayout
 				android:layout_height="wrap_content"
 				android:layout_width="fill_parent"
-				android:layout_margin="10dp"
+				android:layout_marginTop="@dimen/padding_medium"
 				android:orientation="vertical">
+				<ImageView
+					style="@style/standard_list_divider"/>
 				<LinearLayout
 					android:id="@+id/layout_id"
-					android:layout_height="50dp"
-					android:layout_width="fill_parent"
-					android:orientation="horizontal"
-					android:background="@drawable/btn_white_selector"
-					android:clickable="true">
+					style="@style/standard_list_item_with_arrow"
+					android:orientation="horizontal">
 					<TextView
 						android:layout_height="fill_parent"
 						android:layout_width="0dp"
 						android:layout_weight="1"
-						android:paddingLeft="10dp"
+						style="@style/standard_text_gray"
 						android:gravity="center_vertical"
-						android:textColor="@color/black"
-						android:textStyle="bold"
-						android:textSize="18sp"
 						android:text="@string/settings_account_wowid"/>
 					<TextView
 						android:id="@+id/yuanqu_id_text"
@@ -59,7 +55,6 @@
 						android:layout_width="0dp"
 						android:layout_weight="2"
 						android:singleLine="true"
-						android:paddingRight="10dp"
 						android:gravity="center_vertical|right"
 						android:drawablePadding="10dp"
 						android:drawableRight="@drawable/table_arrow"
@@ -70,20 +65,14 @@
 					style="@style/standard_list_divider"/>
 				<LinearLayout
 					android:id="@+id/layout_password"
-					android:layout_height="50dp"
-					android:layout_width="fill_parent"
-					android:orientation="horizontal"
-					android:background="@drawable/btn_white_selector"
-					android:clickable="true">
+					style="@style/standard_list_item_with_arrow"
+					android:orientation="horizontal">
 					<TextView
 						android:layout_height="fill_parent"
 						android:layout_width="0dp"
 						android:layout_weight="1"
-						android:paddingLeft="10dp"
+						style="@style/standard_text_gray"
 						android:gravity="center_vertical"
-						android:textColor="@color/black"
-						android:textStyle="bold"
-						android:textSize="18sp"
 						android:text="@string/settings_account_pwd"/>
 					<TextView
 						android:id="@+id/pwd_text"
@@ -91,13 +80,14 @@
 						android:layout_width="0dp"
 						android:layout_weight="2"
 						android:singleLine="true"
-						android:paddingRight="10dp"
 						android:gravity="center_vertical|right"
 						android:drawablePadding="10dp"
 						android:drawableRight="@drawable/table_arrow"
 						android:textColor="@color/orange"
 						android:textSize="18sp"/>
 				</LinearLayout>
+				<ImageView
+					style="@style/standard_list_divider"/>
 			</LinearLayout>
 
 			<LinearLayout
@@ -173,12 +163,10 @@
 
 			<Button
 				android:id="@+id/btn_logout"
-				android:layout_height="50dp"
+				android:layout_height="wrap_content"
 				android:layout_width="fill_parent"
 				style="@style/button_red"
-				android:layout_marginLeft="10dp"
-				android:layout_marginRight="10dp"
-				android:layout_marginTop="10dp"
+				android:layout_margin="@dimen/padding_medium"
 				android:text="@string/logout"/>
 		</LinearLayout>
 	</ScrollView>

@@ -1,9 +1,7 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -12,14 +10,17 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.*;
-
-import com.umeng.analytics.MobclickAgent;
-
-import org.wowtalk.api.*;
-import org.wowtalk.ui.*;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
+import com.androidquery.AQuery;
+import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.ImageViewActivity;
+import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.PhotoDisplayHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -59,17 +60,10 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
             "raw"
     };
 
-    private ImageButton btnTitleBack;
-    private ImageButton btnTitleMore;
-    private TextView txtIsFriendNotename;
-
     private ImageView mGenderImg;
     private TextView mFriendNameBiz;
-    private ImageView mFavoriteImg;
     private TextView mPronunciation;
     private LinearLayout mBtnBizlayout;
-    private Button mSendSmsBizBtn;
-    private Button mSendCallBizBtn;
     private LinearLayout mStatusLayout;
     private TextView mStatusTextView;
 
@@ -113,7 +107,6 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     private int buddyType;
 
     private MessageBox mMsgBox = null;
-    private BottomButtonBoard bottomBoard;
 
     private ImageView imgPhoto;
 
@@ -131,28 +124,25 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
      * 头像右侧的个人信息
      */
     private void initFriendInfoForBiz() {
-        mFavoriteImg = (ImageView) findViewById(R.id.favorite_img);
+        AQuery q = new AQuery(this);
+
         mFriendNameBiz = (TextView) findViewById(R.id.friend_name_biz);
         mPronunciation = (TextView) findViewById(R.id.friend_name_pronunciation);
         mBtnBizlayout = (LinearLayout) findViewById(R.id.layout_btn_biz);
-        mSendSmsBizBtn = (Button) findViewById(R.id.send_sms_biz);
-        mSendCallBizBtn = (Button) findViewById(R.id.send_call_biz);
 
-        mFavoriteImg.setOnClickListener(this);
-        mSendSmsBizBtn.setOnClickListener(this);
-        mSendCallBizBtn.setOnClickListener(this);
+        q.find(R.id.btn_msg).clicked(this);
+        q.find(R.id.btn_call).clicked(this);
+        q.find(R.id.btn_video).clicked(this);
 
         setFriendInfoForBiz();
     }
 
     private void setFriendInfoForBiz() {
         // 默认男性
-        mFavoriteImg.setBackgroundResource(buddy.isFrequent ? R.drawable.btn_like_p : R.drawable.btn_like);
         mFriendNameBiz.setText(buddy.nickName);
         mPronunciation.setText(buddy.pronunciation);
 
         if (buddyType == BUDDY_TYPE_MYSELF) {
-            mFavoriteImg.setVisibility(View.GONE);
             mBtnBizlayout.setVisibility(View.GONE);
         }
     }
@@ -365,32 +355,10 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         getMomentsByUserId(buddy.userID);
     }
 
-    private void showCallPop() {
-        final BottomButtonBoard board = new BottomButtonBoard(this, getWindow().getDecorView());
-        board.add(getResources().getString(R.string.contact_info_call), BottomButtonBoard.BUTTON_BLUE,
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        CallMainActivity.startNewOutGoingCall(ContactInfoActivity.this, buddy.userID, buddy.nickName, false);
-                        board.dismiss();
-                    }
-                });
-        board.add(getResources().getString(R.string.contact_info_video_call), BottomButtonBoard.BUTTON_BLUE,
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        CallMainActivity.startNewOutGoingCall(ContactInfoActivity.this, buddy.userID, buddy.nickName, true);
-                        board.dismiss();
-                    }
-                });
-        board.addCancelBtn(getString(R.string.close));
-        board.show();
-    }
-
     private void initView() {
+        AQuery q = new AQuery(this);
+
         imgPhoto = (ImageView) findViewById(R.id.img_thumbnail);
-        btnTitleBack = (ImageButton) findViewById(R.id.title_back);
-        btnTitleMore = (ImageButton) findViewById(R.id.title_more);
         mLayout3 = (LinearLayout) findViewById(R.id.layout3);//moment show
         mMomentLayout = (LinearLayout) findViewById(R.id.moment_layout);
         mGenderImg = (ImageView) findViewById(R.id.avatar_gender);
@@ -405,10 +373,9 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         initBranchStoreEmployeeId();
         initLayout3();
 
-        findViewById(R.id.img_thumbnail).setOnClickListener(this);
-        btnTitleBack.setOnClickListener(this);
-        btnTitleMore.setOnClickListener(this);
-        findViewById(R.id.btn_goto_moments).setOnClickListener(this);
+        q.find(R.id.img_thumbnail).clicked(this);
+        q.find(R.id.navbar_btn_left).clicked(this);
+        q.find(R.id.btn_goto_moments).clicked(this);
 
         //if family buddy,no moment layout
 //        if(buddy.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
@@ -512,54 +479,6 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         }
 	}
 
-    private void inputRemarkName() {
-        final EditText editText = new EditText(this);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle(R.string.set_mark_name)
-                .setView(editText)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        updateRemarkname(String.valueOf(editText.getText()));
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).show();
-    }
-
-    private void updateRemarkname(final String name) {
-        buddy.alias = name;
-
-        mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
-            @Override
-            protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(ContactInfoActivity.this)
-                        .fOperateBuddy(buddy);
-            }
-
-            @Override
-            protected void onPostExecute(Integer result) {
-                mMsgBox.dismissWait();
-
-                if (result == ErrorCode.OK) {
-                    updateRemarkInView(name);
-                    dbHelper.storeNewBuddyWithUpdate(buddy);
-                    // update the displayName of chatmessages
-                    dbHelper.updateChatMessageDisplayNameWithUser(buddy.userID, name);
-                }
-            }
-        }.execute((Void)null);
-    }
-
-    private void updateRemarkInView(String name) {
-        txtIsFriendNotename.setText(String.format(getString(R.string.contact_info_remarkname), name));
-    }
-
     public static void fSendSmsToInvite(Context context,Person person) {
         String phoneNumber = person.getGlobalPhoneNumber();
         Uri smsUri = Uri.parse("smsto:" + phoneNumber);
@@ -571,24 +490,17 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-            case R.id.title_back:
+            case R.id.navbar_btn_left:
                 handleBackEvent();
                 break;
-            case R.id.title_more:
-                bottomBoard.show();
-                break;
-            case R.id.favorite_img:
-                buddy.isFrequent = !buddy.isFrequent;
-                mFavoriteImg.setBackgroundResource(buddy.isFrequent ? R.drawable.btn_like_p : R.drawable.btn_like);
-                setFavorite(buddy.isFrequent);
-                break;
-            case R.id.send_sms:
-            case R.id.send_sms_biz:
+            case R.id.btn_msg:
                 chatWith(buddy.userID, buddy.nickName);
                 break;
-            case R.id.send_call_biz:
-//                CallMainActivity.startNewOutGoingCall(ContactInfoActivity.this, buddy.userID, buddy.nickName, false);
-                showCallPop();
+            case R.id.btn_call:
+                CallMainActivity.startNewOutGoingCall(ContactInfoActivity.this, buddy.userID, buddy.nickName, false);
+                break;
+            case R.id.btn_video:
+                CallMainActivity.startNewOutGoingCall(ContactInfoActivity.this, buddy.userID, buddy.nickName, true);
                 break;
             case R.id.img_thumbnail:
                 ImageViewActivity.launch(this, buddy);
@@ -644,42 +556,6 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         handleBackEvent();
     }
 
-    private void setFavorite(final boolean isFavorite) {
-        new AsyncTask<Void, Void, Integer> () {
-            @Override
-            protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(ContactInfoActivity.this).updateBuddyFavorite(buddy.userID, isFavorite);
-            }
-
-            protected void onPostExecute(Integer result) {
-                Log.d("ContactInfoActivity#setFavorite, resultCode is " + result);
-                // 更新失败，则设置回原先的状态
-                if (result != ErrorCode.OK) {
-                    buddy.isFrequent = !isFavorite;
-                    mFavoriteImg.setBackgroundResource(buddy.isFrequent ? R.drawable.btn_like_p : R.drawable.btn_like);
-                }
-            };
-        }.execute((Void)null);
-    }
-
-    private void deleteBuddy_async(final String uid) {
-        mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
-            @Override
-            protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(ContactInfoActivity.this).fRemoveBuddy(uid);
-            }
-
-            @Override
-            protected void onPostExecute(Integer result) {
-                mMsgBox.dismissWait();
-                if (result == ErrorCode.OK) {
-                    finish();
-                }
-            }
-        }.execute((Void)null);
-    }
-
     protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_contact_info);
@@ -687,7 +563,6 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
-        bottomBoard = new BottomButtonBoard(this, findViewById(R.id.info_main));
 		buddyType = getIntent().getIntExtra(EXTRA_BUDDY_TYPE, BUDDY_TYPE_NOT_USER);
 		person = getIntent().getParcelableExtra(EXTRA_BUDDY_DETAIL);
 		Log.i("person signature : " + person.getPersonState()
@@ -720,8 +595,6 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         mInitBuddy.status = buddy.status;
 
         mMsgBox = new MessageBox(this);
-
-        bottomBoard.addCancelBtn(getString(R.string.close));
 
         initView();
 

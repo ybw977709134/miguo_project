@@ -1,61 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout 
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:roundedImgView="http://schemas.android.com/apk/auto-res"
     android:id="@+id/info_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_dark" >
-    <RelativeLayout 
+    <RelativeLayout
         android:id="@+id/title_bar"
         android:layout_height="@dimen/title_bar_height"
         android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
         style="?attr/navbar">
         <ImageButton
-            android:id="@+id/title_back"
-            android:layout_height="50dp"
-            android:layout_width="50dp"
-            android:layout_alignParentLeft="true"
-            android:background="@null"
+            android:id="@+id/navbar_btn_left"
+            style="?attr/navbar_btn_left"
             android:src="@drawable/nav_back_selector"/>
-        <ImageButton
-            android:id="@+id/title_more"
-            android:layout_height="50dp"
-            android:layout_width="50dp"
-            android:layout_alignParentRight="true"
-            android:background="@null"
-            android:visibility="gone"
-            android:src="@drawable/nav_more_selector"/>
         <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_centerInParent="true"
-            style="@style/page_title_dark"
+            style="?attr/navbar_title"
             android:text="@string/contact_info_buddy_pageinfo"/>
     </RelativeLayout>
 
-    <ScrollView 
+    <ScrollView
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:layout_below="@+id/title_bar">
-        <LinearLayout 
+        <LinearLayout
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:orientation="vertical">
-            <RelativeLayout 
+            <RelativeLayout
                 android:layout_height="118dp"
                 android:layout_width="fill_parent"
                 android:gravity="center_vertical"
                 android:padding="10dp">
-                <FrameLayout 
+                <FrameLayout
                     android:id="@+id/frame_photo"
                     android:layout_height="98dp"
                     android:layout_width="98dp"
                     android:layout_marginRight="10dp"
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true">
-	                <co.onemeter.oneapp.ui.CircleImageView
+                    <co.onemeter.oneapp.ui.CircleImageView
                         android:id="@+id/img_thumbnail"
                         android:layout_height="match_parent"
                         android:layout_width="match_parent"
@@ -64,16 +50,16 @@
                         android:clickable="true"
                         android:src="@drawable/default_avatar_90"
                         roundedImgView:click_dim="true"/>
-<!--
-                    <ImageView
-                        android:id="@+id/img_thumbnail"
-                        android:layout_height="match_parent"
-                        android:layout_width="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:scaleType="fitCenter"
-                        android:background="@drawable/default_avatar_90"/>
- -->
+                    <!--
+										<ImageView
+											android:id="@+id/img_thumbnail"
+											android:layout_height="match_parent"
+											android:layout_width="match_parent"
+											android:layout_gravity="center"
+											android:layout_margin="5dp"
+											android:scaleType="fitCenter"
+											android:background="@drawable/default_avatar_90"/>
+					 -->
                     <ImageView
                         android:id="@+id/avatar_bar"
                         android:layout_height="wrap_content"
@@ -81,7 +67,7 @@
                         android:layout_gravity="bottom"
                         android:layout_margin="5dp"
                         android:background="@drawable/avatar_bar"
-                            android:visibility="gone"/>
+                        android:visibility="gone"/>
                     <ImageView
                         android:id="@+id/avatar_gender"
                         android:layout_height="wrap_content"
@@ -94,75 +80,63 @@
                 <RelativeLayout
                     android:id="@+id/layout_friend_biz"
                     android:layout_height="fill_parent"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_toRightOf="@+id/frame_photo">
-                    <RelativeLayout
-                        android:id="@+id/name_layout_biz"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_width="191dp">
-                        <ImageView
-                            android:id="@+id/favorite_img"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/friend_name_biz"
                             android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:background="@drawable/btn_like"/>
-                        <TextView 
-	                        android:id="@+id/friend_name_biz"
-	                        android:layout_height="wrap_content"
-	                        android:layout_width="wrap_content"
-	                        android:layout_alignParentTop="true"
-	                        android:layout_alignParentLeft="true"
-	                        android:layout_toLeftOf="@id/favorite_img"
-	                        android:layout_marginTop="5dp"
-	                        android:shadowColor="@color/black"
-	                        android:shadowDy="1"
-	                        android:singleLine="true"
-	                        android:textSize="17sp"
-	                        android:textStyle="bold"
-	                        android:textColor="@color/text_gray1"
-	                        android:text="@string/add"/>
-                    </RelativeLayout>
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginTop="5dp"
+                            style="@style/standard_text"
+                            android:singleLine="true"
+                            android:text="@string/add"/>
 
-                    <LinearLayout 
-                        android:id="@+id/layout_btn_biz"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:orientation="horizontal">
-                        <Button 
-                            android:id="@+id/send_sms_biz"
-                            android:layout_height="34dp"
-                            android:layout_width="60dp"
-                            android:background="@drawable/btn_chat_selector"
-                            android:textColor="@color/white"
-                            android:textStyle="bold"
-                            android:textSize="15sp"/>
-                        <Button 
-                            android:id="@+id/send_call_biz"
-                            android:layout_height="34dp"
-                            android:layout_width="121dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/btn_call_selector"
-                            android:textColor="@color/white"
-                            android:textStyle="bold"
-                            android:textSize="15sp"/>
+                        <TextView
+                            android:id="@+id/friend_name_pronunciation"
+                            style="@style/standard_text_gray"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text="pinyin"/>
                     </LinearLayout>
 
-                    <TextView 
-                        android:id="@+id/friend_name_pronunciation"
-                        android:layout_height="fill_parent"
-                        android:layout_width="191dp"
-                        android:layout_below="@id/name_layout_biz"
-                        android:layout_above="@id/layout_btn_biz"
-                        android:layout_marginBottom="10dp"
-                        android:layout_centerVertical="true"
-                        android:gravity="center_vertical"
-                        android:shadowColor="@color/black"
-                        android:shadowDy="1"
-                        android:singleLine="true"
-                        android:textSize="16sp"
-                        android:textColor="@color/text_gray3"
-                        android:text="pinyin"/>
+                    <LinearLayout
+                        android:id="@+id/layout_btn_biz"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:layout_alignParentBottom="true"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+                        <ImageButton
+                            android:id="@+id/btn_msg"
+                            style="@style/button_blue"
+                            android:layout_height="34dp"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/profile_btn_message"/>
+                        <ImageButton
+                            android:id="@+id/btn_call"
+                            style="@style/button_blue"
+                            android:layout_height="34dp"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="@dimen/padding_medium"
+                            android:src="@drawable/profile_btn_call"/>
+                        <ImageButton
+                            android:id="@+id/btn_video"
+                            style="@style/button_blue"
+                            android:layout_height="34dp"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="@dimen/padding_medium"
+                            android:src="@drawable/profile_btn_video"/>
+                    </LinearLayout>
                 </RelativeLayout>
             </RelativeLayout>
 
@@ -200,7 +174,7 @@
                     android:scrollHorizontally="true"/>
             </LinearLayout>
 
-            <LinearLayout 
+            <LinearLayout
                 android:id="@+id/layout_dept_job"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
@@ -225,19 +199,19 @@
                         android:textSize="17sp"
                         android:text="@string/contactinfo_department"/>
                     <co.onemeter.oneapp.utils.AlwaysMarqueeTextView
-                            android:id="@+id/txt_dept"
-                            android:layout_height="@dimen/section_row_height"
-                            android:layout_width="0dp"
-                            android:layout_weight="2"
-                            android:singleLine="true"
-                            android:gravity="center_vertical"
-                            android:textSize="17sp"
-                            android:textColor="@color/black"
-                            android:ellipsize="marquee"
-                            android:marqueeRepeatLimit="marquee_forever"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:scrollHorizontally="true"/>
+                        android:id="@+id/txt_dept"
+                        android:layout_height="@dimen/section_row_height"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:singleLine="true"
+                        android:gravity="center_vertical"
+                        android:textSize="17sp"
+                        android:textColor="@color/black"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:scrollHorizontally="true"/>
                     <!--
                     <TextView
                         android:id="@+id/txt_dept"
@@ -283,7 +257,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout 
+            <LinearLayout
                 android:id="@+id/layout_contact_way"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
@@ -381,7 +355,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout 
+            <LinearLayout
                 android:id="@+id/layout_branchstore_employeeid"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
@@ -453,14 +427,14 @@
                 </LinearLayout>
             </LinearLayout>
 
-	        <LinearLayout
+            <LinearLayout
                 android:id="@+id/layout3"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:layout_margin="@dimen/padding_medium"
                 android:background="@drawable/table_white"
                 android:orientation="vertical">
-                <TextView 
+                <TextView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:layout_marginTop="10dp"
@@ -480,18 +454,15 @@
                 </LinearLayout>
             </LinearLayout>
 
-	        <Button
-		        android:layout_width="fill_parent"
-		        android:layout_height="wrap_content"
-		        android:text="@string/contact_info_goto_moments"
-		        android:id="@+id/btn_goto_moments"
-		        android:layout_alignParentLeft="true"
-		        android:layout_alignParentTop="true"
-		        android:layout_gravity="center"
-		        android:layout_margin="@dimen/padding_medium"
-		        android:background="@drawable/btn_blue_selector"
-		        android:textColor="@color/white"
-		        android:textSize="16dp"/>
+            <Button
+                style="@style/button_blue"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/contact_info_goto_moments"
+                android:id="@+id/btn_goto_moments"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="@dimen/padding_medium"/>
 
         </LinearLayout>
     </ScrollView>

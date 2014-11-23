@@ -178,6 +178,7 @@
     <style name="button_white" parent="button">
         <item name="android:textColor">@color/black</item>
         <item name="android:background">@drawable/btn_white_selector</item>
+        <item name="android:padding">@dimen/padding_medium</item>
     </style>
 
 	<style name="button_red" parent="button">

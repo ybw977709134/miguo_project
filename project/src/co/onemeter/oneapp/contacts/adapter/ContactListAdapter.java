@@ -82,7 +82,7 @@ public class ContactListAdapter extends BaseAdapter implements Filterable {
 	}
 
 	@Override
-	public Object getItem(int position) {
+	public Person getItem(int position) {
 		return mFilteredPersons.get(position);
 	}
 

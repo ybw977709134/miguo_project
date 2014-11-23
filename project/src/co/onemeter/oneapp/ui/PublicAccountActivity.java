@@ -1,11 +1,14 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.*;
+import co.onemeter.oneapp.contacts.util.ContactUtil;
+import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.adapter.ContactListAdapter;
@@ -19,10 +22,8 @@ import co.onemeter.oneapp.contacts.adapter.ContactListAdapter;
  */
 public class PublicAccountActivity extends Activity implements View.OnClickListener {
 
-    private ImageButton btnTitleBack;
+    private static final int REQ_ADD = 123;
     private ListView lvPublicAccount;
-    private ScrollView mMainScrollView;
-    private LinearLayout mMainLinearLayout;
     private EditText edtSearch;
 
     private ContactListAdapter publicAccountAdapter;
@@ -51,14 +52,15 @@ public class PublicAccountActivity extends Activity implements View.OnClickListe
     };
 
     private void initView() {
-        btnTitleBack = (ImageButton) findViewById(R.id.title_back);
+        AQuery q = new AQuery(this);
+
         lvPublicAccount = (ListView) findViewById(R.id.public_account_list);
-        mMainScrollView = (ScrollView) findViewById(R.id.main_scroll_view);
-        mMainLinearLayout = (LinearLayout) findViewById(R.id.main_linear_layout);
         edtSearch = (EditText) findViewById(R.id.edt_search);
         edtSearch.addTextChangedListener(textWatcher);
 
-        btnTitleBack.setOnClickListener(this);
+        q.find(R.id.navbar_btn_left).clicked(this);
+        q.find(R.id.navbar_btn_right).clicked(this);
+
         lvPublicAccount.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -70,8 +72,14 @@ public class PublicAccountActivity extends Activity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.title_back:
+            case R.id.navbar_btn_left:
                 finish();
+                break;
+            case R.id.navbar_btn_right:
+                startActivityForResult(
+                        new Intent(this, PublicSearchActivity.class),
+                        REQ_ADD
+                );
                 break;
             default:
                 break;
@@ -87,8 +95,17 @@ public class PublicAccountActivity extends Activity implements View.OnClickListe
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
         initView();
-        publicAccountAdapter = new ContactListAdapter(this);
+        publicAccountAdapter = new ContactListAdapter(this,
+                ContactUtil.fFetchPublicAccountsAsPerson(this));
         lvPublicAccount.setAdapter(publicAccountAdapter);
+        lvPublicAccount.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                startActivity(new Intent(PublicAccountActivity.this, PublicAccountDetailActivity.class)
+                        .putExtra(PublicAccountDetailActivity.PERSON_DETAIL,
+                                publicAccountAdapter.getItem(position)));
+            }
+        });
         ListHeightUtil.setListHeight(lvPublicAccount);
     }
 

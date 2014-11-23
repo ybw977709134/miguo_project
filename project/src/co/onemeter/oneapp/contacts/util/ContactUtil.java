@@ -49,39 +49,59 @@ public class ContactUtil {
 		changeBuddiesForPersons();
 	}
 
-	
+	public static ArrayList<Buddy> fFetchPublicAccounts(Context context) {
+		Database dbHelper = new Database(context);
+		return dbHelper.fetchPublicAccounts();
+	}
+
+	public static ArrayList<Person> fFetchPublicAccountsAsPerson(Context context) {
+		Database dbHelper = new Database(context);
+		ArrayList<Buddy> buddies = dbHelper.fetchPublicAccounts();
+		ArrayList<Person> result = new ArrayList<Person>(buddies.size());
+		for (Buddy buddy : buddies) {
+			result.add(buddy2person(buddy));
+		}
+		return result;
+	}
+
 	private static void changeBuddiesForPersons() {
 		allPersons = new ArrayList<Person>();
 		Person person;
 		for (Buddy buddy : allBuddies) {
-			person = new Person();
-			if (buddy.getSexFlag() == Buddy.SEX_FEMALE) {
-				person.setSexFlag(Person.SEX_FEMAIL);
-			} else {
-				person.setSexFlag(Person.SEX_MAIL);
-			}
-            if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_PUBLIC) {
-                person.setAccountType(Person.ACCOUNT_TYPE_PUBLIC);
-            } else {
-                person.setAccountType(Person.ACCOUNT_TYPE_NORMAL);
-            }
-			person.setID(buddy.userID);
-			if (TextUtils.isEmpty(buddy.alias)) {
-			    person.setName(buddy.nickName);
-			} else {
-			    person.setName(buddy.alias);
-            }
-			person.setEmailAddress(buddy.getEmail());
-			person.setWowTalkId(buddy.wowtalkID);
-			person.setSelected(false);
-			person.setPersonState(buddy.status);
-			person.setRigion(buddy.area);
-            person.setSortKey(buddy.sortKey);
-			person.photoUploadedTimestamp = buddy.photoUploadedTimeStamp;
+			person = buddy2person(buddy);
 			allPersons.add(person);
 		}
 	}
-	
+
+	private static Person buddy2person(Buddy buddy) {
+		Person person;
+		person = new Person();
+		if (buddy.getSexFlag() == Buddy.SEX_FEMALE) {
+            person.setSexFlag(Person.SEX_FEMAIL);
+        } else {
+            person.setSexFlag(Person.SEX_MAIL);
+        }
+		if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_PUBLIC) {
+            person.setAccountType(Person.ACCOUNT_TYPE_PUBLIC);
+        } else {
+            person.setAccountType(Person.ACCOUNT_TYPE_NORMAL);
+        }
+		person.setID(buddy.userID);
+		if (TextUtils.isEmpty(buddy.alias)) {
+            person.setName(buddy.nickName);
+        } else {
+            person.setName(buddy.alias);
+}
+		person.setEmailAddress(buddy.getEmail());
+		person.setWowTalkId(buddy.wowtalkID);
+		person.setSelected(false);
+		person.setPersonState(buddy.status);
+		person.setRigion(buddy.area);
+		person.setSortKey(buddy.sortKey);
+		person.photoUploadedTimestamp = buddy.photoUploadedTimeStamp;
+		return person;
+	}
+
 	public static ArrayList<Group> fFetchAllGroups() {
 		ArrayList<Group> groups = new ArrayList<Group>();
 		if (allGroups.size() > 0)

@@ -842,6 +842,36 @@ public class Database {
         return normalBuddy;
     }
 
+    public ArrayList<Buddy> fetchPublicAccounts() {
+        ArrayList<Buddy> list = new ArrayList<Buddy>();
+        if (isDBUnavailable()) {
+            return list;
+        }
+
+        Cursor cursor = database.rawQuery(
+                "SELECT "
+                        + "`buddies`.`uid`"
+                        + " FROM `buddies`"
+                        + " LEFT JOIN `buddydetail` ON `buddies`.`uid`= `buddydetail`.`uid`"
+                        + " LEFT JOIN `block_list` ON `buddies`.`uid`= `block_list`.`uid`"
+                        + " WHERE account_type == " + Buddy.ACCOUNT_TYPE_PUBLIC + ""
+                        + " ORDER BY `sort_key`",
+                null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                Buddy user = new Buddy(cursor.getString(0));
+                if (null != fetchBuddyDetail(user))
+                    list.add(user);
+            } while (cursor.moveToNext());
+        }
+
+        if (cursor != null && !cursor.isClosed()) {
+            cursor.close();
+        }
+        return list;
+    }
+
     public ArrayList<Buddy> fetchFamilyBuddies() {
         ArrayList<Buddy> familyBuddy=new ArrayList<Buddy>();
         if (isDBUnavailable()) {

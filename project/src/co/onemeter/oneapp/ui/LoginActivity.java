@@ -358,7 +358,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.login);
+		setContentView(R.layout.activity_login);
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(PixelFormat.RGBA_8888);

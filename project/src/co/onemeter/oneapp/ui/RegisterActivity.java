@@ -191,7 +191,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.register_page);
+		setContentView(R.layout.activity_register_page);
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);

@@ -16,7 +16,7 @@ public class LoginInvitedActivity extends Activity implements View.OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_invite);
+        setContentView(R.layout.activity_login_invite);
 
         AQuery q = new AQuery(this);
 

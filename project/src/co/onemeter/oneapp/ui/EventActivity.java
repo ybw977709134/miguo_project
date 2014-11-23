@@ -233,7 +233,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
          */
         public FilterBar(Context context, int layoutResId, int[] menuItemResIds, View dialogBackground) {
             super(context, layoutResId, menuItemResIds, dialogBackground);
-            setBackgroundColor(getResources().getColor(R.color.white));
+            setBackgroundColor(getResources().getColor(R.color.background_light));
         }
 
         @Override

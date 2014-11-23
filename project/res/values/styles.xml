@@ -336,7 +336,7 @@
 	<style name="standard_list_divider">
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:layout_width">fill_parent</item>
-		<item name="android:background">@drawable/divider_h</item>
+		<item name="android:background">@drawable/divider</item>
 	</style>
 
 	<style name="standard_radio_green" parent="standard_text">

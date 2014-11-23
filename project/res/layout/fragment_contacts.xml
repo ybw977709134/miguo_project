@@ -41,7 +41,7 @@
 					android:layout_width="fill_parent"
 					android:cacheColorHint="@null"
                     android:background="@color/background_light"
-					android:divider="@drawable/divider_h"/>
+					android:divider="@drawable/divider"/>
 
                 <TextView
                         android:id="@+id/tv_family_friend"
@@ -68,21 +68,21 @@
 					android:layout_width="fill_parent"
 					android:cacheColorHint="@null"
 					android:visibility="gone"
-					android:divider="@drawable/divider_h"/>
+					android:divider="@drawable/divider"/>
 				<ExpandableListView
                     android:id="@+id/group_list_biz"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:groupIndicator="@drawable/group_indicator_selector"
                     android:cacheColorHint="@null"
-                    android:divider="@drawable/divider_h"
-                    android:childDivider="@drawable/divider_h"/>
+                    android:divider="@drawable/divider"
+                    android:childDivider="@drawable/divider"/>
 
 				<ListView
 					android:id="@+id/contact_detail"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"
-					android:divider="@drawable/divider_h"
+					android:divider="@drawable/divider"
 					android:cacheColorHint="@null"/>
 
 			</LinearLayout>

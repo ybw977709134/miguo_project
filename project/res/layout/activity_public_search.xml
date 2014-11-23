@@ -42,6 +42,6 @@
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:cacheColorHint="@null"
-            android:divider="@drawable/divider_h"/>
+            android:divider="@drawable/divider"/>
     </LinearLayout>
 </RelativeLayout>

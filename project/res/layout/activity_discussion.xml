@@ -78,7 +78,7 @@
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
             android:cacheColorHint="@null"
-            android:divider="@drawable/divider_h">
+            android:divider="@drawable/divider">
         </ListView>
     </RelativeLayout>
 

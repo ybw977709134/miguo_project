@@ -67,7 +67,7 @@
                 android:id="@+id/person_list"
                 android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
-                android:divider="@drawable/divider_h"
+                android:divider="@drawable/divider"
                 android:cacheColorHint="@null"/>
             <GridView
                 android:id="@+id/person_grid"

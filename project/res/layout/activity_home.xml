@@ -161,7 +161,7 @@
 				android:layout_below="@+id/vg_btn_row1"
 				android:paddingLeft="@dimen/padding_medium"
 				android:paddingRight="@dimen/padding_medium"
-				android:background="@drawable/divider_h"/>
+				android:background="@drawable/divider"/>
 
 			<!-- Row #2 -->
 			<LinearLayout

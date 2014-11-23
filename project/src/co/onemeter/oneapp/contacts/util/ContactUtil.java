@@ -59,7 +59,7 @@ public class ContactUtil {
 		ArrayList<Buddy> buddies = dbHelper.fetchPublicAccounts();
 		ArrayList<Person> result = new ArrayList<Person>(buddies.size());
 		for (Buddy buddy : buddies) {
-			result.add(buddy2person(buddy));
+			result.add(Person.fromBuddy(buddy));
 		}
 		return result;
 	}
@@ -68,38 +68,9 @@ public class ContactUtil {
 		allPersons = new ArrayList<Person>();
 		Person person;
 		for (Buddy buddy : allBuddies) {
-			person = buddy2person(buddy);
+			person = Person.fromBuddy(buddy);
 			allPersons.add(person);
 		}
-	}
-
-	private static Person buddy2person(Buddy buddy) {
-		Person person;
-		person = new Person();
-		if (buddy.getSexFlag() == Buddy.SEX_FEMALE) {
-            person.setSexFlag(Person.SEX_FEMAIL);
-        } else {
-            person.setSexFlag(Person.SEX_MAIL);
-        }
-		if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_PUBLIC) {
-            person.setAccountType(Person.ACCOUNT_TYPE_PUBLIC);
-        } else {
-            person.setAccountType(Person.ACCOUNT_TYPE_NORMAL);
-        }
-		person.setID(buddy.userID);
-		if (TextUtils.isEmpty(buddy.alias)) {
-            person.setName(buddy.nickName);
-        } else {
-            person.setName(buddy.alias);
-}
-		person.setEmailAddress(buddy.getEmail());
-		person.setWowTalkId(buddy.wowtalkID);
-		person.setSelected(false);
-		person.setPersonState(buddy.status);
-		person.setRigion(buddy.area);
-		person.setSortKey(buddy.sortKey);
-		person.photoUploadedTimestamp = buddy.photoUploadedTimeStamp;
-		return person;
 	}
 
 	public static ArrayList<Group> fFetchAllGroups() {

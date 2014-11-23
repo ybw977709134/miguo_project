@@ -20,7 +20,6 @@ import co.onemeter.oneapp.contacts.adapter.ContactListAdapter;
 public class PublicAccountActivity extends Activity implements View.OnClickListener {
 
     private ImageButton btnTitleBack;
-    private ImageButton btnTitleMore;
     private ListView lvPublicAccount;
     private ScrollView mMainScrollView;
     private LinearLayout mMainLinearLayout;
@@ -53,7 +52,6 @@ public class PublicAccountActivity extends Activity implements View.OnClickListe
 
     private void initView() {
         btnTitleBack = (ImageButton) findViewById(R.id.title_back);
-        btnTitleMore = (ImageButton) findViewById(R.id.title_more);
         lvPublicAccount = (ListView) findViewById(R.id.public_account_list);
         mMainScrollView = (ScrollView) findViewById(R.id.main_scroll_view);
         mMainLinearLayout = (LinearLayout) findViewById(R.id.main_linear_layout);
@@ -61,7 +59,6 @@ public class PublicAccountActivity extends Activity implements View.OnClickListe
         edtSearch.addTextChangedListener(textWatcher);
 
         btnTitleBack.setOnClickListener(this);
-        btnTitleMore.setOnClickListener(this);
         lvPublicAccount.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -75,8 +72,6 @@ public class PublicAccountActivity extends Activity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.title_back:
                 finish();
-                break;
-            case R.id.title_more:
                 break;
             default:
                 break;

@@ -1,18 +1,26 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.contacts.model.Person;
+import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.*;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.contacts.model.Person;
+import org.wowtalk.ui.GlobalValue;
+import org.wowtalk.ui.ImageViewActivity;
+import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.PhotoDisplayHelper;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,9 +33,6 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
 
     public static final String PERSON_DETAIL = "person_detail";
 
-    private ImageButton btnTitleBack;
-    private ImageButton btnTitleMore;
-    private ImageView imgDivRight;
     private ImageView imgThumbnail;
     private TextView txtFunctionDetail;
     private TextView txtAccoutName;
@@ -44,14 +49,16 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
 
     private Database dbHelper;
 
-    private BottomButtonBoard bottomBoard;
     private MessageBox mMsgBox;
     private boolean isFriend;
 
     private void initView() {
-        btnTitleBack = (ImageButton) findViewById(R.id.title_back);
-        btnTitleMore = (ImageButton) findViewById(R.id.title_more);
-        imgDivRight = (ImageView) findViewById(R.id.div_right);
+        AQuery q = new AQuery(this);
+
+        q.find(R.id.navbar_btn_left).clicked(this);
+        q.find(R.id.btn_goto_moments).clicked(this);
+        q.find(R.id.img_thumbnail).clicked(this);
+
         imgThumbnail = (ImageView) findViewById(R.id.img_thumbnail);
         txtAccoutName = (TextView) findViewById(R.id.account_name);
         txtAccountId = (TextView) findViewById(R.id.account_id);
@@ -70,22 +77,14 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
         txtFunctionDetail.setText(person.getPersonState());
         refreshView();
 
-        btnTitleBack.setOnClickListener(this);
-        btnTitleMore.setOnClickListener(this);
         btnAccept.setOnClickListener(this);
         btnShow.setOnClickListener(this);
-        imgThumbnail.setOnClickListener(this);
-        View imgM = findViewById(R.id.img_thumbnail_mask);
-        if (imgM != null)
-            imgM.setOnClickListener(this);
     }
 
     private void refreshView() {
         buddy = dbHelper.buddyWithUserID(person.getID());
         if (buddy != null && buddy.getFriendShipWithMe() == Buddy.RELATIONSHIP_FRIEND_HERE) {
             isFriend = true;
-            btnTitleMore.setVisibility(View.VISIBLE);
-            imgDivRight.setVisibility(View.VISIBLE);
             extraLayout.setVisibility(View.VISIBLE);
             btnFollow.setText(getString(R.string.send_message));
             btnFollow.setOnClickListener(new View.OnClickListener() {
@@ -97,8 +96,6 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
             });
         } else {
             isFriend = false;
-            btnTitleMore.setVisibility(View.GONE);
-            imgDivRight.setVisibility(View.GONE);
             extraLayout.setVisibility(View.GONE);
             btnFollow.setText(getString(R.string.follow));
             btnFollow.setOnClickListener(new View.OnClickListener() {
@@ -136,11 +133,13 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.title_back:
+            case R.id.navbar_btn_left:
                 finish();
                 break;
-            case R.id.title_more:
-                bottomBoard.show();
+            case R.id.btn_goto_moments:
+                startActivity(new Intent(this, TimelineActivity.class)
+                        .putExtra(TimelineActivity.EXTRA_UID, person.getID())
+                        .putExtra(TimelineActivity.EXTRA_PAGE_TITLE, person.getName()));
                 break;
             case R.id.btn_follow:
                 MessageComposerActivity.launchToChatWithBuddy(PublicAccountDetailActivity.this,
@@ -160,7 +159,6 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
                         ? R.drawable.switch_off : R.drawable.switch_on);
                 break;
             case R.id.img_thumbnail:
-            case R.id.img_thumbnail_mask:
                 ImageViewActivity.launch(this, person.toBuddy());
                 break;
             default:
@@ -181,16 +179,6 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
         mMsgBox = new MessageBox(this);
         person = getIntent().getParcelableExtra(PERSON_DETAIL);
         initView();
-        bottomBoard = new BottomButtonBoard(this, getWindow().getDecorView());
-        bottomBoard.add(getString(R.string.cancel_follow), BottomButtonBoard.BUTTON_RED,
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cancelFollow();
-                        bottomBoard.dismiss();
-                    }
-                });
-        bottomBoard.addCancelBtn(getString(R.string.cancel));
     }
 
     private void cancelFollow() {

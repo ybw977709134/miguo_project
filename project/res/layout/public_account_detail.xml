@@ -5,140 +5,105 @@
                 android:layout_height="match_parent"
                 android:background="@color/background_dark">
     <RelativeLayout
-            android:id="@+id/title_bar"
-            android:layout_height="@dimen/title_bar_height"
-            android:layout_width="fill_parent"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/navbar_bg">
+        android:id="@+id/title_bar"
+        style="?attr/navbar">
         <ImageButton
-                android:id="@+id/title_back"
-                android:layout_height="50dp"
-                android:layout_width="50dp"
-                android:layout_alignParentLeft="true"
-                android:background="@null"
-                android:src="@drawable/nav_back_selector"/>
-        <ImageButton
-                android:id="@+id/title_more"
-                android:layout_height="50dp"
-                android:layout_width="50dp"
-                android:layout_alignParentRight="true"
-                android:background="@null"
-                android:src="@drawable/nav_more_selector"/>
-        <ImageView
-                android:id="@+id/div_right"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_toLeftOf="@+id/title_more"
-                android:background="@drawable/navbar_div"/>
+            android:id="@+id/navbar_btn_left"
+            style="?attr/navbar_btn_left"
+            android:src="@drawable/nav_back_selector"/>
         <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_centerInParent="true"
-                android:singleLine="true"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:text="@string/contact_info_official_pagetitle"/>
+            style="?attr/navbar_title"
+            android:text="@string/contact_info_official_pagetitle"/>
     </RelativeLayout>
 
     <ScrollView
-            android:layout_height="fill_parent"
-            android:layout_width="fill_parent"
-            android:layout_below="@+id/title_bar">
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_below="@+id/title_bar">
         <LinearLayout
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:orientation="vertical">
             <RelativeLayout
-                    android:layout_height="118dp"
-                    android:layout_width="fill_parent"
-                    android:gravity="center"
-                    android:padding="10dp">
+                android:layout_height="118dp"
+                android:layout_width="fill_parent"
+                android:gravity="center"
+                android:padding="10dp">
                 <FrameLayout
-                        android:id="@+id/photo_frame"
-                        android:layout_height="98dp"
-                        android:layout_width="98dp"
-                        android:layout_alignParentLeft="true">
-                    <ImageView
-                            android:id="@+id/img_thumbnail"
-                            android:layout_height="fill_parent"
-                            android:layout_width="fill_parent"
-                            android:layout_gravity="center"
-                            android:layout_margin="5dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/default_avatar_90"/>
-                    <ImageView
-	                    android:id="@+id/img_thumbnail_mask"
-	                    android:layout_height="fill_parent"
-	                    android:layout_width="fill_parent"
-	                    android:clickable="true"
-	                    android:background="@drawable/photo_frame"/>
+                    android:id="@+id/photo_frame"
+                    android:layout_height="98dp"
+                    android:layout_width="98dp"
+                    android:layout_alignParentLeft="true">
+                    <co.onemeter.oneapp.ui.CircleImageView
+                        android:id="@+id/img_thumbnail"
+                        android:layout_height="fill_parent"
+                        android:layout_width="fill_parent"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/default_avatar_90"/>
                 </FrameLayout>
 
                 <RelativeLayout
-                        android:layout_height="fill_parent"
-                        android:layout_width='fill_parent'
-                        android:layout_toRightOf="@+id/photo_frame"
-                        android:layout_marginLeft="7dp">
+                    android:layout_height="fill_parent"
+                    android:layout_width='fill_parent'
+                    android:layout_toRightOf="@+id/photo_frame"
+                    android:layout_marginLeft="7dp">
 
                     <TextView
-                            android:id="@+id/account_name"
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginTop="3dp"
-                            android:singleLine="true"
-                            android:shadowColor="@color/black"
-                            android:shadowDy="1"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/black"/>
+                        android:id="@+id/account_name"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="3dp"
+                        android:singleLine="true"
+                        style="@style/standard_text"
+                        android:text="dummy name"/>
                     <TextView
-                            android:id="@+id/account_id"
-                            android:layout_height="fill_parent"
-                            android:layout_width="wrap_content"
-                            android:gravity="center_vertical"
-                            android:layout_below="@+id/account_name"
-                            android:layout_above="@+id/btn_follow"
-                            android:shadowColor="@color/black"
-                            android:shadowDy="1"
-                            android:singleLine="true"
-                            android:textSize="15sp"
-                            android:textColor="@color/text_gray3"
-                            android:text="aaa"/>
+                        android:id="@+id/account_id"
+                        android:layout_height="fill_parent"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_below="@+id/account_name"
+                        android:layout_above="@+id/btn_follow"
+                        android:singleLine="true"
+                        style="@style/standard_text_gray"
+                        android:text="aaa"/>
                     <Button
-                            android:id="@+id/btn_follow"
-                            android:layout_height="35dp"
-                            android:layout_width="90dp"
-                            android:layout_alignParentBottom="true"
-                            android:background="@drawable/btn_blue_selector"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/white"
-                            android:text="@string/send_message"/>
+                        android:id="@+id/btn_follow"
+                        android:layout_height="35dp"
+                        android:layout_width="90dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@drawable/btn_blue_selector"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:text="@string/send_message"/>
                 </RelativeLayout>
             </RelativeLayout>
 
             <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:orientation="vertical">
+                <ImageView
+                    style="@style/standard_list_divider"/>
+                <LinearLayout
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
-                    android:background="@drawable/table_white"
-                    android:layout_margin="10dp"
+                    style="@style/standard_list_item"
                     android:orientation="horizontal">
-
-                <TextView
+                    <TextView
                         android:id="@+id/function"
                         android:layout_height="wrap_content"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
                         android:gravity="center_vertical"
-                        android:paddingLeft="10dp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_gray3"
-                        android:textSize="17sp"
+                        style="@style/standard_text_gray"
                         android:text="@string/function_introduce"/>
-                <TextView
+                    <TextView
                         android:id="@+id/function_detail"
                         android:layout_height="wrap_content"
                         android:layout_width="0dp"
@@ -146,68 +111,74 @@
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
-            </LinearLayout>
-            <LinearLayout
-                    android:id="@+id/layout2"
-                    android:layout_height="45dp"
-                    android:layout_width="fill_parent"
-                    android:layout_margin="10dp"
-                    android:gravity="center|center_vertical|center_horizontal"
-                    android:background="@drawable/table_white"
-                    android:orientation="vertical">
-                <LinearLayout
-                        android:layout_height="@dimen/section_row_height"
-                        android:layout_width="fill_parent"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-                    <TextView
-                            android:layout_height="@dimen/section_row_height"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_marginLeft="10dp"
-                            android:layout_gravity="center_vertical"
-                            android:gravity="center_vertical"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            android:text="@string/accept_msg"/>
-                    <ImageView
-                            android:id="@+id/img_accept"
-                            android:layout_height="27dp"
-                            android:layout_width="77dp"
-                            android:layout_gravity="right|center_vertical"
-                            android:layout_marginRight="10dp"
-                            android:background="@drawable/switch_on"/>
                 </LinearLayout>
                 <ImageView
-                        android:layout_height="wrap_content"
-                        android:layout_width="fill_parent"
-                        android:visibility="gone"
-                        android:background="@drawable/divider"/>
-                <LinearLayout
-                        android:layout_height="@dimen/section_row_height"
-                        android:layout_width="fill_parent"
-                        android:gravity="center|center_horizontal|center_vertical"
-                        android:visibility="gone"
-                        android:orientation="horizontal">
-                    <TextView
-                            android:layout_height="@dimen/section_row_height"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_marginLeft="10dp"
-                            android:layout_gravity="center_vertical"
-                            android:gravity="center_vertical"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            android:text="@string/show_in_contact_list"/>
-                    <ImageView
-                            android:id="@+id/img_show"
-                            android:layout_height="27dp"
-                            android:layout_width="77dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_gravity="center_vertical|right"
-                            android:background="@drawable/switch_off"/>
-                    </LinearLayout>
+                    style="@style/standard_list_divider"/>
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout2"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:gravity="center|center_vertical|center_horizontal"
+                android:orientation="vertical">
+                <ImageView
+                    style="@style/standard_list_divider"/>
+                <LinearLayout
+                    style="@style/standard_list_item"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_height="@dimen/section_row_height"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        style="@style/standard_text_gray"
+                        android:text="@string/accept_msg"/>
+                    <ImageView
+                        android:id="@+id/img_accept"
+                        android:layout_height="27dp"
+                        android:layout_width="77dp"
+                        android:layout_gravity="right|center_vertical"
+                        android:background="@drawable/switch_on"/>
+                </LinearLayout>
+                <ImageView
+                    style="@style/standard_list_divider"/>
+
+                <LinearLayout
+                    android:layout_height="@dimen/section_row_height"
+                    android:layout_width="fill_parent"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:visibility="gone"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_height="@dimen/section_row_height"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:text="@string/show_in_contact_list"/>
+                    <ImageView
+                        android:id="@+id/img_show"
+                        android:layout_height="27dp"
+                        android:layout_width="77dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_gravity="center_vertical|right"
+                        android:background="@drawable/switch_off"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_goto_moments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_medium"
+                style="@style/button_blue"
+                android:text="@string/contact_info_goto_moments"/>
         </LinearLayout>
     </ScrollView>
 

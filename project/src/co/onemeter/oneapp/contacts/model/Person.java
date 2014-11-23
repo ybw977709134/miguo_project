@@ -20,10 +20,6 @@ public class Person implements IHasPhoto, Parcelable{
 
 	public static final int SEX_UNKNOWN = 2;
 
-    public static final int ACCOUNT_TYPE_NORMAL = 3;
-
-    public static final int ACCOUNT_TYPE_PUBLIC = 4;
-	
 	public HashMap<String, String> map = new HashMap<String, String>();
 	
 	private String ID;
@@ -36,7 +32,7 @@ public class Person implements IHasPhoto, Parcelable{
 	
 	private int sexFlag = 0;
 
-    private int accountType = ACCOUNT_TYPE_NORMAL;
+    private int accountType = Buddy.ACCOUNT_TYPE_NULL;
 	
 	private long localPersonPhotoID;
 	
@@ -95,11 +91,7 @@ public class Person implements IHasPhoto, Parcelable{
         } else {
             person.sexFlag = SEX_UNKNOWN;
         }
-        if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT) {
-            person.accountType = Person.ACCOUNT_TYPE_NORMAL;
-        } else {
-            person.accountType = Person.ACCOUNT_TYPE_PUBLIC;
-        }
+		person.accountType = buddy.getAccountType();
 
         person.wowtalkId = buddy.wowtalkID;
         person.rigion = buddy.area;

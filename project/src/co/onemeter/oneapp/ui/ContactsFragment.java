@@ -163,7 +163,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
                                 ArrayList<Person> persons = contactAdapter.getPersonSource();
                                 if (persons == null || persons.size() <= position)
                                     return;
-                                if (persons.get(position).getAccountType() == Person.ACCOUNT_TYPE_PUBLIC) {
+                                if (persons.get(position).getAccountType() == Buddy.ACCOUNT_TYPE_PUBLIC) {
                                     Intent intent = new Intent(getActivity(), PublicAccountDetailActivity.class);
                                     intent.putExtra(PublicAccountDetailActivity.PERSON_DETAIL, ContactUtil.allPersons.get(position));
                                     startActivity(intent);

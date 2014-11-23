@@ -231,6 +231,12 @@ public class ContactsFragment extends Fragment implements OnClickListener,
         map.put("badge", pendingRequestCountIn);
         list.add(map);
 
+        map = new HashMap<String, Integer>();
+        map.put("image", R.drawable.official_icon);
+        map.put("text", R.string.offical_account);
+        map.put("badge", 0);
+        list.add(map);
+
         fucAdapter = new FunctionAdapter(getActivity(), list);
         lvFunction.setAdapter(fucAdapter);
         ListHeightUtil.setListHeight(lvFunction);
@@ -243,6 +249,9 @@ public class ContactsFragment extends Fragment implements OnClickListener,
                     startActivity(newFriendsIntent);
                 } else if (finalList.get(position).get("text") == R.string.contacts_discussion) {
                     Intent discussionIntent = new Intent(getActivity(), ContactDiscussionActivity.class);
+                    startActivity(discussionIntent);
+                } else if (finalList.get(position).get("text") == R.string.offical_account) {
+                    Intent discussionIntent = new Intent(getActivity(), PublicAccountActivity.class);
                     startActivity(discussionIntent);
                 }
             }

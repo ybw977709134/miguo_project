@@ -3,16 +3,18 @@ package co.onemeter.oneapp.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.*;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.GroupMembersGridAdapter;
+import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.*;
@@ -48,20 +50,9 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
     private boolean mProfileUpdated = false;
 
 	private ImageView imgPhoto;
-	private ImageButton btnTitleBack;
-	private ImageButton btnTitleSetting;
-    private ImageButton btnTitleMore;
 	private TextView txtGroupName;
 	private TextView txtGroupID;
-	private Button btnGroupChat;
-    private LinearLayout layoutExtra;
-    private ImageView imgDiv;
-    private ImageView imgDiv2;
-    private LinearLayout layoutPlace;
-    private LinearLayout layoutDistance;
     private LinearLayout layoutCategory;
-	private TextView txtPlace;
-	private TextView txtDistance;
     private TextView txtCategory;
 	private TextView txtGroupIntroduce;
 	private TextView txtMembersCount;
@@ -101,23 +92,17 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
     }
 
 	private void initView() {
+        AQuery q = new AQuery(this);
+
 		imgPhoto = (ImageView) findViewById(R.id.img_thumbnail);
-		btnTitleBack = (ImageButton) findViewById(R.id.title_back);
-		btnTitleSetting = (ImageButton) findViewById(R.id.title_setting);
-        btnTitleMore = (ImageButton) findViewById(R.id.title_more);
 
 		txtGroupName = (TextView) findViewById(R.id.group_name_text);
 		txtGroupID = (TextView) findViewById(R.id.group_id_text);
-		btnGroupChat = (Button) findViewById(R.id.group_chat_button);
+		q.find(R.id.group_chat_button).clicked(this);
+        q.find(R.id.navbar_btn_left).clicked(this);
+        q.find(R.id.navbar_btn_right).clicked(this);
 
-        layoutExtra = (LinearLayout) findViewById(R.id.layout_extra);
-        imgDiv = (ImageView) findViewById(R.id.img_div);
-        imgDiv2 = (ImageView) findViewById(R.id.img_div2);
-        layoutPlace = (LinearLayout) findViewById(R.id.layout_place);
-        layoutDistance = (LinearLayout) findViewById(R.id.layout_distance);
         layoutCategory = (LinearLayout) findViewById(R.id.layout_category);
-		txtPlace = (TextView) findViewById(R.id.place_text);
-		txtDistance = (TextView) findViewById(R.id.distance_text);
         txtCategory = (TextView) findViewById(R.id.category_text);
 		txtGroupIntroduce = (TextView) findViewById(R.id.group_introduce);
 		txtMembersCount = (TextView) findViewById(R.id.group_members_count_text);
@@ -126,10 +111,6 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
         gridPendingMembers = (YQGridView)findViewById(R.id.grid_pending_members);
         vgPendingMembers = findViewById(R.id.vg_pending_members);
 
-		btnTitleBack.setOnClickListener(this);
-		btnTitleSetting.setOnClickListener(this);
-        btnTitleMore.setOnClickListener(this);
-		btnGroupChat.setOnClickListener(this);
 		findViewById(R.id.img_thumbnail).setOnClickListener(this);
 		findViewById(R.id.message_history_layout).setOnClickListener(this);
         vgPendingMembers.setVisibility(View.GONE);
@@ -138,15 +119,12 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.title_back:
+		case R.id.navbar_btn_left:
 			finish();
 			break;
-		case R.id.title_setting:
+		case R.id.navbar_btn_right:
 		    showPopupMenu();
 			break;
-        case R.id.title_more:
-            showPopupMenu();
-            break;
         case R.id.message_history_layout:
             Intent intent = new Intent(this, MessageHistoryActivity.class);
             intent.putExtra(MessageComposerActivityBase.KEY_TARGET_IS_NORMAL_GROUP, true);
@@ -399,8 +377,6 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
             setDisplayOfGroup();
         } else {
             Log.e("ContractGroupInfoActivity.onCreate(), load data faliure: groupId = " + groupID);
-            btnTitleBack = (ImageButton) findViewById(R.id.title_back);
-            btnTitleBack.setOnClickListener(this);
             mMsgBox.show(null, getString(R.string.contactgroupinfo_load_failure));
         }
 
@@ -419,31 +395,8 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 
         txtGroupName.setText(groupRoom.groupNameOriginal);
         txtGroupID.setText(String.format(getString(R.string.contact_info_group_short_id), groupRoom.shortGroupID));
-        // There're 3 layout rows: place, distance, category.
-        int totalLayoutRows = 3;
-        int emptyLayoutRows = 0;
-        if (groupRoom.location == null || groupRoom.location.x == 0 || groupRoom.location.y == 0) {
-            layoutDistance.setVisibility(View.GONE);
-            imgDiv.setVisibility(View.GONE);
-            emptyLayoutRows++;
-        } else {
-            layoutDistance.setVisibility(View.GONE);
-            float [] distance = new float[1];
-            Location.distanceBetween(0, 0, 0, 0, distance);
-            txtDistance.setText(String.format("%fKM", distance[0]));
-            emptyLayoutRows++;
-        }
-        if (groupRoom.place == null || groupRoom.place.equals("")) {
-            layoutPlace.setVisibility(View.GONE);
-            imgDiv.setVisibility(View.GONE);
-            emptyLayoutRows++;
-        } else {
-            layoutPlace.setVisibility(View.VISIBLE);
-            txtPlace.setText(groupRoom.place);
-        }
         if (groupRoom.category == null || groupRoom.category.equals("")) {
-            layoutCategory.setVisibility(View.GONE);
-            emptyLayoutRows++;
+            txtCategory.setText("");
         } else {
             layoutCategory.setVisibility(View.VISIBLE);
             String[] categoryMsg = getResources().getStringArray(R.array.group_category_msg);
@@ -454,37 +407,6 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
                     break;
                 }
             }
-        }
-        if(layoutPlace.getVisibility() == View.GONE || layoutDistance.getVisibility() == View.GONE) {
-            imgDiv.setVisibility(View.GONE);
-        } else {
-            imgDiv.setVisibility(View.VISIBLE);
-        }
-        if (layoutDistance.getVisibility() == View.GONE || layoutCategory.getVisibility() == View.GONE) {
-            imgDiv2.setVisibility(View.GONE);
-        } else {
-            imgDiv2.setVisibility(View.VISIBLE);
-        }
-        if (layoutDistance.getVisibility() == View.GONE && layoutPlace.getVisibility() == View.VISIBLE
-                && layoutCategory.getVisibility() == View.VISIBLE) {
-            imgDiv.setVisibility(View.VISIBLE);
-            imgDiv2.setVisibility(View.GONE);
-        }
-        if (GlobalValue.RELEASE_AS_WOWCITY) {
-            if (emptyLayoutRows == totalLayoutRows) {
-                layoutExtra.setVisibility(View.GONE);
-            } else {
-                int eachLineHeight = getResources().getDimensionPixelOffset(
-                        R.dimen.section_row_height);
-                int rows = totalLayoutRows - emptyLayoutRows;
-                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layoutExtra
-                        .getLayoutParams();
-                params.height = eachLineHeight * rows;
-                layoutExtra.setLayoutParams(params);
-                layoutExtra.setVisibility(View.VISIBLE);
-            }
-        } else if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
-            layoutExtra.setVisibility(View.GONE);
         }
         txtGroupIntroduce.setText((groupRoom.groupStatus == null || groupRoom.groupStatus.equals("")) ?
                 getResources().getString(R.string.contacts_group_no_introduce) :
@@ -544,9 +466,9 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
             int pendingCounts = Database.open(ContactGroupInfoActivity.this).fetchPendingCountsByGroupId(groupRoom.groupID);
             Log.i("ContactGroupInfoActivity, mPendingRequestObserver, the counts of pendings is " + pendingCounts);
             if (pendingCounts == 0) {
-                btnTitleSetting.setImageResource(R.drawable.nav_settings_selector);
+                new AQuery(this).find(R.id.navbar_btn_right).image(R.drawable.nav_settings_selector);
             } else {
-                btnTitleSetting.setImageResource(R.drawable.nav_settings_pending_selector);
+                new AQuery(this).find(R.id.navbar_btn_right).image(R.drawable.nav_settings_pending_selector);
             }
         }
     }
@@ -765,22 +687,6 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 
         if (GroupMember.LEVEL_ADMIN == myLevel || GroupMember.LEVEL_CREATOR == myLevel) {
 //            downloadAndDisplayPendingMembers_async(); // function moved to NewFriendsActivity
-        }
-
-        if (GlobalValue.RELEASE_AS_WOWCITY) {
-            if (GroupMember.LEVEL_ADMIN == myLevel) {
-                btnTitleMore.setVisibility(View.INVISIBLE);
-                btnTitleSetting.setVisibility(View.VISIBLE);
-            } else if (GroupMember.LEVEL_CREATOR == myLevel) {
-                btnTitleMore.setVisibility(View.INVISIBLE);
-                btnTitleSetting.setVisibility(View.VISIBLE);
-            } else if (GroupMember.LEVEL_DEFAULT == myLevel) {
-                btnTitleMore.setVisibility(View.VISIBLE);
-                btnTitleSetting.setVisibility(View.INVISIBLE);
-            }
-        } else if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
-            btnTitleMore.setVisibility(View.INVISIBLE);
-            btnTitleSetting.setVisibility(View.INVISIBLE);
         }
 	}
 

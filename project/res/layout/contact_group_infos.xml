@@ -1,65 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/background_dark" >
-    <RelativeLayout 
+                android:id="@+id/layout"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/background_dark" >
+    <RelativeLayout
         android:id="@+id/title_bar"
         android:layout_height="@dimen/title_bar_height"
         android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
         style="?attr/navbar">
-        <ImageButton 
-            android:id="@+id/title_back"
-            android:layout_height="50dp"
-            android:layout_width="50dp"
-            android:layout_alignParentLeft="true"
-            android:background="@null"
+        <ImageButton
+            android:id="@+id/navbar_btn_left"
+            style="?attr/navbar_btn_left"
             android:src="@drawable/nav_back_selector"/>
         <ImageButton
-            android:id="@+id/title_more"
-            android:layout_height="50dp"
-            android:layout_width="50dp"
-            android:layout_alignParentRight="true"
-            android:visibility="gone"
-            android:background="@null"
-            android:src="@drawable/nav_more_selector"/>
-        <ImageButton
-            android:id="@+id/title_setting"
-            android:layout_height="50dp"
-            android:layout_width="50dp"
-            android:layout_alignParentRight="true"
-            android:visibility="gone"
-            android:background="@null"
+            android:id="@+id/navbar_btn_right"
+            style="?attr/navbar_btn_right"
             android:src="@drawable/nav_settings_selector"/>
         <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_centerInParent="true"
-            style="@style/page_title_dark"
+            style="?attr/navbar_title"
             android:text="@string/contact_info_group_pagetitle"/>
     </RelativeLayout>
-    
+
     <co.onemeter.oneapp.ui.ScrollViewWithoutFadingEdge
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:layout_below="@+id/title_bar">
-        <LinearLayout 
+        <LinearLayout
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:orientation="vertical">
-            <RelativeLayout 
+            <RelativeLayout
                 android:layout_height="118dp"
                 android:layout_width="fill_parent"
                 android:gravity="center_vertical"
                 android:padding="10dp"
                 android:focusableInTouchMode="true">
-                <FrameLayout 
+                <FrameLayout
                     android:id="@+id/frame"
                     android:layout_height="98dp"
                     android:layout_width="98dp">
-	                <co.onemeter.oneapp.ui.CircleImageView
+                    <co.onemeter.oneapp.ui.CircleImageView
                         android:id="@+id/img_thumbnail"
                         android:layout_height="fill_parent"
                         android:layout_width="fill_parent"
@@ -67,25 +49,22 @@
                         android:layout_margin="5dp"
                         android:src="@drawable/default_avatar_90"/>
                 </FrameLayout>
-                <RelativeLayout 
+                <RelativeLayout
                     android:layout_height="fill_parent"
                     android:layout_width="fill_parent"
                     android:layout_toRightOf="@+id/frame"
                     android:layout_marginLeft="7dp"
                     android:orientation="vertical">
-                    <TextView 
+                    <TextView
                         android:id="@+id/group_name_text"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:layout_alignParentTop="true"
                         android:layout_marginTop="3dp"
-                        android:singleLine="true"
-                        android:shadowColor="@color/black"
-                        android:shadowDy="1"
-                        android:textSize="17sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"/>
-                    <TextView 
+                        android:text="dummy group name"
+                        style="@style/standard_text"
+                        android:singleLine="true"/>
+                    <TextView
                         android:id="@+id/group_id_text"
                         android:layout_height="fill_parent"
                         android:layout_width="wrap_content"
@@ -93,111 +72,39 @@
                         android:layout_below="@+id/group_name_text"
                         android:layout_above="@+id/group_chat_button"
                         android:singleLine="true"
-                        android:shadowColor="@color/black"
-                        android:shadowDy="1"
-                        android:textSize="12sp"
-                        android:textColor="@color/text_gray3"
+                        style="@style/standard_text_gray"
                         android:visibility="gone"
                         android:text="@string/contact_info_group_short_id"/>
-                    <Button 
+                    <ImageButton
                         android:id="@+id/group_chat_button"
                         android:layout_height="35dp"
                         android:layout_width="60dp"
                         android:layout_alignParentBottom="true"
-                        android:background="@drawable/btn_chat"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:textColor="@color/white"/>
+                        style="@style/button_blue"
+                        android:src="@drawable/profile_btn_message"/>
                 </RelativeLayout>
             </RelativeLayout>
-            
+
+            <!-- category -->
+
             <LinearLayout
-                android:id="@+id/layout_extra"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:layout_margin="10dp"
-                android:visibility="gone"
-                android:gravity="center|center_vertical|center_horizontal"
-                android:background="@drawable/table_white"
+                android:layout_marginTop="@dimen/padding_medium"
                 android:orientation="vertical">
-                <LinearLayout
-                    android:id="@+id/layout_place"
-                    android:layout_height="@dimen/section_row_height"
-                    android:layout_width="fill_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <TextView 
-                        android:layout_height="fill_parent"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
-                        android:paddingLeft="10dp"
-                        android:gravity="center_vertical"
-                        android:textSize="17sp"
-                        android:textColor="@color/text_gray2"
-                        android:textStyle="bold"
-                        android:text="@string/place"/>
-                    <TextView 
-                        android:id="@+id/place_text"
-                        android:layout_height="fill_parent"
-                        android:layout_width="0dp"
-                        android:layout_weight="2"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:textSize="17sp"
-                        android:textColor="@color/black"/>
-                </LinearLayout>
                 <ImageView
-                    android:id="@+id/img_div"
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:background="@drawable/divider"/>
-                <LinearLayout
-                    android:id="@+id/layout_distance"
-                    android:layout_width="fill_parent"
-                    android:layout_height="@dimen/section_row_height"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <TextView 
-                        android:layout_height="@dimen/section_row_height"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="10dp"
-                        android:textSize="17sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_gray2"
-                        android:text="@string/distance"/>
-                    <TextView 
-                        android:id="@+id/distance_text"
-                        android:layout_height="@dimen/section_row_height"
-                        android:layout_width="0dp"
-                        android:layout_weight="2"
-                        android:gravity="center_vertical"
-                        android:textSize="17sp"
-                        android:textColor="@color/black"/>
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/img_div2"
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:background="@drawable/divider"/>
+                    style="@style/standard_list_divider"/>
                 <LinearLayout
                     android:id="@+id/layout_category"
-                    android:layout_height="@dimen/section_row_height"
-                    android:layout_width="fill_parent"
+                    style="@style/standard_list_item"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
                     <TextView
                         android:layout_height="fill_parent"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:paddingLeft="10dp"
+                        style="@style/standard_text_gray"
                         android:gravity="center_vertical"
-                        android:textSize="17sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_gray2"
                         android:text="@string/group_category"/>
                     <TextView
                         android:id="@+id/category_text"
@@ -205,147 +112,182 @@
                         android:layout_width="0dp"
                         android:layout_weight="2"
                         android:gravity="center_vertical"
-                        android:textSize="17sp"
-                        android:textColor="@color/black"/>
+                        android:text="dummy cagtegory"
+                        style="@style/standard_text"/>
                 </LinearLayout>
-            </LinearLayout>
-            
-            <LinearLayout 
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:layout_margin="10dp"
-                android:visibility="gone"
-                android:background="@drawable/table_white"
-                android:orientation="vertical">
-                <TextView 
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:paddingLeft="10dp"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_gray2"
-                    android:text="@string/group_introduce"/>
-                <TextView 
-                    android:id="@+id/group_introduce"
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginBottom="10dp"
-                    android:paddingLeft="10dp"
-                    android:textSize="17sp"
-                    android:textColor="@color/black"/>
+                <ImageView
+                    style="@style/standard_list_divider"/>
             </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/message_history_layout"
-                android:layout_height="50dp"
-                android:layout_width="fill_parent"
-                android:layout_margin="10dp"
-                android:background="@drawable/table_white"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:layout_centerInParent="true"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:drawableRight="@drawable/table_arrow"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_gray2"
-                    android:text="@string/cat_message_history"/>
-            </RelativeLayout>
+            <!-- description -->
 
-	        <LinearLayout
-		        android:layout_height="wrap_content"
-		        android:layout_width="fill_parent"
-		        android:layout_margin="10dp"
-		        android:background="@drawable/table_white"
-		        android:orientation="vertical">
-		        <TextView
-			        android:id="@+id/group_members_count_text"
-			        android:layout_height="wrap_content"
-			        android:layout_width="wrap_content"
-			        android:layout_marginTop="10dp"
-			        android:layout_marginLeft="10dp"
-			        android:textSize="17sp"
-			        android:textStyle="bold"
-			        android:textColor="@color/text_gray2"
-			        android:text="@string/group_members"/>
-		        <co.onemeter.oneapp.ui.YQGridView
-			        android:id="@+id/grid_members"
-			        android:layout_height="wrap_content"
-			        android:layout_width="fill_parent"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:listSelector="#0000"
-			        android:horizontalSpacing="0dp"
-			        android:verticalSpacing="10dp"
-			        android:numColumns="5"
-			        android:columnWidth="@dimen/group_member_grid_width"/>
-		        <ImageView
-			        android:layout_height="wrap_content"
-			        android:layout_width="fill_parent"
-			        android:background="@drawable/divider"
-			        android:visibility="gone"/>
-		        <TextView
-			        android:id="@+id/see_all_text"
-			        android:layout_height="45dp"
-			        android:layout_width="fill_parent"
-			        android:gravity="center"
-			        android:textSize="17sp"
-			        android:textStyle="bold"
-			        android:textColor="@color/text_gray2"
-			        android:text="@string/see_all"
-			        android:visibility="gone"/>
-	        </LinearLayout>
-
-	        <LinearLayout
-		        android:id="@+id/vg_pending_members"
+            <LinearLayout
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:layout_margin="10dp"
-                android:background="@drawable/table_white"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:orientation="vertical">
+                <ImageView
+                    style="@style/standard_list_divider"/>
+                <LinearLayout
+                    style="@style/standard_list_item"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        style="@style/standard_text_gray"
+                        android:text="@string/group_introduce"/>
+                    <TextView
+                        android:id="@+id/group_introduce"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:layout_marginTop="@dimen/padding_small"
+                        android:text="dummy description"
+                        style="@style/standard_text"/>
+                </LinearLayout>
+                <ImageView
+                    style="@style/standard_list_divider"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:orientation="vertical">
+                <ImageView
+                    style="@style/standard_list_divider"/>
+
+                <RelativeLayout
+                    android:id="@+id/message_history_layout"
+                    style="@style/standard_list_item_with_arrow"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:layout_centerInParent="true"
+                        android:drawableRight="@drawable/table_arrow"
+                        style="@style/standard_text_gray"
+                        android:text="@string/cat_message_history"/>
+                </RelativeLayout>
+
+                <ImageView
+                    style="@style/standard_list_divider"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:orientation="vertical" >
+
+                <ImageView
+                    style="@style/standard_list_divider"/>
+
+                <LinearLayout
+                    style="@style/standard_list_item"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/group_members_count_text"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        style="@style/standard_text_gray"
+                        android:text="@string/group_members"/>
+                    <co.onemeter.oneapp.ui.YQGridView
+                        android:id="@+id/grid_members"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:listSelector="#0000"
+                        android:horizontalSpacing="0dp"
+                        android:verticalSpacing="10dp"
+                        android:numColumns="5"
+                        android:columnWidth="@dimen/group_member_grid_width"/>
+                    <ImageView
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:background="@drawable/divider"
+                        android:visibility="gone"/>
+                    <TextView
+                        android:id="@+id/see_all_text"
+                        android:layout_height="45dp"
+                        android:layout_width="fill_parent"
+                        android:gravity="center"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_gray2"
+                        android:text="@string/see_all"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+                <ImageView
+                    style="@style/standard_list_divider"/>
+            </LinearLayout>
+
+            <!-- pending members -->
+
+            <LinearLayout
+                android:id="@+id/vg_pending_members"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_medium"
                 android:orientation="vertical"
-                android:visibility="gone">
-                <TextView 
-                    android:id="@+id/group_pending_members_count_text"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:paddingLeft="10dp"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_gray2"
-                    android:text="@string/group_pending_members"/>
-                <co.onemeter.oneapp.ui.YQGridView
-                    android:id="@+id/grid_pending_members"
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:horizontalSpacing="10dp"
-                    android:verticalSpacing="10dp"
-                    android:numColumns="5"
-                    android:columnWidth="50dp" />
+                android:visibility="visible">
+
+                <ImageView
+                    style="@style/standard_list_divider"/>
+
+                <LinearLayout
+                    style="@style/standard_list_item"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/group_pending_members_count_text"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        style="@style/standard_text_gray"
+                        android:text="@string/group_pending_members"/>
+                    <co.onemeter.oneapp.ui.YQGridView
+                        android:id="@+id/grid_pending_members"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:horizontalSpacing="10dp"
+                        android:verticalSpacing="10dp"
+                        android:numColumns="5"
+                        android:columnWidth="50dp" />
+                </LinearLayout>
+
+                <ImageView
+                    style="@style/standard_list_divider"/>
+
             </LinearLayout>
-            
-            <LinearLayout 
-                android:layout_height="45dp"
+
+            <!-- what's up in this group? -->
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/padding_medium"
                 android:layout_width="fill_parent"
-                android:layout_margin="10dp"
-                android:background="@drawable/table_white"
+                android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:orientation="vertical">
-                <TextView 
-                    android:id="@+id/group_events_count_text"
-                    android:layout_height="45dp"
-                    android:layout_width="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_gray2"
-                    android:text="@string/group_events"/>
+
+                <ImageView
+                    style="@style/standard_list_divider"/>
+
+                <LinearLayout
+                    style="@style/standard_list_item"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/group_events_count_text"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_vertical"
+                        style="@style/standard_text_gray"
+                        android:text="@string/group_events"/>
+                </LinearLayout>
+
+                <ImageView
+                    style="@style/standard_list_divider"/>
             </LinearLayout>
         </LinearLayout>
     </co.onemeter.oneapp.ui.ScrollViewWithoutFadingEdge>

@@ -117,6 +117,7 @@ public class Person implements IHasPhoto, Parcelable{
         b.setEmail(emailAddress);
         b.phoneNumber = globalPhonenumber;
         b.photoUploadedTimeStamp = photoUploadedTimestamp;
+		b.setAccountType(accountType);
         return b;
     }
 

@@ -332,22 +332,6 @@
             android:screenOrientation="portrait" >
         </activity>
 		<activity
-			android:name=".ui.Withdraw1Activity"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.Withdraw2Activity"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.WithdrawFailActivity"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.WithdrawSuccessActivity"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
 			android:name=".ui.CreateMomentActivity"
 			android:theme="@style/Theme.Blue"
 			android:screenOrientation="portrait" >

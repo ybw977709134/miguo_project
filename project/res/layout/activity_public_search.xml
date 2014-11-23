@@ -7,25 +7,13 @@
                 android:background="@color/background_dark">
     <RelativeLayout
         android:id="@+id/title_bar"
-        android:layout_height="@dimen/title_bar_height"
-        android:layout_width="fill_parent"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/navbar_bg">
+        style="?attr/navbar">
         <ImageButton
             android:id="@+id/title_back"
-            android:layout_height="50dp"
-            android:layout_width="50dp"
-            android:layout_alignParentLeft="true"
-            android:background="@null"
+            style="?attr/navbar_btn_left"
             android:src="@drawable/nav_back_selector"/>
         <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_centerInParent="true"
-            android:singleLine="true"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="20sp"
+            style="?attr/navbar_title"
             android:text="@string/public_account"/>
     </RelativeLayout>
     <LinearLayout
@@ -35,8 +23,7 @@
         android:orientation="vertical">
         <include
             android:id="@+id/searchLayout"
-            layout="@layout/piece_search_bar"
-            android:layout_below="@+id/title_bar"/>
+            layout="@layout/piece_search_bar"/>
         <ListView
             android:id="@+id/list_public"
             android:layout_height="wrap_content"

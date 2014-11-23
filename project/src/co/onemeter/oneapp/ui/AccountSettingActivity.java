@@ -154,7 +154,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
                 if (StartActivity.isInstanciated()) {
                     StartActivity.instance().finish();
                 }
-                Intent intent = new Intent(AccountSettingActivity.this, LoginActivity.class);
+                Intent intent = new Intent(AccountSettingActivity.this, LoginInvitedActivity.class);
                 startActivity(intent);
 
                 finish();

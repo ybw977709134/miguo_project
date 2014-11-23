@@ -209,11 +209,6 @@
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
-			android:name=".ui.OfficalAccountActivity"
-			android:theme="@style/Theme.Blue"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
 			android:name=".ui.CreateGroupActivity"
 			android:theme="@style/Theme.Blue"
 			android:screenOrientation="portrait"

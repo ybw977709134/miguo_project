@@ -137,7 +137,7 @@
                             style="@style/moment_datetime"
                             android:paddingLeft="5dp"
                             android:paddingRight="4dp"
-                            android:background="@color/background"/>
+                            android:background="@color/background_dark"/>
 
                     <ImageView
                             android:id="@+id/iv_moment_item_tag_color_line"

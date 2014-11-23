@@ -25,7 +25,7 @@
 				<RelativeLayout
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent"
-                    android:background="@color/background">
+                    android:background="@color/background_dark">
 					<include
 						android:id="@+id/search_bar"
 						layout="@layout/piece_filter_bar"

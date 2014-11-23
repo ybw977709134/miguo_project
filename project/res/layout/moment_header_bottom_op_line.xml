@@ -17,7 +17,7 @@
                 android:id="@+id/hsv_tag_content"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/moment_header_bottom_op_line_height"
-                android:background="@color/background"
+                android:background="@color/background_dark"
                 android:scrollbars="none">
             <LinearLayout
                     android:layout_width="match_parent"

@@ -1,136 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/background_dark" >
-    <RelativeLayout 
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/background_dark" >
+    <RelativeLayout
         android:id="@+id/title_bar"
         android:layout_height="50dp"
         android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
         style="?attr/navbar">
-        <ImageButton 
+        <ImageButton
             android:id="@+id/title_back"
-            android:layout_height="50dp"
-            android:layout_width="50dp"
-            android:layout_alignParentLeft="true"
-            android:background="@null"
+            style="?attr/navbar_btn_left"
             android:src="@drawable/nav_back_selector"/>
         <ImageButton
             android:id="@+id/title_confirm"
-            android:layout_height="50dp"
-            android:layout_width="50dp"
-            android:layout_alignParentRight="true"
-            android:background="@null"
+            style="?attr/navbar_btn_right"
             android:src="@drawable/nav_confirm_selector"/>
         <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="20sp"
+            style="?attr/navbar_title"
             android:text="@string/settings_privacy"/>
-        
+
     </RelativeLayout>
-    <ScrollView 
+    <ScrollView
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:layout_below="@+id/title_bar">
-    <LinearLayout 
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:orientation="vertical">
-        <LinearLayout 
+        <LinearLayout
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:layout_margin="10dp"
             android:orientation="vertical">
-            <RelativeLayout
-                android:id="@+id/others_can_add_me_layout"
-                android:layout_height="50dp"
+            <LinearLayout
+                android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:orientation="horizontal"
-                android:background="@drawable/btn_white">
-                <TextView 
-                    android:layout_height="fill_parent"
-                    android:layout_width="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:layout_toLeftOf="@+id/others_can_add_me"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text="@string/privacysetting_others_can_add_me"/>
-                <ImageButton 
-                    android:id="@+id/others_can_add_me"
-                    android:layout_width="48dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/switch_on_little"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"/>
-            </RelativeLayout>
-            <ImageView
-	            android:id="@+id/div_others_and_auth"
-	            style="@style/standard_list_divider"/>
-            <RelativeLayout
-                android:id="@+id/auth_is_needed_layout"
-                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:orientation="vertical">
+                <ImageView
+                    style="@style/standard_list_divider"/>
+                <RelativeLayout
+                    android:id="@+id/others_can_add_me_layout"
+                    style="@style/standard_list_item"
+                    android:orientation="horizontal" >
+                    <TextView
+                        android:layout_height="fill_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center_vertical"
+                        style="@style/standard_text_gray"
+                        android:text="@string/privacysetting_others_can_add_me"/>
+                    <ImageButton
+                        android:id="@+id/others_can_add_me"
+                        android:layout_width="48dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/switch_on_little"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true" />
+                </RelativeLayout>
+                <ImageView
+                    android:id="@+id/div_others_and_auth"
+                    style="@style/standard_list_divider"/>
+                <RelativeLayout
+                    android:id="@+id/auth_is_needed_layout"
+                    style="@style/standard_list_item"
+                    android:orientation="horizontal" >
+                    <TextView
+                        android:layout_height="fill_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center_vertical"
+                        style="@style/standard_text_gray"
+                        android:text="@string/privacysetting_auth_is_needed"/>
+                    <ImageButton
+                        android:id="@+id/auth_is_needed"
+                        android:layout_width="48dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/switch_on_little"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true" />
+                </RelativeLayout>
+                <ImageView
+                    style="@style/standard_list_divider"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:orientation="horizontal"
-                android:background="@drawable/btn_white">
-                <TextView 
-                    android:layout_height="fill_parent"
-                    android:layout_width="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:layout_toLeftOf="@+id/auth_is_needed"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text="@string/privacysetting_auth_is_needed"/>
-                <ImageButton 
-                    android:id="@+id/auth_is_needed"
-                    android:layout_width="48dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/switch_on_little"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"/>
-            </RelativeLayout>
+                android:layout_marginTop="@dimen/padding_medium"
+                android:orientation="vertical">
+                <ImageView
+                    style="@style/standard_list_divider"/>
+                <RelativeLayout
+                    style="@style/standard_list_item">
+                    <TextView
+                        android:layout_height="fill_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center_vertical"
+                        style="@style/standard_text_gray"
+                        android:text="@string/privacysetting_nearby_find_me"/>
+                    <ImageButton
+                        android:id="@+id/nearby_can_find_me"
+                        android:layout_width="48dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/switch_on_little"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true" />
+                </RelativeLayout>
+                <ImageView
+                    style="@style/standard_list_divider"/>
+            </LinearLayout>
         </LinearLayout>
-        
-        <RelativeLayout
-            android:layout_height="50dp"
-            android:layout_width="fill_parent"
-            android:layout_margin="10dp"
-            android:background="@drawable/btn_white">
-            <TextView 
-                android:layout_height="fill_parent"
-                android:layout_width="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:layout_toLeftOf="@+id/nearby_can_find_me"
-                android:gravity="center_vertical"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:text="@string/privacysetting_nearby_find_me"/>
-            <ImageButton 
-                    android:id="@+id/nearby_can_find_me"
-                    android:layout_width="48dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/switch_on_little"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"/>
-    </RelativeLayout>
-    </LinearLayout>
-	</ScrollView>
+    </ScrollView>
 </RelativeLayout>

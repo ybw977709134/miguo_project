@@ -65,10 +65,6 @@ public class ContactsFragment extends Fragment implements OnClickListener,
     private ScrollView mMainScrollView;
     private LinearLayout mMainLinearLayout;
 
-	private LinearLayout mLocalLayout;
-    private View mNewFriendsLayout;
-    private LinearLayout mPublicAccount;
-
 	private ContactListAdapter contactAdapter;
 	private ContactGroupAdapter groupsAdapter;
     private FunctionAdapter fucAdapter;
@@ -105,16 +101,12 @@ public class ContactsFragment extends Fragment implements OnClickListener,
             if (s.length() == 0) {
                 fieldClear.setVisibility(View.GONE);
                 mSideBar.setVisibility(View.VISIBLE);
-                mLocalLayout.setVisibility(View.GONE);
-                mPublicAccount.setVisibility(View.GONE);
                 contactAdapter.setPersonSource(ContactUtil.allPersons);
                 contactAdapter.notifyDataSetChanged();
                 ListHeightUtil.setListHeight(lvContacts);
             } else {
                 fieldClear.setVisibility(View.VISIBLE);
                 mSideBar.setVisibility(View.GONE);
-                mLocalLayout.setVisibility(View.GONE);
-                mPublicAccount.setVisibility(View.GONE);
                 contactAdapter.getFilter().filter(s.toString(), new Filter.FilterListener() {
                     @Override
                     public void onFilterComplete(int i) {
@@ -204,14 +196,8 @@ public class ContactsFragment extends Fragment implements OnClickListener,
         lvFunction = (ListView) contentView.findViewById(R.id.function_list);
 		lvContacts = (ListView) contentView.findViewById(R.id.contact_detail);
 		lvContactGroup = (ListView) contentView.findViewById(R.id.group_list);
-		mLocalLayout = (LinearLayout) contentView.findViewById(R.id.layout_local);
-        mNewFriendsLayout =  contentView.findViewById(R.id.layout_new_friends);
-        mPublicAccount = (LinearLayout) contentView.findViewById(R.id.layout_public_account);
 
 		mSideBar.setOnTouchingLetterChangedListener(this);
-		mLocalLayout.setOnClickListener(this);
-        mNewFriendsLayout.setOnClickListener(this);
-        mPublicAccount.setOnClickListener(this);
 		etSearch.addTextChangedListener(searchWacher);
         fieldClear.setOnClickListener(this);
 	}
@@ -351,17 +337,6 @@ public class ContactsFragment extends Fragment implements OnClickListener,
             case R.id.field_clear:
                 etSearch.setText("");
                 break;
-            case R.id.layout_local:
-                Intent localIntent = new Intent(getActivity(), LocalContactsActivity.class);
-                startActivity(localIntent);
-                break;
-            case R.id.layout_new_friends:
-                Intent newFriendsIntent = new Intent(getActivity(), NewFriendsActivity.class);
-                startActivity(newFriendsIntent);
-                break;
-            case R.id.layout_public_account:
-                Intent publicAccountIntent = new Intent(getActivity(), PublicAccountActivity.class);
-                startActivity(publicAccountIntent);
             default:
                 break;
         }

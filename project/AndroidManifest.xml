@@ -549,6 +549,7 @@
 		          android:screenOrientation="portrait"
 			/>
 		<activity android:name=".ui.LoginInvitedActivity"
+		          android:launchMode="singleTask"
 		          android:screenOrientation="portrait"
 			/>
 		<activity android:name=".ui.ForgetPasswordActivity"

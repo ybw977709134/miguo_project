@@ -1335,9 +1335,10 @@ public class WowTalkWebServerIF {
 	 * @param result Buddy, output uid,domain,password,wowtalkId
 	 * @return
 	 */
-	public int fLoginWithAutoCreatedUser(Buddy result) {
-		final String action = "login_with_auto_create_user";
-		String postStr = "action=" + action;
+	public int fLoginWithInvitationCode(String invitationCode, Buddy result) {
+		final String action = "login_with_invitation_code";
+		String postStr = "action=" + action
+				+ "&invitation_code=" + Utils.urlencodeUtf8(invitationCode);
 		Connect2 connect2 = new Connect2();
 		Element root = connect2.Post(postStr);
 

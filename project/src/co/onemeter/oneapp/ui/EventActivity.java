@@ -202,11 +202,6 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 				}
 			}
 			
-			if(!hasPhoto) {
-                imgPhoto.setVisibility(View.GONE);
-			} else {
-                imgPhoto.setVisibility(View.VISIBLE);
-			}
  			return lView;
 		}
 

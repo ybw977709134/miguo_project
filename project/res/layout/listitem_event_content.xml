@@ -31,7 +31,8 @@
             android:layout_marginRight="15dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:background="@drawable/feed_default_pic"/>
+            android:scaleType="centerCrop"
+            android:background="@drawable/events_default_pic"/>
 
 
         <LinearLayout

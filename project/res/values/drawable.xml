@@ -2,4 +2,5 @@
 <resources>
 	<drawable name="color_drawable_transparent">#00000000</drawable>
 	<drawable name="color_drawable_blue">#3485CA</drawable>
+	<drawable name="standard_list_divider">@drawable/timeline_divider_h</drawable>
 </resources>

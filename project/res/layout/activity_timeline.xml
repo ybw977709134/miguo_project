@@ -87,7 +87,7 @@
 				<ImageView
 					android:layout_width="wrap_content"
 					android:layout_height="match_parent"
-					android:background="@drawable/timeline_divider_v"/>
+					android:background="@drawable/standard_divider_v"/>
 				<ImageView
 					android:layout_width="0dp"
 					android:layout_height="match_parent"
@@ -95,7 +95,7 @@
 				<ImageView
 					android:layout_width="wrap_content"
 					android:layout_height="match_parent"
-					android:background="@drawable/timeline_divider_v"/>
+					android:background="@drawable/standard_divider_v"/>
 				<ImageView
 					android:layout_width="0dp"
 					android:layout_height="match_parent"
@@ -175,7 +175,7 @@
 					android:layout_height="wrap_content"
 					android:paddingLeft="@dimen/padding_medium"
 					android:paddingRight="@dimen/padding_medium"
-					android:background="@drawable/timeline_divider_h"/>
+					android:background="@drawable/standard_divider_h"/>
 				<LinearLayout
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"

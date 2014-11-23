@@ -136,21 +136,21 @@
 					android:layout_width="fill_parent"
 					android:cacheColorHint="@null"
 					android:visibility="gone"
-					android:divider="@drawable/standard_list_divider"/>
+					android:divider="@drawable/standard_divider_h"/>
 				<ExpandableListView
                     android:id="@+id/group_list_biz"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:groupIndicator="@drawable/group_indicator_selector"
                     android:cacheColorHint="@null"
-                    android:divider="@drawable/standard_list_divider"
+                    android:divider="@drawable/standard_divider_h"
                     android:childDivider="@drawable/divider_320"/>
 
 				<ListView
 					android:id="@+id/contact_detail"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"
-					android:divider="@drawable/standard_list_divider"
+					android:divider="@drawable/standard_divider_h"
 					android:cacheColorHint="@null"/>
 
 			</LinearLayout>

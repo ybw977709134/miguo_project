@@ -19,7 +19,7 @@
         android:id="@+id/divider_image"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:background="@drawable/standard_divider_h"
+        android:background="@drawable/divider_h"
         android:visibility="gone"/>
 	<TextView
 		android:id="@+id/txt_local_contacts"

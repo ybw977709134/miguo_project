@@ -148,7 +148,7 @@
 			android:layout_width="fill_parent"
 			android:layout_marginTop="5dp"
 			android:layout_marginBottom="5dp"
-			android:background="@drawable/standard_divider_h"/>
+			android:background="@drawable/divider_h"/>
 
 		<LinearLayout
 			android:id="@+id/layout_review"

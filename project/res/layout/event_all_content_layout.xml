@@ -9,5 +9,5 @@
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:cacheColorHint="@null"
-            android:divider="@drawable/standard_divider_h"/>
+            android:divider="@drawable/divider_h"/>
 </LinearLayout>

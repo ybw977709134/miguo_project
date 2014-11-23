@@ -55,7 +55,7 @@
         android:layout_margin="10dp"
         android:cacheColorHint="@null"
         android:listSelector="@android:color/transparent"
-        android:divider="@drawable/standard_divider_h"
+        android:divider="@drawable/divider_h"
         android:dividerHeight="1dp"
         android:background="@drawable/table_white"
         dslv:float_alpha="0.6"

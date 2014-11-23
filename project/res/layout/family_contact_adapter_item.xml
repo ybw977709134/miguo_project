@@ -9,7 +9,7 @@
             android:id="@+id/divider_view"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:background="@drawable/standard_divider_h"
+            android:background="@drawable/divider_h"
             android:visibility="gone"/>
 
 

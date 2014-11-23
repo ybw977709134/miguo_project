@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 public interface IHasPhoto extends Parcelable {
+	public int getAccountType();
 	public String getGUID();
 	public void setPhotoUploadedTimestamp(long value);
 	public long getPhotoUploadedTimestamp();

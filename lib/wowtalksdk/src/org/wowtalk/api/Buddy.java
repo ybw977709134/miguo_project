@@ -44,6 +44,8 @@ public class Buddy implements IHasPhoto, Parcelable {
     public static final int ACCOUNT_TYPE_TEACHER = 2;
     /** User type: Unknown(not initialized). */
     public static final int ACCOUNT_TYPE_NULL = 9;
+    /** 虚拟的buddy：群组。因为某些情况下也可以把群组视为联系人，比如在显示头像时。 */
+    public static final int ACCOUNT_TYPE_GROUP = 10;
 
     // A flag value indicating some fields are valid in certain context.
 

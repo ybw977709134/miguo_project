@@ -141,10 +141,10 @@ public class ImageViewActivity extends Activity implements View.OnClickListener 
 
         if(!dataSrcFound) {
             //if no image inputted,show the single default image
-            String defImagePath=PhotoDisplayHelper.makeLocalThumbnailPath(this, DEFAULT_IMAGE_ID_ON_NO_IMAGE);
+            String defImagePath=PhotoDisplayHelper.makeLocalThumbnailPath(this, DEFAULT_IMAGE_ID_ON_NO_IMAGE + mPhotoEntity.getAccountType());
             if(!new File(defImagePath).exists()) {
                 //if such def image not exist,create it
-                Bitmap bmp=BitmapFactory.decodeResource(getResources(),R.drawable.default_avatar_90);
+                Bitmap bmp=BitmapFactory.decodeResource(getResources(), getFallbackDrawableResId(mPhotoEntity.getAccountType()));
                 try {
                     OutputStream os = new FileOutputStream(defImagePath);
                     boolean ret = bmp.compress(Bitmap.CompressFormat.JPEG, 80, os); // XXX format should be same with main file?
@@ -183,6 +183,17 @@ public class ImageViewActivity extends Activity implements View.OnClickListener 
 //            vpAdapter = new MyViewPagerAdapter();
 //            mainViewPager.setAdapter(vpAdapter);
 //            return;
+        }
+    }
+
+    private static int getFallbackDrawableResId(int accountType) {
+        switch (accountType) {
+            case Buddy.ACCOUNT_TYPE_PUBLIC:
+                return R.drawable.default_official_avatar_90;
+            case Buddy.ACCOUNT_TYPE_GROUP:
+                return R.drawable.default_group_avatar_90;
+            default:
+                return R.drawable.default_avatar_90;
         }
     }
 

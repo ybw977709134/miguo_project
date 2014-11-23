@@ -153,7 +153,12 @@ public class GroupChatRoom extends TreeNode implements IHasPhoto{
 		memberList.add(buddy);
 	}
 
-	@Override
+    @Override
+    public int getAccountType() {
+        return Buddy.ACCOUNT_TYPE_GROUP;
+    }
+
+    @Override
 	public String getGUID() {
 		return groupID;
 	}

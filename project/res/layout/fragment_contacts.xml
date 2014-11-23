@@ -109,7 +109,7 @@
 					android:layout_width="fill_parent"
 					android:cacheColorHint="@null"
                     android:background="@color/white"
-					android:divider="@drawable/divider_320"/>
+					android:divider="@drawable/standard_divider_h"/>
 
                 <TextView
                         android:id="@+id/tv_family_friend"
@@ -144,7 +144,7 @@
                     android:groupIndicator="@drawable/group_indicator_selector"
                     android:cacheColorHint="@null"
                     android:divider="@drawable/standard_divider_h"
-                    android:childDivider="@drawable/divider_320"/>
+                    android:childDivider="@drawable/standard_divider_h"/>
 
 				<ListView
 					android:id="@+id/contact_detail"

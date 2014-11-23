@@ -54,8 +54,8 @@
         android:groupIndicator="@drawable/group_indicator_selector"
         android:cacheColorHint="@null"
         android:visibility="gone"
-        android:divider="@drawable/divider_320"
-        android:childDivider="@drawable/divider_320"/>
+        android:divider="@drawable/standard_divider_h"
+        android:childDivider="@drawable/standard_divider_h"/>
 	<RelativeLayout
 		android:id="@+id/layout_bottom"
 		android:layout_height="wrap_content"

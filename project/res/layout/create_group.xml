@@ -87,7 +87,7 @@
                 <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
-                    android:background="@drawable/divider_320"/>
+                    android:background="@drawable/standard_divider_h"/>
                 <RelativeLayout
                     android:id="@+id/layout_photo"
                     android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
 	            <ImageView
 		            android:layout_height="wrap_content"
 		            android:layout_width="fill_parent"
-		            android:background="@drawable/divider_320"/>
+		            android:background="@drawable/standard_divider_h"/>
 	            <LinearLayout
 		            android:id="@+id/layout_category"
 		            android:layout_height="50dp"

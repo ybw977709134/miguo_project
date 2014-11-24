@@ -1,8 +1,13 @@
 #!/bin/bash
 
-if [ $# == 1 ]; then
-  opt="-s $1"
+if [ $# == 0 ]; then
+    echo -e "Usage:\n\t$0 <uid> [<device id>]"
+    exit
 fi
 
-db=wowtalkdb_8a0dc925-b22a-4d6b-8b9f-ecc7159dda14
+if [ $# == 2 ]; then
+  opt="-s $2"
+fi
+
+db=wowtalkdb_$1
 adb $opt pull /data/data/co.onemeter.oneapp/databases/$db && sqlite3 $db

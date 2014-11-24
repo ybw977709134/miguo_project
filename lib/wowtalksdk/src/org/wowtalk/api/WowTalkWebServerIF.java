@@ -4323,7 +4323,7 @@ public class WowTalkWebServerIF {
             return ErrorCode.INVALID_ARGUMENT;
         }
 
-        String action = "get_company_structure";
+        String action = "get_school_structure";
         String postStr = "action=" + action
                 + "&uid=" + Utils.urlencodeUtf8(strUID)
                 + "&password=" + Utils.urlencodeUtf8(strPwd)

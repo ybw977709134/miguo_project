@@ -1,17 +1,24 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
+import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.ui.MessageBox;
 
 /**
  * 添加课堂
  * Created by pzy on 11/8/14.
  */
 public class AddClassActivity extends Activity implements View.OnClickListener {
+
+    private MessageBox msgbox = new MessageBox(this);
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,8 +36,36 @@ public class AddClassActivity extends Activity implements View.OnClickListener {
                 onBackPressed();
                 break;
             case R.id.btn_add:
-                Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+                submit();
                 break;
         }
+    }
+
+    private void submit() {
+        String invitationCode = new AQuery(this).find(R.id.txt_code).getText().toString();
+        if (TextUtils.isEmpty(invitationCode))
+            return;
+
+        msgbox.showWait();
+
+        new AsyncTask<String, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(String... strings) {
+                int errno = WowTalkWebServerIF.getInstance(AddClassActivity.this)
+                        .fBindInvitationCode(strings[0]);
+                return errno;
+            }
+
+            @Override
+            public void onPostExecute(Integer errno) {
+                msgbox.dismissWait();
+                if (errno == ErrorCode.OK) {
+                    msgbox.toast(R.string.operation_done);
+                } else {
+                    msgbox.toast(R.string.operation_failed);
+                }
+            }
+        }.execute(invitationCode);
+
     }
 }

@@ -287,7 +287,7 @@
 
 	<!-- MISC -->
 
-
+    <string name="operation_done">操作成功</string>
 	<string name="operation_failed">操作失败</string>
 	<string name="back">返回</string>
 	<string name="plz_wait">请稍候...</string>

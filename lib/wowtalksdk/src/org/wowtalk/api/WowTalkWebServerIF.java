@@ -364,7 +364,23 @@ public class WowTalkWebServerIF {
 		}
 		return errno;
 	}
-	
+
+	public int fBindInvitationCode(String invitationCode) {
+		String uid = sPrefUtil.getUid();
+		String password = sPrefUtil.getPassword();
+		if(isAuthEmpty(uid, password))
+			return ErrorCode.INVALID_ARGUMENT;
+
+
+		final String action = "bind_with_invitation_code";
+		String postStr = "action=" + action
+				+ "&uid=" + Utils.urlencodeUtf8(uid)
+				+ "&password=" + Utils.urlencodeUtf8(password)
+				+ "&invitation_code=" + Utils.urlencodeUtf8(invitationCode)
+				+ "&lang=" + Locale.getDefault().getLanguage();
+		return _doRequestWithoutResponse(postStr);
+	}
+
 	/**
 	 * Bind my account with a mobile phone number.
 	 * @param mobile

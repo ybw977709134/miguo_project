@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.GroupMembersGridAdapter;
+import co.onemeter.oneapp.utils.ThemeHelper;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
@@ -755,6 +756,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
             addIntent.putExtra("isOnlyShowContacts", true);
             addIntent.putExtra("currentMemberIds", membersArray);
             addIntent.putExtra("group_id", groupRoom.groupID);
+            ThemeHelper.putExtraCurrThemeResId(addIntent, this);
             startActivityForResult(addIntent, REQ_PICK_BUDDYS);
             return;
         }

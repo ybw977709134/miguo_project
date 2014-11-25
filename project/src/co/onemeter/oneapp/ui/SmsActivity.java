@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MessagesAdapter;
+import co.onemeter.oneapp.utils.ThemeHelper;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.GlobalValue;
@@ -338,6 +339,7 @@ public class SmsActivity extends Activity implements OnClickListener {
 		    case R.id.title_edit:
 			    Intent intent = new Intent();
 			    intent.setClass(SmsActivity.this, MultiSelectActivity.class);
+                ThemeHelper.putExtraCurrThemeResId(intent, this);
 			    startActivityForResult(intent, REQ_PICK_BUDDYS);
 			    break;
 		    default:

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
+import co.onemeter.oneapp.utils.ThemeHelper;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
@@ -51,6 +52,7 @@ public class SingleContactChatDetailActivity extends Activity implements OnClick
                         Intent addIntent = new Intent();
                         if (GlobalValue.RELEASE_AS_WOWCITY) {
                             addIntent.setClass(SingleContactChatDetailActivity.this, MultiSelectActivity.class);
+                            ThemeHelper.putExtraCurrThemeResId(addIntent, SingleContactChatDetailActivity.this);
                         } else if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
                             addIntent.setClass(SingleContactChatDetailActivity.this, MultiSelectActivityForBiz.class);
                         }

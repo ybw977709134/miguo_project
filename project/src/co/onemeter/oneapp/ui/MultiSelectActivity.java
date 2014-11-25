@@ -23,6 +23,7 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.adapter.ContactListAdapter;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
+import co.onemeter.oneapp.utils.ThemeHelper;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
@@ -38,7 +39,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class MultiSelectActivity extends Activity implements OnClickListener {
-	private class SelectedAdapter extends BaseAdapter {
+
+    private class SelectedAdapter extends BaseAdapter {
 
 		private ArrayList<Person> adapterSelectedPerson;
 		
@@ -443,6 +445,8 @@ public class MultiSelectActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+        ThemeHelper.setTheme(this, getIntent().getExtras());
+
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
@@ -508,4 +512,5 @@ public class MultiSelectActivity extends Activity implements OnClickListener {
     public void onBackPressed() {
         handleBackEvent();
     }
+
 }

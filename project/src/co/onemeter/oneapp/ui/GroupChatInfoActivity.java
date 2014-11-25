@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
+import co.onemeter.oneapp.utils.ThemeHelper;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
@@ -68,6 +69,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
                             } else if (position == groupMembers.size() - 2) {
                                 Intent addIntent = new Intent();
                                 addIntent.setClass(GroupChatInfoActivity.this, MultiSelectActivity.class);
+                                ThemeHelper.putExtraCurrThemeResId(addIntent, GroupChatInfoActivity.this);
                                 String[] memberIds = getCurrentMemberIds();
                                 addIntent.putExtra("currentMemberIds", memberIds);
                                 addIntent.putExtra("group_id", groupId);
@@ -91,8 +93,9 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
                                 Intent addIntent = new Intent();
                                 if (GlobalValue.RELEASE_AS_WOWCITY) {
                                     addIntent.setClass(GroupChatInfoActivity.this, MultiSelectActivity.class);
+                                    ThemeHelper.putExtraCurrThemeResId(addIntent, GroupChatInfoActivity.this);
                                 } else if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
-                                    addIntent.setClass(GroupChatInfoActivity.this, MultiSelectActivity.class);
+                                    addIntent.setClass(GroupChatInfoActivity.this, MultiSelectActivityForBiz.class);
                                 }
                                 String[] memberIds = getCurrentMemberIds();
                                 addIntent.putExtra("currentMemberIds", memberIds);

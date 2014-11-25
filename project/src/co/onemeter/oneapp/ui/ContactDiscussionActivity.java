@@ -1,20 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.GlobalValue;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.contacts.adapter.ContactDiscussionAdapter;
-import co.onemeter.oneapp.contacts.model.Person;
-import co.onemeter.oneapp.utils.Utils;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -30,6 +15,17 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.contacts.adapter.ContactDiscussionAdapter;
+import co.onemeter.oneapp.contacts.model.Person;
+import co.onemeter.oneapp.utils.ThemeHelper;
+import co.onemeter.oneapp.utils.Utils;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.GlobalValue;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class ContactDiscussionActivity extends Activity implements OnClickListener{
 
@@ -188,6 +184,7 @@ public class ContactDiscussionActivity extends Activity implements OnClickListen
             Intent discussionIntent = new Intent();
             if (GlobalValue.RELEASE_AS_WOWCITY) {
                 discussionIntent.setClass(this, MultiSelectActivity.class);
+                ThemeHelper.putExtraCurrThemeResId(discussionIntent, this);
             } else if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
                 discussionIntent.setClass(this, MultiSelectActivityForBiz.class);
             }

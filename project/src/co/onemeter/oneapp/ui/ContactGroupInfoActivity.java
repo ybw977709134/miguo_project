@@ -751,7 +751,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
                 membersArray[i] = members.get(i).userID;
             }
             Intent addIntent = new Intent();
-            addIntent.setClass(this, MultiSelectActivityForBiz.class);
+            addIntent.setClass(this, MultiSelectActivity.class);
             addIntent.putExtra("isOnlyShowContacts", true);
             addIntent.putExtra("currentMemberIds", membersArray);
             addIntent.putExtra("group_id", groupRoom.groupID);

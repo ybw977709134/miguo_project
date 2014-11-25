@@ -1,27 +1,11 @@
 package co.onemeter.oneapp.ui;
 
-import java.util.ArrayList;
-
-import org.wowtalk.api.ChatMessage;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.GlobalSetting;
-import org.wowtalk.api.IDBTableChangeListener;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.GlobalValue;
-import org.wowtalk.ui.bitmapfun.util.AsyncTask;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.adapter.MessagesAdapter;
-import co.onemeter.oneapp.contacts.model.Person;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -31,17 +15,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
+import android.widget.*;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.adapter.MessagesAdapter;
 import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.GlobalValue;
+import org.wowtalk.ui.bitmapfun.util.AsyncTask;
+
+import java.util.ArrayList;
 
 public class SmsActivity extends Activity implements OnClickListener {
 
@@ -355,7 +337,7 @@ public class SmsActivity extends Activity implements OnClickListener {
                 break;
 		    case R.id.title_edit:
 			    Intent intent = new Intent();
-			    intent.setClass(SmsActivity.this, MultiSelectActivityForBiz.class);
+			    intent.setClass(SmsActivity.this, MultiSelectActivity.class);
 			    startActivityForResult(intent, REQ_PICK_BUDDYS);
 			    break;
 		    default:

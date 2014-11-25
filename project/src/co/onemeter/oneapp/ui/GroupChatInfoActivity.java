@@ -67,7 +67,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
                                 memberAdapter.notifyDataSetChanged();
                             } else if (position == groupMembers.size() - 2) {
                                 Intent addIntent = new Intent();
-                                addIntent.setClass(GroupChatInfoActivity.this, MultiSelectActivityForBiz.class);
+                                addIntent.setClass(GroupChatInfoActivity.this, MultiSelectActivity.class);
                                 String[] memberIds = getCurrentMemberIds();
                                 addIntent.putExtra("currentMemberIds", memberIds);
                                 addIntent.putExtra("group_id", groupId);
@@ -92,7 +92,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
                                 if (GlobalValue.RELEASE_AS_WOWCITY) {
                                     addIntent.setClass(GroupChatInfoActivity.this, MultiSelectActivity.class);
                                 } else if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
-                                    addIntent.setClass(GroupChatInfoActivity.this, MultiSelectActivityForBiz.class);
+                                    addIntent.setClass(GroupChatInfoActivity.this, MultiSelectActivity.class);
                                 }
                                 String[] memberIds = getCurrentMemberIds();
                                 addIntent.putExtra("currentMemberIds", memberIds);

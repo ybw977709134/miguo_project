@@ -228,16 +228,13 @@
 					android:numColumns="auto_fit"/>
 			</FrameLayout>
 		</HorizontalScrollView>
-		<Button
-			android:id="@+id/btn_ok"
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"
-			android:layout_alignParentRight="true"
-			android:layout_centerVertical="true"
-            android:paddingLeft="7dp"
-            android:paddingRight="7dp"
-            android:background="@drawable/btn_blue_selector"
-            android:textColor="@color/white"
-            android:textSize="16sp"/>
+        <Button
+            android:id="@+id/btn_ok"
+            style="@style/button_blue"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="DUMMY"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
 	</RelativeLayout>
 </RelativeLayout>

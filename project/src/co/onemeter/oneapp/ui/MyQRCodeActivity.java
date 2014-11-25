@@ -184,7 +184,7 @@ public class MyQRCodeActivity extends Activity implements View.OnClickListener{
 
                     JSONObject contentObj=new JSONObject();
 
-                    String myid = mPrefUtil.getMyWowtalkID();
+                    String myid = mPrefUtil.getUid();
                     if(TextUtils.isEmpty(myid)) {
                         myid = mPrefUtil.getUid();
                         if(TextUtils.isEmpty(myid)) {

@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import co.onemeter.oneapp.utils.ThemeHelper;
 import com.zxing.activity.CaptureActivity;
 import com.zxing.decoding.CaptureActivityHandler;
 import org.wowtalk.api.Buddy;
@@ -39,7 +40,6 @@ import co.onemeter.oneapp.utils.Utils;
  * To change this template use File | Settings | File Templates.
  */
 public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickListener{
-    public final static String EXTRA_THEME_RESID = "theme";
 
     private ImageView ivInitLighterAnimMask;
     private ImageView ivBottomFlash;
@@ -88,14 +88,10 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
 //    private Camera camera;
 
     private final static int INTENT_ID_PICK_PHOTO=3;
-    private int themeResId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        getData(savedInstanceState != null ? savedInstanceState : getIntent().getExtras());
-
-        if (themeResId > 0)
-            setTheme(themeResId);
+        ThemeHelper.setTheme(this, getIntent().getExtras());
 
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.scan_qr_code_layout); // passed to parent
@@ -107,10 +103,6 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
         mWebif = WowTalkWebServerIF.getInstance(this);
 
         initView();
-    }
-
-    private void getData(Bundle arg) {
-        themeResId = arg.getInt(EXTRA_THEME_RESID);
     }
 
     private void initView() {
@@ -286,7 +278,7 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
                 break;
             case R.id.scan_qr_code_bottom_btn_qrcode:
                 Intent intentView = new Intent(this,MyQRCodeActivity.class);
-                intentView.putExtra(MyQRCodeActivity.EXTRA_THEME_RESID, themeResId);
+                ThemeHelper.putExtraCurrThemeResId(intentView, this);
                 startActivity(intentView);
                 break;
         }

@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.ThemeHelper;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
@@ -250,13 +251,15 @@ public class LoginActivity extends Activity implements OnClickListener {
 			login();
 			break;
 		case R.id.login_qrcode:
-            startActivityForResult(new Intent(this, ScanQRCodeActivity.class)
-                            .putExtra(ScanQRCodeActivity.EXTRA_THEME_RESID, R.style.Theme_Green)
+        {
+            Intent i = new Intent(this, ScanQRCodeActivity.class)
                             .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_WITH_LAYOUT, true)
                             .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_LAYOUT_ID, R.layout.scan_qr_code_layout)
-                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_FINISH_AFTER_DECODE, false),
-                    REQ_SCAN);
-			break;
+                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_FINISH_AFTER_DECODE, false);
+            ThemeHelper.putExtraCurrThemeResId(i, this);
+            startActivityForResult(i, REQ_SCAN);
+            break;
+        }
 		case R.id.forgotPassWord:
 			fGotoFetchPwd();
 			break;

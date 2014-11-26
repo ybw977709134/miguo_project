@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import co.onemeter.oneapp.utils.ThemeHelper;
 import com.umeng.analytics.MobclickAgent;
 import com.zxing.activity.CaptureActivity;
 import org.wowtalk.ui.MessageBox;
@@ -54,7 +55,7 @@ public class ContactAddActivity extends Activity implements OnClickListener{
                 break;
             case R.id.scan_qr_code:
                 Intent scanIntent = new Intent(ContactAddActivity.this, ScanQRCodeActivity.class);
-                scanIntent.putExtra(ScanQRCodeActivity.EXTRA_THEME_RESID, R.style.Theme_Blue);
+                ThemeHelper.putExtraCurrThemeResId(scanIntent, this);
                 scanIntent.putExtra(CaptureActivity.ACTIVITY_ARG_WITH_LAYOUT,true);
                 scanIntent.putExtra(CaptureActivity.ACTIVITY_ARG_LAYOUT_ID,R.layout.scan_qr_code_layout);
                 scanIntent.putExtra(CaptureActivity.ACTIVITY_ARG_FINISH_AFTER_DECODE,false);

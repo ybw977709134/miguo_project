@@ -11,7 +11,7 @@ import android.os.Bundle;
  */
 public class ThemeHelper {
     /** Theme resource ID. */
-    public final static String EXTRA_THEME_RESID = "theme_helper_theme_23947593";
+    private final static String EXTRA_THEME_RESID = "theme_helper_theme_23947593";
 
     public static int getThemeResId(Activity activity) {
         try {

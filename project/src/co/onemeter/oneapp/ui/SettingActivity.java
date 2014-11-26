@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.AppUpgradeTask;
+import co.onemeter.oneapp.utils.ThemeHelper;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
@@ -135,10 +136,12 @@ public class SettingActivity extends Activity implements OnClickListener {
             case R.id.settings_myinfo:
                 startActivity(intent.setClass(SettingActivity.this, MyInfoActivity.class));
                 break;
-            case R.id.settings_my_qrcode:
-                startActivity(new Intent(this,MyQRCodeActivity.class)
-                        .putExtra(MyQRCodeActivity.EXTRA_THEME_RESID, R.style.Theme_Green));
+            case R.id.settings_my_qrcode: {
+                Intent i = new Intent(this, MyQRCodeActivity.class);
+                ThemeHelper.putExtraCurrThemeResId(i, this);
+                startActivity(i);
                 break;
+            }
             case R.id.settings_account:
                 if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
                     intent.setClass(SettingActivity.this, AccountSettingActivity_biz.class);

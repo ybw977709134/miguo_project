@@ -686,7 +686,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         Database.addDBTableChangeListener(Database.TBL_MOMENT,momentObserver);
         Database.addDBTableChangeListener(Database.TBL_MOMENT_REVIEWS,momentObserver);
 
-
+        dbHelper.setReviewsRead(moment);
     }
 
     @Override

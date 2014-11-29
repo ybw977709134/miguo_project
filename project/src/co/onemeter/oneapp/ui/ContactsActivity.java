@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
 import org.wowtalk.api.PrefUtil;
@@ -31,7 +33,6 @@ public class ContactsActivity extends FragmentActivity implements View.OnClickLi
     private String uid;
     private String pageTitle;
     private int activatedTab;
-    private BottomButtonBoard bottomBoard;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,7 +118,6 @@ public class ContactsActivity extends FragmentActivity implements View.OnClickLi
                 if (activatedTab == TAB_CONTACTS) {
                     contactsFragment.handleBackPress();
                 }
-                bottomBoard.show();
                 break;
         }
     }
@@ -143,12 +143,32 @@ public class ContactsActivity extends FragmentActivity implements View.OnClickLi
     }
 
     private void updateMenu() {
+        int[] icons = null;
         Fragment f = currFragment();
-        if (f instanceof BottomButtonBoard.OptionsMenuProvider
-                && null != (bottomBoard = BottomButtonBoard.create(
-                this,
-                (BottomButtonBoard.OptionsMenuProvider)f,
-                findViewById(R.id.navbar_btn_right)))) {
+
+        if (f instanceof BottomButtonBoard.OptionsMenuProvider) {
+            final BottomButtonBoard.OptionsMenuProvider provider = ((BottomButtonBoard.OptionsMenuProvider) f);
+            icons = provider.getOptionsMenuItemIcons(this);
+            if (icons.length > 0) {
+                ViewGroup btnBox = ((ViewGroup)q.find(R.id.navbar_btn_right).getView());
+                btnBox.removeAllViews();
+                for (int i = 0; i < icons.length; ++i) {
+                    ImageView btn = new ImageView(this);
+                    btn.setImageResource(icons[i]);
+                    btn.setBackgroundResource(0);
+                    final int position = i;
+                    btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            provider.onOptionsItemSelected(position);
+                        }
+                    });
+                    btnBox.addView(btn);
+                }
+            }
+        }
+
+        if (icons != null && icons.length > 0) {
             q.find(R.id.navbar_btn_right).visible();
         } else {
             q.find(R.id.navbar_btn_right).invisible();

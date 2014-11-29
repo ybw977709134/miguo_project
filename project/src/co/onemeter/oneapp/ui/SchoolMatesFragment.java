@@ -75,6 +75,11 @@ public class SchoolMatesFragment extends Fragment
     }
 
     @Override
+    public int[] getOptionsMenuItemIcons(Context context) {
+        return new int[] { R.drawable.nav_refresh_selector };
+    }
+
+    @Override
     public boolean onOptionsItemSelected(int position) {
         switch (position) {
             case 0:

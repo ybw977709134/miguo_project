@@ -15,10 +15,10 @@
 			android:id="@+id/navbar_btn_left"
 			style="@style/navbar_btn_left"
 			android:visibility="gone"/>
-		<ImageButton
+		<LinearLayout
 			android:id="@+id/navbar_btn_right"
 			style="@style/navbar_btn_right"
-			android:src="@drawable/nav_more_selector"/>
+			android:orientation="horizontal"/>
 		<LinearLayout
 			android:id="@+id/btn_layout"
 			android:layout_height="wrap_content"

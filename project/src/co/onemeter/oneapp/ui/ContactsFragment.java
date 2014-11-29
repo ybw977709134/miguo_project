@@ -562,6 +562,11 @@ public class ContactsFragment extends Fragment implements OnClickListener,
     }
 
     @Override
+    public int[] getOptionsMenuItemIcons(Context context) {
+        return new int[] { R.drawable.nav_add_selector, R.drawable.nav_refresh_selector };
+    }
+
+    @Override
     public boolean onOptionsItemSelected(int position) {
         switch (position) {
             case 0:

@@ -1,8 +1,5 @@
 package org.wowtalk.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.res.Resources;
@@ -11,10 +8,15 @@ import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils.TruncateAt;
 import android.util.TypedValue;
 import android.view.*;
-import android.widget.*;
-
-import org.wowtalk.api.Utils;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import co.onemeter.oneapp.R;
+import org.wowtalk.api.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -243,6 +245,7 @@ public class BottomButtonBoard {
          * @return
          */
         public String[] getOptionsMenuItems(Context context);
+        public int[] getOptionsMenuItemIcons(Context context);
         public boolean onOptionsItemSelected(int position);
     }
 }

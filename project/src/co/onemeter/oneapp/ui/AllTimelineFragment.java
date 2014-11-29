@@ -56,7 +56,7 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
     @Override
     public void onPause() {
         super.onPause();
-        if (timelineDropdownFilter.isShowingDialog()) {
+        if (timelineDropdownFilter != null && timelineDropdownFilter.isShowingDialog()) {
             timelineDropdownFilter.tryDismissAll();
         }
     }
@@ -110,7 +110,7 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
 
     @Override
     public boolean handleBackPress() {
-        if (timelineDropdownFilter.isShowingDialog()) {
+        if (timelineDropdownFilter != null && timelineDropdownFilter.isShowingDialog()) {
             timelineDropdownFilter.tryDismissAll();
             return true;
         }

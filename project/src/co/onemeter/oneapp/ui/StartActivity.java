@@ -482,9 +482,6 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 		NotificationManager notifManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		notifManager.cancel(org.wowtalk.ui.GlobalValue.NOTIFICATION_FOR_CHATMESSAGE);
 
-//		org.wowtalk.ui.GlobalValue.unreadMsgCount = new Database(this).open().countAllUnreadChatMessages();
-		fRefreshTabBadge_unreadMsg();
-
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         org.wowtalk.ui.GlobalValue.screenW = displayMetrics.widthPixels;
@@ -496,8 +493,6 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
             fRefreshTabBadge_contact();
         }
 
-        fRefreshTabBadge_social();
-
         Database.addDBTableChangeListener(Database.DUMMY_TBL_SWITCH_ACCOUNT, mSwitchAccountObserver);
         Database.addDBTableChangeListener(Database.TBL_LATEST_CHAT_TARGET, chatmessageObserver);
         Database.addDBTableChangeListener(Database.TBL_LATEST_CHAT_TARGET_UNREAD_COUNT, chatmessageObserver);
@@ -507,6 +502,10 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         }
 
         setTab(_selectedTabIndex);
+
+        fRefreshTabBadge_unreadMsg();
+        fRefreshTabBadge_social();
+        fRefreshTabBadge_contact();
 	}
 
     protected void onNewIntent(Intent intent) {

@@ -268,6 +268,8 @@ public class ContactsFragment extends Fragment implements OnClickListener,
                         .fGroupChat_GetMyGroups();
                 WowTalkWebServerIF.getInstance(getActivity())
                         .fGetBuddyList();
+                WowTalkWebServerIF.getInstance(getActivity())
+                        .fGetPendingRequests();
                 return null;
             }
 

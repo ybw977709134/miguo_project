@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.ThemeHelper;
 import com.androidquery.AQuery;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
@@ -22,6 +23,8 @@ public class AddClassActivity extends Activity implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ThemeHelper.setTheme(this, getIntent().getExtras());
         setContentView(R.layout.activity_add_class);
 
         AQuery q = new AQuery(this);

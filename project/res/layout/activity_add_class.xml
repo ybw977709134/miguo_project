@@ -43,6 +43,6 @@
 			android:layout_height="wrap_content"
 			android:layout_margin="@dimen/padding_medium"
 			android:text="@string/add"
-			style="@style/button_green"/>
+			style="?attr/button"/>
 	</LinearLayout>
 </LinearLayout>

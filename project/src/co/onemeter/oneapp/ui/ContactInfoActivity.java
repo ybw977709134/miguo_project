@@ -376,6 +376,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         q.find(R.id.img_thumbnail).clicked(this);
         q.find(R.id.navbar_btn_left).clicked(this);
         q.find(R.id.btn_goto_moments).clicked(this);
+        q.find(R.id.btn_delete).clicked(this);
 
         //if family buddy,no moment layout
 //        if(buddy.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
@@ -529,9 +530,32 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
             case R.id.btn_goto_moments:
                 TimelineActivity.launch(this, buddy.userID, buddy.nickName);
                 break;
+            case R.id.btn_delete:
+                removeBuddy();
+                break;
             default:
                 break;
         }
+    }
+
+    private void removeBuddy() {
+        final Context context = this;
+        mMsgBox.showWait();
+        new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return WowTalkWebServerIF.getInstance(context)
+                        .fRemoveBuddy(buddy.userID);
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                mMsgBox.dismissWait();
+                if (result == ErrorCode.OK) {
+                    finish();
+                }
+            }
+        }.execute((Void)null);
     }
 
     private void handleBackEvent() {

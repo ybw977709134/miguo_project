@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import co.onemeter.oneapp.utils.ThemeHelper;
 import com.androidquery.AQuery;
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.ui.BottomButtonBoard;
+import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -101,7 +103,14 @@ public class SchoolMatesFragment extends Fragment
     }
 
     public void refresh() {
-
+        final MessageBox msgbox = new MessageBox(getActivity());
+        msgbox.showWait();
+        new Handler(getActivity().getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                msgbox.dismissWait();
+            }
+        }, 1000);
     }
 
     @Override

@@ -115,11 +115,16 @@ public abstract class TimelineFragment extends ListFragment
         if (listView != null) {
             listView.setOnRefreshListener(this);
         }
+
+        checkNewReviews();
+        Database.addDBTableChangeListener(Database.TBL_MOMENT_REVIEWS,momentReviewObserver);
     }
 
     @Override
     public void onPause() {
         super.onPause();
+
+        Database.removeDBTableChangeListener(momentReviewObserver);
     }
 
     @Override
@@ -279,6 +284,25 @@ public abstract class TimelineFragment extends ListFragment
             }
         }.execute(maxTimestamp);
         return true;
+    }
+
+    private IDBTableChangeListener momentReviewObserver = new IDBTableChangeListener() {
+        public void onDBTableChanged(String tableName) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    checkNewReviews();
+                }
+            });
+        }
+    };
+
+    private void checkNewReviews() {
+        Moment dummy = new Moment(null);
+        Database mDb = new Database(getActivity());
+        int newReviewsCount = mDb.fetchNewReviews(dummy);
+        adapter.setNewReviewCount(newReviewsCount);
+        adapter.notifyDataSetChanged();
     }
 
     /**

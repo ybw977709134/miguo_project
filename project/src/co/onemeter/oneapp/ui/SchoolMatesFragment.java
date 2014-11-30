@@ -1,6 +1,8 @@
 package co.onemeter.oneapp.ui;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.adapter.ContactGroupIterationAdapter;
 import co.onemeter.oneapp.contacts.adapter.GroupTreeAdapter;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
+import co.onemeter.oneapp.utils.ThemeHelper;
 import com.androidquery.AQuery;
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.ui.BottomButtonBoard;
@@ -25,6 +28,7 @@ import java.util.UUID;
 public class SchoolMatesFragment extends Fragment
         implements BottomButtonBoard.OptionsMenuProvider {
 
+    private static final int REQ_ADD_CLASS = 1;
     Adapter adapter;
     AQuery aQuery;
 
@@ -103,22 +107,38 @@ public class SchoolMatesFragment extends Fragment
     @Override
     public String[] getOptionsMenuItems(Context context) {
         return new String[] {
+                context.getString(R.string.add),
                 context.getString(R.string.refresh_from_server) };
     }
 
     @Override
     public int[] getOptionsMenuItemIcons(Context context) {
-        return new int[] { R.drawable.nav_refresh_selector };
+        return new int[] { R.drawable.nav_add_selector, R.drawable.nav_refresh_selector };
     }
 
     @Override
     public boolean onOptionsItemSelected(int position) {
         switch (position) {
-            case 0:
+            case 0: {
+                Intent intent = new Intent(getActivity(), AddClassActivity.class);
+                ThemeHelper.putExtraCurrThemeResId(intent, getActivity());
+                startActivityForResult(intent, REQ_ADD_CLASS);
+                return true;
+            }
+            case 1:
                 refresh();
                 return true;
             default:
                 return false;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQ_ADD_CLASS && resultCode == Activity.RESULT_OK) {
+            refresh();
         }
     }
 }

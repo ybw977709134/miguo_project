@@ -117,33 +117,36 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
 
         // retrieve views
         albumCoverImageView = (ImageView) headerView_albumCover.findViewById(R.id.imgAlbumBg);
-        mProgressUploadingAlbumcover = (ProgressBar)headerView_albumCover.findViewById(R.id.progress_uploading_albumcover);
+        mProgressUploadingAlbumcover = (ProgressBar) headerView_albumCover.findViewById(R.id.progress_uploading_albumcover);
         ImageView imgPtrRefreshIcon = (ImageView) headerView_albumCover.findViewById(R.id.imgRefreshRotate);
         ImageView imgThumbnail = (ImageView) headerView_albumCover.findViewById(R.id.img_thumbnail);
         TextView txtName = (TextView) headerView_albumCover.findViewById(R.id.txt_name);
         TextView txtSignature = (TextView) headerView_albumCover.findViewById(R.id.txt_signature);
-        View headerBottomBg= headerView_albumCover.findViewById(R.id.box_info_bg);
+        View headerBottomBg = headerView_albumCover.findViewById(R.id.box_info_bg);
 
         // retrieve data
         Buddy buddy = dbHelper.buddyWithUserID(uid());
         mAlbumCover = dbHelper.getAlbumCover(uid());
 
         // display data
-        txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
-        if (buddy.status == null || buddy.status.equals("")) {
-            txtSignature.setText("");
-            headerBottomBg.setVisibility(View.GONE);
-        } else {
-            txtSignature.setText(buddy.status);
-            headerBottomBg.setVisibility(View.VISIBLE);
+        if (buddy != null) {
+            txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
+            if (buddy.status == null || buddy.status.equals("")) {
+                txtSignature.setText("");
+                headerBottomBg.setVisibility(View.GONE);
+            } else {
+                txtSignature.setText(buddy.status);
+                headerBottomBg.setVisibility(View.VISIBLE);
+            }
+
+            if (imgThumbnail instanceof RoundedImageView) {
+                setAvatarRadius((RoundedImageView) imgThumbnail);
+            }
+            PhotoDisplayHelper.displayPhoto(getActivity(),
+                    imgThumbnail, R.drawable.default_avatar_90, buddy, true);
+            if (mAlbumCover != null)
+                displayAlbumCover(albumCoverImageView);
         }
-        if (imgThumbnail instanceof RoundedImageView) {
-            setAvatarRadius((RoundedImageView)imgThumbnail);
-        }
-        PhotoDisplayHelper.displayPhoto(getActivity(),
-                imgThumbnail, R.drawable.default_avatar_90, buddy, true);
-        if (mAlbumCover != null)
-            displayAlbumCover(albumCoverImageView);
 
         // bind event handlers
         ptrListView.setOnPullEventListener(new OnPullEventListener(imgPtrRefreshIcon));

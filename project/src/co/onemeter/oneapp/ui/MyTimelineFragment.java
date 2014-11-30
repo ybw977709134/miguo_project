@@ -21,7 +21,6 @@ import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.InputBoardManager;
-import org.wowtalk.ui.msg.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -139,9 +138,6 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
                 headerBottomBg.setVisibility(View.VISIBLE);
             }
 
-            if (imgThumbnail instanceof RoundedImageView) {
-                setAvatarRadius((RoundedImageView) imgThumbnail);
-            }
             PhotoDisplayHelper.displayPhoto(getActivity(),
                     imgThumbnail, R.drawable.default_avatar_90, buddy, true);
             if (mAlbumCover != null)
@@ -167,25 +163,6 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         resizeAlbumCover(albumCoverImageView, imgPtrRefreshIcon);
         mBeginUploadAlbumCover = new UploadCoverListener(mProgressUploadingAlbumcover);
         albumCoverNetworkDelegate = new AlbumCoverNetworkDelegate(mProgressUploadingAlbumcover);
-    }
-
-    private void setAvatarRadius(final RoundedImageView view) {
-        view.setBorderWidth(2);
-
-        if (establishedAvatarRadius > 0) {
-            view.setCornerRadius(establishedAvatarRadius);
-            return;
-        }
-
-        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (view.getHeight() > 0 && establishedAvatarRadius <= 0) {
-                    establishedAvatarRadius = view.getHeight() / 2;
-                    view.setCornerRadius(establishedAvatarRadius);
-                }
-            }
-        });
     }
 
     private boolean handleItemClick() {

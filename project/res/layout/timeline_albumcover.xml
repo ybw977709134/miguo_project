@@ -42,7 +42,7 @@
 				android:layout_alignParentBottom="true"
 				android:layout_marginRight="@dimen/padding_medium">
 
-				<org.wowtalk.ui.msg.RoundedImageView
+				<co.onemeter.oneapp.ui.CircleImageView
 					android:id="@+id/img_thumbnail"
 					android:layout_height="fill_parent"
 					android:layout_width="fill_parent"

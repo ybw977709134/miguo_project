@@ -463,6 +463,7 @@
             android:screenOrientation="portrait">
         </activity>
 		<activity android:name=".ui.NewReviewsActivity"
+		          android:theme="@style/Theme.Blue"
 		          android:screenOrientation="portrait"/>
         <activity android:name=".ui.AllMyReviewActivity"
                   android:screenOrientation="portrait"/>

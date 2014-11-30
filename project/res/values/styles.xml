@@ -2,8 +2,7 @@
 	<style name="title_bar">
 		<item name="android:layout_width">fill_parent</item>
 		<item name="android:layout_height">@dimen/title_bar_height</item>
-		<item name="android:minHeight">@dimen/title_bar_height</item>
-		<item name="android:maxHeight">@dimen/title_bar_height</item>
+        <item name="android:layout_alignParentTop">true</item>
 	</style>
 
 	<style name="title_bar_red" parent="title_bar">
@@ -128,7 +127,7 @@
     </style>
 
     <style name="page">
-        <item name="android:background">#FFF2F2F2</item>
+        <item name="android:background">@color/background_light</item>
     </style>
 
     <style name="label_white">

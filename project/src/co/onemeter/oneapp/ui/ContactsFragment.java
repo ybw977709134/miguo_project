@@ -121,6 +121,10 @@ public class ContactsFragment extends Fragment implements OnClickListener,
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case HANDLER_LOCAL_GROUPS_LOADED:
+
+                    if (getActivity() == null)
+                        break;
+
                     if (groupRooms == null || groupRooms.size() == 0) {
                         contentView.findViewById(R.id.group_indicator).setVisibility(View.GONE);
                         lvContactGroup.setVisibility(View.GONE);

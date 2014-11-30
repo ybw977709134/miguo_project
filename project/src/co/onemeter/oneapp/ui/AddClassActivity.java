@@ -64,6 +64,7 @@ public class AddClassActivity extends Activity implements View.OnClickListener {
                 msgbox.dismissWait();
                 if (errno == ErrorCode.OK) {
                     msgbox.toast(R.string.operation_done);
+                    setResult(RESULT_OK);
                 } else {
                     msgbox.toast(R.string.operation_failed);
                 }

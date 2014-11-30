@@ -84,8 +84,6 @@ public class NewReviewsActivity extends ListActivity implements View.OnClickList
         super.onDestroy();
 
         Database.removeDBTableChangeListener(momentReviewObserver);
-
-        setAllReviewReaded();
     }
 
     @Override

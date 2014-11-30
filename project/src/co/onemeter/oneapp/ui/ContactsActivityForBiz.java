@@ -41,10 +41,6 @@ public class ContactsActivityForBiz extends Activity implements OnClickListener,
      * the groupId of latestContact, indicates the groupChatRoom is latestContact
      */
     public static final String GROUP_ID_OF_LATEST_CONTACT = "-1";
-    /**
-     * the groupId of root_favorite_group, indicates the groupChatRoom is the root of favorite_group
-     */
-    public static final String GROUP_ID_OF_ROOT_FAVORITE_GROUP = "0";
 
     /**
      * 每次加载的条数
@@ -602,14 +598,14 @@ public class ContactsActivityForBiz extends Activity implements OnClickListener,
     public static GroupChatRoom treeFavoriteGroups(String fgname,ArrayList<GroupChatRoom> rooms) {
         // 构造最外层的收藏的根群组
 //        String rootRoomName = getString(R.string.contactsforbiz_root_favorite_group_name);
-        GroupChatRoom rootChatRoom = new GroupChatRoom(GROUP_ID_OF_ROOT_FAVORITE_GROUP,
+        GroupChatRoom rootChatRoom = new GroupChatRoom(ContactGroupIterationAdapter.GROUP_ID_ROOT,
                 fgname, fgname, "", 0, 0, false);
         rootChatRoom.isEditable = false;
         rootChatRoom.parentGroupId = null;
         rootChatRoom.childGroups = new ArrayList<GroupChatRoom>();
         // 将收藏的群组的parentGroupId设置为构造的根群组的id
         for (GroupChatRoom favoriteGroup : rooms) {
-            favoriteGroup.parentGroupId = GROUP_ID_OF_ROOT_FAVORITE_GROUP;
+            favoriteGroup.parentGroupId = ContactGroupIterationAdapter.GROUP_ID_ROOT;
             rootChatRoom.childGroups.add(favoriteGroup);
         }
         return rootChatRoom;

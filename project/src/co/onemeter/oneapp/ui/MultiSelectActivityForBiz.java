@@ -1013,14 +1013,14 @@ public class MultiSelectActivityForBiz extends Activity implements OnClickListen
     private GroupChatRoom treeFavoriteGroups() {
         // 构造最外层的收藏的根群组
         String rootRoomName = getString(R.string.contactsforbiz_root_favorite_group_name);
-        GroupChatRoom rootChatRoom = new GroupChatRoom(ContactsActivityForBiz.GROUP_ID_OF_ROOT_FAVORITE_GROUP,
+        GroupChatRoom rootChatRoom = new GroupChatRoom(ContactGroupIterationAdapter.GROUP_ID_ROOT,
                 rootRoomName, rootRoomName, "", 0, 0, false);
         rootChatRoom.isEditable = false;
         rootChatRoom.parentGroupId = null;
         rootChatRoom.childGroups = new ArrayList<GroupChatRoom>();
         // 将收藏的群组的parentGroupId设置为构造的根群组的id
         for (GroupChatRoom favoriteGroup : mFavoriteGroupRooms) {
-            favoriteGroup.parentGroupId = ContactsActivityForBiz.GROUP_ID_OF_ROOT_FAVORITE_GROUP;
+            favoriteGroup.parentGroupId = ContactGroupIterationAdapter.GROUP_ID_ROOT;
             rootChatRoom.childGroups.add(favoriteGroup);
         }
         return rootChatRoom;

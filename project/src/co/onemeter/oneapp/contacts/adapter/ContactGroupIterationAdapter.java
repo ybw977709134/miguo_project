@@ -21,6 +21,10 @@ import java.util.Set;
 public class ContactGroupIterationAdapter extends BaseAdapter {
 
     /**
+     * the groupId of root_favorite_group, indicates the groupChatRoom is the root of favorite_group
+     */
+    public static final String GROUP_ID_ROOT = "0";
+    /**
      * 缩进的最大层数
      */
     private static final int MAX_INDENT_LEVEL = 2;
@@ -111,7 +115,7 @@ public class ContactGroupIterationAdapter extends BaseAdapter {
 	 */
 	public void setRootFavoriteGroupSource(GroupChatRoom newRootFavoriteRoom) {
 	    GroupChatRoom oldRootFavoriteRoom = mRootGroups.get(0);
-	    if (null != oldRootFavoriteRoom && ContactsActivityForBiz.GROUP_ID_OF_ROOT_FAVORITE_GROUP.equals(oldRootFavoriteRoom.groupID)) {
+	    if (null != oldRootFavoriteRoom && GROUP_ID_ROOT.equals(oldRootFavoriteRoom.groupID)) {
 	        boolean isExpand = oldRootFavoriteRoom.isExpand;
 	        mRootGroups.remove(0);
 	        newRootFavoriteRoom.isShow = true;
@@ -188,7 +192,7 @@ public class ContactGroupIterationAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 // 点击的收藏的群组，则不跳转，无响应事件
-                if (ContactsActivityForBiz.GROUP_ID_OF_ROOT_FAVORITE_GROUP.equals(group.groupID)) {
+                if (GROUP_ID_ROOT.equals(group.groupID)) {
                     return;
                 }
                 // 点击群组名称，跳转至联系人界面
@@ -212,7 +216,7 @@ public class ContactGroupIterationAdapter extends BaseAdapter {
                 // favorite节点下的，需要同时更新all下对应群组的isFavorite属性
                 // 且对应的group不一定处于show状态，可能不存在与mShowGroupRooms中，需要更新mRootGroups
                 // 需要此处对adapter内容进行修改，如果直接监听数据库，则会重新获取所有的group，会是一个全新的未展开的根节点
-                if (ContactsActivityForBiz.GROUP_ID_OF_ROOT_FAVORITE_GROUP.equals(group.parentGroupId)) {
+                if (GROUP_ID_ROOT.equals(group.parentGroupId)) {
                     // 过滤mShowGroupRooms
                     for (GroupChatRoom tempChatRoom : mShowGroupRooms) {
                         // group自己包含在mShowGroupRooms里，所以需要过滤掉自己
@@ -226,7 +230,7 @@ public class ContactGroupIterationAdapter extends BaseAdapter {
                     // 过滤mRootGroups
                     for (GroupChatRoom rootRoom : mRootGroups) {
                         // 过滤非favorite节点下的群组
-                        if (!ContactsActivityForBiz.GROUP_ID_OF_ROOT_FAVORITE_GROUP.equals(rootRoom.groupID)) {
+                        if (!GROUP_ID_ROOT.equals(rootRoom.groupID)) {
                             setFavoriteInRootGroupRoom(group.isFavorite, group.groupID, rootRoom);
                         }
                     }
@@ -252,7 +256,7 @@ public class ContactGroupIterationAdapter extends BaseAdapter {
             }
         });
 
-        if (ContactsActivityForBiz.GROUP_ID_OF_ROOT_FAVORITE_GROUP.equals(group.groupID)) {
+        if (GROUP_ID_ROOT.equals(group.groupID)) {
 //            holder.imgActionLayout.setVisibility(View.VISIBLE);
             holder.imgAction.setVisibility(View.VISIBLE);
             holder.imgAction.setBackgroundResource(R.drawable.group_sort);
@@ -263,12 +267,12 @@ public class ContactGroupIterationAdapter extends BaseAdapter {
             holder.imgAction.setBackgroundResource(R.drawable.group_send);
 //            holder.dividerAfter.setVisibility(group.isMeBelongs ? View.VISIBLE : View.GONE);
         }
-//        holder.imgAction.setBackgroundResource(ContactsActivityForBiz.GROUP_ID_OF_ROOT_FAVORITE_GROUP.equals(group.groupID)
+//        holder.imgAction.setBackgroundResource(ContactsActivityForBiz.GROUP_ID_ROOT.equals(group.groupID)
 //                ? R.drawable.group_sort : R.drawable.group_send);
         holder.imgAction.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContactsActivityForBiz.GROUP_ID_OF_ROOT_FAVORITE_GROUP.equals(group.groupID)) {
+                if (GROUP_ID_ROOT.equals(group.groupID)) {
                     // 排序，跳转排序页面
                     GroupChatRoom rootFavoriteGroup = mRootGroups.get(0);
                     // 收藏的群组数超过一个才能进入收藏界面
@@ -314,9 +318,9 @@ public class ContactGroupIterationAdapter extends BaseAdapter {
 	 */
     private void setIndentLevel(GroupChatRoom group) {
         // f(group.level,group.indentLevel,mMaxShowLevel) 之间的某个关系
-        if (ContactsActivityForBiz.GROUP_ID_OF_ROOT_FAVORITE_GROUP.equals(group.groupID)) {
+        if (GROUP_ID_ROOT.equals(group.groupID)) {
             group.indentLevel = 0;
-        } else if (ContactsActivityForBiz.GROUP_ID_OF_ROOT_FAVORITE_GROUP.equals(group.parentGroupId)) {
+        } else if (GROUP_ID_ROOT.equals(group.parentGroupId)) {
             group.indentLevel = 1;
         } else {
             if (mMaxShowLevel <= MAX_INDENT_LEVEL) {

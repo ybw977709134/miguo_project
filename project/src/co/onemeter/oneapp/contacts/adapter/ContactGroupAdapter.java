@@ -1,24 +1,19 @@
 package co.onemeter.oneapp.contacts.adapter;
 
-import java.util.ArrayList;
-
-import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.ui.PhotoDisplayHelper;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.contacts.model.Group;
-import co.onemeter.oneapp.contacts.util.ContactUtil;
-
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import co.onemeter.oneapp.R;
+import org.wowtalk.api.GroupChatRoom;
+import org.wowtalk.ui.PhotoDisplayHelper;
+
+import java.util.ArrayList;
 
 public class ContactGroupAdapter extends BaseAdapter {
-	private ArrayList<Group> groups;
 	private Context mContext;
 	private ArrayList<GroupChatRoom> groupRooms;
 	

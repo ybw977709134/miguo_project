@@ -7,22 +7,19 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.text.TextUtils;
+import co.onemeter.oneapp.contacts.model.Person;
+import co.onemeter.oneapp.ui.Log;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.Utils;
-import co.onemeter.oneapp.contacts.model.Group;
-import co.onemeter.oneapp.contacts.model.Person;
-import co.onemeter.oneapp.ui.Log;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class ContactUtil {
-	private static String[] groupName = new String[] {"ȫ����ϵ��", "�绰����ϵ��", "Ⱥ��", "����"};
-	
+
 	public static ArrayList<Person> allPersons = new ArrayList<Person>();
 	public static ArrayList<Person> curPersons = new ArrayList<Person>();
-	public static ArrayList<Group> allGroups = new ArrayList<Group>();
 	public static ArrayList<Person> localPersons = new ArrayList<Person>();
 	public static ArrayList<Buddy> allBuddies = new ArrayList<Buddy>();
 	
@@ -73,18 +70,6 @@ public class ContactUtil {
 		}
 	}
 
-	public static ArrayList<Group> fFetchAllGroups() {
-		ArrayList<Group> groups = new ArrayList<Group>();
-		if (allGroups.size() > 0)
-			return groups;
-		for (int i = 0; i < 4; i++) {
-			Group group = new Group();
-			group.setName(groupName[i]);
-			allGroups.add(group);
-		}
-		return groups;
-	}
-	
 	/**
 	 * 获取本地联系人信息
 	 * 

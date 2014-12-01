@@ -150,4 +150,9 @@ public class SchoolMatesFragment extends Fragment
             refresh();
         }
     }
+
+    public boolean isEmpty() {
+        // TODO not implemented
+        return false;
+    }
 }

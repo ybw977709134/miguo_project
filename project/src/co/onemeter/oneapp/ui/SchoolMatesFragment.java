@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,25 +49,7 @@ public class SchoolMatesFragment extends Fragment
 
         msgbox = new MessageBox(getActivity());
 
-        msgbox.showWait();
-
-        new AsyncTask<Void, Void, Integer>() {
-            List<GroupChatRoom> classrooms;
-            @Override
-            protected Integer doInBackground(Void... voids) {
-                classrooms = WowTalkWebServerIF.getInstance(getActivity()).getMyClassRooms();
-                return null;
-            }
-
-            @Override
-            public void onPostExecute(Integer errno) {
-                msgbox.dismissWait();
-                if (classrooms != null) {
-                    adapter = new GroupTreeAdapter(getActivity(), classrooms);
-                    aQuery.find(R.id.listview).adapter(adapter);
-                }
-            }
-        }.execute((Void)null);
+        refresh();
     }
 
     private ArrayList<GroupChatRoom> makeFakeData(
@@ -121,14 +102,25 @@ public class SchoolMatesFragment extends Fragment
     }
 
     public void refresh() {
-        final MessageBox msgbox = new MessageBox(getActivity());
         msgbox.showWait();
-        new Handler(getActivity().getMainLooper()).postDelayed(new Runnable() {
+
+        new AsyncTask<Void, Void, Integer>() {
+            List<GroupChatRoom> classrooms;
             @Override
-            public void run() {
-                msgbox.dismissWait();
+            protected Integer doInBackground(Void... voids) {
+                classrooms = WowTalkWebServerIF.getInstance(getActivity()).getMyClassRooms();
+                return null;
             }
-        }, 1000);
+
+            @Override
+            public void onPostExecute(Integer errno) {
+                msgbox.dismissWait();
+                if (classrooms != null) {
+                    adapter = new GroupTreeAdapter(getActivity(), classrooms);
+                    aQuery.find(R.id.listview).adapter(adapter);
+                }
+            }
+        }.execute((Void)null);
     }
 
     @Override

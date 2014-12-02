@@ -35,6 +35,7 @@ public class SchoolMatesFragment extends Fragment
     Adapter adapter;
     AQuery aQuery;
     MessageBox msgbox;
+    List<GroupChatRoom> classrooms;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -105,7 +106,6 @@ public class SchoolMatesFragment extends Fragment
         msgbox.showWait();
 
         new AsyncTask<Void, Void, Integer>() {
-            List<GroupChatRoom> classrooms;
             @Override
             protected Integer doInBackground(Void... voids) {
                 classrooms = WowTalkWebServerIF.getInstance(getActivity()).getMyClassRooms();
@@ -115,9 +115,12 @@ public class SchoolMatesFragment extends Fragment
             @Override
             public void onPostExecute(Integer errno) {
                 msgbox.dismissWait();
-                if (classrooms != null) {
+                if (!isEmpty()) {
                     adapter = new GroupTreeAdapter(getActivity(), classrooms);
                     aQuery.find(R.id.listview).adapter(adapter);
+                } else {
+                    // TODO 显示笑脸
+                    msgbox.toast("is empty\nTODO 显示笑脸 :)");
                 }
             }
         }.execute((Void)null);
@@ -162,7 +165,6 @@ public class SchoolMatesFragment extends Fragment
     }
 
     public boolean isEmpty() {
-        // TODO not implemented
-        return false;
+        return classrooms == null || classrooms.isEmpty();
     }
 }

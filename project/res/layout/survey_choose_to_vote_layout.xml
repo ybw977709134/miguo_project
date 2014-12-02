@@ -7,8 +7,8 @@
               android:layout_height="wrap_content">
     <ImageView
             android:id="@+id/choose_layout_inner_check"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="left"
             android:padding="5dp"
             android:src="@drawable/timeline_unchecked"
@@ -20,5 +20,5 @@
             android:layout_marginLeft="3dp"
             android:gravity="center_vertical"
             android:textColor="@color/black"
-            android:textSize="23sp"/>
+            android:textSize="15sp"/>
 </LinearLayout>

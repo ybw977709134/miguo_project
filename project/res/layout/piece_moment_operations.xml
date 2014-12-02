@@ -39,7 +39,7 @@
                 <Button
                         android:id="@+id/btn_like"
                         android:layout_height="20dp"
-                        android:layout_width="20dp"
+                        android:layout_width="23dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/timeline_like"/>
 
@@ -73,7 +73,7 @@
                 <Button
                         android:id="@+id/btn_comment"
                         android:layout_height="20dp"
-                        android:layout_width="20dp"
+                        android:layout_width="23dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/timeline_comment"/>
 
@@ -101,7 +101,7 @@
                 <Button
                         android:id="@+id/btn_answer"
                         android:layout_height="20dp"
-                        android:layout_width="20dp"
+                        android:layout_width="23dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/timeline_comment"/>
 

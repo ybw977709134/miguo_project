@@ -70,10 +70,10 @@
                     android:layout_above="@+id/qr_scan_bottom_btn"
                     android:orientation="vertical">
 
-                <FrameLayout
+                <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
-
+                        
                     <SurfaceView
                             android:id="@+id/preview_view"
                             android:layout_width="match_parent"
@@ -81,12 +81,37 @@
                             android:layout_centerInParent="true"
                             android:layout_gravity="center"/>
 
+                    <ImageView 
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/signup_icon_scan_leftup"
+                        android:layout_alignLeft="@+id/viewfinder_view"
+                        android:layout_alignTop="@+id/viewfinder_view"/>
+                    <ImageView 
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/signup_icon_scan_leftdown"
+                        android:layout_alignLeft="@+id/viewfinder_view"
+                        android:layout_alignBottom="@+id/viewfinder_view"/>
+                    <ImageView 
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/signup_icon_scan_rightup"
+                        android:layout_alignRight="@+id/viewfinder_view"
+                        android:layout_alignTop="@+id/viewfinder_view"/>
+                    <ImageView 
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/signup_icon_scan_rightdown"
+                        android:layout_alignRight="@+id/viewfinder_view"
+                        android:layout_alignBottom="@+id/viewfinder_view"/>
+                    
                     <com.zxing.view.ViewfinderView
                             android:id="@+id/viewfinder_view"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@color/transparent"/>
-                </FrameLayout>
+                </RelativeLayout>
             </LinearLayout>
             <!-- bottom button -->
             <LinearLayout

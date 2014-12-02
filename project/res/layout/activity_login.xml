@@ -53,11 +53,11 @@
 					android:id="@+id/accountInput"
 					style="@style/inputbox_borderless"
 					android:imeOptions="actionNext"
-					android:hint="@string/account_hint"/>
+					android:hint="@string/account_hint"
+					android:textCursorDrawable="@color/green"/>
 
 				<ImageView
 					android:layout_marginLeft="@dimen/padding_medium"
-					android:layout_marginRight="@dimen/padding_medium"
 					style="@style/standard_list_divider"/>
 
 				<RelativeLayout
@@ -68,7 +68,8 @@
 						style="@style/inputbox_borderless"
 						android:hint="@string/passWord_hint"
 						android:imeOptions="actionDone"
-						android:inputType="textPassword"/>
+						android:inputType="textPassword"
+						android:textCursorDrawable="@color/green"/>
 					<ImageButton
 						android:id="@+id/field_clear"
 						android:layout_height="20dp"

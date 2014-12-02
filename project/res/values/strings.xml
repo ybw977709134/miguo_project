@@ -585,7 +585,6 @@
 	<string name="account_web_api_auth_failure">帐号验证失败，请重新登录</string>
     <string name="refresh_from_server">刷新</string>
 	<string name="contact_info_goto_moments">查看动态</string>
-    <string name="contact_info_delete_friend">删除好友</string>
 	<string name="chat_menu_copy">复制</string>
 	<string name="chat_menu_call">拨打电话</string>
 	<string name="chat_menu_open_url">打开链接</string>

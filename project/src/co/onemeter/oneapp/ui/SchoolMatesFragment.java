@@ -3,6 +3,7 @@ package co.onemeter.oneapp.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -11,16 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.contacts.adapter.ContactGroupIterationAdapter;
 import co.onemeter.oneapp.contacts.adapter.GroupTreeAdapter;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import com.androidquery.AQuery;
 import org.wowtalk.api.GroupChatRoom;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -33,6 +35,7 @@ public class SchoolMatesFragment extends Fragment
     private static final int REQ_ADD_CLASS = 1;
     Adapter adapter;
     AQuery aQuery;
+    MessageBox msgbox;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,12 +48,27 @@ public class SchoolMatesFragment extends Fragment
     public void onStart() {
         super.onStart();
 
-//        ArrayList<GroupChatRoom> groups = new Database(getActivity()).fetchAllGroupChatRooms(true);
-//        ArrayList<GroupChatRoom> groups = new Database(getActivity()).fetchAllGroupChatRooms();
-        ContactUtil.fFetchNormalPersons(getActivity());
-        ArrayList<GroupChatRoom> groups = makeFakeData(ContactGroupIterationAdapter.GROUP_ID_ROOT, 3, 0, 3);
-        adapter = new GroupTreeAdapter(getActivity(), groups);
-        aQuery.find(R.id.listview).adapter(adapter);
+        msgbox = new MessageBox(getActivity());
+
+        msgbox.showWait();
+
+        new AsyncTask<Void, Void, Integer>() {
+            List<GroupChatRoom> classrooms;
+            @Override
+            protected Integer doInBackground(Void... voids) {
+                classrooms = WowTalkWebServerIF.getInstance(getActivity()).getMyClassRooms();
+                return null;
+            }
+
+            @Override
+            public void onPostExecute(Integer errno) {
+                msgbox.dismissWait();
+                if (classrooms != null) {
+                    adapter = new GroupTreeAdapter(getActivity(), classrooms);
+                    aQuery.find(R.id.listview).adapter(adapter);
+                }
+            }
+        }.execute((Void)null);
     }
 
     private ArrayList<GroupChatRoom> makeFakeData(

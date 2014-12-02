@@ -4400,6 +4400,101 @@ public class WowTalkWebServerIF {
         return errno;
     }
 
+	public List<GroupChatRoom> getMyClassRooms() {
+		List<GroupChatRoom> result = new LinkedList<GroupChatRoom>();
+		List<String> schoolIds = getSchoolIds();
+		for (String schoolId : schoolIds) {
+			List<GroupChatRoom> classRooms = getSchoolClassRooms(schoolId);
+			result.addAll(classRooms);
+		}
+		return result;
+	}
+
+	private List<GroupChatRoom> getSchoolClassRooms(String schoolId) {
+		List<GroupChatRoom> result = new LinkedList<GroupChatRoom>();
+
+		String strUID = sPrefUtil.getUid();
+		String strPwd = sPrefUtil.getPassword();
+
+		if (isAuthEmpty(strUID, strPwd)) {
+			return result;
+		}
+
+		String action = "get_classroom_user_in";
+		String postStr = "action=" + action
+				+ "&uid=" + Utils.urlencodeUtf8(strUID)
+				+ "&password=" + Utils.urlencodeUtf8(strPwd)
+				+ "&corp_id=" + Utils.urlencodeUtf8(schoolId);
+
+		Connect2 connect2 = new Connect2();
+		Element root = connect2.Post(postStr);
+
+		if (root != null) {
+
+			// err_no要素のリストを取得
+			NodeList errorList = root.getElementsByTagName("err_no");
+			// error要素を取得
+			Element errorElement = (Element) errorList.item(0);
+			// error要素の最初の子ノード（テキストノード）の値を取得
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+
+				NodeList nodeList = root.getElementsByTagName("group");
+
+				for(int i = 0, n = nodeList.getLength(); i < n; ++i) {
+					Element groupNode = (Element) nodeList.item(i);
+					GroupChatRoom g = new GroupChatRoom();
+					XmlHelper.parseGroup(groupNode, g);
+					g.isMeBelongs = true;
+					result.add(g);
+				}
+			}
+		}
+		return result;
+	}
+
+	private List<String> getSchoolIds() {
+		List<String> result = new LinkedList<String>();
+
+		String strUID = sPrefUtil.getUid();
+		String strPwd = sPrefUtil.getPassword();
+
+		if (isAuthEmpty(strUID, strPwd)) {
+			return result;
+		}
+
+		String action = "get_school_members";
+		String postStr = "action=" + action
+				+ "&uid=" + Utils.urlencodeUtf8(strUID)
+				+ "&password=" + Utils.urlencodeUtf8(strPwd);
+
+		Connect2 connect2 = new Connect2();
+		Element root = connect2.Post(postStr);
+
+		if (root != null) {
+
+			// err_no要素のリストを取得
+			NodeList errorList = root.getElementsByTagName("err_no");
+			// error要素を取得
+			Element errorElement = (Element) errorList.item(0);
+			// error要素の最初の子ノード（テキストノード）の値を取得
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				Database dbHelper = new Database(mContext);
+
+				NodeList schoolNodes = root.getElementsByTagName("school");
+				for (int i = 0; i < schoolNodes.getLength(); i++) {
+					Element schoolNode = (Element) schoolNodes.item(i);
+					String schoolId = schoolNode.getElementsByTagName("corp_id").item(0).getTextContent();
+					result.add(schoolId);
+				}
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * 获得收藏的联系人及群组
 	 * @return

@@ -4442,13 +4442,30 @@ public class WowTalkWebServerIF {
 
 				NodeList nodeList = root.getElementsByTagName("group");
 
+				Map<String, GroupChatRoom> map = new HashMap<String, GroupChatRoom>();
+
 				for(int i = 0, n = nodeList.getLength(); i < n; ++i) {
 					Element groupNode = (Element) nodeList.item(i);
 					GroupChatRoom g = new GroupChatRoom();
 					XmlHelper.parseGroup(groupNode, g);
 					g.isMeBelongs = true;
+					map.put(g.groupID, g);
 					result.add(g);
 				}
+
+				LinkedList<GroupChatRoom> groupsToBeRemovedFromTopLevel = new LinkedList<GroupChatRoom>();
+				for (GroupChatRoom g : result) {
+					GroupChatRoom parent = map.get(g.parentGroupId);
+					if (parent != null) {
+						if (parent.childGroups == null) {
+							parent.childGroups = new ArrayList<GroupChatRoom>();
+						}
+						parent.childGroups.add(g);
+						g.level = parent.level + 1;
+						groupsToBeRemovedFromTopLevel.add(g);
+					}
+				}
+				result.removeAll(groupsToBeRemovedFromTopLevel);
 			}
 		}
 		return result;

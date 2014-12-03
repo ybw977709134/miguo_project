@@ -62,10 +62,10 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library" scope="PROVIDED">
+    <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../lib/wowtalksdk/libs/wowtalk_jar_onemeter_haslog_20140924.jar!/" />
+          <root url="jar://$MODULE_DIR$/../lib/wowtalksdk/libs/wowtalk_jar_onemeter_dev01_20141202.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

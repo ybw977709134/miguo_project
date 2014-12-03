@@ -4,3 +4,6 @@ tester
 .directory
 *.apk
 proguard_logs
+Manifest.java
+BuildConfig.java
+R.java

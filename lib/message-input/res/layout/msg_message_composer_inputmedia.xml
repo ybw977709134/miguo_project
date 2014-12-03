@@ -12,9 +12,9 @@
 
     <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="240dp"
             android:orientation="horizontal"
-            android:background="@color/libmsg_background"
+            android:background="@color/libmsg_white"
             android:padding="@dimen/multimedia_btn_margin">
 
         <TableRow

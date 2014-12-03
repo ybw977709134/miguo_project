@@ -314,6 +314,7 @@
 		</activity>
 		<activity
 			android:name=".ui.InputTextActivity"
+			android:theme="@style/Theme.Green"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity

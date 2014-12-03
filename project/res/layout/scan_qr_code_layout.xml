@@ -70,48 +70,45 @@
                     android:layout_above="@+id/qr_scan_bottom_btn"
                     android:orientation="vertical">
 
-                <RelativeLayout
+                <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
-                        
-                    <SurfaceView
+                        <SurfaceView
                             android:id="@+id/preview_view"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_centerInParent="true"
                             android:layout_gravity="center"/>
-
-                    <ImageView 
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/signup_icon_scan_leftup"
-                        android:layout_alignLeft="@+id/viewfinder_view"
-                        android:layout_alignTop="@+id/viewfinder_view"/>
-                    <ImageView 
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/signup_icon_scan_leftdown"
-                        android:layout_alignLeft="@+id/viewfinder_view"
-                        android:layout_alignBottom="@+id/viewfinder_view"/>
-                    <ImageView 
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/signup_icon_scan_rightup"
-                        android:layout_alignRight="@+id/viewfinder_view"
-                        android:layout_alignTop="@+id/viewfinder_view"/>
-                    <ImageView 
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/signup_icon_scan_rightdown"
-                        android:layout_alignRight="@+id/viewfinder_view"
-                        android:layout_alignBottom="@+id/viewfinder_view"/>
-                    
-                    <com.zxing.view.ViewfinderView
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="148dp"
+                            android:paddingLeft="60dp"
+                            android:src="@drawable/signup_icon_scan_leftup"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="305dp"
+                            android:paddingLeft="60dp"
+                            android:src="@drawable/signup_icon_scan_leftdown"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="148dp"
+                            android:paddingLeft="278dp"
+                            android:src="@drawable/signup_icon_scan_rightup"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="305dp"
+                            android:paddingLeft="278dp"
+                            android:src="@drawable/signup_icon_scan_rightdown"/>
+                        <com.zxing.view.ViewfinderView
                             android:id="@+id/viewfinder_view"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@color/transparent"/>
-                </RelativeLayout>
+                </FrameLayout>
             </LinearLayout>
             <!-- bottom button -->
             <LinearLayout

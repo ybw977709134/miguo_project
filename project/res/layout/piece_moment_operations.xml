@@ -6,7 +6,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:background="@drawable/timeline_card_bg2">
+        android:background="@drawable/timeline_card_bg">
     <RelativeLayout
             android:layout_height="@dimen/title_bar_height"
             android:layout_width="match_parent">
@@ -26,7 +26,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:orientation="horizontal">
-
+                
             <LinearLayout
                     android:id="@+id/layout_like"
                     android:layout_width="0dp"
@@ -75,7 +75,7 @@
                         android:layout_height="20dp"
                         android:layout_width="23dp"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/timeline_comment"/>
+                        android:background="@drawable/share_icon_comment"/>
 
                 <TextView
                         android:id="@+id/tv_moment_op_comment"
@@ -103,7 +103,7 @@
                         android:layout_height="20dp"
                         android:layout_width="23dp"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/timeline_comment"/>
+                        android:background="@drawable/share_icon_comment"/>
 
                 <TextView
                         android:id="@+id/tv_moment_op_answer"

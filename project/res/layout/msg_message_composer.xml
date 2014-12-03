@@ -46,14 +46,15 @@
     </RelativeLayout>
 
 	<com.handmark.pulltorefresh.widget.PullToRefreshListView
-		android:id="@+id/message_history"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:layout_below="@+id/title_bar"
-		android:layout_marginBottom="10dp"
-        android:fadingEdge="none"
-		android:cacheColorHint="@null"
-		android:dividerHeight="0dp" >
+	    android:id="@+id/message_history"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_alignParentBottom="true"
+	    android:layout_below="@+id/title_bar"
+	    android:cacheColorHint="@null"
+	    android:dividerHeight="0dp"
+	    android:fadingEdge="none" >
+
 	</com.handmark.pulltorefresh.widget.PullToRefreshListView>
 
 	<org.wowtalk.ui.msg.HeightAwareRelativeLayout

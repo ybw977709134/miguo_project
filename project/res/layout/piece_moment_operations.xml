@@ -26,6 +26,23 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:orientation="horizontal">
+            <LinearLayout
+                    android:id="@+id/layout_more"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:gravity="left"
+                    android:background="@color/transparent">
+
+                <Button
+                        android:id="@+id/btn_more"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/tabbar_more_selector"/>
+            </LinearLayout>
                 
             <LinearLayout
                     android:id="@+id/layout_like"
@@ -54,12 +71,7 @@
                         android:textColor="@color/default_text"/>
             </LinearLayout>
 
-            <ImageView
-                    android:layout_height="match_parent"
-                    android:layout_width="2dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:src="@color/text_gray4"/>
+
 
             <LinearLayout
                     android:id="@+id/layout_comment"

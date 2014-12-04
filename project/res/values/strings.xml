@@ -645,8 +645,8 @@
     <string name="event_list_empty">没有事件</string>
     <string name="timeline">近况</string>
     <string name="moment_tag_all">全部</string>
-    <string name="moment_tag_notice">通知</string>
     <string name="moment_tag_qa">问答</string>
+    <string name="moment_tag_notice">通知</string>
 	<string name="moment_tag_study">学习</string>
 	<string name="moment_tag_life">生活</string>
 	<string name="moment_tag_survey">投票</string>

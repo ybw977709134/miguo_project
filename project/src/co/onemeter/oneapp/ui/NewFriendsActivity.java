@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -14,12 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.RoundedImageView;
+
 import co.onemeter.oneapp.R;
 
 import java.util.ArrayList;
@@ -85,6 +89,8 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
                             return;
                         }
                         addFriend_async(p);
+                        Intent intent = new Intent(NewFriendsActivity.this, MessageComposerActivity.class);
+                        startActivity(intent);
                     }
                 });
                 btnDecline.setOnClickListener(new View.OnClickListener() {

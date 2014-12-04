@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/bitmapfun"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/DraggableListView"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/google-play-services_lib"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/message-input"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/messagebox"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/paint_android"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pulltorefresh"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SimpleQRCodeLib"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/wowtalksdk"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

@@ -1,4 +1,4 @@
-package org.wowtech.yuanqu.ui;
+package org.wowtalk.ui.bitmapfun.ui;
 
 import android.content.Context;
 

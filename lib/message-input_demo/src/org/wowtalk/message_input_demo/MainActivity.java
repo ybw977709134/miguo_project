@@ -16,7 +16,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		mInputMgr = new InputBoardManager(this, (ViewGroup)this.findViewById(android.R.id.content), null);
+		mInputMgr = new InputBoardManager(this, (ViewGroup)this.findViewById(android.R.id.content), null, null);
 		mInputMgr.show(InputBoardManager.FLAG_SHOW_TEXT);
 	}
 

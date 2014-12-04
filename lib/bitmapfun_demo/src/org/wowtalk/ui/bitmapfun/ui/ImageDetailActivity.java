@@ -29,8 +29,8 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Toast;
 
-import org.wowtalk.ui.bitmapfun.demo.BuildConfig;
 import org.wowtalk.ui.bitmapfun.demo.R;
+import org.wowtalk.ui.bitmapfun.demo.BuildConfig;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
 import org.wowtalk.ui.bitmapfun.util.ImageFetcher;
 import org.wowtalk.ui.bitmapfun.util.Utils;

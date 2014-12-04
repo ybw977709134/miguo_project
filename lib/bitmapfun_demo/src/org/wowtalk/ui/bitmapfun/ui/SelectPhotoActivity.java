@@ -15,7 +15,6 @@ import android.widget.*;
 import org.wowtalk.ui.bitmapfun.demo.R;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
-import org.wowtech.yuanqu.ui.DensityUtil;
 
 import java.util.ArrayList;
 

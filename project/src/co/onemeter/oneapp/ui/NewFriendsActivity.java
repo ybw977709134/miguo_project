@@ -104,6 +104,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
                 txtExtra.setText(String.format(getString(R.string.contacts_new_friends_buddyout), p.nickname));
                 txtStatus.setText(mContext.getResources().getString(R.string.contacts_newfriend_wait_for_cofirm));
                 txtName.setText(p.nickname);
+                
             }
             // 某群邀请我加入
             else if (p.type == PendingRequest.GROUP_IN) {

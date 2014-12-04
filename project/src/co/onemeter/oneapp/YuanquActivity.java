@@ -60,6 +60,7 @@ public class YuanquActivity extends Activity {
 
                     if(NetworkManager.isConnected){
                         WowTalkVoipIF.getInstance(YuanquActivity.this).fBecomeActive();
+                        
                     }
                 }
             }).start();
@@ -140,6 +141,7 @@ public class YuanquActivity extends Activity {
                   while ((readLen=is.read(buffer))!=-1) {
                       os.write(buffer, 0, readLen);
                   }
+                  
                   os.flush();
                   is.close();
                   os.close();

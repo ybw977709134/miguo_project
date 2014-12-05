@@ -70,6 +70,7 @@
 	<string name="contacts_search_buddy_hint">请输入用户 ID</string>
 	<string name="contacts_search_group_hint">请输入群组号或名称</string>
 	<string name="contacts_new_friends">新的朋友</string>
+	<string name="contacts_new_friends_add_list">请求列表</string>
 	<string name="contacts_new_friends_pending_in">发来好友请求</string>
 	<string name="contacts_new_friends_pending_out">我已发出请求，等待对方回应</string>
 	<string name="contacts_new_friends_unknown_state">未知状态</string>
@@ -332,6 +333,7 @@
     <string name="group_events">正在进行的群活动(%s)</string>
     <string name="add">添加</string>
     <string name="decline">拒绝</string>
+    <string name="ignore">忽略</string>
     <string name="contacts_local">手机通讯录</string>
     <string name="newest_offical_id">最新公众帐号(%s)</string>
     <string name="offical_recommendations">官方推荐(%s)</string>

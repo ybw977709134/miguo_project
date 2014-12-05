@@ -68,12 +68,12 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
             TextView txtName = (TextView) convertView.findViewById(R.id.txt_name);
             TextView txtExtra = (TextView) convertView.findViewById(R.id.txt_extra);
             Button btnAdd = (Button) convertView.findViewById(R.id.btn_add);
-            Button btnDecline = (Button) convertView.findViewById(R.id.btn_decline);
+            Button btnIgnore = (Button) convertView.findViewById(R.id.btn_ignore);
             TextView txtStatus = (TextView) convertView.findViewById(R.id.txt_status);
             if (p.type == PendingRequest.BUDDY_IN) {
                 txtStatus.setVisibility(View.GONE);
                 btnAdd.setVisibility(View.VISIBLE);
-                btnDecline.setVisibility(View.VISIBLE);
+                btnIgnore.setVisibility(View.VISIBLE);
                 if (!TextUtils.isEmpty(p.msg)) {
                     txtExtra.setText(p.msg);
                 } else {
@@ -93,7 +93,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
                         startActivity(intent);
                     }
                 });
-                btnDecline.setOnClickListener(new View.OnClickListener() {
+                btnIgnore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if(!isNetworkAvailable()) {
@@ -106,7 +106,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
             } else if (p.type == PendingRequest.BUDDY_OUT) {
                 txtStatus.setVisibility(View.VISIBLE);
                 btnAdd.setVisibility(View.GONE);
-                btnDecline.setVisibility(View.GONE);
+                btnIgnore.setVisibility(View.GONE);
                 txtExtra.setText(String.format(getString(R.string.contacts_new_friends_buddyout), p.nickname));
                 txtStatus.setText(mContext.getResources().getString(R.string.contacts_newfriend_wait_for_cofirm));
                 txtName.setText(p.nickname);
@@ -128,7 +128,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
             else if (p.type == PendingRequest.GROUP_OUT) {
                 txtStatus.setVisibility(View.VISIBLE);
                 btnAdd.setVisibility(View.GONE);
-                btnDecline.setVisibility(View.GONE);
+                btnIgnore.setVisibility(View.GONE);
                 txtExtra.setText(String.format(getString(R.string.contacts_new_friends_groupout), p.group_name));
                 txtStatus.setText(mContext.getResources().getString(R.string.contacts_newfriend_wait_for_cofirm));
                 txtName.setText(p.group_name);
@@ -146,9 +146,9 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
                 }
 
                 btnAdd.setVisibility(View.VISIBLE);
-                btnDecline.setVisibility(View.VISIBLE);
+                btnIgnore.setVisibility(View.VISIBLE);
 
-                btnAdd.setText(mContext.getResources().getString(R.string.contacts_new_friends_allow_to_join_group));
+                btnAdd.setText(mContext.getResources().getString(R.string.add));
                 btnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -160,7 +160,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
                     }
                 });
 
-                btnDecline.setOnClickListener(new View.OnClickListener() {
+                btnIgnore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if(!isNetworkAvailable()) {
@@ -258,6 +258,28 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
                 return true;
             }
         });
+    }
+    
+    /**
+     * @author hutianfeng
+     * @date 2014-12-5 11:51
+     * 为“+”号图片添加事件监听,点击跳转到添加新朋友界面
+     * @param view
+     */
+    public void clickButton(View view){
+    	switch (view.getId()) {
+		case R.id.title_newfriend_add:
+			Intent intent = new Intent();
+			intent.setClass(NewFriendsActivity.this, ContactAddActivity.class);
+			startActivity(intent);
+			break;
+		case R.id.textView_buddy_back:
+			finish();
+			break;
+
+		default:
+			break;
+		}
     }
 
     private void showDeleteDlg(final PendingRequest p) {

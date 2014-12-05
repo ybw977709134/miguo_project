@@ -8,4 +8,44 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent">
     </ListView>
+    
+    <LinearLayout
+        android:id="@+id/schoolmate_emptyview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:visibility="gone">
+        <ImageView 
+            android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:src="@drawable/messages_icon_empty_status"
+        	android:layout_marginBottom="20dp"/>
+        <LinearLayout 
+            android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:orientation="horizontal"
+        	android:gravity="center_horizontal">
+            
+            <TextView 
+                android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:text="@string/contacts_schoolmate_emptymsg_left"
+        		android:textColor="@color/text_gray3"
+        		android:layout_marginRight="3dp"/>
+            
+            <ImageView 
+                android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:src="@drawable/messages_icon_empty_status_plus"/>
+            
+            <TextView 
+                android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:text="@string/contacts_schoolmate_emptymsg_right"
+        		android:textColor="@color/text_gray3"
+        		android:layout_marginLeft="3dp"/>
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

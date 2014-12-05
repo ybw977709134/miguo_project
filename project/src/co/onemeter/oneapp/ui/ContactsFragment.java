@@ -280,6 +280,9 @@ public class ContactsFragment extends Fragment implements OnClickListener,
             @Override
             protected void onPostExecute(Void v) {
                 mMsgBox.dismissWait();
+                if(isEmpty()){
+                	
+                }
             }
         }.execute((Void)null);
     }
@@ -587,5 +590,9 @@ public class ContactsFragment extends Fragment implements OnClickListener,
             default:
                 return false;
         }
+    }
+    
+    public boolean isEmpty(){
+    	return ContactUtil.allPersons == null || ContactUtil.allPersons.isEmpty();
     }
 }

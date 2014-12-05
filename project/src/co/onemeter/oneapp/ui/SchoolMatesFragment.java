@@ -10,11 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.ListView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.adapter.GroupTreeAdapter;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
 import co.onemeter.oneapp.utils.ThemeHelper;
+
 import com.androidquery.AQuery;
+
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.BottomButtonBoard;
@@ -120,7 +123,8 @@ public class SchoolMatesFragment extends Fragment
                     aQuery.find(R.id.listview).adapter(adapter);
                 } else {
                     // TODO 显示笑脸
-                    msgbox.toast("is empty\nTODO 显示笑脸 :)");
+                    //msgbox.toast("is empty\nTODO 显示笑脸 :)");
+                    aQuery.find(R.id.schoolmate_emptyview).visibility(View.VISIBLE);
                 }
             }
         }.execute((Void)null);

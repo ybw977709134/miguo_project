@@ -99,6 +99,8 @@
     <string name="contacts_frequent">常用联系人</string>
     <string name="contactsforbiz_root_favorite_group_name">收藏的群组</string>
     <string name="contactsforbiz_root_group_name_display">所有成员</string>
+    <string name="contacts_schoolmate_emptymsg_left">点击右上角</string>
+    <string name="contacts_schoolmate_emptymsg_right">加入班级，找到更多小伙伴</string>
 
 	<string name="friends_moments_pagetitle">动态</string>
 	<string name="friends_pagetitle">朋友们</string>

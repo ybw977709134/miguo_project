@@ -36,6 +36,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity android:name=".HybirdImageVoiceTextEditor"/>
+        <activity android:name=".HybirdImageVoiceTextPreview"/>
     </application>
 
 </manifest>

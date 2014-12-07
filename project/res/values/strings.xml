@@ -522,6 +522,7 @@
 	<string name="moments_stamp_not_supported_in_review">评论中尚不支持图像表情</string>
 	<string name="moments_photo_not_supported_in_review">评论中尚不支持照片</string>
 	<string name="moments_video_not_supported_in_review">评论中尚不支持视频</string>
+    <string name="moments_hybird_not_supported_in_review">评论中尚不支持图文音混合消息</string>
 	<string name="moments_loc_not_supported_in_review">评论中尚不支持地点</string>
 	<string name="msg_text_is_empty">不能发送空消息</string>
     <string name="messagecomposerbase_no_friends">你们还不是好友，请先添加好友后再聊天</string>

@@ -59,6 +59,10 @@ public class InputBoardManager implements Parcelable,
         public void onVoiceInputted(String path, int duration);
         public void onStampInputted(Stamp s);
         public void onPhotoInputted(String path, String thumbPath);
+        /** 输入了混合类型的消息：文字、图、音。*/
+        public void onHybirdInputted(String text,
+                                     String imagePath, String imageThumbPath,
+                                     String voicePath, int voiceDuration);
         public void onVideoInputted(String path, String thumbPath);
 
         /**
@@ -125,6 +129,9 @@ public class InputBoardManager implements Parcelable,
 
     private static final int REQ_INPUT_PHOTO_FOR_DOODLE = 80873;
     private static final int REQ_INPUT_DOODLE = 80874;
+    /** 为图文音混合消息输入图片。*/
+    private static final int REQ_INPUT_PHOTO_FOR_HYBIRD = 8087300;
+    private static final int REQ_INPUT_HYBIRD = 8087301;
 
 
     /**
@@ -511,7 +518,7 @@ public class InputBoardManager implements Parcelable,
         } else if (i == R.id.btn_input_doodle) {
             inputDoodle();
         } else if (i == R.id.btn_input_picvoice) {
-            Toast.makeText(mContext, "即将推出", Toast.LENGTH_SHORT).show();
+            inputHybirdImageVoiceText();
         } else if (i == R.id.btn_input_voice) {// replace text inputbox with hold-to-speak button
             PackageManager pm = mContext.getPackageManager();
             if (!pm.hasSystemFeature(PackageManager.FEATURE_MICROPHONE)) {
@@ -555,6 +562,10 @@ public class InputBoardManager implements Parcelable,
 
     private void inputDoodle() {
         inputImage(REQ_INPUT_PHOTO_FOR_DOODLE);
+    }
+
+    private void inputHybirdImageVoiceText() {
+        inputImage(REQ_INPUT_PHOTO_FOR_HYBIRD);
     }
 
     private void inputLocation() {
@@ -1120,87 +1131,133 @@ public class InputBoardManager implements Parcelable,
         Log.i("InputBoardManager#handleActivityResult, "
                 + "mMediaInputHelper is null(" + (null == mMediaInputHelper));
         switch (requestCode) {
-        case REQ_INPUT_LOC:
-            final double lat = data.getExtras().getDouble("target_lat");
-            final double lon = data.getExtras().getDouble("target_lon");
-            mResultHandler.onLocationInputted(lat, lon, null);
-            result = true;
-            break;
-        case REQ_INPUT_VIDEO:
-            if (null != mMediaInputHelper) {
-                String[] videoPath = new String[2];
-                if(mMediaInputHelper.handleVideoResult(
-                        mContext,
-                        data,
-                        PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
-                        PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
-                        videoPath)) {
-                    mResultHandler.onVideoInputted(videoPath[0], videoPath[1]);
-                    result = true;
+            case REQ_INPUT_LOC:
+                final double lat = data.getExtras().getDouble("target_lat");
+                final double lon = data.getExtras().getDouble("target_lon");
+                mResultHandler.onLocationInputted(lat, lon, null);
+                result = true;
+                break;
+            case REQ_INPUT_VIDEO:
+                if (null != mMediaInputHelper) {
+                    String[] videoPath = new String[2];
+                    if(mMediaInputHelper.handleVideoResult(
+                            mContext,
+                            data,
+                            PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
+                            PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
+                            videoPath)) {
+                        mResultHandler.onVideoInputted(videoPath[0], videoPath[1]);
+                        result = true;
+                    }
                 }
-            }
-            break;
-        case REQ_INPUT_PHOTO:
-            if (null != mMediaInputHelper) {
+                break;
+            case REQ_INPUT_PHOTO:
+                if (null != mMediaInputHelper) {
+                    String[] photoPath = new String[2];
+                    if (mMediaInputHelper.handleImageResult(
+                            mContext,
+                            data,
+                            PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
+                            PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
+                            photoPath)) {
+                        mResultHandler.onPhotoInputted(photoPath[0], photoPath[1]);
+                        result = true;
+                    }
+                }
+                break;
+            case REQ_INPUT_DOODLE: {
                 String[] photoPath = new String[2];
-                if (mMediaInputHelper.handleImageResult(
-                        mContext,
-                        data,
-                        PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
-                        PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
-                        photoPath)) {
-                    mResultHandler.onPhotoInputted(photoPath[0], photoPath[1]);
-                    result = true;
-                }
-            }
-            break;
-        case REQ_INPUT_DOODLE: {
-            String[] photoPath = new String[2];
-            photoPath[0] = doodleOutFilename;
+                photoPath[0] = doodleOutFilename;
 
-            // generate thumbnail
-            File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_THUMNAIL, ".jpg");
-            if (f != null) {
-                photoPath[1] = f.getAbsolutePath();
-                Bitmap thumbnail = BmpUtils.decodeFile(photoPath[0],
-                        PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT);
-                try {
-                    FileOutputStream fos = new FileOutputStream(photoPath[1]);
-                    thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, fos);
-                    fos.close();
-                } catch (java.io.IOException e) {
-                    e.printStackTrace();
+                // generate thumbnail
+                File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_THUMNAIL, ".jpg");
+                if (f != null) {
+                    photoPath[1] = f.getAbsolutePath();
+                    Bitmap thumbnail = BmpUtils.decodeFile(photoPath[0],
+                            PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT);
+                    try {
+                        FileOutputStream fos = new FileOutputStream(photoPath[1]);
+                        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+                        fos.close();
+                    } catch (java.io.IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-            mResultHandler.onPhotoInputted(photoPath[0], photoPath[1]);
-            result = true;
-            break;
-        }
-        case REQ_INPUT_PHOTO_FOR_DOODLE:
-            if (null != mMediaInputHelper) {
+                mResultHandler.onPhotoInputted(photoPath[0], photoPath[1]);
+                result = true;
+                break;
+            }
+            case REQ_INPUT_HYBIRD: {
                 String[] photoPath = new String[2];
-                if (mMediaInputHelper.handleImageResult(
-                        mContext,
-                        data,
-                        PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
-                        PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
-                        photoPath)) {
-                    doodleOutFilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
-                    mContext.startActivityForResult(
-                            new Intent(mContext, DoodleActivity.class)
-                                    .putExtra(DoodleActivity.EXTRA_MAX_WIDTH, PHOTO_SEND_WIDTH)
-                                    .putExtra(DoodleActivity.EXTRA_MAX_HEIGHT, PHOTO_SEND_HEIGHT)
-                                    .putExtra(DoodleActivity.EXTRA_BACKGROUND_FILENAME, photoPath[0])
-                                    .putExtra(DoodleActivity.EXTRA_OUTPUT_FILENAME, doodleOutFilename),
-                            REQ_INPUT_DOODLE
-                    );
+                photoPath[0] = data.getStringExtra(HybirdImageVoiceTextEditor.EXTRA_OUT_IMAGE_FILENAME);
+
+                // generate thumbnail
+                File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_THUMNAIL, ".jpg");
+                if (f != null) {
+                    photoPath[1] = f.getAbsolutePath();
+                    Bitmap thumbnail = BmpUtils.decodeFile(photoPath[0],
+                            PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT);
+                    try {
+                        FileOutputStream fos = new FileOutputStream(photoPath[1]);
+                        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+                        fos.close();
+                    } catch (java.io.IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+
+                mResultHandler.onHybirdInputted(
+                        data.getStringExtra(HybirdImageVoiceTextEditor.EXTRA_OUT_TEXT),
+                        photoPath[0], photoPath[1],
+                        data.getStringExtra(HybirdImageVoiceTextEditor.EXTRA_OUT_VOICE_FILENAME),
+                        data.getIntExtra(HybirdImageVoiceTextEditor.EXTRA_OUT_VOICE_DURATION, 0));
+                result = true;
+                break;
             }
-            result = true;
-            break;
-        default:
-            break;
+            case REQ_INPUT_PHOTO_FOR_DOODLE:
+                if (null != mMediaInputHelper) {
+                    String[] photoPath = new String[2];
+                    if (mMediaInputHelper.handleImageResult(
+                            mContext,
+                            data,
+                            PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
+                            PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
+                            photoPath)) {
+                        doodleOutFilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
+                        mContext.startActivityForResult(
+                                new Intent(mContext, DoodleActivity.class)
+                                        .putExtra(DoodleActivity.EXTRA_MAX_WIDTH, PHOTO_SEND_WIDTH)
+                                        .putExtra(DoodleActivity.EXTRA_MAX_HEIGHT, PHOTO_SEND_HEIGHT)
+                                        .putExtra(DoodleActivity.EXTRA_BACKGROUND_FILENAME, photoPath[0])
+                                        .putExtra(DoodleActivity.EXTRA_OUTPUT_FILENAME, doodleOutFilename),
+                                REQ_INPUT_DOODLE
+                        );
+                    }
+                }
+                result = true;
+                break;
+            case REQ_INPUT_PHOTO_FOR_HYBIRD:
+                if (null != mMediaInputHelper) {
+                    String[] photoPath = new String[2];
+                    if (mMediaInputHelper.handleImageResult(
+                            mContext,
+                            data,
+                            PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
+                            PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
+                            photoPath)) {
+                        doodleOutFilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
+                        mContext.startActivityForResult(
+                                new Intent(mContext, HybirdImageVoiceTextEditor.class)
+                                        .putExtra(HybirdImageVoiceTextEditor.EXTRA_IN_IMAGE_FILENAME, photoPath[0]),
+                                REQ_INPUT_HYBIRD
+                        );
+                    }
+                }
+                result = true;
+                break;
+            default:
+                break;
         }
 
         Log.i("InputBoardManager#handleActivityResult, handle result is " + result);

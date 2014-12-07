@@ -2,11 +2,7 @@ package org.wowtalk.ui.msg;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
@@ -21,21 +17,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.handmark.pulltorefresh.widget.PullToRefreshListView;
-import com.handmark.pulltorefresh.widget.PullToRefreshListView.OnRefreshListener;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.wowtalk.Log;
-import org.wowtalk.api.*;
-import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.AppStatusService;
 import co.onemeter.oneapp.ui.CallMainActivity;
 import co.onemeter.oneapp.ui.MessageDetailAdapter;
 import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
+import com.handmark.pulltorefresh.widget.PullToRefreshListView;
+import com.handmark.pulltorefresh.widget.PullToRefreshListView.OnRefreshListener;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.wowtalk.Log;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -1642,6 +1636,15 @@ public abstract class MessageComposerActivityBase extends Activity
     public void onPhotoInputted(String path, String thumbPath) {
         Log.i("photo inputted");
         fSendMediaMsg_async(path, thumbPath, 0, ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO);
+    }
+
+    @Override
+    public void onHybirdInputted(String text,
+                                 String imagePath, String imageThumbPath,
+                                 String voicePath, int voiceDuration) {
+        String msgContent = String.format("（图文音消息） %s, \n%s %s, \n%s %d",
+                text, imagePath, imageThumbPath, voicePath, voiceDuration);
+        fSendTextMsg_async(msgContent);
     }
 
     @Override

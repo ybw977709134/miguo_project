@@ -55,7 +55,7 @@ public class ContactTreeNode implements IHasPhoto {
     }
 
     public boolean isExpandable() {
-        return group != null && group.childGroups != null && !group.childGroups.isEmpty() && !group.isExpand;
+        return children != null && !children.isEmpty();
     }
 
     public int getIndentLevel() {

@@ -10,22 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
-import android.widget.ListView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.adapter.GroupTreeAdapter;
-import co.onemeter.oneapp.contacts.util.ContactUtil;
 import co.onemeter.oneapp.utils.ThemeHelper;
-
 import com.androidquery.AQuery;
-
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * <p>显示“校园里”通讯录。</p>
@@ -54,47 +48,6 @@ public class SchoolMatesFragment extends Fragment
         msgbox = new MessageBox(getActivity());
 
         refresh();
-    }
-
-    private ArrayList<GroupChatRoom> makeFakeData(
-            String parentGroupId, int count, int currLevel, int recursiveDepth) {
-        ArrayList<GroupChatRoom> result = new ArrayList<GroupChatRoom>(count);
-
-        for (int groupId = 0; groupId < count; ++groupId) {
-            // ctor params:
-            // String groupID,
-            // String groupNameOriginal,
-            // String groupNameLocal,
-            // String groupStatus,
-            // int maxNumber,
-            // int memberCount,
-            // boolean isTemporaryGroup
-            String name = String.format("GROUP %d-%d", currLevel, groupId + 1);
-            GroupChatRoom g = new GroupChatRoom(
-                    UUID.randomUUID().toString(),
-                    name,
-                    name,
-                    "",
-                    10,
-                    10,
-                    false
-            );
-            g.parentGroupId = parentGroupId;
-            g.level = currLevel;
-            g.memberList = ContactUtil.allBuddies;
-
-            if (recursiveDepth > 0) {
-                ArrayList<GroupChatRoom> children = makeFakeData(g.groupID, count, currLevel + 1, recursiveDepth - 1);
-                if (g.childGroups == null) {
-                    g.childGroups = children;
-                } else {
-                    g.childGroups.addAll(children);
-                }
-            }
-
-            result.add(g);
-        }
-        return result;
     }
 
     public boolean handleBackPress() {

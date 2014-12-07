@@ -41,16 +41,10 @@ public class SchoolMatesFragment extends Fragment
         View v = inflater.inflate(R.layout.fragment_schoolmates, container, false);
         aQuery = new AQuery(v);
         aQuery.find(R.id.listview).itemClicked(this);
-        return v;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
 
         msgbox = new MessageBox(getActivity());
-
         refresh();
+        return v;
     }
 
     public boolean handleBackPress() {

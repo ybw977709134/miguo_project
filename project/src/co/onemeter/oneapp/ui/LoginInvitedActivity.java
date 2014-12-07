@@ -75,7 +75,9 @@ public class LoginInvitedActivity extends Activity implements View.OnClickListen
                 if (errno == ErrorCode.OK) {
                     startActivity(new Intent(LoginInvitedActivity.this, StartActivity.class));
                 } else {
-                    msgbox.toast(R.string.msg_operation_failed);
+                    msgbox.toast(getString(R.string.operation_failed_with_errcode_msg,
+                            errno,
+                            ErrorCode.getErrorName(LoginInvitedActivity.this, errno)));
                 }
             }
         }.execute(invitationCode);

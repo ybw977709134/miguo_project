@@ -293,6 +293,7 @@
 
     <string name="operation_done">操作成功</string>
 	<string name="operation_failed">操作失败</string>
+    <string name="operation_failed_with_errcode_msg" formatted="false">操作失败: %d %s</string>
 	<string name="back">返回</string>
 	<string name="plz_wait">请稍候...</string>
 	<string name="not_implemented">功能尚未实现</string>

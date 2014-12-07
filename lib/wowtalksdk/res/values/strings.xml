@@ -1,3 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="ERR_UNKNOWN">未知错误</string>
+	<string name="ERR_INVITATION_CODE_NOT_EXIST">无效的邀请码</string>
+	<string name="ERR_SCHOOL_USER_HAD_BOUND">该邀请码已经绑定过了</string>
+	<string name="ERR_EXPIRED_INVITATION_CODE">邀请码已过期</string>
+	<string name="ERR_BOUND_SAME_SCHOOL_USER">已将绑定过该学校的邀请码了</string>
+	<string name="ERR_SCHOOL_USER_TYPE_NOT_MATCH">用户类型不符</string>
+	<string name="ERR_SCHOOL_MEMBERS_GET">未绑定该学校，或者用户类型不对</string>
 </resources>

@@ -1,5 +1,7 @@
 package org.wowtalk.api;
 
+import android.content.Context;
+
 public class ErrorCode {
 	/** Error Code */
 	public static final int OK = 0;
@@ -74,36 +76,55 @@ public class ErrorCode {
     public static final int FORGET_PWD_PHONE_NOT_MATCH = 1104;
     public static final int FORGET_PWD_EMAIL_PHONE_NOT_BOUND = 1105;
 
-    public static String getErrorName(int errno) {
+	public final static int ERR_INVITATION_CODE_NOT_EXIST = -98;         //INVITATION_CODE not exist error
+	public final static int ERR_SCHOOL_USER_HAD_BOUND = -97;         //INVITATION_CODE HAD BOUND error
+	public final static int ERR_EXPIRED_INVITATION_CODE = -96;           //INVITATION_CODE EXPIRED error
+	public final static int ERR_BOUND_SAME_SCHOOL_USER = -95;         //same school's user HAD BOUND error
+	public final static int ERR_SCHOOL_USER_TYPE_NOT_MATCH = -94;        //school user_type not matched
+	public final static int ERR_SCHOOL_MEMBERS_GET = 1004;      //not bind INVITATION_CODE or user not student or teacher
+
+	public static String getErrorName(Context context, int errno) {
 		switch (errno) {
-		case ErrorCode.OK:
-			return "OK";
-		case ErrorCode.BAD_RESPONSE:
-			return "ERR_BAD_RESPONSE";
-		case ErrorCode.INVALID_ARGUMENT:
-			return "ERR_INVALID_ARGUMENT";
-		case ErrorCode.AUTH:
-			return "ERR_AUTH";
-		case ErrorCode.DB:
-			return "ERR_DB";
-		case ErrorCode.VER_NOT_COMPATIBLE:
-			return "ERR_VER_NOT_COMPATIBLE";
-		case ErrorCode.USER_NOT_EXISTS:
-			return "ERR_USER_NOT_EXISTS";
-		case ErrorCode.USER_ALREADY_EXISTS:
-			return "ERR_USER_ALREADY_EXISTS";
-		case ErrorCode.PASSWORD_NOT_CHANGED:
-			return "ERR_PASSWORD_NOT_CHANGED";
-		case ErrorCode.WOWID_NOT_CHANGED:
-			return "ERR_WOWID_NOT_CHANGED";
-		case ErrorCode.GROUP_NOT_EXISTS:
-			return "ERR_GROUP_NOT_EXISTS";
-		case ErrorCode.NOT_CREATOR:
-			return "ERR_NOT_CREATOR";
-		case ErrorCode.UNKNOWN:
-			return "ERR_UNKNOWN";
-		default:
-			return "ERR_NOT_DEFINED";
+			case ErrorCode.OK:
+				return "OK";
+			case ErrorCode.BAD_RESPONSE:
+				return "ERR_BAD_RESPONSE";
+			case ErrorCode.INVALID_ARGUMENT:
+				return "ERR_INVALID_ARGUMENT";
+			case ErrorCode.AUTH:
+				return "ERR_AUTH";
+			case ErrorCode.DB:
+				return "ERR_DB";
+			case ErrorCode.VER_NOT_COMPATIBLE:
+				return "ERR_VER_NOT_COMPATIBLE";
+			case ErrorCode.USER_NOT_EXISTS:
+				return "ERR_USER_NOT_EXISTS";
+			case ErrorCode.USER_ALREADY_EXISTS:
+				return "ERR_USER_ALREADY_EXISTS";
+			case ErrorCode.PASSWORD_NOT_CHANGED:
+				return "ERR_PASSWORD_NOT_CHANGED";
+			case ErrorCode.WOWID_NOT_CHANGED:
+				return "ERR_WOWID_NOT_CHANGED";
+			case ErrorCode.GROUP_NOT_EXISTS:
+				return "ERR_GROUP_NOT_EXISTS";
+			case ErrorCode.NOT_CREATOR:
+				return "ERR_NOT_CREATOR";
+			case ErrorCode.UNKNOWN:
+				return "ERR_UNKNOWN";
+			case ERR_INVITATION_CODE_NOT_EXIST:
+				return context.getString(R.string.ERR_INVITATION_CODE_NOT_EXIST);
+			case ERR_SCHOOL_USER_HAD_BOUND:
+				return context.getString(R.string.ERR_SCHOOL_USER_HAD_BOUND);
+			case ERR_EXPIRED_INVITATION_CODE:
+				return context.getString(R.string.ERR_EXPIRED_INVITATION_CODE);
+			case ERR_BOUND_SAME_SCHOOL_USER:
+				return context.getString(R.string.ERR_BOUND_SAME_SCHOOL_USER);
+			case ERR_SCHOOL_USER_TYPE_NOT_MATCH:
+				return context.getString(R.string.ERR_SCHOOL_USER_TYPE_NOT_MATCH);
+			case ERR_SCHOOL_MEMBERS_GET:
+				return context.getString(R.string.ERR_SCHOOL_MEMBERS_GET);
+			default:
+				return context.getString(R.string.ERR_UNKNOWN);
 		}
 	}
 

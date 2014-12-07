@@ -6,16 +6,18 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.adapter.GroupTreeAdapter;
+import co.onemeter.oneapp.contacts.model.ContactTreeNode;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import com.androidquery.AQuery;
-import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
 
@@ -26,7 +28,7 @@ import java.util.List;
  * Created by pzy on 11/22/14.
  */
 public class SchoolMatesFragment extends Fragment
-        implements BottomButtonBoard.OptionsMenuProvider {
+        implements BottomButtonBoard.OptionsMenuProvider, AdapterView.OnItemClickListener {
 
     private static final int REQ_ADD_CLASS = 1;
     Adapter adapter;
@@ -38,6 +40,7 @@ public class SchoolMatesFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_schoolmates, container, false);
         aQuery = new AQuery(v);
+        aQuery.find(R.id.listview).itemClicked(this);
         return v;
     }
 
@@ -75,8 +78,6 @@ public class SchoolMatesFragment extends Fragment
                     adapter = new GroupTreeAdapter(getActivity(), classrooms);
                     aQuery.find(R.id.listview).adapter(adapter);
                 } else {
-                    // TODO 显示笑脸
-                    //msgbox.toast("is empty\nTODO 显示笑脸 :)");
                     aQuery.find(R.id.schoolmate_emptyview).visibility(View.VISIBLE);
                 }
             }
@@ -123,5 +124,32 @@ public class SchoolMatesFragment extends Fragment
 
     public boolean isEmpty() {
         return classrooms == null || classrooms.isEmpty();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        try {
+            Context context = getActivity();
+            if (context == null)
+                return;
+
+            Object item = adapterView.getItemAtPosition(i);
+            if (item instanceof ContactTreeNode) {
+                ContactTreeNode contact = (ContactTreeNode) item;
+                if (!contact.isGroup()) {
+                    String uid = contact.getGUID();
+                    String myUid = PrefUtil.getInstance(context).getUid();
+                    if (!TextUtils.equals(uid, myUid)) {
+                        Buddy buddy = new Database(context).buddyWithUserID(uid);
+                        ContactInfoActivity.launch(context, uid,
+                                buddy == null ? 0 : buddy.getFriendShipWithMe());
+                    } else {
+                        startActivity(new Intent(context, MyInfoActivity.class));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -210,7 +210,7 @@
                     android:layout_height="@dimen/create_normal_moment_with_tag_def_img_size"
                     android:layout_width="fill_parent"
                     android:layout_marginTop="@dimen/normal_moment_layout_split_height"
-                    android:background="@drawable/btn_white"
+                    android:background="@color/white"
                     android:scrollbars="none">
                 <RelativeLayout
                         android:layout_height="match_parent"

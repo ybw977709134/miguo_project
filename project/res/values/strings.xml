@@ -71,6 +71,7 @@
 	<string name="contacts_search_buddy_hint">请输入用户 ID</string>
 	<string name="contacts_search_group_hint">请输入群组号或名称</string>
 	<string name="contacts_new_friends">新的朋友</string>
+	<string name="contacts_new_friends_add_list">请求列表</string>
 	<string name="contacts_new_friends_pending_in">发来好友请求</string>
 	<string name="contacts_new_friends_pending_out">我已发出请求，等待对方回应</string>
 	<string name="contacts_new_friends_unknown_state">未知状态</string>
@@ -100,6 +101,8 @@
     <string name="contacts_frequent">常用联系人</string>
     <string name="contactsforbiz_root_favorite_group_name">收藏的群组</string>
     <string name="contactsforbiz_root_group_name_display">所有成员</string>
+    <string name="contacts_schoolmate_emptymsg_left">点击右上角</string>
+    <string name="contacts_schoolmate_emptymsg_right">加入班级，找到更多小伙伴</string>
 
 	<string name="friends_moments_pagetitle">动态</string>
 	<string name="friends_pagetitle">朋友们</string>
@@ -291,6 +294,7 @@
 
     <string name="operation_done">操作成功</string>
 	<string name="operation_failed">操作失败</string>
+    <string name="operation_failed_with_errcode_msg" formatted="false">操作失败: %d %s</string>
 	<string name="back">返回</string>
 	<string name="plz_wait">请稍候...</string>
 	<string name="not_implemented">功能尚未实现</string>
@@ -333,6 +337,7 @@
     <string name="group_events">正在进行的群活动(%s)</string>
     <string name="add">添加</string>
     <string name="decline">拒绝</string>
+    <string name="ignore">忽略</string>
     <string name="contacts_local">手机通讯录</string>
     <string name="newest_offical_id">最新公众帐号(%s)</string>
     <string name="offical_recommendations">官方推荐(%s)</string>
@@ -518,6 +523,7 @@
 	<string name="moments_stamp_not_supported_in_review">评论中尚不支持图像表情</string>
 	<string name="moments_photo_not_supported_in_review">评论中尚不支持照片</string>
 	<string name="moments_video_not_supported_in_review">评论中尚不支持视频</string>
+    <string name="moments_hybird_not_supported_in_review">评论中尚不支持图文音混合消息</string>
 	<string name="moments_loc_not_supported_in_review">评论中尚不支持地点</string>
 	<string name="msg_text_is_empty">不能发送空消息</string>
     <string name="messagecomposerbase_no_friends">你们还不是好友，请先添加好友后再聊天</string>

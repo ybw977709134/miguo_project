@@ -4,13 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
-
-import com.umeng.analytics.MobclickAgent;
-
-import org.wowtalk.api.*;
-import org.wowtalk.ui.BottomButtonBoard;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
+import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.Buddy;
+import org.wowtalk.api.ChatMessage;
+import org.wowtalk.api.Database;
+import org.wowtalk.api.GroupChatRoom;
+import org.wowtalk.ui.BottomButtonBoard;
 
 public class MessageComposerActivity extends org.wowtalk.ui.msg.MessageComposerActivityBase {
 

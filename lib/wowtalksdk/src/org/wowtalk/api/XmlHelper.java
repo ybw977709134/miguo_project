@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.PointF;
 import android.text.TextUtils;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.wowtalk.Log;
 
@@ -11,6 +12,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -935,4 +938,18 @@ public class XmlHelper {
         return groupId;
     }
 
+    /**
+     * 读取所有子节点的文字内容。
+     * @param node
+     * @return
+     */
+    public static Map<String, String> getChildrenTextContent(Node node) {
+        int n = node.getChildNodes().getLength();
+        HashMap<String, String> result = new HashMap<>(n);
+        for (int i = 0; i < n; ++i) {
+            Node child = node.getChildNodes().item(i);
+            result.put(child.getNodeName(), child.getTextContent());
+        }
+        return result;
+    }
 }

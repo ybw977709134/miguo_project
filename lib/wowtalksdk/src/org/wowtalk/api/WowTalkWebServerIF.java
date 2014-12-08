@@ -7,6 +7,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.wowtalk.Log;
 
@@ -4401,12 +4402,23 @@ public class WowTalkWebServerIF {
     }
 
 	public List<GroupChatRoom> getMyClassRooms() {
-		List<GroupChatRoom> result = new LinkedList<GroupChatRoom>();
+		List<GroupChatRoom> result = new LinkedList<>();
 		List<String> schoolIds = getSchoolIds();
 		for (String schoolId : schoolIds) {
 			List<GroupChatRoom> classRooms = getSchoolClassRooms(schoolId);
 			result.addAll(classRooms);
+
+			Map<String, List<Buddy>> schoolMembers = getSchoolMembers(schoolId);
+			for (GroupChatRoom classroom : classRooms) {
+				List<Buddy> classMembers = schoolMembers.get(classroom.groupID);
+				if (classMembers != null && !classMembers.isEmpty()) {
+					for (Buddy member : classMembers) {
+						classroom.addMember(member);
+					}
+				}
+			}
 		}
+
 		return result;
 	}
 
@@ -4471,6 +4483,77 @@ public class WowTalkWebServerIF {
 		return result;
 	}
 
+	/**
+	 * 获取校内成员用户，结果按班级组织。
+	 * @param schoolId
+	 * @return
+	 */
+	private Map<String, List<Buddy>> getSchoolMembers(String schoolId) {
+		Map<String, List<Buddy>> result = new HashMap<>();
+
+		String strUID = sPrefUtil.getUid();
+		String strPwd = sPrefUtil.getPassword();
+
+		if (isAuthEmpty(strUID, strPwd)) {
+			return result;
+		}
+
+		String action = "get_school_members";
+		String postStr = "action=" + action
+				+ "&uid=" + Utils.urlencodeUtf8(strUID)
+				+ "&password=" + Utils.urlencodeUtf8(strPwd)
+				+ "&corp_id=" + Utils.urlencodeUtf8(schoolId);
+
+		Connect2 connect2 = new Connect2();
+		Element root = connect2.Post(postStr);
+
+		if (root != null) {
+
+			// err_no要素のリストを取得
+			NodeList errorList = root.getElementsByTagName("err_no");
+			// error要素を取得
+			Element errorElement = (Element) errorList.item(0);
+			// error要素の最初の子ノード（テキストノード）の値を取得
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				NodeList classroomNodes = root.getElementsByTagName("classroom");
+				for(int i = 0, n = classroomNodes.getLength(); i < n; ++i) {
+					Node classroomNode = classroomNodes.item(i);
+					String groupId = null;
+					for (int j = 0, m = classroomNode.getChildNodes().getLength(); j < m; ++j) {
+						Node node = classroomNode.getChildNodes().item(j);
+						if (node.getNodeName().equals("group_id")) {
+							groupId = node.getTextContent();
+						} else if (node.getNodeName().equals("member")) {
+							Map<String, String> fields = XmlHelper.getChildrenTextContent(node);
+							try {
+								Buddy b = new Buddy(fields.get("uid"));
+								b.nickName = fields.get("nickname");
+								b.setPhotoUploadedTimestamp(Long.parseLong(fields.get("upload_photo_timestamp")));
+								b.status = fields.get("last_status");
+								b.setAccountType(Integer.parseInt(fields.get("user_type")));
+
+								if (groupId != null) {
+									List<Buddy> classroom = result.get(groupId);
+									if (classroom == null) {
+										classroom = new LinkedList<>();
+										result.put(groupId, classroom);
+									}
+									classroom.add(b);
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+
+			}
+		}
+		return result;
+	}
+
 	private List<String> getSchoolIds() {
 		List<String> result = new LinkedList<String>();
 
@@ -4481,7 +4564,7 @@ public class WowTalkWebServerIF {
 			return result;
 		}
 
-		String action = "get_school_members";
+		String action = "get_school_user_in";
 		String postStr = "action=" + action
 				+ "&uid=" + Utils.urlencodeUtf8(strUID)
 				+ "&password=" + Utils.urlencodeUtf8(strPwd);

@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:layout_margin="10dp"
-            android:background="@drawable/btn_white"
+            android:background="@color/white"
             android:orientation="vertical">
             <EditText 
 	        	android:id="@+id/edt_email"

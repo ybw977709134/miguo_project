@@ -16,10 +16,13 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
+
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
+
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.BuddySearchItemAdapter;
 import co.onemeter.oneapp.adapter.GroupSearchAdapter;
@@ -41,10 +44,10 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 	
 	private ImageButton btnTitleBack;
 //    private LinearLayout mLayoutButton;
-	private Button btnSearchGroup;
-	private Button btnSearchPerson;
+//	private Button btnSearchGroup;
+//	private Button btnSearchPerson;
 //    private TextView txtPublicSearch;
-	private Button btnSearch;
+//	private Button btnSearch;
 	
 //	private Button btnAdd;
 	
@@ -60,6 +63,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 	private TextView txtResultCount;
     private ListView lvBuddy;
 	private ListView lvGroups;
+	private TextView search_cancel;
 
     private BuddySearchItemAdapter buddyAdapter;
 	private GroupSearchAdapter groupAdapter;
@@ -326,44 +330,45 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
         }
     }
 	
-	private void setTitleMode() {
-//        edtSearchContent.setText("");
-		if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
-            edtSearchContent.setText(buddySearchContent);
-
-			btnSearchPerson.setBackgroundResource(R.drawable.tab_button_left_white_a);
-			btnSearchGroup.setBackgroundResource(R.drawable.tab_button_right_white);
-			btnSearchPerson.setTextColor(getResources().getColor(R.color.blue));
-			btnSearchGroup.setTextColor(getResources().getColor(R.color.white));
-//			mPersonLayout.setVisibility(View.GONE);
-//			mGroupLayout.setVisibility(View.GONE);
-
-			edtSearchContent.setHint(R.string.contacts_search_buddy_hint);
-		} else {
-            edtSearchContent.setText(groupSearchContent);
-			btnSearchPerson.setBackgroundResource(R.drawable.tab_button_left_white);
-			btnSearchGroup.setBackgroundResource(R.drawable.tab_button_right_white_a);
-			btnSearchPerson.setTextColor(getResources().getColor(R.color.white));
-			btnSearchGroup.setTextColor(getResources().getColor(R.color.blue));
-//			mPersonLayout.setVisibility(View.GONE);
-//			mGroupLayout.setVisibility(View.GONE);
-
-			edtSearchContent.setHint(R.string.contacts_search_group_hint);
-		}
-        setSearchResultStatus();
-	}
+//	private void setTitleMode() {
+////        edtSearchContent.setText("");
+//		if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
+//            edtSearchContent.setText(buddySearchContent);
+//
+//			btnSearchPerson.setBackgroundResource(R.drawable.tab_button_left_white_a);
+//			btnSearchGroup.setBackgroundResource(R.drawable.tab_button_right_white);
+//			btnSearchPerson.setTextColor(getResources().getColor(R.color.blue));
+//			btnSearchGroup.setTextColor(getResources().getColor(R.color.white));
+////			mPersonLayout.setVisibility(View.GONE);
+////			mGroupLayout.setVisibility(View.GONE);
+//
+//			edtSearchContent.setHint(R.string.contacts_search_buddy_hint);
+//		} else {
+//            edtSearchContent.setText(groupSearchContent);
+//			btnSearchPerson.setBackgroundResource(R.drawable.tab_button_left_white);
+//			btnSearchGroup.setBackgroundResource(R.drawable.tab_button_right_white_a);
+//			btnSearchPerson.setTextColor(getResources().getColor(R.color.white));
+//			btnSearchGroup.setTextColor(getResources().getColor(R.color.blue));
+////			mPersonLayout.setVisibility(View.GONE);
+////			mGroupLayout.setVisibility(View.GONE);
+//
+//			edtSearchContent.setHint(R.string.contacts_search_group_hint);
+//		}
+//        setSearchResultStatus();
+//	}
 	
 	private void initView() {
 //		mPersonLayout = (RelativeLayout) findViewById(R.id.personLayout);
 //		mGroupLayout = (RelativeLayout) findViewById(R.id.groupLayout);
 //		framePhoto = (FrameLayout) findViewById(R.id.photo_frame);
-		btnTitleBack = (ImageButton) findViewById(R.id.title_back);
+//		btnTitleBack = (ImageButton) findViewById(R.id.title_back);
 //        mLayoutButton = (LinearLayout) findViewById(R.id.layout_btn);
-		btnSearchGroup = (Button) findViewById(R.id.search_group);
-		btnSearchPerson = (Button) findViewById(R.id.search_person);
+//		btnSearchGroup = (Button) findViewById(R.id.search_group);
+//		btnSearchPerson = (Button) findViewById(R.id.search_person);
 //        txtPublicSearch = (TextView) findViewById(R.id.public_search);
-		btnSearch = (Button) findViewById(R.id.btn_search);
+//		btnSearch = (Button) findViewById(R.id.btn_search);
 		edtSearchContent = (EditText) findViewById(R.id.edt_search);
+		search_cancel = (TextView) findViewById(R.id.search_cancel);
         fieldClear = (ImageButton) findViewById(R.id.field_clear);
 //		txtPersonName = (TextView) findViewById(R.id.person_name_text);
 		txtResultCount = (TextView) findViewById(R.id.txt_count);
@@ -399,11 +404,12 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
         });
 
 //		framePhoto.setOnClickListener(this);
-		btnTitleBack.setOnClickListener(this);
-		btnSearchGroup.setOnClickListener(this);
-		btnSearchPerson.setOnClickListener(this);
-		btnSearch.setOnClickListener(this);
+//		btnTitleBack.setOnClickListener(this);
+//		btnSearchGroup.setOnClickListener(this);
+//		btnSearchPerson.setOnClickListener(this);
+//		btnSearch.setOnClickListener(this);
 //		btnAdd.setOnClickListener(this);
+        search_cancel.setOnClickListener(this);
 		
 		lvGroups.setOnItemClickListener(new OnItemClickListener() {
 
@@ -482,7 +488,29 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
             }
         });
     }
-
+	private void searchAuto(){
+		edtSearchContent.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				fStartSearch();
+				
+			}
+		});
+	}
     private void showInputMessageDlg(final GroupChatRoom g) {
         final EditText edtText = new EditText(ContactSearchActivity.this);
         new AlertDialog.Builder(ContactSearchActivity.this)
@@ -539,7 +567,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.title_back:
+		case R.id.search_cancel:
 			finish();
 			break;
 //		case R.id.photo_frame:
@@ -555,17 +583,17 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //                }
 //            }
 //			break;
-		case R.id.search_group:
-			searchKind = GET_GROUP_BY_NAME;
-			setTitleMode();
-			break;
-		case R.id.search_person:
-			searchKind = GET_BUDDY_BY_WOWTALK_ID;
-			setTitleMode();
-			break;
-		case R.id.btn_search:
-			fStartSearch();
-			break;
+//		case R.id.search_group:
+//			searchKind = GET_GROUP_BY_NAME;
+//			setTitleMode();
+//			break;
+//		case R.id.search_person:
+//			searchKind = GET_BUDDY_BY_WOWTALK_ID;
+//			setTitleMode();
+//			break;
+//		case R.id.btn_search:
+//			fStartSearch();
+//			break;
 //		case R.id.btn_add:
 //            onAddFriendPressed();
 //            break;
@@ -618,7 +646,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
 //        searchType = getIntent().getIntExtra(EXTRA_SEARCH, REQ_NORMAL_ACCOUNT);
 		initView();
-		setTitleMode();
+		searchAuto();
+//		setTitleMode();
 
         mMsgBox = new MessageBox(this);
 		mWebif = WowTalkWebServerIF.getInstance(this);

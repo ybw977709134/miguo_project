@@ -23,6 +23,7 @@ import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.RoundedImageView;
+import org.wowtalk.ui.msg.InputBoardManager.InputResultHandler;
 
 import co.onemeter.oneapp.R;
 
@@ -89,8 +90,11 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
                             return;
                         }
                         addFriend_async(p);
-                        Intent intent = new Intent(NewFriendsActivity.this, MessageComposerActivity.class);
-                        startActivity(intent);
+                        MessageComposerActivity.launchToChatWithBuddy(
+                                NewFriendsActivity.this,
+                                MessageComposerActivity.class,
+                                p.uid);
+
                     }
                 });
                 btnIgnore.setOnClickListener(new View.OnClickListener() {

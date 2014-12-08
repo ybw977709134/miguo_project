@@ -67,6 +67,7 @@
     <string name="contactgroupinfo_load_failure">数据加载失败</string>
 	<string name="contacts_search_buddy">搜索好友</string>
 	<string name="contacts_search_group">搜索群组</string>
+	<string name="contacts_search_cancel">取消</string>
 	<string name="contacts_search_buddy_hint">请输入用户 ID</string>
 	<string name="contacts_search_group_hint">请输入群组号或名称</string>
 	<string name="contacts_new_friends">新的朋友</string>

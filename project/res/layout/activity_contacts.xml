@@ -11,10 +11,10 @@
 		android:layout_width="fill_parent"
 		android:layout_alignParentTop="true"
 		style="?attr/navbar">
-		<ImageButton
+		<LinearLayout
 			android:id="@+id/navbar_btn_left"
 			style="@style/navbar_btn_left"
-			android:visibility="gone"/>
+			android:orientation="horizontal"/>
 		<LinearLayout
 			android:id="@+id/navbar_btn_right"
 			style="@style/navbar_btn_right"

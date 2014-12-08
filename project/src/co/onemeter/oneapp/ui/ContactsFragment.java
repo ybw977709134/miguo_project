@@ -280,9 +280,6 @@ public class ContactsFragment extends Fragment implements OnClickListener,
             @Override
             protected void onPostExecute(Void v) {
                 mMsgBox.dismissWait();
-                if(isEmpty()){
-                	
-                }
             }
         }.execute((Void)null);
     }
@@ -572,19 +569,19 @@ public class ContactsFragment extends Fragment implements OnClickListener,
 
     @Override
     public int[] getOptionsMenuItemIcons(Context context) {
-        return new int[] { R.drawable.nav_add_selector, R.drawable.nav_refresh_selector };
+        return new int[] { R.drawable.nav_refresh_selector, R.drawable.nav_add_selector};
     }
 
     @Override
     public boolean onOptionsItemSelected(int position) {
         switch (position) {
-            case 0:
+            case 1:
                 Intent addIntent = new Intent(
                         getActivity(),
                         ContactAddActivity.class);
                 startActivity(addIntent);
                 return true;
-            case 1:
+            case 0:
                 refresh();
                 return true;
             default:
@@ -592,7 +589,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
         }
     }
     
-    public boolean isEmpty(){
-    	return ContactUtil.allPersons == null || ContactUtil.allPersons.isEmpty();
-    }
+//    public boolean isEmpty(){
+//    	return ContactUtil.allPersons == null || ContactUtil.allPersons.isEmpty();
+//    }
 }

@@ -71,6 +71,7 @@ public class SchoolMatesFragment extends Fragment
                 if (!isEmpty()) {
                     adapter = new GroupTreeAdapter(getActivity(), classrooms);
                     aQuery.find(R.id.listview).adapter(adapter);
+                    aQuery.find(R.id.schoolmate_emptyview).visibility(View.GONE);
                 } else {
                     aQuery.find(R.id.schoolmate_emptyview).visibility(View.VISIBLE);
                 }
@@ -87,19 +88,19 @@ public class SchoolMatesFragment extends Fragment
 
     @Override
     public int[] getOptionsMenuItemIcons(Context context) {
-        return new int[] { R.drawable.nav_add_selector, R.drawable.nav_refresh_selector };
+        return new int[] { R.drawable.nav_refresh_selector, R.drawable.nav_add_selector };
     }
 
     @Override
     public boolean onOptionsItemSelected(int position) {
         switch (position) {
-            case 0: {
+            case 1: {
                 Intent intent = new Intent(getActivity(), AddClassActivity.class);
                 ThemeHelper.putExtraCurrThemeResId(intent, getActivity());
                 startActivityForResult(intent, REQ_ADD_CLASS);
                 return true;
             }
-            case 1:
+            case 0:
                 refresh();
                 return true;
             default:

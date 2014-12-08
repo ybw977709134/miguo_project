@@ -150,8 +150,10 @@ public class ContactsActivity extends FragmentActivity implements View.OnClickLi
             final BottomButtonBoard.OptionsMenuProvider provider = ((BottomButtonBoard.OptionsMenuProvider) f);
             icons = provider.getOptionsMenuItemIcons(this);
             if (icons.length > 0) {
-                ViewGroup btnBox = ((ViewGroup)q.find(R.id.navbar_btn_right).getView());
-                btnBox.removeAllViews();
+                ViewGroup btnBox_left = ((ViewGroup)q.find(R.id.navbar_btn_left).getView());
+                btnBox_left.removeAllViews();
+                ViewGroup btnBox_right = ((ViewGroup)q.find(R.id.navbar_btn_right).getView());
+                btnBox_right.removeAllViews();
                 for (int i = 0; i < icons.length; ++i) {
                     ImageView btn = new ImageView(this);
                     btn.setImageResource(icons[i]);
@@ -163,7 +165,12 @@ public class ContactsActivity extends FragmentActivity implements View.OnClickLi
                             provider.onOptionsItemSelected(position);
                         }
                     });
-                    btnBox.addView(btn);
+                    //因为只有两个菜单按钮，所以我做了简单的判断
+                    if(i == 0){
+                    	btnBox_left.addView(btn);
+                    }else{
+                    	btnBox_right.addView(btn);
+                    }
                 }
             }
         }

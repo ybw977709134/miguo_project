@@ -1,9 +1,12 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import co.onemeter.oneapp.R;
+
 import com.androidquery.AQuery;
 
 /**
@@ -19,6 +22,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener 
         AQuery q = new AQuery(this);
 
         q.find(R.id.title_back).clicked(this);
+        q.find(R.id.btn_live).clicked(this);
     }
 
     @Override
@@ -26,6 +30,12 @@ public class MyClassesActivity extends Activity implements View.OnClickListener 
         switch (view.getId()) {
             case R.id.title_back:
                 onBackPressed();
+                break;
+            case R.id.btn_live:
+            	Intent intent = new Intent();
+            	ComponentName component = new ComponentName("com.example.liveplayerdemoapp2", "com.example.liveplayerdemoapp2.VideoPlayingActivity"); 
+            	intent.setComponent(component); 
+            	startActivity(intent);
                 break;
         }
     }

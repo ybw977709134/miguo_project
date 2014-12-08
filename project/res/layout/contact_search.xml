@@ -11,55 +11,40 @@
 		android:layout_width="fill_parent"
 		android:layout_alignParentTop="true"
 		style="?attr/navbar">
-		<ImageButton
-			android:id="@+id/title_back"
-			android:layout_height="50dp"
-			android:layout_width="50dp"
-			android:layout_alignParentLeft="true"
-            android:background="@null"
-			android:src="@drawable/nav_back_selector"/>
+
 		<LinearLayout
-            android:id="@+id/layout_btn"
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"
-			android:orientation="horizontal"
-			android:layout_centerInParent="true"
-            android:visibility="visible">
-			<Button
-				android:id="@+id/search_person"
-				android:layout_height="wrap_content"
-				android:layout_width="70dp"
-                android:lines="1"
-                android:background="@drawable/tab_button_left_white_a"
-				android:textColor="@color/green"
-				android:textSize="14sp"
-				android:text="@string/contacts_search_buddy"/>
-			<Button
-				android:id="@+id/search_group"
-				android:layout_height="wrap_content"
-				android:layout_width="70dp"
-                android:lines="1"
-                android:background="@drawable/tab_button_right_white"
-				android:textColor="@color/white"
-				android:textSize="14sp"
-				android:text="@string/contacts_search_group"/>
+		    android:id="@+id/layout_btn"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerVertical="true"
+		    android:gravity="center_vertical"
+		    android:orientation="horizontal"
+		    android:paddingLeft="10dp"
+		    android:paddingRight="10dp"
+		    android:visibility="visible" >
+
+			<include
+			    android:id="@+id/relativeLayout01"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    layout="@layout/piece_search_bar" 
+			    android:layout_weight="1"
+			    />
+
+            <TextView
+                android:id="@+id/search_cancel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/contacts_search_cancel"
+                android:textSize="15sp"
+                android:textColor="@color/white" 
+                android:clickable="true"
+                android:layout_weight="5"/>
+
 		</LinearLayout>
-        <TextView
-            android:id="@+id/public_search"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_centerInParent="true"
-            android:singleLine="true"
-            android:visibility="gone"
-            style="@style/page_title_dark"
-            android:text="@string/contacts_search_buddy"/>
+
 	</RelativeLayout>
-	<include
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/relativeLayout01"
-		layout="@layout/piece_search_bar"
-		android:layout_below="@+id/title_bar"/>
 
     <LinearLayout
             android:id="@+id/search_result_layout"

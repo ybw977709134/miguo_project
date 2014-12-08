@@ -224,6 +224,7 @@ public class SmsActivity extends Activity implements OnClickListener {
                             MessageComposerActivity.class,
                             msg.chatUserName);
                 } else {
+                	//调用发送消息的方法
                     MessageComposerActivity.launchToChatWithBuddy(
                             SmsActivity.this,
                             MessageComposerActivity.class,

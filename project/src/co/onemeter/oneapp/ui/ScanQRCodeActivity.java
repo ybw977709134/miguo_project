@@ -103,6 +103,8 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
         mWebif = WowTalkWebServerIF.getInstance(this);
 
         initView();
+        
+        
     }
 
     private void initView() {
@@ -113,6 +115,7 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
         findViewById(R.id.scan_qr_code_bottom_btn_flash).setOnClickListener(this);
         findViewById(R.id.scan_qr_code_bottom_btn_qrcode).setOnClickListener(this);
         findViewById(R.id.title_back).setOnClickListener(this);
+;
     }
 
     private void beginOpenDoorAnim() {

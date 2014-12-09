@@ -21,5 +21,5 @@
     <dimen name="dimen_50">50dp</dimen>
     <dimen name="dimen_40">40dp</dimen>
     <dimen name="msg_composer_media_txt_ind_size">12sp</dimen>
-    <dimen name="tablelayout_height">240dp</dimen>
+    <dimen name="tablelayout_height">200dp</dimen>
 </resources>

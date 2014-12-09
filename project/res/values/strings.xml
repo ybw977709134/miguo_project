@@ -68,6 +68,8 @@
 	<string name="contacts_search_buddy">搜索好友</string>
 	<string name="contacts_search_group">搜索群组</string>
 	<string name="contacts_search_cancel">取消</string>
+	<string name="contacts_search_result_buddy">用户</string>
+	<string name="contacts_search_result_group">群组</string>
 	<string name="contacts_search_buddy_hint">请输入用户 ID</string>
 	<string name="contacts_search_group_hint">请输入群组号或名称</string>
 	<string name="contacts_new_friends">新的朋友</string>

@@ -79,35 +79,32 @@
                             android:layout_height="match_parent"
                             android:layout_centerInParent="true"
                             android:layout_gravity="center"/>
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="148dp"
-                            android:paddingLeft="60dp"
-                            android:src="@drawable/signup_icon_scan_leftup"/>
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="305dp"
-                            android:paddingLeft="60dp"
-                            android:src="@drawable/signup_icon_scan_leftdown"/>
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="148dp"
-                            android:paddingLeft="278dp"
-                            android:src="@drawable/signup_icon_scan_rightup"/>
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="305dp"
-                            android:paddingLeft="278dp"
-                            android:src="@drawable/signup_icon_scan_rightdown"/>
                         <com.zxing.view.ViewfinderView
                             android:id="@+id/viewfinder_view"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@color/transparent"/>
+                        <ImageView
+                            android:id="@+id/imageview1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|top"
+                            android:src="@drawable/signup_icon_scan_leftup"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|bottom"
+                            android:src="@drawable/signup_icon_scan_leftdown"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|top"
+                            android:src="@drawable/signup_icon_scan_rightup"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|bottom"
+                            android:src="@drawable/signup_icon_scan_rightdown"/>
                 </FrameLayout>
             </LinearLayout>
             <!-- bottom button -->

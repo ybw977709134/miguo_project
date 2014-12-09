@@ -30,7 +30,7 @@
         	android:singleLine="true"
         	android:textColor="@color/black"
         	android:textStyle="bold"
-        	android:textSize="25sp"/>
+        	android:textSize="20sp"/>
         <TextView 
             android:id="@+id/txt_group_id"
             android:layout_height="0dp"
@@ -43,6 +43,6 @@
             android:shadowDy="1"
             android:textSize="15sp"/>
     </LinearLayout>
-    
+
 
 </RelativeLayout>

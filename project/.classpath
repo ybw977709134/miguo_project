@@ -11,8 +11,8 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/pulltorefresh"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SimpleQRCodeLib"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/wowtalksdk"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/MyActivity"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/MyActivity"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

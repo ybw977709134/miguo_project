@@ -27,6 +27,7 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.BuddySearchItemAdapter;
 import co.onemeter.oneapp.adapter.GroupSearchAdapter;
 import co.onemeter.oneapp.contacts.model.Person;
+import co.onemeter.oneapp.utils.ListViewUtils;
 
 import java.util.ArrayList;
 
@@ -60,7 +61,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //	private ImageView imgThumbNail;
 //	private TextView txtPersonName;
     private LinearLayout searchResultLayout;
-	private TextView txtResultCount;
+//	private TextView txtResultCount;
     private ListView lvBuddy;
 	private ListView lvGroups;
 	private TextView search_cancel;
@@ -104,7 +105,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
         public void afterTextChanged(Editable s) {
             String curSearchTxt=edtSearchContent.getText().toString();
 
-            if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
+
                 if(!buddySearchContent.equals(curSearchTxt)) {
                     if (buddyAdapter != null) {
                         buddyAdapter.clear();
@@ -113,7 +114,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
                     }
                 }
                 buddySearchContent=edtSearchContent.getText().toString();
-            } else {
+            
                 if(!groupSearchContent.equals(curSearchTxt)) {
                     if (groupAdapter != null) {
                         groupAdapter.clear();
@@ -122,7 +123,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
                     }
                 }
                 groupSearchContent=edtSearchContent.getText().toString();
-            }
+            
 
             setSearchResultStatus();
         }
@@ -130,10 +131,9 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
 	private void searchGroup() {
 		final String keyword = edtSearchContent.getText().toString().trim();
-		if(keyword.equals(""))
-			return;
 
-        mMsgBox.showWait();
+
+//        mMsgBox.showWait();
 
 		new AsyncTask<Void, Integer, Void>() {
 
@@ -285,10 +285,10 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 	}
 	
 	private void fStartSearch() {
-        if(TextUtils.isEmpty(edtSearchContent.getText().toString())) {
-            mMsgBox.toast(getString(R.string.alert_search_target_empty));
-            return;
-        }
+//        if(TextUtils.isEmpty(edtSearchContent.getText().toString())) {
+//            mMsgBox.toast(getString(R.string.alert_search_target_empty));
+//            return;
+//        }
 
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(edtSearchContent.getWindowToken(), 0);
@@ -301,33 +301,36 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //        } else {
 //            searchPublicAccount();
 //        }
-        if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
+//        if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
             searchBuddy();
-        } else {
+//        } else {
             searchGroup();
-        }
+//        }
+//        ListViewUtils.setListViewHeightBasedOnChildren(lvBuddy);
+//        ListViewUtils.setListViewHeightBasedOnChildren(lvGroups);
 	}
 
     private void setSearchResultStatus() {
-        if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
-            txtResultCount.setText(String.format(getResources().getString(R.string.search_result_count), searchedBuddyList.size()));
-            lvBuddy.setVisibility(View.VISIBLE);
-            lvGroups.setVisibility(View.GONE);
+//        if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
+//            txtResultCount.setText(String.format(getResources().getString(R.string.search_result_count), searchedBuddyList.size()));
+//            lvBuddy.setVisibility(View.VISIBLE);
+//            lvGroups.setVisibility(View.GONE);
             if(searchedBuddyList.size() <= 0) {
                 searchResultLayout.setVisibility(View.GONE);
             } else {
                 searchResultLayout.setVisibility(View.VISIBLE);
             }
-        } else {
-            txtResultCount.setText(String.format(getResources().getString(R.string.search_result_count), searchedGroupRoomList.size()));
-            lvBuddy.setVisibility(View.GONE);
-            lvGroups.setVisibility(View.VISIBLE);
-            if(searchedGroupRoomList.size() <= 0) {
-                searchResultLayout.setVisibility(View.GONE);
-            } else {
-                searchResultLayout.setVisibility(View.VISIBLE);
-            }
-        }
+//        } 
+//    else {
+//            txtResultCount.setText(String.format(getResources().getString(R.string.search_result_count), searchedGroupRoomList.size()));
+//            lvBuddy.setVisibility(View.GONE);
+//            lvGroups.setVisibility(View.VISIBLE);
+//            if(searchedGroupRoomList.size() <= 0) {
+//                searchResultLayout.setVisibility(View.GONE);
+//            } else {
+//                searchResultLayout.setVisibility(View.VISIBLE);
+//            }
+//        }
     }
 	
 //	private void setTitleMode() {
@@ -371,7 +374,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 		search_cancel = (TextView) findViewById(R.id.search_cancel);
         fieldClear = (ImageButton) findViewById(R.id.field_clear);
 //		txtPersonName = (TextView) findViewById(R.id.person_name_text);
-		txtResultCount = (TextView) findViewById(R.id.txt_count);
+//		txtResultCount = (TextView) findViewById(R.id.txt_count);
 //		btnAdd = (Button) findViewById(R.id.btn_add);
 //		imgThumbNail = (ImageView) findViewById(R.id.person_photo);
         searchResultLayout=(LinearLayout) findViewById(R.id.search_result_layout);
@@ -507,7 +510,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 			@Override
 			public void afterTextChanged(Editable s) {
 				fStartSearch();
-				
+		        ListViewUtils.setListViewHeightBasedOnChildren(lvBuddy);
+		        ListViewUtils.setListViewHeightBasedOnChildren(lvGroups);
 			}
 		});
 	}

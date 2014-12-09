@@ -83,6 +83,10 @@ public final class ViewfinderView extends View {
     private final static long LASER_ROUND_TRIP_INTERVAL=5000;//ms
     @Override
     public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (isInEditMode())
+            return;
+
         if(null != svUnder) {
             if(svUnder.getWidth() != lastSvUnderWidth || svUnder.getHeight() != lastSvUnderHeight) {
                 Log.w("abcd", "sv size: " + svUnder.getWidth() + ":" + svUnder.getHeight());

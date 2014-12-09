@@ -93,7 +93,8 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
                         MessageComposerActivity.launchToChatWithBuddy(
                                 NewFriendsActivity.this,
                                 MessageComposerActivity.class,
-                                p.uid);
+                                p.uid,
+                                getString(R.string.msg_friend_request_is_passed));
 
                     }
                 });

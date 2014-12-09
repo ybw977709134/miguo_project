@@ -18,10 +18,7 @@ package com.zxing.view;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
+import android.graphics.*;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceView;
@@ -122,6 +119,16 @@ public final class ViewfinderView extends View {
             canvas.drawRect(frame.left, frame.top + 2, frame.left + 2, frame.bottom - 1, paint);
             canvas.drawRect(frame.right - 1, frame.top, frame.right + 1, frame.bottom - 1, paint);
             canvas.drawRect(frame.left, frame.bottom - 1, frame.right + 1, frame.bottom + 1, paint);
+
+            // 在扫描框的四角绘制 L 型图案。
+            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.viewfinder_exterior_lt);
+            canvas.drawBitmap(bmp, frame.left, frame.top, paint);
+            bmp = BitmapFactory.decodeResource(getResources(), R.drawable.viewfinder_exterior_rt);
+            canvas.drawBitmap(bmp, frame.right - bmp.getWidth(), frame.top, paint);
+            bmp = BitmapFactory.decodeResource(getResources(), R.drawable.viewfinder_exterior_rb);
+            canvas.drawBitmap(bmp, frame.right - bmp.getWidth(), frame.bottom - bmp.getHeight(), paint);
+            bmp = BitmapFactory.decodeResource(getResources(), R.drawable.viewfinder_exterior_lb);
+            canvas.drawBitmap(bmp, frame.left, frame.bottom - bmp.getHeight(), paint);
 
             // Draw a red "laser scanner" line through the middle to show decoding is active
             paint.setColor(laserColor);

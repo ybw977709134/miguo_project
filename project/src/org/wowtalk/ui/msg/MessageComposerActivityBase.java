@@ -55,11 +55,14 @@ public abstract class MessageComposerActivityBase extends Activity
     protected void messageTextClicked(ChatMessage message, String[] phones, String[] links) {
     }
 
+    // Keys for intent extras
     public final static String KEY_TARGET_UID = "target_uid";
 	public final static String KEY_TARGET_DISPLAYNAME = "target_name";
 	public final static String KEY_TARGET_PHONENUMBER = "target_phone";
 	public final static String KEY_TARGET_IS_NORMAL_GROUP = "is_normal_group";
 	public final static String KEY_TARGET_IS_TMP_GROUP = "is_tmp_group";
+    /** 自动向对方发送的消息 */
+    public final static String KEY_HELLO_MESSAGE = "hello_message";
 
 	/**
 	 * 默认显示的信息条数
@@ -902,7 +905,9 @@ public abstract class MessageComposerActivityBase extends Activity
 		mIsFirstStartToScroll = true;
 		setContentView(R.layout.msg_message_composer);
 
-		Bundle b = null;
+        String hello = null;
+
+		Bundle b;
 		if(savedInstanceState != null) {
 			b = savedInstanceState;
 		} else {
@@ -913,6 +918,7 @@ public abstract class MessageComposerActivityBase extends Activity
 			_targetGlobalPhoneNumber = b.getString(KEY_TARGET_DISPLAYNAME);
 			_targetIsNormalGroup = b.getBoolean(KEY_TARGET_IS_NORMAL_GROUP, false);
 			_targetIsTmpGroup = b.getBoolean(KEY_TARGET_IS_TMP_GROUP, false);
+            hello = b.getString(KEY_HELLO_MESSAGE);
 		}
 
         if(savedInstanceState != null) {
@@ -938,6 +944,9 @@ public abstract class MessageComposerActivityBase extends Activity
         sCanSendMsgInited = false;
 
         initActivity();
+
+        if (hello != null)
+            fSendTextMsg_async(hello);
     }
 
     @Override
@@ -1372,6 +1381,16 @@ public abstract class MessageComposerActivityBase extends Activity
 	}
 
     public static void launchToChatWithBuddy(Context context, Class<?> subclassType, String uid) {
+        launchToChatWithBuddy(context, subclassType, uid, null);
+    }
+
+    /**
+     * @param context
+     * @param subclassType
+     * @param uid
+     * @param hello 若非 null，则自动向对方发送此文本消息。
+     */
+    public static void launchToChatWithBuddy(Context context, Class<?> subclassType, String uid, String hello) {
 
 		Database db = new Database(context);
 		// 查询是否还是好友
@@ -1395,6 +1414,7 @@ public abstract class MessageComposerActivityBase extends Activity
 		intent.putExtra(
 				MessageComposerActivityBase.KEY_TARGET_PHONENUMBER, 
 				phoneNumber);
+        intent.putExtra(KEY_HELLO_MESSAGE, hello);
 		context.startActivity(intent);
 	}
 

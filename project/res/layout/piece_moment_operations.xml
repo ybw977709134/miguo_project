@@ -60,14 +60,15 @@
                         android:layout_width="23dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/timeline_like"/>
-
+				
+                <!--          android:text="@string/moments_like" -->
                 <TextView
                         android:id="@+id/tv_moment_op_like"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="5dp"
-                        android:text="@string/moments_like"
+          
                         android:textSize="@dimen/moment_op_txt_size"
                         android:textColor="@color/default_text"/>
             </LinearLayout>
@@ -89,14 +90,15 @@
                         android:layout_width="23dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/share_icon_comment"/>
-
+			
+                <!--     android:text="@string/moments_comment"  -->  
                 <TextView
                         android:id="@+id/tv_moment_op_comment"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_gravity="center_vertical"
-                        android:text="@string/moments_comment"
+               
                         android:textSize="@dimen/moment_op_txt_size"
                         android:textColor="@color/default_text"/>
             </LinearLayout>
@@ -118,13 +120,14 @@
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/share_icon_comment"/>
 
+                <!--             android:text="@string/answer_qa" -->
                 <TextView
                         android:id="@+id/tv_moment_op_answer"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_gravity="center_vertical"
-                        android:text="@string/answer_qa"
+           
                         android:textSize="@dimen/moment_op_txt_size"
                         android:textColor="@color/default_text"/>
             </LinearLayout>

@@ -749,31 +749,32 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         }
 
         if(View.VISIBLE == holder.layoutLike.getVisibility()) {
-            holder.tvLikeCountInd.setText(""+likeReview.size()+" "+context.getString(R.string.moments_like));
-            holder.tvLikeCountInd.setVisibility(View.VISIBLE);
+//            holder.tvLikeCountInd.setText(""+likeReview.size()+" "+context.getString(R.string.moments_like));
+//            holder.tvLikeCountInd.setVisibility(View.VISIBLE);
         } else {
             holder.tvLikeCountInd.setVisibility(View.GONE);
         }
 
         if(View.VISIBLE == holder.layoutComment.getVisibility()) {
-            holder.tvCommentCountInd.setText(""+commentReview.size()+" "+context.getString(R.string.moments_comment));
-            holder.tvCommentCountInd.setVisibility(View.VISIBLE);
+//            holder.tvCommentCountInd.setText(""+commentReview.size()+" "+context.getString(R.string.moments_comment));
+//            holder.tvCommentCountInd.setVisibility(View.VISIBLE);
         } else {
             holder.tvCommentCountInd.setVisibility(View.GONE);
         }
 
         if(View.VISIBLE == holder.layoutAnswer.getVisibility()) {
-            holder.tvAnswerCountInd.setText(""+commentReview.size()+" "+context.getString(R.string.answer_qa));
-            holder.tvAnswerCountInd.setVisibility(View.VISIBLE);
+//            holder.tvAnswerCountInd.setText(""+commentReview.size()+" "+context.getString(R.string.answer_qa));
+//            holder.tvAnswerCountInd.setVisibility(View.VISIBLE);
         } else {
             holder.tvAnswerCountInd.setVisibility(View.GONE);
         }
 
         if(moment.likedByMe) {
-//            holder.tvLike.setText(""+likeReview.size());
-            holder.tvLike.setText(R.string.moments_liked);
+        	//显示点赞的数量
+            holder.tvLike.setText(""+likeReview.size());
+//            holder.tvLike.setText(R.string.moments_liked);
         } else {
-            holder.tvLike.setText(R.string.moments_like);
+     //       holder.tvLike.setText(R.string.moments_like);
         }
 //        if(commentReview.size() > 0) {
 //            if(View.VISIBLE == holder.layoutComment.getVisibility()) {
@@ -787,8 +788,13 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //            holder.tvComment.setText(R.string.moments_comment);
 //            holder.tvAnswer.setText(R.string.answer_qa);
 //        }
-        holder.tvComment.setText(R.string.moments_comment);
-        holder.tvAnswer.setText(R.string.answer_qa);
+        
+        //显示评论的数量
+//        holder.tvComment.setText(R.string.moments_comment);
+        holder.tvComment.setText(""+commentReview.size());
+        //显示回复的数量
+//        holder.tvAnswer.setText(R.string.answer_qa);
+        holder.tvAnswer.setText(""+commentReview.size());
 
         if (moment.likedByMe) {
 //            holder.btnLike.setEnabled(false);
@@ -798,6 +804,18 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //            holder.btnLike.setEnabled(true);
 //            holder.layoutLike.setEnabled(true);
             holder.btnLike.setBackgroundResource(R.drawable.timeline_like);
+        }
+        
+        if (moment.allowReview) {
+        	holder.btnComment.setBackgroundResource(R.drawable.profile_btn_message_p);
+        } else {
+        	holder.btnComment.setBackgroundResource(R.drawable.timeline_comment);
+        }
+        
+        if (moment.allowReview) {
+        	holder.btnAnswer.setBackgroundResource(R.drawable.profile_btn_message_p);
+        } else {
+        	holder.btnAnswer.setBackgroundResource(R.drawable.timeline_comment);
         }
 
         holder.btnLike.setOnClickListener(new View.OnClickListener() {

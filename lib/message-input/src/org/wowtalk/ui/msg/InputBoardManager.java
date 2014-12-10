@@ -518,7 +518,10 @@ public class InputBoardManager implements Parcelable,
         } else if (i == R.id.btn_input_doodle) {
             inputDoodle();
         } else if (i == R.id.btn_input_picvoice) {
-            inputHybirdImageVoiceText();
+         //   inputHybirdImageVoiceText();
+        	//跳转到图文音界面
+        	Intent intent = new Intent(mContext,HybirdImageVoiceTextEditor.class);
+        	mContext.startActivity(intent);
         } else if (i == R.id.btn_input_voice) {// replace text inputbox with hold-to-speak button
             PackageManager pm = mContext.getPackageManager();
             if (!pm.hasSystemFeature(PackageManager.FEATURE_MICROPHONE)) {

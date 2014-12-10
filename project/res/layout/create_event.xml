@@ -405,7 +405,7 @@
                         android:drawableRight="@drawable/table_arrow"
                         android:drawablePadding="10dp" />
                 </LinearLayout>
-            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_height="wrap_content"
@@ -460,6 +460,64 @@
                 style="@style/inputbox_white"
                 android:padding="10dp"
                 android:hint="@string/event_desc" />
+            
+            <LinearLayout
+                    android:id="@+id/layout_isinfo"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/table_cell_white_height"
+                    android:orientation="horizontal"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="@dimen/padding_medium" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="3"
+                        android:text="@string/event_isinfo"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <ImageButton
+                        android:id="@+id/btn_isinfo"
+                        android:layout_width="48dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/icon_switch_on"
+                        android:layout_gravity="center_vertical" />
+                </LinearLayout>
+                <ImageView
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:background="@drawable/divider"/>
+                <LinearLayout
+                    android:id="@+id/layout_ispublic"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/table_cell_white_height"
+                    android:orientation="horizontal"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="@dimen/padding_medium" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="3"
+                        android:text="@string/event_ispublic"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <ImageButton
+                        android:id="@+id/btn_ispublic"
+                        android:layout_width="48dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/icon_switch_on"
+                        android:layout_gravity="center_vertical" />
+                </LinearLayout>
+
+            </LinearLayout>
         </LinearLayout>
+
     </ScrollView>
 </RelativeLayout>

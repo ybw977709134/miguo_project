@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import co.onemeter.oneapp.R;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 
 import java.text.SimpleDateFormat;
@@ -38,6 +40,8 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     private boolean isAllDay = false;
     private boolean allowReview = false;
     private boolean needToUpdateMulti = false;
+    private boolean mIsInfo = true;
+    private boolean mIsPublic = true;
 
     private ImageButton btnTitleBack;
     private ImageButton btnTitleConfirm;
@@ -47,6 +51,9 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     private ImageView imgAllDay;
     private ImageView imgAllowReview;
     private ImageView imgNeedToUpdateMulti;
+    
+    private ImageButton isBtnInfo;
+    private ImageButton isBtnPublic;
 
     private EditText edtContent;
 
@@ -69,6 +76,8 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         imgAllDay = (ImageView) findViewById(R.id.img_allday);
         imgAllowReview = (ImageView) findViewById(R.id.img_allowreview);
         imgNeedToUpdateMulti = (ImageView) findViewById(R.id.img_needtoupdatemulti);
+        isBtnInfo = (ImageButton) findViewById(R.id.btn_isinfo);
+        isBtnPublic = (ImageButton) findViewById(R.id.btn_ispublic);
 
         btnTitleBack.setOnClickListener(this);
         btnTitleConfirm.setOnClickListener(this);
@@ -76,6 +85,9 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         imgAllDay.setOnClickListener(this);
         imgAllowReview.setOnClickListener(this);
         imgNeedToUpdateMulti.setOnClickListener(this);
+        
+        isBtnInfo.setOnClickListener(this);
+        isBtnPublic.setOnClickListener(this);
 
         findViewById(R.id.layout_title).setOnClickListener(this);
         findViewById(R.id.layout_loc).setOnClickListener(this);
@@ -266,12 +278,20 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                 break;
             case R.id.layout_addaudio:
                 break;
+            case R.id.btn_isinfo:
+            	changeIsInfo(!mIsInfo);
+            	break;
+            case R.id.btn_ispublic:
+            	changeIsPublic(!mIsPublic);
+            	break;
             default:
                 break;
         }
     }
 
-    @Override
+
+
+	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(resultCode, resultCode, data);
 
@@ -359,5 +379,14 @@ public class CreateEventActivity extends Activity implements OnClickListener {
             wevent.multimedias.add(imageInputWidget.getItem(i));
         }
     }
+    
+    private void changeIsInfo(boolean isInfo) {
+    	mIsInfo = isInfo;
+    	isBtnInfo.setBackgroundResource(mIsInfo ? R.drawable.icon_switch_on : R.drawable.icon_switch_off);;
+	}
+    private void changeIsPublic(boolean isPublic) {
+    	mIsPublic = isPublic;
+    	isBtnPublic.setBackgroundResource(mIsPublic ? R.drawable.icon_switch_on : R.drawable.icon_switch_off);;
+	}
 
 }

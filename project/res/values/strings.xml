@@ -145,9 +145,12 @@
 	<string name="event_pics">图片:</string>
     <string name="event_detail_introduce">详细说明:</string>
 	<string name="event_title">标题</string>
+	<string name="event_timebeforeafter">活动结束时间不能早于开始时间</string>
 	<string name="event_desc">简介</string>
 	<string name="event_capacity">人数限制</string>
 	<string name="event_loc">地点</string>
+	<string name="event_isinfo">是否需要报名者提供信息</string>
+	<string name="event_ispublic">是否公开</string>
 	<string name="event_latlon">经纬度</string>
 	<string name="event_startdate">开始</string>
     <string name="event_enddate">结束</string>

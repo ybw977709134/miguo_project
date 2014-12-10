@@ -1,5 +1,6 @@
 package co.onemeter.oneapp.ui;
 
+import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import org.wowtalk.api.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class CreateEventActivity extends Activity implements OnClickListener {
@@ -117,7 +119,6 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         updateData();
         new AsyncTask<WEvent, Void, Integer>() {
             Context context;
-
             @Override
             protected Integer doInBackground(WEvent... wEvents) {
                 context = CreateEventActivity.this;
@@ -149,6 +150,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                                 }
                             });
                 }
+
 
                 return errno;
             }
@@ -209,6 +211,9 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                 finish();
                 break;
             case R.id.title_confirm:
+                if(wevent.startTime.after(wevent.endTime)){
+                	Toast.makeText(this, getString(R.string.event_timebeforeafter), Toast.LENGTH_SHORT).show();
+                }
                 createEvent();
                 break;
             case R.id.img_allday:
@@ -241,15 +246,19 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                     @Override
                     public void onDateTimeResult(Calendar result) {
                         wevent.startTime = result.getTime();
+                        
                         updateUI();
+                     
                     }
                 });
+
                 break;
             case R.id.layout_endtime:
                 DateTimeInputHelper.inputStartDateTime(this, new DateTimeInputHelper.OnDateTimeSetListener() {
                     @Override
                     public void onDateTimeResult(Calendar result) {
                         wevent.endTime = result.getTime();
+                        
                         updateUI();
                     }
                 });
@@ -382,11 +391,11 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     
     private void changeIsInfo(boolean isInfo) {
     	mIsInfo = isInfo;
-    	isBtnInfo.setBackgroundResource(mIsInfo ? R.drawable.icon_switch_on : R.drawable.icon_switch_off);;
+    	isBtnInfo.setBackgroundResource(mIsInfo ? R.drawable.icon_switch_on : R.drawable.icon_switch_off);
 	}
     private void changeIsPublic(boolean isPublic) {
     	mIsPublic = isPublic;
-    	isBtnPublic.setBackgroundResource(mIsPublic ? R.drawable.icon_switch_on : R.drawable.icon_switch_off);;
+    	isBtnPublic.setBackgroundResource(mIsPublic ? R.drawable.icon_switch_on : R.drawable.icon_switch_off);
 	}
 
 }

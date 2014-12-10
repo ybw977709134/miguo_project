@@ -21,5 +21,5 @@
     <string name="media_record_not_avaliable">Media record not avaliable</string>
 	<string name="input_doodle">Doodle</string>
 	<string name="input_pictext">Pic + Text</string>
-	<string name="input_picvoice">Pic + Voice</string>
+	<string name="input_picvoice">Pic + text + Voice </string>
 </resources>

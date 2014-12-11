@@ -213,8 +213,9 @@ public class CreateEventActivity extends Activity implements OnClickListener {
             case R.id.title_confirm:
                 if(wevent.startTime.after(wevent.endTime)){
                 	Toast.makeText(this, getString(R.string.event_timebeforeafter), Toast.LENGTH_SHORT).show();
+                }else{
+                	createEvent();
                 }
-                createEvent();
                 break;
             case R.id.img_allday:
                 isAllDay = !isAllDay;

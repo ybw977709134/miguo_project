@@ -188,8 +188,6 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 joinEvent();//参加报名
                 btn_right_up.setVisibility(View.GONE);
                 btn_right_down.setVisibility(View.VISIBLE);
-                Intent intent = new Intent(EventDetailActivity.this, SubmitInformationActivity.class);
-                startActivity(intent);
                 break;
             case R.id.right_button_down:
             	cancel_join_event();//取消报名

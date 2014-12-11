@@ -704,14 +704,14 @@ public abstract class MessageComposerActivityBase extends Activity
      * @param voiceDuration only required for voice msg.
      * @param msgType ChatMessage.MSGTYPE_*
      */
-	protected void fSendMediaMsg_async(
+    protected void fSendMediaMsg_async(
             final String pathOfMultimedia,
             final String pathOfThumbNail,
             final int voiceDuration,
-			final String msgType) {
-		if (_targetUID == null) {
-			return;
-		}
+            final String msgType) {
+        if (_targetUID == null) {
+            return;
+        }
 
         if(!Connect2.confirmSend2server()) {
             //...no handle now
@@ -719,25 +719,25 @@ public abstract class MessageComposerActivityBase extends Activity
 		/*
 		 *  1, generate a message object and display it, before we actually post the thumb nail and media file.
 		 */
-		final ChatMessage msg = new ChatMessage();
-		msg.chatUserName = _targetUID;
-		msg.displayName = _targetGlobalPhoneNumber;
-		msg.isGroupChatMessage = _targetIsTmpGroup || _targetIsNormalGroup;
+        final ChatMessage msg = new ChatMessage();
+        msg.chatUserName = _targetUID;
+        msg.displayName = _targetGlobalPhoneNumber;
+        msg.isGroupChatMessage = _targetIsTmpGroup || _targetIsNormalGroup;
         if (msg.isGroupChatMessage) {
             msg.groupChatSenderID = mPref.getUid();
         }
-		msg.fixMessageSenderDisplayName(MessageComposerActivityBase.this, R.string.session_unknown_buddy, R.string.session_unknown_group);
-		msg.msgType = msgType;
-		msg.pathOfMultimedia = pathOfMultimedia;
-		msg.pathOfThumbNail = pathOfThumbNail;
-		msg.initExtra();
-		msg.extraData.putBoolean("isTransferring", true);
+        msg.fixMessageSenderDisplayName(MessageComposerActivityBase.this, R.string.session_unknown_buddy, R.string.session_unknown_group);
+        msg.msgType = msgType;
+        msg.pathOfMultimedia = pathOfMultimedia;
+        msg.pathOfThumbNail = pathOfThumbNail;
+        msg.initExtra();
+        msg.extraData.putBoolean("isTransferring", true);
 
-		// WowTalkVoipIF.fSendChatMessage() would set these fields, but we need them now.
-		msg.ioType = ChatMessage.IOTYPE_OUTPUT;
-		msg.sentStatus = ChatMessage.SENTSTATUS_SENDING;
-		msg.sentDate = getSentDate();
-		msg.uniqueKey = Database.chatMessageSentDateToUniqueKey(msg.sentDate);
+        // WowTalkVoipIF.fSendChatMessage() would set these fields, but we need them now.
+        msg.ioType = ChatMessage.IOTYPE_OUTPUT;
+        msg.sentStatus = ChatMessage.SENTSTATUS_SENDING;
+        msg.sentDate = getSentDate();
+        msg.uniqueKey = Database.chatMessageSentDateToUniqueKey(msg.sentDate);
 
         // postMultimediaAndSend() will set the mediaFileId and duration, but we need it now.
         // Set the duration.
@@ -752,12 +752,97 @@ public abstract class MessageComposerActivityBase extends Activity
 		/*
 		 *  2, upload, asynchronously, so the UI can refresh immediately.
 		 */
-		if(pathOfThumbNail != null) {
+        if(pathOfThumbNail != null) {
             postThumbnailAndMultimediaAndSend(pathOfMultimedia, pathOfThumbNail,
                     voiceDuration, msg);
-		} else {
-			postMultimediaAndSend(pathOfMultimedia, null, msg);
+        } else {
+            postMultimediaAndSend(pathOfMultimedia, null, msg);
+        }
+    }
+
+	protected void fSendHybird_async(final String text,
+                                 String imagePath, String imageThumbPath,
+                                 String audioPath, final int duration) {
+		if (_targetUID == null) {
+			return;
 		}
+
+        if(!Connect2.confirmSend2server()) {
+            //...no handle now
+        }
+		/*
+		 *  1, generate a message object and display it, before we actually post the thumb nail and media file.
+		 */
+		final ChatMessage msg = new ChatMessage();
+
+        final String imageExt = imagePath.substring(imagePath.lastIndexOf("."));
+        final String audioExt = audioPath.substring(audioPath.lastIndexOf("."));
+        msg.msgType = ChatMessage.MSGTYPE_HYBIRD;
+        msg.formatContentAsHybird(text,
+                imagePath, imageExt, imageThumbPath,
+                audioPath, audioExt, duration);
+
+		msg.chatUserName = _targetUID;
+		msg.displayName = _targetGlobalPhoneNumber;
+		msg.isGroupChatMessage = _targetIsTmpGroup || _targetIsNormalGroup;
+        if (msg.isGroupChatMessage) {
+            msg.groupChatSenderID = mPref.getUid();
+        }
+		msg.fixMessageSenderDisplayName(MessageComposerActivityBase.this, R.string.session_unknown_buddy, R.string.session_unknown_group);
+		msg.pathOfMultimedia = imagePath;
+		msg.pathOfThumbNail = imageThumbPath;
+		msg.initExtra();
+		msg.extraData.putBoolean("isTransferring", true);
+
+		// WowTalkVoipIF.fSendChatMessage() would set these fields, but we need them now.
+		msg.ioType = ChatMessage.IOTYPE_OUTPUT;
+		msg.sentStatus = ChatMessage.SENTSTATUS_SENDING;
+		msg.sentDate = getSentDate();
+		msg.uniqueKey = Database.chatMessageSentDateToUniqueKey(msg.sentDate);
+
+        // 多媒体文件时，先存入数据库，此时缺少消息对应的详细content，此处只是为了本地能够显示，后面发送成功后会更新这条数据
+        msg.primaryKey = mDbHelper.storeNewChatMessage(msg, false);
+        addToLogMsg(msg);
+
+		/*
+		 *  2, upload, asynchronously, so the UI can refresh immediately.
+		 */
+        new PostFileTask(this){
+            @Override
+            protected Boolean doInBackground(final String... pathes) {
+                boolean status = super.doInBackground(pathes);
+                if (status) {
+                    msg.formatContentAsHybird(text,
+                            fileIds[0], imageExt, fileIds[1],
+                            fileIds[2], audioExt, duration);
+                    status = WowTalkVoipIF.getInstance(MessageComposerActivityBase.this)
+                            .fSendChatMessage(msg);
+                } else {
+                    msg.sentStatus = ChatMessage.SENTSTATUS_NOTSENT;
+                    mDbHelper.setChatMessageCannotSent(msg);
+                }
+                return status;
+            }
+
+            @Override
+            public void onPostExecute(Boolean status) {
+                if (!status) {
+                    mMsgBox.toast(R.string.messagecomposerbase_upload_file_failure);
+                }
+                msg.extraData.putBoolean("isTransferring", false);
+                final ProgressBar progressBar = (ProgressBar)msg.extraObjects.get("progressBar");
+                if(progressBar != null)
+                    progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            protected void onProgressUpdate(Integer... param) {
+                ProgressBar progressBar = (ProgressBar)msg.extraObjects.get("progressBar");
+                if(progressBar != null) {
+                    progressBar.setProgress(param[0]);
+                }
+            }
+        }.execute(imagePath, imageThumbPath, audioPath);
 	}
 
     protected void resendMediaMsgAsync(ChatMessage chatMessage) {
@@ -785,102 +870,102 @@ public abstract class MessageComposerActivityBase extends Activity
 	 * @param pathOfThumbNail
 	 * @param msg
 	 */
-	private void postThumbnailAndMultimediaAndSend(
+    private void postThumbnailAndMultimediaAndSend(
             final String pathOfMultimedia,
-			final String pathOfThumbNail,
+            final String pathOfThumbNail,
             final int voiceDuration,
             final ChatMessage msg) {
-		msg.initExtra();
+        msg.initExtra();
 
-		new AsyncTask<Void, Integer, Void>() {
+        new AsyncTask<Void, Integer, Void>() {
 
-			String thumb_id = null;
-			String media_id = null;
-			boolean isFileUploadSuccess = true;
+            String thumb_id = null;
+            String media_id = null;
+            boolean isFileUploadSuccess = true;
 
-			@Override
-			protected Void doInBackground(Void... arg0) {
-				WowTalkWebServerIF.getInstance(MessageComposerActivityBase.this).fPostFileToServer(
-						pathOfThumbNail,
-						new NetworkIFDelegate(){
+            @Override
+            protected Void doInBackground(Void... arg0) {
+                WowTalkWebServerIF.getInstance(MessageComposerActivityBase.this).fPostFileToServer(
+                        pathOfThumbNail,
+                        new NetworkIFDelegate(){
 
-							@Override
-							public void didFailNetworkIFCommunication(int arg0,
-									byte[] arg1) {
+                            @Override
+                            public void didFailNetworkIFCommunication(int arg0,
+                                                                      byte[] arg1) {
                                 isFileUploadSuccess = false;
                                 Log.e("upload thumb file failure.");
-							}
+                            }
 
-							@Override
-							public void didFinishNetworkIFCommunication(int arg0,
-									byte[] arg1) {
-								thumb_id = new String(arg1);
-							}
+                            @Override
+                            public void didFinishNetworkIFCommunication(int arg0,
+                                                                        byte[] arg1) {
+                                thumb_id = new String(arg1);
+                            }
 
-							@Override
-							public void setProgress(int tag, final int progress) {
-								// assume thumb nail takes 20% of total uploading
-								publishProgress(Math.round(progress * .2f));
-							}
+                            @Override
+                            public void setProgress(int tag, final int progress) {
+                                // assume thumb nail takes 20% of total uploading
+                                publishProgress(Math.round(progress * .2f));
+                            }
 
-						}, 0);
+                        }, 0);
 
                 if(thumb_id == null) {
                     mDbHelper.setChatMessageCannotSent(msg);
                     return null;
                 }
 
-				WowTalkWebServerIF.getInstance(MessageComposerActivityBase.this).fPostFileToServer(
-						pathOfMultimedia,
-						new NetworkIFDelegate(){
+                WowTalkWebServerIF.getInstance(MessageComposerActivityBase.this).fPostFileToServer(
+                        pathOfMultimedia,
+                        new NetworkIFDelegate(){
 
-							@Override
-							public void didFailNetworkIFCommunication(int arg0,
-									byte[] arg1) {
+                            @Override
+                            public void didFailNetworkIFCommunication(int arg0,
+                                                                      byte[] arg1) {
                                 isFileUploadSuccess = false;
                                 Log.e("upload multimedia file failure.");
-							}
+                            }
 
-							@Override
-							public void didFinishNetworkIFCommunication(int arg0,
-									byte[] arg1) {
-								media_id = new String(arg1);
-							}
+                            @Override
+                            public void didFinishNetworkIFCommunication(int arg0,
+                                                                        byte[] arg1) {
+                                media_id = new String(arg1);
+                            }
 
-							@Override
-							public void setProgress(int tag, final int progress) {
-								publishProgress(20 + Math.round(progress * .8f));
-							}
+                            @Override
+                            public void setProgress(int tag, final int progress) {
+                                publishProgress(20 + Math.round(progress * .8f));
+                            }
 
-						}, 0);
+                        }, 0);
 
 
-				if(media_id != null) {
+                if(media_id != null) {
                     if(msg.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE)
                             || msg.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO))
                         msg.formatContentAsPhotoMessage(media_id, thumb_id);
                     else if(msg.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_VOICE_NOTE)) {
                         msg.formatContentAsVoiceMessage(media_id, voiceDuration);
-					}
+                    }
 
                     if(msg.isGroupChatMessage) {
                         mWebif.fGroupChat_SendMessage(msg.chatUserName, msg);
                     } else {
                         WowTalkVoipIF.getInstance(MessageComposerActivityBase.this).fSendChatMessage(msg);
                     }
-				} else {
-					mDbHelper.setChatMessageCannotSent(msg);
-				}
-				return null;
-			}
+                } else {
+                    mDbHelper.setChatMessageCannotSent(msg);
+                }
+                return null;
+            }
 
-			@Override
-			protected void onProgressUpdate(Integer... param) {
-				ProgressBar progressBar = (ProgressBar)msg.extraObjects.get("progressBar");
-				if(progressBar != null) {
-					progressBar.setProgress(param[0]);
-				}
-			}
+            @Override
+            protected void onProgressUpdate(Integer... param) {
+                ProgressBar progressBar = (ProgressBar)msg.extraObjects.get("progressBar");
+                if(progressBar != null) {
+                    progressBar.setProgress(param[0]);
+                }
+            }
 
             @Override
             protected void onPostExecute(Void result) {
@@ -888,18 +973,19 @@ public abstract class MessageComposerActivityBase extends Activity
                     mMsgBox.toast(R.string.messagecomposerbase_upload_file_failure);
                 }
 
-				msg.extraData.putBoolean("isTransferring", false);
+                msg.extraData.putBoolean("isTransferring", false);
 //                mDbHelper.updateChatMessage(msg, true);
-				final ProgressBar progressBar = (ProgressBar)msg.extraObjects.get("progressBar");
-				if(progressBar != null)
-					progressBar.setVisibility(View.GONE);
+                final ProgressBar progressBar = (ProgressBar)msg.extraObjects.get("progressBar");
+                if(progressBar != null)
+                    progressBar.setVisibility(View.GONE);
 //				showSentStatus(msg);
-			}
+            }
 
-		}.execute((Void)null);
-	}
+        }.execute((Void)null);
+    }
 
-	public void onCreate(Bundle savedInstanceState) {
+
+    public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		instance = this;
 		mIsFirstStartToScroll = true;
@@ -1661,10 +1747,8 @@ public abstract class MessageComposerActivityBase extends Activity
     @Override
     public void onHybirdInputted(String text,
                                  String imagePath, String imageThumbPath,
-                                 String voicePath, int voiceDuration) {
-        String msgContent = String.format("（图文音消息） %s, \n%s %s, \n%s %d",
-                text, imagePath, imageThumbPath, voicePath, voiceDuration);
-        fSendTextMsg_async(msgContent);
+                                 String audioPath, int duration) {
+        fSendHybird_async(text, imagePath, imageThumbPath, audioPath, duration);
     }
 
     @Override

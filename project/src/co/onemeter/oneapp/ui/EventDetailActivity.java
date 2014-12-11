@@ -231,7 +231,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                     msgbox.toast(R.string.require_join_event_success);
                     refresh(false);
                 } else {
-                    msgbox.toast(R.string.require_join_event_fail);
+                    msgbox.toast(R.string.require_join_event_joined);
                 }
             }
         }.execute((Void)null);

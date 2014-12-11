@@ -610,6 +610,7 @@
     <string name="event_more_send_to">发送至 :</string>
     <string name="require_join_event_success">报名成功</string>
     <string name="require_join_event_fail">报名失败</string>
+    <string name="require_join_event_joined">你已经报名了</string>
     <string name="title_send_mail">发送邮件</string>
     <string name="require_to_join_event">请求参加:</string>
     <string name="alert_no_such_public_account">搜索的公共账号不存在</string>

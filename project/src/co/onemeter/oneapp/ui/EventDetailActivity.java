@@ -1,6 +1,9 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,9 +12,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 import co.onemeter.oneapp.R;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.ImageViewActivity;
@@ -30,6 +37,8 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 	
 	private WEvent eventDetail;
     private MessageBox msgbox;
+    private TextView btn_right_up;
+    private TextView btn_right_down;
 
     private void downloadImage(final WFile aFile, final boolean thumbnail, final ImageView imageView) {
 
@@ -176,9 +185,36 @@ public class EventDetailActivity extends Activity implements OnClickListener {
             case R.id.left_button:
                 finish();
                 break;
-            case R.id.right_button:
-                joinEvent();
+            case R.id.right_button_up:
+                joinEvent();//参加报名
+                btn_right_up.setVisibility(View.GONE);
+                btn_right_down.setVisibility(View.VISIBLE);
                 break;
+            case R.id.right_button_down:
+            	cancel_join_event();//取消报名
+            	Builder builder = new AlertDialog.Builder(EventDetailActivity.this);
+            	builder.setTitle("提示");
+            	builder.setMessage("你确认取消报名吗？");
+            	builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						cancel_join_event();
+						btn_right_down.setVisibility(View.GONE);
+		            	btn_right_up.setVisibility(View.VISIBLE);
+		            	Toast.makeText(EventDetailActivity.this, R.string.require_cancel_event_joined, Toast.LENGTH_SHORT).show();
+					}
+				});
+            	builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				});
+            	
+            	builder.create().show();//显示取消报名的对话框           	
+            
+            	break;
             default:
                 break;
         }
@@ -222,6 +258,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
             protected Integer doInBackground(Void... voids) {
                 WowEventWebServerIF web = WowEventWebServerIF.getInstance(EventDetailActivity.this);
                 return web.fJoinEvent(eventDetail.id);
+               
             }
 
             @Override
@@ -235,6 +272,33 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 }
             }
         }.execute((Void)null);
+    }
+    
+    /**
+     * 取消报名
+     */
+    private void cancel_join_event(){
+   	 msgbox.showWait();
+    	 new AsyncTask<Void, Void, Integer>(){
+
+            @Override
+            protected Integer doInBackground(Void... voids) {
+                 WowEventWebServerIF web = WowEventWebServerIF.getInstance(EventDetailActivity.this);
+                return web.fDeleteEvent(eventDetail.id);                
+             }
+
+             @Override
+             public void onPostExecute(Integer errno) {
+                 msgbox.dismissWait();
+                 if (errno == ErrorCode.OK) {
+     //                msgbox.toast(R.string.require_cancel_event_joined);
+                     refresh(false);
+                 } else {
+     //               msgbox.toast(R.string.require_cancel_event_fail);
+                 }
+             }
+         }.execute((Void)null);
+    	
     }
 
     private void refresh(final boolean showProgressBar) {
@@ -274,8 +338,12 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
         AQuery q = new AQuery(this);
         q.find(R.id.left_button).clicked(this);
-        q.find(R.id.right_button).clicked(this);
-
+        q.find(R.id.right_button_up).clicked(this);
+        q.find(R.id.right_button_down).clicked(this);
+        
+        btn_right_up = (TextView) findViewById(R.id.right_button_up);
+        btn_right_down = (TextView) findViewById(R.id.right_button_down);
+        
         updateUI();
     }
 

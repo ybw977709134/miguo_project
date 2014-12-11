@@ -363,6 +363,7 @@
     <string name="import_weibo_friend">导入微博好友</string>
     <string name="import_weixin_friend">导入微信好友</string>
     <string name="event_want_to_sing_up">报名</string>
+    <string name="event_want_to_sing_down">取消报名</string>
     <string name="look_into_bbs">查看讨论版</string>
     <string name="event_apply">报名</string>
     <string name="logo_name">一米家校</string>
@@ -610,6 +611,10 @@
     <string name="event_more_send_to">发送至 :</string>
     <string name="require_join_event_success">报名成功</string>
     <string name="require_join_event_fail">报名失败</string>
+    
+    <string name="require_cancel_event_joined">取消报名成功</string>
+    <string name="require_cancel_event_fail">取消报名失败</string>
+    
     <string name="require_join_event_joined">你已经报名了</string>
     <string name="title_send_mail">发送邮件</string>
     <string name="require_to_join_event">请求参加:</string>

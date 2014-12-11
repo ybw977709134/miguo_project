@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -26,8 +27,7 @@ import org.wowtalk.api.Database;
 import org.wowtalk.api.Moment;
 import org.wowtalk.ui.MediaInputHelper;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -518,10 +518,19 @@ public class InputBoardManager implements Parcelable,
         } else if (i == R.id.btn_input_doodle) {
             inputDoodle();
         } else if (i == R.id.btn_input_picvoice) {
-         //   inputHybirdImageVoiceText();
+            new AlertDialog.Builder(mContext)
+                    .setMessage("图文音消息功能还在开发当中，现在只能发送固定内容的模拟消息。")
+                    .setPositiveButton("发送", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            inputHybird();
+                        }
+                    })
+                    .setNegativeButton("取消", null)
+                    .create().show();
         	//跳转到图文音界面
-        	Intent intent = new Intent(mContext,HybirdImageVoiceTextEditor.class);
-        	mContext.startActivity(intent);
+//        	Intent intent = new Intent(mContext,HybirdImageVoiceTextEditor.class);
+//        	mContext.startActivity(intent);
         } else if (i == R.id.btn_input_voice) {// replace text inputbox with hold-to-speak button
             PackageManager pm = mContext.getPackageManager();
             if (!pm.hasSystemFeature(PackageManager.FEATURE_MICROPHONE)) {
@@ -567,8 +576,27 @@ public class InputBoardManager implements Parcelable,
         inputImage(REQ_INPUT_PHOTO_FOR_DOODLE);
     }
 
-    private void inputHybirdImageVoiceText() {
-        inputImage(REQ_INPUT_PHOTO_FOR_HYBIRD);
+    private void inputHybird() {
+        String imageFilename = mContext.getExternalCacheDir() + "/wowtalk_sample_image_3o35u6.jpg";
+        String thumbFilename = mContext.getExternalCacheDir() + "/wowtalk_sample_thumb_3o35u6.jpg";
+        String audioFilename = mContext.getExternalCacheDir() + "/wowtalk_sample_audio_3o35u6.m4a";
+        try {
+            InputStream imageIS = mContext.getAssets().open("sample_image.jpg");
+            FileUtils.copyFile(imageIS, new File(imageFilename));
+
+            InputStream thumbIS = mContext.getAssets().open("sample_thumb.jpg");
+            FileUtils.copyFile(thumbIS, new File(thumbFilename));
+
+            InputStream audioIS = mContext.getAssets().open("sample_audio.m4a");
+            FileUtils.copyFile(audioIS, new File(audioFilename));
+
+            mResultHandler.onHybirdInputted(
+                    "这是一个示例图文音消息，内容是固定的。",
+                    imageFilename, thumbFilename,
+                    audioFilename, 9);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void inputLocation() {

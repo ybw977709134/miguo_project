@@ -6,7 +6,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:background="@drawable/timeline_card_bg">
+        android:background="@drawable/timeline_card_bg2">
     <RelativeLayout
             android:layout_height="@dimen/title_bar_height"
             android:layout_width="match_parent">

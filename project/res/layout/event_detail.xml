@@ -19,9 +19,15 @@
             android:text="@string/event_details"/>
 
         <TextView
-            android:id="@+id/right_button"
+            android:id="@+id/right_button_up"
             android:text="@string/event_want_to_sing_up"
             style="?attr/navbar_txt_right"/>
+        
+        <TextView
+            android:id="@+id/right_button_down"
+            android:text="@string/event_want_to_sing_down"
+            style="?attr/navbar_txt_right"
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <ScrollView

@@ -108,7 +108,7 @@
                     android:gravity="center"
                     android:text="@string/moment_tag_qa"
                     android:textSize="@dimen/emergency_contact_status_title_txt_size"
-                    android:textColor="@color/white"
+                    android:textColor="@color/gray"
                     android:background="@drawable/btn_gray_selector"/>
         </LinearLayout>
     </LinearLayout>

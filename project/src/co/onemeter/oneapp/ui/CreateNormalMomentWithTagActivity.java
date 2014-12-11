@@ -1191,8 +1191,8 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 @Override
                 protected void onPostExecute(Integer errno) {
                     mMsgBox.dismissWait();
-                    Intent intent =new Intent(CreateNormalMomentWithTagActivity.this, TimelineActivity.class);
-                    startActivity(intent);
+                    finish();
+                   
                     
                 }
             }.execute((Void)null);

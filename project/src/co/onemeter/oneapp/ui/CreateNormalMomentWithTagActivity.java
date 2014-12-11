@@ -43,7 +43,7 @@ import java.util.*;
  * Time: 下午2:05
  * To change this template use File | Settings | File Templates.
  */
-public class CreateNormalMomentWithTagActivity extends Activity implements View.OnClickListener, InputBoardManager.ChangeToOtherAppsListener {
+public class CreateNormalMomentWithTagActivity extends Activity implements View.OnClickListener, InputBoardManager.ChangeToOtherAppsListener{
 
     public static final int MOMENTS_WORDS_OVER = 600;
 
@@ -110,6 +110,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 
     private MediaPlayerWraper mediaPlayerWraper;
     private TimeElapseReportRunnable rightBtnStatusRunnable;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1190,7 +1191,9 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 @Override
                 protected void onPostExecute(Integer errno) {
                     mMsgBox.dismissWait();
-                    finish();
+                    Intent intent =new Intent(CreateNormalMomentWithTagActivity.this, TimelineActivity.class);
+                    startActivity(intent);
+                    
                 }
             }.execute((Void)null);
         }

@@ -563,6 +563,10 @@
 		<activity android:name=".ui.ForgetPasswordActivity"
 		          android:screenOrientation="portrait"
 			/>
+		<activity android:name=".ui.SubmitInformationActivity"
+		          android:theme="@style/Theme.Green"
+			      android:screenOrientation="portrait" >
+		</activity>
 	</application>
 
 </manifest>

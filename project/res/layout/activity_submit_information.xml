@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        style="?attr/navbar"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:layout_alignParentTop="true" >
+
+        <ImageButton
+            android:id="@+id/submit_left_button"
+            style="?attr/navbar_btn_left"
+            android:src="@drawable/nav_back_selector" />
+
+        <TextView
+            style="?attr/navbar_title"
+            android:text="@string/event_submitinfo" />
+
+        <TextView
+            android:id="@+id/submit_right_button"
+            style="?attr/navbar_txt_right"
+            android:text="@string/confirm" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_bar"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingTop="100dp" >
+
+        <ImageView style="@style/standard_list_divider" />
+
+        <EditText
+            android:id="@+id/submit_accountInput"
+            style="@style/inputbox_borderless"
+            android:hint="@string/manage_account_user_name"
+            android:imeOptions="actionNext"
+            android:textCursorDrawable="@color/green" />
+
+        <ImageView
+            style="@style/standard_list_divider"
+            android:layout_marginLeft="@dimen/padding_medium" />
+
+        <EditText
+            android:id="@+id/submit_passWordInput"
+            style="@style/inputbox_borderless"
+            android:hint="@string/sys_notice_telephone"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:textCursorDrawable="@color/green" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/submit_confirm"
+        style="@style/button_green"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayout1"
+        android:layout_centerHorizontal="true"
+        android:text="@string/confirm" />
+
+</RelativeLayout>

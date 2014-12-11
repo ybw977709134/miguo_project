@@ -1,6 +1,7 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import co.onemeter.oneapp.R;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.ImageViewActivity;
@@ -178,6 +181,8 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 break;
             case R.id.right_button:
                 joinEvent();
+            	Intent intent = new Intent(EventDetailActivity.this, SubmitInformationActivity.class);
+            	startActivity(intent);
                 break;
             default:
                 break;

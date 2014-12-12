@@ -172,6 +172,8 @@
     <string name="event_info2">活动介绍可以帮助其他用户更好地了解此活动，请不要过于简略。</string>
     <string name="event_time_start_earlier_now">活动开始时间早于当前时间！</string>
     <string name="event_time_end_earlier">活动结束时间早于开始时间！</string>
+    <string name="event_member_count_nolimit">不限</string>
+    <string name="event_join_coin_free">免费</string>
 
     <string name="settings_myinfo">个人信息</string>
     <string name="my_treasure">我的百宝箱</string>

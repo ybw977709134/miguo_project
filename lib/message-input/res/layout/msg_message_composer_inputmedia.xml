@@ -163,7 +163,7 @@
 			        android:layout_width="64dp"
 			        android:layout_height="64dp"
 			        android:contentDescription="@null"
-			        android:background="@drawable/chat_icon_picvoice"/>
+			        android:background="@drawable/messages_icon_more_pictures_voice_text"/>
 
 		        <TextView
 			        android:layout_height="wrap_content"

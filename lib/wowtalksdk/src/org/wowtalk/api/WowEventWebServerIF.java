@@ -908,7 +908,37 @@ public class WowEventWebServerIF {
 
         dbHelper.setEventJoined(eventId);
     }
+    
+    /**
+     * 取消报名
+     * @param event_id
+     * @return
+     */
+    public int fDeleteEvent(String event_id) {
+    	String uid = mPrefUtil.getUid();
+        String password = mPrefUtil.getPassword();
+        if(uid == null || password == null || event_id == null)
+            return ErrorCode.INVALID_ARGUMENT;
 
+        final String action = "cancel_join_event";
+        String postStr = "action=" + action
+                + "&uid=" + Utils.urlencodeUtf8(uid)
+                + "&password=" + Utils.urlencodeUtf8(password)
+                + "&event_id=" + Utils.urlencodeUtf8(event_id);
+        int errno = _doRequestWithoutResponse(postStr);
+        if(ErrorCode.OK == errno) {
+            setEventDeleted(event_id);
+        }
+        return errno;
+    	
+  
+    }
+
+    private void setEventDeleted(String event_id) {
+    	Database dbHelper = new Database(mContext);
+    	dbHelper.deleteAEvent(event_id);
+    }
+    
     public int fJoinEventWithDetail(String event_id,String name,String phone_number,String email) {
         String uid = mPrefUtil.getUid();
         String password = mPrefUtil.getPassword();

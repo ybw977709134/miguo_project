@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="wowtalk_service">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/wowtalksdk/libs/wowtalk_jar_onemeter_haslog_20140924.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

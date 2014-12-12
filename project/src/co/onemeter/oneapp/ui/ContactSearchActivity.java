@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
@@ -261,6 +262,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //		txtResultCount.setText(String.format(getResources().getString(R.string.search_result_count), groupRooms.size()));
 		groupAdapter = new GroupSearchAdapter(ContactSearchActivity.this, searchedGroupRoomList, strContent);
 		lvGroups.setAdapter(groupAdapter);
+		ListViewUtils.setListViewHeightBasedOnChildren(lvGroups);
         setSearchResultStatus();
 	}
 	
@@ -280,7 +282,9 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //            txtPersonName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
 //            btnAdd.setVisibility(mAllowAdd ? View.VISIBLE : View.INVISIBLE);
 //        }
+
         lvBuddy.setAdapter(buddyAdapter = new BuddySearchItemAdapter(this,searchedBuddyList,edtSearchContent.getText().toString().trim(),mMsgBox));
+	    ListViewUtils.setListViewHeightBasedOnChildren(lvBuddy);
         setSearchResultStatus();
 	}
 	
@@ -510,8 +514,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 			@Override
 			public void afterTextChanged(Editable s) {
 				fStartSearch();
-		        ListViewUtils.setListViewHeightBasedOnChildren(lvBuddy);
-		        ListViewUtils.setListViewHeightBasedOnChildren(lvGroups);
+//		        ListViewUtils.setListViewHeightBasedOnChildren(lvBuddy);
+//		        ListViewUtils.setListViewHeightBasedOnChildren(lvGroups);
 			}
 		});
 	}

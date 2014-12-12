@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.amazonaws.util.StringInputStream;
 
+import junit.framework.Assert;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -121,10 +122,21 @@ i:someone leave the group i am involved
 //messgae payload :   type | yyyy/MM/dd HH:mm| msg id       |content
 // length         :    "i" | <------16------>|"{"$msgId"}"  |"{"$senderID"}"
 
+MSGTYPE_HYBIRD
+s:hybird(image+voice+text) msg content:
+{
+    "text":"...",
 
+    // image (field names are compliant with MSGTYPE_MULTIMEDIA_PHOTO)
+    "pathoffileincloud":"8f623afb-e841-4178-b538-ff7813867b55",
+    "pathofthumbnailincloud":"be298ccb-42a3-4d79-825f-bf1bc01a77bf",
+    "ext":".jpg"
 
-j-zA-Z: reserved
-
+    // audio
+    "audio_pathoffileincloud":"8f623afb-e841-4178-b538-ff7813867b55",
+    "audio_ext":".m4a"
+    "duration":"9",
+}
 
 
 */
@@ -219,6 +231,9 @@ public class ChatMessage {
     public static String MSGTYPE_GROUP_INFO_UPDATED = "q";
     /** added in 2014/8 **/
     public static String MSGTYPE_MOMENT = "r";
+	/**Message Type : hybird of text, image, and voice.
+	 * TODO the value should be "s", but for now the sdk doesn't allow this new type. */
+	public static String MSGTYPE_HYBIRD = "c";
     public static String MSGTYPE_OUTGOING_MSG = "z";
 
     public static String MSGTYPE_SYSTEM_PROMPT = "local_a";
@@ -243,6 +258,9 @@ public class ChatMessage {
 	public static String SENTSTATUS_REACHED_CONTACT = "2";
 	public static String SENTSTATUS_READED_BY_CONTACT = "3";
     public static String SENTSTATUS_SENDING = "4";
+
+	public static final int HYBIRD_COMPONENT_IMAGE = 0;
+	public static final int HYBIRD_COMPONENT_AUDIO = 1;
 
 	/************************Data should be saved in db*****************************/
 	/** insert key of this message in db **/
@@ -472,6 +490,34 @@ public class ChatMessage {
                 mediaFileID, duration);
     }
 
+	/**
+	 * Format message body for {@link #MSGTYPE_HYBIRD}.
+	 * @param text
+	 * @param imageFileId
+	 * @param imageExt
+	 * @param thumbnailFileId
+	 * @param audioFileId
+	 * @param audioExt
+	 * @param duration
+	 */
+	public void formatContentAsHybird(
+			String text,
+			String imageFileId, String imageExt, String thumbnailFileId,
+			String audioFileId, String audioExt, int duration) {
+		messageContent = String.format(
+				"{\"text\":\"%s\"," +
+						"\"pathoffileincloud\":\"%s\"," +
+						"\"ext\":\".%s\"," +
+						"\"pathofthumbnailincloud\":\"%s\"," +
+						"\"audio_pathoffileincloud\":\"%s\"," +
+						"\"audio_ext\":\"%s\"," +
+						"\"duration\":\"%d\"" +
+						"}",
+				text,
+				imageFileId, imageExt, thumbnailFileId,
+				audioFileId, audioExt, duration);
+	}
+
     public void formatContentAsGroupProfileUpdated(String group_id) {
         messageContent = String.format(Locale.getDefault(),
                 "{\"reason\":\"group_profile_updated\",\"id\":\"%s\"}", group_id);
@@ -491,11 +537,29 @@ public class ChatMessage {
      *    <li> {@link #MSGTYPE_MULTIMEDIA_VOICE_NOTE}</li>
      * </ul>
      */
-    public String getMediaFileID() {
-        Pattern p = Pattern.compile("pathoffileincloud\" *: *\"([0-9a-zA-Z-_]+)");
-        Matcher m = p.matcher(messageContent);
-        if(m.find())
-            return m.group(1);
+	public String getMediaFileID() {
+		Pattern p = Pattern.compile("pathoffileincloud\" *: *\"([0-9a-zA-Z-_]+)");
+		Matcher m = p.matcher(messageContent);
+		if(m.find())
+			return m.group(1);
+		return null;
+	}
+
+    public String getMediaFileID(int hybirdComponent) {
+		if (hybirdComponent == HYBIRD_COMPONENT_IMAGE) {
+			// the image component is compliant with image message.
+			return getMediaFileID();
+		}
+
+		Assert.assertTrue(hybirdComponent == HYBIRD_COMPONENT_AUDIO);
+
+		if (hybirdComponent == HYBIRD_COMPONENT_AUDIO) {
+			Pattern p = Pattern.compile("audio_pathoffileincloud\" *: *\"([0-9a-zA-Z-_]+)");
+			Matcher m = p.matcher(messageContent);
+			if (m.find())
+				return m.group(1);
+		}
+
         return null;
     }
 
@@ -551,6 +615,39 @@ public class ChatMessage {
         // audio sent by ios is .aac
         return ".aac";
     }
+
+	/**
+	 * Get the file name extension coded in message body if this message is of
+	 * type {@link #MSGTYPE_HYBIRD}.
+	 *
+	 * @param hybirdComponent one of
+	 * <ul>
+	 *     <li>{@link #HYBIRD_COMPONENT_IMAGE}</li>
+	 *     <li>{@link #HYBIRD_COMPONENT_AUDIO}</li>
+	 * </ul>
+	 * @return
+	 */
+	public String getFilenameExt(int hybirdComponent) {
+		if (hybirdComponent == HYBIRD_COMPONENT_IMAGE) {
+			// the image component is compliant with image message.
+			return getFilenameExt();
+		}
+
+		Assert.assertTrue(hybirdComponent == HYBIRD_COMPONENT_AUDIO);
+
+		if (hybirdComponent == HYBIRD_COMPONENT_AUDIO) {
+			Pattern p = Pattern.compile("audio_ext\" *: *\"([\\.a-zA-Z0-9]+)");
+			Matcher m = p.matcher(messageContent);
+			if (m.find()) {
+				if (m.group(1).startsWith("."))
+					return m.group(1);
+				else
+					return "." + m.group(1);
+			}
+		}
+
+		return null;
+	}
 
     /**
      * Get the entity ID coded in message body if this message is of type

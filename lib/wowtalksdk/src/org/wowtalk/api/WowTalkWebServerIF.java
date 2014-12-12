@@ -5,6 +5,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Pair;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -4403,12 +4404,20 @@ public class WowTalkWebServerIF {
 
 	public List<GroupChatRoom> getMyClassRooms() {
 		List<GroupChatRoom> result = new LinkedList<>();
-		List<String> schoolIds = getSchoolIds();
-		for (String schoolId : schoolIds) {
-			List<GroupChatRoom> classRooms = getSchoolClassRooms(schoolId);
-			result.addAll(classRooms);
+		List<Pair<String, String>> schools = getMySchools();
+		for (Pair<String, String> school : schools) {
+			GroupChatRoom schoolNode = new GroupChatRoom(school.first, school.second, school.second,
+					null, 0, 0, false);
+			result.add(schoolNode);
 
-			Map<String, List<Buddy>> schoolMembers = getSchoolMembers(schoolId);
+			List<GroupChatRoom> classRooms = getSchoolClassRooms(school.first);
+			schoolNode.childGroups = new ArrayList<>(classRooms);
+			for (GroupChatRoom c : classRooms) {
+				increaseLevel(c);
+				c.parentGroupId = schoolNode.groupID;
+			}
+
+			Map<String, List<Buddy>> schoolMembers = getSchoolMembers(school.first);
 			for (GroupChatRoom classroom : classRooms) {
 				List<Buddy> classMembers = schoolMembers.get(classroom.groupID);
 				if (classMembers != null && !classMembers.isEmpty()) {
@@ -4420,6 +4429,19 @@ public class WowTalkWebServerIF {
 		}
 
 		return result;
+	}
+
+	/** 递归地 level+1 */
+	private void increaseLevel(GroupChatRoom g) {
+		LinkedList<GroupChatRoom> openlist = new LinkedList<>();
+		openlist.add(g);
+		while (!openlist.isEmpty()) {
+			GroupChatRoom gg = openlist.poll();
+			++gg.level;
+			if (gg.childGroups != null) {
+				openlist.addAll(gg.childGroups);
+			}
+		}
 	}
 
 	private List<GroupChatRoom> getSchoolClassRooms(String schoolId) {
@@ -4554,8 +4576,11 @@ public class WowTalkWebServerIF {
 		return result;
 	}
 
-	private List<String> getSchoolIds() {
-		List<String> result = new LinkedList<String>();
+	/**
+	 * @return Pair(school-id, school-name)
+	 */
+	private List<Pair<String, String>> getMySchools() {
+		List<Pair<String, String>> result = new LinkedList<>();
 
 		String strUID = sPrefUtil.getUid();
 		String strPwd = sPrefUtil.getPassword();
@@ -4588,7 +4613,8 @@ public class WowTalkWebServerIF {
 				for (int i = 0; i < schoolNodes.getLength(); i++) {
 					Element schoolNode = (Element) schoolNodes.item(i);
 					String schoolId = schoolNode.getElementsByTagName("corp_id").item(0).getTextContent();
-					result.add(schoolId);
+					String schoolName = schoolNode.getElementsByTagName("corp_name").item(0).getTextContent();
+					result.add(new Pair<>(schoolId, schoolName));
 				}
 			}
 		}

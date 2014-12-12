@@ -2,166 +2,263 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_dark">
-    <RelativeLayout 
+    android:background="@color/background_dark" >
+
+    <RelativeLayout
         android:id="@+id/title_bar"
-        android:layout_height="@dimen/title_bar_height"
+        style="?attr/navbar"
         android:layout_width="fill_parent"
-        style="?attr/navbar">
-        <ImageButton 
+        android:layout_height="@dimen/title_bar_height" >
+
+        <ImageButton
             android:id="@+id/title_close"
-            android:layout_height="50dp"
             android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:background="@null"
-            android:src="@drawable/nav_close_selector"/>
+            android:src="@drawable/nav_close_selector" />
+
         <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_centerInParent="true"
             style="@style/page_title_dark"
-            android:text="@string/firends_add_pagetitle"/>
-    </RelativeLayout>
-    <LinearLayout 
-        android:layout_height="fill_parent"
-        android:layout_width="fill_parent"
-        android:layout_below="@+id/title_bar"
-        android:orientation="vertical">
-        <LinearLayout 
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/firends_add_pagetitle" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/title_bar"
+        android:orientation="vertical" >
+
+        <LinearLayout
             android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/table_white"
-            android:orientation="vertical">
-            <TextView 
-                android:id="@+id/add_search"
-                android:layout_height="@dimen/table_cell_grouped_height"
-                android:layout_width="fill_parent"
-                android:drawableLeft="@drawable/addcontacts_icon_search"
-                android:drawableRight="@drawable/table_arrow"
-                android:drawablePadding="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:gravity="center_vertical"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:text="@string/contacts_search_buddy"
-                android:clickable="true"/>
-                <!--android:background="@drawable/group_list_bg_begin"-->
-                <!--android:clickable="true"/>-->
-            <ImageView 
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:background="@drawable/divider"/>
+            android:orientation="vertical" >
+
             <TextView
-                    android:id="@+id/scan_qr_code"
-                    android:layout_height="@dimen/table_cell_grouped_height"
-                    android:layout_width="fill_parent"
-                    android:drawableLeft="@drawable/addcontacts_icon_scan"
-                    android:drawableRight="@drawable/table_arrow"
-                    android:drawablePadding="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text="@string/scan_qr_code"
-                    android:clickable="true"/>
-				<!--android:background="@drawable/group_list_bg_body"-->
-            <ImageView
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:background="@drawable/divider"/>
-            <TextView 
-                android:id="@+id/add_import"
-                android:layout_height="@dimen/table_cell_grouped_height"
+                android:id="@+id/add_search"
                 android:layout_width="fill_parent"
-                android:drawableRight="@drawable/table_arrow"
+                android:layout_height="@dimen/table_cell_grouped_height"
+                android:clickable="true"
+                android:drawableLeft="@drawable/addcontacts_icon_search"
                 android:drawablePadding="10dp"
+                android:drawableRight="@drawable/table_arrow"
+                android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:gravity="center_vertical"
-                android:singleLine="true"
+                android:text="@string/contacts_search_buddy"
                 android:textColor="@color/black"
-                android:textStyle="bold"
                 android:textSize="18sp"
-                android:text="@string/import_from_phonecontacts"
+                android:textStyle="bold" />
+            <!-- android:background="@drawable/group_list_bg_begin" -->
+            <!-- android:clickable="true"/> -->
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/divider" />
+
+            <TextView
+                android:id="@+id/scan_qr_code"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/table_cell_grouped_height"
                 android:clickable="true"
-                android:visibility="gone"/>
-            
+                android:drawableLeft="@drawable/addcontacts_icon_scan"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/table_arrow"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/scan_qr_code"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <!-- android:background="@drawable/group_list_bg_body" -->
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/divider" />
+
+            <TextView
+                android:id="@+id/add_import"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/table_cell_grouped_height"
+                android:clickable="true"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/table_arrow"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:text="@string/import_from_phonecontacts"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
             <TextView
                 android:id="@+id/add_nearby"
-                android:layout_height="50dp"
                 android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:clickable="true"
                 android:drawableLeft="@drawable/addcontacts_icon_nearby"
-                android:drawableRight="@drawable/table_arrow"
                 android:drawablePadding="10dp"
+                android:drawableRight="@drawable/table_arrow"
+                android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:gravity="center_vertical"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textSize="18sp"
                 android:text="@string/friends_nearby"
-                android:clickable="true"/>
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
             <ImageView
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:background="@drawable/divider"/>
-        </LinearLayout>
-        <TextView
-                android:id="@+id/add_create_group"
-                android:layout_height="50dp"
                 android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/divider" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:background="@color/background_light">
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/divider" />
+
+            <TextView
+                android:id="@+id/add_create_group"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:clickable="true"
                 android:drawableLeft="@drawable/addcontacts_icon_group"
-                android:drawableRight="@drawable/table_arrow"
                 android:drawablePadding="10dp"
+                android:drawableRight="@drawable/table_arrow"
+                android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:gravity="center_vertical"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textSize="18sp"
                 android:text="@string/friends_add_create_group"
-                android:clickable="true"/>
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/divider" />
+        </LinearLayout>
+        
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:background="@color/background_light">
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/divider" />
+
+            <TextView
+                android:id="@+id/add_offcial_account"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:drawableLeft="@drawable/addcontacts_icon_account"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/table_arrow"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/friends_add_official_account"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/divider" />
+        </LinearLayout>
+        
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:background="@color/background_light">
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/divider" />
+
+            <TextView
+                android:id="@+id/add_tell_friends"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:drawableLeft="@drawable/addcontacts_icon_tellfriend"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/table_arrow"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/friends_tell_friends"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/divider" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/add_external"
-            android:layout_height="@dimen/table_cell_grouped_height"
             android:layout_width="fill_parent"
+            android:layout_height="@dimen/table_cell_grouped_height"
             android:layout_margin="10dp"
+            android:background="@drawable/table_white"
+            android:clickable="true"
             android:drawableLeft="@drawable/table_add_contact"
-            android:drawableRight="@drawable/table_arrow"
             android:drawablePadding="10dp"
+            android:drawableRight="@drawable/table_arrow"
+            android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:background="@drawable/table_white"
-            android:gravity="center_vertical"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="18sp"
             android:text="@string/friends_add_external_contact"
-            android:visibility="gone"
-            android:clickable="true"/>
-        <TextView 
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
             android:id="@+id/add_offical"
-            android:layout_height="@dimen/table_cell_grouped_height"
             android:layout_width="fill_parent"
+            android:layout_height="@dimen/table_cell_grouped_height"
             android:layout_margin="10dp"
+            android:background="@drawable/table_white"
+            android:clickable="true"
             android:drawableLeft="@drawable/table_official"
-            android:drawableRight="@drawable/table_arrow"
             android:drawablePadding="10dp"
+            android:drawableRight="@drawable/table_arrow"
+            android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:background="@drawable/table_white"
-            android:gravity="center_vertical"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="18sp"
             android:text="@string/friends_add_official_account"
-            android:visibility="gone"
-            android:clickable="true"/>
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
     </LinearLayout>
 
 </RelativeLayout>

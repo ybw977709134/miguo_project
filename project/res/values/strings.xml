@@ -116,14 +116,16 @@
 	<string name="friends_add_search">搜索</string>
 	<string name="friends_add_import">导入</string>
 	<string name="friends_add_create_group">创建组</string>
-	<string name="friends_add_official_account">公众帐号</string>
+	<string name="friends_add_official_account">官方帐号</string>
 	<string name="friends_nearby">附近的人</string>
 	<string name="friends_nearby_groups">附近的群</string>
 	<string name="friends_interest">兴趣交友</string>
     <string name="friends_moment_detail">详情</string>
+    <string name="friends_tell_friends">告诉朋友</string>
     <string name="friends_add_external_contact">添加外部联系人</string>
     <string name="friends_moment_comment_me">我</string>
     <string name="favoriteGroupsSort_failure">排序失败</string>
+    
 
 	<string name="events_all">乐趣活动</string>
 	<string name="events_official">官方活动</string>

@@ -18,8 +18,10 @@ import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView.ScaleType;
 import co.onemeter.oneapp.R;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.Log;
 import org.wowtalk.api.*;
 
@@ -294,6 +296,9 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 		txtTitle = (TextView) findViewById(R.id.title_text);
 		lvEvent = (ListView) findViewById(R.id.event_list);
         newEventPanel = findViewById(R.id.new_event_panel);
+        if(Buddy.ACCOUNT_TYPE_TEACHER != PrefUtil.getInstance(this).getMyAccountType()){
+        	ibRight.setVisibility(View.GONE);
+        }
 
         ibRight.setOnClickListener(this);
 		txtTitle.setOnClickListener(this);

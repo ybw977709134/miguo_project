@@ -120,7 +120,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:textSize="@dimen/moment_op_txt_size"
-                                        android:textColor="@color/default_text"/>
+                                        android:textColor="@color/default_text"
+                                        android:visibility="gone"/>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>

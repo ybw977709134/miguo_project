@@ -43,13 +43,13 @@
 				android:background="@null"
 				android:src="@drawable/home_icon_my_class"/>
 			<ImageButton
-				android:id="@+id/btn_homework"
+				android:id="@+id/btn_funnyevent"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
 				android:layout_gravity="center_vertical"
 				android:background="@null"
-				android:src="@drawable/home_icon_homework"/>
+				android:src="@drawable/home_icon_events_1"/>
 		</LinearLayout>
 
 		<!-- buttons wrapper -->
@@ -121,7 +121,8 @@
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:gravity="center"
-					android:orientation="vertical">
+					android:orientation="vertical"
+					android:visibility="gone">
 					<ImageButton
 						android:id="@+id/btn_event"
 						android:layout_width="@dimen/home_icon_size"
@@ -133,6 +134,25 @@
 						android:layout_height="wrap_content"
 						android:textColor="@color/text_gray2"
 						android:text="@string/home_button_events"/>
+				</LinearLayout>
+				<LinearLayout
+					android:id="@+id/vg_bonus"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:gravity="center"
+					android:orientation="vertical">
+					<ImageButton
+						android:id="@+id/btn_bonus"
+						android:layout_width="@dimen/home_icon_size"
+						android:layout_height="@dimen/home_icon_size"
+						android:background="@null"
+						android:src="@drawable/home_icon_gift_selector"/>
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:textColor="@color/text_gray2"
+						android:text="@string/home_button_gift"/>
 				</LinearLayout>
 				<LinearLayout
 					android:id="@+id/vg_grow"
@@ -172,25 +192,7 @@
 				android:layout_below="@+id/vg_btn_row1"
 				android:gravity="center_vertical"
 				android:orientation="horizontal">
-				<LinearLayout
-					android:id="@+id/vg_bonus"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:gravity="center"
-					android:orientation="vertical">
-					<ImageButton
-						android:id="@+id/btn_bonus"
-						android:layout_width="@dimen/home_icon_size"
-						android:layout_height="@dimen/home_icon_size"
-						android:background="@null"
-						android:src="@drawable/home_icon_gift_selector"/>
-					<TextView
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:textColor="@color/text_gray2"
-						android:text="@string/home_button_gift"/>
-				</LinearLayout>
+				
 				<!-- dummy -->
 				<!-- dummy -->
 				<LinearLayout
@@ -218,6 +220,24 @@
 						android:text="@string/home_button_gift"/>
 				</LinearLayout>
 
+				<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:gravity="center"
+					android:visibility="invisible"
+					android:orientation="vertical">
+					<ImageButton
+						android:layout_width="@dimen/home_icon_size"
+						android:layout_height="@dimen/home_icon_size"
+						android:background="@null"
+						android:src="@drawable/home_icon_gift_selector"/>
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:textColor="@color/text_gray2"
+						android:text="@string/home_button_gift"/>
+				</LinearLayout>
 				<LinearLayout
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"

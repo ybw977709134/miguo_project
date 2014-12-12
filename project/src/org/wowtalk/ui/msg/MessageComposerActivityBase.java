@@ -22,9 +22,13 @@ import co.onemeter.oneapp.ui.AppStatusService;
 import co.onemeter.oneapp.ui.CallMainActivity;
 import co.onemeter.oneapp.ui.MessageDetailAdapter;
 import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
+import co.onemeter.oneapp.ui.SmsActivity;
+import co.onemeter.oneapp.ui.StartActivity;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
+
 import com.handmark.pulltorefresh.widget.PullToRefreshListView;
 import com.handmark.pulltorefresh.widget.PullToRefreshListView.OnRefreshListener;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
@@ -1097,7 +1101,11 @@ public abstract class MessageComposerActivityBase extends Activity
 //                if(null != mInputMgr) {
 //                    mInputMgr.hide();
 //                }
-				finish();
+//				finish();
+				
+				//聊完天后都直接 跳转到主消息页面
+				Intent intent = new Intent(MessageComposerActivityBase.this,StartActivity.class);
+				startActivity(intent);
 			}
 		});
 

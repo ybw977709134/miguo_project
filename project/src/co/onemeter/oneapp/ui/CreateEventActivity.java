@@ -230,10 +230,10 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                 imgNeedToUpdateMulti.setImageResource(needToUpdateMulti ? R.drawable.switch_on : R.drawable.switch_off);
                 break;
             case R.id.layout_title: {
-                startActivityForResult(
-                        new Intent(this, InputPlainTextActivity.class)
-                                .putExtra(InputPlainTextActivity.EXTRA_TITLE, getString(R.string.event_title)),
-                        REQ_INPUT_TITLE);
+            	Intent intent = new Intent(this, InputPlainTextActivity.class);
+                intent.putExtra(InputPlainTextActivity.EXTRA_TITLE, getString(R.string.event_title));
+                intent.putExtra(InputPlainTextActivity.EXTRA_VALUE,txtTitle.getText());
+                startActivityForResult(intent,REQ_INPUT_TITLE);
                 break;
             }
             case R.id.layout_loc:
@@ -247,20 +247,29 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                     @Override
                     public void onDateTimeResult(Calendar result) {
                         wevent.startTime = result.getTime();
-                        
-                        updateUI();
-                     
+                        if(wevent.startTime.getTime() > System.currentTimeMillis()){
+                        	updateUI();
+                        }else{
+                        	Toast.makeText(CreateEventActivity.this, R.string.event_time_start_earlier_now, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
-
                 break;
             case R.id.layout_endtime:
                 DateTimeInputHelper.inputStartDateTime(this, new DateTimeInputHelper.OnDateTimeSetListener() {
                     @Override
                     public void onDateTimeResult(Calendar result) {
                         wevent.endTime = result.getTime();
+                        if(wevent.endTime.getTime() > System.currentTimeMillis()){
+                        	if(wevent.startTime != null && wevent.startTime.getTime() < wevent.endTime.getTime()){
+                        		updateUI();
+                        	}else{
+                            	Toast.makeText(CreateEventActivity.this, R.string.event_time_end_earlier, Toast.LENGTH_SHORT).show();
+                        	}
+                        }else{
+                        	Toast.makeText(CreateEventActivity.this, R.string.event_time_start_earlier_now, Toast.LENGTH_SHORT).show();
+                        }
                         
-                        updateUI();
                     }
                 });
                 break;

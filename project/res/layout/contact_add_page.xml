@@ -90,7 +90,28 @@
                 android:text="@string/import_from_phonecontacts"
                 android:clickable="true"
                 android:visibility="gone"/>
+            
             <TextView
+                android:id="@+id/add_nearby"
+                android:layout_height="50dp"
+                android:layout_width="fill_parent"
+                android:drawableLeft="@drawable/addcontacts_icon_nearby"
+                android:drawableRight="@drawable/table_arrow"
+                android:drawablePadding="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:text="@string/friends_nearby"
+                android:clickable="true"/>
+            <ImageView
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:background="@drawable/divider"/>
+        </LinearLayout>
+        <TextView
                 android:id="@+id/add_create_group"
                 android:layout_height="50dp"
                 android:layout_width="fill_parent"
@@ -105,7 +126,6 @@
                 android:textSize="18sp"
                 android:text="@string/friends_add_create_group"
                 android:clickable="true"/>
-        </LinearLayout>
         <TextView
             android:id="@+id/add_external"
             android:layout_height="@dimen/table_cell_grouped_height"

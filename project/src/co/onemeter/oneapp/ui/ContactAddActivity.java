@@ -23,6 +23,7 @@ public class ContactAddActivity extends Activity implements OnClickListener{
 	private TextView txtCreateGroup;
 	private TextView txtOfficial;
     private TextView txtExternal;
+    private TextView txtNearby;
     private MessageBox mMsgBox;
 	
 	private void initView() {
@@ -33,6 +34,7 @@ public class ContactAddActivity extends Activity implements OnClickListener{
 		txtCreateGroup = (TextView) findViewById(R.id.add_create_group);
 		txtOfficial = (TextView) findViewById(R.id.add_offical);
         txtExternal = (TextView) findViewById(R.id.add_external);
+        txtNearby = (TextView) findViewById(R.id.add_nearby);
 		
 		btnTitleClose.setOnClickListener(this);
 		txtSearch.setOnClickListener(this);
@@ -41,6 +43,7 @@ public class ContactAddActivity extends Activity implements OnClickListener{
 		txtCreateGroup.setOnClickListener(this);
 		txtOfficial.setOnClickListener(this);
         txtExternal.setOnClickListener(this);
+        txtNearby.setOnClickListener(this);
 	}
 	
 	@Override
@@ -77,6 +80,10 @@ public class ContactAddActivity extends Activity implements OnClickListener{
                 Intent externalIntent = new Intent(ContactAddActivity.this, ExternalSearchActivity.class);
                 startActivity(externalIntent);
                 break;
+            case R.id.add_nearby:
+            	Intent nearbyIntent = new Intent(ContactAddActivity.this, NearbyActivity.class);
+            	startActivity(nearbyIntent);
+            	break;
             default:
                 mMsgBox.toast(R.string.not_implemented);
                 break;

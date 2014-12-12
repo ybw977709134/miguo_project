@@ -7,11 +7,14 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
@@ -19,6 +22,7 @@ import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.bitmapfun.util.AsyncTask;
 import org.wowtalk.ui.msg.RoundedImageView;
+
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 
@@ -71,7 +75,7 @@ public class PublicSearchActivity extends Activity {
     }
 
     private ImageButton btnTitleBack;
-    private Button searchButton;
+//    private Button searchButton;
     private EditText edtSearch;
     private ListView lvPublic;
 //    private Buddy buddy;
@@ -92,7 +96,7 @@ public class PublicSearchActivity extends Activity {
         mMsgBox = new MessageBox(this);
 
         btnTitleBack = (ImageButton) findViewById(R.id.title_back);
-        searchButton = (Button) findViewById(R.id.btn_search);
+//        searchButton = (Button) findViewById(R.id.btn_search);
         edtSearch = (EditText) findViewById(R.id.edt_search);
         fieldClear = (ImageButton) findViewById(R.id.field_clear);
         lvPublic = (ListView) findViewById(R.id.list_public);
@@ -102,12 +106,12 @@ public class PublicSearchActivity extends Activity {
                 finish();
             }
         });
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchPublicAccount(edtSearch.getText().toString());
-            }
-        });
+//        searchButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                searchPublicAccount(edtSearch.getText().toString());
+//            }
+//        });
         fieldClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,9 +134,19 @@ public class PublicSearchActivity extends Activity {
 
             @Override
             public void afterTextChanged(Editable s) {
+            	//searchPublicAccount(edtSearch.getText().toString());
             }
         });
 
+        edtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				searchPublicAccount(edtSearch.getText().toString());
+				return true;
+			}
+		});
+        
         lvPublic.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -149,10 +163,15 @@ public class PublicSearchActivity extends Activity {
             mMsgBox.toast(getString(R.string.alert_search_target_empty));
             return;
         }
-        mMsgBox.showWait();
+        
 //        buddy = new Buddy();
         publicBuddies = new ArrayList<Buddy>();
         new AsyncTask<Void, Void, Integer>() {
+        	
+        	protected void onPreExecute() {
+        		mMsgBox.showWait();
+        	};
+        	
             @Override
             protected Integer doInBackground(Void... params) {
                 return WowTalkWebServerIF.getInstance(PublicSearchActivity.this)

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * <p>“图文音”混合消息的编辑器。</p>
@@ -28,9 +29,11 @@ public class HybirdImageVoiceTextEditor extends Activity {
     private LinearLayout layout_hybird_image_voice_text_record;//录音布局
     private LinearLayout layout_hybird_image_voice_text_endrecord;//结束录音后的布局
     private ImageView imageView_hybird_image_voice_text_record;//录音图片
+    private ImageView imageView_hybird_image_voice_text_record_play;//播放图片
     private TextView textView_hybird_image_voice_text_recordtime;//录音时间1
     private TextView textView_hybird_image_voice_text_recorddown;//按下，能录120秒
     private TextView textView_hybird_image_voice_text_endrecordsound;//点击结束录音
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +60,7 @@ public class HybirdImageVoiceTextEditor extends Activity {
         layout_hybird_image_voice_text_record = (LinearLayout) findViewById(R.id.layout_hybird_image_voice_text_record);
         layout_hybird_image_voice_text_endrecord = (LinearLayout) findViewById(R.id.layout_hybird_image_voice_text_endrecord);
         imageView_hybird_image_voice_text_record = (ImageView) findViewById(R.id.imageView_hybird_image_voice_text_record);
+        imageView_hybird_image_voice_text_record_play = (ImageView) findViewById(R.id.imageView_hybird_image_voice_text_record_play);
         textView_hybird_image_voice_text_recordtime = (TextView) findViewById(R.id.textView_hybird_image_voice_text_recordtime);
         textView_hybird_image_voice_text_recorddown = (TextView) findViewById(R.id.textView_hybird_image_voice_text_recorddown);
         textView_hybird_image_voice_text_endrecordsound = (TextView) findViewById(R.id.textView_hybird_image_voice_text_endrecordsound);
@@ -68,8 +72,9 @@ public class HybirdImageVoiceTextEditor extends Activity {
     		finish();
     		
     	} else if (R.id.textView_hybird_image_voice_text_preview == view.getId()) {//预览
-    		Intent intent = new Intent(HybirdImageVoiceTextEditor.this,HybirdImageVoiceTextPreview.class);
-    		startActivity(intent);
+//    		Intent intent = new Intent(HybirdImageVoiceTextEditor.this,HybirdImageVoiceTextPreview.class);
+//    		startActivity(intent);
+    		Toast.makeText(HybirdImageVoiceTextEditor.this, "功能还未开放", Toast.LENGTH_SHORT).show();
     		
     	} else if (R.id.textView_hybird_image_voice_text_upload == view.getId()) {//点击添加图片//点击图片图标能查看大图
     		
@@ -84,6 +89,7 @@ public class HybirdImageVoiceTextEditor extends Activity {
     		layout_hybird_image_voice_text_endrecord.setVisibility(View.VISIBLE);
     		
     	} else if (R.id.imageView_hybird_image_voice_text_record_play == view.getId()) {//点击播放
+    		imageView_hybird_image_voice_text_record_play.setBackgroundResource(R.drawable.timeline_stop);
     		
     	} else if (R.id.imageView_hybird_image_voice_text_endrecord_cancel == view.getId()) {//点击取消
     		layout_hybird_image_voice_text_endrecord.setVisibility(View.GONE);

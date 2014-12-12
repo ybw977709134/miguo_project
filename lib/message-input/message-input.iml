@@ -74,14 +74,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="paint_android" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../wowtalksdk/libs/wowtalk_jar_onemeter_dev01_20141202.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="wowtalk_service" level="project" />
   </component>
 </module>

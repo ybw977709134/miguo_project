@@ -370,7 +370,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 getResources().getString(R.string.event_time_label),
                 new SimpleDateFormat("MM月dd日 HH:mm").format(eventDetail.startTime)
                         + "-"
-                        + new SimpleDateFormat("HH:mm").format(eventDetail.endTime)));
+                        + new SimpleDateFormat("MM月dd日 HH:mm").format(eventDetail.endTime)));
 
         // place
         q.find(R.id.event_place).text(helper.formatField(

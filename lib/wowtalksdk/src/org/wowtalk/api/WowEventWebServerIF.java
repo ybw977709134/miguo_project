@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 /**
- * 娲诲姩妯″潡鐩稿叧鍔熻兘銆�
+ * 活动模块相关功能。
  */
 public class WowEventWebServerIF {
 
@@ -81,7 +81,7 @@ public class WowEventWebServerIF {
 
             sb.append("<event>");
                 sb.append("<event_id>70abf1f63-8038-4fe5-b97a-3b1f27c0ab14</event_id>");
-                sb.append("<event_creator>鑻忓窞鍥尯</event_creator>");
+                sb.append("<event_creator>苏州园区</event_creator>");
                 sb.append("<owner_id>xxfv</owner_id>");
                 sb.append("<event_title>dancing ball</event_title>");
                 sb.append("<event_desc>new_temp_group_6044</event_desc>");
@@ -128,7 +128,7 @@ public class WowEventWebServerIF {
 
             sb.append("<event>");
                 sb.append("<event_id>70afdc1f63-8038-4fe5-b97a-3b1f27adc0ab14</event_id>");
-                sb.append("<event_creator>鍥尯</event_creator>");
+                sb.append("<event_creator>园区</event_creator>");
                 sb.append("<owner_id>xxfk</owner_id>");
                 sb.append("<event_title>pipu ball</event_title>");
                 sb.append("<event_desc>pipu ball play</event_desc>");
@@ -224,7 +224,7 @@ public class WowEventWebServerIF {
 
             sb.append("<event>");
                 sb.append("<event_id>70af1f63-8038-4fe5-b97a-3b1f27c0ab16</event_id>");
-                sb.append("<event_creator>鑻忓窞</event_creator>");
+                sb.append("<event_creator>苏州</event_creator>");
                 sb.append("<owner_id>xxfb</owner_id>");
                 sb.append("<event_title>ka ball</event_title>");
                 sb.append("<event_desc>ka ball play</event_desc>");
@@ -258,11 +258,11 @@ public class WowEventWebServerIF {
         try {
             DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
 
-            // 銉夈偔銉ャ儭銉炽儓銉撱儷銉�銉笺倰鐢熸垚
+            // ドキュメントビルダーを生成
             DocumentBuilder builder = dbfactory.newDocumentBuilder();
 
             String xmlStr=fixXmlResultForEventTest(action);
-            xmlStr=xmlStr.replaceAll("&amp;", "锛�");
+            xmlStr=xmlStr.replaceAll("&amp;", "＆");
             xmlStr=xmlStr.replaceAll("&quot;", "\"");
             xmlStr=xmlStr.replaceAll("&nbsp;", " ");
 
@@ -282,7 +282,7 @@ public class WowEventWebServerIF {
     }
 
 	/**
-	 * 鑾峰彇娲诲姩鍒楄〃銆�
+	 * 获取活动列表。
 	 * @return errno
 	 */
 	public int fGetLatestEvents() {
@@ -533,7 +533,7 @@ public class WowEventWebServerIF {
     }
 
     /**
-	 * 鍒涘缓娲诲姩銆�
+	 * 创建活动。
 	 * 
 	 * @param data The newly created WActivity object's ID will be written into data.actid.
 	 * @return errno
@@ -589,7 +589,7 @@ public class WowEventWebServerIF {
     }
 
     /**
-     * 淇敼娲诲姩淇℃伅銆�
+     * 修改活动信息。
      * 
      * @param event_id
      * @param text
@@ -617,7 +617,7 @@ public class WowEventWebServerIF {
     }
 
     /**
-     * 涓婁紶澶氬獟浣撻檮浠躲��
+     * 上传多媒体附件。
      * 
      * @param event_id
      * @param multimedia_content_type
@@ -650,7 +650,7 @@ public class WowEventWebServerIF {
     }
 
     /**
-     * 鍒犻櫎澶氬獟浣撻檮浠躲��
+     * 删除多媒体附件。
      * 
      * @param event_id
      * @param multimedia_content_id
@@ -674,7 +674,7 @@ public class WowEventWebServerIF {
     }
 
     /**
-     * 鍙戣〃璇勮銆�
+     * 发表评论。
      * 
      * @param event_id
      * @param comment_type
@@ -700,7 +700,7 @@ public class WowEventWebServerIF {
     }
 
     /**
-     * 鍒犻櫎娲诲姩銆�
+     * 删除活动。
      * 
      * @param event_id
 	 * @return errno
@@ -721,7 +721,7 @@ public class WowEventWebServerIF {
     }
     
     /**
-     * 鍒犻櫎娲诲姩璇勮銆�
+     * 删除活动评论。
      * 
      * @param event_id
      * @param review_id
@@ -744,7 +744,7 @@ public class WowEventWebServerIF {
     
     
     /**
-     * 鎵瑰噯鍔犲叆鐢宠銆�
+     * 批准加入申请。
      * 
      * @param event_id
      * @param member_id
@@ -755,7 +755,7 @@ public class WowEventWebServerIF {
     }
 
     /**
-     * 鎷掔粷鍔犲叆鐢宠銆�
+     * 拒绝加入申请。
      * 
      * @param event_id
      * @param member_id
@@ -784,14 +784,14 @@ public class WowEventWebServerIF {
 	}
     
 	/**
-	 * 鑾峰彇娲诲姩鐨勬垚鍛樺垪琛ㄣ��
+	 * 获取活动的成员列表。
 	 * <p>
-	 * 鍖呮嫭锛�
+	 * 包括：
 	 * <ul>
-	 * <li>鎴戣嚜宸�</li>
-	 * <li>姝ｅ紡鎴愬憳</li>
-	 * <li>宸茬敵璇峰姞鍏ヤ絾灏氭湭閫氳繃瀹℃牳鐨勬垚鍛�</li>
-	 * <li>宸茶閭�璇峰姞鍏ヤ絾灏氭湭鎺ュ彈鐨勬垚鍛�</li>
+	 * <li>我自己</li>
+	 * <li>正式成员</li>
+	 * <li>已申请加入但尚未通过审核的成员</li>
+	 * <li>已被邀请加入但尚未接受的成员</li>
 	 * </ul>
 	 * 
 	 * @param result Buddy.tag value definitions:

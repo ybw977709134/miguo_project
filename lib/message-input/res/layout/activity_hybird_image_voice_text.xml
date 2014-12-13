@@ -52,7 +52,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="5dp"
-        android:background="@color/libmsg_white"
+        android:background="@drawable/table_white"
         android:gravity="top"
         android:hint="写下要分享的故事"
         android:lines="6"/>
@@ -94,9 +94,9 @@
     <!-- 录音部分 -->
     <LinearLayout 
         android:id="@+id/layout_hybird_image_voice_text_record"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="30dp"       
-        android:background="@color/libmsg_white"
+        android:background="@drawable/table_white"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -107,7 +107,8 @@
             android:id="@+id/imageView_hybird_image_voice_text_record"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/messages_icon_more_voice" />
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/timeline_record" />
         
         <!-- 按下录音（最大120秒）/点击结束录音  -->
         <TextView 
@@ -158,15 +159,16 @@
         
         <LinearLayout
             android:id="@+id/layout_hybird_image_voice_text_endrecord_time" 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/libmsg_white" >
-         <!-- 播放图标 -->   
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:background="@drawable/table_white" >
+         <!-- 播放/暂停 图标 -->   
         <ImageView
             android:id="@+id/imageView_hybird_image_voice_text_record_play"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:onClick="clickButton"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/timeline_play" />
         <!-- 显示录音的时间 -->
         <TextView 
@@ -183,11 +185,11 @@
         <ImageView
             android:id="@+id/imageView_hybird_image_voice_text_endrecord_cancel"
             android:layout_width="30dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:background="@color/libmsg_white"
             android:layout_marginLeft="10dp"
             android:onClick="clickButton"
-            android:src="@drawable/icon_cancel" />
+            android:src="@drawable/timeline_close" />
         
     </LinearLayout>
 

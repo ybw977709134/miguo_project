@@ -138,7 +138,10 @@ public class SmsActivity extends Activity implements OnClickListener {
                 titleBar.setVisibility(View.GONE);
                 searchLayoutRightBtn.setVisibility(View.VISIBLE);
                 searchEmptyGlass.setVisibility(View.VISIBLE);
+                etSearch.setFocusable(true);
+                etSearch.setFocusableInTouchMode(true);
                 etSearch.requestFocus();
+                ((InputMethodManager)SmsActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
             }
             return false;
         }

@@ -319,6 +319,7 @@
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
 						android:drawableRight="@drawable/table_arrow"
+						android:text="@string/event_member_count_nolimit"
 						android:drawablePadding="10dp" />
                 </LinearLayout>
                 <ImageView
@@ -402,6 +403,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
+                        android:text="@string/event_join_coin_free"
                         android:drawableRight="@drawable/table_arrow"
                         android:drawablePadding="10dp" />
                 </LinearLayout>

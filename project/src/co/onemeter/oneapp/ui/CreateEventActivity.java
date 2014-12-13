@@ -50,6 +50,11 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     private ImageVideoInputWidget imageInputWidget;
     private TextView txtTitle;
     private TextView txtLoc;
+    private TextView txtStartTime;
+    private TextView txtEndTime;
+    private TextView txtCapacity;
+    private TextView txtCoins;
+    
     private ImageView imgAllDay;
     private ImageView imgAllowReview;
     private ImageView imgNeedToUpdateMulti;
@@ -74,6 +79,11 @@ public class CreateEventActivity extends Activity implements OnClickListener {
 
         txtTitle = (TextView) findViewById(R.id.txt_title);
         txtLoc = (TextView) findViewById(R.id.txt_loc);
+        txtStartTime = (TextView) findViewById(R.id.txt_start_time);
+        txtEndTime = (TextView) findViewById(R.id.txt_end_time);
+        edtContent = (EditText) findViewById(R.id.edt_content);
+        txtCapacity = (TextView) findViewById(R.id.txt_capacity);
+        txtCoins = (TextView) findViewById(R.id.txt_coins);
 
         imgAllDay = (ImageView) findViewById(R.id.img_allday);
         imgAllowReview = (ImageView) findViewById(R.id.img_allowreview);
@@ -211,10 +221,14 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                 finish();
                 break;
             case R.id.title_confirm:
-                if(wevent.startTime.after(wevent.endTime)){
-                	Toast.makeText(this, getString(R.string.event_timebeforeafter), Toast.LENGTH_SHORT).show();
-                }else{
+            	boolean isContentTrue = !TextUtils.isEmpty(txtTitle.getText()) && !TextUtils.isEmpty(txtTitle.getText()) 
+            				&& !TextUtils.isEmpty(txtStartTime.getText())&& !TextUtils.isEmpty(txtEndTime.getText())
+            				&& !TextUtils.isEmpty(edtContent.getText().toString()) && !TextUtils.isEmpty(txtCapacity.getText()) 
+            				&& !TextUtils.isEmpty(txtCoins.getText()); 
+                if(isContentTrue){
                 	createEvent();
+                }else{
+                	Toast.makeText(this, getString(R.string.operation_failed), Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.img_allday:
@@ -403,6 +417,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     	mIsInfo = isInfo;
     	isBtnInfo.setBackgroundResource(mIsInfo ? R.drawable.icon_switch_on : R.drawable.icon_switch_off);
 	}
+    
     private void changeIsPublic(boolean isPublic) {
     	mIsPublic = isPublic;
     	isBtnPublic.setBackgroundResource(mIsPublic ? R.drawable.icon_switch_on : R.drawable.icon_switch_off);

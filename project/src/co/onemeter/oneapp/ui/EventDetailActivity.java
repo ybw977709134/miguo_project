@@ -190,7 +190,6 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 btn_right_down.setVisibility(View.VISIBLE);
                 break;
             case R.id.right_button_down:
-            	cancel_join_event();//取消报名
             	Builder builder = new AlertDialog.Builder(EventDetailActivity.this);
             	builder.setTitle("提示");
             	builder.setMessage("你确认取消报名吗？");
@@ -198,7 +197,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						cancel_join_event();
+						cancel_join_event();//取消报名
 						btn_right_down.setVisibility(View.GONE);
 		            	btn_right_up.setVisibility(View.VISIBLE);
 		            	Toast.makeText(EventDetailActivity.this, R.string.require_cancel_event_joined, Toast.LENGTH_SHORT).show();
@@ -226,12 +225,25 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
+        
+        btn_right_up = (TextView) findViewById(R.id.right_button_up);
+        btn_right_down = (TextView) findViewById(R.id.right_button_down);
 
         eventDetail = getIntent().getExtras().getParcelable(EventActivity.EVENT_DETAIL_BUNDLE);
+        
+        
 
-        if (eventDetail == null)
+        if (eventDetail == null) { 
             return;
-
+        } else {
+        	if (eventDetail.membership == WEvent.MEMBER_SHIP_JOINED) {
+        		btn_right_up.setVisibility(View.GONE);
+        		btn_right_down.setVisibility(View.VISIBLE);
+        	}
+        }
+        
+        	
+        
         msgbox = new MessageBox(this);
 
 		initView();
@@ -340,8 +352,8 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         q.find(R.id.right_button_up).clicked(this);
         q.find(R.id.right_button_down).clicked(this);
         
-        btn_right_up = (TextView) findViewById(R.id.right_button_up);
-        btn_right_down = (TextView) findViewById(R.id.right_button_down);
+//        btn_right_up = (TextView) findViewById(R.id.right_button_up);
+//        btn_right_down = (TextView) findViewById(R.id.right_button_down);
         
         updateUI();
     }
@@ -358,7 +370,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 getResources().getString(R.string.event_time_label),
                 new SimpleDateFormat("MM月dd日 HH:mm").format(eventDetail.startTime)
                         + "-"
-                        + new SimpleDateFormat("HH:mm").format(eventDetail.endTime)));
+                        + new SimpleDateFormat("MM月dd日 HH:mm").format(eventDetail.endTime)));
 
         // place
         q.find(R.id.event_place).text(helper.formatField(

@@ -116,14 +116,16 @@
 	<string name="friends_add_search">搜索</string>
 	<string name="friends_add_import">导入</string>
 	<string name="friends_add_create_group">创建组</string>
-	<string name="friends_add_official_account">公众帐号</string>
+	<string name="friends_add_official_account">官方帐号</string>
 	<string name="friends_nearby">附近的人</string>
 	<string name="friends_nearby_groups">附近的群</string>
 	<string name="friends_interest">兴趣交友</string>
     <string name="friends_moment_detail">详情</string>
+    <string name="friends_tell_friends">告诉朋友</string>
     <string name="friends_add_external_contact">添加外部联系人</string>
     <string name="friends_moment_comment_me">我</string>
     <string name="favoriteGroupsSort_failure">排序失败</string>
+    
 
 	<string name="events_all">乐趣活动</string>
 	<string name="events_official">官方活动</string>
@@ -172,6 +174,8 @@
     <string name="event_info2">活动介绍可以帮助其他用户更好地了解此活动，请不要过于简略。</string>
     <string name="event_time_start_earlier_now">活动开始时间早于当前时间！</string>
     <string name="event_time_end_earlier">活动结束时间早于开始时间！</string>
+    <string name="event_member_count_nolimit">不限</string>
+    <string name="event_join_coin_free">免费</string>
 
     <string name="settings_myinfo">个人信息</string>
     <string name="my_treasure">我的百宝箱</string>
@@ -608,7 +612,7 @@
 	<string name="settings_account_select_country">选择国家码</string>
 	<string name="friends_moment_reviews">评论</string>
 	<string name="groupmembermanage_cancel_admin">取消管理员</string>
-    <string name="alert_search_target_empty">wowtalk id 不能为空</string>
+    <string name="alert_search_target_empty">搜索内容不能为空</string>
 	<string name="group_pending_request_already_processed">该请求已经被处理过（可能是其他管理员处理的） </string>
     <string name="bao_ming">报名</string>
     <string name="event_input_name_hint">请输入您的名字</string>

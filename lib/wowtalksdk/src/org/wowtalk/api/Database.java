@@ -128,6 +128,18 @@ public class Database {
     }
 
     /**
+     * 这个方法是给 WowTalkVoipIF 调用的。
+     *
+     * java.lang.NoSuchMethodError: org.wowtalk.api.Database.getInstance
+         at org.wowtalk.api.WowTalkVoipIF.fSendChatMessage(WowTalkVoipIF.java:1034)
+     * @param context
+     * @return
+     */
+    public static Database getInstance(Context context) {
+        return new Database(context);
+    }
+
+    /**
      * This has to be called before any function is called.
      * <p>This will be called in constructor automatically.</p>
      * 此处为遗留代码，sdk在调用，上层调用时，不需要显示调用此方法(已在构造方法中调用)

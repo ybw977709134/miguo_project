@@ -225,15 +225,13 @@ public class ChatMessage {
     /**Message Type : communicate with public account. */
     public static String MSGTYPE_OFFICIAL_ACCOUNT_MSG = "n";
 
-    /** added in 2014/4 **/
-    public static String MSGTYPE_LOGIN_PLACE_CHANGED = "o";
-    public static String MSGTYPE_BUDDY_INFO_UPDATED = "p";
+	public static String MSGTYPE_LOGIN_PLACE_CHANGED = "o"; // NOT USED
+	public static String MSGTYPE_BUDDY_INFO_UPDATED = "p";
     public static String MSGTYPE_GROUP_INFO_UPDATED = "q";
     /** added in 2014/8 **/
     public static String MSGTYPE_MOMENT = "r";
-	/**Message Type : hybird of text, image, and voice.
-	 * TODO the value should be "s", but for now the sdk doesn't allow this new type. */
-	public static String MSGTYPE_HYBIRD = "c";
+	/**Message Type : hybird of text, image, and voice. */
+	public static String MSGTYPE_HYBIRD = MSGTYPE_MULTIMEDIA_VCF; // 暂时借用 VCF 这种闲置消息类型
     public static String MSGTYPE_OUTGOING_MSG = "z";
 
     public static String MSGTYPE_SYSTEM_PROMPT = "local_a";

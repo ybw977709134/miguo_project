@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -27,7 +26,8 @@ import org.wowtalk.api.Database;
 import org.wowtalk.api.Moment;
 import org.wowtalk.ui.MediaInputHelper;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -63,6 +63,8 @@ public class InputBoardManager implements Parcelable,
         public void onHybirdInputted(String text,
                                      String imagePath, String imageThumbPath,
                                      String voicePath, int voiceDuration);
+        /** 用户想发送图文音消息。 */
+        public void onHybirdRequested();
         public void onVideoInputted(String path, String thumbPath);
 
         /**
@@ -129,9 +131,6 @@ public class InputBoardManager implements Parcelable,
 
     private static final int REQ_INPUT_PHOTO_FOR_DOODLE = 80873;
     private static final int REQ_INPUT_DOODLE = 80874;
-    /** 为图文音混合消息输入图片。*/
-    private static final int REQ_INPUT_PHOTO_FOR_HYBIRD = 8087300;
-    private static final int REQ_INPUT_HYBIRD = 8087301;
 
 
     /**
@@ -518,19 +517,7 @@ public class InputBoardManager implements Parcelable,
         } else if (i == R.id.btn_input_doodle) {
             inputDoodle();
         } else if (i == R.id.btn_input_picvoice) {
-            new AlertDialog.Builder(mContext)
-                    .setMessage("图文音消息功能还在开发当中，现在只能发送固定内容的模拟消息。")
-                    .setPositiveButton("发送", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            inputHybird();
-                        }
-                    })
-                    .setNegativeButton("取消", null)
-                    .create().show();
-        	//跳转到图文音界面
-//        	Intent intent = new Intent(mContext,HybirdImageVoiceTextEditor.class);
-//        	mContext.startActivity(intent);
+            mResultHandler.onHybirdRequested();
         } else if (i == R.id.btn_input_voice) {// replace text inputbox with hold-to-speak button
             PackageManager pm = mContext.getPackageManager();
             if (!pm.hasSystemFeature(PackageManager.FEATURE_MICROPHONE)) {
@@ -574,29 +561,6 @@ public class InputBoardManager implements Parcelable,
 
     private void inputDoodle() {
         inputImage(REQ_INPUT_PHOTO_FOR_DOODLE);
-    }
-
-    private void inputHybird() {
-        String imageFilename = mContext.getExternalCacheDir() + "/wowtalk_sample_image_3o35u6.jpg";
-        String thumbFilename = mContext.getExternalCacheDir() + "/wowtalk_sample_thumb_3o35u6.jpg";
-        String audioFilename = mContext.getExternalCacheDir() + "/wowtalk_sample_audio_3o35u6.m4a";
-        try {
-            InputStream imageIS = mContext.getAssets().open("sample_image.jpg");
-            FileUtils.copyFile(imageIS, new File(imageFilename));
-
-            InputStream thumbIS = mContext.getAssets().open("sample_thumb.jpg");
-            FileUtils.copyFile(thumbIS, new File(thumbFilename));
-
-            InputStream audioIS = mContext.getAssets().open("sample_audio.m4a");
-            FileUtils.copyFile(audioIS, new File(audioFilename));
-
-            mResultHandler.onHybirdInputted(
-                    "这是一个示例图文音消息，内容是固定的。",
-                    imageFilename, thumbFilename,
-                    audioFilename, 9);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void inputLocation() {
@@ -1219,33 +1183,6 @@ public class InputBoardManager implements Parcelable,
                 result = true;
                 break;
             }
-            case REQ_INPUT_HYBIRD: {
-                String[] photoPath = new String[2];
-                photoPath[0] = data.getStringExtra(HybirdImageVoiceTextEditor.EXTRA_OUT_IMAGE_FILENAME);
-
-                // generate thumbnail
-                File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_THUMNAIL, ".jpg");
-                if (f != null) {
-                    photoPath[1] = f.getAbsolutePath();
-                    Bitmap thumbnail = BmpUtils.decodeFile(photoPath[0],
-                            PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT);
-                    try {
-                        FileOutputStream fos = new FileOutputStream(photoPath[1]);
-                        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, fos);
-                        fos.close();
-                    } catch (java.io.IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                mResultHandler.onHybirdInputted(
-                        data.getStringExtra(HybirdImageVoiceTextEditor.EXTRA_OUT_TEXT),
-                        photoPath[0], photoPath[1],
-                        data.getStringExtra(HybirdImageVoiceTextEditor.EXTRA_OUT_VOICE_FILENAME),
-                        data.getIntExtra(HybirdImageVoiceTextEditor.EXTRA_OUT_VOICE_DURATION, 0));
-                result = true;
-                break;
-            }
             case REQ_INPUT_PHOTO_FOR_DOODLE:
                 if (null != mMediaInputHelper) {
                     String[] photoPath = new String[2];
@@ -1263,25 +1200,6 @@ public class InputBoardManager implements Parcelable,
                                         .putExtra(DoodleActivity.EXTRA_BACKGROUND_FILENAME, photoPath[0])
                                         .putExtra(DoodleActivity.EXTRA_OUTPUT_FILENAME, doodleOutFilename),
                                 REQ_INPUT_DOODLE
-                        );
-                    }
-                }
-                result = true;
-                break;
-            case REQ_INPUT_PHOTO_FOR_HYBIRD:
-                if (null != mMediaInputHelper) {
-                    String[] photoPath = new String[2];
-                    if (mMediaInputHelper.handleImageResult(
-                            mContext,
-                            data,
-                            PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
-                            PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
-                            photoPath)) {
-                        doodleOutFilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
-                        mContext.startActivityForResult(
-                                new Intent(mContext, HybirdImageVoiceTextEditor.class)
-                                        .putExtra(HybirdImageVoiceTextEditor.EXTRA_IN_IMAGE_FILENAME, photoPath[0]),
-                                REQ_INPUT_HYBIRD
                         );
                     }
                 }

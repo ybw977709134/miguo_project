@@ -46,4 +46,12 @@ public class ThemeHelper {
                 activity.setTheme(themeResId);
         }
     }
+
+    /**
+     * Accept theme passed via Intent.
+     * @param activity
+     */
+    public static void setTheme(Activity activity) {
+        setTheme(activity, activity.getIntent().getExtras());
+    }
 }

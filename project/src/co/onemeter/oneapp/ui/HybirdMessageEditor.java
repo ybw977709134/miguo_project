@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.LocationHelper;
+import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
@@ -596,6 +597,7 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
                         }
                         Intent intent = new Intent(HybirdMessageEditor.this, SelectPhotoActivity.class);
                         intent.putExtra("num", imageMaxCnt - listPhoto.size());
+                        ThemeHelper.putExtraCurrThemeResId(intent, HybirdMessageEditor.this);
                         ArrayList<String> listPath = new ArrayList<String>();
                         for (CreateMomentActivity.WMediaFile photo : listPhoto) {
                             if (photo.isFromGallery) {

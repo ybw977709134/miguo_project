@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import co.onemeter.oneapp.utils.ThemeHelper;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.ui.RecyclingImageView;
@@ -246,6 +247,7 @@ public class SelectPhotoActivity extends Activity implements View.OnClickListene
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ThemeHelper.setTheme(this);
         super.onCreate(savedInstanceState);
 
         // fix problem on displaying gradient bmp

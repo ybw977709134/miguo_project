@@ -1179,19 +1179,10 @@ public class MessageDetailAdapter extends BaseAdapter{
                 downloadPhotoOrVideoAndViewIt(cm);
             }
         } else {
-            if(cm.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO)) {
-                //viewPhotoInPager directly
-                //Log.w("viewing photo..............................................");
-//                  viewPhotoInPager(cm);
-                /*viewPhoto(0,
-                        new String[] { cm.pathOfMultimedia },
-                        new String[] { msgtype2mime.get(cm.msgType) });*/
-            } else {
-                Uri uri = Uri.fromFile(new File(cm.pathOfMultimedia));
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setDataAndType(uri, msgtype2mime.get(cm.msgType));
-                mContext.startActivity(intent);
-            }
+            Uri uri = Uri.fromFile(new File(cm.pathOfMultimedia));
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, msgtype2mime.get(cm.msgType));
+            mContext.startActivity(intent);
         }
     }
 

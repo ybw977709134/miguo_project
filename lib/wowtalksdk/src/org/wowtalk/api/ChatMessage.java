@@ -304,7 +304,11 @@ public class ChatMessage {
 	public String pathOfThumbNail;
 	/** field that can be used to save the multimedia downloaded from a message **/
 	public String pathOfMultimedia;
-	
+	/** field that can be used to save the second multimedia downloaded from a message.
+	 * <p>for {@link #MSGTYPE_HYBIRD}, the second multimedia is the audio,
+	 * For other types of messages, there's no second multimedia.</p>**/
+	public String pathOfMultimedia2;
+
 	/************************End of Data should be saved in db*****************************/
 
 	

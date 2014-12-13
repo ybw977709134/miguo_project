@@ -524,6 +524,7 @@
     <string name="apns_photo">[图片]</string>
     <string name="apns_voice">[音频]</string>
     <string name="apns_video">[视频]</string>
+    <string name="apns_hybird">[图文音]</string>
     <string name="apns_loc">[位置信息]</string>
 	<string name="weekday_name"/>
     <string name="contact_subtitle_func">功能</string>

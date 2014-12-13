@@ -128,12 +128,15 @@ public class MessageDetailAdapter extends BaseAdapter{
                     MediaInputHelper.MEDIA_TYPE_VOICE);
             msgtype2mediatype.put(ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE,
                     MediaInputHelper.MEDIA_TYPE_VIDEO);
+            msgtype2mediatype.put(ChatMessage.MSGTYPE_HYBIRD,
+                    MediaInputHelper.MEDIA_TYPE_IMAGE);
         }
         if(msgtype2mime == null) {
             msgtype2mime = new HashMap<String, String>();
             msgtype2mime.put(ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO, "image/*");
             msgtype2mime.put(ChatMessage.MSGTYPE_MULTIMEDIA_VOICE_NOTE, "audio/*");
             msgtype2mime.put(ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE, "video/*");
+            msgtype2mime.put(ChatMessage.MSGTYPE_HYBIRD, "image/*");
         }
     }
 
@@ -167,6 +170,8 @@ public class MessageDetailAdapter extends BaseAdapter{
                 return CELL_TYPE_OUT_PHOTO;
             if(ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE.equals(message.msgType))
                 return CELL_TYPE_OUT_PHOTO;
+            if(ChatMessage.MSGTYPE_HYBIRD.equals(message.msgType))
+                return CELL_TYPE_OUT_PHOTO;
             if(ChatMessage.MSGTYPE_LOCATION.equals(message.msgType))
                 return CELL_TYPE_OUT_LOC;
             if (ChatMessage.MSGTYPE_NORMAL_CALL_REJECTED.equals(message.msgType) || ChatMessage.MSGTYPE_GET_MISSED_CALL.equals(message.msgType) || ChatMessage.MSGTYPE_CALL_LOG.equals(message.msgType))
@@ -183,6 +188,8 @@ public class MessageDetailAdapter extends BaseAdapter{
         if(ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO.equals(message.msgType))
             return CELL_TYPE_IN_PHOTO;
         if(ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE.equals(message.msgType))
+            return CELL_TYPE_IN_PHOTO;
+        if(ChatMessage.MSGTYPE_HYBIRD.equals(message.msgType))
             return CELL_TYPE_IN_PHOTO;
         if(ChatMessage.MSGTYPE_LOCATION.equals(message.msgType))
             return CELL_TYPE_IN_LOC;
@@ -555,6 +562,7 @@ public class MessageDetailAdapter extends BaseAdapter{
         } else if (message.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_VOICE_NOTE)) {
             setViewForVoice(lView, message);
         } else if (message.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO)
+                || message.msgType.equals(ChatMessage.MSGTYPE_HYBIRD)
                 || message.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE)) {
             setViewForPhotoOrVideo(lView, holder, message);
         } else if (message.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_STAMP)){
@@ -948,6 +956,14 @@ public class MessageDetailAdapter extends BaseAdapter{
         } else if (message.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE)) {
             iv.setScaleType(ScaleType.CENTER_INSIDE);
             iv.setImageResource(R.drawable.play_video);
+            if(message.pathOfThumbNail != null && new File(message.pathOfThumbNail).exists()) {
+                setupThumbnail(message, iv, true);
+            } else {
+                iv.setBackgroundResource(R.drawable.broken_thumbnail);
+            }
+        } else if (message.msgType.equals(ChatMessage.MSGTYPE_HYBIRD)) {
+            iv.setScaleType(ScaleType.CENTER_INSIDE);
+            iv.setImageResource(R.drawable.play_hybird);
             if(message.pathOfThumbNail != null && new File(message.pathOfThumbNail).exists()) {
                 setupThumbnail(message, iv, true);
             } else {

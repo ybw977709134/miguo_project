@@ -148,6 +148,8 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
 				strMessage = context.getString(R.string.newer_chatmessage_receive);
 			} else if (msg.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE)) {
 				strMessage = context.getString(R.string.newer_chatmessage_receive);
+            } else if (msg.msgType.equals(ChatMessage.MSGTYPE_HYBIRD)) {
+                strMessage = context.getString(R.string.newer_chatmessage_receive);
 			} else if (msg.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_VCF)) {
 				strMessage = context.getString(R.string.newer_chatmessage_receive);
 			} else if (msg.msgType.equals(ChatMessage.MSGTYPE_OFFICIAL_ACCOUNT_MSG)) {

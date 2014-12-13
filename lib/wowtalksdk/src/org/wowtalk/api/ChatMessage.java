@@ -4,9 +4,8 @@ package org.wowtalk.api;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
-
+import android.util.Base64;
 import com.amazonaws.util.StringInputStream;
-
 import junit.framework.Assert;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -14,7 +13,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -506,6 +505,13 @@ public class ChatMessage {
 			String text,
 			String imageFileId, String imageExt, String thumbnailFileId,
 			String audioFileId, String audioExt, int duration) {
+		try {
+			text = Base64.encodeToString(text.getBytes("UTF-8"), 0);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			text = "";
+		}
+
 		messageContent = String.format(
 				"{\"text\":\"%s\"," +
 						"\"pathoffileincloud\":\"%s\"," +
@@ -529,6 +535,28 @@ public class ChatMessage {
         messageContent = String.format(Locale.getDefault(),
                 "{\"reason\":\"add_buddy\",\"id\":\"%s\",\"msg\":\"%s\"}", buddy_id, hello);
     }
+
+	/**
+	 * Get text body (not JSON) of this message.
+	 * @return
+	 */
+	public String getText() {
+		if (MSGTYPE_NORMAL_TXT_MESSAGE.equals(msgType)) {
+			return messageContent;
+		} else {
+			Pattern p = Pattern.compile("text\" *: *\"([^\"]+)");
+			Matcher m = p.matcher(messageContent);
+			if (m.find()) {
+				String encodedTxt = m.group(1);
+				try {
+					return new String(Base64.decode(encodedTxt, 0), "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
 
     /**
      * Get the original file's ID coded in message body if this message is of

@@ -24,6 +24,9 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.MyUrlSpanHelper;
+import junit.framework.Assert;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
@@ -31,8 +34,6 @@ import org.wowtalk.api.*;
 import org.wowtalk.ui.*;
 import org.wowtalk.ui.msg.*;
 import org.wowtalk.ui.msg.Utils;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.utils.MyUrlSpanHelper;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -1179,10 +1180,20 @@ public class MessageDetailAdapter extends BaseAdapter{
                 downloadPhotoOrVideoAndViewIt(cm);
             }
         } else {
-            Uri uri = Uri.fromFile(new File(cm.pathOfMultimedia));
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(uri, msgtype2mime.get(cm.msgType));
-            mContext.startActivity(intent);
+            if (ChatMessage.MSGTYPE_HYBIRD.equals(cm.msgType)) {
+                mContext.startActivity(new Intent(mContext, HybirdImageVoiceTextPreview.class)
+                                .putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_TEXT, cm.getText())
+                                .putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_IMAGE_FILENAME, cm.pathOfMultimedia)
+                                .putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_VOICE_FILENAME, cm.pathOfMultimedia2)
+                                .putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_VOICE_DURATION, cm.getVoiceDuration())
+                );
+            } else {
+                Uri uri = Uri.fromFile(new File(cm.pathOfMultimedia));
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(uri, msgtype2mime.get(cm.msgType));
+                mContext.startActivity(intent);
+
+            }
         }
     }
 
@@ -1195,9 +1206,13 @@ public class MessageDetailAdapter extends BaseAdapter{
 
     private void downloadPhotoOrVideoAndViewIt(final ChatMessage msg) {
 
-        final String pathoffileincloud = msg.getMediaFileID();
-        if(pathoffileincloud == null) 
+        final String[] pathoffileincloud = new String[2];
+        pathoffileincloud[0] = msg.getMediaFileID();
+        if(pathoffileincloud[0] == null)
             return;
+        if (ChatMessage.MSGTYPE_HYBIRD.equals(msg.msgType)) {
+            pathoffileincloud[1] = msg.getMediaFileID(ChatMessage.HYBIRD_COMPONENT_AUDIO);
+        }
 
         // prevent multiple download
         msg.initExtra();
@@ -1210,8 +1225,17 @@ public class MessageDetailAdapter extends BaseAdapter{
         ext = msg.getFilenameExt();
         Log.w("video ext got "+ext);
 
-        final String pathOfMultimedia = MediaInputHelper.makeOutputMediaFile(
+        final String[] pathOfMultimedia = new String[2];
+        pathOfMultimedia[0] = MediaInputHelper.makeOutputMediaFile(
                 msgtype2mediatype.get(msg.msgType), ext).getAbsolutePath();
+        if (ChatMessage.MSGTYPE_HYBIRD.equals(msg.msgType)) {
+            pathOfMultimedia[1] = MediaInputHelper.makeOutputMediaFile(
+                    msgtype2mediatype.get(ChatMessage.MSGTYPE_MULTIMEDIA_VOICE_NOTE),
+                    msg.getFilenameExt(ChatMessage.HYBIRD_COMPONENT_AUDIO)).getAbsolutePath();
+        }
+
+        final int fileNum = ChatMessage.MSGTYPE_HYBIRD.equals(msg.msgType) ? 2 : 1;
+
         final ProgressBar progressBar = msg.extraObjects == null ? null : (ProgressBar)msg.extraObjects.get("progressBar");
         showProgressbarOnUiThread(progressBar);
 
@@ -1225,28 +1249,35 @@ public class MessageDetailAdapter extends BaseAdapter{
                 f = new CancelFlag();
                 msg.extraObjects.put("cancelFlag", f);
 
-                WowTalkWebServerIF.getInstance(mContext).fGetFileFromServer(
-                        pathoffileincloud, 
-                        new NetworkIFDelegate(){
+                for (int fileIdx = 0; fileIdx < fileNum; ++fileIdx) {
+                    final int finalFileIdx = fileIdx;
+                    WowTalkWebServerIF.getInstance(mContext).fGetFileFromServer(
+                            pathoffileincloud[fileIdx],
+                            new NetworkIFDelegate() {
 
-                            @Override
-                            public void didFailNetworkIFCommunication(
-                                    int arg0, byte[] arg1) {
-                                status = false;
-                            }
+                                @Override
+                                public void didFailNetworkIFCommunication(
+                                        int arg0, byte[] arg1) {
+                                    status = false;
+                                }
 
-                            @Override
-                            public void didFinishNetworkIFCommunication(
-                                    int arg0, byte[] arg1) {
-                                status = true;
-                            }
+                                @Override
+                                public void didFinishNetworkIFCommunication(
+                                        int arg0, byte[] arg1) {
+                                    status = true;
+                                }
 
-                            @Override
-                            public void setProgress(int arg0, int arg1) {
-                                publishProgress(arg1);
-                            }
+                                @Override
+                                public void setProgress(int arg0, int arg1) {
+                                    publishProgress((int)(arg1 * (float)(1 + finalFileIdx) / fileNum));
+                                }
 
-                        }, 0, pathOfMultimedia, f);
+                            }, 0, pathOfMultimedia[fileIdx], f);
+
+                    // 如果任意一个文件下载失败，就不再继续了，视为整体失败。
+                    if (!status)
+                        break;
+                }
                 return null;
             }
 
@@ -1264,16 +1295,24 @@ public class MessageDetailAdapter extends BaseAdapter{
                 }
 
                 if(status) {
-                    msg.pathOfMultimedia = pathOfMultimedia;
+                    msg.pathOfMultimedia = pathOfMultimedia[0];
+                    msg.pathOfMultimedia2 = pathOfMultimedia[1];
                     if (mIsShowHistory) {
                         mDbHelper.updateChatMessageHistory(msg, true);
                     } else {
                         mDbHelper.updateChatMessage(msg, true);
                     }
 
-                    if(msg.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO)) {
-                        //if msg content is photo,use our own photoviewer
-//                      viewPhotoInPager(msg);
+                    //if msg content is photo,use our own photo viewer
+                    Assert.assertFalse(msg.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO));
+
+                    if(msg.msgType.equals(ChatMessage.MSGTYPE_HYBIRD)) {
+                        mContext.startActivity(new Intent(mContext, HybirdImageVoiceTextPreview.class)
+                                        .putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_TEXT, msg.getText())
+                                        .putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_IMAGE_FILENAME, pathOfMultimedia[0])
+                                        .putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_VOICE_FILENAME, pathOfMultimedia[1])
+                                        .putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_VOICE_DURATION, msg.getVoiceDuration())
+                        );
                     } else {
                         //if not photo,call system viewer service
                         Uri uri = Uri.fromFile(new File(msg.pathOfMultimedia));

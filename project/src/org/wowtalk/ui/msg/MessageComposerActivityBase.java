@@ -22,13 +22,10 @@ import co.onemeter.oneapp.ui.AppStatusService;
 import co.onemeter.oneapp.ui.CallMainActivity;
 import co.onemeter.oneapp.ui.MessageDetailAdapter;
 import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
-import co.onemeter.oneapp.ui.SmsActivity;
 import co.onemeter.oneapp.ui.StartActivity;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
-
 import com.handmark.pulltorefresh.widget.PullToRefreshListView;
 import com.handmark.pulltorefresh.widget.PullToRefreshListView.OnRefreshListener;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
@@ -794,6 +791,7 @@ public abstract class MessageComposerActivityBase extends Activity
         }
 		msg.fixMessageSenderDisplayName(MessageComposerActivityBase.this, R.string.session_unknown_buddy, R.string.session_unknown_group);
 		msg.pathOfMultimedia = imagePath;
+        msg.pathOfMultimedia2 = audioPath;
 		msg.pathOfThumbNail = imageThumbPath;
 		msg.initExtra();
 		msg.extraData.putBoolean("isTransferring", true);

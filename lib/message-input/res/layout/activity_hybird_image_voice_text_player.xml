@@ -12,11 +12,47 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:shadowRadius="1"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowColor="@color/libmsg_white"
+        android:textColor="@color/libmsg_black"
+        android:text="dummy"
         android:id="@+id/txt_msg_text"/>
 
-    <Button
-        android:layout_width="fill_parent"
+    <!-- 音频播放进度条 -->
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btn_msg_audio"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:weightSum="100"
+            android:layout_alignParentBottom="true">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/progressbar_elapsed"
+                android:layout_weight="80"
+                android:background="@color/libmsg_wowtalk_green"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/progressbar_remained"
+                android:layout_weight="20"
+                android:background="@color/libmsg_black"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Pause"
+            android:id="@+id/btn_msg_audio"
+            android:gravity="center"/>
+
+    </FrameLayout>
 </RelativeLayout>

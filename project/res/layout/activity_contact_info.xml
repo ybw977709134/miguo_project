@@ -96,7 +96,7 @@
                             android:layout_marginTop="5dp"
                             style="@style/standard_text"
                             android:singleLine="true"
-                            android:text="@string/add"/>
+                            android:text="name"/>
 
                         <TextView
                             android:id="@+id/friend_name_pronunciation"
@@ -107,7 +107,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/layout_btn_biz"
+                        android:id="@+id/module_chat"
                         android:layout_height="wrap_content"
                         android:layout_width="fill_parent"
                         android:layout_alignParentBottom="true"
@@ -428,7 +428,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/layout3"
+                android:id="@+id/module_moment"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:layout_margin="@dimen/padding_medium"
@@ -458,8 +458,8 @@
                 style="@style/button_blue"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/contact_info_goto_moments"
-                android:id="@+id/btn_goto_moments"
+                android:text="@string/contact_info_add_as_friend"
+                android:id="@+id/btn_add"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_margin="@dimen/padding_medium"/>

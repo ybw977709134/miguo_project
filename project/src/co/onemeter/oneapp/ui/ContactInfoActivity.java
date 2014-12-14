@@ -63,11 +63,10 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     private ImageView mGenderImg;
     private TextView mFriendNameBiz;
     private TextView mPronunciation;
-    private LinearLayout mBtnBizlayout;
     private LinearLayout mStatusLayout;
     private TextView mStatusTextView;
 
-    private LinearLayout mLayout3;
+    private LinearLayout mModuleMoment;
     private LinearLayout mMomentLayout;
 
     private LinearLayout mDeptJobLayout;
@@ -112,6 +111,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 
     private void resetViewsForBiz() {
         mGenderImg.setBackgroundResource(buddy.getSexFlag() == Buddy.SEX_FEMALE ? R.drawable.avatar_female : R.drawable.avatar_male);
+        initView_visibilities();
         setFriendInfoForBiz();
         setStatus();
         setDeptJobTitle();
@@ -123,12 +123,11 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     /**
      * 头像右侧的个人信息
      */
-    private void initFriendInfoForBiz() {
+    private void initView_friendInfoForBiz() {
         AQuery q = new AQuery(this);
 
         mFriendNameBiz = (TextView) findViewById(R.id.friend_name_biz);
         mPronunciation = (TextView) findViewById(R.id.friend_name_pronunciation);
-        mBtnBizlayout = (LinearLayout) findViewById(R.id.layout_btn_biz);
 
         q.find(R.id.btn_msg).clicked(this);
         q.find(R.id.btn_call).clicked(this);
@@ -141,13 +140,9 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         // 默认男性
         mFriendNameBiz.setText(buddy.nickName);
         mPronunciation.setText(buddy.pronunciation);
-
-        if (buddyType == BUDDY_TYPE_MYSELF) {
-            mBtnBizlayout.setVisibility(View.GONE);
-        }
     }
 
-    private void initStatus() {
+    private void initView_status() {
         mStatusLayout = (LinearLayout) findViewById(R.id.status_layout);
         mStatusTextView = (TextView) findViewById(R.id.txt_status);
         setStatus();
@@ -165,7 +160,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     /**
      * 部门，职位
      */
-    private void initDeptJobTitle() {
+    private void initView_deptJobTitle() {
         mDeptJobLayout = (LinearLayout)findViewById(R.id.layout_dept_job);
         mDeptLayout = (LinearLayout)findViewById(R.id.dept_layout);
         mDeptTextView = (TextView)findViewById(R.id.txt_dept);
@@ -219,7 +214,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     /**
      * 联系方式
      */
-    private void initContactWay() {
+    private void initView_contactWay() {
         mContactWayLayout = (LinearLayout)findViewById(R.id.layout_contact_way);
         mPhoneLayout = (LinearLayout)findViewById(R.id.layout_phone);
         mPhoneTextView = (TextView)findViewById(R.id.txt_phone);
@@ -300,7 +295,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     /**
      * 支店，工号
      */
-    private void initBranchStoreEmployeeId() {
+    private void initView_branchStoreEmployeeId() {
         mBranchStoreEmployeeIdLayout = (LinearLayout)findViewById(R.id.layout_branchstore_employeeid);
         mBranchStoreLayout = (LinearLayout)findViewById(R.id.layout_branch_store);
         mBranchStoreTextView = (TextView)findViewById(R.id.txt_branch_store);
@@ -351,38 +346,47 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         }
     }
 
-    private void initLayout3() {
+    private void initView_layout3() {
         getMomentsByUserId(buddy.userID);
+    }
+
+    /** 根据我与当前用户的关系设置界面元素的可见性 */
+    private void initView_visibilities() {
+
+        AQuery q = new AQuery(this);
+
+        if (buddyType != BUDDY_TYPE_IS_FRIEND) {
+            q.find(R.id.module_moment).gone();
+            q.find(R.id.module_chat).invisible();
+            q.find(R.id.btn_delete).gone();
+        } else {
+            q.find(R.id.btn_add).gone();
+        }
     }
 
     private void initView() {
         AQuery q = new AQuery(this);
 
         imgPhoto = (ImageView) findViewById(R.id.img_thumbnail);
-        mLayout3 = (LinearLayout) findViewById(R.id.layout3);//moment show
+        mModuleMoment = (LinearLayout) findViewById(R.id.module_moment);//moment show
         mMomentLayout = (LinearLayout) findViewById(R.id.moment_layout);
         mGenderImg = (ImageView) findViewById(R.id.avatar_gender);
         mGenderImg.setBackgroundResource(buddy.getSexFlag() == Buddy.SEX_FEMALE
                 ? R.drawable.avatar_female : R.drawable.avatar_male);
         PhotoDisplayHelper.displayPhoto(this, imgPhoto, R.drawable.default_avatar_90, buddy, true);
 
-        initFriendInfoForBiz();
-        initStatus();
-        initDeptJobTitle();
-        initContactWay();
-        initBranchStoreEmployeeId();
-        initLayout3();
+        initView_visibilities();
+        initView_friendInfoForBiz();
+        initView_status();
+        initView_deptJobTitle();
+        initView_contactWay();
+        initView_branchStoreEmployeeId();
+        initView_layout3();
 
         q.find(R.id.img_thumbnail).clicked(this);
         q.find(R.id.navbar_btn_left).clicked(this);
-        q.find(R.id.btn_goto_moments).clicked(this);
+        q.find(R.id.btn_add).clicked(this);
         q.find(R.id.btn_delete).clicked(this);
-
-        //if family buddy,no moment layout
-//        if(buddy.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
-//            findViewById(R.id.layout3).setVisibility(View.GONE);
-//            findViewById(R.id.btn_goto_moments).setVisibility(View.GONE);
-//        }
     }
 
     /**
@@ -423,7 +427,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 	private void getMomentsByUserId(final String userId) {
         moments = dbHelper.fetchMomentsOfSingleBuddy(userId, 0, 100);
         if (moments == null || moments.size() == 0) {
-            mLayout3.setVisibility(View.GONE);
+            mModuleMoment.setVisibility(View.GONE);
             return;
         }
         ArrayList<WFile> listPath = new ArrayList<WFile>();
@@ -436,15 +440,15 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
             }
         }
         if (listPath == null || listPath.size() == 0) {
-            mLayout3.setVisibility(View.GONE);
+            mModuleMoment.setVisibility(View.GONE);
         } else {
-            mLayout3.setOnClickListener(new OnClickListener() {
+            mModuleMoment.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     TimelineActivity.launch(ContactInfoActivity.this, buddy.userID, buddy.nickName);
                 }
             });
-            mLayout3.setVisibility(View.VISIBLE);
+            mModuleMoment.setVisibility(View.VISIBLE);
             int imageNum;
             if (listPath.size() <= MOMENT_NUMBER) {
                 imageNum = listPath.size();
@@ -527,8 +531,8 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                     startActivity(Intent.createChooser(emailIntent, null));
                 }
                 break;
-            case R.id.btn_goto_moments:
-                TimelineActivity.launch(this, buddy.userID, buddy.nickName);
+            case R.id.btn_add:
+                addBuddy();
                 break;
             case R.id.btn_delete:
                 removeBuddy();
@@ -536,6 +540,34 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
             default:
                 break;
         }
+    }
+
+    private void addBuddy() {
+        final Context context = this;
+        mMsgBox.showWait();
+        new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return WowTalkWebServerIF.getInstance(context)
+                        .fAddBuddy(buddy.userID);
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                mMsgBox.dismissWait();
+                if(result == ErrorCode.OK) {
+                    if (0 != (Buddy.RELATIONSHIP_FRIEND_HERE & buddy.getFriendShipWithMe())) {
+                        mMsgBox.toast(R.string.contacts_add_buddy_succeed_without_pending);
+                    } else if (0 != (Buddy.RELATIONSHIP_PENDING_OUT & buddy.getFriendShipWithMe())) {
+                        mMsgBox.show(null, getString(R.string.contacts_add_buddy_pending_out));
+                    }
+                } else if (result == ErrorCode.ERR_OPERATION_DENIED){
+                    mMsgBox.show(null, getString(R.string.contactinfo_add_friend_denied));
+                } else {
+                    mMsgBox.show(null, getString(R.string.operation_failed));
+                }
+            }
+        }.execute((Void)null);
     }
 
     private void removeBuddy() {
@@ -595,10 +627,6 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 				+ " wowtalkId : " + person.getWowTalkId());
         dbHelper = new Database(this);
 		buddy = dbHelper.buddyWithUserID(person.getID());
-		buddyType = getIntent().getIntExtra(EXTRA_BUDDY_TYPE, BUDDY_TYPE_NOT_USER);
-		person = getIntent().getParcelableExtra(EXTRA_BUDDY_DETAIL);
-		Database db = new Database(this);
-		buddy = db.buddyWithUserID(person.getID());
 		if(buddy == null) {
             buddy=person.toBuddy();
         } else {

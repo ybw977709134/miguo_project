@@ -17,7 +17,6 @@ import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 
@@ -43,10 +42,10 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			switch (msg.what) {
 			case MSG_REGISTER_SUCCESS:
 			{
-                RegisterActivity.this.startActivity(
-                        new Intent(RegisterActivity.this, StartActivity.class));
-
-                LoginActivity.intance().finish();
+				String[] args = (String[])msg.obj;
+				startActivity(new Intent(RegisterActivity.this, LoginActivity.class)
+						.putExtra(LoginActivity.EXTRA_USERNAME, args[0])
+						.putExtra(LoginActivity.EXTRA_PASSWORD, args[1]));
                 finish();
 			}
 			break;
@@ -83,31 +82,6 @@ public class RegisterActivity extends Activity implements OnClickListener{
 		btnCreate.setOnClickListener(this);
 	}
 
-    private void loginRequire(final String oldUId) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int result = WowTalkWebServerIF.getInstance(RegisterActivity.this).fLogin(
-                        edtAccount.getText().toString(),
-                        edtPwd.getText().toString(), buddy);
-                if (result == ErrorCode.OK) {
-                    Log.i("register login ok");
-
-                    WowTalkWebServerIF.getInstance(RegisterActivity.this).fGetMyProfile();
-                    PrefUtil.getInstance(RegisterActivity.this).setAutoLogin(false);
-                }
-
-                String newUId = PrefUtil.getInstance(RegisterActivity.this).getUid();
-                LoginActivity.clearCachedValues(oldUId, newUId);
-
-                mMsgBox.dismissWait();
-                Message msg = Message.obtain();
-                msg.what = MSG_REGISTER_SUCCESS;
-                mHandler.sendMessage(msg);
-            }
-        }).start();
-    }
-	
 	private void fRegister() {
 		
 		final String strUserName = edtAccount.getText().toString();
@@ -131,14 +105,15 @@ public class RegisterActivity extends Activity implements OnClickListener{
 
 				@Override
 				public void run() {
-                    String oldUId = PrefUtil.getInstance(RegisterActivity.this).getPrevUid();
                     int result = WowTalkWebServerIF.getInstance(RegisterActivity.this)
                             .fRegister(strUserName, strPassword, userType, buddy);
 					Log.i("register, the result_code is " + result);
 
 					Message msg = Message.obtain();
 					if (result == ErrorCode.OK) {
-                        loginRequire(oldUId);
+						msg.what = MSG_REGISTER_SUCCESS;
+						msg.obj = new String[]{ strUserName, strPassword };
+						mHandler.sendMessage(msg);
 					} else if (result == ErrorCode.USER_ALREADY_EXISTS) {
 						msg.what = MSG_USER_ALREADY_EXIST;
 						mHandler.sendMessage(msg);

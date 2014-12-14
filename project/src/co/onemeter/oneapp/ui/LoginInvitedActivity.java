@@ -77,7 +77,8 @@ public class LoginInvitedActivity extends Activity implements View.OnClickListen
             public void onPostExecute(Integer errno) {
                 msgbox.dismissWait();
                 if (errno == ErrorCode.OK) {
-                    context.startActivity(new Intent(context, StartActivity.class));
+                    context.startActivity(new Intent(context, StartActivity.class)
+                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                 } else {
                     msgbox.toast(context.getString(R.string.operation_failed_with_errcode_msg,
                             errno,

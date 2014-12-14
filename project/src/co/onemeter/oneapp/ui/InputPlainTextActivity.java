@@ -1,6 +1,7 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Selection;
@@ -8,6 +9,7 @@ import android.text.Spannable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -97,6 +99,7 @@ public class InputPlainTextActivity extends Activity {
             @Override
             public void onClick(View v) {
                 finish();
+                closeSoftKeyboard();
             }
         });
 
@@ -104,10 +107,19 @@ public class InputPlainTextActivity extends Activity {
             @Override
             public void onClick(View v) {
                 onDone();
+                closeSoftKeyboard();
             }
         });
     }
 
+    private void closeSoftKeyboard() {
+        InputMethodManager mInputMethodManager ;
+        mInputMethodManager = (InputMethodManager) this
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        mInputMethodManager .hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+    
     private void onDone() {
         String name = edtValue.getText().toString();
         if (!allowEmpty && TextUtils.isEmpty(name)) {

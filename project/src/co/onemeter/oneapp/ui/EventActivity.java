@@ -100,9 +100,9 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
             // time
             q.find(R.id.event_time).text(formatField(
                             getResources().getString(R.string.event_time_label),
-                            new SimpleDateFormat("MM月dd日 HH:mm").format(act.startTime)
+                            new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(act.startTime)
                                     + "-"
-                                    + new SimpleDateFormat("MM月dd日 HH:mm").format(act.endTime)));
+                                    + new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(act.endTime)));
 
             // place
             q.find(R.id.event_place).text(formatField(
@@ -557,9 +557,9 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
             }
             return;
         } else if (subMenuResId == R.id.btn_filter2) {
-            long now = Calendar.getInstance().getTimeInMillis();
             if (itemIdx == 0) {
                 ArrayList<WEvent> filtered = new ArrayList<WEvent>();
+                long now = System.currentTimeMillis();
                 for (WEvent e : acts) {
                     if (e.startTime.getTime() > now) {
                         filtered.add(e);
@@ -568,14 +568,16 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
                 eventAdapter.setDataSource(filtered);
             } else if (itemIdx == 1) { // on going
                 ArrayList<WEvent> filtered = new ArrayList<WEvent>();
+                long now = System.currentTimeMillis();
                 for (WEvent e : acts) {
-                    if (e.startTime.getTime() < now && e.endTime.getTime() > now) {
+                    if (e.startTime.getTime() <= now && e.endTime.getTime() > now) {
                         filtered.add(e);
                     }
                 }
                 eventAdapter.setDataSource(filtered);
             } else if (itemIdx == 2) { // expired
                 ArrayList<WEvent> filtered = new ArrayList<WEvent>();
+                long now = System.currentTimeMillis();
                 for (WEvent e : acts) {
                     if (e.endTime.getTime() < now) {
                         filtered.add(e);

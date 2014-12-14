@@ -390,7 +390,11 @@
 			android:theme="@style/Theme.Red"
 			android:screenOrientation="portrait" >
 		</activity>
-		<activity android:name="org.wowtalk.ui.msg.HybirdImageVoiceTextEditor"
+		<activity android:name=".ui.HybirdMessageEditor"
+		          android:theme="@style/Theme.Red"
+		          android:screenOrientation="portrait" >
+		</activity>
+		<activity android:name="org.wowtalk.ui.msg.HybirdImageVoiceTextPreview"
 		          android:theme="@style/Theme.Red"
 		          android:screenOrientation="portrait" >
 		</activity>

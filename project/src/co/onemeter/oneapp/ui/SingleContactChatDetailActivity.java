@@ -51,7 +51,7 @@ public class SingleContactChatDetailActivity extends Activity implements OnClick
                     if (position == chatMembers.size() - 1) {
                         Intent addIntent = new Intent();
                         if (GlobalValue.RELEASE_AS_WOWCITY) {
-                            addIntent.setClass(SingleContactChatDetailActivity.this, MultiSelectActivity.class);
+                            addIntent.setClass(SingleContactChatDetailActivity.this, MultiSelectActivityForBiz.class);
                             ThemeHelper.putExtraCurrThemeResId(addIntent, SingleContactChatDetailActivity.this);
                         } else if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
                             addIntent.setClass(SingleContactChatDetailActivity.this, MultiSelectActivityForBiz.class);

@@ -92,6 +92,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     private View newReviewView=null;
 
     private boolean isWithFavorite;
+    private boolean isLike = true;
 
 	public MomentAdapter(Context context, Activity activity, ArrayList<Moment> moments, boolean isSingle,boolean favorite,
                          ImageResizer mImageResizer,
@@ -806,17 +807,24 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.btnLike.setBackgroundResource(R.drawable.timeline_like);
         }
         
-        if (moment.allowReview) {
+//        if (moment.allowReview) {
+//        	holder.btnComment.setBackgroundResource(R.drawable.share_icon_comment);
+//        } else {
+//        	holder.btnComment.setBackgroundResource(R.drawable.profile_btn_message_p);
+//        }
+        if(commentReview.size()>0){
         	holder.btnComment.setBackgroundResource(R.drawable.profile_btn_message_p);
-        } else {
-        	holder.btnComment.setBackgroundResource(R.drawable.timeline_comment);
+        	holder.btnAnswer.setBackgroundResource(R.drawable.profile_btn_message_p);
+        }else{
+        	holder.btnComment.setBackgroundResource(R.drawable.share_icon_comment);
+        	holder.btnAnswer.setBackgroundResource(R.drawable.share_icon_comment);
         }
         
-        if (moment.allowReview) {
-        	holder.btnAnswer.setBackgroundResource(R.drawable.profile_btn_message_p);
-        } else {
-        	holder.btnAnswer.setBackgroundResource(R.drawable.timeline_comment);
-        }
+//        if (moment.allowReview) {
+//        	holder.btnAnswer.setBackgroundResource(R.drawable.share_icon_comment);
+//        } else {
+//        	holder.btnAnswer.setBackgroundResource(R.drawable.profile_btn_message_p);
+//        }
 
         holder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -828,7 +836,8 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             @Override
             public void onClick(View v) {
                 if (mReplyDelegate != null) {
-                    mReplyDelegate.replyToMoment(position, moment, null, true);
+                    mReplyDelegate.replyToMoment(position, moment, null, isLike);
+                    isLike = !isLike;
                 }
             }
         });

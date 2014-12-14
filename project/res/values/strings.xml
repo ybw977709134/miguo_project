@@ -524,6 +524,7 @@
     <string name="apns_photo">[图片]</string>
     <string name="apns_voice">[音频]</string>
     <string name="apns_video">[视频]</string>
+    <string name="apns_hybird">[图文音]</string>
     <string name="apns_loc">[位置信息]</string>
 	<string name="weekday_name"/>
     <string name="contact_subtitle_func">功能</string>
@@ -776,4 +777,7 @@
 	<string name="register_user_type">帐号类型</string>
 	<string name="register_user_type_teacher">老师</string>
 	<string name="register_user_type_student">学生</string>
+    <string name="title_hybird_message">图文音消息</string>
+    <string name="hybird_message_editor_exceed_max_img_cnt">您最多可以添加 %d 张图片</string>
+    <string name="hybird_message_editor_content_required">缺少内容</string>
 </resources>

@@ -15,17 +15,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-
+import co.onemeter.oneapp.R;
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.RoundedImageView;
-import org.wowtalk.ui.msg.InputBoardManager.InputResultHandler;
-
-import co.onemeter.oneapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,12 +86,6 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
                             return;
                         }
                         addFriend_async(p);
-                        MessageComposerActivity.launchToChatWithBuddy(
-                                NewFriendsActivity.this,
-                                MessageComposerActivity.class,
-                                p.uid,
-                                getString(R.string.msg_friend_request_is_passed));
-
                     }
                 });
                 btnIgnore.setOnClickListener(new View.OnClickListener() {
@@ -321,6 +311,13 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
 //                    friendAdapter.notifyDataSetChanged();
                     mPrefUtil.setContactUptodate(false);
                     mPrefUtil.setLocalContactListLastModified();
+
+                    MessageComposerActivity.launchToChatWithBuddy(
+                            NewFriendsActivity.this,
+                            MessageComposerActivity.class,
+                            p.uid,
+                            getString(R.string.msg_friend_request_is_passed));
+
                 } else {
                     mMsgBox.toast(R.string.msg_operation_failed);
                 }

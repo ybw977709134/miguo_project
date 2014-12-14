@@ -16,4 +16,5 @@ public interface IHasReview {
     public Iterator<Review> getReviewIterator();
     public void addReview(Review review);
     public void clearReviews();
+    public String getOwnerUid();
 }

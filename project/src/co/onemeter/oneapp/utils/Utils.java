@@ -11,13 +11,14 @@ public class Utils {
 
     public final static String QR_CODE_KEY_TYPE="type";
     public final static String QR_CODE_KEY_DEF_VALUE_TYPE_BUDDY ="0";
-    public final static String QR_CODE_KEY_DEF_VALUE_TYPE_FMY="1";
+    public final static String QR_CODE_KEY_DEF_VALUE_TYPE_INVITECODE ="1";
     public final static String QR_CODE_KEY_DEF_VALUE_TYPE_GROUP="2";
     public final static String QR_CODE_KEY_DEF_VALUE_TYPE_EVENT="3";
     public final static String QR_CODE_KEY_DEF_VALUE_TYPE_PUBLIC_ACCOUNT="4";
 
     public final static String QR_CODE_KEY_CONTENT="content";
     public final static String QR_CODE_KEY_UID="uid";
+    public final static String QR_CODE_KEY_INVITECODE="invitecode";
     public final static String QR_CODE_KEY_TIMESTAMP="timestamp";
     public final static String QR_CODE_KEY_GROUP_ID="group_id";
     public final static String QR_CODE_KEY_CREATOR_ID="creator_id";

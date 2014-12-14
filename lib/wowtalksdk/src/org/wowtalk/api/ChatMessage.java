@@ -121,7 +121,7 @@ i:someone leave the group i am involved
 //messgae payload :   type | yyyy/MM/dd HH:mm| msg id       |content
 // length         :    "i" | <------16------>|"{"$msgId"}"  |"{"$senderID"}"
 
-MSGTYPE_HYBIRD
+MSGTYPE_PIC_VOICE
 s:hybird(image+voice+text) msg content:
 {
     "text":"...",
@@ -230,7 +230,7 @@ public class ChatMessage {
     /** added in 2014/8 **/
     public static String MSGTYPE_MOMENT = "r";
 	/**Message Type : hybird of text, image, and voice. */
-	public static String MSGTYPE_HYBIRD = MSGTYPE_MULTIMEDIA_VCF; // 暂时借用 VCF 这种闲置消息类型
+	public static String MSGTYPE_PIC_VOICE = MSGTYPE_MULTIMEDIA_VCF; // 暂时借用 VCF 这种闲置消息类型
     public static String MSGTYPE_OUTGOING_MSG = "z";
 
     public static String MSGTYPE_SYSTEM_PROMPT = "local_a";
@@ -304,7 +304,7 @@ public class ChatMessage {
 	/** field that can be used to save the multimedia downloaded from a message **/
 	public String pathOfMultimedia;
 	/** field that can be used to save the second multimedia downloaded from a message.
-	 * <p>for {@link #MSGTYPE_HYBIRD}, the second multimedia is the audio,
+	 * <p>for {@link #MSGTYPE_PIC_VOICE}, the second multimedia is the audio,
 	 * For other types of messages, there's no second multimedia.</p>**/
 	public String pathOfMultimedia2;
 
@@ -492,7 +492,7 @@ public class ChatMessage {
     }
 
 	/**
-	 * Format message body for {@link #MSGTYPE_HYBIRD}.
+	 * Format message body for {@link #MSGTYPE_PIC_VOICE}.
 	 * @param text
 	 * @param imageFileId
 	 * @param imageExt
@@ -648,7 +648,7 @@ public class ChatMessage {
 
 	/**
 	 * Get the file name extension coded in message body if this message is of
-	 * type {@link #MSGTYPE_HYBIRD}.
+	 * type {@link #MSGTYPE_PIC_VOICE}.
 	 *
 	 * @param hybirdComponent one of
 	 * <ul>

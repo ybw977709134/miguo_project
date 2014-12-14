@@ -777,7 +777,7 @@ public abstract class MessageComposerActivityBase extends Activity
 
         final String imageExt = imagePath.substring(imagePath.lastIndexOf("."));
         final String audioExt = audioPath.substring(audioPath.lastIndexOf("."));
-        msg.msgType = ChatMessage.MSGTYPE_HYBIRD;
+        msg.msgType = ChatMessage.MSGTYPE_PIC_VOICE;
         msg.formatContentAsHybird(text,
                 imagePath, imageExt, imageThumbPath,
                 audioPath, audioExt, duration);

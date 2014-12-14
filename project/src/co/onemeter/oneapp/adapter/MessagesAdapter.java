@@ -435,7 +435,7 @@ public class MessagesAdapter extends BaseAdapter {
 		else if (message.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_VOICE_NOTE)) {
 			txtContent.setText(R.string.apns_voice);
 		}
-        else if (message.msgType.equals(ChatMessage.MSGTYPE_HYBIRD)) {
+        else if (message.msgType.equals(ChatMessage.MSGTYPE_PIC_VOICE)) {
             txtContent.setText(R.string.apns_hybird);
         }
         else if (message.msgType.equals(ChatMessage.MSGTYPE_LOCATION)) {

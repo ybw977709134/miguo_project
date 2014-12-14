@@ -129,7 +129,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                     MediaInputHelper.MEDIA_TYPE_VOICE);
             msgtype2mediatype.put(ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE,
                     MediaInputHelper.MEDIA_TYPE_VIDEO);
-            msgtype2mediatype.put(ChatMessage.MSGTYPE_HYBIRD,
+            msgtype2mediatype.put(ChatMessage.MSGTYPE_PIC_VOICE,
                     MediaInputHelper.MEDIA_TYPE_IMAGE);
         }
         if(msgtype2mime == null) {
@@ -137,7 +137,7 @@ public class MessageDetailAdapter extends BaseAdapter{
             msgtype2mime.put(ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO, "image/*");
             msgtype2mime.put(ChatMessage.MSGTYPE_MULTIMEDIA_VOICE_NOTE, "audio/*");
             msgtype2mime.put(ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE, "video/*");
-            msgtype2mime.put(ChatMessage.MSGTYPE_HYBIRD, "image/*");
+            msgtype2mime.put(ChatMessage.MSGTYPE_PIC_VOICE, "image/*");
         }
     }
 
@@ -171,7 +171,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 return CELL_TYPE_OUT_PHOTO;
             if(ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE.equals(message.msgType))
                 return CELL_TYPE_OUT_PHOTO;
-            if(ChatMessage.MSGTYPE_HYBIRD.equals(message.msgType))
+            if(ChatMessage.MSGTYPE_PIC_VOICE.equals(message.msgType))
                 return CELL_TYPE_OUT_PHOTO;
             if(ChatMessage.MSGTYPE_LOCATION.equals(message.msgType))
                 return CELL_TYPE_OUT_LOC;
@@ -190,7 +190,7 @@ public class MessageDetailAdapter extends BaseAdapter{
             return CELL_TYPE_IN_PHOTO;
         if(ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE.equals(message.msgType))
             return CELL_TYPE_IN_PHOTO;
-        if(ChatMessage.MSGTYPE_HYBIRD.equals(message.msgType))
+        if(ChatMessage.MSGTYPE_PIC_VOICE.equals(message.msgType))
             return CELL_TYPE_IN_PHOTO;
         if(ChatMessage.MSGTYPE_LOCATION.equals(message.msgType))
             return CELL_TYPE_IN_LOC;
@@ -563,7 +563,7 @@ public class MessageDetailAdapter extends BaseAdapter{
         } else if (message.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_VOICE_NOTE)) {
             setViewForVoice(lView, message);
         } else if (message.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO)
-                || message.msgType.equals(ChatMessage.MSGTYPE_HYBIRD)
+                || message.msgType.equals(ChatMessage.MSGTYPE_PIC_VOICE)
                 || message.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE)) {
             setViewForPhotoOrVideo(lView, holder, message);
         } else if (message.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_STAMP)){
@@ -962,7 +962,7 @@ public class MessageDetailAdapter extends BaseAdapter{
             } else {
                 iv.setBackgroundResource(R.drawable.broken_thumbnail);
             }
-        } else if (message.msgType.equals(ChatMessage.MSGTYPE_HYBIRD)) {
+        } else if (message.msgType.equals(ChatMessage.MSGTYPE_PIC_VOICE)) {
             iv.setScaleType(ScaleType.CENTER_INSIDE);
             iv.setImageResource(R.drawable.play_hybird);
             if(message.pathOfThumbNail != null && new File(message.pathOfThumbNail).exists()) {
@@ -1180,7 +1180,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 downloadPhotoOrVideoAndViewIt(cm);
             }
         } else {
-            if (ChatMessage.MSGTYPE_HYBIRD.equals(cm.msgType)) {
+            if (ChatMessage.MSGTYPE_PIC_VOICE.equals(cm.msgType)) {
                 mContext.startActivity(new Intent(mContext, HybirdImageVoiceTextPreview.class)
                                 .putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_TEXT, cm.getText())
                                 .putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_IMAGE_FILENAME, cm.pathOfMultimedia)
@@ -1210,7 +1210,7 @@ public class MessageDetailAdapter extends BaseAdapter{
         pathoffileincloud[0] = msg.getMediaFileID();
         if(pathoffileincloud[0] == null)
             return;
-        if (ChatMessage.MSGTYPE_HYBIRD.equals(msg.msgType)) {
+        if (ChatMessage.MSGTYPE_PIC_VOICE.equals(msg.msgType)) {
             pathoffileincloud[1] = msg.getMediaFileID(ChatMessage.HYBIRD_COMPONENT_AUDIO);
         }
 
@@ -1228,13 +1228,13 @@ public class MessageDetailAdapter extends BaseAdapter{
         final String[] pathOfMultimedia = new String[2];
         pathOfMultimedia[0] = MediaInputHelper.makeOutputMediaFile(
                 msgtype2mediatype.get(msg.msgType), ext).getAbsolutePath();
-        if (ChatMessage.MSGTYPE_HYBIRD.equals(msg.msgType)) {
+        if (ChatMessage.MSGTYPE_PIC_VOICE.equals(msg.msgType)) {
             pathOfMultimedia[1] = MediaInputHelper.makeOutputMediaFile(
                     msgtype2mediatype.get(ChatMessage.MSGTYPE_MULTIMEDIA_VOICE_NOTE),
                     msg.getFilenameExt(ChatMessage.HYBIRD_COMPONENT_AUDIO)).getAbsolutePath();
         }
 
-        final int fileNum = ChatMessage.MSGTYPE_HYBIRD.equals(msg.msgType) ? 2 : 1;
+        final int fileNum = ChatMessage.MSGTYPE_PIC_VOICE.equals(msg.msgType) ? 2 : 1;
 
         final ProgressBar progressBar = msg.extraObjects == null ? null : (ProgressBar)msg.extraObjects.get("progressBar");
         showProgressbarOnUiThread(progressBar);
@@ -1306,7 +1306,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                     //if msg content is photo,use our own photo viewer
                     Assert.assertFalse(msg.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO));
 
-                    if(msg.msgType.equals(ChatMessage.MSGTYPE_HYBIRD)) {
+                    if(msg.msgType.equals(ChatMessage.MSGTYPE_PIC_VOICE)) {
                         mContext.startActivity(new Intent(mContext, HybirdImageVoiceTextPreview.class)
                                         .putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_TEXT, msg.getText())
                                         .putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_IMAGE_FILENAME, pathOfMultimedia[0])

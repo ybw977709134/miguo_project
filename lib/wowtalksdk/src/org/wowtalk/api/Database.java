@@ -1298,7 +1298,7 @@ public class Database {
                 ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO ,
                 ChatMessage.MSGTYPE_MULTIMEDIA_VOICE_NOTE ,
                 ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE ,
-                ChatMessage.MSGTYPE_HYBIRD ,
+                ChatMessage.MSGTYPE_PIC_VOICE,
                 ChatMessage.MSGTYPE_MULTIMEDIA_VCF ,
                 ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST ,
                 ChatMessage.MSGTYPE_GROUPCHAT_SOMEONE_JOIN_ROOM ,
@@ -1425,7 +1425,7 @@ public class Database {
                 ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO ,
                 ChatMessage.MSGTYPE_MULTIMEDIA_VOICE_NOTE ,
                 ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE ,
-                ChatMessage.MSGTYPE_HYBIRD ,
+                ChatMessage.MSGTYPE_PIC_VOICE,
                 ChatMessage.MSGTYPE_MULTIMEDIA_VCF ,
                 ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST ,
                 ChatMessage.MSGTYPE_GROUPCHAT_SOMEONE_JOIN_ROOM ,
@@ -1772,7 +1772,7 @@ public class Database {
             //path or video->pathOfThumbNail,pathOfMultimedia
             deleteAFile(message.pathOfThumbNail);
             deleteAFile(message.pathOfMultimedia);
-        } else if (message.msgType.equals(ChatMessage.MSGTYPE_HYBIRD)) {
+        } else if (message.msgType.equals(ChatMessage.MSGTYPE_PIC_VOICE)) {
             deleteAFile(message.pathOfThumbNail);
             deleteAFile(message.pathOfMultimedia);
 //            deleteAFile(message.getMediaFileID(ChatMessage.HYBIRD_COMPONENT_AUDIO)); // TODO

@@ -4837,7 +4837,7 @@ public class Database {
 		},
 		selection, selectionArgs, null, null, "timeStamp DESC", null);
 
-		if(cur == null || !cur.moveToFirst()) {
+		if(cur == null || !cur.moveToLast()) {
 		    if (null != cur && !cur.isClosed()) {
 		        cur.close();
 		    }
@@ -4878,7 +4878,7 @@ public class Database {
             e.tag=cur.getString(++i);
             e.category=cur.getString(++i);
 			data.add(e);
-		} while(cur.moveToNext());
+		} while(cur.moveToPrevious());
 
 		if (null != cur && !cur.isClosed()) {
             cur.close();

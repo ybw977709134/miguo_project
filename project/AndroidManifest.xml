@@ -519,11 +519,6 @@
                 android:screenOrientation="portrait">
         </activity>
         <activity
-                android:name=".ui.FamilyContactRelationHandleActivity"
-                android:theme="@style/Theme.Blue"
-                android:screenOrientation="portrait">
-        </activity>
-        <activity
                 android:name=".ui.CreateNormalMomentWithTagActivity"
                 android:theme="@style/Theme.Blue"
                 android:screenOrientation="portrait">

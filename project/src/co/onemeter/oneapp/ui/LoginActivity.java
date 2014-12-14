@@ -11,13 +11,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.*;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import com.androidquery.AQuery;
@@ -38,6 +39,10 @@ public class LoginActivity extends Activity implements OnClickListener {
      * 是否是添加帐户时进入此界面
      */
     public static final String EXTRA_IS_ADD_ACCOUNT = "is_add_account";
+    /** 可选，自动采用该用户名登录。*/
+    public static final String EXTRA_USERNAME = "username";
+    /** 可选，自动采用该密码登录。*/
+    public static final String EXTRA_PASSWORD = "password";
 
 	private static final int MSG_LOGIN_SUCCESS = 100;
 	private static final int MSG_AUTO_REGISTER_SUCCESS = 101;
@@ -283,7 +288,12 @@ public class LoginActivity extends Activity implements OnClickListener {
             alert(R.string.login_pwd_cannot_be_null);
             return;
         }
+        login(username, pwdStr);
 
+
+    }
+
+    private void login(final String username, final String pwdStr) {
         // 添加帐号时，判断此帐号是否已经存在于account_list中
         if (mIsAddAccount) {
             String tempWowtalkId = username;
@@ -350,8 +360,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 				}
 			}
 		}).start();
-		
-	}
+    }
 
     private void fGotoFetchPwd() {
 		Intent fetchIntent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
@@ -381,6 +390,20 @@ public class LoginActivity extends Activity implements OnClickListener {
         mPrefUtil = PrefUtil.getInstance(LoginActivity.this);
         // the value of Connect2.context will be changed in StartActivity
         Connect2.setContext(this);
+
+        // 处理自动登录
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String username = extras.getString(EXTRA_USERNAME);
+            if (username != null) {
+                edtAccount.setText(username);
+                String password = extras.getString(EXTRA_PASSWORD);
+                if (password != null) {
+                    edtPassword.setText(password);
+                    login(username, password);
+                }
+            }
+        }
     }
 
     @Override
@@ -416,19 +439,4 @@ public class LoginActivity extends Activity implements OnClickListener {
 		dialog.create().show();
 	}
 
-	/**
-	 * clear the cached global and sharedPrefrence values.
-	 * @param oldUId
-	 * @param newUId
-	 */
-	public static void clearCachedValues(String oldUId, String newUId) {
-        Log.i("clear globalValues and SP values after login/register/auto_register, the oldUId is " + oldUId + ", the newUId is " + newUId);
-        if (TextUtils.isEmpty(newUId) || !newUId.equals(oldUId)) {
-            GlobalValue.clearGolableValues();
-            mPrefUtil.setContactsUptodateAfterLogin(false);
-            mPrefUtil.setGroupUptodate(false);
-            mPrefUtil.setFavoritesUptodate(false);
-            mPrefUtil.resetSysNoticeStatus();
-        }
-    }
 }

@@ -10,6 +10,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 
@@ -17,6 +18,7 @@ import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.*;
+import org.wowtalk.ui.msg.InputBoardManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -227,6 +229,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
             				&& !TextUtils.isEmpty(txtCoins.getText()); 
                 if(isContentTrue){
                 	createEvent();
+                	closeSoftKeyboard();
                 }else{
                 	Toast.makeText(this, getString(R.string.operation_failed), Toast.LENGTH_SHORT).show();
                 }
@@ -322,7 +325,13 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         }
     }
 
-
+    private void closeSoftKeyboard() {
+        InputMethodManager mInputMethodManager ;
+        mInputMethodManager = (InputMethodManager) this
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        mInputMethodManager .hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+    }
 
 	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -94,6 +94,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         if (title != null) {
             q.find(R.id.btn_layout).invisible();
             q.find(R.id.title_text).visible().text(title);
+            q.find(R.id.title_edit).visibility(View.GONE);
         } else {
             q.find(R.id.btn_layout).visible();
             q.find(R.id.title_text).invisible();

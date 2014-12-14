@@ -12,23 +12,19 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-
-import com.umeng.analytics.MobclickAgent;
-
-import org.wowtalk.api.*;
-import org.wowtalk.ui.BottomButtonBoard;
-import org.wowtalk.ui.MessageBox;
-
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.BuddySearchItemAdapter;
 import co.onemeter.oneapp.adapter.GroupSearchAdapter;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.ListViewUtils;
+import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.BottomButtonBoard;
+import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;
 
@@ -133,23 +129,20 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 	private void searchGroup() {
 		final String keyword = edtSearchContent.getText().toString().trim();
 
-
-//        mMsgBox.showWait();
-
 		new AsyncTask<Void, Integer, Void>() {
 
             ArrayList<GroupChatRoom> results = new ArrayList<GroupChatRoom>();
 
-			@Override
-			protected Void doInBackground(Void... params) {
-//				GroupChatRoom groupWithThatShortID = null;
+            @Override
+            protected void onPreExecute() {
                 if (groupAdapter != null)
                     groupAdapter.clear();
                 else
                     searchedGroupRoomList.clear();
-//				if(groupWithThatShortID != null) {
-//                    searchedGroupRoomList.add(groupWithThatShortID);
-//				}
+            }
+
+			@Override
+			protected Void doInBackground(Void... params) {
 				mWebif.fGroupChat_Search(keyword, results);
 				return null;
 			}
@@ -178,30 +171,17 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 			int errno = ErrorCode.OK;
             ArrayList<Buddy> results = new ArrayList<Buddy>();
 
-			@Override
-			protected Void doInBackground(Void... arg0) {
-//				buddy = new Buddy();
+            @Override
+            protected void onPreExecute() {
                 if (buddyAdapter != null)
                     buddyAdapter.clear();
                 else
                     searchedBuddyList.clear();
+            }
 
+			@Override
+			protected Void doInBackground(Void... arg0) {
 				errno = mWebif.fSearchBuddy(wowtalkId,Buddy.ACCOUNT_TYPE_STUDENT, results);
-
-//                mAllowAdd = errno == ErrorCode.OK
-//                        && !Utils.isNullOrEmpty(buddy.userID)
-//                        && 0 == (buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE)
-//                        && !buddy.userID.equals(mWebif.fGetMyUserIDFromLocal());
-//
-//                if (!TextUtils.isEmpty(buddy.userID)) {
-//                    if (buddy.userID.equals(mWebif.fGetMyUserIDFromLocal())) {
-//                        mFriendType = ContactInfoActivity.BUDDY_TYPE_MYSELF;
-//                    } else if (errno == ErrorCode.OK) {
-//                        mFriendType = (0 != (buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE))
-//                                ? ContactInfoActivity.BUDDY_TYPE_IS_FRIEND
-//                                        : ContactInfoActivity.BUDDY_TYPE_NOT_FRIEND;
-//                    }
-//                }
 				return null;
 			}
 			

@@ -126,10 +126,9 @@ public class LoginActivity extends Activity implements OnClickListener {
                     if (!mIsAddAccount) {
                         Intent newIntent = new Intent(LoginActivity.this, StartActivity.class);
                         newIntent.putExtra(StartActivity.KEY_IS_START_FROM_LOGIN, true);
+                        newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(newIntent);
                     }
-
-                    finish();
                 } else {
                     // 登录失败，则将原来uid对应的SP拷贝到当前SP中
                     if (null != oldAccount) {

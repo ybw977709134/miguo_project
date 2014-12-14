@@ -309,7 +309,7 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
             } else {
                 try {
                     String type=jsonWraper.getValue(Utils.QR_CODE_KEY_TYPE);
-                    if(type.equals(Utils.QR_CODE_KEY_DEF_VALUE_TYPE_YQT) ||
+                    if(type.equals(Utils.QR_CODE_KEY_DEF_VALUE_TYPE_BUDDY) ||
                             type.equals(Utils.QR_CODE_KEY_DEF_VALUE_TYPE_FMY)) {
                         String uid=jsonWraper.getValue(Utils.QR_CODE_KEY_CONTENT,Utils.QR_CODE_KEY_UID);
                         String timestamp=jsonWraper.getValue(Utils.QR_CODE_KEY_CONTENT,Utils.QR_CODE_KEY_TIMESTAMP);

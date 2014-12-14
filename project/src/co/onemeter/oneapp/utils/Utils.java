@@ -10,7 +10,7 @@ public class Utils {
     public final static String QR_CODE_KEY_DEF_VALUE_LABEL="WTH_QR_CODE_CHECK";
 
     public final static String QR_CODE_KEY_TYPE="type";
-    public final static String QR_CODE_KEY_DEF_VALUE_TYPE_YQT="0";
+    public final static String QR_CODE_KEY_DEF_VALUE_TYPE_BUDDY ="0";
     public final static String QR_CODE_KEY_DEF_VALUE_TYPE_FMY="1";
     public final static String QR_CODE_KEY_DEF_VALUE_TYPE_GROUP="2";
     public final static String QR_CODE_KEY_DEF_VALUE_TYPE_EVENT="3";

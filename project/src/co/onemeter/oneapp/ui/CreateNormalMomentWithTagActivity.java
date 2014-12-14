@@ -2,6 +2,7 @@ package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,8 +14,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
-
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.adapter.CreateSurveyOptionsLeftDeleteAdapter;
+import co.onemeter.oneapp.adapter.CreateSurveyOptionsRightContentAdapter;
+import co.onemeter.oneapp.utils.LocationHelper;
+import co.onemeter.oneapp.utils.ThemeHelper;
+import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MediaInputHelper;
@@ -23,11 +30,6 @@ import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
 import org.wowtalk.ui.msg.InputBoardManager;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.adapter.CreateSurveyOptionsLeftDeleteAdapter;
-import co.onemeter.oneapp.adapter.CreateSurveyOptionsRightContentAdapter;
-import co.onemeter.oneapp.utils.LocationHelper;
-import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -920,7 +922,14 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         }).start();
     }
 
+    private void hideIME() {
+        final InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(etMomentMsgContent.getWindowToken(), 0);
+    }
+
     private void showPickImgSelector() {
+        hideIME();
+
         final BottomButtonBoard bottomBoard=new BottomButtonBoard(this, getWindow().getDecorView());
         bottomBoard.add(getString(R.string.image_take_photo), BottomButtonBoard.BUTTON_BLUE,
                 new View.OnClickListener() {
@@ -951,6 +960,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                         }
                         Intent intent = new Intent(CreateNormalMomentWithTagActivity.this, SelectPhotoActivity.class);
                         intent.putExtra("num", CreateMomentActivity.TOTAL_PHOTO_ALLOWED - i);
+                        ThemeHelper.putExtraCurrThemeResId(intent, CreateNormalMomentWithTagActivity.this);
                         ArrayList<String> listPath = new ArrayList<String>();
                         for (CreateMomentActivity.WMediaFile photo : listPhoto) {
                             if (photo.isFromGallery) {

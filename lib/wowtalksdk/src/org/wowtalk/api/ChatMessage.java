@@ -4,9 +4,8 @@ package org.wowtalk.api;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
-
+import android.util.Base64;
 import com.amazonaws.util.StringInputStream;
-
 import junit.framework.Assert;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -14,7 +13,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -225,15 +224,13 @@ public class ChatMessage {
     /**Message Type : communicate with public account. */
     public static String MSGTYPE_OFFICIAL_ACCOUNT_MSG = "n";
 
-    /** added in 2014/4 **/
-    public static String MSGTYPE_LOGIN_PLACE_CHANGED = "o";
-    public static String MSGTYPE_BUDDY_INFO_UPDATED = "p";
+	public static String MSGTYPE_LOGIN_PLACE_CHANGED = "o"; // NOT USED
+	public static String MSGTYPE_BUDDY_INFO_UPDATED = "p";
     public static String MSGTYPE_GROUP_INFO_UPDATED = "q";
     /** added in 2014/8 **/
     public static String MSGTYPE_MOMENT = "r";
-	/**Message Type : hybird of text, image, and voice.
-	 * TODO the value should be "s", but for now the sdk doesn't allow this new type. */
-	public static String MSGTYPE_HYBIRD = "c";
+	/**Message Type : hybird of text, image, and voice. */
+	public static String MSGTYPE_HYBIRD = MSGTYPE_MULTIMEDIA_VCF; // 暂时借用 VCF 这种闲置消息类型
     public static String MSGTYPE_OUTGOING_MSG = "z";
 
     public static String MSGTYPE_SYSTEM_PROMPT = "local_a";
@@ -306,7 +303,11 @@ public class ChatMessage {
 	public String pathOfThumbNail;
 	/** field that can be used to save the multimedia downloaded from a message **/
 	public String pathOfMultimedia;
-	
+	/** field that can be used to save the second multimedia downloaded from a message.
+	 * <p>for {@link #MSGTYPE_HYBIRD}, the second multimedia is the audio,
+	 * For other types of messages, there's no second multimedia.</p>**/
+	public String pathOfMultimedia2;
+
 	/************************End of Data should be saved in db*****************************/
 
 	
@@ -504,6 +505,13 @@ public class ChatMessage {
 			String text,
 			String imageFileId, String imageExt, String thumbnailFileId,
 			String audioFileId, String audioExt, int duration) {
+		try {
+			text = Base64.encodeToString(text.getBytes("UTF-8"), 0);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			text = "";
+		}
+
 		messageContent = String.format(
 				"{\"text\":\"%s\"," +
 						"\"pathoffileincloud\":\"%s\"," +
@@ -527,6 +535,28 @@ public class ChatMessage {
         messageContent = String.format(Locale.getDefault(),
                 "{\"reason\":\"add_buddy\",\"id\":\"%s\",\"msg\":\"%s\"}", buddy_id, hello);
     }
+
+	/**
+	 * Get text body (not JSON) of this message.
+	 * @return
+	 */
+	public String getText() {
+		if (MSGTYPE_NORMAL_TXT_MESSAGE.equals(msgType)) {
+			return messageContent;
+		} else {
+			Pattern p = Pattern.compile("text\" *: *\"([^\"]+)");
+			Matcher m = p.matcher(messageContent);
+			if (m.find()) {
+				String encodedTxt = m.group(1);
+				try {
+					return new String(Base64.decode(encodedTxt, 0), "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
 
     /**
      * Get the original file's ID coded in message body if this message is of

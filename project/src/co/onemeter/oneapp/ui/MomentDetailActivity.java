@@ -947,6 +947,11 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     }
 
     @Override
+    public void onHybirdRequested() {
+        mMsgBox.show(null, getString(R.string.moments_hybird_not_supported_in_review));
+    }
+
+    @Override
     public void onVideoInputted(String path, String thumbPath) {
         mMsgBox.show(null, getString(R.string.moments_video_not_supported_in_review));
     }

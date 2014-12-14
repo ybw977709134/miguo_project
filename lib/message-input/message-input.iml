@@ -74,6 +74,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="paint_android" />
-    <orderEntry type="library" name="wowtalk_service" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="wowtalk_service" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="android-query" level="project" />
   </component>
 </module>

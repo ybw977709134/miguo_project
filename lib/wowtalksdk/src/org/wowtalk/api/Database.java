@@ -128,6 +128,18 @@ public class Database {
     }
 
     /**
+     * 这个方法是给 WowTalkVoipIF 调用的。
+     *
+     * java.lang.NoSuchMethodError: org.wowtalk.api.Database.getInstance
+         at org.wowtalk.api.WowTalkVoipIF.fSendChatMessage(WowTalkVoipIF.java:1034)
+     * @param context
+     * @return
+     */
+    public static Database getInstance(Context context) {
+        return new Database(context);
+    }
+
+    /**
      * This has to be called before any function is called.
      * <p>This will be called in constructor automatically.</p>
      * 此处为遗留代码，sdk在调用，上层调用时，不需要显示调用此方法(已在构造方法中调用)
@@ -1286,6 +1298,7 @@ public class Database {
                 ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO ,
                 ChatMessage.MSGTYPE_MULTIMEDIA_VOICE_NOTE ,
                 ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE ,
+                ChatMessage.MSGTYPE_HYBIRD ,
                 ChatMessage.MSGTYPE_MULTIMEDIA_VCF ,
                 ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST ,
                 ChatMessage.MSGTYPE_GROUPCHAT_SOMEONE_JOIN_ROOM ,
@@ -1315,6 +1328,7 @@ public class Database {
         values.put("read_count", msg.readCount);
         values.put("path_thumbnail", msg.pathOfThumbNail);
         values.put("path_multimedia", msg.pathOfMultimedia);
+        values.put("path_multimedia2", msg.pathOfMultimedia2);
         values.put("msgcontent", msg.messageContent);
         values.put("unique_key", msg.uniqueKey);
 
@@ -1411,6 +1425,7 @@ public class Database {
                 ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO ,
                 ChatMessage.MSGTYPE_MULTIMEDIA_VOICE_NOTE ,
                 ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE ,
+                ChatMessage.MSGTYPE_HYBIRD ,
                 ChatMessage.MSGTYPE_MULTIMEDIA_VCF ,
                 ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST ,
                 ChatMessage.MSGTYPE_GROUPCHAT_SOMEONE_JOIN_ROOM ,
@@ -1437,6 +1452,7 @@ public class Database {
         values.put("group_chat_sender_id", msg.groupChatSenderID);
         values.put("path_thumbnail", msg.pathOfThumbNail);
         values.put("path_multimedia", msg.pathOfMultimedia);
+        values.put("path_multimedia2", msg.pathOfMultimedia2);
         values.put("msgcontent", msg.messageContent);
         values.put("local_item", msg.localHistoryId);
 
@@ -1462,6 +1478,7 @@ public class Database {
         ContentValues values = new ContentValues();
         values.put("path_thumbnail", msg.pathOfThumbNail);
         values.put("path_multimedia", msg.pathOfMultimedia);
+        values.put("path_multimedia2", msg.pathOfMultimedia2);
 
         boolean ret= database.update(TBL_MESSAGES_HISTORY, values, "id=" + msg.primaryKey, null) > 0;
         if (isObserver) {
@@ -1488,7 +1505,7 @@ public class Database {
                 new String[] { "id",
                     "chattarget", "msgtype", "sentdate", "iotype",
                     "is_group_chat", "group_chat_sender_id",
-                    "path_thumbnail", "path_multimedia",
+                    "path_thumbnail", "path_multimedia", "path_multimedia2",
                     "msgcontent"},
                 "local_item > ? and chattarget=? AND msgtype<>?",
                 new String[] {String.valueOf(startLocalItem), targetId, ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST},
@@ -1509,7 +1526,8 @@ public class Database {
                 msg.groupChatSenderID = cursor.getString(6);
                 msg.pathOfThumbNail = cursor.getString(7);
                 msg.pathOfMultimedia = cursor.getString(8);
-                msg.messageContent = cursor.getString(9);
+                msg.pathOfMultimedia2 = cursor.getString(9);
+                msg.messageContent = cursor.getString(10);
 
                 list.add(msg);
             } while (cursor.moveToNext());
@@ -1530,7 +1548,7 @@ public class Database {
                 new String[] { "id",
                     "chattarget", "msgtype", "sentdate", "iotype",
                     "is_group_chat", "group_chat_sender_id",
-                    "path_thumbnail", "path_multimedia",
+                    "path_thumbnail", "path_multimedia", "path_multimedia2",
                     "msgcontent"},
                 "id=?",
                 new String[] {id},
@@ -1551,7 +1569,8 @@ public class Database {
             msg.groupChatSenderID = cursor.getString(6);
             msg.pathOfThumbNail = cursor.getString(7);
             msg.pathOfMultimedia = cursor.getString(8);
-            msg.messageContent = cursor.getString(9);
+            msg.pathOfMultimedia2 = cursor.getString(9);
+            msg.messageContent = cursor.getString(10);
         }
         if (cursor != null && !cursor.isClosed()) {
             cursor.close();
@@ -1570,7 +1589,7 @@ public class Database {
                 new String[] { "id",
                     "chattarget", "msgtype", "sentdate", "iotype",
                     "is_group_chat", "group_chat_sender_id",
-                    "path_thumbnail", "path_multimedia",
+                    "path_thumbnail", "path_multimedia", "path_multimedia2",
                     "msgcontent"},
                 null,
                 null,
@@ -1590,7 +1609,8 @@ public class Database {
                 msg.groupChatSenderID = cursor.getString(6);
                 msg.pathOfThumbNail = cursor.getString(7);
                 msg.pathOfMultimedia = cursor.getString(8);
-                msg.messageContent = cursor.getString(9);
+                msg.pathOfMultimedia2 = cursor.getString(9);
+                msg.messageContent = cursor.getString(10);
 
                 list.add(msg);
             } while (cursor.moveToNext());
@@ -1752,6 +1772,10 @@ public class Database {
             //path or video->pathOfThumbNail,pathOfMultimedia
             deleteAFile(message.pathOfThumbNail);
             deleteAFile(message.pathOfMultimedia);
+        } else if (message.msgType.equals(ChatMessage.MSGTYPE_HYBIRD)) {
+            deleteAFile(message.pathOfThumbNail);
+            deleteAFile(message.pathOfMultimedia);
+//            deleteAFile(message.getMediaFileID(ChatMessage.HYBIRD_COMPONENT_AUDIO)); // TODO
         }
     }
 
@@ -1801,7 +1825,7 @@ public class Database {
 //                    + " chattarget,"
 //                    + "display_name,msgtype,sentdate,"
 //                    + "iotype,sentstatus,is_group_chat,group_chat_sender_id,"
-//                    + "read_count,path_thumbnail,path_multimedia,"
+//                    + "read_count,path_thumbnail,path_multimedia,path_multimedia2,"
 //                    + "msgcontent,unique_key"
 //                    + " from chatmessages"
 //                    + " group by chattarget"
@@ -1813,7 +1837,7 @@ public class Database {
                     + " chattarget,"
                     + "display_name,msgtype,sentdate,"
                     + "iotype,sentstatus,is_group_chat,group_chat_sender_id,"
-                    + "read_count,path_thumbnail,path_multimedia,"
+                    + "read_count,path_thumbnail,path_multimedia,path_multimedia2,"
                     + "msgcontent,unique_key"
                     + " from chatmessages"
                     + " where msgtype<>'"+ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST+"'"
@@ -1825,7 +1849,7 @@ public class Database {
 					"chattarget", "display_name", "msgtype", "sentdate",
 					"iotype", "sentstatus", "is_group_chat",
 					"group_chat_sender_id", "read_count", "path_thumbnail",
-					"path_multimedia", "msgcontent", "unique_key" },
+					"path_multimedia", "path_multimedia2", "msgcontent", "unique_key" },
 					"msgtype<>'" + ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST
 							+ "'", null, null, null, null);
 		}
@@ -1846,8 +1870,9 @@ public class Database {
 				msg.readCount = cursor.getInt(9);
 				msg.pathOfThumbNail = cursor.getString(10);
 				msg.pathOfMultimedia = cursor.getString(11);
-				msg.messageContent = cursor.getString(12);
-				msg.uniqueKey = cursor.getString(13);
+                msg.pathOfMultimedia2 = cursor.getString(12);
+				msg.messageContent = cursor.getString(13);
+				msg.uniqueKey = cursor.getString(14);
 
                 // SmsActivity查询信息列表时，需要查询该条信息对应的成员与自己的所有未读信息条数，避免在显示时查询导致数据不一致
                 if (isDistinctByUserName) {
@@ -1880,12 +1905,12 @@ public class Database {
                 + " ifnull(temp_chatmessages.sentdate, latest_chat_target.sentdate) as temp_sentdate,"
                 + " iotype,sentstatus,latest_chat_target.is_group,"
                 + " group_chat_sender_id,read_count,path_thumbnail,"
-                + " path_multimedia, msgcontent,unique_key"
+                + " path_multimedia, path_multimedia2, msgcontent,unique_key"
                 + " from latest_chat_target"
                 + " left join"
                 + "     (select id,chattarget,display_name,msgtype,iotype,"
                 + "     sentstatus,group_chat_sender_id,read_count,"
-                + "     path_thumbnail,path_multimedia, msgcontent,unique_key,"
+                + "     path_thumbnail,path_multimedia, path_multimedia2, msgcontent,unique_key,"
                 + "     max(sentdate) as sentdate"
                 + "     from chatmessages"
                 + "     group by chattarget) temp_chatmessages"
@@ -1915,12 +1940,12 @@ public class Database {
                 + " ifnull(temp_chatmessages.sentdate, latest_chat_target.sentdate) as temp_sentdate,"
                 + " iotype,sentstatus,latest_chat_target.is_group,"
                 + " group_chat_sender_id,read_count,path_thumbnail,"
-                + " path_multimedia, msgcontent,unique_key"
+                + " path_multimedia, path_multimedia2, msgcontent,unique_key"
                 + " from latest_chat_target"
                 + " left join"
                 + "     (select id,chattarget,display_name,msgtype,iotype,"
                 + "     sentstatus,group_chat_sender_id,read_count,"
-                + "     path_thumbnail,path_multimedia, msgcontent,unique_key,"
+                + "     path_thumbnail,path_multimedia, path_multimedia2, msgcontent,unique_key,"
                 + "     max(sentdate) as sentdate"
                 + "     from chatmessages"
                 + "     group by chattarget) temp_chatmessages"
@@ -1958,8 +1983,9 @@ public class Database {
                 }
                 msg.pathOfThumbNail = cursor.getString(10);
                 msg.pathOfMultimedia = cursor.getString(11);
-                msg.messageContent = cursor.getString(12);
-                msg.uniqueKey = cursor.getString(13);
+                msg.pathOfMultimedia2 = cursor.getString(12);
+                msg.messageContent = cursor.getString(13);
+                msg.uniqueKey = cursor.getString(14);
 
                 // SmsActivity查询信息列表时，需要查询该条信息对应的成员与自己的所有未读信息条数，避免在显示时查询导致数据不一致
                 msg.unreadCount = countUnreadChatMessagesWithUser(msg.chatUserName);
@@ -1988,7 +2014,7 @@ public class Database {
 		cursor = database.query("chatmessages", new String[] { "id",
 				"chattarget", "display_name", "msgtype", "sentdate", "iotype",
 				"sentstatus", "is_group_chat", "group_chat_sender_id",
-				"read_count", "path_thumbnail", "path_multimedia",
+				"read_count", "path_thumbnail", "path_multimedia", "path_multimedia2",
 				"msgcontent", "unique_key" }, "msgtype="
 				+ ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST, null, null, null,
 				null);
@@ -2009,8 +2035,9 @@ public class Database {
 				msg.readCount = cursor.getInt(9);
 				msg.pathOfThumbNail = cursor.getString(10);
 				msg.pathOfMultimedia = cursor.getString(11);
-				msg.messageContent = cursor.getString(12);
-				msg.uniqueKey = cursor.getString(13);
+                msg.pathOfMultimedia2 = cursor.getString(12);
+				msg.messageContent = cursor.getString(13);
+				msg.uniqueKey = cursor.getString(14);
 
 				list.add(msg);
 			} while (cursor.moveToNext());
@@ -2058,7 +2085,7 @@ public class Database {
 		Cursor cursor = database.query("chatmessages", new String[] { "id",
 				"chattarget", "display_name", "msgtype", "sentdate", "iotype",
 				"sentstatus", "is_group_chat", "group_chat_sender_id",
-				"read_count", "path_thumbnail", "path_multimedia",
+				"read_count", "path_thumbnail", "path_multimedia", "path_multimedia2",
 				"msgcontent", "unique_key" }, "msgcontent LIKE '%"
 				+ searchMsgText + "%'", null, "chattarget", null, null);
 
@@ -2078,8 +2105,9 @@ public class Database {
 				msg.readCount = cursor.getInt(9);
 				msg.pathOfThumbNail = cursor.getString(10);
 				msg.pathOfMultimedia = cursor.getString(11);
-				msg.messageContent = cursor.getString(12);
-				msg.uniqueKey = cursor.getString(13);
+                msg.pathOfMultimedia2 = cursor.getString(12);
+				msg.messageContent = cursor.getString(13);
+				msg.uniqueKey = cursor.getString(14);
 
 				list.add(msg);
 			} while (cursor.moveToNext());
@@ -2112,7 +2140,7 @@ public class Database {
 
         Cursor cursor = database.rawQuery("SELECT chatmessages.id,chattarget,"
                 + "     display_name,msgtype,sentdate,iotype,sentstatus,is_group_chat,"
-                + "     group_chat_sender_id,msg_readed.read_count,path_thumbnail,path_multimedia,"
+                + "     group_chat_sender_id,msg_readed.read_count,path_thumbnail,path_multimedia,path_multimedia2,"
                 + "     msgcontent,chatmessages.unique_key"
                 + " FROM chatmessages "
                 + " left join "
@@ -2138,8 +2166,9 @@ public class Database {
                 msg.readCount = cursor.getInt(9);
                 msg.pathOfThumbNail = cursor.getString(10);
                 msg.pathOfMultimedia = cursor.getString(11);
-                msg.messageContent = cursor.getString(12);
-                msg.uniqueKey = cursor.getString(13);
+                msg.pathOfMultimedia2 = cursor.getString(12);
+                msg.messageContent = cursor.getString(13);
+                msg.uniqueKey = cursor.getString(14);
 
                 list.add(msg);
             } while (cursor.moveToNext());
@@ -2168,7 +2197,7 @@ public class Database {
 		Cursor cursor = database.query("chatmessages", new String[] { "id",
 				"chattarget", "display_name", "msgtype", "sentdate", "iotype",
 				"sentstatus", "is_group_chat", "group_chat_sender_id",
-				"read_count", "path_thumbnail", "path_multimedia",
+				"read_count", "path_thumbnail", "path_multimedia", "path_multimedia2",
 				"msgcontent", "unique_key" }, "chattarget='" + userID
 				+ "' AND msgtype<>'"
 				+ ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST + "'", null, null,
@@ -2191,8 +2220,9 @@ public class Database {
 				msg.readCount = cursor.getInt(9);
 				msg.pathOfThumbNail = cursor.getString(10);
 				msg.pathOfMultimedia = cursor.getString(11);
-				msg.messageContent = cursor.getString(12);
-				msg.uniqueKey = cursor.getString(13);
+                msg.pathOfMultimedia2 = cursor.getString(12);
+				msg.messageContent = cursor.getString(13);
+				msg.uniqueKey = cursor.getString(14);
 
 				list.add(msg);
 			} while (cursor.moveToNext());
@@ -2213,7 +2243,7 @@ public class Database {
 
         Cursor cursor = database.rawQuery("SELECT chatmessages.id,chattarget,"
                 + "     display_name,msgtype,sentdate,iotype,sentstatus,is_group_chat,"
-                + "     group_chat_sender_id,msg_readed.read_count,path_thumbnail,path_multimedia,"
+                + "     group_chat_sender_id,msg_readed.read_count,path_thumbnail,path_multimedia,path_multimedia2,"
                 + "     msgcontent,chatmessages.unique_key"
                 + " FROM chatmessages "
                 + " left join "
@@ -2239,8 +2269,9 @@ public class Database {
                 msg.readCount = cursor.getInt(9);
                 msg.pathOfThumbNail = cursor.getString(10);
                 msg.pathOfMultimedia = cursor.getString(11);
-                msg.messageContent = cursor.getString(12);
-                msg.uniqueKey = cursor.getString(13);
+                msg.pathOfMultimedia2 = cursor.getString(12);
+                msg.messageContent = cursor.getString(13);
+                msg.uniqueKey = cursor.getString(14);
 
                 list.add(msg);
             } while (cursor.moveToNext());
@@ -2264,7 +2295,7 @@ public class Database {
 
         Cursor cursor = database.rawQuery("SELECT chatmessages.id,chattarget,"
                 + "     display_name,msgtype,sentdate,iotype,sentstatus,is_group_chat,"
-                + "     group_chat_sender_id,msg_readed.read_count,path_thumbnail,path_multimedia,"
+                + "     group_chat_sender_id,msg_readed.read_count,path_thumbnail,path_multimedia,path_multimedia2,"
                 + "     msgcontent,chatmessages.unique_key"
                 + " FROM chatmessages "
                 + " left join "
@@ -2292,8 +2323,9 @@ public class Database {
                 msg.readCount = cursor.getInt(9);
                 msg.pathOfThumbNail = cursor.getString(10);
                 msg.pathOfMultimedia = cursor.getString(11);
-                msg.messageContent = cursor.getString(12);
-                msg.uniqueKey = cursor.getString(13);
+                msg.pathOfMultimedia2 = cursor.getString(12);
+                msg.messageContent = cursor.getString(13);
+                msg.uniqueKey = cursor.getString(14);
 
                 list.add(msg);
             } while (cursor.moveToNext());
@@ -2322,7 +2354,7 @@ public class Database {
 		Cursor cursor = database.query("chatmessages", new String[] { "id",
 				"chattarget", "display_name", "msgtype", "sentdate", "iotype",
 				"sentstatus", "is_group_chat", "group_chat_sender_id",
-				"read_count", "path_thumbnail", "path_multimedia",
+				"read_count", "path_thumbnail", "path_multimedia", "path_multimedia2",
 				"msgcontent", "unique_key" }, "chattarget='" + userID
 				+ "' AND msgtype<>'"
 				+ ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST + "'"
@@ -2347,8 +2379,9 @@ public class Database {
 				msg.readCount = cursor.getInt(9);
 				msg.pathOfThumbNail = cursor.getString(10);
 				msg.pathOfMultimedia = cursor.getString(11);
-				msg.messageContent = cursor.getString(12);
-				msg.uniqueKey = cursor.getString(13);
+                msg.pathOfMultimedia2 = cursor.getString(12);
+				msg.messageContent = cursor.getString(13);
+				msg.uniqueKey = cursor.getString(14);
 
 				list.add(msg);
 			} while (cursor.moveToNext());
@@ -2374,7 +2407,7 @@ public class Database {
 		Cursor cursor = database.query("chatmessages", new String[] { "id",
 				"chattarget", "display_name", "msgtype", "sentdate", "iotype",
 				"sentstatus", "is_group_chat", "group_chat_sender_id",
-				"read_count", "path_thumbnail", "path_multimedia",
+				"read_count", "path_thumbnail", "path_multimedia", "path_multimedia2",
 				"msgcontent", "unique_key" }, "id='" + primaryKey
 				+ "' AND msgtype<>'"
 				+ ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST + "'", null, null,
@@ -2397,8 +2430,9 @@ public class Database {
 			msg.readCount = cursor.getInt(9);
 			msg.pathOfThumbNail = cursor.getString(10);
 			msg.pathOfMultimedia = cursor.getString(11);
-			msg.messageContent = cursor.getString(12);
-			msg.uniqueKey = cursor.getString(13);
+            msg.pathOfMultimedia2 = cursor.getString(12);
+			msg.messageContent = cursor.getString(13);
+			msg.uniqueKey = cursor.getString(14);
 
 		}
 		if (cursor != null && !cursor.isClosed()) {
@@ -2421,7 +2455,7 @@ public class Database {
         Cursor cursor = database.query("chatmessages", new String[] { "id",
                 "chattarget", "display_name", "msgtype", "sentdate", "iotype",
                 "sentstatus", "is_group_chat", "group_chat_sender_id",
-                "read_count", "path_thumbnail", "path_multimedia",
+                "read_count", "path_thumbnail", "path_multimedia", "path_multimedia2",
                 "msgcontent", "unique_key" },
                 "unique_key=? AND msgtype<>?",
                 new String[]{ uniqueKey, ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST},
@@ -2442,8 +2476,9 @@ public class Database {
             msg.readCount = cursor.getInt(9);
             msg.pathOfThumbNail = cursor.getString(10);
             msg.pathOfMultimedia = cursor.getString(11);
-            msg.messageContent = cursor.getString(12);
-            msg.uniqueKey = cursor.getString(13);
+            msg.pathOfMultimedia2 = cursor.getString(12);
+            msg.messageContent = cursor.getString(13);
+            msg.uniqueKey = cursor.getString(14);
         }
         if (cursor != null && !cursor.isClosed()) {
             cursor.close();
@@ -2966,6 +3001,7 @@ public class Database {
         values.put("read_count", msg.readCount);
         values.put("path_thumbnail", msg.pathOfThumbNail);
         values.put("path_multimedia", msg.pathOfMultimedia);
+        values.put("path_multimedia2", msg.pathOfMultimedia2);
         values.put("msgcontent", msg.messageContent);
         values.put("unique_key", msg.uniqueKey);
 
@@ -6082,7 +6118,7 @@ public class Database {
 
 class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME_PRE = GlobalSetting.DATABASE_NAME;
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     public int flagIndex;
     private Context mContext;
 
@@ -6099,6 +6135,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 			+ " `read_count` INTEGER,"
 			+ " `path_thumbnail` TEXT,"
 			+ " `path_multimedia` TEXT,"
+            + " `path_multimedia2` TEXT,"
 			+ " `msgcontent` TEXT,"
 			+ " `unique_key` TEXT); ";
 
@@ -6351,6 +6388,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
             + "group_chat_sender_id TEXT,"
             + "path_thumbnail TEXT,"
             + "path_multimedia TEXT,"
+            + "path_multimedia2 TEXT,"
             + "msgcontent TEXT,"
             + "local_item INTEGER"
             + ");";
@@ -6435,10 +6473,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
             database.execSQL("INSERT INTO chatmessages"
                     + "     (id,chattarget,display_name,msgtype,sentdate,iotype,"
                     + "     sentstatus,is_group_chat,group_chat_sender_id,read_count,"
-                    + "     path_thumbnail,path_multimedia,msgcontent,unique_key)"
+                    + "     path_thumbnail,path_multimedia,path_multimedia2,msgcontent,unique_key)"
                     + " SELECT id,chattarget,display_name,msgtype,sentdate,iotype,"
                     + "     sentstatus,is_group_chat,group_chat_sender_id,read_count,"
-                    + "     path_thumbnail,path_multimedia,msgcontent,remote_key"
+                    + "     path_thumbnail,path_multimedia,path_multimedia2,msgcontent,remote_key"
                     + " FROM chatmessages_temp;");
             // 4. 更新sqlite_sequence
             database.execSQL("update sqlite_sequence set seq=(select max(id) from chatmessages) where name='chatmessages';");
@@ -6456,6 +6494,15 @@ class DatabaseHelper extends SQLiteOpenHelper {
             database.execSQL("UPDATE event SET endTime=startTime;");
             // 添加 host 字段到 event 表
             database.execSQL("ALTER TABLE event ADD COLUMN host TEXT AFTER owner_uid;");
+            ++oldVersion;
+        }
+
+        if (oldVersion == 5) {
+            // 添加 path_multimedia2 字段到 chatmessages, chatmessages_history 表
+            database.execSQL("ALTER TABLE " + DATABASE_CREATE_TBL_CHATMESSAGES +
+                " ADD COLUMN path_multimedia2 TEXT AFTER path_multimedia;");
+            database.execSQL("ALTER TABLE " + DATABASE_CREATE_TBL_CHATMESSAGES_HISTORY +
+                    " ADD COLUMN path_multimedia2 TEXT AFTER path_multimedia;");
             ++oldVersion;
         }
     }

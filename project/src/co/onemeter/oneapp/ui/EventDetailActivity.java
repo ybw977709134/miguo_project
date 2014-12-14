@@ -225,12 +225,25 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
+        
+        btn_right_up = (TextView) findViewById(R.id.right_button_up);
+        btn_right_down = (TextView) findViewById(R.id.right_button_down);
 
         eventDetail = getIntent().getExtras().getParcelable(EventActivity.EVENT_DETAIL_BUNDLE);
+        
+        
 
-        if (eventDetail == null)
+        if (eventDetail == null) { 
             return;
-
+        } else {
+        	if (eventDetail.membership == WEvent.MEMBER_SHIP_JOINED) {
+        		btn_right_up.setVisibility(View.GONE);
+        		btn_right_down.setVisibility(View.VISIBLE);
+        	}
+        }
+        
+        	
+        
         msgbox = new MessageBox(this);
 
 		initView();
@@ -339,8 +352,8 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         q.find(R.id.right_button_up).clicked(this);
         q.find(R.id.right_button_down).clicked(this);
         
-        btn_right_up = (TextView) findViewById(R.id.right_button_up);
-        btn_right_down = (TextView) findViewById(R.id.right_button_down);
+//        btn_right_up = (TextView) findViewById(R.id.right_button_up);
+//        btn_right_down = (TextView) findViewById(R.id.right_button_down);
         
         updateUI();
     }

@@ -18,17 +18,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.AppStatusService;
-import co.onemeter.oneapp.ui.CallMainActivity;
-import co.onemeter.oneapp.ui.MessageDetailAdapter;
+import co.onemeter.oneapp.ui.*;
 import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
-import co.onemeter.oneapp.ui.SmsActivity;
-import co.onemeter.oneapp.ui.StartActivity;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
-
 import com.handmark.pulltorefresh.widget.PullToRefreshListView;
 import com.handmark.pulltorefresh.widget.PullToRefreshListView.OnRefreshListener;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
@@ -45,6 +39,8 @@ import java.util.Date;
  */
 public abstract class MessageComposerActivityBase extends Activity
         implements InputBoardManager.InputResultHandler, InputBoardManager.ChangeToOtherAppsListener {
+
+    private static final int REQ_HYBIRD = 9469021;
 
     private MessageBox mMsgBox;
     private TimeElapseReportRunnable timeElapseReportForCaptureVoiceRunnable;
@@ -794,6 +790,7 @@ public abstract class MessageComposerActivityBase extends Activity
         }
 		msg.fixMessageSenderDisplayName(MessageComposerActivityBase.this, R.string.session_unknown_buddy, R.string.session_unknown_group);
 		msg.pathOfMultimedia = imagePath;
+        msg.pathOfMultimedia2 = audioPath;
 		msg.pathOfThumbNail = imageThumbPath;
 		msg.initExtra();
 		msg.extraData.putBoolean("isTransferring", true);
@@ -1381,6 +1378,19 @@ public abstract class MessageComposerActivityBase extends Activity
                 && mInputMgr.handleActivityResult(requestCode, resultCode, data)) {
             return;
         }
+        if (requestCode == REQ_HYBIRD) {
+            if (resultCode == RESULT_OK) {
+                String[] path = data.getStringArrayExtra(HybirdMessageEditor.EXTRA_OUT_IMAGE_FILENAME);
+                onHybirdInputted(
+                        data.getStringExtra(HybirdMessageEditor.EXTRA_OUT_TEXT),
+                        path[0],
+                        path[1],
+                        data.getStringExtra(HybirdMessageEditor.EXTRA_OUT_VOICE_FILENAME),
+                        data.getIntExtra(HybirdMessageEditor.EXTRA_OUT_VOICE_DURATION, 0)
+                );
+            }
+            return;
+        }
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
@@ -1757,6 +1767,16 @@ public abstract class MessageComposerActivityBase extends Activity
                                  String imagePath, String imageThumbPath,
                                  String audioPath, int duration) {
         fSendHybird_async(text, imagePath, imageThumbPath, audioPath, duration);
+    }
+
+    @Override
+    public void onHybirdRequested() {
+        startActivityForResult(
+                new Intent(this, HybirdMessageEditor.class)
+                        .putExtra(HybirdMessageEditor.EXTRA_PAGE_TITLE, getString(R.string.title_hybird_message))
+                        .putExtra(HybirdMessageEditor.EXTRA_IMAGE_MAX_COUNT, 1)
+                        .putExtra(HybirdMessageEditor.EXTRA_ALLOW_VOICE, true)
+                , REQ_HYBIRD);
     }
 
     @Override

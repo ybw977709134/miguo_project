@@ -205,7 +205,7 @@ public class ChatMessage {
 	/**Message Type : Video File*/
 	public static String MSGTYPE_MULTIMEDIA_VIDEO_NOTE = "e";
 	/**Message Type : VCF*/
-	public static String MSGTYPE_MULTIMEDIA_VCF = "f";
+	public static String MSGTYPE_MULTIMEDIA_VCF = "o"; // 本来是"f"，暂时借它让 MSGTYPE_PIC_VOICE 通过。
 
 	/**Message Type : GroupChat：Join Request*/
 	public static String MSGTYPE_GROUPCHAT_JOIN_REQUEST = "g";
@@ -230,7 +230,7 @@ public class ChatMessage {
     /** added in 2014/8 **/
     public static String MSGTYPE_MOMENT = "r";
 	/**Message Type : hybird of text, image, and voice. */
-	public static String MSGTYPE_PIC_VOICE = MSGTYPE_MULTIMEDIA_VCF; // 暂时借用 VCF 这种闲置消息类型
+	public static String MSGTYPE_PIC_VOICE = "o";
     public static String MSGTYPE_OUTGOING_MSG = "z";
 
     public static String MSGTYPE_SYSTEM_PROMPT = "local_a";

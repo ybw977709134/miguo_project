@@ -100,9 +100,9 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
             // time
             q.find(R.id.event_time).text(formatField(
                             getResources().getString(R.string.event_time_label),
-                            new SimpleDateFormat("MM月dd日 HH:mm").format(act.startTime)
+                            new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(act.startTime)
                                     + "-"
-                                    + new SimpleDateFormat("MM月dd日 HH:mm").format(act.endTime)));
+                                    + new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(act.endTime)));
 
             // place
             q.find(R.id.event_place).text(formatField(

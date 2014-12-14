@@ -221,7 +221,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         moment.latitude = latitude;
         moment.longitude = longitude;
 
-        tvPickLocationTxtInd.setText(String.format(getString(R.string.event_place_label),strAddress));
+        tvPickLocationTxtInd.setText(strAddress);
         ivPickLocationImgInd.setImageResource(R.drawable.timeline_location_a);
         findViewById(R.id.pick_location_layout).setBackgroundResource(R.drawable.text_field);
         findViewById(R.id.pick_location_delete).setVisibility(View.VISIBLE);

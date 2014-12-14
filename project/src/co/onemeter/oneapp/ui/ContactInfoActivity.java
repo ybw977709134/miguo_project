@@ -548,6 +548,21 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 		startActivity(intent);
 	}
 
+    public static void launch(Context context, Buddy buddy) {
+        int mFriendType = ContactInfoActivity.BUDDY_TYPE_UNKNOWN;
+
+        if (!TextUtils.isEmpty(buddy.userID)) {
+            if (buddy.userID.equals(PrefUtil.getInstance(context).getUid())) {
+                mFriendType = ContactInfoActivity.BUDDY_TYPE_MYSELF;
+            } else {
+                mFriendType = (0 != (buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE))
+                        ? ContactInfoActivity.BUDDY_TYPE_IS_FRIEND
+                        : ContactInfoActivity.BUDDY_TYPE_NOT_FRIEND;
+            }
+        }
+        launch(context, buddy.userID, mFriendType);
+    }
+
 	/**
 	 * 
 	 * @param context

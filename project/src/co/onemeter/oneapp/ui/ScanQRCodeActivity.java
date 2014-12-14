@@ -427,9 +427,7 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
                 mMsgbBox.dismissWait();
 
                 if(null != buddy) {
-                    Intent intent=new Intent(ScanQRCodeActivity.this, FamilyContactRelationHandleActivity.class);
-                    intent.putExtra(FamilyContactRelationHandleActivity.ACTIVITY_INTENT_EXT_KEY_BUDDY,buddy);
-                    startActivity(intent);
+                    ContactInfoActivity.launch(ScanQRCodeActivity.this, buddy);
                 } else {
                     mMsgbBox.toast(String.format(getString(R.string.family_qr_content_not_valid),uid));
                 }

@@ -314,6 +314,11 @@ public class Moment implements Parcelable, IHasMultimedia, IHasReview {
             reviews.clear();
     }
 
+    @Override
+    public String getOwnerUid() {
+        return owner != null ? owner.userID : null;
+    }
+
     public static class SurveyOption {
         public String momentId;
         public String optionDesc;

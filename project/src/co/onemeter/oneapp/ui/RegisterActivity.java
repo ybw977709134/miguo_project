@@ -116,12 +116,12 @@ public class RegisterActivity extends Activity implements OnClickListener{
                 Buddy.ACCOUNT_TYPE_TEACHER : Buddy.ACCOUNT_TYPE_STUDENT;
 
         if (!Utils.verifyWowTalkId(strUserName)) {
-            mMsgBox.show(null, getString(R.string.setting_wowtalkid_format_error));
+            mMsgBox.toast(R.string.setting_wowtalkid_format_error);
             return;
         }
 
         if (!Utils.verifyWowTalkPwd(strPassword)) {
-            mMsgBox.show(null, getString(R.string.settings_account_passwd_format_error));
+            mMsgBox.toast(R.string.settings_account_passwd_format_error);
             return;
         }
 

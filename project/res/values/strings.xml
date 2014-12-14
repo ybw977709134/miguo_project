@@ -212,7 +212,7 @@
 	<string name="settings_account_wowid_used_by_others">您所设置的用户 ID已经存在，请重新选择一个用户 ID</string>
 	<string name="settings_account_email_used_by_others">您要绑定的邮箱已经绑定到其它帐号</string>
 	<string name="settings_account_phone_used_by_others">您要绑定的手机号码已经绑定到其它帐号</string>
-	<string name="settings_account_passwd_format_error">密码格式不正确，请重新输入</string>
+	<string name="settings_account_passwd_format_error">密码格式不正确，可以使用6-20个字母，数字，下划线和减号</string>
 	<string name="settings_account_passwd_retypo">两次输入的密码不一致</string>
 	<string name="settings_account_logout_without_set_id_pwd">为了能够再次登录，请您先设置用户 ID和登录密码后再退出</string>
 	<string name="settings_account_verification_code_empty">验证码不能为空</string>
@@ -445,8 +445,8 @@
     <string name="setting_wowtalkid_msg">您的好友可以通过用户 ID找到你。\n用户 ID只能修改一次。可以使用2-20个字母，数字，下划线和减号</string>
     <string name="confirm">确认</string>
     <string name="setting_wowtalkid_dialog_title">温馨提示</string>
-    <string name="setting_wowtalkid_dialog_msg">用户 ID只能修改一次。您确定要将其修改为%s？</string>
-    <string name="setting_wowtalkid_format_error">用户 ID格式错误，请重新输入</string>
+    <string name="setting_wowtalkid_dialog_msg">用户ID只能修改一次。您确定要将其修改为%s？</string>
+    <string name="setting_wowtalkid_format_error">用户ID格式错误，可以使用2-20个字母，数字，下划线和减号</string>
     <string name="bind_phone">绑定手机</string>
     <string name="bind_phone_msg">点击下一步，我们将会向该号码发送验证码</string>
     <string name="bind_email_msg">点击下一步，我们将会向该地址发送验证码</string>

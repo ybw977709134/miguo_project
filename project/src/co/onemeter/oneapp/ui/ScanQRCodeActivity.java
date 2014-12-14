@@ -309,14 +309,21 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
             } else {
                 try {
                     String type=jsonWraper.getValue(Utils.QR_CODE_KEY_TYPE);
-                    if(type.equals(Utils.QR_CODE_KEY_DEF_VALUE_TYPE_YQT) ||
-                            type.equals(Utils.QR_CODE_KEY_DEF_VALUE_TYPE_FMY)) {
-                        String uid=jsonWraper.getValue(Utils.QR_CODE_KEY_CONTENT,Utils.QR_CODE_KEY_UID);
-                        String timestamp=jsonWraper.getValue(Utils.QR_CODE_KEY_CONTENT,Utils.QR_CODE_KEY_TIMESTAMP);
-                        if(TextUtils.isEmpty(uid) || TextUtils.isEmpty(timestamp)) {
-                            canHandle=false;
+                    if(type.equals(Utils.QR_CODE_KEY_DEF_VALUE_TYPE_BUDDY)) {
+                        String uid = jsonWraper.getValue(Utils.QR_CODE_KEY_CONTENT, Utils.QR_CODE_KEY_UID);
+                        String timestamp = jsonWraper.getValue(Utils.QR_CODE_KEY_CONTENT, Utils.QR_CODE_KEY_TIMESTAMP);
+                        if (TextUtils.isEmpty(uid) || TextUtils.isEmpty(timestamp)) {
+                            canHandle = false;
                         } else {
                             doHandleUserAccount(uid);
+                        }
+                    } else if(type.equals(Utils.QR_CODE_KEY_DEF_VALUE_TYPE_INVITECODE)) {
+                        String code=jsonWraper.getValue(Utils.QR_CODE_KEY_CONTENT,Utils.QR_CODE_KEY_INVITECODE);
+                        String timestamp=jsonWraper.getValue(Utils.QR_CODE_KEY_CONTENT,Utils.QR_CODE_KEY_TIMESTAMP);
+                        if(TextUtils.isEmpty(code) || TextUtils.isEmpty(timestamp)) {
+                            canHandle=false;
+                        } else {
+                            doHandleInvitation(code);
                         }
                     } else if (type.equals(Utils.QR_CODE_KEY_DEF_VALUE_TYPE_PUBLIC_ACCOUNT)) {
                         String publicAccountId=jsonWraper.getValue(Utils.QR_CODE_KEY_CONTENT,Utils.QR_CODE_KEY_PUBLIC_ACCOUNT_ID);
@@ -398,6 +405,10 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
         }
     }
 
+    private void doHandleInvitation(final String code) {
+        LoginInvitedActivity.login(this, code, new MessageBox(this));
+    }
+
     private void doHandleUserAccount(final String uid) {
         mMsgbBox.showWait();
 
@@ -427,9 +438,7 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
                 mMsgbBox.dismissWait();
 
                 if(null != buddy) {
-                    Intent intent=new Intent(ScanQRCodeActivity.this, FamilyContactRelationHandleActivity.class);
-                    intent.putExtra(FamilyContactRelationHandleActivity.ACTIVITY_INTENT_EXT_KEY_BUDDY,buddy);
-                    startActivity(intent);
+                    ContactInfoActivity.launch(ScanQRCodeActivity.this, buddy);
                 } else {
                     mMsgbBox.toast(String.format(getString(R.string.family_qr_content_not_valid),uid));
                 }

@@ -4837,7 +4837,7 @@ public class Database {
 		},
 		selection, selectionArgs, null, null, "timeStamp DESC", null);
 
-		if(cur == null || !cur.moveToFirst()) {
+		if(cur == null || !cur.moveToLast()) {
 		    if (null != cur && !cur.isClosed()) {
 		        cur.close();
 		    }
@@ -4878,7 +4878,7 @@ public class Database {
             e.tag=cur.getString(++i);
             e.category=cur.getString(++i);
 			data.add(e);
-		} while(cur.moveToNext());
+		} while(cur.moveToPrevious());
 
 		if (null != cur && !cur.isClosed()) {
             cur.close();
@@ -5654,6 +5654,13 @@ public class Database {
         if (isDBUnavailable()) {
             return false;
         }
+
+        // 如果评论的目标不是我，则把它设置为已读，以免UI提示未读评论。
+        String myUid = PrefUtil.getInstance(context).getUid();
+        if (!TextUtils.equals(attachedTo.getOwnerUid(), myUid)) {
+            r.read = true;
+        }
+
         ContentValues values = new ContentValues();
         values.put(attachedTo.getReviewDataTablePrimaryKeyName(),
                 attachedTo.getReviewDataTablePrimaryKeyValue());

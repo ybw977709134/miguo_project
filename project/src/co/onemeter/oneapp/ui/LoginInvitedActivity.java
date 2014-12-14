@@ -1,6 +1,7 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -51,8 +52,11 @@ public class LoginInvitedActivity extends Activity implements View.OnClickListen
     }
 
     private void login() {
-
         String invitationCode = new AQuery(this).find(R.id.txt_invite_code).getText().toString();
+        login(this, invitationCode, msgbox);
+    }
+
+    public static void login(final Context context, String invitationCode, final MessageBox msgbox) {
 
         msgbox.showWait();
         new AsyncTask<String, Void, Integer>() {
@@ -60,7 +64,7 @@ public class LoginInvitedActivity extends Activity implements View.OnClickListen
 
             @Override
             protected Integer doInBackground(String... invitationCode) {
-                WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(LoginInvitedActivity.this);
+                WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(context);
                 int errno = web.fLoginWithInvitationCode(
                         invitationCode[0], result);
                 if (errno == ErrorCode.OK) {
@@ -73,11 +77,11 @@ public class LoginInvitedActivity extends Activity implements View.OnClickListen
             public void onPostExecute(Integer errno) {
                 msgbox.dismissWait();
                 if (errno == ErrorCode.OK) {
-                    startActivity(new Intent(LoginInvitedActivity.this, StartActivity.class));
+                    context.startActivity(new Intent(context, StartActivity.class));
                 } else {
-                    msgbox.toast(getString(R.string.operation_failed_with_errcode_msg,
+                    msgbox.toast(context.getString(R.string.operation_failed_with_errcode_msg,
                             errno,
-                            ErrorCode.getErrorName(LoginInvitedActivity.this, errno)));
+                            ErrorCode.getErrorName(context, errno)));
                 }
             }
         }.execute(invitationCode);

@@ -3,7 +3,6 @@ package co.onemeter.oneapp.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,10 +20,6 @@ import org.wowtalk.api.*;
 import org.wowtalk.ui.ImageViewActivity;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ContactInfoActivity extends Activity implements OnClickListener{
     private static final int MOMENT_NUMBER = 3;
@@ -66,9 +61,6 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     private LinearLayout mStatusLayout;
     private TextView mStatusTextView;
 
-    private LinearLayout mModuleMoment;
-    private LinearLayout mMomentLayout;
-
     private LinearLayout mDeptJobLayout;
     private LinearLayout mDeptLayout;
     private TextView mDeptTextView;
@@ -101,7 +93,6 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
      */
     private Buddy mInitBuddy;
     private Buddy buddy;
-    private ArrayList<Moment> moments;
 
     private int buddyType;
 
@@ -116,7 +107,6 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         setStatus();
         setDeptJobTitle();
         setContactWay();
-        setBranchStoreEmployeeId();
         PhotoDisplayHelper.displayPhoto(this, imgPhoto, R.drawable.default_avatar_90, buddy, true);
     }
 
@@ -292,72 +282,14 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         }
     }
 
-    /**
-     * 支店，工号
-     */
-    private void initView_branchStoreEmployeeId() {
-        mBranchStoreEmployeeIdLayout = (LinearLayout)findViewById(R.id.layout_branchstore_employeeid);
-        mBranchStoreLayout = (LinearLayout)findViewById(R.id.layout_branch_store);
-        mBranchStoreTextView = (TextView)findViewById(R.id.txt_branch_store);
-        mDividerBranchStoreEmployeeId = (ImageView) findViewById(R.id.divider_branchstore_employeeid);
-        mEmployeeIdLayout = (LinearLayout)findViewById(R.id.layout_employee_id);
-        mEmployeeIdTextView = (TextView)findViewById(R.id.txt_employee_id);
-
-        setBranchStoreEmployeeId();
-    }
-
-    private void setBranchStoreEmployeeId() {
-        int emptyLayoutCount = 0;
-        if (TextUtils.isEmpty(buddy.area)) {
-            mBranchStoreLayout.setVisibility(View.GONE);
-            emptyLayoutCount++;
-        } else {
-            mBranchStoreLayout.setVisibility(View.VISIBLE);
-            mBranchStoreTextView.setText(buddy.area);
-        }
-
-        if (TextUtils.isEmpty(buddy.employeeId)) {
-            mEmployeeIdLayout.setVisibility(View.GONE);
-            emptyLayoutCount++;
-        } else {
-            mEmployeeIdLayout.setVisibility(View.VISIBLE);
-            mEmployeeIdTextView.setText(buddy.employeeId);
-        }
-
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)mBranchStoreEmployeeIdLayout.getLayoutParams();
-        switch (emptyLayoutCount) {
-        case 0:
-            mBranchStoreEmployeeIdLayout.setVisibility(View.VISIBLE);
-            mDividerBranchStoreEmployeeId.setVisibility(View.VISIBLE);
-            params.height = 2 * getResources().getDimensionPixelSize(R.dimen.section_row_height);
-            mBranchStoreEmployeeIdLayout.setLayoutParams(params);
-            break;
-        case 1:
-            mBranchStoreEmployeeIdLayout.setVisibility(View.VISIBLE);
-            mDividerBranchStoreEmployeeId.setVisibility(View.GONE);
-            params.height = getResources().getDimensionPixelSize(R.dimen.section_row_height);
-            mBranchStoreEmployeeIdLayout.setLayoutParams(params);
-            break;
-        case 2:
-            mBranchStoreEmployeeIdLayout.setVisibility(View.GONE);
-            break;
-        default:
-            break;
-        }
-    }
-
-    private void initView_layout3() {
-        getMomentsByUserId(buddy.userID);
-    }
-
     /** 根据我与当前用户的关系设置界面元素的可见性 */
     private void initView_visibilities() {
 
         AQuery q = new AQuery(this);
 
         if (buddyType != BUDDY_TYPE_IS_FRIEND) {
-            q.find(R.id.module_moment).gone();
             q.find(R.id.module_chat).invisible();
+            q.find(R.id.btn_goto_moments).gone();
             q.find(R.id.btn_delete).gone();
         } else {
             q.find(R.id.btn_add).gone();
@@ -368,8 +300,6 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         AQuery q = new AQuery(this);
 
         imgPhoto = (ImageView) findViewById(R.id.img_thumbnail);
-        mModuleMoment = (LinearLayout) findViewById(R.id.module_moment);//moment show
-        mMomentLayout = (LinearLayout) findViewById(R.id.moment_layout);
         mGenderImg = (ImageView) findViewById(R.id.avatar_gender);
         mGenderImg.setBackgroundResource(buddy.getSexFlag() == Buddy.SEX_FEMALE
                 ? R.drawable.avatar_female : R.drawable.avatar_male);
@@ -380,11 +310,10 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         initView_status();
         initView_deptJobTitle();
         initView_contactWay();
-        initView_branchStoreEmployeeId();
-        initView_layout3();
 
         q.find(R.id.img_thumbnail).clicked(this);
         q.find(R.id.navbar_btn_left).clicked(this);
+        q.find(R.id.btn_goto_moments).clicked(this);
         q.find(R.id.btn_add).clicked(this);
         q.find(R.id.btn_delete).clicked(this);
     }
@@ -423,66 +352,6 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
             };
         }.execute((Void)null);
     }
-
-	private void getMomentsByUserId(final String userId) {
-        moments = dbHelper.fetchMomentsOfSingleBuddy(userId, 0, 100);
-        if (moments == null || moments.size() == 0) {
-            mModuleMoment.setVisibility(View.GONE);
-            return;
-        }
-        ArrayList<WFile> listPath = new ArrayList<WFile>();
-        for (Moment moment : moments) {
-            for (WFile file : moment.multimedias) {
-//                if(file.getExt().equals("jpg") || file.getExt().equals("png")) {
-                if (Arrays.asList(IMAGE_TYPES).contains(file.getExt())) {
-                    listPath.add(file);
-                }
-            }
-        }
-        if (listPath == null || listPath.size() == 0) {
-            mModuleMoment.setVisibility(View.GONE);
-        } else {
-            mModuleMoment.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TimelineActivity.launch(ContactInfoActivity.this, buddy.userID, buddy.nickName);
-                }
-            });
-            mModuleMoment.setVisibility(View.VISIBLE);
-            int imageNum;
-            if (listPath.size() <= MOMENT_NUMBER) {
-                imageNum = listPath.size();
-            } else {
-                imageNum = MOMENT_NUMBER;
-            }
-            for (int i = 0; i < imageNum; i++) {
-                final ImageView imageView = new ImageView(ContactInfoActivity.this);
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                File file = new File(PhotoDisplayHelper.makeLocalFilePath(listPath.get(i).thumb_fileid,
-                        listPath.get(i).getExt()));
-                if (!file.exists()) {
-                    imageView.setTag(file.getAbsolutePath());
-                    imageView.setImageResource(R.drawable.default_avatar_90);
-                    PhotoDisplayHelper.displayPhoto(ContactInfoActivity.this, imageView,
-                            R.drawable.default_avatar_90, listPath.get(i).thumb_fileid, listPath.get(i).getExt(), null,
-                            new PhotoDisplayHelper.OnFileDownloadedListener() {
-                        @Override
-                        public void onFileDownloaded(String localPath) {
-                            imageView.setImageDrawable(new BitmapDrawable(ContactInfoActivity.this.getResources(), localPath));
-                        }
-                    });
-                } else {
-                    imageView.setImageDrawable(new BitmapDrawable(ContactInfoActivity.this.getResources(), file.getAbsolutePath()));
-                }
-                mMomentLayout.addView(imageView);
-                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) imageView.getLayoutParams();
-                params.width = DensityUtil.dip2px(ContactInfoActivity.this, 50);
-                params.height = DensityUtil.dip2px(ContactInfoActivity.this, 50);
-                params.setMargins(0, 0, DensityUtil.dip2px(ContactInfoActivity.this, 5), 0);
-                imageView.setLayoutParams(params);
-            }
-        }
-	}
 
     public static void fSendSmsToInvite(Context context,Person person) {
         String phoneNumber = person.getGlobalPhoneNumber();
@@ -530,6 +399,9 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                     Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + emailAddr));
                     startActivity(Intent.createChooser(emailIntent, null));
                 }
+                break;
+            case R.id.btn_goto_moments:
+                TimelineActivity.launch(this, buddy.userID, buddy.nickName);
                 break;
             case R.id.btn_add:
                 addBuddy();
@@ -675,6 +547,21 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 				phoneNumber);
 		startActivity(intent);
 	}
+
+    public static void launch(Context context, Buddy buddy) {
+        int mFriendType = ContactInfoActivity.BUDDY_TYPE_UNKNOWN;
+
+        if (!TextUtils.isEmpty(buddy.userID)) {
+            if (buddy.userID.equals(PrefUtil.getInstance(context).getUid())) {
+                mFriendType = ContactInfoActivity.BUDDY_TYPE_MYSELF;
+            } else {
+                mFriendType = (0 != (buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE))
+                        ? ContactInfoActivity.BUDDY_TYPE_IS_FRIEND
+                        : ContactInfoActivity.BUDDY_TYPE_NOT_FRIEND;
+            }
+        }
+        launch(context, buddy.userID, mFriendType);
+    }
 
 	/**
 	 * 

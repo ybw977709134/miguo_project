@@ -261,4 +261,9 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
         if (reviews != null && !reviews.isEmpty())
             reviews.clear();
     }
+
+    @Override
+    public String getOwnerUid() {
+        return owner_uid;
+    }
 }

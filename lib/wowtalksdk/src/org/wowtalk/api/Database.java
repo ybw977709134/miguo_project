@@ -113,6 +113,7 @@ public class Database {
     private Context context;
     private static SQLiteDatabase database;
     private static DatabaseHelper dbHelper;
+    private static String ownerUid;
     private PrefUtil mPrefUtil;
 
     /**
@@ -142,19 +143,19 @@ public class Database {
     /**
      * This has to be called before any function is called.
      * <p>This will be called in constructor automatically.</p>
-     * 此处为遗留代码，sdk在调用，上层调用时，不需要显示调用此方法(已在构造方法中调用)
-     * 
+     * 此处为遗留代码，sdk在调用，上层调用时，不需要显式调用此方法(已在构造方法中调用)
+     *
      * @return
      * @throws SQLException
      */
     public Database open() throws SQLException {
+        String uid = mPrefUtil.getUid();
         if (null == dbHelper || dbHelper.flagIndex != sFlagIndex
-                || null == database || !database.isOpen()) {
-            String uid = mPrefUtil.getUid();
-            if (!TextUtils.isEmpty(uid)) {
-                dbHelper = new DatabaseHelper(context, uid, mFlagIndex);
-                database = dbHelper.getWritableDatabase();
-            }
+                || null == database || !database.isOpen()
+                || !TextUtils.equals(ownerUid, uid)) {
+            dbHelper = new DatabaseHelper(context, uid, mFlagIndex);
+            database = dbHelper.getWritableDatabase();
+            ownerUid = uid;
         }
         return this;
     }

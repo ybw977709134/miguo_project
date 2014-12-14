@@ -329,15 +329,15 @@ public class Database {
         ContentValues values = new ContentValues();
 		values.put("uid", buddy.userID);
 		values.put("phone_number", buddy.phoneNumber);
-//        if (buddy.getFriendShipWithMe() != Buddy.RELATIONSHIP_UNSET)
-//            values.put("friendship", buddy.getFriendShipWithMe());
-        // 此friendship字段，服务器打算不维护了
         if (mPrefUtil.getUid().equals(buddy.userID)) {
             values.put("friendship", Buddy.RELATIONSHIP_SELF);
         } else if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_NOTICE_MAN) {
             values.put("friendship", Buddy.RELATIONSHIP_NONE);
         } else {
-            values.put("friendship", Buddy.RELATIONSHIP_FRIEND_BOTH);
+            if (buddy.getFriendShipWithMe() != Buddy.RELATIONSHIP_UNSET)
+                values.put("friendship", buddy.getFriendShipWithMe());
+            else
+                values.put("friendship", Buddy.RELATIONSHIP_NONE);
         }
         values.put("will_block_msg", buddy.willBlockMsg ? 1 : 0);
         values.put("will_block_msg_notification", buddy.willBlockNotification ? 1 : 0);

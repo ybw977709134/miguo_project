@@ -822,10 +822,10 @@ public class MultiSelectActivityForBiz extends Activity implements OnClickListen
     }
 
     private void commitSelection() {
-        if(mSelectedPerson.isEmpty()) {
-            this.setResult(Activity.RESULT_CANCELED);
+		if(mSelectedPerson.isEmpty()) {
+			this.setResult(Activity.RESULT_CANCELED);
             finish();
-        }
+		}
 
         final Person[] persons = new Person[mSelectedPerson.size()];
         mSelectedPerson.toArray(persons);
@@ -864,12 +864,13 @@ public class MultiSelectActivityForBiz extends Activity implements OnClickListen
                 @Override
                 protected void onPostExecute(String gid) {
                     mMsgBox.dismissWait();
-                    if(TextUtils.isEmpty(gid)) {
+                    if(gid == null || TextUtils.isEmpty(gid)) {
                         mMsgBox.toast(R.string.operation_failed);
                         setResult(Activity.RESULT_CANCELED);
                     } else {
                         Intent data = new Intent();
-                        data.putExtra("is_group_chat", true);
+//                        data.putExtra("is_group_chat", true);
+                        data.putExtra("persons", persons);
                         data.putExtra("gid", gid);
                         setResult(RESULT_OK, data);
                     }

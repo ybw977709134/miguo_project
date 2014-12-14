@@ -5654,6 +5654,13 @@ public class Database {
         if (isDBUnavailable()) {
             return false;
         }
+
+        // 如果评论的目标不是我，则把它设置为已读，以免UI提示未读评论。
+        String myUid = PrefUtil.getInstance(context).getUid();
+        if (!TextUtils.equals(attachedTo.getOwnerUid(), myUid)) {
+            r.read = true;
+        }
+
         ContentValues values = new ContentValues();
         values.put(attachedTo.getReviewDataTablePrimaryKeyName(),
                 attachedTo.getReviewDataTablePrimaryKeyValue());

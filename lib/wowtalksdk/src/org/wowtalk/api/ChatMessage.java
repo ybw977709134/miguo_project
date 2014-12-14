@@ -205,7 +205,7 @@ public class ChatMessage {
 	/**Message Type : Video File*/
 	public static String MSGTYPE_MULTIMEDIA_VIDEO_NOTE = "e";
 	/**Message Type : VCF*/
-	public static String MSGTYPE_MULTIMEDIA_VCF = "f";
+	public static String MSGTYPE_MULTIMEDIA_VCF = "o"; // 本来是"f"，暂时借它让 MSGTYPE_PIC_VOICE 通过。
 
 	/**Message Type : GroupChat：Join Request*/
 	public static String MSGTYPE_GROUPCHAT_JOIN_REQUEST = "g";

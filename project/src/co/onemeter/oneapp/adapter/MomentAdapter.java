@@ -585,6 +585,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 }
             }
 
+            surveyOutOfDate=true;
             //survey options
             if(moment.isMeVoted() || surveyOutOfDate) {
                 //voted,show vote factor
@@ -651,6 +652,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 case ErrorCode.OK:
                     btnSurvey.setVisibility(View.GONE);
                     setSurveyInfo(context,moment,voteSurveyLayout,lvSurveyOptions,choosed,btnSurvey);
+                    lvSurveyOptions.setListAdapter(new SurveyVotedDisplayAdapter(context,moment.surveyOptions));
                     break;
                 case ErrorCode.MOMENT_SURVEY_OUTOFDATE:
                     choosed.clear();

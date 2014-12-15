@@ -172,7 +172,7 @@ public class MyQRCodeActivity extends Activity implements View.OnClickListener{
                 JSONObject strObj=new JSONObject();
                 try {
                     strObj.put(Utils.QR_CODE_KEY_LABEL,Utils.QR_CODE_KEY_DEF_VALUE_LABEL);
-                    strObj.put(Utils.QR_CODE_KEY_TYPE,Utils.QR_CODE_KEY_DEF_VALUE_TYPE_YQT);
+                    strObj.put(Utils.QR_CODE_KEY_TYPE,Utils.QR_CODE_KEY_DEF_VALUE_TYPE_BUDDY);
 
                     JSONObject contentObj=new JSONObject();
 

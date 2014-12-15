@@ -24,7 +24,9 @@ import co.onemeter.oneapp.contacts.adapter.ContactListAdapter;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
 import co.onemeter.oneapp.utils.ThemeHelper;
+
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.IDBTableChangeListener;
@@ -357,6 +359,9 @@ public class MultiSelectActivity extends Activity implements OnClickListener {
         return isNeeded;
 	}
 
+	private String mOriginalGid;
+	private Database mDbHelper;
+	
 	private void commitSelection() {
 		if(mSelectedPerson.isEmpty()) {
 			this.setResult(Activity.RESULT_CANCELED);
@@ -366,9 +371,11 @@ public class MultiSelectActivity extends Activity implements OnClickListener {
         final Person[] persons = new Person[mSelectedPerson.size()];
         mSelectedPerson.toArray(persons);
 
-        if(1 == mSelectedPerson.size()) {
+        // mSelectedPerson doesn't contain myself).
+        if(1 == mSelectedPerson.size() && TextUtils.isEmpty(mOriginalGid)) {
             Intent data = new Intent();
-            data.putExtra("persons", persons);
+            data.putExtra("is_group_chat", false);
+            data.putExtra("buddy_id", mSelectedPerson.get(0).getID());
             this.setResult(RESULT_OK, data);
             finish();
         } else {
@@ -377,32 +384,42 @@ public class MultiSelectActivity extends Activity implements OnClickListener {
             new AsyncTask<Parcelable, Integer, String>() {
                 @Override
                 protected String doInBackground(Parcelable... params) {
-                    Parcelable[] parArr = params;
-                    return GroupChatRoomHelper.createTmp(parArr,
-                            WowTalkWebServerIF.getInstance(MultiSelectActivity.this),
-                            new Database(MultiSelectActivity.this),
-                            MultiSelectActivity.this);
+                    String gid = null;
+                    if (TextUtils.isEmpty(mOriginalGid)) {
+                        gid = GroupChatRoomHelper.createTmp(params,
+                                WowTalkWebServerIF.getInstance(MultiSelectActivity.this),
+                                mDbHelper,
+                                MultiSelectActivity.this);
+                    } else {
+                        GroupChatRoomHelper.addMembers(
+                                mOriginalGid,
+                                params,
+                                WowTalkWebServerIF.getInstance(MultiSelectActivity.this),
+                                mDbHelper,
+                                MultiSelectActivity.this);
+                        gid = mOriginalGid;
+                    }
+                    return gid;
                 }
 
                 @Override
                 protected void onPostExecute(String gid) {
                     mMsgBox.dismissWait();
-                    if(gid == null) {
+                    if(gid == null || TextUtils.isEmpty(gid)) {
                         mMsgBox.toast(R.string.operation_failed);
                         setResult(Activity.RESULT_CANCELED);
                     } else {
                         Intent data = new Intent();
+//                        data.putExtra("is_group_chat", true);
                         data.putExtra("persons", persons);
                         data.putExtra("gid", gid);
-
                         setResult(RESULT_OK, data);
                     }
                     finish();
                 }
-
             }.execute(persons);
         }
-	}
+    }
 	
 	@Override
 	public void onClick(View v) {
@@ -458,6 +475,8 @@ public class MultiSelectActivity extends Activity implements OnClickListener {
 		if (null != intent){
 		    mCurrentMemberIds = intent.getStringArrayExtra("currentMemberIds");
 		    mIsOnlyShowContacts = intent.getBooleanExtra("isOnlyShowContacts", false);
+		    mOriginalGid = intent.getStringExtra("group_id");
+		    mDbHelper = new Database(this);
 		    mIsChangeMultiFromSingle = intent.getBooleanExtra(INTENT_CHANGE_MULTI_FROM_SINGLE, false);
 		    if (mIsChangeMultiFromSingle && null != mCurrentMemberIds && mCurrentMemberIds.length > 0) {
 		        // the personId of the person whose chat is this multi-chat changed from.

@@ -14,9 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.GroupMembersGridAdapter;
+import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.ThemeHelper;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.*;
 import org.wowtalk.ui.msg.MessageComposerActivityBase;
@@ -523,6 +526,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
         if(REQ_PICK_BUDDYS == requestCode && RESULT_OK == resultCode) {
             // do nothing
             // Database.TBL_GROUP_MEMBER <==> groupMembersObserver
+        	refreshMemberGrid();
         } else if (REQ_PICK_PHOTO == requestCode && RESULT_OK == resultCode) {
             String[] path = new String[2];
             if(mMediaInput != null && mMediaInput.handleImageResult(this, data,

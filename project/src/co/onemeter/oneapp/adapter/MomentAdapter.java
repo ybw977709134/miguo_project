@@ -26,6 +26,7 @@ import org.wowtalk.ui.msg.TimerTextView;
 
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.*;
+import co.onemeter.oneapp.utils.LocationHelper;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -434,7 +435,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         } else {
 //            holder.imgLocation.setVisibility(View.GONE);
             holder.txtLoc.setVisibility(View.VISIBLE);
-            holder.txtLoc.setText(moment.place);
+            LocationHelper.getAddressFromLatitudeAndLongitude((int)moment.latitude, (int)moment.longitude, holder.txtLoc);
             holder.txtLoc.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

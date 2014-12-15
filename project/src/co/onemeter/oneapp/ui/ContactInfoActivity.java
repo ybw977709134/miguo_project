@@ -427,6 +427,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
             @Override
             protected void onPostExecute(Integer result) {
                 mMsgBox.dismissWait();
+                buddy = new Database(context).buddyWithUserID(buddy.userID); // refresh buddy data
                 if(result == ErrorCode.OK) {
                     if (0 != (Buddy.RELATIONSHIP_FRIEND_HERE & buddy.getFriendShipWithMe())) {
                         mMsgBox.toast(R.string.contacts_add_buddy_succeed_without_pending);

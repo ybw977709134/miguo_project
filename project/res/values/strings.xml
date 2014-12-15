@@ -302,6 +302,10 @@
 	<string name="image_override">覆盖</string>
 	<string name="image_save_as">保存为新的文件</string>
 
+	<!-- VEDIO -->
+	<string name="vedio_shoot_vedio">拍摄</string>
+	<string name="vedio_pick_from_local">选择本地视频</string>
+	
 	<!-- MISC -->
 
     <string name="operation_done">操作成功</string>

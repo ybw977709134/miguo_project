@@ -254,6 +254,7 @@
 
             <!-- voice -->
             <FrameLayout
+                	android:id="@+id/capture_voice_framelayout"
                     android:layout_height="@dimen/create_moment_option_tag_height"
                     android:layout_width="wrap_content"
                     android:layout_marginTop="@dimen/normal_moment_layout_split_height">

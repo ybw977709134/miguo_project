@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.ImageViewActivity;
 import org.wowtalk.ui.MessageBox;
@@ -22,8 +23,10 @@ import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.bitmapfun.ui.RecyclingImageView;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 import org.wowtalk.ui.msg.TimerTextView;
+
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.*;
+import co.onemeter.oneapp.utils.LocationHelper;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -432,7 +435,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         } else {
 //            holder.imgLocation.setVisibility(View.GONE);
             holder.txtLoc.setVisibility(View.VISIBLE);
-            holder.txtLoc.setText(moment.place);
+            LocationHelper.getAddressFromLatitudeAndLongitude((int)moment.latitude, (int)moment.longitude, holder.txtLoc);
             holder.txtLoc.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

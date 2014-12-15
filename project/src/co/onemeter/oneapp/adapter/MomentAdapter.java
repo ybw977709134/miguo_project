@@ -3,6 +3,7 @@ package co.onemeter.oneapp.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -15,7 +16,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
-
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.ui.*;
+import co.onemeter.oneapp.utils.LocationHelper;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.ImageViewActivity;
 import org.wowtalk.ui.MessageBox;
@@ -23,10 +26,6 @@ import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.bitmapfun.ui.RecyclingImageView;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 import org.wowtalk.ui.msg.TimerTextView;
-
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.*;
-import co.onemeter.oneapp.utils.LocationHelper;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -95,7 +94,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     private View newReviewView=null;
 
     private boolean isWithFavorite;
-    private boolean isLike = true;
 
 	public MomentAdapter(Context context, Activity activity, ArrayList<Moment> moments, boolean isSingle,boolean favorite,
                          ImageResizer mImageResizer,
@@ -111,6 +109,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         isWithFavorite=favorite;
 
         mediaPlayerWraper=new MediaPlayerWraper(activity, true);
+        
+        
+//        this.listView = listView;///////////////添加的东西
+        
 	}
 
     public void setNewReviewCount(int count) {
@@ -157,7 +159,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             return VIEW_TYPE_LOADMORE;
         return VIEW_TYPE_DEFAULT;
     }
-
+    
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
         if(isNewReviewViewAvaliable()) {
@@ -207,7 +209,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
 		final Moment moment = getItem(momentPos);
 		ArrayList<Review> reviews = moment.reviews;
-		ArrayList<Review> likeReview = new ArrayList<Review>();
+		final ArrayList<Review> likeReview = new ArrayList<Review>();
 		ArrayList<Review> commentReview = new ArrayList<Review>();
         ArrayList<WFile> photoFiles = new ArrayList<WFile>();
         WFile voiceFile = null;
@@ -285,6 +287,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
+		
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -294,6 +297,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //                }
             }
         });
+
 
         setTagDescInfo(holder,moment);
         setupOpButtons(holder,moment,momentPos,likeReview,commentReview);
@@ -446,6 +450,8 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 		return convertView;
 	}
 
+	////////////////////////////////////////////////////////////////
+	
     public static void setStringAsURLIfAvaliable(TextView tv2set,String str,boolean withClick) {
         CharSequence result=str;
         boolean isValidURLExist=false;
@@ -527,8 +533,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     private static void setSurveyInfo(final Context context,final Moment moment,final LinearLayout voteSurveyLayout,final LinearLayoutAsListView lvSurveyOptions,final ArrayList<String> choosed,final Button btnSurvey) {
         if(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag) || Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
             moment.showVoteInfo();
-
+            
             voteSurveyLayout.setVisibility(View.VISIBLE);
+            
 
             TextView tvSurveyDeadLineIndicate=(TextView) voteSurveyLayout.findViewById(R.id.survey_dead_line_indicate);
             boolean surveyOutOfDate=false;
@@ -586,12 +593,12 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 }
             }
 
-            surveyOutOfDate=true;
             //survey options
             if(moment.isMeVoted() || surveyOutOfDate) {
                 //voted,show vote factor
                 btnSurvey.setVisibility(View.GONE);
                 lvSurveyOptions.setListAdapter(new SurveyVotedDisplayAdapter(context,moment.surveyOptions));
+                
 //                ListHeightUtil.setListHeight(lvSurveyOptions);
             } else {
                 //not vote yet,show to vote
@@ -616,9 +623,13 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                         if(choosed.size() == 0) {
                             return;
                         }
+                        
                         doVoteSurvey(context,moment,choosed,voteSurveyLayout,lvSurveyOptions,choosed,btnSurvey);
                     }
                 });
+             
+                
+                
                 if(0 == choosed.size()) {
                     btnSurvey.setBackgroundResource(R.drawable.btn_gray_selector);
                 } else {
@@ -652,8 +663,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 switch (errno) {
                 case ErrorCode.OK:
                     btnSurvey.setVisibility(View.GONE);
-                    setSurveyInfo(context,moment,voteSurveyLayout,lvSurveyOptions,choosed,btnSurvey);
-                    lvSurveyOptions.setListAdapter(new SurveyVotedDisplayAdapter(context,moment.surveyOptions));
+       
+                   setSurveyInfo(context,moment,voteSurveyLayout,lvSurveyOptions,choosed,btnSurvey);
+                  
                     break;
                 case ErrorCode.MOMENT_SURVEY_OUTOFDATE:
                     choosed.clear();
@@ -681,7 +693,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 holder.voteSurveyLayout,holder.lvSurveyOptions,surveyMomentChoosedItemList.get(moment.id),holder.btnSurvey);
 
         if(TextUtils.isEmpty(moment.shareRange) || moment.shareRange.equals(Moment.SERVER_SHARE_RANGE_PUBLIC)) {
-            holder.tvMomentShareRange.setText(R.string.share_range_public_short);
+//            holder.tvMomentShareRange.setText(R.string.share_range_public_short);
             holder.ivMomentShareRange.setImageResource(R.drawable.timeline_public);
         } else {
             holder.tvMomentShareRange.setText(R.string.share_range_private);
@@ -738,7 +750,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     }
 
     private void setupOpButtons(final ViewHolder holder,final Moment moment,final int position,
-                                ArrayList<Review> likeReview,ArrayList<Review> commentReview) {
+                                final ArrayList<Review> likeReview,ArrayList<Review> commentReview) {
         if (!TextUtils.isEmpty(moment.tag) &&
                 (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_QA))) {
             holder.layoutLike.setVisibility(View.VISIBLE);
@@ -775,11 +787,13 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.tvAnswerCountInd.setVisibility(View.GONE);
         }
 
+        
         if(moment.likedByMe) {
         	//显示点赞的数量
             holder.tvLike.setText(""+likeReview.size());
 //            holder.tvLike.setText(R.string.moments_liked);
         } else {
+//        	holder.tvLike.setText(""+likeReview.size());
      //       holder.tvLike.setText(R.string.moments_like);
         }
 //        if(commentReview.size() > 0) {
@@ -820,16 +834,25 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         if(commentReview.size()>0){
         	holder.btnComment.setBackgroundResource(R.drawable.profile_btn_message_p);
         	holder.btnAnswer.setBackgroundResource(R.drawable.profile_btn_message_p);
+        	holder.tvComment.setVisibility(View.VISIBLE);
+        	holder.tvAnswer.setVisibility(View.VISIBLE);
         }else{
         	holder.btnComment.setBackgroundResource(R.drawable.share_icon_comment);
         	holder.btnAnswer.setBackgroundResource(R.drawable.share_icon_comment);
+        	holder.tvComment.setVisibility(View.GONE);
+        	holder.tvAnswer.setVisibility(View.GONE);
         }
-        
+        if(likeReview.size()>0){
+        	holder.tvLike.setVisibility(View.VISIBLE);
+        }else{
+        	holder.tvLike.setVisibility(View.GONE);
+        }
 //        if (moment.allowReview) {
 //        	holder.btnAnswer.setBackgroundResource(R.drawable.share_icon_comment);
 //        } else {
 //        	holder.btnAnswer.setBackgroundResource(R.drawable.profile_btn_message_p);
 //        }
+        
 
         holder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -841,9 +864,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             @Override
             public void onClick(View v) {
                 if (mReplyDelegate != null) {
-                    mReplyDelegate.replyToMoment(position, moment, null, isLike);
-                    isLike = !isLike;
+                    mReplyDelegate.replyToMoment(position, moment, null, true);
                 }
+                
             }
         });
         holder.btnComment.setOnClickListener(new View.OnClickListener() {
@@ -1128,6 +1151,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         }
     }
 
+
     static class ViewHolder {
 		ImageView imgThumbnail;
 		TextView txtName;
@@ -1318,7 +1342,20 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ImageViewActivity.launch(context, photoIdx, files,ImageViewActivity.UPDATE_WITH_MOMENT_MEDIA);
+                        WFile f = files.get(photoIdx);
+                        String ext = f.getExt();
+                        if (ext != null)
+                            ext = ext.toLowerCase();
+                        if(ext != null && ext.matches("jpg|jpeg|bmp|png")) {
+                            // image
+                            ImageViewActivity.launch(context, photoIdx, files, ImageViewActivity.UPDATE_WITH_MOMENT_MEDIA);
+                        } else if(ext != null && ext.matches("avi|wmv|mp4|asf|mpg|mp2|mpeg|mpe|mpv|m2v|m4v|3gp")) {
+                            // video
+                            Uri uri = Uri.fromFile(new File(f.localPath));
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setDataAndType(uri, "video/*");
+                            context.startActivity(intent);
+                        }
                     }
                 });
                 if (new File(imageThumbnailPath).exists()) {
@@ -1933,5 +1970,17 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     public void setShowLoadMoreAsLastItem(boolean showLoadMoreAsLastItem) {
         this.showLoadMoreAsLastItem = showLoadMoreAsLastItem;
     }
-
+    
+    /**
+     * 实现投票的局部刷新
+     * @param itemIndex
+     */
+//    public void updateView(int itemIndex) {
+//    	//得到第一个可显示控件的位置
+//    	int visiblePosition = listView.getFirstVisiblePosition();
+//    	//只有当要更新的view在可见的位置时才更新，不可见时，跳过不更新
+//    	if (itemIndex - visiblePosition > 0) {
+//    		View view = listView.getChildAt(itemIndex);
+//    	}
+//    }
 }

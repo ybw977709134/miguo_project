@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.media.MediaPlayer;
@@ -60,6 +61,10 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
     private final static int ACTIVITY_REQ_ID_PICK_PHOTO_FROM_CAMERA=1;
     private final static int ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY=2;
     private final static int ACTIVITY_REQ_ID_SHARE_RANGE_SELECT=3;
+    private static final int ACTIVITY_REQ_ID_INPUT_VIDEO = 4;
+
+    public final static int PHOTO_THUMBNAIL_WIDTH = 180;
+    public final static int PHOTO_THUMBNAIL_HEIGHT = 120;
 
     private ArrayList<CreateMomentActivity.WMediaFile> listPhoto;
 
@@ -694,7 +699,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 break;
             case R.id.trigger_add_img_layout:
             	if(tagType == TimelineActivity.TAG_VIDEO_IDX){
-            		showPickVedioSelector();
+                    mediaHelper.inputVideo(this, ACTIVITY_REQ_ID_INPUT_VIDEO);
             	}else{
             		showPickImgSelector();
             	}
@@ -704,31 +709,6 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         }
     }
 
-    //显示视频选择的BottomButtonBoard
-    private void showPickVedioSelector(){
-    	hideIME();
-
-        final BottomButtonBoard bottomBoard=new BottomButtonBoard(this, getWindow().getDecorView());
-        bottomBoard.add(getString(R.string.vedio_shoot_vedio), BottomButtonBoard.BUTTON_BLUE,
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        bottomBoard.dismiss();
-                        
-                    }
-                });
-        bottomBoard.add(getString(R.string.vedio_pick_from_local), BottomButtonBoard.BUTTON_BLUE,
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        bottomBoard.dismiss();
-                        
-                    }
-                });
-        bottomBoard.addCancelBtn(getString(R.string.cancel));
-        bottomBoard.show();
-    }
-    
     private void stopPlayingVoice() {
         mediaPlayerWraper.stop();
 
@@ -1212,9 +1192,6 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                             int errno=ErrorCode.UNKNOWN;
                             if(TimelineActivity.TAG_SURVEY_IDX == tagType) {
                                 errno = WowMomentWebServerIF.getInstance(CreateNormalMomentWithTagActivity.this).fAddMomentForSurvey(moment);
-                            } else if (TimelineActivity.TAG_VIDEO_IDX == tagType) {
-                                //not implemented now
-                                throw new IllegalArgumentException();
                             } else {
                             	//android.util.Log.i("-->>>", moment.place);
                                 errno = WowMomentWebServerIF.getInstance(CreateNormalMomentWithTagActivity.this).fAddMoment(moment);
@@ -1254,26 +1231,33 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         bmpDrawableList.clear();
     }
 
-    private void copyFileForMomentMultimedia(WFile aFile) {
+    private void copyFileForMomentMultimedia(WFile aFile, boolean isPhoto) {
         String destFilePath = PhotoDisplayHelper.makeLocalFilePath(
                 aFile.fileid, aFile.getExt());
         FileUtils.copyFile(aFile.localPath, destFilePath);
 
         // make thumbnail
-        if (null != aFile.thumb_fileid) {
-            Bitmap thumb = BmpUtils.decodeFile(aFile.localPath, 200, 200, true);
-            aFile.localThumbnailPath = PhotoDisplayHelper.makeLocalFilePath(
-                    aFile.thumb_fileid, aFile.getExt());
+        if (null != aFile.thumb_fileid && aFile.localThumbnailPath == null) {
             boolean saved = false;
-            OutputStream os = null;
-            try {
-                os = new FileOutputStream(aFile.localThumbnailPath);
-                saved = thumb.compress(Bitmap.CompressFormat.JPEG, 80, os); // XXX format should be same with main file?
-                os.close();
+            Bitmap thumb = null;
+            if (isPhoto) {
+                thumb = BmpUtils.decodeFile(aFile.localPath, 200, 200, true);
+            } else {
+                thumb = BitmapFactory.decodeResource(getResources(), R.drawable.chat_icon_video);
+            }
+            if (thumb != null) {
+                aFile.localThumbnailPath = PhotoDisplayHelper.makeLocalFilePath(
+                        aFile.thumb_fileid, aFile.getExt());
+                OutputStream os = null;
+                try {
+                    os = new FileOutputStream(aFile.localThumbnailPath);
+                    saved = thumb.compress(Bitmap.CompressFormat.JPEG, 80, os); // XXX format should be same with main file?
+                    os.close();
 
-                BmpUtils.recycleABitmap(thumb);
-            } catch (Exception e) {
-                e.printStackTrace();
+                    BmpUtils.recycleABitmap(thumb);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             if (!saved) {
@@ -1282,21 +1266,23 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         }
     }
 
-    private void addPhoto2moment(CreateMomentActivity.WMediaFile aPhoto) {
+    private void addMedia2moment(CreateMomentActivity.WMediaFile file) {
         for(WFile aFile : moment.multimedias) {
-            if(aFile.localPath.equals(aPhoto.localPath)) {
+            if(aFile.localPath.equals(file.localPath)) {
                 Log.w("duplicate photo add 2 momet, omit");
                 return;
             }
         }
-        String ext = FileUtils.getExt(aPhoto.localPath);
-        String fakeFileId = String.valueOf(Math.random());
-        WFile f = new WFile(ext, fakeFileId, null, aPhoto.localPath);
-        f.thumb_fileid = String.valueOf(Math.random());
-        f.remoteDir = GlobalSetting.S3_MOMENT_FILE_DIR;
-        moment.multimedias.add(f);
+        if (TextUtils.isEmpty(file.getExt()))
+            file.setExt(FileUtils.getExt(file.localPath));
+        if (TextUtils.isEmpty(file.fileid))
+            file.fileid = String.valueOf(Math.random());
+        if (TextUtils.isEmpty(file.thumb_fileid))
+            file.thumb_fileid = String.valueOf(Math.random());
+        file.remoteDir = GlobalSetting.S3_MOMENT_FILE_DIR;
+        moment.multimedias.add(file);
 
-        copyFileForMomentMultimedia(f);
+        copyFileForMomentMultimedia(file, file.isPhoto);
     }
 
     private void removePhotoFromMoment(CreateMomentActivity.WMediaFile aPhoto) {
@@ -1335,7 +1321,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
             f.remoteDir = GlobalSetting.S3_MOMENT_FILE_DIR;
             moment.multimedias.add(f);
 
-            copyFileForMomentMultimedia(f);
+            copyFileForMomentMultimedia(f, false);
         }
     }
 
@@ -1383,15 +1369,17 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         updateTriggerAddImgDescTxtStatus();
 
         if (isAdded) {
+            addMedia2moment(listPhoto.get(listPhoto.size() - 1));
+
             final View view = LayoutInflater.from(this).inflate(R.layout.listitem_moment_image, addedImgLayout, false);
             final ImageView imgPhoto = (ImageView) view.findViewById(R.id.img_photo);
-            imgPhoto.setImageDrawable(new BitmapDrawable(getResources(), listPhoto.get(listPhoto.size() - 1).localPath));
+            imgPhoto.setImageDrawable(new BitmapDrawable(getResources(),
+                    listPhoto.get(listPhoto.size() - 1).localThumbnailPath));
             bmpDrawableList.add((BitmapDrawable)imgPhoto.getDrawable());
 
-            addPhoto2moment(listPhoto.get(listPhoto.size() - 1));
             listPhoto.get(listPhoto.size() - 1).relativeView=view;
 
-            ImageButton imgDelete = (ImageButton) view.findViewById(R.id.btn_delete);
+            View imgDelete = view.findViewById(R.id.btn_delete);
             imgDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1415,15 +1403,17 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 
             int fileNum = listPhoto.size();
             for (int i = 0; i < fileNum; i++) {
+                addMedia2moment(listPhoto.get(i));
+
                 final View view = LayoutInflater.from(this).inflate(R.layout.listitem_moment_image, addedImgLayout, false);
                 final ImageView imgPhoto = (ImageView) view.findViewById(R.id.img_photo);
-                imgPhoto.setImageDrawable(new BitmapDrawable(getResources(), listPhoto.get(i).localPath));
+                imgPhoto.setImageDrawable(new BitmapDrawable(getResources(),
+                        listPhoto.get(i).localThumbnailPath));
                 bmpDrawableList.add((BitmapDrawable)imgPhoto.getDrawable());
 
-                addPhoto2moment(listPhoto.get(i));
                 listPhoto.get(i).relativeView=view;
 
-                ImageButton imgDelete = (ImageButton) view.findViewById(R.id.btn_delete);
+                View imgDelete = view.findViewById(R.id.btn_delete);
                 imgDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1518,7 +1508,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                         @Override
                         protected Void doInBackground(ArrayList<String>... params) {
                             for (String path : params[0]) {
-                                CreateMomentActivity.WMediaFile photo = new CreateMomentActivity.WMediaFile();
+                                CreateMomentActivity.WMediaFile photo = new CreateMomentActivity.WMediaFile(true);
                                 Bitmap bmp = BmpUtils.decodeFile(path, CreateMomentActivity.PHOTO_SEND_WIDTH, CreateMomentActivity.PHOTO_SEND_HEIGHT);
                                 File file = MediaInputHelper.makeOutputMediaFile(
                                         MediaInputHelper.MEDIA_TYPE_IMAGE, ".jpg");
@@ -1570,7 +1560,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                             } else {
                                 Log.e("handle image error");
                             }
-                            CreateMomentActivity.WMediaFile photo = new CreateMomentActivity.WMediaFile();
+                            CreateMomentActivity.WMediaFile photo = new CreateMomentActivity.WMediaFile(true);
                             photo.localPath = path[0];
                             photo.isFromGallery = false;
                             listPhoto.add(photo);
@@ -1582,6 +1572,23 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                             instance.notifyFileChanged(true);
                         }
                     }.execute(data);
+                }
+                break;
+            case ACTIVITY_REQ_ID_INPUT_VIDEO:
+                if (resultCode == RESULT_OK && null != mediaHelper) {
+                    String[] videoPath = new String[2];
+                    if(mediaHelper.handleVideoResult(
+                            this,
+                            data,
+                            CreateMomentActivity.PHOTO_SEND_WIDTH, CreateMomentActivity.PHOTO_SEND_HEIGHT,
+                            PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
+                            videoPath)) {
+                        CreateMomentActivity.WMediaFile videoFile = new CreateMomentActivity.WMediaFile(false);
+                        videoFile.localPath = videoPath[0];
+                        videoFile.localThumbnailPath = videoPath[1];
+                        listPhoto.add(videoFile);
+                        notifyFileChanged(true);
+                    }
                 }
                 break;
         }

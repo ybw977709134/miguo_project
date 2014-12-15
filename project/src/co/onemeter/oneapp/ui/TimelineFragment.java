@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.widget.ListView;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
+
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
@@ -87,6 +90,9 @@ public abstract class TimelineFragment extends ListFragment
 
     private void setupListAdapter(ArrayList<Moment> items) {
         ImageResizer imageResizer = new ImageResizer(getActivity(), DensityUtil.dip2px(getActivity(), 100));
+        //获取上下文的listView
+//        ListView listView = getListView();
+        
         adapter = new MomentAdapter(getActivity(),
                 getActivity(),
                 items,
@@ -95,7 +101,7 @@ public abstract class TimelineFragment extends ListFragment
                 imageResizer,
                 this,
                 null,
-                new MessageBox(getActivity()));
+                new MessageBox(getActivity()));/////////// 传入listview
         adapter.setShowLoadMoreAsLastItem(!items.isEmpty());
         adapter.setLoadDelegate(this);
         setListAdapter(adapter);

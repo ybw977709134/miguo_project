@@ -7,14 +7,18 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.widget.TextView;
+
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
+
 import co.onemeter.oneapp.ui.TimePiece;
 
 import java.io.IOException;
@@ -205,6 +209,72 @@ public class LocationHelper {
     	}
     }
 
+    public static String getAddressFromLatitudeAndLongitude(final double latitude,final double longitude,final TextView textView){
+    	new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                URL myFileUrl = null;
+                String jsonStr = null;
+                String addressStr = "";
+                try {
+                    myFileUrl = new URL("http://maps.google.com/maps/api/geocode/json?latlng=" +
+                    		latitude + "," + longitude + "&sensor=true&language="+ Locale.getDefault().getLanguage());
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+                HttpURLConnection httpURLConnection = null;
+                InputStream in = null;
+                try {
+                    httpURLConnection = (HttpURLConnection) myFileUrl.openConnection();
+                    httpURLConnection.setDoInput(true);
+                    httpURLConnection.setConnectTimeout(5000);
+                    httpURLConnection.setReadTimeout(5000);
+                    httpURLConnection.connect();
+                    in = httpURLConnection.getInputStream();
+                    StringBuffer out = new StringBuffer();
+                    byte[] bytes = new byte[4096];
+                    int n;
+                    while ((n = in.read(bytes)) != -1) {
+                        out.append(new String(bytes, 0, n));
+                        jsonStr = out.toString();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+                finally
+                {
+                	if(in != null)
+						try {
+							in.close();
+						} catch (IOException e) {
+						}
+                	if(httpURLConnection !=null)
+                		httpURLConnection.disconnect();
+                }
+                try {
+                    JSONObject json = new JSONObject(jsonStr);
+                    JSONArray jsonArray = json.getJSONArray("results");
+                    JSONObject addressObject = jsonArray.getJSONObject(0);
+                    if (addressObject != null && addressObject.has("formatted_address")) {
+                        addressStr = addressObject.getString("formatted_address");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+                return addressStr;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+            	textView.setText(result);
+            }
+        }.execute((Void)null);
+    	return null;
+    }
+    
     private void notifyMyLocation() {
         if (mOnLocationGotListener != null) {
             if (null != mLocation && null != mStrAddress) {

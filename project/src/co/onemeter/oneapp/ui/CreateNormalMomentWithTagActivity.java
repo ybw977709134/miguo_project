@@ -1102,7 +1102,6 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
             moment.id = CreateMomentActivity.ALIAS_ID_PREFIX+System.currentTimeMillis()+(++MOMENT_ALIAS_ID_INC);
             moment.timestamp = getIntent().getLongExtra(CreateMomentActivity.EXTRA_KEY_MOMENT_MAX_TIMESTAMP,0)+1;
             Log.w("local moment timestamp set to "+moment.timestamp);
-
             if(TimelineActivity.TAG_SURVEY_IDX==tagType) {
                 if(surveyOptions.size() < MIN_OPTIONS_NUM_FOR_SURVEY) {
 //                    mMsgBox.toast(String.format(getString(R.string.inputsimpletext_empty),getString(R.string.survey_option)));
@@ -1183,6 +1182,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                                 //not implemented now
                                 throw new IllegalArgumentException();
                             } else {
+                            	//android.util.Log.i("-->>>", moment.place);
                                 errno = WowMomentWebServerIF.getInstance(CreateNormalMomentWithTagActivity.this).fAddMoment(moment);
                             }
                             if (errno == ErrorCode.OK) {

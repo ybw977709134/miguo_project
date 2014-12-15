@@ -1161,59 +1161,7 @@ public class WowTalkWebServerIF {
 				+ "&user=" + Utils.urlencodeUtf8(username) 
 				+ "&plain_password=" + Utils.urlencodeUtf8(password) 
 				+ "&lang=" + Locale.getDefault().getLanguage();
-		Connect2 connect2 = new Connect2();
-		Element root = connect2.Post(postStr);
-
-		int errno = ErrorCode.BAD_RESPONSE;
-		if (root != null) {
-			NodeList errorList = root.getElementsByTagName("err_no");
-			Element errorElement = (Element) errorList.item(0);
-			String errorStr = errorElement.getFirstChild().getNodeValue();
-
-			if (errorStr.equals("0")) {
-				errno = 0;
-
-				if(result != null) {
-                    configS3();
-
-                    sPrefUtil.setWowtalkIdChanged(true);
-                    sPrefUtil.setPasswordChanged(true);
-
-					Element bodyElement = Utils.getFirstElementByTagName(root, "body");
-					Element registerElement = Utils.getFirstElementByTagName(bodyElement, action);
-					Element uidElement = Utils.getFirstElementByTagName(registerElement, "uid");
-					Element domainElement = Utils.getFirstElementByTagName(registerElement, "domain");
-					Element passwordElement = Utils.getFirstElementByTagName(registerElement, "password");
-                    Element sipPasswordElement = Utils.getFirstElementByTagName(registerElement, "sip_password");
-
-					if(uidElement != null) {
-						result.userID = uidElement.getTextContent();
-						String prevUID = sPrefUtil.getPrevUid();
-						if(!TextUtils.isEmpty(prevUID) && !prevUID.equals(result.userID)) {
-							clearLocalData();
-						}
-						sPrefUtil.setPrevUid(result.userID);
-						sPrefUtil.setUid(result.userID);
-					}
-					if(domainElement != null) {
-						result.domain = domainElement.getTextContent();
-					}
-					if(passwordElement != null) {
-						result.hashedPassword = passwordElement.getTextContent();
-						sPrefUtil.setPassword(result.hashedPassword);
-					}
-                    if(sipPasswordElement != null) {
-                        sPrefUtil.setSipPassword(sipPasswordElement.getTextContent());
-                    }
-
-                    sPrefUtil.setSetupStep(2);
-				}
-			} else {
-				errno = Integer.parseInt(errorStr);
-			}
-		}
-
-		return errno;
+		return parseLoginXml(postStr, "login", result);
 	}
 
     /**
@@ -1357,72 +1305,7 @@ public class WowTalkWebServerIF {
 		final String action = "login_with_invitation_code";
 		String postStr = "action=" + action
 				+ "&invitation_code=" + Utils.urlencodeUtf8(invitationCode);
-		Connect2 connect2 = new Connect2();
-		Element root = connect2.Post(postStr);
-
-		int errno = -1;
-		if (root != null) {
-			NodeList errorList = root.getElementsByTagName("err_no");
-			Element errorElement = (Element) errorList.item(0);
-			String errorStr = errorElement.getFirstChild().getNodeValue();
-			if (errorStr.equals("0")) {
-				clearLocalData();
-                configS3();
-
-                sPrefUtil.setWowtalkIdChanged(false);
-                sPrefUtil.setPasswordChanged(false);
-
-				Element bodyElement = Utils.getFirstElementByTagName(root, "body");
-				Element registerElement = Utils.getFirstElementByTagName(bodyElement, action);
-				Element uidElement = Utils.getFirstElementByTagName(registerElement, "uid");
-				Element domainElement = Utils.getFirstElementByTagName(registerElement, "domain");
-				Element passwordElement = Utils.getFirstElementByTagName(registerElement, "password");
-                Element sipPasswordElement = Utils.getFirstElementByTagName(registerElement, "sip_password");
-				Element plainPasswordElement = Utils.getFirstElementByTagName(registerElement, "plain_password");
-				Element wowtalkidElement = Utils.getFirstElementByTagName(registerElement, "wowtalk_id");
-
-				if(uidElement != null) {
-					result.userID = uidElement.getTextContent();
-                    sPrefUtil.setPrevUid(result.userID);
-                    sPrefUtil.setUid(result.userID);
-				}
-				if(domainElement != null) {
-					result.domain = domainElement.getTextContent();
-				}
-				if(passwordElement != null) {
-					result.hashedPassword = passwordElement.getTextContent();
-                    sPrefUtil.setPassword(result.hashedPassword);
-				}
-                if(sipPasswordElement != null) {
-                    sPrefUtil.setSipPassword(sipPasswordElement.getTextContent());
-                }
-				if(plainPasswordElement != null) {
-					result.plainPassword = plainPasswordElement.getTextContent();
-				}
-				if(wowtalkidElement != null) {
-					result.wowtalkID = wowtalkidElement.getTextContent();
-				}
-				
-				Element e = null;
-				
-				e = Utils.getFirstElementByTagName(registerElement, "wowtalk_id_changed");
-				if(e != null) {
-                    sPrefUtil.setWowtalkIdChanged("1".equals(e.getTextContent()));
-				}
-				
-				e = Utils.getFirstElementByTagName(registerElement, "password_changed");
-				if(e != null) {
-                    sPrefUtil.setPasswordChanged("1".equals(e.getTextContent()));
-				}
-
-                sPrefUtil.setSetupStep(2);
-
-				errno = 0;
-			} else {
-				errno = Integer.parseInt(errorStr);
-			}
-		}
-		return errno; 
+		return parseLoginXml(postStr, "login_with_invitation_code", result);
 	}
 
     public int fLogout() {

@@ -32,6 +32,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.logging.LogRecord;
 
 public class MomentAdapter extends ArrayAdapter<Moment> {
     public interface ReplyDelegate {
@@ -95,8 +96,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     private View newReviewView=null;
 
     private boolean isWithFavorite;
-    private boolean isLike = true;
-
 	public MomentAdapter(Context context, Activity activity, ArrayList<Moment> moments, boolean isSingle,boolean favorite,
                          ImageResizer mImageResizer,
                          ReplyDelegate replyDelegate,String uid,MessageBox box) {
@@ -207,7 +206,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
 		final Moment moment = getItem(momentPos);
 		ArrayList<Review> reviews = moment.reviews;
-		ArrayList<Review> likeReview = new ArrayList<Review>();
+		final ArrayList<Review> likeReview = new ArrayList<Review>();
 		ArrayList<Review> commentReview = new ArrayList<Review>();
         ArrayList<WFile> photoFiles = new ArrayList<WFile>();
         WFile voiceFile = null;
@@ -294,6 +293,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //                }
             }
         });
+
 
         setTagDescInfo(holder,moment);
         setupOpButtons(holder,moment,momentPos,likeReview,commentReview);
@@ -445,7 +445,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         }
 		return convertView;
 	}
-
+	
     public static void setStringAsURLIfAvaliable(TextView tv2set,String str,boolean withClick) {
         CharSequence result=str;
         boolean isValidURLExist=false;
@@ -681,7 +681,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 holder.voteSurveyLayout,holder.lvSurveyOptions,surveyMomentChoosedItemList.get(moment.id),holder.btnSurvey);
 
         if(TextUtils.isEmpty(moment.shareRange) || moment.shareRange.equals(Moment.SERVER_SHARE_RANGE_PUBLIC)) {
-            holder.tvMomentShareRange.setText(R.string.share_range_public_short);
+//            holder.tvMomentShareRange.setText(R.string.share_range_public_short);
             holder.ivMomentShareRange.setImageResource(R.drawable.timeline_public);
         } else {
             holder.tvMomentShareRange.setText(R.string.share_range_private);
@@ -738,7 +738,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     }
 
     private void setupOpButtons(final ViewHolder holder,final Moment moment,final int position,
-                                ArrayList<Review> likeReview,ArrayList<Review> commentReview) {
+                                final ArrayList<Review> likeReview,ArrayList<Review> commentReview) {
         if (!TextUtils.isEmpty(moment.tag) &&
                 (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_QA))) {
             holder.layoutLike.setVisibility(View.VISIBLE);
@@ -775,11 +775,13 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.tvAnswerCountInd.setVisibility(View.GONE);
         }
 
+        
         if(moment.likedByMe) {
         	//显示点赞的数量
             holder.tvLike.setText(""+likeReview.size());
 //            holder.tvLike.setText(R.string.moments_liked);
         } else {
+//        	holder.tvLike.setText(""+likeReview.size());
      //       holder.tvLike.setText(R.string.moments_like);
         }
 //        if(commentReview.size() > 0) {
@@ -820,16 +822,25 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         if(commentReview.size()>0){
         	holder.btnComment.setBackgroundResource(R.drawable.profile_btn_message_p);
         	holder.btnAnswer.setBackgroundResource(R.drawable.profile_btn_message_p);
+        	holder.tvComment.setVisibility(View.VISIBLE);
+        	holder.tvAnswer.setVisibility(View.VISIBLE);
         }else{
         	holder.btnComment.setBackgroundResource(R.drawable.share_icon_comment);
         	holder.btnAnswer.setBackgroundResource(R.drawable.share_icon_comment);
+        	holder.tvComment.setVisibility(View.GONE);
+        	holder.tvAnswer.setVisibility(View.GONE);
         }
-        
+        if(likeReview.size()>0){
+        	holder.tvLike.setVisibility(View.VISIBLE);
+        }else{
+        	holder.tvLike.setVisibility(View.GONE);
+        }
 //        if (moment.allowReview) {
 //        	holder.btnAnswer.setBackgroundResource(R.drawable.share_icon_comment);
 //        } else {
 //        	holder.btnAnswer.setBackgroundResource(R.drawable.profile_btn_message_p);
 //        }
+        
 
         holder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -841,9 +852,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             @Override
             public void onClick(View v) {
                 if (mReplyDelegate != null) {
-                    mReplyDelegate.replyToMoment(position, moment, null, isLike);
-                    isLike = !isLike;
+                    mReplyDelegate.replyToMoment(position, moment, null, true);
                 }
+                
             }
         });
         holder.btnComment.setOnClickListener(new View.OnClickListener() {
@@ -1127,6 +1138,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             ((TextView)mLoadMoreView.findViewById(R.id.text)).setText(R.string.load_more);
         }
     }
+
 
     static class ViewHolder {
 		ImageView imgThumbnail;

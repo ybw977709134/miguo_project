@@ -296,6 +296,11 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         case TimelineActivity.TAG_STUDY_IDX:
             etMomentMsgContent.setHint(R.string.moments_compose_hint_report);
             break;
+        case TimelineActivity.TAG_VIDEO_IDX:
+        	etMomentMsgContent.setHint(R.string.moments_compose_hint);
+        	((TextView)findViewById(R.id.trigger_add_img_txt_desc)).setText(R.string.moments_compose_gallery_video);
+        	findViewById(R.id.capture_voice_framelayout).setVisibility(View.GONE);
+        	break;
         default:
             etMomentMsgContent.setHint(R.string.moments_compose_hint);
             break;
@@ -399,7 +404,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
             }
         }
 
-        if(TimelineActivity.TAG_NOTICE_IDX == tagType) {
+        if(TimelineActivity.TAG_NOTICE_IDX == tagType || tagType == TimelineActivity.TAG_VIDEO_IDX) {
             findViewById(R.id.location_layout).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.location_layout).setVisibility(View.GONE);
@@ -688,13 +693,42 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 startActivityForResult(intent, ACTIVITY_REQ_ID_SHARE_RANGE_SELECT);
                 break;
             case R.id.trigger_add_img_layout:
-                showPickImgSelector();
+            	if(tagType == TimelineActivity.TAG_VIDEO_IDX){
+            		showPickVedioSelector();
+            	}else{
+            		showPickImgSelector();
+            	}
                 break;
             default:
                 break;
         }
     }
 
+    //显示视频选择的BottomButtonBoard
+    private void showPickVedioSelector(){
+    	hideIME();
+
+        final BottomButtonBoard bottomBoard=new BottomButtonBoard(this, getWindow().getDecorView());
+        bottomBoard.add(getString(R.string.vedio_shoot_vedio), BottomButtonBoard.BUTTON_BLUE,
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bottomBoard.dismiss();
+                        
+                    }
+                });
+        bottomBoard.add(getString(R.string.vedio_pick_from_local), BottomButtonBoard.BUTTON_BLUE,
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bottomBoard.dismiss();
+                        
+                    }
+                });
+        bottomBoard.addCancelBtn(getString(R.string.cancel));
+        bottomBoard.show();
+    }
+    
     private void stopPlayingVoice() {
         mediaPlayerWraper.stop();
 

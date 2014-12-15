@@ -3,6 +3,7 @@ package co.onemeter.oneapp.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -15,7 +16,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
-
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.ui.*;
+import co.onemeter.oneapp.utils.LocationHelper;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.ImageViewActivity;
 import org.wowtalk.ui.MessageBox;
@@ -24,15 +27,10 @@ import org.wowtalk.ui.bitmapfun.ui.RecyclingImageView;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 import org.wowtalk.ui.msg.TimerTextView;
 
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.*;
-import co.onemeter.oneapp.utils.LocationHelper;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.logging.LogRecord;
 
 public class MomentAdapter extends ArrayAdapter<Moment> {
     public interface ReplyDelegate {
@@ -1344,7 +1342,20 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ImageViewActivity.launch(context, photoIdx, files,ImageViewActivity.UPDATE_WITH_MOMENT_MEDIA);
+                        WFile f = files.get(photoIdx);
+                        String ext = f.getExt();
+                        if (ext != null)
+                            ext = ext.toLowerCase();
+                        if(ext != null && ext.matches("jpg|jpeg|bmp|png")) {
+                            // image
+                            ImageViewActivity.launch(context, photoIdx, files, ImageViewActivity.UPDATE_WITH_MOMENT_MEDIA);
+                        } else if(ext != null && ext.matches("avi|wmv|mp4|asf|mpg|mp2|mpeg|mpe|mpv|m2v|m4v|3gp")) {
+                            // video
+                            Uri uri = Uri.fromFile(new File(f.localPath));
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setDataAndType(uri, "video/*");
+                            context.startActivity(intent);
+                        }
                     }
                 });
                 if (new File(imageThumbnailPath).exists()) {

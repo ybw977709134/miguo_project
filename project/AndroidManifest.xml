@@ -566,6 +566,10 @@
 		          android:theme="@style/Theme.Green"
 			      android:screenOrientation="portrait" >
 		</activity>
+		<activity android:name=".ui.FriendValidateActivity"
+			      android:theme="@style/Theme.Blue"
+			      android:screenOrientation="portrait" >
+		</activity>
 	</application>
 
 </manifest>

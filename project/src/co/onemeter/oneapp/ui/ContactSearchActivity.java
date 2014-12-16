@@ -16,12 +16,15 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView.OnEditorActionListener;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.BuddySearchItemAdapter;
 import co.onemeter.oneapp.adapter.GroupSearchAdapter;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.ListViewUtils;
+
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
@@ -476,26 +479,33 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
         });
     }
 	private void searchAuto(){
-		edtSearchContent.addTextChangedListener(new TextWatcher() {
+//		edtSearchContent.addTextChangedListener(new TextWatcher() {
+//			
+//			@Override
+//			public void onTextChanged(CharSequence s, int start, int before, int count) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void beforeTextChanged(CharSequence s, int start, int count,
+//					int after) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void afterTextChanged(Editable s) {
+//				fStartSearch();
+//
+//			}
+//		});
+		edtSearchContent.setOnEditorActionListener(new OnEditorActionListener() {
 			
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void afterTextChanged(Editable s) {
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 				fStartSearch();
-//		        ListViewUtils.setListViewHeightBasedOnChildren(lvBuddy);
-//		        ListViewUtils.setListViewHeightBasedOnChildren(lvGroups);
+				return true;
 			}
 		});
 	}

@@ -806,6 +806,20 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
             galleryPath = parcel.readString();
             isPhoto = parcel.readInt() == 1;
         }
+
+        public static Creator<WMediaFile> CREATOR = new Creator<WMediaFile>() {
+            @Override
+            public WMediaFile createFromParcel(Parcel parcel) {
+                WMediaFile f = new WMediaFile();
+                f.loadFromParcel(parcel);
+                return f;
+            }
+
+            @Override
+            public WMediaFile[] newArray(int i) {
+                return new WMediaFile[i];
+            }
+        };
     }
 
     @Override

@@ -1409,7 +1409,8 @@ public class WowTalkWebServerIF {
 		String postStr = "action=" + action
 				+ "&uid=" + Utils.urlencodeUtf8(uid)
 				+ "&password=" + Utils.urlencodeUtf8(password)
-				+ "&wowtalk_id=" + Utils.urlencodeUtf8(wowtalkId.trim());
+				+ "&new_wowtalk_id=" + Utils.urlencodeUtf8(wowtalkId.trim()) // compliant
+				+ "&wowtalk_id=" + Utils.urlencodeUtf8(wowtalkId.trim()); // compliant
 		Connect2 connect2 = new Connect2();
 		Element root = connect2.Post(postStr);
 

@@ -644,7 +644,7 @@ public class WowMomentWebServerIF {
     	if(uid == null || password == null)
     		return ErrorCode.INVALID_ARGUMENT;
 
-        final String action = "get_reviews_on_me";
+        final String action = "get_latest_reviews_for_me";
     	String postStr = "action=" + action
     			+ "&uid=" + Utils.urlencodeUtf8(uid) 
     			+ "&password=" + Utils.urlencodeUtf8(password) 

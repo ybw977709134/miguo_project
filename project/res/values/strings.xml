@@ -30,6 +30,7 @@
     <string name="start_downloading_temp_groups">下载临时会话群组</string>
     <string name="start_downloading_favorite_items">下载收藏的群组／成员</string>
     <string name="start_downloading_latest_chat_targets">下载最近联系人列表</string>
+    <string name="start_downloading_buddies">下载联系人</string>
 
 	<string name="sms_pagetitle">会话</string>
 	<string name="sms_chat_info">会话信息</string>

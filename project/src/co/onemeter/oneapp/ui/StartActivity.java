@@ -62,7 +62,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
     private static final int HANDLER_GET_TEMP_GROUPS = 3;
     private static final int HANDLER_GET_FAVORITE_GROUPS_AND_CONTACTS = 4;
     private static final int HANDLER_GET_LATEST_CHAT_TARGETS = 5;
-//    private static final int HANDLER_GET_ALBUMCOVER = 6;
+    private static final int HANDLER_GET_CONTACTS = 6;
     private static final int HANDLER_GET_SECURITY_LEVEL = 10;
 
 	private static StartActivity instance;
@@ -164,9 +164,9 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
             case HANDLER_GET_LATEST_CHAT_TARGETS:
                 mMsgbBox.showOrUpdateWatiMsg(R.string.start_downloading_latest_chat_targets);
                 break;
-//            case HANDLER_GET_ALBUMCOVER:
-//                mMsgbBox.showOrUpdateWatiMsg(R.string.start_downloading_album_cover);
-//                break;
+            case HANDLER_GET_CONTACTS :
+                mMsgbBox.showOrUpdateWatiMsg(R.string.start_downloading_buddies);
+                break;
             case HANDLER_GET_SECURITY_LEVEL:
                 synchronized (StartActivity.class) {
 //                    if (mSecurityLevel == Constants.SECURITY_LEVEL_NORMAL) {
@@ -1148,24 +1148,24 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 
         String companyId = prefUtil.getCompanyId();
         // 1. 组织架构（部门id，成员id的关系）
-        Log.i("downloading(1/3) company structure");
+        Log.i("downloading(1/4) company structure");
         if (null != handler) {
             handler.sendEmptyMessage(HANDLER_GET_COMPANY_STRUCTURE);
         }
         int errno = webIF.getCompanyStructure(companyId);
-        Log.i("StartActivity#downloadContactsAndGroups, Finish downloading(1/3) company structure (errno:" + errno);
+        Log.i("StartActivity#downloadContactsAndGroups, Finish downloading(1/4) company structure (errno:" + errno);
 
         // 公司用来发通知的buddy信息,其wowtalk_id格式为companyId_companyId
         // 此过程不需要显示在界面上（属于组织架构部分）
         errno = webIF.fGetBuddyByWowtalkId(companyId + "_" + companyId, new Buddy());
 
         // 2. 部门
-        Log.i("downloading(2/3) all depts for biz");
+        Log.i("downloading(2/4) all depts for biz");
         if (null != handler) {
             handler.sendEmptyMessage(HANDLER_GET_DEPTS);
         }
         errno = webIF.getGroupsByCompanyId(prefUtil.getCompanyId());
-        Log.i("StartActivity#downloadContactsAndGroups, finish downloading(2/3) all groups for biz (errno:" + errno);
+        Log.i("StartActivity#downloadContactsAndGroups, finish downloading(2/4) all groups for biz (errno:" + errno);
         if (ErrorCode.OK == errno) {
             prefUtil.setLocalGroupListLastModified();
             prefUtil.setGroupUptodate(true);
@@ -1180,12 +1180,23 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 //        Log.i("StartActivity#downloadContactsAndGroups, finish downloading(3/4) temp groups for biz (errno:" + errno);
 
         // 3. 收藏的群组和常用联系人
-        Log.i("downloading(3/3) favorite contacts and groups for biz");
+        Log.i("downloading(3/4) favorite contacts and groups for biz");
         if (null != handler) {
             handler.sendEmptyMessage(HANDLER_GET_FAVORITE_GROUPS_AND_CONTACTS);
         }
         errno = webIF.getFavoriteContactsAndGroups();
-        Log.i("StartActivity#downloadContactsAndGroups, finish downloading(3/3) favorite contacts and groups for biz (errno:" + errno);
+        Log.i("StartActivity#downloadContactsAndGroups, finish downloading(3/4) favorite contacts and groups for biz (errno:" + errno);
+        if (ErrorCode.OK == errno) {
+            prefUtil.setFavoritesUptodate(true);
+        }
+
+        // 4. 我的联系人
+        Log.i("downloading(4/4) favorite contacts and groups for biz");
+        if (null != handler) {
+            handler.sendEmptyMessage(HANDLER_GET_CONTACTS);
+        }
+        errno = webIF.fGetBuddyList();
+        Log.i("StartActivity#fGetBuddyList, finish downloading(4/4) (errno:" + errno);
         if (ErrorCode.OK == errno) {
             prefUtil.setFavoritesUptodate(true);
         }

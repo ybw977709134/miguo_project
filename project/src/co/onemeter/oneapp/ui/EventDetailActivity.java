@@ -262,7 +262,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
     }
 
     private void joinEvent() {
-        msgbox.showWait();
+   //     msgbox.showWait();
         new AsyncTask<Void, Void, Integer>(){
 
             @Override
@@ -274,7 +274,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
             @Override
             public void onPostExecute(Integer errno) {
-                msgbox.dismissWait();
+     //           msgbox.dismissWait();
                 if (errno == ErrorCode.OK) {
                     msgbox.toast(R.string.require_join_event_success);
                     refresh(false);
@@ -289,7 +289,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
      * 取消报名
      */
     private void cancel_join_event(){
-   	 msgbox.showWait();
+ //  	 msgbox.showWait();
     	 new AsyncTask<Void, Void, Integer>(){
 
             @Override
@@ -300,7 +300,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
              @Override
              public void onPostExecute(Integer errno) {
-                 msgbox.dismissWait();
+      //           msgbox.dismissWait();
                  if (errno == ErrorCode.OK) {
      //                msgbox.toast(R.string.require_cancel_event_joined);
                      refresh(false);

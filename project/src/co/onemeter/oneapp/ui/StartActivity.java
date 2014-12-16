@@ -18,6 +18,7 @@ import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import co.onemeter.oneapp.utils.WebServerEventPoller;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 
@@ -953,21 +954,8 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 
     @Override
     public void onTabChanged(String tabId) {
-
         if(Utils.isNetworkConnected(this)) {
-            // 既然 tab changed，说明有用户活动，是检查新评论的好机会。
-
-            new TimelineActivity.CheckNewReviewsTask() {
-                @Override
-                protected void onPostExecute(Integer errno) {
-                    if (errno == ErrorCode.OK) {
-//                    fRefreshTabBadge_social();
-//                    if (FriendsActivity.instance() != null) {
-//                        FriendsActivity.instance().refreshBadge();
-//                    }
-                    }
-                }
-            }.execute(StartActivity.this);
+            WebServerEventPoller.instance(this).invoke();
         }
     }
 

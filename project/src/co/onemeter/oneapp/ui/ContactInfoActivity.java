@@ -297,7 +297,11 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
             q.find(R.id.module_chat).invisible();
             q.find(R.id.btn_goto_moments).gone();
             q.find(R.id.btn_delete).gone();
+            q.find(R.id.btn_add).visible();
         } else {
+            q.find(R.id.module_chat).visible();
+            q.find(R.id.btn_goto_moments).visible();
+            q.find(R.id.btn_delete).visible();
             q.find(R.id.btn_add).gone();
         }
     }
@@ -353,6 +357,11 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 
             protected void onPostExecute(Integer resultCode) {
                 if (resultCode == ErrorCode.OK) {
+                    if (0 != (buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE)) {
+                        buddyType = BUDDY_TYPE_IS_FRIEND;
+                    } else {
+                        buddyType = BUDDY_TYPE_NOT_FRIEND;
+                    }
                     resetViewsForBiz();
                 }
             };

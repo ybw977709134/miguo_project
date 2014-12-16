@@ -106,7 +106,11 @@
     <string name="contactsforbiz_root_group_name_display">所有成员</string>
     <string name="contacts_schoolmate_emptymsg_left">点击右上角</string>
     <string name="contacts_schoolmate_emptymsg_right">加入班级，找到更多小伙伴</string>
-
+    <string name="contacts_friend_validate">朋友验证</string>
+    <string name="contacts_validate_send">发送</string>
+    <string name="contacts_validate_message">你需要发送验证申请，等对方通过</string>
+    <string name="contacts_validate_name">为好友设置备注名</string>
+    <string name="contacts_validate_toast">发送成功</string>
 	<string name="friends_moments_pagetitle">动态</string>
 	<string name="friends_pagetitle">朋友们</string>
 	<string name="firends_add_pagetitle">添加朋友</string>
@@ -785,4 +789,5 @@
     <string name="title_hybird_message">图文音消息</string>
     <string name="hybird_message_editor_exceed_max_img_cnt">您最多可以添加 %d 张图片</string>
     <string name="hybird_message_editor_content_required">缺少内容</string>
+    <string name="download_failed">下载失败</string>
 </resources>

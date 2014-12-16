@@ -1351,10 +1351,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                             ImageViewActivity.launch(context, photoIdx, files, ImageViewActivity.UPDATE_WITH_MOMENT_MEDIA);
                         } else if(ext != null && ext.matches("avi|wmv|mp4|asf|mpg|mp2|mpeg|mpe|mpv|m2v|m4v|3gp")) {
                             // video
-                            Uri uri = Uri.fromFile(new File(f.localPath));
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setDataAndType(uri, "video/*");
-                            context.startActivity(intent);
+                            viewVideo(f, context);
                         }
                     }
                 });
@@ -1374,6 +1371,62 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             params.setMargins(0, DensityUtil.dip2px(context, 3), 0, 0);
             tableRow.setLayoutParams(params);
         }
+    }
+
+    private static void viewVideo(final WFile file, final Context context) {
+        if (!new File(file.localPath).exists()) {
+            // need download
+            new AsyncTask<Void, Void, Integer>() {
+
+                private WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(context);
+                private boolean status;
+                MessageBox msgbox = new MessageBox(context);
+
+                @Override
+                protected void onPreExecute() {
+                    msgbox.showWait();
+                }
+
+                @Override
+                protected Integer doInBackground(Void... voids) {
+                    web.fGetFileFromServer(file.fileid, GlobalSetting.S3_MOMENT_FILE_DIR,
+                            new NetworkIFDelegate() {
+                                @Override
+                                public void didFinishNetworkIFCommunication(int i, byte[] bytes) {
+                                    status = true;
+                                }
+
+                                @Override
+                                public void didFailNetworkIFCommunication(int i, byte[] bytes) {
+                                    status = false;
+                                }
+
+                                @Override
+                                public void setProgress(int i, int i2) {
+                                }
+                            }, 0, file.localPath, null);
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Integer arg) {
+                    msgbox.dismissWait();
+                    if (status)
+                        viewVideoDirectly(file, context);
+                    else
+                        msgbox.toast(R.string.download_failed);
+                }
+            }.execute((Void)null);
+        } else {
+            viewVideoDirectly(file, context);
+        }
+    }
+
+    private static void viewVideoDirectly(WFile f, Context context) {
+        Uri uri = Uri.fromFile(new File(f.localPath));
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "video/*");
+        context.startActivity(intent);
     }
 
     private void setTimeForAll(TextView txtTime, long time) {

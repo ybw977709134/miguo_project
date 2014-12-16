@@ -1,7 +1,10 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -12,10 +15,13 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.ImageViewActivity;
 import org.wowtalk.ui.MessageBox;
@@ -291,7 +297,11 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
             q.find(R.id.module_chat).invisible();
             q.find(R.id.btn_goto_moments).gone();
             q.find(R.id.btn_delete).gone();
+            q.find(R.id.btn_add).visible();
         } else {
+            q.find(R.id.module_chat).visible();
+            q.find(R.id.btn_goto_moments).visible();
+            q.find(R.id.btn_delete).visible();
             q.find(R.id.btn_add).gone();
         }
     }
@@ -347,6 +357,11 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 
             protected void onPostExecute(Integer resultCode) {
                 if (resultCode == ErrorCode.OK) {
+                    if (0 != (buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE)) {
+                        buddyType = BUDDY_TYPE_IS_FRIEND;
+                    } else {
+                        buddyType = BUDDY_TYPE_NOT_FRIEND;
+                    }
                     resetViewsForBiz();
                 }
             };
@@ -407,7 +422,29 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                 addBuddy();
                 break;
             case R.id.btn_delete:
-                removeBuddy();
+            	Builder builder = new AlertDialog.Builder(this);
+            	builder.setTitle("提示");
+            	builder.setMessage("你确定要删除好友吗?");
+            	builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						// TODO Auto-generated method stub
+						removeBuddy();
+						Toast.makeText(ContactInfoActivity.this, "删除好友成功", Toast.LENGTH_SHORT).show();
+					}
+				});
+            	
+            	builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						
+					}
+				});
+            	
+            	builder.create().show();
+                
                 break;
             default:
                 break;

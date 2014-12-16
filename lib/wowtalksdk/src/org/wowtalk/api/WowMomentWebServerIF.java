@@ -677,14 +677,10 @@ public class WowMomentWebServerIF {
                                 result.add(r);
                                 if (m == null || !m.id.equals(r.hostId)) {
                                     m = new Moment(r.hostId);
+                                    m.owner = new Buddy(uid);
                                     localMoment=db.fetchMoment(r.hostId);
                                 }
                                 db.storeReview(m, r);
-
-                                if(null != localMoment &&
-                                        (null != localMoment.owner && !localMoment.owner.userID.equals(uid))) {
-                                    fSetReviewRead(localMoment);
-                                }
                             }
 						}
 					}

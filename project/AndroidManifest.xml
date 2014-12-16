@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="co.onemeter.oneapp"
           android:versionCode="6"
-          android:versionName="2.0.4.1215-2" >
+          android:versionName="2.0.4.1316-3" >
 
 	<!-- 在 Android 2.3 上，PullToRefreshListView 产生 stack overflow 错误。 -->
 	<uses-sdk
@@ -564,6 +564,10 @@
 			/>
 		<activity android:name=".ui.SubmitInformationActivity"
 		          android:theme="@style/Theme.Green"
+			      android:screenOrientation="portrait" >
+		</activity>
+		<activity android:name=".ui.FriendValidateActivity"
+			      android:theme="@style/Theme.Blue"
 			      android:screenOrientation="portrait" >
 		</activity>
 	</application>

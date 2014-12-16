@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/layout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+    android:background="@color/background_dark">
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        android:layout_height="@dimen/title_bar_height"
+        android:layout_width="fill_parent"
+        android:layout_alignParentTop="true"
+        style="?attr/navbar">
+
+        <TextView 
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/textView_validate_cancel"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:paddingLeft="10dp"
+            android:textSize="20sp"
+            android:clickable="true"
+            android:onClick="clickButton"
+            android:text="@string/contacts_search_cancel"/>
+        
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:singleLine="true"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:text="@string/contacts_friend_validate"/>
+
+        <TextView
+            android:id="@+id/textView_validate_send"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:paddingRight="10dp"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:clickable="true"
+            android:onClick="clickButton"
+            android:text="@string/contacts_validate_send"/>
+        
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout1"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/title_bar"
+        android:layout_marginTop="15dp" 
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="16dp"
+            android:textSize="18sp"
+            android:text="@string/contacts_validate_message" />
+
+
+
+        <EditText
+            android:id="@+id/editText_validate_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/textView1"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"/>
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/layout2"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/layout1"
+        android:focusable="true"
+        android:focusableInTouchMode="true" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="16dp"
+            android:textSize="18sp"
+            android:gravity="bottom"
+            android:text="@string/contacts_validate_name" />
+
+
+
+        <EditText
+            android:id="@+id/editText_validate_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/textView1"
+            android:gravity="center_vertical"
+            android:textColor="@color/black"/>
+    </RelativeLayout>
+
+</RelativeLayout>

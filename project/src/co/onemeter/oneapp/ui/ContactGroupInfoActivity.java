@@ -225,7 +225,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
             rooms.remove(rooms.size() - 1);
             rooms.remove(rooms.size() - 1);
         }
-        intent.putExtra("group", groupRoom);
+        intent.putExtra("group_id", groupRoom.groupID);
         intent.putExtra("pending_requests", mCurrentPendingRequests);
         intent.putExtra("members", rooms);
         intent.putExtra("mylevel", myLevel);

@@ -2,6 +2,7 @@ package co.onemeter.oneapp.ui;
 
 import android.R.integer;
 import android.app.Activity;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -270,6 +271,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                         	Toast.makeText(CreateEventActivity.this, R.string.event_time_start_earlier_now, Toast.LENGTH_SHORT).show();
                         }
                     }
+                   
                 });
                 break;
             case R.id.layout_endtime:

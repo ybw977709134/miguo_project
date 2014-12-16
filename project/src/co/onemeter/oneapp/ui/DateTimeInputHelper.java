@@ -42,11 +42,12 @@ public class DateTimeInputHelper {
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int h, int m) {
-                        dest.set(Calendar.HOUR, h);
+                        dest.set(Calendar.HOUR_OF_DAY, h);
                         dest.set(Calendar.MINUTE, m);
                         if (callback != null) {
                             callback.onDateTimeResult(dest);
                         }
+                        
                     }
                 },
                 now.get(Calendar.HOUR),

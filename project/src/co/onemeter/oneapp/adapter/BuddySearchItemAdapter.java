@@ -1,6 +1,7 @@
 package co.onemeter.oneapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -14,6 +15,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.ui.FriendValidateActivity;
+import co.onemeter.oneapp.ui.StartActivity;
+
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.PrefUtil;
@@ -136,6 +140,8 @@ public class BuddySearchItemAdapter extends BaseAdapter {
 
     private void onAddFriendPressed(final Buddy buddy,final Button btn) {
         mMsgBox.showWait();
+    	Intent intent = new Intent(contextRef, FriendValidateActivity.class);
+    	contextRef.startActivity(intent);
 
         new AsyncTask<Void, Void, Integer>() {
             @Override

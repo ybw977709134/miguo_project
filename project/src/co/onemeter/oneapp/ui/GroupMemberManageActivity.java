@@ -457,6 +457,7 @@ public class GroupMemberManageActivity extends Activity implements View.OnClickL
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private String group_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -465,7 +466,7 @@ public class GroupMemberManageActivity extends Activity implements View.OnClickL
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
-        groupRoom = getIntent().getParcelableExtra("group");
+        group_id = getIntent().getStringExtra("group_id");
         pendingRequests = getIntent().getParcelableArrayListExtra("pending_requests");
         memberPersons = getIntent().getParcelableArrayListExtra("members");
         myLevel = getIntent().getIntExtra("mylevel", GroupMember.LEVEL_CREATOR);
@@ -476,6 +477,7 @@ public class GroupMemberManageActivity extends Activity implements View.OnClickL
             }
         }
         dbHelper = new Database(this);
+        groupRoom = dbHelper.fetchGroupChatRoom(group_id);
 //        getPendings();
         mStrTitle = getString(R.string.group_member_manage);
         initView();

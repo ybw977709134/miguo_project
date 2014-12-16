@@ -749,6 +749,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         }
     }
 
+    private boolean isLike;
     private void setupOpButtons(final ViewHolder holder,final Moment moment,final int position,
                                 final ArrayList<Review> likeReview,ArrayList<Review> commentReview) {
         if (!TextUtils.isEmpty(moment.tag) &&
@@ -853,10 +854,16 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //        	holder.btnAnswer.setBackgroundResource(R.drawable.profile_btn_message_p);
 //        }
         
-
+        isLike = moment.likedByMe;
         holder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+            	isLike = !isLike;
+            	if (isLike) {
+                  holder.btnLike.setBackgroundResource(R.drawable.timeline_like_a);
+            	} else {
+                  holder.btnLike.setBackgroundResource(R.drawable.timeline_like);
+            	}
                 holder.layoutLike.performClick();
             }
         });

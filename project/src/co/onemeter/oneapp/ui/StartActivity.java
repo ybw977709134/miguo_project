@@ -507,6 +507,8 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         fRefreshTabBadge_unreadMsg();
         fRefreshTabBadge_social();
         fRefreshTabBadge_contact();
+
+        WebServerEventPoller.instance(this).invoke();
 	}
 
     protected void onNewIntent(Intent intent) {

@@ -1,7 +1,6 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,12 +8,13 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.TimelineActivity.BeginUploadAlbumCover;
 import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GlobalSetting;
 import org.wowtalk.api.NetworkIFDelegate;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MediaInputHelper;
+import org.wowtalk.ui.MessageBox;
 
 import java.io.File;
 
@@ -26,10 +26,12 @@ public class AlbumCoverChangeActivity extends Activity implements OnClickListene
     private static final int ALBUMCOVER_HEIGHT = 800;
     private static final int ALBUMCOVER_WIDTH = 800;
 
-    private static MediaInputHelper sMediaInput;
-    private static NetworkIFDelegate sNetworkIFDelegate;
-    private static BeginUploadAlbumCover sBeginUploadAlbumCover;
+    /**
+     * 上传成功后，在 Activity result 中输出 file id.
+     */
+    public static final String EXTRA_FILE_ID = "fileid";
 
+    private static MediaInputHelper sMediaInput;
     private WowTalkWebServerIF mWebIF;
 
     @Override
@@ -83,36 +85,36 @@ public class AlbumCoverChangeActivity extends Activity implements OnClickListene
     }
 
     private void uploadAlbumCoverAsync(String filepath) {
-        sBeginUploadAlbumCover.onBeginUploadCover(filepath);
         new AsyncTask<String, Integer, Void>() {
+            private MessageBox msgbox = new MessageBox(AlbumCoverChangeActivity.this);
+
+            @Override
+            protected void onPreExecute() {
+                msgbox.showWait();
+            }
+
             @Override
             protected Void doInBackground(final String... params) {
                 try {
                     mWebIF.fPostFileToServer(params[0], GlobalSetting.S3_MOMENT_FILE_DIR, new NetworkIFDelegate() {
                                 @Override
                                 public void didFinishNetworkIFCommunication(int i, byte[] bytes) {
-                                    if (sNetworkIFDelegate != null) {
-                                        sNetworkIFDelegate.didFinishNetworkIFCommunication(i, bytes);
-                                    }
-
                                     String fileId = new String(bytes);
                                     int pos = params[0].lastIndexOf('.');
                                     String ext = pos != -1 ? params[0].substring(pos) : "jpg";
-                                    mWebIF.fSetAlbumCover(fileId, ext);
+                                    int errno = mWebIF.fSetAlbumCover(fileId, ext);
+                                    if (errno == ErrorCode.OK) {
+                                        setResult(RESULT_OK, new Intent().putExtra(EXTRA_FILE_ID, fileId));
+                                    }
                                 }
 
                                 @Override
                                 public void didFailNetworkIFCommunication(int i, byte[] bytes) {
-                                    if (sNetworkIFDelegate != null) {
-                                        sNetworkIFDelegate .didFailNetworkIFCommunication(i, bytes);
-                                    }
+                                    setResult(RESULT_CANCELED, null);
                                 }
 
                                 @Override
                                 public void setProgress(int i, int i1) {
-                                    if (sNetworkIFDelegate != null) {
-                                        sNetworkIFDelegate.setProgress(i, i1);
-                                    }
                                 }
                             },
                             TimelineActivity.NETWORK_TAG_UPLOADING_ALBUMCOVER);
@@ -120,6 +122,18 @@ public class AlbumCoverChangeActivity extends Activity implements OnClickListene
                     e.printStackTrace();
                 }
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void arg) {
+                msgbox.dismissWait();
+                finish();
+            }
+
+            @Override
+            protected void onCancelled() {
+                msgbox.dismissWait();
+                finish();
             }
         }.execute(filepath);
     }
@@ -146,13 +160,9 @@ public class AlbumCoverChangeActivity extends Activity implements OnClickListene
         }
     }
 
-    public static void launchActivity(Context context, MediaInputHelper mediaInput,
-            NetworkIFDelegate networkIFDelegate,
-            BeginUploadAlbumCover beginUploadAlbumCover) {
+    public static void launchActivity(Activity activity, MediaInputHelper mediaInput, int requestCode) {
         sMediaInput = mediaInput;
-        sNetworkIFDelegate = networkIFDelegate;
-        sBeginUploadAlbumCover = beginUploadAlbumCover;
-        Intent albumCoverChangeIntent = new Intent(context, AlbumCoverChangeActivity.class);
-        context.startActivity(albumCoverChangeIntent);
+        Intent albumCoverChangeIntent = new Intent(activity, AlbumCoverChangeActivity.class);
+        activity.startActivityForResult(albumCoverChangeIntent, requestCode);
     }
 }

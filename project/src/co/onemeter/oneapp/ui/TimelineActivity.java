@@ -12,11 +12,8 @@ import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
-import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.InputBoardManager;
-
-import java.util.ArrayList;
 
 /**
  * <p>(时间线|分享|动态)页面。</p>
@@ -216,43 +213,8 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         context.startActivity(intent);
     }
 
-    /**
-     * Request to check new reviews again.
-     */
-//    public static void requestCheckNewReviews() {
-//        // just invalidate the last check timestamp will be done
-//        mLastCheckReviewTime = INVALID_TIMESTAMP_VALUE;
-//    }
-
-    interface BeginUploadAlbumCover {
-        void onBeginUploadCover(String filePath);
-    }
-
     public interface OnMomentReviewDeleteListener {
         void onMomentDelete(String momentId, Review review);
-    }
-
-    /**
-     * 检查新评论。内置频率保护。
-     */
-    public static class CheckNewReviewsTask extends AsyncTask<Context, Void, Integer> {
-
-        @Override
-        protected Integer doInBackground(Context... contexts) {
-
-            ArrayList<Review> reviews = new ArrayList<Review>();
-
-            try {
-                int errno = WowMomentWebServerIF.getInstance(contexts[0]).fGetReviewsOnMe(reviews);
-                if (ErrorCode.OK == errno) {
-                    GlobalValue.unreadMomentReviews = reviews.size();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return ErrorCode.BAD_RESPONSE;
-            }
-            return ErrorCode.OK;
-        }
     }
 
     public static String getSelectedTagServerDesc(Context context,int tagIdx,boolean surveyMultiSelect) {

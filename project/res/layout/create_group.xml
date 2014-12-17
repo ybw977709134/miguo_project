@@ -220,16 +220,7 @@
                 android:background="@drawable/table_white"
                 android:hint="@string/group_introduce_hint"/>
 
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="14dp"
-                android:layout_marginRight="14dp"
-                android:gravity="center_horizontal"
-                android:textSize="18sp"
-                android:textColor="@color/text_gray3"
-                android:text="@string/create_group_bottom_text"/>
+            
         </LinearLayout>
      </ScrollView>
      

@@ -50,7 +50,7 @@
 
             <!-- msg -->
             <EditText
-                    android:id="@+id/moment_content"
+                    android:id="@+id/edt_moment_content"
                     android:layout_height="120dp"
                     android:layout_width="fill_parent"
                     android:padding="5dp"

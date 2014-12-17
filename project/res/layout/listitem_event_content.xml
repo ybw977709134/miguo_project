@@ -55,7 +55,8 @@
             <TextView
                 android:id="@+id/event_category"
                 android:text="dummy category"
-                style="@style/event_field_small"/>
+                style="@style/event_field_small"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/event_host"

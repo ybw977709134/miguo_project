@@ -86,9 +86,35 @@ public class AlbumCoverChangeActivity extends Activity implements OnClickListene
         sBeginUploadAlbumCover.onBeginUploadCover(filepath);
         new AsyncTask<String, Integer, Void>() {
             @Override
-            protected Void doInBackground(String... params) {
+            protected Void doInBackground(final String... params) {
                 try {
-                    mWebIF.fPostFileToServer(params[0], GlobalSetting.S3_MOMENT_FILE_DIR, sNetworkIFDelegate,
+                    mWebIF.fPostFileToServer(params[0], GlobalSetting.S3_MOMENT_FILE_DIR, new NetworkIFDelegate() {
+                                @Override
+                                public void didFinishNetworkIFCommunication(int i, byte[] bytes) {
+                                    if (sNetworkIFDelegate != null) {
+                                        sNetworkIFDelegate.didFinishNetworkIFCommunication(i, bytes);
+                                    }
+
+                                    String fileId = new String(bytes);
+                                    int pos = params[0].lastIndexOf('.');
+                                    String ext = pos != -1 ? params[0].substring(pos) : "jpg";
+                                    mWebIF.fSetAlbumCover(fileId, ext);
+                                }
+
+                                @Override
+                                public void didFailNetworkIFCommunication(int i, byte[] bytes) {
+                                    if (sNetworkIFDelegate != null) {
+                                        sNetworkIFDelegate .didFailNetworkIFCommunication(i, bytes);
+                                    }
+                                }
+
+                                @Override
+                                public void setProgress(int i, int i1) {
+                                    if (sNetworkIFDelegate != null) {
+                                        sNetworkIFDelegate.setProgress(i, i1);
+                                    }
+                                }
+                            },
                             TimelineActivity.NETWORK_TAG_UPLOADING_ALBUMCOVER);
                 } catch (Exception e) {
                     e.printStackTrace();

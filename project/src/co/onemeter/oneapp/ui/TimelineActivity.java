@@ -41,6 +41,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
 
     private AllTimelineFragment allTimelineFragment;
     private MyTimelineFragment myTimelineFragment;
+    private TimelineFragment currTimelineFragment;
     private View newMomentPanel;
     private AQuery q = new AQuery(this);
     private String uid;
@@ -95,6 +96,17 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         } else {
             q.find(R.id.btn_layout).visible();
             q.find(R.id.title_text).invisible();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // 发布动态成功后，刷新
+        if (requestCode == REQ_CREATE_MOMENT && resultCode == Activity.RESULT_OK
+                && currTimelineFragment != null) {
+            currTimelineFragment.checkNewMoments();
         }
     }
 
@@ -196,6 +208,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, allTimelineFragment)
                 .commit();
+        currTimelineFragment = allTimelineFragment;
     }
 
     private void switchToSingle() {
@@ -204,6 +217,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, myTimelineFragment)
                 .commit();
+        currTimelineFragment = myTimelineFragment;
     }
 
     public static void launch(Context context, String uid, String pageTitle) {

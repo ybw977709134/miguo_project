@@ -368,12 +368,14 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         q.find(R.id.event_title).text(eventDetail.title);
 
         // time
-        q.find(R.id.event_time).text(helper.formatField(
-                getResources().getString(R.string.event_time_label),
-                new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(eventDetail.startTime)
-                        + "-"
-                        + new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(eventDetail.endTime)));
+        q.find(R.id.event_time_start).text(helper.formatField(
+                getResources().getString(R.string.event_time_label_start),
+                new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(eventDetail.startTime)));
 
+        // time
+        q.find(R.id.event_time_end).text(helper.formatField(
+                getResources().getString(R.string.event_time_label_end),
+                new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(eventDetail.endTime)));
         // place
         q.find(R.id.event_place).text(helper.formatField(
                 getResources().getString(R.string.event_place_label),

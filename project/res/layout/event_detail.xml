@@ -108,8 +108,15 @@
                 android:orientation="vertical" >
 
                 <TextView
-                    android:id="@+id/event_time"
-                    android:text="dummy time"
+                    android:id="@+id/event_time_start"
+                    android:text="dummy start time"
+                    style="@style/event_field_large"/>
+                <ImageView
+                    style="@style/standard_list_divider"/>
+                
+                <TextView
+                    android:id="@+id/event_time_end"
+                    android:text="dummy end time"
                     style="@style/event_field_large"/>
                 <ImageView
                     style="@style/standard_list_divider"/>

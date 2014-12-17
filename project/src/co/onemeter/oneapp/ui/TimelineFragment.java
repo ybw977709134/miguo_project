@@ -45,6 +45,9 @@ public abstract class TimelineFragment extends ListFragment
             selectedTag = savedInstanceState.getInt("selectedTag");
         }
 
+        // load moments
+        setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag)));
+        checkNewMoments();
     }
 
     @Override
@@ -112,10 +115,6 @@ public abstract class TimelineFragment extends ListFragment
     public void onResume() {
         super.onResume();
 
-        // load moments
-        setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag)));
-        checkNewMoments();
-        
         setupListHeaderView();
 
         PullToRefreshListView listView = getPullToRefreshListView();
@@ -125,7 +124,6 @@ public abstract class TimelineFragment extends ListFragment
 
         checkNewReviews();
         Database.addDBTableChangeListener(Database.TBL_MOMENT_REVIEWS,momentReviewObserver);
-        
     }
 
     @Override

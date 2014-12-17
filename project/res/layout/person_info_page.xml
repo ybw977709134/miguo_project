@@ -278,6 +278,7 @@
                         android:gravity="center_vertical"
                         android:paddingRight="10dp"
                         android:drawableRight="@drawable/table_arrow"
+                        android:clickable="true"
                         android:textColor="@color/black"
                         android:textSize="18sp"/>
                 </LinearLayout>

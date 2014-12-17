@@ -16,6 +16,7 @@ import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
 import co.onemeter.oneapp.utils.MyUrlSpanHelper;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
@@ -58,6 +59,11 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     private ProgressBar progressBar;
     private TimerTextView micTimer;
     private TextView txtLoc;
+    
+    //详情页中的赞数和评论数
+    private LinearLayout layout_detailcomment_review;
+    private TextView textView_commentdetail_like;//赞
+    private TextView textView_commentdetail_comment;//评论
 
     private LinearLayout reviewLayout;
     private SpannedTextView txtLikeName;
@@ -134,6 +140,12 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         layoutComment = (LinearLayout) findViewById(R.id.layout_comment);
         layoutAnswer = (LinearLayout) findViewById(R.id.layout_answer);
         ivMomentFavorite=(ImageView) findViewById(R.id.moment_favorite);
+        
+        //赞和评论的布局
+        layout_detailcomment_review = (LinearLayout) findViewById(R.id.layout_detailcomment_review);
+        layout_detailcomment_review.setVisibility(View.VISIBLE);//显示布局
+        textView_commentdetail_like = (TextView) findViewById(R.id.textView_momentdetail_like);//赞
+        textView_commentdetail_comment = (TextView) findViewById(R.id.textView_momentdetail_comment);//评论
 
         findViewById(R.id.moment_op_btns_layout_whole).setVisibility(View.GONE);
 
@@ -779,6 +791,9 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         MomentAdapter.setImageLayout(this, mImageResizer, photoFiles, imageTable);
         int nlikers = MomentAdapter.setViewForLikeReview(this, txtLikeName, moment.reviews);
         int nReviews = MomentAdapter.setViewForCommentReview(this, commentLayout, moment.reviews, -1, moment, this);
+        //赞和评论的具体数量统计
+        textView_commentdetail_like.setText(nlikers+"");
+        textView_commentdetail_comment.setText(nReviews+"");
 
         txtLikeName.setVisibility(nlikers > 0 ? View.VISIBLE : View.GONE);
         reviewLayout.setVisibility(nlikers + nReviews > 0 ? View.VISIBLE : View.GONE);

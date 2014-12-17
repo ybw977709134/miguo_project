@@ -127,6 +127,7 @@
                     </LinearLayout>
 
                 </LinearLayout>
+
                 <LinearLayout
                         android:id="@+id/moment_tag_layout"
                         android:layout_height="@dimen/moment_tag_ind_height"

@@ -285,6 +285,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
             default:
                 break;
         }
+        
         return tag;
     }
 

@@ -98,11 +98,12 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
             q.find(R.id.event_title).text(act.title);
 
             // time
-            q.find(R.id.event_time).text(formatField(
-                            getResources().getString(R.string.event_time_label),
-                            new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(act.startTime)
-                                    + "-"
-                                    + new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(act.endTime)));
+            q.find(R.id.event_time_start).text(formatField(
+                            getResources().getString(R.string.event_time_label_start),
+                            new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(act.startTime)));
+            q.find(R.id.event_time_end).text(formatField(
+                    getResources().getString(R.string.event_time_label_end),
+                    new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(act.endTime)));
 
             // place
             q.find(R.id.event_place).text(formatField(

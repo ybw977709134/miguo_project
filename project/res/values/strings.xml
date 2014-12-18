@@ -184,6 +184,7 @@
     <string name="event_member_count_nolimit">不限</string>
     <string name="event_join_coin_free">免费</string>
     <string name="event_finish_info">发布活动需要完成所有信息的填写！</string>
+    <string name="event_info_fill">请先填写信息！</string>
 
     <string name="settings_myinfo">个人信息</string>
     <string name="my_treasure">我的百宝箱</string>

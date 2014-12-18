@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -120,6 +121,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         } else {
             setTitle("");
         }
+        wevent.is_get_member_info = mIsInfo;
     }
 
     @Override
@@ -171,6 +173,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
             @Override
             protected void onPostExecute(Integer errno) {
                 if (errno == ErrorCode.OK) {
+                	Log.i("--->>>create", wevent.is_get_member_info+"");
                     finish();
                 } else {
                     Toast.makeText(context, R.string.operation_failed, Toast.LENGTH_SHORT).show();
@@ -425,8 +428,8 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     }
     
     private void changeIsInfo(boolean isInfo) {
-    	mIsInfo = isInfo;
-    	isBtnInfo.setBackgroundResource(mIsInfo ? R.drawable.icon_switch_on : R.drawable.icon_switch_off);
+    	wevent.is_get_member_info = isInfo;
+    	isBtnInfo.setBackgroundResource(isInfo ? R.drawable.icon_switch_on : R.drawable.icon_switch_off);
 	}
     
     private void changeIsPublic(boolean isPublic) {

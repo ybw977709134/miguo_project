@@ -49,11 +49,11 @@
             android:layout_marginLeft="@dimen/padding_medium" />
 
         <EditText
-            android:id="@+id/submit_passWordInput"
+            android:id="@+id/submit_telephone"
             style="@style/inputbox_borderless"
             android:hint="@string/sys_notice_telephone"
             android:imeOptions="actionDone"
-            android:inputType="textPassword"
+            android:inputType="number"
             android:textCursorDrawable="@color/green" />
     </LinearLayout>
 

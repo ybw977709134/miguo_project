@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.liveplayer.VideoPlayingActivity;
 
 import com.androidquery.AQuery;
 
@@ -22,6 +23,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener 
         AQuery q = new AQuery(this);
 
         q.find(R.id.title_back).clicked(this);
+        q.find(R.id.livingClass).clicked(this);
     }
 
     @Override
@@ -30,6 +32,10 @@ public class MyClassesActivity extends Activity implements View.OnClickListener 
             case R.id.title_back:
                 onBackPressed();
                 break;
+            case R.id.livingClass:
+            	Intent intent = new Intent(this, VideoPlayingActivity.class);
+            	startActivity(intent);
+            	break;
         }
     }
 }

@@ -5,14 +5,11 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.widget.ListView;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
-
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
@@ -45,6 +42,9 @@ public abstract class TimelineFragment extends ListFragment
             selectedTag = savedInstanceState.getInt("selectedTag");
         }
 
+        // load moments
+        setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag)));
+        checkNewMoments();
     }
 
     @Override
@@ -104,7 +104,7 @@ public abstract class TimelineFragment extends ListFragment
         setListAdapter(adapter);
     }
 
-    private void checkNewMoments() {
+    public void checkNewMoments() {
         new RefreshMomentsTask().execute(Long.valueOf(0));
     }
 
@@ -112,10 +112,6 @@ public abstract class TimelineFragment extends ListFragment
     public void onResume() {
         super.onResume();
 
-        // load moments
-        setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag)));
-//        checkNewMoments();
-        
         setupListHeaderView();
 
         PullToRefreshListView listView = getPullToRefreshListView();
@@ -125,7 +121,6 @@ public abstract class TimelineFragment extends ListFragment
 
         checkNewReviews();
         Database.addDBTableChangeListener(Database.TBL_MOMENT_REVIEWS,momentReviewObserver);
-        
     }
 
     @Override
@@ -265,7 +260,14 @@ public abstract class TimelineFragment extends ListFragment
         protected void onPostExecute(Integer errno) {
             if (errno == ErrorCode.OK) {
                 ArrayList<Moment> lst = loadLocalMoments(maxTimestamp, tagIdxFromUiToDb(selectedTag));
-                fillListView(lst, maxTimestamp > 0);
+                if (lst != null && !lst.isEmpty()) {
+                    fillListView(lst, maxTimestamp > 0);
+
+                    // 如果是刷新，滚到列表顶部
+                    if (maxTimestamp == 0) {
+                        getListView().setSelection(0);
+                    }
+                }
             } else {
                 Toast.makeText(getActivity(), R.string.moments_check_failed, Toast.LENGTH_SHORT).show();
             }

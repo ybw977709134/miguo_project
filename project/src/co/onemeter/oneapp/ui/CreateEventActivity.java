@@ -224,7 +224,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                 finish();
                 break;
             case R.id.title_confirm:
-            	boolean isContentTrue = !TextUtils.isEmpty(txtTitle.getText()) && !TextUtils.isEmpty(txtTitle.getText()) 
+            	boolean isContentTrue = !TextUtils.isEmpty(txtTitle.getText()) && !TextUtils.isEmpty(txtLoc.getText()) 
             				&& !TextUtils.isEmpty(txtStartTime.getText())&& !TextUtils.isEmpty(txtEndTime.getText())
             				&& !TextUtils.isEmpty(edtContent.getText().toString()) && !TextUtils.isEmpty(txtCapacity.getText()) 
             				&& !TextUtils.isEmpty(txtCoins.getText()); 
@@ -232,7 +232,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                 	createEvent();
                 	closeSoftKeyboard();
                 }else{
-                	Toast.makeText(this, getString(R.string.operation_failed), Toast.LENGTH_SHORT).show();
+                	Toast.makeText(this, getString(R.string.event_finish_info), Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.img_allday:

@@ -277,7 +277,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
      //           msgbox.dismissWait();
                 if (errno == ErrorCode.OK) {
                     msgbox.toast(R.string.require_join_event_success);
-                    refresh(false);
+                    refresh(false,false);
                 } else {
                     msgbox.toast(R.string.require_join_event_joined);
                 }
@@ -303,7 +303,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
       //           msgbox.dismissWait();
                  if (errno == ErrorCode.OK) {
      //                msgbox.toast(R.string.require_cancel_event_joined);
-                     refresh(false);
+                     refresh(false,false);
                  } else {
      //               msgbox.toast(R.string.require_cancel_event_fail);
                  }
@@ -312,7 +312,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
     	
     }
 
-    private void refresh(final boolean showProgressBar) {
+    private void refresh(final boolean showProgressBar,final boolean needUpdateGallery) {
         if (showProgressBar)
             msgbox.showWait();
 
@@ -333,15 +333,17 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                     if (e != null) {
                         WEventUiHelper.fixMediaLocalPath(e);
                         eventDetail = e;
-                        updateUI();
+                        updateUI(needUpdateGallery);
                     }
                 }
             }
         }.execute((Void)null);
     }
 
-    private void updateUI() {
-        initGallery();
+    private void updateUI(boolean needUpdateGallery) {
+    	if(needUpdateGallery){
+    		initGallery();
+    	}
         displayEventAttributes();
     }
 
@@ -355,7 +357,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 //        btn_right_up = (TextView) findViewById(R.id.right_button_up);
 //        btn_right_down = (TextView) findViewById(R.id.right_button_down);
         
-        updateUI();
+        updateUI(true);
     }
 
     private void displayEventAttributes() {
@@ -366,12 +368,14 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         q.find(R.id.event_title).text(eventDetail.title);
 
         // time
-        q.find(R.id.event_time).text(helper.formatField(
-                getResources().getString(R.string.event_time_label),
-                new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(eventDetail.startTime)
-                        + "-"
-                        + new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(eventDetail.endTime)));
+        q.find(R.id.event_time_start).text(helper.formatField(
+                getResources().getString(R.string.event_time_label_start),
+                new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(eventDetail.startTime)));
 
+        // time
+        q.find(R.id.event_time_end).text(helper.formatField(
+                getResources().getString(R.string.event_time_label_end),
+                new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(eventDetail.endTime)));
         // place
         q.find(R.id.event_place).text(helper.formatField(
                 getResources().getString(R.string.event_place_label),

@@ -138,6 +138,8 @@
 	<string name="events_applied">已报名的活动</string>
 	<string name="events_joined">已参加的活动</string>
 	<string name="event_time_label">时间</string>
+	<string name="event_time_label_start">开始时间</string>
+	<string name="event_time_label_end">结束时间</string>
 	<string name="event_place_label">地点</string>
 	<string name="event_host_label">主办</string>
     <string name="event_tel_label">联系方式</string>
@@ -181,6 +183,7 @@
     <string name="event_time_end_earlier">活动结束时间早于开始时间！</string>
     <string name="event_member_count_nolimit">不限</string>
     <string name="event_join_coin_free">免费</string>
+    <string name="event_finish_info">发布活动需要完成所有信息的填写！</string>
 
     <string name="settings_myinfo">个人信息</string>
     <string name="my_treasure">我的百宝箱</string>

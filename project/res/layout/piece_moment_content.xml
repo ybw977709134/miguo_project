@@ -61,6 +61,7 @@
                     android:textColor="@color/voice_play_btn_bg"
                     android:text="00:00"/>
         </LinearLayout>
+        
         <TextView
                 android:id="@+id/txt_loc"
                 android:layout_height="wrap_content"
@@ -111,6 +112,63 @@
                     android:textColor="@color/gray"
                     android:background="@drawable/btn_gray_selector"/>
         </LinearLayout>
+    </LinearLayout>
+    
+    <!-- 在好友圈中的详情页中添加赞和评论的数量 -->
+    <LinearLayout 
+        android:id="@+id/layout_detailcomment_review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_medium"
+        android:layout_marginLeft="@dimen/padding_medium"
+        android:layout_marginRight="@dimen/padding_medium"
+        android:paddingLeft="@dimen/padding_small"
+        android:visibility="gone"
+        android:orientation="horizontal">
+        <!-- 赞数 -->
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#333"
+            android:text="赞:"/>
+        <TextView
+            android:id="@+id/textView_momentdetail_like" 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#333"
+            />
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#333"
+            android:text="人"/>
+        
+        <ImageView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/icon_grey_point"/>
+        
+        <!-- 评论数 -->
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#333"
+            android:text="评论:"/>
+        <TextView 
+            android:id="@+id/textView_momentdetail_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#333"
+            />
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#333"
+            android:text="条"/>
+        
     </LinearLayout>
 
     <!--

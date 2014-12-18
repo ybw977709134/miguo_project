@@ -138,6 +138,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 		findViewById(R.id.layout_mobile).setOnClickListener(this);
 		findViewById(R.id.layout_email).setOnClickListener(this);
 		findViewById(R.id.layout_branch_store).setOnClickListener(this);
+		txtAge.setOnClickListener(this);
 	}
 
 	/**
@@ -208,7 +209,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
                 bottomBoard.addCancelBtn(getString(R.string.cancel));
                 bottomBoard.show();
                 break;
-            case R.id.boxAge:
+            case R.id.person_age:
             {
                 showDialog(1);
             }

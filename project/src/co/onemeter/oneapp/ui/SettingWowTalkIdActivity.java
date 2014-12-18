@@ -122,6 +122,7 @@ public class SettingWowTalkIdActivity extends Activity {
         });
 
         fieldClear.setOnClickListener(new OnClickListener() {
+        	
             @Override
             public void onClick(View v) {
                 edtWowTalkId.setText("");

@@ -12,11 +12,8 @@ import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
-import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.InputBoardManager;
-
-import java.util.ArrayList;
 
 /**
  * <p>(时间线|分享|动态)页面。</p>
@@ -44,6 +41,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
 
     private AllTimelineFragment allTimelineFragment;
     private MyTimelineFragment myTimelineFragment;
+    private TimelineFragment currTimelineFragment;
     private View newMomentPanel;
     private AQuery q = new AQuery(this);
     private String uid;
@@ -98,6 +96,17 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         } else {
             q.find(R.id.btn_layout).visible();
             q.find(R.id.title_text).invisible();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // 发布动态成功后，刷新
+        if (requestCode == REQ_CREATE_MOMENT && resultCode == Activity.RESULT_OK
+                && currTimelineFragment != null) {
+            currTimelineFragment.checkNewMoments();
         }
     }
 
@@ -199,6 +208,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, allTimelineFragment)
                 .commit();
+        currTimelineFragment = allTimelineFragment;
     }
 
     private void switchToSingle() {
@@ -207,6 +217,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, myTimelineFragment)
                 .commit();
+        currTimelineFragment = myTimelineFragment;
     }
 
     public static void launch(Context context, String uid, String pageTitle) {
@@ -216,43 +227,8 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         context.startActivity(intent);
     }
 
-    /**
-     * Request to check new reviews again.
-     */
-//    public static void requestCheckNewReviews() {
-//        // just invalidate the last check timestamp will be done
-//        mLastCheckReviewTime = INVALID_TIMESTAMP_VALUE;
-//    }
-
-    interface BeginUploadAlbumCover {
-        void onBeginUploadCover(String filePath);
-    }
-
     public interface OnMomentReviewDeleteListener {
         void onMomentDelete(String momentId, Review review);
-    }
-
-    /**
-     * 检查新评论。内置频率保护。
-     */
-    public static class CheckNewReviewsTask extends AsyncTask<Context, Void, Integer> {
-
-        @Override
-        protected Integer doInBackground(Context... contexts) {
-
-            ArrayList<Review> reviews = new ArrayList<Review>();
-
-            try {
-                int errno = WowMomentWebServerIF.getInstance(contexts[0]).fGetReviewsOnMe(reviews);
-                if (ErrorCode.OK == errno) {
-                    GlobalValue.unreadMomentReviews = reviews.size();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return ErrorCode.BAD_RESPONSE;
-            }
-            return ErrorCode.OK;
-        }
     }
 
     public static String getSelectedTagServerDesc(Context context,int tagIdx,boolean surveyMultiSelect) {

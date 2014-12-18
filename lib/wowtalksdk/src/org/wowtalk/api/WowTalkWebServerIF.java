@@ -1409,7 +1409,8 @@ public class WowTalkWebServerIF {
 		String postStr = "action=" + action
 				+ "&uid=" + Utils.urlencodeUtf8(uid)
 				+ "&password=" + Utils.urlencodeUtf8(password)
-				+ "&wowtalk_id=" + Utils.urlencodeUtf8(wowtalkId.trim());
+				+ "&new_wowtalk_id=" + Utils.urlencodeUtf8(wowtalkId.trim()) // compliant
+				+ "&wowtalk_id=" + Utils.urlencodeUtf8(wowtalkId.trim()); // compliant
 		Connect2 connect2 = new Connect2();
 		Element root = connect2.Post(postStr);
 
@@ -5628,21 +5629,19 @@ public class WowTalkWebServerIF {
      * Set album cover, which is a photo file.
      * @param file_id
      * @param ext (jpe?g|png|gif|bmp)
-     * @return
+     * @return errno
      */
-    public HashMap<String, Object> fSetAlbumCover(String file_id, String ext) {
+    public int fSetAlbumCover(String file_id, String ext) {
         String strUID = sPrefUtil.getUid();
         String strPwd = sPrefUtil.getPassword();
         HashMap<String, Object> resultMap = new HashMap<String, Object>();
 
         if (isAuthEmpty(strUID, strPwd)) {
-            resultMap.put("result_code", ErrorCode.NOT_LOGGED_IN);
-            return resultMap;
+            return ErrorCode.NOT_LOGGED_IN;
         }
 
         if (Utils.isNullOrEmpty(ext) && !ext.matches("\\.?(jpe?g|png|gif|bmp)")) {
-            resultMap.put("result_code", ErrorCode.INVALID_ARGUMENT);
-            return resultMap;
+			return ErrorCode.INVALID_ARGUMENT;
         }
 
         if (ext.charAt(0) == '.') {
@@ -5669,13 +5668,13 @@ public class WowTalkWebServerIF {
                         resultMap.put("update_timestamp", timestamp);
                     }
                 }
+				return ErrorCode.OK;
             } else {
-                resultMap.put("result_code", Integer.parseInt(errorStr));
+                return Integer.parseInt(errorStr);
             }
         } else {
-            resultMap.put("result_code", ErrorCode.BAD_RESPONSE);
+            return ErrorCode.BAD_RESPONSE;
         }
-        return resultMap;
     }
 
     /**

@@ -280,7 +280,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 
         locationHelper = new LocationHelper(this);
 
-        etMomentMsgContent=(EditText) findViewById(R.id.moment_content);
+        etMomentMsgContent=(EditText) findViewById(R.id.edt_moment_content);
         addedImgLayout=(LinearLayout) findViewById(R.id.added_images_layout);
         hsvImgList=(HorizontalScrollView) findViewById(R.id.hsv_img_list);
 

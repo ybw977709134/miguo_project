@@ -147,13 +147,30 @@ public abstract class TimelineFragment extends ListFragment
                 @Override
                 protected Integer doInBackground(String... params) {
                     WowMomentWebServerIF web = WowMomentWebServerIF.getInstance(getActivity());
-                    return web.fReviewMoment(params[0], Review.TYPE_LIKE, null, null, r);
+                    if (!moment.likedByMe) { // 点赞
+                        return web.fReviewMoment(params[0], Review.TYPE_LIKE, null, null, r);
+                    } else { // 撤销赞
+                        Review likeReview=null;
+                        String mMyUid = PrefUtil.getInstance(getActivity()).getUid();
+                        for(Review aReview : moment.reviews) {
+                            if(Review.TYPE_LIKE == aReview.type && aReview.uid.equals(mMyUid)) {
+                                likeReview=aReview;
+                                break;
+                            }
+                        }
+                        if(null != likeReview) {
+                            moment.reviews.remove(likeReview);
+                            return web.fDeleteMomentReview(moment.id, likeReview);
+                        } else {
+                            return ErrorCode.OPERATION_FAILED;
+                        }
+                    }
                 }
 
                 @Override
                 protected void onPostExecute(Integer errcode) {
                     if (errcode == ErrorCode.OK) {
-                        moment.likedByMe = true;
+                        moment.likedByMe = !moment.likedByMe;
                         adapter.notifyDataSetChanged();
                     }
                 }

@@ -424,7 +424,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
 
         q.find(R.id.txt_coins).text(wevent.costGolds > 0 ?
                 Integer.toString(wevent.costGolds) :
-                getString(R.string.event_not_limited));
+                getString(R.string.event_join_coin_free));
         q.find(R.id.txt_capacity).text(wevent.capacity > 0 ?
                 Integer.toString(wevent.capacity) :
                 getString(R.string.event_not_limited));

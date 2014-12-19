@@ -630,7 +630,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 	}
 
 	//上啦加载更多
-	private void uploadmore(final String get_finished_event_only,final String max_startdate) {
+	private void uploadmore(final String get_finished_event_only,final String max_startdate,final int position) {
 		new Thread(new Runnable() {
 
 			@Override
@@ -650,22 +650,15 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 				            case 2:
 				                acts.addAll(mDb.fetchNotJoinedEvents());
 				                break;
-//						case 1:
-//							acts = mDb.fetchOfficialEvents();
-//							break;
-//						case 2:
-//							acts = mDb.fetchAppliedEvents();
-//							break;
-//						case 3:
-//							acts = mDb.fetchJoinedEvents();
-//							break;
-//						case 4:
 				            default:
 				                acts.addAll(mDb.fetchAllEvents());
 				                break;
 				        }
 
 				        fixEventLocalPath();
+				        eventAdapter = new EventAdapter(EventActivity.this, acts);
+				        lvEvent.setAdapter(eventAdapter);
+				        lvEvent.setSelection(position);
 						eventAdapter.notifyDataSetChanged();
 						}
 					});
@@ -682,19 +675,19 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 		//即将进行
 		case 0:
 			time = acts.get(acts.size()-1).startTime.getTime() + "";
-			uploadmore(GET_FINISHED_EVENT0,time.substring(0, time.length()-3));
+			uploadmore(GET_FINISHED_EVENT0,time.substring(0, time.length()-3),acts.size());
 			break;
 
 		//进行中
 		case 1:
 			time = acts.get(acts.size()-1).startTime.getTime() + "";
-			uploadmore(null,time.substring(0, time.length()-3));
+			uploadmore(null,time.substring(0, time.length()-3),acts.size());
 			break;
 			
 		//已过期
 		case 2:
 			time = acts.get(0).startTime.getTime() + "";
-			uploadmore(GET_FINISHED_EVENT1,time.substring(0, time.length()-3));
+			uploadmore(GET_FINISHED_EVENT1,time.substring(0, time.length()-3),acts.size());
 			break;
 		default: break;
 		}

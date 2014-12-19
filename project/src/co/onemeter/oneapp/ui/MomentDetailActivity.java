@@ -715,6 +715,12 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         Database.addDBTableChangeListener(Database.TBL_MOMENT_REVIEWS,momentObserver);
 
         dbHelper.setReviewsRead(moment);
+
+        // 我们不知道是否以及何时提交投票，索性假设用户一定提交了投票，从而返回后上级页面总是刷新。
+        if (Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag)
+                || Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
+            setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, moment.id));
+        }
     }
 
     @Override

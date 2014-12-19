@@ -749,7 +749,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         }
     }
 
-    private boolean isLike;
     private void setupOpButtons(final ViewHolder holder,final Moment moment,final int position,
                                 final ArrayList<Review> likeReview,ArrayList<Review> commentReview) {
         if (!TextUtils.isEmpty(moment.tag) &&
@@ -788,15 +787,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.tvAnswerCountInd.setVisibility(View.GONE);
         }
 
-        
-        if(moment.likedByMe) {
-        	//显示点赞的数量
-            holder.tvLike.setText(""+likeReview.size());
-//            holder.tvLike.setText(R.string.moments_liked);
-        } else {
-//        	holder.tvLike.setText(""+likeReview.size());
-     //       holder.tvLike.setText(R.string.moments_like);
-        }
+        //显示点赞的数量
+        holder.tvLike.setText(""+likeReview.size());
+
 //        if(commentReview.size() > 0) {
 //            if(View.VISIBLE == holder.layoutComment.getVisibility()) {
 //                holder.tvComment.setText(""+commentReview.size());
@@ -854,11 +847,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //        	holder.btnAnswer.setBackgroundResource(R.drawable.profile_btn_message_p);
 //        }
         
-        isLike = moment.likedByMe;
         holder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            	isLike = !isLike;
+                boolean isLike = !moment.likedByMe;
             	if (isLike) {
                   holder.btnLike.setBackgroundResource(R.drawable.timeline_like_a);
             	} else {

@@ -143,7 +143,7 @@ public abstract class TimelineFragment extends ListFragment
     public void replyToMoment(int position, final Moment moment, Review replyTo, boolean like) {
         if (like) {
             new AsyncTask<String, Void, Integer>() {
-                Review r = new Review();
+                Review r = new Review(); // 添加或删除的赞
                 @Override
                 protected Integer doInBackground(String... params) {
                     WowMomentWebServerIF web = WowMomentWebServerIF.getInstance(getActivity());
@@ -159,7 +159,7 @@ public abstract class TimelineFragment extends ListFragment
                             }
                         }
                         if(null != likeReview) {
-                            moment.reviews.remove(likeReview);
+                            r = likeReview;
                             return web.fDeleteMomentReview(moment.id, likeReview);
                         } else {
                             return ErrorCode.OPERATION_FAILED;
@@ -171,6 +171,12 @@ public abstract class TimelineFragment extends ListFragment
                 protected void onPostExecute(Integer errcode) {
                     if (errcode == ErrorCode.OK) {
                         moment.likedByMe = !moment.likedByMe;
+                        if (moment.likedByMe) {
+                            moment.reviews.add(r);
+                        } else {
+                            moment.reviews.remove(r);
+                        }
+                        dbHelper.storeMoment(moment, moment.id);
                         adapter.notifyDataSetChanged();
                     }
                 }

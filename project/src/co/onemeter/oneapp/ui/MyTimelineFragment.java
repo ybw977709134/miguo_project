@@ -1,5 +1,7 @@
 package co.onemeter.oneapp.ui;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,7 +13,10 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.*;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -31,15 +36,11 @@ import java.util.Iterator;
  */
 public class MyTimelineFragment extends TimelineFragment implements InputBoardManager.ChangeToOtherAppsListener {
     public static final String EXTRA_UID = "uid";
+    private static final int REQ_CHANGE_ALBUMCOVER = 123;
     private int originalHeaderViewsCount = 0;
-    private InputBoardManager mInputMgr;
     private MediaInputHelper mMediaInput;
-    private String mInputedPhotoPathForAlbumcover;
-    private TimelineActivity.BeginUploadAlbumCover mBeginUploadAlbumCover;
-    private NetworkIFDelegate albumCoverNetworkDelegate;
     private AlbumCover mAlbumCover;
     private int establishedAlbumCoverHeight = 0;
-    private int establishedAvatarRadius = 0;
 
     //
     // UI
@@ -53,8 +54,6 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
     // 相册封面相关
     private ImageView albumCoverImageView;
     private MessageBox mMsgBox;
-    private ProgressBar mProgressUploadingAlbumcover;
-    private boolean isAlbumCoverUploadingInProgress;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,7 +69,6 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         super.onCreate(savedInstanceState);
 
         mMsgBox = new MessageBox(getActivity());
-        // TODO mInputMgr
     }
 
     private String uid() {
@@ -109,6 +107,15 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQ_CHANGE_ALBUMCOVER && resultCode == Activity.RESULT_OK) {
+            // 由于 onResume() 中会调用 checkoutAlbumCover()，这里不需要做什么。
+        }
+    }
+
     private void setupListHeaderView_albumCover() {
         headerView_albumCover = LayoutInflater.from(getActivity())
                 .inflate(R.layout.timeline_albumcover, null);
@@ -116,7 +123,6 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
 
         // retrieve views
         albumCoverImageView = (ImageView) headerView_albumCover.findViewById(R.id.imgAlbumBg);
-        mProgressUploadingAlbumcover = (ProgressBar) headerView_albumCover.findViewById(R.id.progress_uploading_albumcover);
         ImageView imgPtrRefreshIcon = (ImageView) headerView_albumCover.findViewById(R.id.imgRefreshRotate);
         ImageView imgThumbnail = (ImageView) headerView_albumCover.findViewById(R.id.img_thumbnail);
         TextView txtName = (TextView) headerView_albumCover.findViewById(R.id.txt_name);
@@ -149,85 +155,17 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         albumCoverImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isMe()) {
-                    if (isAlbumCoverUploadingInProgress) {
-                        mMsgBox.toast(getString(R.string.moments_uploading_in_progress));
-                    } else {
-                        showAlbumCoverMenu();
-                    }
-                }
+                showAlbumCoverMenu();
             }
         });
 
         // misc
         resizeAlbumCover(albumCoverImageView, imgPtrRefreshIcon);
-        mBeginUploadAlbumCover = new UploadCoverListener(mProgressUploadingAlbumcover);
-        albumCoverNetworkDelegate = new AlbumCoverNetworkDelegate(mProgressUploadingAlbumcover);
     }
 
     private boolean handleItemClick() {
-        if (mInputMgr != null && mInputMgr.isShowing()) {
-            mInputMgr.hide();
-            return true;
-        }
-
         return false;
     }
-
-    private class UploadCoverListener implements TimelineActivity.BeginUploadAlbumCover {
-        private ProgressBar progressBar;
-
-        public UploadCoverListener(ProgressBar progressBar) {
-            this.progressBar = progressBar;
-        }
-
-        @Override
-        public void onBeginUploadCover(String filePath) {
-            if (progressBar != null) {
-                progressBar.setVisibility(View.VISIBLE);
-                progressBar.setProgress(0);
-            }
-
-            mInputedPhotoPathForAlbumcover = filePath;
-        }
-    };
-
-    class AlbumCoverNetworkDelegate implements NetworkIFDelegate {
-        private ProgressBar progressBar;
-
-        public AlbumCoverNetworkDelegate(ProgressBar progressBar) {
-            this.progressBar = progressBar;
-        }
-
-        @Override
-        public void didFinishNetworkIFCommunication(int tag, byte[] bytes) {
-            if (progressBar != null) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setVisibility(View.GONE);
-                    }
-                });
-            }
-        }
-
-        @Override
-        public void didFailNetworkIFCommunication(int tag, byte[] bytes) {
-            if (progressBar != null) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setVisibility(View.GONE);
-                    }
-                });
-            }
-        }
-
-        @Override
-        public void setProgress(int tag, int progress) {
-
-        }
-    };
 
     private void showAlbumCoverMenu() {
         handleItemClick();
@@ -242,7 +180,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
                     public void onClick(View v) {
                         bottomBoard.dismiss();
                         AlbumCoverChangeActivity.launchActivity(
-                                getActivity(), mMediaInput, albumCoverNetworkDelegate, mBeginUploadAlbumCover);
+                                getActivity(), mMediaInput, REQ_CHANGE_ALBUMCOVER);
                     }
                 });
         if (mAlbumCover.timestamp != -1 && !TextUtils.isEmpty(mAlbumCover.fileId)) {
@@ -251,7 +189,6 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
                         @Override
                         public void onClick(View v) {
                             bottomBoard.dismiss();
-                            mInputedPhotoPathForAlbumcover = null;
                             new AsyncTask<Void, Void, Void>() {
                                 @Override
                                 protected Void doInBackground(Void... params) {

@@ -43,10 +43,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/event_time"
-                android:text="dummy time"
+                android:id="@+id/event_time_start"
+                android:text="dummy start time"
                 style="@style/event_field_small"/>
-
+			<TextView
+                android:id="@+id/event_time_end"
+                android:text="dummy end time"
+                style="@style/event_field_small"/>
             <TextView
                 android:id="@+id/event_place"
                 android:text="dummy place"
@@ -55,7 +58,8 @@
             <TextView
                 android:id="@+id/event_category"
                 android:text="dummy category"
-                style="@style/event_field_small"/>
+                style="@style/event_field_small"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/event_host"

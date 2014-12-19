@@ -1,5 +1,8 @@
 package co.onemeter.oneapp.ui;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.FeatureInfo;
 import android.content.pm.PackageManager;
@@ -18,15 +21,19 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.Toast;
 import co.onemeter.oneapp.utils.ThemeHelper;
+
 import com.zxing.activity.CaptureActivity;
 import com.zxing.decoding.CaptureActivityHandler;
+
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.BmpUtils;
+
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.StringToJason;
@@ -293,7 +300,7 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
         handleDecodedString(decodedContent);
     }
 
-    private void handleDecodedString(String str) {
+    private void handleDecodedString(final String str) {
         //TODO
         if(TextUtils.isEmpty(str)) {
             Log.e("empty decoded string for handle");
@@ -341,9 +348,34 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
             }
 
             if(!canHandle) {
-                Intent intent=new Intent(this, QRCodeDecodedContentActivity.class);
-                intent.putExtra(QRCodeDecodedContentActivity.ACTIVITY_INTENT_EXT_KEY_CONTENT,str);
-                startActivity(intent);
+//                Intent intent=new Intent(this, QRCodeDecodedContentActivity.class);
+//                intent.putExtra(QRCodeDecodedContentActivity.ACTIVITY_INTENT_EXT_KEY_CONTENT,str);
+            	if(str.contains("//")){
+            		Builder builder = new AlertDialog.Builder(ScanQRCodeActivity.this);
+            		builder.setTitle(getResources().getString(R.string.contacts_QRcode_dialogtitle));
+                	builder.setMessage(getResources().getString(R.string.contacts_QRcode_confirm));
+                	builder.setPositiveButton(getResources().getString(R.string.contacts_QRcode_ok), new DialogInterface.OnClickListener() {
+    					
+    					@Override
+    					public void onClick(DialogInterface dialog, int which) {
+    		            	Intent intent= new Intent(); 
+    		            	intent.setAction("android.intent.action.VIEW");
+    		            	Uri content_url = Uri.parse(str);
+    		            	intent.setData(content_url);
+    		                startActivity(intent);
+    					}
+    				});
+                	builder.setNegativeButton(getResources().getString(R.string.contacts_QRcode_cancel), new DialogInterface.OnClickListener() {
+    					
+    					@Override
+    					public void onClick(DialogInterface dialog, int which) {
+    						finish();
+    					}
+    				});
+                	
+                	builder.create().show();         
+            		
+            	}
             }
         }
     }

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -16,8 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.ImageViewActivity;
@@ -185,9 +188,16 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 finish();
                 break;
             case R.id.right_button_up:
-                joinEvent();//参加报名
-                btn_right_up.setVisibility(View.GONE);
-                btn_right_down.setVisibility(View.VISIBLE);
+            	Log.i("----->>>>", ""+eventDetail.is_get_member_info);
+            	if(eventDetail.is_get_member_info){
+            		Intent intent = new Intent(this, SubmitInformationActivity.class);
+            		startActivityForResult(intent, 100);
+            	}else{
+            		joinEvent();
+            		btn_right_up.setVisibility(View.GONE);
+                    btn_right_down.setVisibility(View.VISIBLE);
+            	}
+                
                 break;
             case R.id.right_button_down:
             	Builder builder = new AlertDialog.Builder(EventDetailActivity.this);
@@ -261,6 +271,16 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         MobclickAgent.onPause(this);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	super.onActivityResult(requestCode, resultCode, data);
+    	if(resultCode == RESULT_OK){
+    		String name = data.getStringExtra(SubmitInformationActivity.SUBMITNAME);
+    		String phone = data.getStringExtra(SubmitInformationActivity.SUBMITPHONE);
+    		joinEventWithDetail(name,phone);//参加报名，填写信息。
+    	}
+    }
+    
     private void joinEvent() {
    //     msgbox.showWait();
         new AsyncTask<Void, Void, Integer>(){
@@ -277,7 +297,34 @@ public class EventDetailActivity extends Activity implements OnClickListener {
      //           msgbox.dismissWait();
                 if (errno == ErrorCode.OK) {
                     msgbox.toast(R.string.require_join_event_success);
-                    refresh(false);
+                    btn_right_up.setVisibility(View.GONE);
+                    btn_right_down.setVisibility(View.VISIBLE);
+                    refresh(false,false);
+                } else {
+                    msgbox.toast(R.string.require_join_event_joined);
+                }
+            }
+        }.execute((Void)null);
+    }
+    
+    private void joinEventWithDetail(final String name,final String phone_number){
+    	new AsyncTask<Void, Void, Integer>(){
+
+            @Override
+            protected Integer doInBackground(Void... voids) {
+                WowEventWebServerIF web = WowEventWebServerIF.getInstance(EventDetailActivity.this);
+                return web.fJoinEventWithDetail(eventDetail.id, name, phone_number);
+            }
+
+            @Override
+            public void onPostExecute(Integer errno) {
+     //           msgbox.dismissWait();
+            	Log.i("-->>", errno+"");
+                if (errno == ErrorCode.OK) {
+                    msgbox.toast(R.string.require_join_event_success);
+                    btn_right_up.setVisibility(View.GONE);
+                    btn_right_down.setVisibility(View.VISIBLE);
+                    refresh(false,false);
                 } else {
                     msgbox.toast(R.string.require_join_event_joined);
                 }
@@ -303,7 +350,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
       //           msgbox.dismissWait();
                  if (errno == ErrorCode.OK) {
      //                msgbox.toast(R.string.require_cancel_event_joined);
-                     refresh(false);
+                     refresh(false,false);
                  } else {
      //               msgbox.toast(R.string.require_cancel_event_fail);
                  }
@@ -312,7 +359,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
     	
     }
 
-    private void refresh(final boolean showProgressBar) {
+    private void refresh(final boolean showProgressBar,final boolean needUpdateGallery) {
         if (showProgressBar)
             msgbox.showWait();
 
@@ -333,15 +380,17 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                     if (e != null) {
                         WEventUiHelper.fixMediaLocalPath(e);
                         eventDetail = e;
-                        updateUI();
+                        updateUI(needUpdateGallery);
                     }
                 }
             }
         }.execute((Void)null);
     }
 
-    private void updateUI() {
-        initGallery();
+    private void updateUI(boolean needUpdateGallery) {
+    	if(needUpdateGallery){
+    		initGallery();
+    	}
         displayEventAttributes();
     }
 
@@ -355,7 +404,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 //        btn_right_up = (TextView) findViewById(R.id.right_button_up);
 //        btn_right_down = (TextView) findViewById(R.id.right_button_down);
         
-        updateUI();
+        updateUI(true);
     }
 
     private void displayEventAttributes() {
@@ -366,12 +415,14 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         q.find(R.id.event_title).text(eventDetail.title);
 
         // time
-        q.find(R.id.event_time).text(helper.formatField(
-                getResources().getString(R.string.event_time_label),
-                new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(eventDetail.startTime)
-                        + "-"
-                        + new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(eventDetail.endTime)));
+        q.find(R.id.event_time_start).text(helper.formatField(
+                getResources().getString(R.string.event_time_label_start),
+                new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(eventDetail.startTime)));
 
+        // time
+        q.find(R.id.event_time_end).text(helper.formatField(
+                getResources().getString(R.string.event_time_label_end),
+                new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(eventDetail.endTime)));
         // place
         q.find(R.id.event_place).text(helper.formatField(
                 getResources().getString(R.string.event_place_label),

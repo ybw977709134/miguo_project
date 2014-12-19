@@ -226,6 +226,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 
         txt_unreadMsg.getBackground().setAlpha(NOTE_TXT_BKG_ALPHA);
         txt_friends_news.getBackground().setAlpha(NOTE_TXT_BKG_ALPHA);
+        txt_pendingin_requests.getBackground().setAlpha(NOTE_TXT_BKG_ALPHA);
 
 		mTabSms.setOnClickListener(this);
 		mTabContact.setOnClickListener(this);
@@ -868,6 +869,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         if (!pendingRequestExist) {
             txt_pendingin_requests.setVisibility(View.GONE);
         } else {
+        	txt_pendingin_requests.setText(pendingRequests.size()+"");
             txt_pendingin_requests.setVisibility(View.VISIBLE);
         }
     }

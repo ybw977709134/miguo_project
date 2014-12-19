@@ -92,7 +92,11 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
 	 */
 	public int size;
 
-
+	/**
+	 * require member's info
+	 */
+	public boolean is_get_member_info = true;
+	
     public WEvent() {
     	
     }
@@ -117,6 +121,7 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
 		dest.writeInt(membership);
 		dest.writeTypedList(multimedias == null ? new ArrayList<WFile>() : multimedias);
 		dest.writeInt(needWork ? 1 : 0);
+		dest.writeInt(is_get_member_info ? 1 : 0);
 		dest.writeString(owner_uid);
         dest.writeString(host);
 		dest.writeInt(privacy_level);
@@ -158,6 +163,7 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
 			a.multimedias = new ArrayList<WFile>();
 			source.readTypedList(a.multimedias, WFile.CREATOR);
 			a.needWork = source.readInt() == 1;
+			a.is_get_member_info = source.readInt() == 1;
 			a.owner_uid = source.readString();
             a.host = source.readString();
 			a.privacy_level = source.readInt();

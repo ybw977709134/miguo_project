@@ -4578,6 +4578,7 @@ public class Database {
 		values.put("longitude", e.longitude);
 		values.put("membership", e.membership);
 		values.put("needWork", e.needWork ? 1 : 0);
+		values.put("is_get_member_info", e.is_get_member_info ? 1 : 0);
 		values.put("owner_uid", e.owner_uid);
         values.put("host", e.host);
 		values.put("privacy_level", e.privacy_level);
@@ -4817,6 +4818,7 @@ public class Database {
 				"longitude",
 				"membership",
 				"needWork",
+				"is_get_member_info",
 				"owner_uid",
                 "host",
 				"privacy_level",
@@ -4860,6 +4862,7 @@ public class Database {
 			e.longitude = cur.getFloat(++i);
 			e.membership = cur.getInt(++i);
 			e.needWork = cur.getInt(++i) == 1;
+			e.is_get_member_info = cur.getInt(++i) == 1;
 			e.owner_uid = cur.getString(++i);
             e.host = cur.getString(++i);
 			e.privacy_level = cur.getInt(++i);
@@ -6254,6 +6257,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 			+ "`longitude` FLOAT,"
 			+ "`membership` INTEGER,"
 			+ "`needWork` INTEGER,"
+			+ "`is_get_member_info` INTEGER,"
 			+ "`owner_uid` TEXT,"
             + "`host` TEXT,"
 			+ "`privacy_level` INTEGER,"

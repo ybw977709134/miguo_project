@@ -560,7 +560,8 @@ public class WowEventWebServerIF {
 				+ "&max_member=" + data.capacity
 				+ "&is_official=" + (data.isOfficial ? 1 : 0)
 				+ "&allow_review=" + (data.allowReview ? 1 : 0) 
-				+ "&need_work=" + (data.needWork ? 1 : 0);
+				+ "&need_work=" + (data.needWork ? 1 : 0)
+				+ "&is_get_member_info=" + (data.is_get_member_info ? 1 : 0);
 		if(data.privacy_level != WEvent.PRIVACY_LEVEL_UNDEFINED)
 			postStr += "&privacy_level=" + data.privacy_level;
 
@@ -939,20 +940,19 @@ public class WowEventWebServerIF {
     	dbHelper.deleteAEvent(event_id);
     }
     
-    public int fJoinEventWithDetail(String event_id,String name,String phone_number,String email) {
+    public int fJoinEventWithDetail(String event_id,String name,String phone_number) {
         String uid = mPrefUtil.getUid();
         String password = mPrefUtil.getPassword();
         if(uid == null || password == null || event_id == null)
             return ErrorCode.INVALID_ARGUMENT;
 
-        final String action = "join_the_event_with_details";
+        final String action = "join_event";
         String postStr = "action=" + action
                 + "&uid=" + Utils.urlencodeUtf8(uid)
                 + "&password=" + Utils.urlencodeUtf8(password)
                 + "&event_id=" + Utils.urlencodeUtf8(event_id)
-                + "&name=" + Utils.urlencodeUtf8(name)
-                + "&phone_number=" + Utils.urlencodeUtf8(phone_number)
-                + "&email=" + Utils.urlencodeUtf8(email);
+                + "&real_name=" + Utils.urlencodeUtf8(name)
+                + "&telephone_number=" + Utils.urlencodeUtf8(phone_number);
         int errno = _doRequestWithoutResponse(postStr);
         if(ErrorCode.OK == errno) {
             setEventJoined(event_id);

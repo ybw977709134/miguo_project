@@ -90,6 +90,10 @@
     <string name="contacts_new_friends_buddyout">请求加：%s为好友</string>
 	<string name="contacts_new_friends_prompt_title">您有新的好友请求</string>
 	<string name="contacts_new_friends_prompt_msg">请到 联系人－新的朋友 中查看</string>
+	<string name="contacts_QRcode_dialogtitle">提示</string>
+	<string name="contacts_QRcode_confirm">你确定要访问该网址吗？</string>
+	<string name="contacts_QRcode_ok">确定</string>
+	<string name="contacts_QRcode_cancel">取消</string>
     <string name="contacts_apply_to_join_group">申请加入群组</string>
     <string name="contact_groupcreate_input_group_name">输入群组名称</string>
     <string name="contacts_newfriend_wait_for_cofirm">等待验证</string>

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -16,8 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.ImageViewActivity;
@@ -185,9 +188,16 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 finish();
                 break;
             case R.id.right_button_up:
-                joinEvent();//参加报名
-                btn_right_up.setVisibility(View.GONE);
-                btn_right_down.setVisibility(View.VISIBLE);
+            	Log.i("----->>>>", ""+eventDetail.is_get_member_info);
+            	if(eventDetail.is_get_member_info){
+            		Intent intent = new Intent(this, SubmitInformationActivity.class);
+            		startActivityForResult(intent, 100);
+            	}else{
+            		joinEvent();
+            		btn_right_up.setVisibility(View.GONE);
+                    btn_right_down.setVisibility(View.VISIBLE);
+            	}
+                
                 break;
             case R.id.right_button_down:
             	Builder builder = new AlertDialog.Builder(EventDetailActivity.this);
@@ -261,6 +271,16 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         MobclickAgent.onPause(this);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	super.onActivityResult(requestCode, resultCode, data);
+    	if(resultCode == RESULT_OK){
+    		String name = data.getStringExtra(SubmitInformationActivity.SUBMITNAME);
+    		String phone = data.getStringExtra(SubmitInformationActivity.SUBMITPHONE);
+    		joinEventWithDetail(name,phone);//参加报名，填写信息。
+    	}
+    }
+    
     private void joinEvent() {
    //     msgbox.showWait();
         new AsyncTask<Void, Void, Integer>(){
@@ -277,6 +297,33 @@ public class EventDetailActivity extends Activity implements OnClickListener {
      //           msgbox.dismissWait();
                 if (errno == ErrorCode.OK) {
                     msgbox.toast(R.string.require_join_event_success);
+                    btn_right_up.setVisibility(View.GONE);
+                    btn_right_down.setVisibility(View.VISIBLE);
+                    refresh(false,false);
+                } else {
+                    msgbox.toast(R.string.require_join_event_joined);
+                }
+            }
+        }.execute((Void)null);
+    }
+    
+    private void joinEventWithDetail(final String name,final String phone_number){
+    	new AsyncTask<Void, Void, Integer>(){
+
+            @Override
+            protected Integer doInBackground(Void... voids) {
+                WowEventWebServerIF web = WowEventWebServerIF.getInstance(EventDetailActivity.this);
+                return web.fJoinEventWithDetail(eventDetail.id, name, phone_number);
+            }
+
+            @Override
+            public void onPostExecute(Integer errno) {
+     //           msgbox.dismissWait();
+            	Log.i("-->>", errno+"");
+                if (errno == ErrorCode.OK) {
+                    msgbox.toast(R.string.require_join_event_success);
+                    btn_right_up.setVisibility(View.GONE);
+                    btn_right_down.setVisibility(View.VISIBLE);
                     refresh(false,false);
                 } else {
                     msgbox.toast(R.string.require_join_event_joined);

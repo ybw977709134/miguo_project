@@ -220,7 +220,10 @@ public class XmlHelper {
         if(e != null)
             a.isOfficial = "1".equals(e.getTextContent());
 
-
+        e = Utils.getFirstElementByTagName(eventNode, "is_get_member_info");
+        if(e != null){
+        	a.is_get_member_info = "1".equals(e.getTextContent());
+        }
 
         e = Utils.getFirstElementByTagName(eventNode, "coin");
         if(e != null)

@@ -20,6 +20,7 @@ import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.*;
+import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.InputBoardManager;
 
 import java.text.SimpleDateFormat;
@@ -67,6 +68,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     private ImageButton isBtnPublic;
 
     private EditText edtContent;
+    private MessageBox msgBox;
 
     private void initView(Bundle bundle) {
         AQuery q = new AQuery(this);
@@ -122,6 +124,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
             setTitle("");
         }
         wevent.is_get_member_info = mIsInfo;
+        msgBox = new MessageBox(this);
     }
 
     @Override
@@ -132,6 +135,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
 
     private void createEvent() {
         updateData();
+        msgBox.showWait();
         new AsyncTask<WEvent, Void, Integer>() {
             Context context;
             @Override
@@ -172,8 +176,9 @@ public class CreateEventActivity extends Activity implements OnClickListener {
 
             @Override
             protected void onPostExecute(Integer errno) {
+            	msgBox.dismissWait();
                 if (errno == ErrorCode.OK) {
-                	Log.i("--->>>create", wevent.is_get_member_info+"");
+                	//Log.i("--->>>create", wevent.is_get_member_info+"");
                     finish();
                 } else {
                     Toast.makeText(context, R.string.operation_failed, Toast.LENGTH_SHORT).show();
@@ -182,6 +187,14 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         }.execute(wevent);
     }
 
+    @Override
+    public void onBackPressed() {
+    	super.onBackPressed();
+    	if(msgBox != null){
+    		msgBox.dismissToast();
+    	}
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -235,7 +248,10 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                 	createEvent();
                 	closeSoftKeyboard();
                 }else{
-                	Toast.makeText(this, getString(R.string.event_finish_info), Toast.LENGTH_SHORT).show();
+                	if(!msgBox.isWaitShowing()){
+                		msgBox.toast(getString(R.string.event_finish_info), 1000);
+                	//Toast.makeText(this, getString(R.string.event_finish_info), Toast.LENGTH_SHORT).show();
+                	}
                 }
                 break;
             case R.id.img_allday:

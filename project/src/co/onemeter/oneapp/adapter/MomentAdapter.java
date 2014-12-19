@@ -33,7 +33,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public class MomentAdapter extends ArrayAdapter<Moment> {
-    public interface ReplyDelegate {
+    public interface MomentActionHandler {
         /**
          *
          * @param position Moment 在列表中的位置
@@ -42,6 +42,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
          * @param like 这是一个“赞”
          */
         public void replyToMoment(int position, Moment moment, Review replyTo, boolean like);
+        public void onMomentClicked(int position, Moment moment);
     }
 
     public interface LoadDelegate {
@@ -68,7 +69,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 	private Context context;
     private Activity activity;
     private ImageResizer mImageResizer;
-    private ReplyDelegate mReplyDelegate;
+    private MomentActionHandler mReplyDelegate;
     public LoadDelegate mLoadDelegate;
     private boolean showLoadMoreAsLastItem = false;
     private boolean mIsLoading = false;
@@ -92,7 +93,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
 	public MomentAdapter(Context context, Activity activity, ArrayList<Moment> moments, boolean isSingle,boolean favorite,
                          ImageResizer mImageResizer,
-                         ReplyDelegate replyDelegate,String uid,MessageBox box) {
+                         MomentActionHandler replyDelegate,String uid,MessageBox box) {
         super(context, 0, 0, moments);
 		this.context = context;
         this.activity = activity;
@@ -270,10 +271,11 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MomentDetailActivity.launch(context, moment);
+                if (mReplyDelegate != null) {
+                    mReplyDelegate.onMomentClicked(position, moment);
+                }
             }
         });
-
 
         setTagDescInfo(holder,moment);
         setupOpButtons(holder,moment,momentPos,likeReview,commentReview);
@@ -1503,7 +1505,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     public static int setViewForCommentReview(
             final Context context, LinearLayout layout, final ArrayList<Review> reviews,
             final int momentPosition, final Moment moment,
-            final ReplyDelegate mReplyDelegate) {
+            final MomentActionHandler mReplyDelegate) {
 
         layout.removeAllViews();
 
@@ -1585,7 +1587,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         mCurrentPlayingVoicePath = null;
     }
 
-    public void setReplyDelegate(ReplyDelegate replyDelegate) {
+    public void setReplyDelegate(MomentActionHandler replyDelegate) {
         this.mReplyDelegate = replyDelegate;
     }
 

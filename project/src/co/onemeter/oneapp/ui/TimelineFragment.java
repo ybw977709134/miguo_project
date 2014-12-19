@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.text.TextUtils;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
@@ -21,8 +22,8 @@ import java.util.ArrayList;
  * Created by pzy on 10/13/14.
  */
 public abstract class TimelineFragment extends ListFragment
-        implements MomentAdapter.ReplyDelegate, OnTimelineFilterChangedListener,
-        PullToRefreshListView.OnRefreshListener, MomentAdapter.LoadDelegate {
+        implements MomentAdapter.MomentActionHandler, OnTimelineFilterChangedListener,
+        PullToRefreshListView.OnRefreshListener, MomentAdapter.LoadDelegate  {
     protected static final int PAGE_SIZE = 10;
     private static final int REQ_COMMENT = 123;
     protected Database dbHelper;
@@ -87,9 +88,7 @@ public abstract class TimelineFragment extends ListFragment
 
     private void setupListAdapter(ArrayList<Moment> items) {
         ImageResizer imageResizer = new ImageResizer(getActivity(), DensityUtil.dip2px(getActivity(), 100));
-        //获取上下文的listView
-//        ListView listView = getListView();
-        
+
         adapter = new MomentAdapter(getActivity(),
                 getActivity(),
                 items,
@@ -134,7 +133,47 @@ public abstract class TimelineFragment extends ListFragment
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_COMMENT && resultCode == Activity.RESULT_OK) {
-            // TODO refresh views
+            // refresh views
+            boolean handled = false;
+            if (data != null) {
+                String changedMomentId = data.getStringExtra(MomentDetailActivity.EXTRA_CHANGED_MOMENT_ID);
+                if (changedMomentId != null) {
+                    for (int i = 0; i < adapter.getCount(); ++i) {
+                        Moment m = adapter.getItem(i);
+                        if (TextUtils.equals(changedMomentId, m.id)) {
+                            Moment changedMoment = dbHelper.fetchMoment(changedMomentId);
+                            adapter.remove(m);
+                            adapter.insert(changedMoment, i);
+                            adapter.notifyDataSetChanged();
+                            handled = true;
+                            break;
+                        }
+                    }
+                } else {
+                    String deletedMomentId = data.getStringExtra(MomentDetailActivity.EXTRA_DELETED_MOMENT_ID);
+                    if (deletedMomentId != null) {
+                        for (int i = 0; i < adapter.getCount(); ++i) {
+                            Moment m = adapter.getItem(i);
+                            if (TextUtils.equals(deletedMomentId, m.id)) {
+                                adapter.remove(m);
+                                adapter.notifyDataSetChanged();
+                                handled = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!handled) {
+                // refresh list
+                new RefreshMomentsTask(){
+                    @Override
+                    protected void onPostExecute(Integer errno) {
+                        super.onPostExecute(errno);
+                    }
+                }.execute(Long.valueOf(0));
+            }
         }
     }
     
@@ -188,6 +227,14 @@ public abstract class TimelineFragment extends ListFragment
                     REQ_COMMENT
             );
         }
+    }
+
+    public void onMomentClicked(int position, Moment moment) {
+        startActivityForResult(
+                new Intent(this.getActivity(), MomentDetailActivity.class)
+                        .putExtra("moment", moment),
+                REQ_COMMENT
+        );
     }
 
     /**

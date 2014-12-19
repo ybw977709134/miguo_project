@@ -309,7 +309,14 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MomentDetailActivity.launch(context, moment);
+            	String mMyUid = PrefUtil.getInstance(context).getUid();
+                if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
+                	MomentDetailActivity.launch(context, moment,"had");//跳转到自己的详情页
+                } else {
+                	MomentDetailActivity.launch(context, moment);//跳转到好友的详情页
+                }
+                
+//                MomentDetailActivity.launch(context, moment);
 //                if(!MomentActivity.instance().handleItemClick()) {
 //                    MomentDetailActivity.launch(context, moment);
 //                }

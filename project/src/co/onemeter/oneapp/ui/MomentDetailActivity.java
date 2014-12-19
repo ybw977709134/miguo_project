@@ -114,6 +114,8 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 //    }
 
     private MediaPlayerWraper mediaPlayerWraper;
+    
+    ImageButton momentOp;
     private void initView() {
         btnTitleBack = (ImageButton) findViewById(R.id.title_back);
 
@@ -151,11 +153,11 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 //        boolean isMineMoment=mWeb.fGetMyUserIDFromLocal().equals(moment.owner.userID);
 //        Log.i("moment detail mine? "+isMineMoment);
 
-        ImageButton momentOp=(ImageButton) findViewById(R.id.moment_op);
+//        	ImageButton momentOp=(ImageButton) findViewById(R.id.moment_op);
 //        ImageView ivMomentOpLeftDiv=(ImageView) findViewById(R.id.moment_op_left_div);
 //        if(isMomentMine()) {
 //            momentOp.setVisibility(View.VISIBLE);
-//            ivMomentOpLeftDiv.setVisibility(View.VISIBLE);
+//            ivMomentOpLeftDiv.setVisibility(View.VISIBLE); 
 //        }
 
         if(!TextUtils.isEmpty(moment.tag) && moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_QA)) {
@@ -577,14 +579,14 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     private void showMomentOpBottomDialog() {
         final BottomButtonBoard bottomBoard = new BottomButtonBoard(this,
                 findViewById(R.id.moment_op));
-        bottomBoard.add(moment.isFavorite?getString(R.string.un_favorite_moment):getString(R.string.favorite_moment),
-                BottomButtonBoard.BUTTON_BLUE, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MomentAdapter.triggerMomentFavorite(MomentDetailActivity.this,moment,ivMomentFavorite);
-                bottomBoard.dismiss();
-            }
-        });
+//        bottomBoard.add(moment.isFavorite?getString(R.string.un_favorite_moment):getString(R.string.favorite_moment),
+//                BottomButtonBoard.BUTTON_BLUE, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                MomentAdapter.triggerMomentFavorite(MomentDetailActivity.this,moment,ivMomentFavorite);
+//                bottomBoard.dismiss();
+//            }
+//        });
         String myUid = mPrefUtil.getUid();
         if(!TextUtils.isEmpty(myUid) && myUid.equals(moment.owner.userID)) {
             //moment is mine
@@ -610,7 +612,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             });
         }
 
-        bottomBoard.addCancelBtn(getString(R.string.close));
+//        bottomBoard.addCancelBtn(getString(R.string.close));
         bottomBoard.show();
     }
 
@@ -649,6 +651,15 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moment_detail);
+        momentOp=(ImageButton) findViewById(R.id.moment_op);
+        
+        int isShow = getIntent().getIntExtra("isowner", 0);
+        
+        if (isShow == 1) {
+        	momentOp.setVisibility(View.VISIBLE);
+        } else {
+        	momentOp.setVisibility(View.GONE);
+        }
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
@@ -867,6 +878,13 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     public static void launch(Context context, Moment moment) {
         Intent intent = new Intent(context, MomentDetailActivity.class);
         intent.putExtra("moment", moment);
+        context.startActivity(intent);
+    }
+    
+    public static void launch(Context context, Moment moment,String isowner) {
+        Intent intent = new Intent(context, MomentDetailActivity.class);
+        intent.putExtra("moment", moment);
+        intent.putExtra("isowner", 1);
         context.startActivity(intent);
     }
 

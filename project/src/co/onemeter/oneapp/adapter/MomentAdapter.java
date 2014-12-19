@@ -19,6 +19,7 @@ import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.*;
 import co.onemeter.oneapp.utils.LocationHelper;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.ImageViewActivity;
 import org.wowtalk.ui.MessageBox;
@@ -55,7 +56,8 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     public interface OnMediaPlayFinishListener {
         public void onMediaPlayFinished();
     }
-
+    
+    private static Database dbHelper;
 
     private static final String TAG_IS_PLAYING = "isplaying";
     private static final String TAG_NOT_PLAYING = "notplaying";
@@ -66,7 +68,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     private String targetUid;
     private boolean isSingle = false;
 	private Context context;
-    private Activity activity;
+    private static Activity activity;
 //    private MediaPlayer mPlayer;
     private ImageResizer mImageResizer;
     private ReplyDelegate mReplyDelegate;
@@ -94,7 +96,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     private View newReviewView=null;
 
     private boolean isWithFavorite;
-
+    
 	public MomentAdapter(Context context, Activity activity, ArrayList<Moment> moments, boolean isSingle,boolean favorite,
                          ImageResizer mImageResizer,
                          ReplyDelegate replyDelegate,String uid,MessageBox box) {
@@ -288,6 +290,22 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		
+//		holder.btnSurvey.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View arg0) {
+//				
+//		        surveyMomentChoosedItemList.put(moment.id,new ArrayList<String>());
+//			
+//		        doVoteSurvey(context, moment, surveyMomentChoosedItemList.get(moment.id), holder.voteSurveyLayout, holder.lvSurveyOptions, surveyMomentChoosedItemList.get(moment.id), holder.btnSurvey);
+//		        
+//		        setTagdesc(context,moment,holder.ivMomentTagColor,holder.tvMomentTagDesc,
+//		                holder.voteSurveyLayout,holder.lvSurveyOptions,surveyMomentChoosedItemList.get(moment.id),holder.btnSurvey);
+//				
+//			}
+//		});
+        
+        
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -301,6 +319,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
         setTagDescInfo(holder,moment);
         setupOpButtons(holder,moment,momentPos,likeReview,commentReview);
+        
 
 //        if (isSingle) {
 ////            if (isMyMoment(moment.owner.userID)) {
@@ -410,7 +429,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //            holder.layoutLike.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
-//                    MomentActivity a = MomentActivity.instance();
+//                   MomentActivity a = MomentActivity.instance();
 //                    if (a != null)
 //                        a.doLikeMoment_async(moment);
 //                }
@@ -447,8 +466,11 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 }
             });
         }
-		return convertView;
+        
+		return convertView;	 
 	}
+	
+
 
 	////////////////////////////////////////////////////////////////
 	
@@ -531,11 +553,11 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     }
 
     private static void setSurveyInfo(final Context context,final Moment moment,final LinearLayout voteSurveyLayout,final LinearLayoutAsListView lvSurveyOptions,final ArrayList<String> choosed,final Button btnSurvey) {
-        if(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag) || Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
-            moment.showVoteInfo();
-            
+        if(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag) || Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {   
+        	
+        	moment.showVoteInfo();
+        	
             voteSurveyLayout.setVisibility(View.VISIBLE);
-            
 
             TextView tvSurveyDeadLineIndicate=(TextView) voteSurveyLayout.findViewById(R.id.survey_dead_line_indicate);
             boolean surveyOutOfDate=false;
@@ -599,6 +621,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 btnSurvey.setVisibility(View.GONE);
                 lvSurveyOptions.setListAdapter(new SurveyVotedDisplayAdapter(context,moment.surveyOptions));
                 
+                //投票刷新成功，取消观察者的监听
+        //        Database.removeDBTableChangeListener(momentObserver);             
+                
 //                ListHeightUtil.setListHeight(lvSurveyOptions);
             } else {
                 //not vote yet,show to vote
@@ -623,10 +648,11 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                         if(choosed.size() == 0) {
                             return;
                         }
-                        
                         doVoteSurvey(context,moment,choosed,voteSurveyLayout,lvSurveyOptions,choosed,btnSurvey);
                     }
                 });
+                
+
              
                 
                 
@@ -639,8 +665,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         } else {
             voteSurveyLayout.setVisibility(View.GONE);
         }
+        
     }
 
+    
     private static void doVoteSurvey(final Context context,final Moment moment,final ArrayList<String> selectedOptionList,
                                      final LinearLayout voteSurveyLayout,final LinearLayoutAsListView lvSurveyOptions,final ArrayList<String> choosed,final Button btnSurvey) {
         final MessageBox msgBox=new MessageBox(context);
@@ -662,10 +690,8 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 msgBox.dismissWait();
                 switch (errno) {
                 case ErrorCode.OK:
-                    btnSurvey.setVisibility(View.GONE);
-       
-                   setSurveyInfo(context,moment,voteSurveyLayout,lvSurveyOptions,choosed,btnSurvey);
-                  
+                	btnSurvey.setVisibility(View.GONE);   
+                	setSurveyInfo(context,moment,voteSurveyLayout,lvSurveyOptions,choosed,btnSurvey);              
                     break;
                 case ErrorCode.MOMENT_SURVEY_OUTOFDATE:
                     choosed.clear();

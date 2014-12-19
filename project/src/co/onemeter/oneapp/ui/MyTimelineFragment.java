@@ -18,8 +18,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
+
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MediaInputHelper;
@@ -85,6 +87,11 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
     protected int loadRemoteMoments(long maxTimestamp) {
         WowMomentWebServerIF web = WowMomentWebServerIF.getInstance(getActivity());
         return web.fGetMomentsOfBuddy(uid(), maxTimestamp, PAGE_SIZE, true);
+    }
+    
+    @Override
+    protected ArrayList<Moment> loadUidMoments(int countType,long maxTimestamp) {
+    	return dbHelper.fetchBuddyDetailUID(countType, maxTimestamp, PAGE_SIZE);
     }
 
     @Override

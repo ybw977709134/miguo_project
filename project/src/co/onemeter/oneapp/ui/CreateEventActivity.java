@@ -290,7 +290,6 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                         	Toast.makeText(CreateEventActivity.this, R.string.event_time_start_earlier_now, Toast.LENGTH_SHORT).show();
                         }
                     }
-                   
                 });
                 break;
             case R.id.layout_endtime:

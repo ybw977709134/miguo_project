@@ -20,6 +20,10 @@ import android.widget.ImageView.ScaleType;
 import co.onemeter.oneapp.R;
 
 import com.androidquery.AQuery;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.Log;
@@ -28,12 +32,11 @@ import org.wowtalk.api.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class EventActivity extends Activity implements OnClickListener, MenuBar.OnDropdownMenuItemClickListener {
+public class EventActivity extends Activity implements OnClickListener, MenuBar.OnDropdownMenuItemClickListener, OnRefreshListener<ListView>, OnLastItemVisibleListener {
     private class EventAdapter extends BaseAdapter {
 
         private final static int VIEWTYPE_NORMAL = 0;
@@ -257,6 +260,9 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
     }
 
     public static final String EVENT_DETAIL_BUNDLE = "event_detail_id";
+    private final String GET_FINISHED_EVENT0 = "0";//只返回尚未开始的活动（升序）
+    private final String GET_FINISHED_EVENT1 = "1";//只返回已过期的活动（降序）
+    private final String GET_FINISHED_EVENT = "";//只返回进行中的活动（升序）
 
 	private ImageButton ibRight;
 	private ListView lvEvent;
@@ -271,6 +277,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 	private Database mDb = null;
 
     private FilterBar tf;
+    private int tag = 0;
 
 
 //	public static EventActivity instance() {
@@ -292,10 +299,12 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 //		return instance != null;
 //	}
 	
+	private PullToRefreshListView pullListView;
 	private void initView() {
         ibRight = (ImageButton) findViewById(R.id.right_button);
 		txtTitle = (TextView) findViewById(R.id.title_text);
-		lvEvent = (ListView) findViewById(R.id.event_list);
+		pullListView = (PullToRefreshListView) findViewById(R.id.event_list);
+		lvEvent = pullListView.getRefreshableView();
         newEventPanel = findViewById(R.id.new_event_panel);
         if(Buddy.ACCOUNT_TYPE_TEACHER != PrefUtil.getInstance(this).getMyAccountType()){
         	ibRight.setVisibility(View.GONE);
@@ -320,7 +329,9 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
                 c);
         tf.setOnFilterChangedListener(this);
         lvEvent.addHeaderView(tf.getView());
-
+        pullListView.setOnRefreshListener(this);
+        pullListView.setOnLastItemVisibleListener(this);
+        
         fSetShownEvents();
         hideNewEventPanel();
 
@@ -334,14 +345,14 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         // TODO control create moment button visibility according to user type.
 	}
 	
-	private void downloadLatestEvents() {
+	private void downloadLatestEvents(final String get_finished_event_only,final String max_startdate) {
         lastRefreshEventTime=System.currentTimeMillis();
 
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				int errno = WowEventWebServerIF.getInstance(EventActivity.this).fGetLatestEvents();
+				int errno = WowEventWebServerIF.getInstance(EventActivity.this).fGetLatestEvents(get_finished_event_only,max_startdate);
 				if (errno == ErrorCode.OK) {
                     refresh();
 				}
@@ -401,6 +412,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         eventAdapter = new EventAdapter(EventActivity.this, acts);
         lvEvent.setAdapter(eventAdapter);
 		eventAdapter.notifyDataSetChanged();
+		pullListView.onRefreshComplete();
 	}
 	
 	private void fGointoASpecificEvent(WEvent wa) {
@@ -504,7 +516,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         MobclickAgent.onResume(this);
 
         if(System.currentTimeMillis()-lastRefreshEventTime >= REFRESH_EVENT_INTERVAL) {
-            downloadLatestEvents();
+            downloadLatestEvents(GET_FINISHED_EVENT0,null);
         }
 	}
 	
@@ -559,32 +571,14 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
             return;
         } else if (subMenuResId == R.id.btn_filter2) {
             if (itemIdx == 0) {
-                ArrayList<WEvent> filtered = new ArrayList<WEvent>();
-                long now = System.currentTimeMillis();
-                for (WEvent e : acts) {
-                    if (e.startTime.getTime() > now) {
-                        filtered.add(e);
-                    }
-                }
-                eventAdapter.setDataSource(filtered);
+            	tag = 0;
+            	downloadLatestEvents(GET_FINISHED_EVENT0,null);
             } else if (itemIdx == 1) { // on going
-                ArrayList<WEvent> filtered = new ArrayList<WEvent>();
-                long now = System.currentTimeMillis();
-                for (WEvent e : acts) {
-                    if (e.startTime.getTime() <= now && e.endTime.getTime() > now) {
-                        filtered.add(e);
-                    }
-                }
-                eventAdapter.setDataSource(filtered);
+            	tag = 1;
+            	downloadLatestEvents(null,null);
             } else if (itemIdx == 2) { // expired
-                ArrayList<WEvent> filtered = new ArrayList<WEvent>();
-                long now = System.currentTimeMillis();
-                for (WEvent e : acts) {
-                    if (e.endTime.getTime() < now) {
-                        filtered.add(e);
-                    }
-                }
-                eventAdapter.setDataSource(filtered);
+            	tag = 2;
+                downloadLatestEvents(GET_FINISHED_EVENT1,null);
             }
             return;
         }
@@ -614,4 +608,95 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
                 start, end, 0);
         return str;
     }
+
+	@Override
+	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+		switch (tag) {
+		//即将进行
+		case 0:
+			downloadLatestEvents(GET_FINISHED_EVENT0,null);
+			break;
+		//进行中
+		case 1:
+			downloadLatestEvents(null,null);
+			break;
+			
+		//已过期
+		case 2:
+			downloadLatestEvents(GET_FINISHED_EVENT1,null);
+			break;
+		default: break;
+		}
+	}
+
+	//上啦加载更多
+	private void uploadmore(final String get_finished_event_only,final String max_startdate) {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				int errno = WowEventWebServerIF.getInstance(EventActivity.this).fGetLatestEvents(get_finished_event_only,max_startdate);
+				if (errno == ErrorCode.OK) {
+					runOnUiThread(new Runnable(){
+						@Override
+						public void run() {
+							switch (curEventGroupToShow) {
+				            case 0:
+				                acts.addAll(mDb.fetchAllEvents());
+				                break;
+				            case 1:
+				                acts.addAll(mDb.fetchJoinedEvents());
+				                break;
+				            case 2:
+				                acts.addAll(mDb.fetchNotJoinedEvents());
+				                break;
+//						case 1:
+//							acts = mDb.fetchOfficialEvents();
+//							break;
+//						case 2:
+//							acts = mDb.fetchAppliedEvents();
+//							break;
+//						case 3:
+//							acts = mDb.fetchJoinedEvents();
+//							break;
+//						case 4:
+				            default:
+				                acts.addAll(mDb.fetchAllEvents());
+				                break;
+				        }
+
+				        fixEventLocalPath();
+						eventAdapter.notifyDataSetChanged();
+						}
+					});
+				}
+			}
+			
+		}).start();
+	}
+	
+	@Override
+	public void onLastItemVisible() {
+		String time = null;
+		switch (tag) {
+		//即将进行
+		case 0:
+			time = acts.get(acts.size()-1).startTime.getTime() + "";
+			uploadmore(GET_FINISHED_EVENT0,time.substring(0, time.length()-3));
+			break;
+
+		//进行中
+		case 1:
+			time = acts.get(acts.size()-1).startTime.getTime() + "";
+			uploadmore(null,time.substring(0, time.length()-3));
+			break;
+			
+		//已过期
+		case 2:
+			time = acts.get(0).startTime.getTime() + "";
+			uploadmore(GET_FINISHED_EVENT1,time.substring(0, time.length()-3));
+			break;
+		default: break;
+		}
+	}
 }

@@ -57,7 +57,7 @@ public class WebServerEventPoller {
             @Override
             public void run() {
                 WowMomentWebServerIF web = WowMomentWebServerIF.getInstance(context);
-                LinkedList<Review> reviews = new LinkedList<>();
+                LinkedList<Review> reviews = new LinkedList<Review>();
                 int errno = web.fGetReviewsOnMe(reviews);
 
                 if (ErrorCode.OK == errno) {

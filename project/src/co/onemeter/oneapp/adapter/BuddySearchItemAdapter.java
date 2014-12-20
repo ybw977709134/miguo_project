@@ -3,10 +3,12 @@ package co.onemeter.oneapp.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +21,10 @@ import co.onemeter.oneapp.ui.FriendValidateActivity;
 import co.onemeter.oneapp.ui.StartActivity;
 
 import org.wowtalk.api.Buddy;
+import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.GroupChatRoom;
+import org.wowtalk.api.PendingRequest;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
@@ -44,7 +49,8 @@ public class BuddySearchItemAdapter extends BaseAdapter {
     private MessageBox mMsgBox;
 
     public final static String NAME_SPLIT=":";
-
+    private WowTalkWebServerIF mWebif = null;
+    private Database mDbHelper = null;
     public BuddySearchItemAdapter(Context context, ArrayList<Buddy> buddy, String str,MessageBox box) {
         contextRef=context;
         buddyList=buddy;
@@ -56,6 +62,7 @@ public class BuddySearchItemAdapter extends BaseAdapter {
         myLocalUid = PrefUtil.getInstance(context).getUid();
 
         mMsgBox=box;
+        mDbHelper = new Database(contextRef);
     }
     @Override
     public int getCount() {
@@ -73,7 +80,7 @@ public class BuddySearchItemAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if(null == convertView) {
             convertView= LayoutInflater.from(contextRef).inflate(R.layout.listitem_buddysearch, null);
         }
@@ -108,7 +115,14 @@ public class BuddySearchItemAdapter extends BaseAdapter {
             btnAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onAddFriendPressed(buddy,btnAdd);
+                	Log.d("--------------------", buddy+"");
+                	Intent intent = new Intent(contextRef, FriendValidateActivity.class);
+                	intent.putExtra("buddyList", buddyList);
+                	intent.putExtra("position", position);
+                	contextRef.startActivity(intent);
+                	btnAdd.setVisibility(View.GONE);
+
+//                    onAddFriendPressed(buddy,btnAdd);
                 }
             });
         } else {
@@ -138,35 +152,50 @@ public class BuddySearchItemAdapter extends BaseAdapter {
         tvName.setText(ssb);
     }
 
-    private void onAddFriendPressed(final Buddy buddy,final Button btn) {
+    private void onAddFriendPressed(final Buddy buddy,final Button btn,final String message) {
         mMsgBox.showWait();
     	Intent intent = new Intent(contextRef, FriendValidateActivity.class);
     	contextRef.startActivity(intent);
 
-        new AsyncTask<Void, Void, Integer>() {
-            @Override
-            protected Integer doInBackground(Void... params) {
-                int errno = WowTalkWebServerIF.getInstance(contextRef).fAddBuddy(buddy.userID);
-                return errno;
+        new AsyncTask<Buddy, Integer, Void>() {
+        	int errno = ErrorCode.OK;
+        	PendingRequest pr;
+        	@Override
+            protected Void doInBackground(Buddy... params) {
+            	Buddy b =  params[0];
+                errno = WowTalkWebServerIF.getInstance(contextRef).faddBuddy_askforRequest(b.userID,message);
+                if (ErrorCode.OK == errno) {
+                    pr = new PendingRequest();
+                    pr.uid = b.getGUID();
+                    pr.nickname = b.nickName;
+                    pr.buddy_photo_timestamp = b.getPhotoUploadedTimestamp();
+                    pr.type = PendingRequest.BUDDY_OUT;
+                   
+                }
+                return null;
+
             }
             @Override
-            protected void onPostExecute(Integer s) {
+            protected void onPostExecute(Void v) {
                 mMsgBox.dismissWait();
-                if(s == ErrorCode.OK) {
+                if(errno == ErrorCode.OK) {
                     btn.setVisibility(View.GONE); // update UI
+                    mDbHelper.storePendingRequest(pr);
                     if (0 != (Buddy.RELATIONSHIP_FRIEND_HERE & buddy.getFriendShipWithMe())) {
                         mMsgBox.toast(R.string.contacts_add_buddy_succeed_without_pending);
                     } else if (0 != (Buddy.RELATIONSHIP_PENDING_OUT & buddy.getFriendShipWithMe())) {
                         mMsgBox.show(null, contextRef.getString(R.string.contacts_add_buddy_pending_out));
                     }
-                } else if (s == ErrorCode.ERR_OPERATION_DENIED){
+                } else if (errno == ErrorCode.ERR_OPERATION_DENIED){
                     mMsgBox.show(null, contextRef.getString(R.string.contactinfo_add_friend_denied));
                 } else {
                     mMsgBox.show(null, contextRef.getString(R.string.operation_failed));
                 }
             }
-        }.execute((Void)null);
+
+        }.execute(buddy);
     }
+    
 
     public void clear() {
         buddyList.clear();

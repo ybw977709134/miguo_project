@@ -16,7 +16,7 @@
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:background="@null"
-            android:src="@drawable/nav_close_selector" />
+            android:src="@drawable/nav_back_selector" />
 
         <TextView
             style="@style/page_title_dark"

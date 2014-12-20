@@ -8,8 +8,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.ui.StartActivity;
+
+import org.wowtalk.api.Database;
+import org.wowtalk.api.PendingRequest;
 import org.wowtalk.ui.GlobalValue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,6 +59,27 @@ public class FunctionAdapter extends BaseAdapter {
         TextView txtInfo = (TextView) convertView.findViewById(R.id.new_info);
         imgView.setImageResource(list.get(position).get("image"));
         txtName.setText(mContext.getResources().getString(list.get(position).get("text")));
+        
+        ArrayList<PendingRequest> pendingRequests=new ArrayList<PendingRequest>();
+        Database.open(mContext).fetchPendingRequest(pendingRequests);
+        boolean pendingRequestExist=false;
+        if(pendingRequests.size() > 0) {
+            for(PendingRequest p : pendingRequests) {
+                if (p.type == PendingRequest.BUDDY_IN
+                        || p.type == PendingRequest.GROUP_IN
+                        || p.type == PendingRequest.GROUP_ADMIN) {
+                    pendingRequestExist=true;
+                    break;
+                }
+            }
+        }
+
+        if (!pendingRequestExist) {
+        	txtInfo.setVisibility(View.GONE);
+        } else {
+        	txtInfo.setText(pendingRequests.size()+"");
+        	txtInfo.setVisibility(View.VISIBLE);
+        }
         int badge = list.get(position).get("badge");
         if (badge == 0) {
             txtInfo.setVisibility(View.GONE);

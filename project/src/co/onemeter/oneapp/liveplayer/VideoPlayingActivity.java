@@ -1,19 +1,9 @@
-﻿package co.onemeter.oneapp.liveplayer;
-
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+package co.onemeter.oneapp.liveplayer;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
-import android.os.Message;
+import android.os.*;
 import android.os.Process;
-import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -25,20 +15,15 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-
-
-
 import co.onemeter.oneapp.R;
-
 import com.baidu.cyberplayer.core.BVideoView;
-import com.baidu.cyberplayer.core.BVideoView.OnCompletionListener;
-import com.baidu.cyberplayer.core.BVideoView.OnErrorListener;
-import com.baidu.cyberplayer.core.BVideoView.OnInfoListener;
-import com.baidu.cyberplayer.core.BVideoView.OnPlayingBufferCacheListener;
-import com.baidu.cyberplayer.core.BVideoView.OnPreparedListener;
-
+import com.baidu.cyberplayer.core.BVideoView.*;
 import de.greenrobot.event.EventBus;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 自定义视频播放界面

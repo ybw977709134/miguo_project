@@ -7,4 +7,16 @@
 	<string name="ERR_BOUND_SAME_SCHOOL_USER">已将绑定过该学校的邀请码了</string>
 	<string name="ERR_SCHOOL_USER_TYPE_NOT_MATCH">用户类型不符</string>
 	<string name="ERR_SCHOOL_MEMBERS_GET">未绑定该学校，或者用户类型不对</string>
+
+	<array name="lesson_performance_names">
+		<item>精神状态</item>
+		<item>参与程度</item>
+		<item>参与效果</item>
+		<item>认真</item>
+		<item>积极</item>
+		<item>自信</item>
+		<item>思维的条理性</item>
+		<item>思维的创造性</item>
+		<item>善于与人合作</item>
+	</array>
 </resources>

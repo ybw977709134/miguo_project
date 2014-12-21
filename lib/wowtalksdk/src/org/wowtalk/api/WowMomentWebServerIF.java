@@ -203,6 +203,18 @@ public class WowMomentWebServerIF {
      * If succeed, moment.id and moment.timestamp will be assigned.
 	 */
     public int fAddMoment(Moment moment) {
+        return fAddMoment(moment, false);
+    }
+
+    /**
+     * Add a Moment to web server and local db.
+     *
+     * @param moment
+     * @param anonymous 如果匿名，则此动态不会出现在任何人的好友圈中，但可以通过moment ID访问。
+     *                  匿名动态的用途之一是保存学生家长对课堂的反馈。
+     * @return
+     */
+    public int fAddMoment(Moment moment, boolean anonymous) {
 		String uid = mPrefUtil.getUid();
 		String password = mPrefUtil.getPassword();
 		if(uid == null || password == null)
@@ -218,6 +230,7 @@ public class WowMomentWebServerIF {
 				+ "&privacy_level=" + moment.privacyLevel
                 + "&tag=" + moment.tag
                 + "&deadline=" + moment.surveyDeadLine
+                + "&anonymous=" + (anonymous ? 1 : 0)
 				+ "&lang=" + Locale.getDefault().getLanguage();
         if (moment.place != null)
             postStr += "&place=" + moment.place;
@@ -693,11 +706,15 @@ public class WowMomentWebServerIF {
     }
 
     public int fGetMomentsOfGroup(String groupId,long maxTimestamp, int count, boolean withReview) {
-        return doGetMoment("get_moments_for_group",maxTimestamp,count,withReview,groupId);
+        return doGetMoment("get_moments_for_group",maxTimestamp,count,withReview,groupId, 0);
     }
 
     public int fGetMomentsOfAll(long maxTimestamp, int count, boolean withReview) {
-        return doGetMoment("get_moments_for_all_buddys",maxTimestamp,count,withReview,null);
+        return doGetMoment("get_moments_for_all_buddys",maxTimestamp,count,withReview,null, 0);
+    }
+
+    public int fGetMomentById(int momentId) {
+        return doGetMoment("get_moment_by_id", 0, 0, false, null, momentId);
     }
     
     /**
@@ -705,10 +722,11 @@ public class WowMomentWebServerIF {
      *
      *
      * @param maxTimestamp can be 0.
-     * @param count
+     * @param count can be 0
+     * @param momentId can be 0
      * @return
      */
-    private int doGetMoment(String action,long maxTimestamp, int count, boolean withReview,String groupId) {
+    private int doGetMoment(String action, long maxTimestamp, int count, boolean withReview, String groupId, int momentId) {
     	int errno;
     	
 		String uid = mPrefUtil.getUid();
@@ -730,6 +748,9 @@ public class WowMomentWebServerIF {
         }
         if(!TextUtils.isEmpty(groupId)) {
             postStr += "&group_id=" + groupId;
+        }
+        if (momentId > 0) {
+            postStr += "&moment_id=" + momentId;
         }
 		Connect2 connect2 = new Connect2();
 		Element root = connect2.Post(postStr);

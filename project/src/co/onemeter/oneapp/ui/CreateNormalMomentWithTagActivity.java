@@ -898,6 +898,11 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                             if(isCapturingVoice) {
                                 String myFormatTime=MediaPlayerWraper.makeMyTimeDisplayFromMS(elapsed);
                                 tvCaptureInnerInd.setText(String.format(getString(R.string.capture_voice_click_stop),myFormatTime));
+                                //如果录音的时间超过120秒//将停止录音
+                                if (elapsed >= 120000 ) {
+                                	stopRecording();
+                                    updateGotVoice();
+                                } 
                             }
                         }
                     });
@@ -1212,6 +1217,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 @Override
                 protected void onPostExecute(Integer errno) {
                     mMsgBox.dismissWait();
+                    Toast.makeText(CreateNormalMomentWithTagActivity.this, "新建日记成功", Toast.LENGTH_SHORT).show();
                     finish();
                    
                     

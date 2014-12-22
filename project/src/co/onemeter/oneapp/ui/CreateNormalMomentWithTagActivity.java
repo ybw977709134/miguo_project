@@ -1,8 +1,11 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +26,7 @@ import co.onemeter.oneapp.adapter.CreateSurveyOptionsRightContentAdapter;
 import co.onemeter.oneapp.utils.LocationHelper;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MediaInputHelper;
@@ -31,6 +35,8 @@ import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
 import org.wowtalk.ui.msg.InputBoardManager;
+
+import com.baidu.cyberplayer.utils.bu;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -116,7 +122,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
     public final static String SURVEY_DEADLINE_NO_LIMIT_VALUE="-1";
 
     private MediaPlayerWraper mediaPlayerWraper;
-    private TimeElapseReportRunnable rightBtnStatusRunnable;
+//    private TimeElapseReportRunnable rightBtnStatusRunnable;
 
 
     @Override
@@ -129,19 +135,20 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 
         initView(savedInstanceState);
 
-        rightBtnStatusRunnable=new TimeElapseReportRunnable();
-        rightBtnStatusRunnable.setElapseReportListener(new TimeElapseReportRunnable.TimeElapseReportListener() {
-            @Override
-            public void reportElapse(final long elapsed) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        checkRightBtnStatus();
-                    }
-                });
-            }
-        });
-        new Thread(rightBtnStatusRunnable).start();
+        //注销掉对发送按钮的服务监听
+//        rightBtnStatusRunnable=new TimeElapseReportRunnable();
+//        rightBtnStatusRunnable.setElapseReportListener(new TimeElapseReportRunnable.TimeElapseReportListener() {
+//            @Override
+//            public void reportElapse(final long elapsed) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        checkRightBtnStatus();
+//                    }
+//                });
+//            }
+//        });
+//        new Thread(rightBtnStatusRunnable).start();
     }
 
     @Override
@@ -168,9 +175,9 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         locationHelper.stop();
         recycleStoredBitmapDrawable();
 
-        if(null != rightBtnStatusRunnable) {
-            rightBtnStatusRunnable.stop();
-        }
+//        if(null != rightBtnStatusRunnable) {
+//            rightBtnStatusRunnable.stop();
+//        }
 
         if(null != mMediaRecorder) {
             stopRecording();
@@ -689,7 +696,44 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 finish();
                 break;
             case R.id.title_moment_send:
-                createMoment();
+            	if (!isContentValid()) {
+            		Toast.makeText(CreateNormalMomentWithTagActivity.this, "请填写信息", Toast.LENGTH_LONG).show();
+            	} else {
+      	
+            		if (TextUtils.isEmpty(etMomentMsgContent.getText().toString())) {
+            			Toast.makeText(CreateNormalMomentWithTagActivity.this, "内容不能为空", Toast.LENGTH_LONG).show();
+            		}
+//            		else if (listPhoto == null || listPhoto.isEmpty()) {
+//            			Toast.makeText(CreateNormalMomentWithTagActivity.this, "请添加图片", Toast.LENGTH_LONG).show();
+//            		} else if (mLastVoiceFile == null || !mLastVoiceFile.exists()) {
+//            			Toast.makeText(CreateNormalMomentWithTagActivity.this, "请录音", Toast.LENGTH_LONG).show();
+//            		} 
+            		else {
+            			Builder builder = new AlertDialog.Builder(CreateNormalMomentWithTagActivity.this);
+            			builder.setTitle("提交前请确认信息是否完整");
+            			builder.setMessage("你确定要提交吗？");
+            			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								createMoment();
+								
+							}
+						});
+            			builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+							}
+						});
+            			builder.create().show();
+            			
+            		}
+            		
+            	}
+            	
+            	
+//                createMoment();
                 break;
             case R.id.share_range_layout:
 //                showShareRangeSelector();
@@ -902,6 +946,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                                 if (elapsed >= 120000 ) {
                                 	stopRecording();
                                     updateGotVoice();
+                                    Toast.makeText(CreateNormalMomentWithTagActivity.this, "录音时间已经超过了120秒", Toast.LENGTH_SHORT).show();
                                 } 
                             }
                         }

@@ -40,6 +40,7 @@ public class AddClassActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btn_add:
                 submit();
+                finish();
                 break;
         }
     }

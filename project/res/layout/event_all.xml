@@ -32,7 +32,7 @@
             android:layout_width="fill_parent"
             android:layout_below="@+id/title_bar">
 
-        <ListView
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
                 android:id="@+id/event_list"
                 android:layout_height="fill_parent"
                 android:layout_width="fill_parent"

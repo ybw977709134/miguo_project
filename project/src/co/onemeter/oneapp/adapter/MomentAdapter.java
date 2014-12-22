@@ -33,7 +33,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public class MomentAdapter extends ArrayAdapter<Moment> {
-    public interface ReplyDelegate {
+    public interface MomentActionHandler {
         /**
          *
          * @param position Moment 在列表中的位置
@@ -42,6 +42,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
          * @param like 这是一个“赞”
          */
         public void replyToMoment(int position, Moment moment, Review replyTo, boolean like);
+        public void onMomentClicked(int position, Moment moment);
     }
 
     public interface LoadDelegate {
@@ -67,9 +68,8 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     private boolean isSingle = false;
 	private Context context;
     private Activity activity;
-//    private MediaPlayer mPlayer;
     private ImageResizer mImageResizer;
-    private ReplyDelegate mReplyDelegate;
+    private MomentActionHandler mReplyDelegate;
     public LoadDelegate mLoadDelegate;
     private boolean showLoadMoreAsLastItem = false;
     private boolean mIsLoading = false;
@@ -78,10 +78,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     private boolean isNoMomentDescShow=false;
     private View noMomentDescView=null;
     private ProgressBar noMomentLoadingProgress;
-
-//    private HashMap<String,TimerTextView> voiceTimerViewMap=new HashMap<String,TimerTextView>();
-//    private boolean isMediaPlaying=false;
-//    private OnMediaPlayFinishListener onMediaPlayFinishListener;
 
     private MessageBox mMsgBox;
     private HashMap<String,ArrayList<String>> surveyMomentChoosedItemList=new HashMap<String,ArrayList<String>>();
@@ -97,7 +93,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
 	public MomentAdapter(Context context, Activity activity, ArrayList<Moment> moments, boolean isSingle,boolean favorite,
                          ImageResizer mImageResizer,
-                         ReplyDelegate replyDelegate,String uid,MessageBox box) {
+                         MomentActionHandler replyDelegate,String uid,MessageBox box) {
         super(context, 0, 0, moments);
 		this.context = context;
         this.activity = activity;
@@ -109,10 +105,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         isWithFavorite=favorite;
 
         mediaPlayerWraper=new MediaPlayerWraper(activity, true);
-        
-        
-//        this.listView = listView;///////////////添加的东西
-        
 	}
 
     public void setNewReviewCount(int count) {
@@ -200,13 +192,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             }
         }
 
-//        long oldTimestamp;
-//        if (position == 0) {
-//            oldTimestamp = 0;
-//        } else {
-//            oldTimestamp = getItem(momentPos).timestamp * 1000;
-//        }
-
 		final Moment moment = getItem(momentPos);
 		ArrayList<Review> reviews = moment.reviews;
 		final ArrayList<Review> likeReview = new ArrayList<Review>();
@@ -229,11 +214,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 		}
 //		convertView.setTag(null);
 		if (null == convertView || null == convertView.getTag()) {
-//            if (isSingle) {
-//                convertView = LayoutInflater.from(context).inflate(R.layout.listitem_trend_me, null);
-//            } else {
-//                convertView = LayoutInflater.from(context).inflate(R.layout.listitem_trend_friend, null);
-//            }
             convertView = LayoutInflater.from(context).inflate(R.layout.listitem_trend_friend, null);
 			holder = new ViewHolder();
 			holder.imgThumbnail = (ImageView) convertView.findViewById(R.id.img_thumbnail);
@@ -291,42 +271,15 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MomentDetailActivity.launch(context, moment);
-//                if(!MomentActivity.instance().handleItemClick()) {
-//                    MomentDetailActivity.launch(context, moment);
-//                }
+                if (mReplyDelegate != null) {
+                    mReplyDelegate.onMomentClicked(position, moment);
+                }
             }
         });
-
 
         setTagDescInfo(holder,moment);
         setupOpButtons(holder,moment,momentPos,likeReview,commentReview);
 
-//        if (isSingle) {
-////            if (isMyMoment(moment.owner.userID)) {
-////                holder.reviewButtons.setVisibility(View.GONE);
-////            } else {
-////                holder.reviewButtons.setVisibility(View.VISIBLE);
-////            }
-//            setTimeForOne(holder.txtDate, holder.txtTime, Long.valueOf(moment.timestamp * 1000));
-//            if (isTheSameDay(moment.timestamp * 1000, oldTimestamp)) {
-//                holder.txtDate.setVisibility(View.GONE);
-//            } else {
-//                holder.txtDate.setVisibility(View.VISIBLE);
-//            }
-//        } else {
-//            setTimeForAll(holder.txtTime, Long.valueOf(moment.timestamp * 1000));
-//            if (moment.owner != null && !Utils.isNullOrEmpty(moment.owner.userID)) {
-//                PhotoDisplayHelper.displayPhoto(context, holder.imgThumbnail,
-//                        R.drawable.default_avatar_90, moment.owner, true);
-//                holder.imgThumbnail.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        MomentActivity.launch(context, moment.owner.userID);
-//                    }
-//                });
-//            }
-//        }
         setTimeForAll(holder.txtTime, Long.valueOf(moment.timestamp * 1000));
         if (moment.owner != null && !Utils.isNullOrEmpty(moment.owner.userID)) {
             PhotoDisplayHelper.displayPhoto(context, holder.imgThumbnail,
@@ -359,77 +312,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //            holder.reviewLayout.setVisibility(View.VISIBLE);
 //            holder.reviewDivider.setVisibility(View.VISIBLE);
         }
-//		if (likeReview.size() == 0) {
-//			holder.txtLikeNames.setVisibility(View.GONE);
-//            holder.reviewDivider.setVisibility(View.GONE);
-//		} else {
-//			holder.txtLikeNames.setVisibility(View.VISIBLE);
-//            setViewForLikeReview(context, holder.txtLikeNames, likeReview);
-//		}
-//		if (commentReview.size() == 0) {
-//            holder.reviewDivider.setVisibility(View.GONE);
-//			holder.mReview.setVisibility(View.GONE);
-//		} else {
-//			holder.mReview.removeAllViews();
-//			holder.mReview.setVisibility(View.VISIBLE);
-//            setViewForCommentReview(context, holder.mReview, commentReview, position, moment.id, mReplyDelegate);
-//		}
-
-        //TODO
-//        holder.ivMomentOpEllipse.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                showMomentOpPopupWindow(view,moment,position);
-//            }
-//        });
-        // like and comment buttons
-        //like and comment is required even if this moment is mine
-//        if (isMyMoment(moment.owner.userID) || !moment.allowReview) {
-//        if (!moment.allowReview) {
-//            holder.reviewButtons.setVisibility(View.GONE);
-//        } else {
-//            holder.reviewButtons.setVisibility(View.VISIBLE);
-//            holder.btnReview.setEnabled(true);
-//
-//            if (moment.likedByMe) {
-//                holder.btnLike.setEnabled(false);
-//                holder.layoutLike.setEnabled(false);
-//                holder.btnLike.setBackgroundResource(R.drawable.icon_btn_liked);
-//            } else {
-//                holder.btnLike.setEnabled(true);
-//                holder.layoutLike.setEnabled(true);
-//                holder.btnLike.setBackgroundResource(R.drawable.icon_btn_like);
-//            }
-//
-//            holder.btnLike.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    holder.layoutLike.performClick();
-//                }
-//            });
-//            holder.layoutLike.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    MomentActivity a = MomentActivity.instance();
-//                    if (a != null)
-//                        a.doLikeMoment_async(moment);
-//                }
-//            });
-//            holder.btnReview.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    holder.layoutComment.performClick();
-//                }
-//            });
-//            holder.layoutComment.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (mReplyDelegate != null) {
-//                        mReplyDelegate.replyToMoment(position, moment.id, null);
-//                    }
-//                }
-//            });
-//        }
 
         setImageLayout(context, mImageResizer, photoFiles, holder.imageTable);
         showVoiceFile(voiceFile, holder.micLayout, holder.progress, holder.micButton, holder.micTime);
@@ -749,7 +631,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         }
     }
 
-    private boolean isLike;
     private void setupOpButtons(final ViewHolder holder,final Moment moment,final int position,
                                 final ArrayList<Review> likeReview,ArrayList<Review> commentReview) {
         if (!TextUtils.isEmpty(moment.tag) &&
@@ -788,28 +669,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.tvAnswerCountInd.setVisibility(View.GONE);
         }
 
-        
-        if(moment.likedByMe) {
-        	//显示点赞的数量
-            holder.tvLike.setText(""+likeReview.size());
-//            holder.tvLike.setText(R.string.moments_liked);
-        } else {
-//        	holder.tvLike.setText(""+likeReview.size());
-     //       holder.tvLike.setText(R.string.moments_like);
-        }
-//        if(commentReview.size() > 0) {
-//            if(View.VISIBLE == holder.layoutComment.getVisibility()) {
-//                holder.tvComment.setText(""+commentReview.size());
-//            } else if(View.VISIBLE == holder.layoutAnswer.getVisibility()) {
-//                holder.tvAnswer.setText(""+commentReview.size());
-//            } else {
-//                //should not be here
-//            }
-//        } else {
-//            holder.tvComment.setText(R.string.moments_comment);
-//            holder.tvAnswer.setText(R.string.answer_qa);
-//        }
-        
+        //显示点赞的数量
+        holder.tvLike.setText(""+likeReview.size());
+
         //显示评论的数量
 //        holder.tvComment.setText(R.string.moments_comment);
         holder.tvComment.setText(""+commentReview.size());
@@ -854,11 +716,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //        	holder.btnAnswer.setBackgroundResource(R.drawable.profile_btn_message_p);
 //        }
         
-        isLike = moment.likedByMe;
         holder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            	isLike = !isLike;
+                boolean isLike = !moment.likedByMe;
             	if (isLike) {
                   holder.btnLike.setBackgroundResource(R.drawable.timeline_like_a);
             	} else {
@@ -912,110 +773,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             }
         });
     }
-
-
-
-//    private void showMomentOpPopupWindow(View parent,final Moment moment,final int position) {
-//        LayoutInflater lf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View contentView= lf.inflate(R.layout.moment_op_layout_wrap, null);
-//
-//        final PopupWindow momentOpPopWindow = Utils.getFixedPopupWindow(contentView, ViewGroup.LayoutParams.WRAP_CONTENT,
-//                ViewGroup.LayoutParams.WRAP_CONTENT);
-//        if(null == momentOpPopWindow) {
-//            Log.e("create popupwindow for moment op fail");
-//            return;
-//        }
-//
-//        //setup listener
-//        final LinearLayout layoutLike=(LinearLayout) contentView.findViewById(R.id.layout_like);
-//        final LinearLayout layoutComment=(LinearLayout) contentView.findViewById(R.id.layout_comment);
-//        final LinearLayout layoutAnswer=(LinearLayout) contentView.findViewById(R.id.layout_answer);
-//
-//        if(!TextUtils.isEmpty(moment.tag) &&
-//                (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_QA))) {
-//            layoutLike.setVisibility(View.GONE);
-//            layoutComment.setVisibility(View.GONE);
-//            layoutAnswer.setVisibility(View.VISIBLE);
-//        }
-//        if(Moment.SERER_MOMENT_TAG_FOR_QUESTION.equals(moment.tag)) {
-//            layoutLike.setVisibility(View.GONE);
-//            layoutComment.setVisibility(View.VISIBLE);
-//            layoutAnswer.setVisibility(View.GONE);
-//        }
-//
-//        Button btnLike=(Button) contentView.findViewById(R.id.btn_like);
-//        Button btnReview=(Button) contentView.findViewById(R.id.btn_review);
-//        Button btnAnswer=(Button) contentView.findViewById(R.id.btn_answer);
-//        TextView tvBtnLike=(TextView) contentView.findViewById(R.id.btn_like_txt);
-//        if (moment.likedByMe) {
-//            btnLike.setEnabled(false);
-//            layoutLike.setEnabled(false);
-//            tvBtnLike.setText(R.string.moments_liked);
-//            btnLike.setBackgroundResource(R.drawable.timeline_like_a);
-//        } else {
-//            btnLike.setEnabled(true);
-//            layoutLike.setEnabled(true);
-//            tvBtnLike.setText(R.string.moments_like);
-//            btnLike.setBackgroundResource(R.drawable.timeline_like);
-//        }
-//
-//        btnLike.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                layoutLike.performClick();
-//            }
-//        });
-//        layoutLike.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                momentOpPopWindow.dismiss();
-//                MomentActivity a = MomentActivity.instance();
-//                if (a != null)
-//                    a.doLikeMoment_async(moment);
-//            }
-//        });
-//        btnReview.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                layoutComment.performClick();
-//            }
-//        });
-//        layoutComment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                momentOpPopWindow.dismiss();
-//                if (mReplyDelegate != null) {
-//                    mReplyDelegate.replyToMoment(position, moment.id, null);
-//                }
-//            }
-//        });
-//        btnAnswer.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                layoutAnswer.performClick();
-//            }
-//        });
-//        layoutAnswer.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                layoutComment.performClick();
-//            }
-//        });
-//
-//        //setup popupwindow
-//        momentOpPopWindow.setFocusable(true);
-//        momentOpPopWindow.setTouchable(true);
-//        momentOpPopWindow.setOutsideTouchable(false);
-//        momentOpPopWindow.setBackgroundDrawable(new BitmapDrawable());
-//
-//        int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-//        int heightSpec = View.MeasureSpec
-//                .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-//        contentView.measure(widthSpec, heightSpec);
-//        int height = contentView.getMeasuredHeight();
-//        momentOpPopWindow.showAsDropDown(parent, -contentView.getMeasuredWidth()-5,
-//                -parent.getHeight() / 2 - height / 2);
-//    }
 
     private View getNewReviewView() {
 //        if(null == newReviewView) {
@@ -1501,18 +1258,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 				@Override
 				protected void onPostExecute(Void v) {
 					mDlVoiceFileTaskMap.remove(path);
-//					micButton.setVisibility(View.VISIBLE);
-//					progress.setVisibility(View.GONE);
-//					if (ok) {
-//						if(path.equals(mCurrentPlayingVoicePath))
-//						{
-//							mediaPlayerWraper.setTemMediaPath(path);
-//							setViewForVoice(voiceLayout, micButton, progress,
-//									micTime, file);
-//							startPlayingVoice(voiceLayout, micButton, micTime,
-//									path, file);
-//						}
-//					}
 					if(listener != null)
 						listener.onTaskPost(ok);
 				}
@@ -1617,40 +1362,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             micTime.setText(String.format(TimerTextView.VOICE_LEN_DEF_FORMAT, file.duration / 60, file.duration % 60));
         }
         
-//        TimerTextView playingTTV=voiceTimerViewMap.get(localPath);
-//        if(null != playingTTV) {
-//            micTime.setText(playingTTV.getText());
-//            playingTTV.setUpdateTarget(micTime);
-//            Log.i("mic timer set with playint ttv "+micTime.getText());
-//        } else {
-//            micTime.setText(String.format("%01d:%02d", file.duration / 60, file.duration % 60));
-//            Log.i("mic timer set with max "+micTime.getText());
-//        }
-////        micTime.setText(String.format("%02d:%02d", file.duration / 60, file.duration % 60));
-//        micTime.setMaxElapse(file.duration);
-//        if (new File(localPath).exists()) {
-//            voiceLayout.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Log.e(voiceLayout.getTag());
-//                    if (voiceLayout.getTag().equals(TAG_IS_PLAYING)) {
-////                        voiceLayout.setTag(TAG_NOT_PLAYING);
-//                        mPlayer.seekTo(mPlayer.getDuration());
-//                    } else {
-//                        voiceLayout.setTag(TAG_IS_PLAYING);
-//                        startPlayingVoice(voiceLayout, micButton, micTime, localPath);
-//                    }
-//                }
-//            });
-//        } else {
-//            voiceLayout.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    getVoiceFileFromServer(voiceLayout, micButton, micTime, progress, file);
-//                }
-//            });
-//        }
-        
         //当前item是否正在下载音频文件
         if(mDlVoiceFileTaskMap.containsKey(localPath))
         {
@@ -1691,35 +1402,12 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                     {
                     	micButton.setImageResource(R.drawable.timeline_player_play);
                     }
-//                    Log.e(voiceLayout.getTag());
-//                    if (voiceLayout.getTag().equals(TAG_IS_PLAYING)) {
-//                        mPlayer.seekTo(mPlayer.getDuration());
-//                    } else {
-//                        startPlayingVoice(voiceLayout, micButton, micTime, localPath,file);
-//                    }
                 } else {
                     getVoiceFileFromServer(voiceLayout, micButton, micTime, progress, file);
                 }
             }
         });
     }
-
-//    public boolean isMediaPlaying() {
-//        return isMediaPlaying;
-//    }
-
-//    private void setMediaPlayingStatus(boolean status) {
-//        boolean oldStatus=isMediaPlaying;
-//        isMediaPlaying=status;
-//        if(oldStatus && !status && null != onMediaPlayFinishListener) {
-//            onMediaPlayFinishListener.onMediaPlayFinished();
-//            onMediaPlayFinishListener=null;
-//        }
-//    }
-
-//    public void setOnMediaPlayFinishListener(OnMediaPlayFinishListener listener) {
-//        onMediaPlayFinishListener=listener;
-//    }
 
     private void startPlayingVoice(final LinearLayout voiceLayout, final ImageView micButton, final TimerTextView micTime,
                                    final String localPath, final WFile file) {
@@ -1750,108 +1438,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             mediaPlayerWraper.triggerPlayer(localPath,file.duration);
         }
 
-
-//        voiceTimerViewMap.put(localPath,micTime);
-//        setMediaPlayingStatus(true);
-//
-//        if (mPlayer != null && mPlayer.isPlaying()) {
-//            mPlayer.seekTo(mPlayer.getDuration());
-//            new Timer().schedule(new TimerTask() {
-//                @Override
-//                public void run() {
-//                    activity.runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            startPlayingVoice(voiceLayout, micButton, micTime, localPath,file);
-//                        }
-//                    });
-//                }
-//            }, 500);
-//        } else {
-//            mPlayer = new MediaPlayer();
-//            micButton.setImageResource(R.drawable.timeline_player_stop);
-//            new AsyncTask<Void, Void, Void>() {
-//                @Override
-//                protected Void doInBackground(Void... params) {
-//                    try {
-//                        mPlayer.setDataSource(localPath);
-//                        mPlayer.prepare();
-//                        mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//                            @Override
-//                            public void onCompletion(MediaPlayer mediaPlayer) {
-//                                voiceLayout.setTag(TAG_NOT_PLAYING);
-//                                micButton.setImageResource(R.drawable.timeline_player_play);
-//                                micTime.stop();
-//                                micTime.setMaxTime();
-//                                micTime.setText(String.format("%01d:%02d", file.duration / 60, file.duration % 60));
-////                        micTime.setText(String.format("%02d:%02d", (mPlayer.getDuration() / 1000) / 60,
-////                                (mPlayer.getDuration() / 1000) % 60));
-//                                mPlayer.release();
-//                                mPlayer = null;
-//                                voiceLayout.setTag(TAG_NOT_PLAYING);
-//
-//                                voiceTimerViewMap.remove(localPath);
-//                                setMediaPlayingStatus(false);
-//                            }
-//                        });
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        mPlayer.release();
-//                        mPlayer = null;
-//                    }
-//
-//                    return null;
-//                }
-//
-//                @Override
-//                protected void onPostExecute(Void errno) {
-//                    if(null != mPlayer) {
-//                        mPlayer.start();
-//
-//                        voiceLayout.setTag(TAG_IS_PLAYING);
-//                        micTime.reset();
-//
-//                        micTime.start();
-//                    } else {
-//                        if(null != mMsgBox) {
-//                            mMsgBox.toast(R.string.operation_failed);
-//                        }
-//                        micButton.setImageResource(R.drawable.timeline_player_play);
-//                    }
-//                }
-//            }.execute((Void) null);
-//
-////            try {
-////                mPlayer.setDataSource(localPath);
-////                mPlayer.prepare();
-////                mPlayer.start();
-////                micButton.setBackgroundResource(R.drawable.stop_btn);
-////                voiceLayout.setTag(TAG_IS_PLAYING);
-////                micTime.reset();
-////                micTime.start();
-////                mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-////                    @Override
-////                    public void onCompletion(MediaPlayer mediaPlayer) {
-////                        voiceLayout.setTag(TAG_NOT_PLAYING);
-////                        micButton.setBackgroundResource(R.drawable.play_btn);
-////                        micTime.stop();
-////                        micTime.setMaxTime();
-//////                        micTime.setText(String.format("%02d:%02d", (mPlayer.getDuration() / 1000) / 60,
-//////                                (mPlayer.getDuration() / 1000) % 60));
-////                        mPlayer.release();
-////                        mPlayer = null;
-////                        voiceLayout.setTag(TAG_NOT_PLAYING);
-////
-////                        voiceTimerViewMap.remove(localPath);
-////                    }
-////                });
-////            } catch (IOException e) {
-////                e.printStackTrace();
-////                mPlayer.release();
-////                mPlayer = null;
-////            }
-//
-//        }
     }
 
     /**
@@ -1904,11 +1490,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         if(0 == cnt) {
             textView.clear();
         }
-//        if (cnt > 0)
-//            textView.append(" " + context.getResources().getString(R.string.moments_think_is_good), null,
-//                    0, 0, 0, null);
-//        else
-//            textView.clear();
         return cnt;
     }
 
@@ -1924,7 +1505,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     public static int setViewForCommentReview(
             final Context context, LinearLayout layout, final ArrayList<Review> reviews,
             final int momentPosition, final Moment moment,
-            final ReplyDelegate mReplyDelegate) {
+            final MomentActionHandler mReplyDelegate) {
 
         layout.removeAllViews();
 
@@ -2002,20 +1583,11 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     }
 
     public void stopMedia() {
-//        if (mPlayer != null) {
-////            mPlayer.release();
-////            mPlayer = null;
-//            mPlayer.seekTo(mPlayer.getDuration());
-//        }
         mediaPlayerWraper.stop();
         mCurrentPlayingVoicePath = null;
     }
 
-//    private boolean isMyMoment(String momentOwnerUid) {
-//        return WowTalkWebServerIF.getInstance(context).fGetMyUserIDFromLocal().equals(momentOwnerUid);
-//    }
-
-    public void setReplyDelegate(ReplyDelegate replyDelegate) {
+    public void setReplyDelegate(MomentActionHandler replyDelegate) {
         this.mReplyDelegate = replyDelegate;
     }
 
@@ -2030,17 +1602,4 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     public void setShowLoadMoreAsLastItem(boolean showLoadMoreAsLastItem) {
         this.showLoadMoreAsLastItem = showLoadMoreAsLastItem;
     }
-    
-    /**
-     * 实现投票的局部刷新
-     * @param itemIndex
-     */
-//    public void updateView(int itemIndex) {
-//    	//得到第一个可显示控件的位置
-//    	int visiblePosition = listView.getFirstVisiblePosition();
-//    	//只有当要更新的view在可见的位置时才更新，不可见时，跳过不更新
-//    	if (itemIndex - visiblePosition > 0) {
-//    		View view = listView.getChildAt(itemIndex);
-//    	}
-//    }
 }

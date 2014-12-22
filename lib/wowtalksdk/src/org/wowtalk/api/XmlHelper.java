@@ -955,4 +955,92 @@ public class XmlHelper {
         }
         return result;
     }
+
+    public static Lesson parseLesson(Element lessonElement) {
+        Lesson lesson = new Lesson();
+        Element e;
+
+        e = Utils.getFirstElementByTagName(lessonElement, "lesson_id");
+        if(e != null)
+            lesson.lesson_id = Integer.parseInt(e.getTextContent());
+
+        e = Utils.getFirstElementByTagName(lessonElement, "class_id");
+        if(e != null)
+            lesson.class_id = e.getTextContent();
+
+        e = Utils.getFirstElementByTagName(lessonElement, "title");
+        if(e != null)
+            lesson.title = e.getTextContent();
+
+        e = Utils.getFirstElementByTagName(lessonElement, "start_date");
+        if(e != null)
+            lesson.start_date = Long.parseLong(e.getTextContent());
+
+        e = Utils.getFirstElementByTagName(lessonElement, "end_date");
+        if(e != null)
+            lesson.end_date = Long.parseLong(e.getTextContent());
+
+        return lesson;
+    }
+
+    public static LessonHomework parseLessonHomework(Element homeworkElement) {
+        LessonHomework homework = new LessonHomework();
+        Element e;
+
+        e = Utils.getFirstElementByTagName(homeworkElement, "lesson_id");
+        if(e != null)
+            homework.lesson_id = Integer.parseInt(e.getTextContent());
+
+        e = Utils.getFirstElementByTagName(homeworkElement, "homework_id");
+        if(e != null)
+            homework.homework_id = Integer.parseInt(e.getTextContent());
+
+        e = Utils.getFirstElementByTagName(homeworkElement, "title");
+        if(e != null)
+            homework.title = e.getTextContent();
+
+        return homework;
+    }
+
+    public static LessonParentFeedback parseLessonParentFeedback(Element homeworkElement) {
+        LessonParentFeedback feedback = new LessonParentFeedback();
+        Element e;
+
+        e = Utils.getFirstElementByTagName(homeworkElement, "lesson_id");
+        if(e != null)
+            feedback.lesson_id = Integer.parseInt(e.getTextContent());
+
+        e = Utils.getFirstElementByTagName(homeworkElement, "student_id");
+        if(e != null)
+            feedback.student_id = e.getTextContent();
+
+        e = Utils.getFirstElementByTagName(homeworkElement, "moment_id");
+        if(e != null)
+            feedback.moment_id = Integer.parseInt(e.getTextContent());
+
+        return feedback;
+    }
+
+    public static LessonPerformance parseLessonPerformance(Element performanceNode) {
+        LessonPerformance performance = new LessonPerformance();
+        Element e;
+
+        e = Utils.getFirstElementByTagName(performanceNode, "lesson_id");
+        if(e != null)
+            performance.lesson_id = Integer.parseInt(e.getTextContent());
+
+        e = Utils.getFirstElementByTagName(performanceNode, "student_id");
+        if(e != null)
+            performance.student_id = e.getTextContent();
+
+        e = Utils.getFirstElementByTagName(performanceNode, "property_id");
+        if(e != null)
+            performance.property_id = Integer.parseInt(e.getTextContent());
+
+        e = Utils.getFirstElementByTagName(performanceNode, "property_value");
+        if(e != null)
+            performance.property_value = Integer.parseInt(e.getTextContent());
+
+        return performance;
+    }
 }

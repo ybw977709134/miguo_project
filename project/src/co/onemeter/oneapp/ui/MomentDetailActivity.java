@@ -39,11 +39,15 @@ import java.util.ArrayList;
  * To change this template use File | Settings | File Templates.
  */
 public class MomentDetailActivity extends Activity implements View.OnClickListener,
-        MomentAdapter.ReplyDelegate, InputBoardManager.InputResultHandler, InputBoardManager.ChangeToOtherAppsListener {
+        MomentAdapter.MomentActionHandler, InputBoardManager.InputResultHandler, InputBoardManager.ChangeToOtherAppsListener {
 
     private static final String IMAGE_CACHE_DIR = "image";
     public static final String EXTRA_REPLY_TO_MOMENT_ID = "reply_to_moment_id";
     public static final String EXTRA_REPLY_TO_REVIEW = "reply_to_review_id";
+    /** 输出状态发生了变化的 moment id */
+    public static final String EXTRA_CHANGED_MOMENT_ID = "changed_moment_id";
+    /** 输出被删除了的 moment id */
+    public static final String EXTRA_DELETED_MOMENT_ID = "deleted_moment_id";
 
     private ImageButton btnTitleBack;
 
@@ -236,6 +240,9 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             }
             if(null != likeReview) {
                 TimelineActivity.deleteMomentReview(this,moment.id,likeReview,onMomentReviewDeleteListener);
+                moment.reviews.remove(likeReview);
+                dbHelper.storeMoment(moment, moment.id);
+                setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, moment.id));
             } else {
                 Log.e("delete like review null");
             }
@@ -261,6 +268,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                 mMsgBox.dismissWait();
                 if (ErrorCode.OK == result) {
                     moment.likedByMe = true;
+                    moment.reviews.add(r);
                     addReviewToList(r);
 
                     // clear inputted text
@@ -268,6 +276,9 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                         mInputMgr.setLayoutForTimelineMoment(moment,getLikeBtnClickListener(momentId));
                         mInputMgr.setInputText("");
                     }
+
+                    dbHelper.storeMoment(moment, moment.id);
+                    setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, momentId));
                 } else {
                     mMsgBox.toast(R.string.msg_operation_failed);
                 }
@@ -312,6 +323,10 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                     if (mInputMgr != null) {
                         mInputMgr.setInputText("");
                     }
+
+                    moment.reviews.add(r);
+                    dbHelper.storeMoment(moment, moment.id);
+                    setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, moment.id));
                 }
             }
         }.execute((Void) null);
@@ -566,7 +581,9 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             @Override
             protected void onPostExecute(Integer errno) {
                 if (ErrorCode.OK == errno) {
-                    mHandler.sendEmptyMessageDelayed(MSG_ID_MOMENT_DELETE_WITH_DELAY_FINISH,1000);
+                    mHandler.sendEmptyMessageDelayed(MSG_ID_MOMENT_DELETE_WITH_DELAY_FINISH, 1000);
+                    dbHelper.deleteMoment(moment.id);
+                    setResult(RESULT_OK, new Intent().putExtra(EXTRA_DELETED_MOMENT_ID, moment.id));
                 } else {
                     mMsgBox.toast(R.string.operation_failed);
                     mMsgBox.dismissWait();
@@ -684,7 +701,6 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         mImageResizer.addImageCache(cacheParams);
 
         moment = getIntent().getParcelableExtra("moment");
-        moment=dbHelper.fetchMoment(moment.id);
         if(null == moment) {
             //as moment is created with alias_id
             //if MomentDetailActivity is started and onCreated has not been called,but moment_id has changed from server
@@ -699,6 +715,12 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         Database.addDBTableChangeListener(Database.TBL_MOMENT_REVIEWS,momentObserver);
 
         dbHelper.setReviewsRead(moment);
+
+        // 我们不知道是否以及何时提交投票，索性假设用户一定提交了投票，从而返回后上级页面总是刷新。
+        if (Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag)
+                || Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
+            setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, moment.id));
+        }
     }
 
     @Override
@@ -886,14 +908,23 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         }
     }
 
+    @Override
+    public void onMomentClicked(int position, Moment moment) {
+        // nothing to do
+    }
+
     private View.OnClickListener getLikeBtnClickListener(final String momentId) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Database db = new Database(MomentDetailActivity.this);
-                final Moment moment=db.fetchMoment(momentId);
-                if(null != moment) {
-                    doLikeMoment_async(moment);
+                Moment m;
+                if (TextUtils.equals(moment.id, momentId)) {
+                    m = moment;
+                } else {
+                    m = dbHelper.fetchMoment(momentId);
+                }
+                if (null != m) {
+                    doLikeMoment_async(m);
                 }
             }
         };
@@ -932,10 +963,15 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         if (mid == null)
             return;
 
-        Moment moment = dbHelper.fetchMoment(mid);
-        if (moment == null)
+        Moment m;
+        if (TextUtils.equals(mid, moment.id)) {
+            m = moment;
+        } else {
+            m = dbHelper.fetchMoment(mid);
+        }
+        if (m == null)
             return;
-        doReviewMoment_async(moment,
+        doReviewMoment_async(m,
                 replyTo == null ? null : replyTo.id,
                 text);
 //        mInputMgr.hide();

@@ -800,7 +800,7 @@
     <string name="hybird_message_editor_content_required">缺少内容</string>
     <string name="download_failed">下载失败</string>
     
-    <!-- MyClass -->
+    <!-- Class -->
     <string name="class_timetable">课表：</string>
     <string name="class_term">学期：%s</string>
     <string name="class_grade">年级：%s</string>
@@ -814,4 +814,6 @@
     <string name="class_parent_opinion_submitted">家长意见已提交</string>
     <string name="class_parent_opinion_not_submitted">家长意见未提交</string>
     <string name="more">更多</string>
+    <string name="class_edit_class_info">编辑班级信息</string>
+    <string name="class_edit_cursetable_info">编辑课表信息</string>
 </resources>

@@ -16,6 +16,7 @@ import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
 import co.onemeter.oneapp.utils.MyUrlSpanHelper;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
@@ -57,7 +58,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     private ImageView btnPlay;
     private ProgressBar progressBar;
     private TimerTextView micTimer;
-    private TextView txtLoc;
+    private TextView txtLoc; 
 
     private LinearLayout reviewLayout;
     private SpannedTextView txtLikeName;

@@ -61,6 +61,7 @@
                     android:textColor="@color/voice_play_btn_bg"
                     android:text="00:00"/>
         </LinearLayout>
+        
         <TextView
                 android:id="@+id/txt_loc"
                 android:layout_height="wrap_content"

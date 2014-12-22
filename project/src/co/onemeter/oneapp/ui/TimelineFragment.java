@@ -148,7 +148,8 @@ public abstract class TimelineFragment extends ListFragment
             // TODO refresh views
         }
     }
-
+    
+    
     @Override
     public void replyToMoment(int position, final Moment moment, Review replyTo, boolean like) {
         if (like) {

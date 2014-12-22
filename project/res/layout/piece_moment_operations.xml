@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+ 
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/moment_op_btns_layout_whole"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:background="@drawable/timeline_card_bg2"
-        android:orientation="vertical"
-        
-        >
+       	android:background="@drawable/timeline_card_bg2"
+        android:orientation="vertical" >
     <RelativeLayout
             android:layout_height="30dp"
-            android:layout_width="match_parent"
-            >
+            android:layout_width="match_parent" >
 
         <!--
         <ImageView
@@ -28,7 +25,8 @@
                 android:layout_width="match_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:orientation="horizontal">
+                
+                android:orientation="horizontal" >
             <LinearLayout
                     android:id="@+id/layout_more"
                     android:layout_width="0dp"
@@ -58,11 +56,10 @@
                     android:background="@color/transparent">
 
                 <Button
-                        android:id="@+id/btn_like"
-                        android:layout_height="20dp"
-                        android:layout_width="23dp"
-                        android:layout_gravity="center_vertical"
-                        android:background="@drawable/timeline_like"/>
+                    android:id="@+id/btn_like"
+                    android:layout_width="23dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/timeline_like" />
 				
                 <!--          android:text="@string/moments_like" -->
                 <TextView

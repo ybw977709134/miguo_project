@@ -484,7 +484,15 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
     }
 
     private void loadLocalPendingRequests() {
-        pendings = getPendingRequestsFromLocal(this);
+//        pendings = getPendingRequestsFromLocal(this);
+      pendings = new ArrayList<PendingRequest>();
+      ArrayList<PendingRequest> pendingRequests = new ArrayList<PendingRequest>();
+      dbHelper.fetchPendingRequest(pendingRequests);
+      for (PendingRequest p : pendingRequests) {
+          if (p.type == PendingRequest.BUDDY_IN || p.type == PendingRequest.GROUP_IN) {
+              pendings.add(p);
+          }
+      }
         friendAdapter = new NewFriendAdapter(this);
         mListView.setAdapter(friendAdapter);
 

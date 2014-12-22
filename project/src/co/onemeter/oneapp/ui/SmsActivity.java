@@ -19,8 +19,11 @@ import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MessagesAdapter;
 import co.onemeter.oneapp.utils.ThemeHelper;
+
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
+import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.bitmapfun.util.AsyncTask;
 
@@ -237,66 +240,66 @@ public class SmsActivity extends Activity implements OnClickListener {
         });
 
         // long click to delete session
-//        lvSms.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
-//
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-//                                           int position, long arg3) {
-//                // footer_view
-//                if (position > usingList.size()) {
-//                    return true;
-//                }
-//                closeSoftKeyboard();
-//                // 添加了header_view
-//                final ChatMessage msg = usingList.get(position - 1);
-//
-//                final BottomButtonBoard board = new BottomButtonBoard(SmsActivity.this, parentView);
-//                String[] texts = new String[]{
-//                        getString(R.string.session_delete),
-//                        getString(R.string.session_delete_chat_target),
-//                        getString(R.string.session_clear),
-//                        getString(R.string.session_clear_chat_target)
-//                };
-//                int[] btnStyles = new int[]{
-//                        BottomButtonBoard.BUTTON_WHITE,
-//                        BottomButtonBoard.BUTTON_WHITE,
-//                        BottomButtonBoard.BUTTON_RED,
-//                        BottomButtonBoard.BUTTON_RED
-//                };
-//                OnClickListener[] listeners = new OnClickListener[texts.length];
-//                listeners[0] = new OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        mDb.deleteChatMessageWithUser(msg.chatUserName);
-//                        board.dismiss();
-//                    }
-//                };
-//                listeners[1] = new OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        mDb.deleteLatestChatTarget(msg.chatUserName);
-//                        board.dismiss();
-//                    }
-//                };
-//                listeners[2] = new OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        mDb.deleteAllChatMessages();
-//                        board.dismiss();
-//                    }
-//                };
-//                listeners[3] = new OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        mDb.clearLatestChatTargets();
-//                        board.dismiss();
-//                    }
-//                };
-//                board.add(texts, btnStyles, listeners).show();
-//                return true;
-//            }
-//
-//        });
+        lvSms.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int position, long arg3) {
+                // footer_view
+                if (position > usingList.size()) {
+                    return true;
+                }
+                closeSoftKeyboard();
+                // 添加了header_view
+                final ChatMessage msg = usingList.get(position - 1);
+
+                final BottomButtonBoard board = new BottomButtonBoard(SmsActivity.this, parentView);
+                String[] texts = new String[]{
+                        getString(R.string.session_delete),
+                        getString(R.string.session_delete_chat_target),
+                        getString(R.string.session_clear),
+                        getString(R.string.session_clear_chat_target)
+                };
+                int[] btnStyles = new int[]{
+                        BottomButtonBoard.BUTTON_BLUE,
+                        BottomButtonBoard.BUTTON_BLUE,
+                        BottomButtonBoard.BUTTON_RED,
+                        BottomButtonBoard.BUTTON_RED
+                };
+                OnClickListener[] listeners = new OnClickListener[texts.length];
+                listeners[0] = new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mDb.deleteChatMessageWithUser(msg.chatUserName);
+                        board.dismiss();
+                    }
+                };
+                listeners[1] = new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mDb.deleteLatestChatTarget(msg.chatUserName);
+                        board.dismiss();
+                    }
+                };
+                listeners[2] = new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mDb.deleteAllChatMessages();
+                        board.dismiss();
+                    }
+                };
+                listeners[3] = new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mDb.clearLatestChatTargets();
+                        board.dismiss();
+                    }
+                };
+                board.add(texts, btnStyles, listeners).show();
+                return true;
+            }
+
+        });
     }
 
     @SuppressWarnings("unchecked")

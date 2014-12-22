@@ -84,6 +84,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
     private PrefUtil mPrefUtil;
 	private Database mDbHelper = null;
     private MessageBox mMsgBox;
+    private TextView search_empty;
 
 //	private int searchType;
 
@@ -304,8 +305,10 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //            lvGroups.setVisibility(View.GONE);
             if(searchedBuddyList.size() <= 0) {
                 searchResultLayout.setVisibility(View.GONE);
+                search_empty.setVisibility(View.VISIBLE);
             } else {
                 searchResultLayout.setVisibility(View.VISIBLE);
+                search_empty.setVisibility(View.GONE);
             }
 //        } 
 //    else {
@@ -360,6 +363,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 		edtSearchContent = (EditText) findViewById(R.id.edt_search);
 		search_cancel = (TextView) findViewById(R.id.search_cancel);
         fieldClear = (ImageButton) findViewById(R.id.field_clear);
+        search_empty = (TextView) findViewById(R.id.search_empty);
 //		txtPersonName = (TextView) findViewById(R.id.person_name_text);
 //		txtResultCount = (TextView) findViewById(R.id.txt_count);
 //		btnAdd = (Button) findViewById(R.id.btn_add);

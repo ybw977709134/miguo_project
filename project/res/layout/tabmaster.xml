@@ -84,19 +84,24 @@
 			            android:layout_width="44dp"
 			            android:layout_centerHorizontal="true"
 			            android:src="@drawable/tabbar_contact"/>
+		            <ImageView
+                        android:id="@+id/tab_contact_image_sms"
+                        android:layout_height="match_parent"
+                        android:layout_width="1dip"
+                        android:layout_centerHorizontal="true"
+                        android:visibility="invisible"/>
+		        		            
 		            <TextView
-			            android:id="@+id/txt_pendingin_requests"
-			            android:layout_width="10dp"
-			            android:layout_height="10dp"
-                        android:layout_gravity="top|right"
-                        android:background="@drawable/indicator"
-			            android:gravity="center"
-			            android:textColor="@color/white"
-			            android:textSize="10sp"
-			            android:visibility="invisible"
-			            android:layout_toRightOf="@+id/tab_contact_image"
-			            android:layout_alignTop="@+id/tab_contact_image"
-			            android:layout_marginTop="5dp"/>
+                        android:id="@+id/txt_pendingin_requests"
+                        android:layout_width="19dp"
+                        android:layout_height="17dp"
+                        android:layout_toRightOf="@id/tab_contact_image_sms"
+                        android:background="@drawable/unread_count_bg"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:visibility="invisible"
+                        android:layout_marginTop="5dp"/>
 		            <TextView
 			            android:id="@+id/tab_contact_text"
 			            android:layout_height="wrap_content"

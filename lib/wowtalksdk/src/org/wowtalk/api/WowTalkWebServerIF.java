@@ -723,6 +723,55 @@ public class WowTalkWebServerIF {
     }
 
 	/**
+	 * 添加好友验证
+	 * @param buddy_uid) 
+     * @param msg optional message to send to buddy admin.
+	 * @return
+	 */
+    public int faddBuddy_askforRequest(String buddy_uid,String msg) {
+    	String strUID = sPrefUtil.getUid();
+        String strPwd = sPrefUtil.getPassword();
+
+        if (isAuthEmpty(strUID, strPwd)) {
+            return ErrorCode.AUTH;
+		}
+
+        if (Utils.isNullOrEmpty(buddy_uid)) {
+            return ErrorCode.INVALID_ARGUMENT;
+        }
+
+        if (strUID.equals(buddy_uid)) {
+            return ErrorCode.ILLEGAL_OPERATION;
+        }
+
+        String postStr = "action=add_buddy&uid=" + Utils.urlencodeUtf8(strUID) + "&password="
+        		+ Utils.urlencodeUtf8(strPwd) + "&buddy_id=" + Utils.urlencodeUtf8(buddy_uid);
+        		        if (null != msg)
+        		            postStr += "&msg=" + Utils.urlencodeUtf8(msg);
+        		        Connect2 connect2 = new Connect2();
+        		Element root = connect2.Post(postStr);
+
+		int errno = ErrorCode.UNKNOWN;
+		if (root != null) {
+            Element errEle = Utils.getFirstElementByTagName(root, "err_no");
+            errno = Utils.tryParseInt(errEle.getTextContent(), ErrorCode.BAD_RESPONSE);
+
+            if (ErrorCode.OK == errno) {
+                Element user = Utils.getFirstElementByTagName(root, "buddy");
+                Database dbHelper = new Database(mContext);
+
+                try {
+                    Buddy buddy = new Buddy();
+                    XmlHelper.parseBuddy(user, buddy);
+                    dbHelper.storeNewBuddyWithUpdate(buddy);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+			}
+		}
+		return errno;
+    }
+	/**
 	 * 用户申请加入组
 	 * @param group_id
      * @param msg optional message to send to group admin.

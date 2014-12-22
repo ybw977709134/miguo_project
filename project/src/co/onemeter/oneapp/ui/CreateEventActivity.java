@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -19,6 +20,7 @@ import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.*;
+import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.InputBoardManager;
 
 import java.text.SimpleDateFormat;
@@ -66,6 +68,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     private ImageButton isBtnPublic;
 
     private EditText edtContent;
+    private MessageBox msgBox;
 
     private void initView(Bundle bundle) {
         AQuery q = new AQuery(this);
@@ -120,6 +123,8 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         } else {
             setTitle("");
         }
+        wevent.is_get_member_info = mIsInfo;
+        msgBox = new MessageBox(this);
     }
 
     @Override
@@ -130,6 +135,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
 
     private void createEvent() {
         updateData();
+        msgBox.showWait();
         new AsyncTask<WEvent, Void, Integer>() {
             Context context;
             @Override
@@ -170,7 +176,9 @@ public class CreateEventActivity extends Activity implements OnClickListener {
 
             @Override
             protected void onPostExecute(Integer errno) {
+            	msgBox.dismissWait();
                 if (errno == ErrorCode.OK) {
+                	//Log.i("--->>>create", wevent.is_get_member_info+"");
                     finish();
                 } else {
                     Toast.makeText(context, R.string.operation_failed, Toast.LENGTH_SHORT).show();
@@ -179,6 +187,14 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         }.execute(wevent);
     }
 
+    @Override
+    public void onBackPressed() {
+    	super.onBackPressed();
+    	if(msgBox != null){
+    		msgBox.dismissToast();
+    	}
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -224,7 +240,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                 finish();
                 break;
             case R.id.title_confirm:
-            	boolean isContentTrue = !TextUtils.isEmpty(txtTitle.getText()) && !TextUtils.isEmpty(txtTitle.getText()) 
+            	boolean isContentTrue = !TextUtils.isEmpty(txtTitle.getText()) && !TextUtils.isEmpty(txtLoc.getText()) 
             				&& !TextUtils.isEmpty(txtStartTime.getText())&& !TextUtils.isEmpty(txtEndTime.getText())
             				&& !TextUtils.isEmpty(edtContent.getText().toString()) && !TextUtils.isEmpty(txtCapacity.getText()) 
             				&& !TextUtils.isEmpty(txtCoins.getText()); 
@@ -232,7 +248,10 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                 	createEvent();
                 	closeSoftKeyboard();
                 }else{
-                	Toast.makeText(this, getString(R.string.operation_failed), Toast.LENGTH_SHORT).show();
+                	if(!msgBox.isWaitShowing()){
+                		msgBox.toast(getString(R.string.event_finish_info), 1000);
+                	//Toast.makeText(this, getString(R.string.event_finish_info), Toast.LENGTH_SHORT).show();
+                	}
                 }
                 break;
             case R.id.img_allday:
@@ -271,7 +290,6 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                         	Toast.makeText(CreateEventActivity.this, R.string.event_time_start_earlier_now, Toast.LENGTH_SHORT).show();
                         }
                     }
-                   
                 });
                 break;
             case R.id.layout_endtime:
@@ -406,7 +424,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
 
         q.find(R.id.txt_coins).text(wevent.costGolds > 0 ?
                 Integer.toString(wevent.costGolds) :
-                getString(R.string.event_not_limited));
+                getString(R.string.event_join_coin_free));
         q.find(R.id.txt_capacity).text(wevent.capacity > 0 ?
                 Integer.toString(wevent.capacity) :
                 getString(R.string.event_not_limited));
@@ -425,8 +443,8 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     }
     
     private void changeIsInfo(boolean isInfo) {
-    	mIsInfo = isInfo;
-    	isBtnInfo.setBackgroundResource(mIsInfo ? R.drawable.icon_switch_on : R.drawable.icon_switch_off);
+    	wevent.is_get_member_info = isInfo;
+    	isBtnInfo.setBackgroundResource(isInfo ? R.drawable.icon_switch_on : R.drawable.icon_switch_off);
 	}
     
     private void changeIsPublic(boolean isPublic) {

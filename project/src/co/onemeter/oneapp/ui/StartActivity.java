@@ -226,6 +226,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 
         txt_unreadMsg.getBackground().setAlpha(NOTE_TXT_BKG_ALPHA);
         txt_friends_news.getBackground().setAlpha(NOTE_TXT_BKG_ALPHA);
+        txt_pendingin_requests.getBackground().setAlpha(NOTE_TXT_BKG_ALPHA);
 
 		mTabSms.setOnClickListener(this);
 		mTabContact.setOnClickListener(this);
@@ -314,7 +315,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 		mHost.addTab(buildTabSpec(String.valueOf(TAB_HOME), getResources().getString(R.string.app_name), R.drawable.ic_action_search, mHomeIntent));
 		mHost.addTab(buildTabSpec(String.valueOf(TAB_SETTING), getResources().getString(R.string.app_name), R.drawable.ic_action_search, mSettingIntent));
 		
-        _selectedTabIndex=TAB_SMS;
+        _selectedTabIndex=TAB_HOME;
 	}
 	
 	@Override
@@ -868,6 +869,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         if (!pendingRequestExist) {
             txt_pendingin_requests.setVisibility(View.GONE);
         } else {
+        	txt_pendingin_requests.setText(pendingRequests.size()+"");
             txt_pendingin_requests.setVisibility(View.VISIBLE);
         }
     }

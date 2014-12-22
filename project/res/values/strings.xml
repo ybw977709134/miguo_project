@@ -66,13 +66,14 @@
     <string name="contactinfo_employee_id">工号</string>
     <string name="contactinfo_add_friend_denied">对方拒绝被添加为好友</string>
     <string name="contactgroupinfo_load_failure">数据加载失败</string>
-	<string name="contacts_search_buddy">搜索好友</string>
+	<string name="contacts_search_buddy">搜索</string>
 	<string name="contacts_search_group">搜索群组</string>
 	<string name="contacts_search_cancel">取消</string>
 	<string name="contacts_search_result_buddy">用户</string>
 	<string name="contacts_search_result_group">群组</string>
 	<string name="contacts_search_buddy_hint">请输入用户 ID</string>
 	<string name="contacts_search_group_hint">请输入群组号或名称</string>
+	<string name="contacts_search_null">你可以搜索到好友和群组</string>
 	<string name="contacts_new_friends">新的朋友</string>
 	<string name="contacts_new_friends_add_list">请求列表</string>
 	<string name="contacts_new_friends_pending_in">发来好友请求</string>
@@ -90,6 +91,10 @@
     <string name="contacts_new_friends_buddyout">请求加：%s为好友</string>
 	<string name="contacts_new_friends_prompt_title">您有新的好友请求</string>
 	<string name="contacts_new_friends_prompt_msg">请到 联系人－新的朋友 中查看</string>
+	<string name="contacts_QRcode_dialogtitle">提示</string>
+	<string name="contacts_QRcode_confirm">你确定要访问该网址吗？</string>
+	<string name="contacts_QRcode_ok">确定</string>
+	<string name="contacts_QRcode_cancel">取消</string>
     <string name="contacts_apply_to_join_group">申请加入群组</string>
     <string name="contact_groupcreate_input_group_name">输入群组名称</string>
     <string name="contacts_newfriend_wait_for_cofirm">等待验证</string>
@@ -113,14 +118,14 @@
     <string name="contacts_validate_toast">发送成功</string>
 	<string name="friends_moments_pagetitle">动态</string>
 	<string name="friends_pagetitle">朋友们</string>
-	<string name="firends_add_pagetitle">添加朋友</string>
+	<string name="firends_add_pagetitle">添加联系人</string>
 	<string name="friends_moments">朋友动态</string>
 	<string name="friends_add">添加朋友</string>
     <string name="friends_official_search">公共帐号搜索</string>
     <string name="friends_recommended_official">推荐的公共帐号</string>
 	<string name="friends_add_search">搜索</string>
 	<string name="friends_add_import">导入</string>
-	<string name="friends_add_create_group">创建组</string>
+	<string name="friends_add_create_group">创建群组</string>
 	<string name="friends_add_official_account">官方帐号</string>
 	<string name="friends_nearby">附近的人</string>
 	<string name="friends_nearby_groups">附近的群</string>
@@ -138,6 +143,8 @@
 	<string name="events_applied">已报名的活动</string>
 	<string name="events_joined">已参加的活动</string>
 	<string name="event_time_label">时间</string>
+	<string name="event_time_label_start">开始时间</string>
+	<string name="event_time_label_end">结束时间</string>
 	<string name="event_place_label">地点</string>
 	<string name="event_host_label">主办</string>
     <string name="event_tel_label">联系方式</string>
@@ -181,6 +188,8 @@
     <string name="event_time_end_earlier">活动结束时间早于开始时间！</string>
     <string name="event_member_count_nolimit">不限</string>
     <string name="event_join_coin_free">免费</string>
+    <string name="event_finish_info">发布活动需要完成所有信息的填写！</string>
+    <string name="event_info_fill">请先填写信息！</string>
 
     <string name="settings_myinfo">个人信息</string>
     <string name="my_treasure">我的百宝箱</string>

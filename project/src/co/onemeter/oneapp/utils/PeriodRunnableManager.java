@@ -34,7 +34,7 @@ public class PeriodRunnableManager {
     }
 
     private static PeriodRunnableManager theInstance;
-    LinkedList<Task> tasks = new LinkedList<>();
+    LinkedList<Task> tasks = new LinkedList<Task>();
 
     private PeriodRunnableManager() {
     }

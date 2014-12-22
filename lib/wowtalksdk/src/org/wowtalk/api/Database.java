@@ -44,6 +44,10 @@ public class Database {
     public static final String TBL_BUDDIES = "buddies";
     public static final String TBL_BUDDY_DETAIL = "buddydetail";
     public static final String TBL_UNSENT_RECEIPTS = "unsent_receipts";
+    public static final String TBL_LESSON = "lesson";
+    public static final String TBL_LESSON_PERFORMANCE = "lesson_performance";
+    public static final String TBL_LESSON_HOMEWORK = "lesson_homework";
+    public static final String TBL_LESSON_PARENT_FEEDBACK = "lesson_parent_feedback";
     @Deprecated
     public static final String TBL_LATEST_CONTACTS = "latest_contacts";
     public static final String TBL_LATEST_CHAT_TARGET = "latest_chat_target";
@@ -4579,6 +4583,7 @@ public class Database {
 		values.put("longitude", e.longitude);
 		values.put("membership", e.membership);
 		values.put("needWork", e.needWork ? 1 : 0);
+		values.put("is_get_member_info", e.is_get_member_info ? 1 : 0);
 		values.put("owner_uid", e.owner_uid);
         values.put("host", e.host);
 		values.put("privacy_level", e.privacy_level);
@@ -4818,6 +4823,7 @@ public class Database {
 				"longitude",
 				"membership",
 				"needWork",
+				"is_get_member_info",
 				"owner_uid",
                 "host",
 				"privacy_level",
@@ -4861,6 +4867,7 @@ public class Database {
 			e.longitude = cur.getFloat(++i);
 			e.membership = cur.getInt(++i);
 			e.needWork = cur.getInt(++i) == 1;
+			e.is_get_member_info = cur.getInt(++i) == 1;
 			e.owner_uid = cur.getString(++i);
             e.host = cur.getString(++i);
 			e.privacy_level = cur.getInt(++i);
@@ -5994,6 +6001,139 @@ public class Database {
         markDBTableModified(TBL_MOMENT_REVIEWS);
     }
 
+    public long storeLesson(Lesson lesson) {
+        ContentValues values = new ContentValues();
+        values.put("lesson_id", lesson.lesson_id);
+        values.put("class_id", lesson.class_id);
+        values.put("title", lesson.title);
+        values.put("start_date", lesson.start_date);
+        values.put("end_date", lesson.end_date);
+        return database.insertWithOnConflict(TBL_LESSON, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public long storeLessonPerformance(LessonPerformance lessonPerformance) {
+        ContentValues values = new ContentValues();
+        values.put("lesson_id", lessonPerformance.lesson_id);
+        values.put("student_id", lessonPerformance.student_id);
+        values.put("property_id", lessonPerformance.property_id);
+        values.put("property_value", lessonPerformance.property_value);
+        return database.insertWithOnConflict(TBL_LESSON_PERFORMANCE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public long storeLessonHomework(LessonHomework lessonHomework) {
+        ContentValues values = new ContentValues();
+        values.put("lesson_id", lessonHomework.lesson_id);
+        values.put("homework_id", lessonHomework.homework_id);
+        values.put("title", lessonHomework.title);
+        return database.insertWithOnConflict(TBL_LESSON_HOMEWORK, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public long storeLessonParentFeedback(LessonParentFeedback feedback) {
+        ContentValues values = new ContentValues();
+        values.put("lesson_id", feedback.lesson_id);
+        values.put("student_id", feedback.student_id);
+        values.put("moment_id", feedback.moment_id);
+        return database.insertWithOnConflict(TBL_LESSON_PARENT_FEEDBACK, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    /**
+     * @param class_id null 则清除所有课程的。
+     * @return
+     */
+    public long deleteLesson(String class_id) {
+        if (class_id == null)
+            return database.delete(TBL_LESSON, null, null);
+        else
+            return database.delete(TBL_LESSON, "class_id=?", new String[] { class_id });
+    }
+
+    public long deleteLessonPerformance(int lesson_id, String student_id) {
+        return database.delete(TBL_LESSON_PERFORMANCE, "lesson_id=? AND student_id=?",
+                new String[]{Integer.toString(lesson_id), student_id});
+    }
+
+    public long deleteLessonHomework(int lesson_id, int homework_id) {
+        return database.delete(TBL_LESSON_HOMEWORK, "lesson_id=? AND homework_id=?",
+                new String[]{Integer.toString(lesson_id), Integer.toString(homework_id)});
+    }
+
+    public List<Lesson> fetchLesson(String classId) {
+        List<Lesson> result = new LinkedList<>();
+        Cursor cur = database.query(TBL_LESSON,
+                new String[] { "lesson_id", "title", "start_date", "end_date" },
+                "class_id=?", new String[] { classId },
+                null, null, null);
+        if (cur.moveToFirst()) {
+            do {
+                Lesson lesson = new Lesson();
+                int i = -1;
+                lesson.lesson_id = cur.getInt(++i);
+                lesson.class_id = classId;
+                lesson.title = cur.getString(++i);
+                lesson.start_date = cur.getLong(++i);
+                lesson.end_date = cur.getLong(++i);
+                result.add(lesson);
+            } while (cur.moveToNext());
+        }
+        return result;
+    }
+
+    public List<LessonPerformance> fetchLessonPerformance(int lessonId, String studentId) {
+        List<LessonPerformance> result = new LinkedList<>();
+        Cursor cur = database.query(TBL_LESSON_PERFORMANCE,
+                new String[] { "property_id", "property_value" },
+                "lesson_id=? AND student_id=?", new String[] { Integer.toString(lessonId), studentId },
+                null, null, null);
+        if (cur.moveToFirst()) {
+            do {
+                LessonPerformance performance = new LessonPerformance();
+                int i = -1;
+                performance.lesson_id = lessonId;
+                performance.student_id = studentId;
+                performance.property_id = cur.getInt(++i);
+                performance.property_value = cur.getInt(++i);
+                result.add(performance);
+            } while (cur.moveToNext());
+        }
+        return result;
+    }
+
+    public List<LessonHomework> fetchLessonHomework(int lessonId) {
+        List<LessonHomework> result = new LinkedList<>();
+        Cursor cur = database.query(TBL_LESSON_HOMEWORK,
+                new String[] { "homework_id", "title" },
+                "lesson_id=?", new String[] { Integer.toString(lessonId) },
+                null, null, null);
+        if (cur.moveToFirst()) {
+            do {
+                LessonHomework homework = new LessonHomework();
+                int i = -1;
+                homework.lesson_id = lessonId;
+                homework.homework_id = cur.getInt(++i);
+                homework.title = cur.getString(++i);
+                result.add(homework);
+            } while (cur.moveToNext());
+        }
+        return result;
+    }
+
+    public LessonParentFeedback fetchLessonParentFeedback(int lessonId, String studentId) {
+        LessonParentFeedback result = null;
+        Cursor cur = database.query(TBL_LESSON_PARENT_FEEDBACK,
+                new String[] { "moment_id" },
+                "lesson_id=? AND student_id=?", new String[] { Integer.toString(lessonId), studentId },
+                null, null, null);
+        if (cur.moveToFirst()) {
+            LessonParentFeedback feedback = new LessonParentFeedback();
+            int i = -1;
+            feedback.lesson_id = lessonId;
+            feedback.student_id = studentId;
+            feedback.moment_id = cur.getInt(++i);
+            result = feedback;
+        }
+        return result;
+    }
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //db table change notification wraper
@@ -6153,7 +6293,7 @@ public class Database {
 
 class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME_PRE = GlobalSetting.DATABASE_NAME;
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
     public int flagIndex;
     private Context mContext;
 
@@ -6281,6 +6421,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 			+ "`longitude` FLOAT,"
 			+ "`membership` INTEGER,"
 			+ "`needWork` INTEGER,"
+			+ "`is_get_member_info` INTEGER,"
 			+ "`owner_uid` TEXT,"
             + "`host` TEXT,"
 			+ "`privacy_level` INTEGER,"
@@ -6428,6 +6569,39 @@ class DatabaseHelper extends SQLiteOpenHelper {
             + "local_item INTEGER"
             + ");";
 
+    private static final String DATABASE_CREATE_TBL_LESSON =
+            "CREATE TABLE IF NOT EXISTS " + Database.TBL_LESSON + " ("
+                    + "lesson_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "class_id TEXT NOT NULL,"
+                    + "title TEXT,"
+                    + "start_date INTEGER,"
+                    + "end_date INTEGER"
+                    + ");";
+
+    private static final String DATABASE_CREATE_TBL_LESSON_PERFORMANCE =
+            "CREATE TABLE IF NOT EXISTS " + Database.TBL_LESSON_PERFORMANCE + " ("
+                    + "performance_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "lesson_id INTEGER NOT NULL,"
+                    + "student_id TEXT NOT NULL,"
+                    + "property_id INTEGER,"
+                    + "property_value INTEGER"
+                    + ");";
+
+    private static final String DATABASE_CREATE_TBL_LESSON_HOMEWORK =
+            "CREATE TABLE IF NOT EXISTS " + Database.TBL_LESSON_HOMEWORK + " ("
+                    + "lesson_id INTEGER NOT NULL,"
+                    + "homework_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                    + "title TEXT NOT NULL"
+                    + ");";
+
+    private static final String DATABASE_CREATE_TBL_LESSON_PARENT_FEEDBACK =
+            "CREATE TABLE IF NOT EXISTS " + Database.TBL_LESSON_PARENT_FEEDBACK + " ("
+                    + "feedback_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "lesson_id INTEGER NOT NULL,"
+                    + "student_id TEXT NOT NULL,"
+                    + "moment_id INTEGER NOT NULL"
+                    + ");";
+
     private static final String DATABASE_CREATE_INDEX_0="CREATE INDEX IF NOT EXISTS " + " idx_moment_ownUid "
             + " ON " + Database.TBL_MOMENT + " ( " + " owner_uid " + " );";
     private static final String DATABASE_CREATE_INDEX_1="CREATE INDEX IF NOT EXISTS " + " idx_moment_timestamp "
@@ -6438,6 +6612,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
             + " ON " + Database.TBL_MESSAGES + " ( " + " chattarget,id " + " );";
     private static final String DATABASE_CREATE_INDEX_4="CREATE INDEX IF NOT EXISTS " + " idx_Event_timeStamp "
             + " ON " + Database.TBL_EVENT + " ( " + " timeStamp " + " );";
+    private static final String DATABASE_CREATE_INDEX_5="CREATE UNIQUE INDEX IF NOT EXISTS " + " idx_lesson_performance "
+            + " ON " + Database.TBL_LESSON_PERFORMANCE + " ( lesson_id, student_id, property_id );";
+    private static final String DATABASE_CREATE_INDEX_6="CREATE UNIQUE INDEX IF NOT EXISTS " + " idx_lesson_parent_feedback "
+            + " ON " + Database.TBL_LESSON_PARENT_FEEDBACK + " ( lesson_id, student_id );";
 
     public DatabaseHelper(Context context, String uid, int flagIndex) {
         super(context, DATABASE_NAME_PRE + "_" + uid, null, DATABASE_VERSION);
@@ -6471,11 +6649,18 @@ class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(DATABASE_CREATE_TBL_CHATMESSAGES_HISTORY);
         database.execSQL(DATABASE_CREATE_TBL_SURVEY);
 
+        database.execSQL(DATABASE_CREATE_TBL_LESSON);
+        database.execSQL(DATABASE_CREATE_TBL_LESSON_PERFORMANCE);
+        database.execSQL(DATABASE_CREATE_TBL_LESSON_HOMEWORK);
+        database.execSQL(DATABASE_CREATE_TBL_LESSON_PARENT_FEEDBACK);
+
         database.execSQL(DATABASE_CREATE_INDEX_0);
         database.execSQL(DATABASE_CREATE_INDEX_1);
         database.execSQL(DATABASE_CREATE_INDEX_2);
         database.execSQL(DATABASE_CREATE_INDEX_3);
         database.execSQL(DATABASE_CREATE_INDEX_4);
+        database.execSQL(DATABASE_CREATE_INDEX_5);
+        database.execSQL(DATABASE_CREATE_INDEX_6);
     }
 
     // Method is called during an upgrade of the database, e.g. if you increase
@@ -6538,6 +6723,18 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 " ADD COLUMN path_multimedia2 TEXT AFTER path_multimedia;");
             database.execSQL("ALTER TABLE " + DATABASE_CREATE_TBL_CHATMESSAGES_HISTORY +
                     " ADD COLUMN path_multimedia2 TEXT AFTER path_multimedia;");
+            ++oldVersion;
+        }
+
+        if (oldVersion == 6) {
+            database.execSQL(DATABASE_CREATE_TBL_LESSON);
+            database.execSQL(DATABASE_CREATE_TBL_LESSON_PERFORMANCE);
+            database.execSQL(DATABASE_CREATE_TBL_LESSON_HOMEWORK);
+            database.execSQL(DATABASE_CREATE_TBL_LESSON_PARENT_FEEDBACK);
+
+            database.execSQL(DATABASE_CREATE_INDEX_5);
+            database.execSQL(DATABASE_CREATE_INDEX_6);
+
             ++oldVersion;
         }
     }

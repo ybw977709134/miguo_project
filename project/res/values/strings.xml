@@ -825,5 +825,8 @@
     <string name="class_wait_submit">待提交意见</string>
     <string name="class_confirmed">已确认</string>
     <string name="class_wait_confirm">待确认</string>
+    <string name="class_very_very_good">棒极了</string>
+    <string name="class_very_good">好</string>
+    <string name="class_good">有待加强</string>
     
 </resources>

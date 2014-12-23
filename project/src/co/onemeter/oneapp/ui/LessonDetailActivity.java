@@ -5,6 +5,7 @@ import org.wowtalk.api.PrefUtil;
 
 import com.androidquery.AQuery;
 
+import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import android.app.Activity;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.view.View.OnClickListener;
  */
 public class LessonDetailActivity extends Activity implements OnClickListener {
 	
+	private int lessonId;
 	
 	protected void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -29,6 +31,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		Intent intent = getIntent();
 		if(null != intent){
 			q.find(R.id.lesson_title).text(intent.getStringExtra("title"));
+			lessonId = intent.getIntExtra(Constants.LESSONID,0);
 		}
 		q.find(R.id.title_back).clicked(this);
 		if(isTeacher()){
@@ -49,15 +52,18 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		Intent intent = new Intent();
+		intent.putExtra(Constants.LESSONID, lessonId);
 		switch (v.getId()) {
 		case R.id.title_back:
 			finish();
 			break;
 		case R.id.les_lay_first:
+			intent.setClass(this, LessonStatusActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.les_lay_second:
-			
+			intent.setClass(this, HomeworkActivity.class);
+			startActivity(intent);
 			break;
 		case R.id.les_lay_third:
 			

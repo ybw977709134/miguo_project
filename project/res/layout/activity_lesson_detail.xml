@@ -20,7 +20,7 @@
         <TextView
             android:id="@+id/lesson_title"
             style="?attr/navbar_title"
-            android:text="" />
+            android:text="dummy" />
     </RelativeLayout>
 
     <LinearLayout

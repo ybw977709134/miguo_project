@@ -15,6 +15,7 @@ import org.wowtalk.ui.BottomButtonBoard;
 
 import com.androidquery.AQuery;
 
+import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -208,7 +209,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			long id) {
 		Intent intent = new Intent();
 		intent.setClass(this, LessonDetailActivity.class);
-		intent.putExtra("lessonId", lessons.get(position).lesson_id);
+		intent.putExtra(Constants.LESSONID, lessons.get(position).lesson_id);
 		intent.putExtra("title", lessons.get(position).title);
 		startActivity(intent);
 	}

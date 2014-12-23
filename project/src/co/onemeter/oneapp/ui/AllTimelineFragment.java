@@ -47,6 +47,15 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
         WowMomentWebServerIF web = WowMomentWebServerIF.getInstance(getActivity());
         return web.fGetMomentsOfAll(maxTimestamp, PAGE_SIZE, true);
     }
+    
+    /**
+     * 重写uid加载动态的抽象方法
+     * @author hutianfeng
+     */
+    @Override
+    protected ArrayList<Moment> loadUidMoments(int countType,long maxTimestamp) {
+    	return dbHelper.fetchBuddyDetailUID(countType, maxTimestamp, PAGE_SIZE);
+    }
 
     @Override
     public void onResume() {

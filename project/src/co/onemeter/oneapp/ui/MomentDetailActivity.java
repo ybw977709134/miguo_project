@@ -62,12 +62,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     private ImageView btnPlay;
     private ProgressBar progressBar;
     private TimerTextView micTimer;
-    private TextView txtLoc;
-    
-    //详情页中的赞数和评论数
-    private LinearLayout layout_detailcomment_review;
-    private TextView textView_commentdetail_like;//赞
-    private TextView textView_commentdetail_comment;//评论
+    private TextView txtLoc; 
 
     private LinearLayout reviewLayout;
     private SpannedTextView txtLikeName;
@@ -80,6 +75,11 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     private LinearLayout layoutComment;
     private LinearLayout layoutAnswer;
     private ImageView ivMomentFavorite;
+    
+  //详情页中的赞数和评论数
+    private LinearLayout layout_detailcomment_review;
+    private TextView textView_commentdetail_like;//赞
+    private TextView textView_commentdetail_comment;//评论
 
     private WowTalkWebServerIF mWeb;
     private PrefUtil mPrefUtil;
@@ -119,6 +119,8 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 //    }
 
     private MediaPlayerWraper mediaPlayerWraper;
+    
+    ImageButton momentOp;
     private void initView() {
         btnTitleBack = (ImageButton) findViewById(R.id.title_back);
 
@@ -156,11 +158,11 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 //        boolean isMineMoment=mWeb.fGetMyUserIDFromLocal().equals(moment.owner.userID);
 //        Log.i("moment detail mine? "+isMineMoment);
 
-        ImageButton momentOp=(ImageButton) findViewById(R.id.moment_op);
+//        	ImageButton momentOp=(ImageButton) findViewById(R.id.moment_op);
 //        ImageView ivMomentOpLeftDiv=(ImageView) findViewById(R.id.moment_op_left_div);
 //        if(isMomentMine()) {
 //            momentOp.setVisibility(View.VISIBLE);
-//            ivMomentOpLeftDiv.setVisibility(View.VISIBLE);
+//            ivMomentOpLeftDiv.setVisibility(View.VISIBLE); 
 //        }
 
         if(!TextUtils.isEmpty(moment.tag) && moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_QA)) {
@@ -595,14 +597,14 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     private void showMomentOpBottomDialog() {
         final BottomButtonBoard bottomBoard = new BottomButtonBoard(this,
                 findViewById(R.id.moment_op));
-        bottomBoard.add(moment.isFavorite?getString(R.string.un_favorite_moment):getString(R.string.favorite_moment),
-                BottomButtonBoard.BUTTON_BLUE, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MomentAdapter.triggerMomentFavorite(MomentDetailActivity.this,moment,ivMomentFavorite);
-                bottomBoard.dismiss();
-            }
-        });
+//        bottomBoard.add(moment.isFavorite?getString(R.string.un_favorite_moment):getString(R.string.favorite_moment),
+//                BottomButtonBoard.BUTTON_BLUE, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                MomentAdapter.triggerMomentFavorite(MomentDetailActivity.this,moment,ivMomentFavorite);
+//                bottomBoard.dismiss();
+//            }
+//        });
         String myUid = mPrefUtil.getUid();
         if(!TextUtils.isEmpty(myUid) && myUid.equals(moment.owner.userID)) {
             //moment is mine
@@ -628,7 +630,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             });
         }
 
-        bottomBoard.addCancelBtn(getString(R.string.close));
+//        bottomBoard.addCancelBtn(getString(R.string.close));
         bottomBoard.show();
     }
 
@@ -667,6 +669,15 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moment_detail);
+        momentOp=(ImageButton) findViewById(R.id.moment_op);
+        
+        int isShow = getIntent().getIntExtra("isowner", 0);
+        
+        if (isShow == 1) {
+        	momentOp.setVisibility(View.VISIBLE);
+        } else {
+        	momentOp.setVisibility(View.GONE);
+        }
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
@@ -813,10 +824,11 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         MomentAdapter.setImageLayout(this, mImageResizer, photoFiles, imageTable);
         int nlikers = MomentAdapter.setViewForLikeReview(this, txtLikeName, moment.reviews);
         int nReviews = MomentAdapter.setViewForCommentReview(this, commentLayout, moment.reviews, -1, moment, this);
-        //赞和评论的具体数量统计
+        
+      //赞和评论的具体数量统计
         textView_commentdetail_like.setText(nlikers+"");
         textView_commentdetail_comment.setText(nReviews+"");
-
+        
         txtLikeName.setVisibility(nlikers > 0 ? View.VISIBLE : View.GONE);
         reviewLayout.setVisibility(nlikers + nReviews > 0 ? View.VISIBLE : View.GONE);
         reviewDivider.setVisibility(nlikers > 0 && nReviews > 0 ? View.VISIBLE : View.GONE);
@@ -889,6 +901,13 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     public static void launch(Context context, Moment moment) {
         Intent intent = new Intent(context, MomentDetailActivity.class);
         intent.putExtra("moment", moment);
+        context.startActivity(intent);
+    }
+    
+    public static void launch(Context context, Moment moment,String isowner) {
+        Intent intent = new Intent(context, MomentDetailActivity.class);
+        intent.putExtra("moment", moment);
+        intent.putExtra("isowner", 1);
         context.startActivity(intent);
     }
 

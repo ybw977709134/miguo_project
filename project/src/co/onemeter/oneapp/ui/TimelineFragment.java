@@ -9,13 +9,16 @@ import android.text.TextUtils;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
+
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>浏览动态。</p>
@@ -67,6 +70,14 @@ public abstract class TimelineFragment extends ListFragment
      * @return {@link org.wowtalk.api.ErrorCode}
      */
     protected abstract int loadRemoteMoments(long maxTimestamp);
+    
+    /**
+     * 根据UI的从本地数据库中加载动态
+     * @param maxTimestamp
+     * @return
+     * @author hutianfeng
+     */
+    protected abstract ArrayList<Moment> loadUidMoments(int countType,long maxTimestamp);
 
     /**
      * fill/append/clear list view, set visibility of the "load more" item.
@@ -247,7 +258,24 @@ public abstract class TimelineFragment extends ListFragment
     public void onSenderChanged(int index) {
 //        Toast.makeText(getActivity(),
 //                "sender: " + index, Toast.LENGTH_SHORT).show();
+    	int newindex = 0;
+    	if (index == 0) {//全部
+    		fillListView(loadLocalMoments(0, tagIdxFromUiToDb(index)), false);
+    	} else if (index == 1) {//官方账号 0
+    		newindex = index -1;
+    		fillListView(loadUidMoments(newindex, 0), false);
+    	} else if (index == 2) {//老师账号2
+    		newindex = index;
+    		fillListView(loadUidMoments(newindex, 0), false);
+    	} else if (index == 3) {//学生账号1
+    		newindex = index - 2;
+    		fillListView(loadUidMoments(newindex, 0), false);
+    	}
+    	
     }
+    
+    
+    
 
     @Override
     public void onTagChanged(int index) {

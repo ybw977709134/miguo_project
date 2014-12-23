@@ -12,6 +12,7 @@ import android.media.MediaPlayer;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Pair;
+
 import org.wowtalk.Log;
 
 import java.io.File;
@@ -5268,6 +5269,8 @@ public class Database {
 
         return ret;
     }
+    
+    
 
     /**
      *
@@ -5442,6 +5445,30 @@ public class Database {
         if (null != cur && !cur.isClosed()) {
             cur.close();
         }
+    }
+    
+    /**
+     * 同过uid来加载好友圈的动态
+     * @param countType
+     * @param maxTimestamp
+     * @param count
+     * @author hutianfeng
+     * @return
+     */
+    public ArrayList<Moment> fetchBuddyDetailUID(int countType, long maxTimestamp, int count) {
+    	Cursor cursor = database.query("buddydetail", null, "account_type = ?", new String[]{countType+""}, null, null, null);
+    	
+//    	String sql = "select uid form buddydetail where account_type = "+countType+"";
+    	ArrayList<Moment> data = new ArrayList<Moment>();
+    	
+    	while (cursor.moveToNext()) {
+    		String uid = cursor.getString(cursor.getColumnIndex("uid"));
+    		ArrayList<Moment> data1 = new ArrayList<Moment>();
+    		data1 = fetchMomentsOfSingleBuddy(uid, maxTimestamp, count);
+    		data.addAll(data1);
+    	}
+    	
+    	return data;
     }
 
     /**
@@ -6700,6 +6727,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         if (oldVersion == 6) {
+            database.execSQL("ALTER TABLE event ADD COLUMN is_get_member_info INTEGER;");
+
             database.execSQL(DATABASE_CREATE_TBL_LESSON);
             database.execSQL(DATABASE_CREATE_TBL_LESSON_PERFORMANCE);
             database.execSQL(DATABASE_CREATE_TBL_LESSON_HOMEWORK);

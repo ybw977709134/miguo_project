@@ -701,7 +701,7 @@
     <string name="share_range_public_short">公开</string>
     <string name="share_range_public">全员可见</string>
     <string name="share_range_private">保密</string>
-    <string name="capture_voice_click_record">点击录音</string>
+    <string name="capture_voice_click_record">点击录音（最大120秒）</string>
     <string name="capture_voice_click_stop">%s 录音中,点击完成</string>
     <string name="answer_qa">回复</string>
     <string name="survey_add_an_option">添加一个选项</string>

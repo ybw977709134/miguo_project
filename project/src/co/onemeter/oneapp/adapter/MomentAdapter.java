@@ -315,7 +315,13 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.imgThumbnail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    TimelineActivity.launch(context, moment.owner.userID, moment.owner.nickName);
+                	String mMyUid = PrefUtil.getInstance(context).getUid();
+                    if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
+                    	TimelineActivity.launch(context, moment.owner.userID, moment.owner.nickName,"owner");//跳转到自己成长日志//可进行发布操作
+                    } else {
+                    	TimelineActivity.launch(context, moment.owner.userID, moment.owner.nickName);//跳转到好友的成长日志//不可进行发布操作
+                    }
+   //                 TimelineActivity.launch(context, moment.owner.userID, moment.owner.nickName);
                 }
             });
         }

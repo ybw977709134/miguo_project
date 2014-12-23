@@ -17,8 +17,8 @@ import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import co.onemeter.oneapp.utils.WebServerEventPoller;
+
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 
@@ -28,6 +28,7 @@ import org.wowtalk.core.RegistrationState;
 import org.wowtalk.core.WowTalkChatMessageState;
 import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.MessageBox;
+
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.AppStatusService.AppStatusBinder;
@@ -853,9 +854,16 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 
     public void fRefreshTabBadge_contact() {
         ArrayList<PendingRequest> pendingRequests=new ArrayList<PendingRequest>();
+        ArrayList<PendingRequest> pendings = new ArrayList<PendingRequest>();
+        mDb.fetchPendingRequest(pendingRequests);
+        for (PendingRequest p : pendingRequests) {
+            if (p.type != PendingRequest.GROUP_OUT) {
+                pendings.add(p);
+            }
+        }
         Database.open(StartActivity.this).fetchPendingRequest(pendingRequests);
         boolean pendingRequestExist=false;
-        if(pendingRequests.size() > 0) {
+        if(pendings.size() > 0) {
             for(PendingRequest p : pendingRequests) {
                 if (p.type == PendingRequest.BUDDY_IN
                         || p.type == PendingRequest.GROUP_IN
@@ -869,7 +877,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         if (!pendingRequestExist) {
             txt_pendingin_requests.setVisibility(View.GONE);
         } else {
-        	txt_pendingin_requests.setText(pendingRequests.size()+"");
+        	txt_pendingin_requests.setText(pendings.size()+"");
             txt_pendingin_requests.setVisibility(View.VISIBLE);
         }
     }

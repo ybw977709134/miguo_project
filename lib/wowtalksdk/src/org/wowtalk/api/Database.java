@@ -3460,6 +3460,7 @@ public class Database {
 
 	/**
 	 * wowcity获取所有群组（自己仍然是群组成员的群组）， biz获取群组时用 {@link #fetchAllGroupChatRooms(boolean)}
+     * 忽略校园组织架构。
 	 * @param
 	 * @return
 	 */
@@ -3480,18 +3481,19 @@ public class Database {
 	 * @return
 	 */
 	public ArrayList<GroupChatRoom> fetchTempGroupChatRooms() {
-		return _fetchGroupChatRooms(1, false);
+		return _fetchGroupChatRooms(1);
 	}
 
 	/**
      * （wowcity获取群组自己仍然是群组成员的群组， biz获取群组时不用考虑自己是否属于此群组）
-     * 
+     * 忽略校园组织架构。
+     *
      * @param
      * @return
      */
     public ArrayList<GroupChatRoom> fetchAllGroupChatRooms(boolean isForBiz) {
         ArrayList<GroupChatRoom> list = new ArrayList<GroupChatRoom>();
-        return _fetchGroupChatRooms(2, isForBiz);
+        return _fetchGroupChatRooms(2);
     }
 
     /**
@@ -3501,7 +3503,7 @@ public class Database {
      */
     public ArrayList<GroupChatRoom> fetchNonTempGroupChatRooms(boolean isForBiz) {
         ArrayList<GroupChatRoom> list = new ArrayList<GroupChatRoom>();
-        return _fetchGroupChatRooms(0, isForBiz);
+        return _fetchGroupChatRooms(0);
     }
 
 	/**
@@ -3525,29 +3527,30 @@ public class Database {
 	}
 
 	/**
-	 * 获取群组（wowcity获取群组自己仍然是群组成员的群组， biz获取群组时不用考虑自己是否属于此群组）
+	 * 获取群组（wowcity获取群组自己仍然是群组成员的群组， biz获取群组时不用考虑自己是否属于此群组）。
+     * 忽略校园组织架构。
 	 * @param tempFlag 0:normal group, 1:temp group, 2:all
-	 * @param isForBiz biz获取群组时，不用考虑自己是否属于此群组
 	 * @return
 	 */
-	private ArrayList<GroupChatRoom> _fetchGroupChatRooms(int tempFlag, boolean isForBiz) {
+	private ArrayList<GroupChatRoom> _fetchGroupChatRooms(int tempFlag) {
         if (isDBUnavailable()) {
-            return new ArrayList<GroupChatRoom>();
+            return new ArrayList<>();
         }
-        String isMeBelongsSelection = " is_me_belongs=1 ";
+        String selection = " (category <> ? AND category <> ?) ";
         if (tempFlag == 2) {
-            return _fetchGroupChatRooms(isForBiz ? null : isMeBelongsSelection, null);
+            return _fetchGroupChatRooms( selection,
+                    new String[] {
+                            GroupChatRoom.CATEGORY_SCHOOL,
+                            GroupChatRoom.CATEGORY_CLASSROOM });
         }
         else {
-            String selection = "";
-            if (isForBiz) {
-                selection = " temp_group_flag=?";
-            } else {
-                selection = isMeBelongsSelection + " and temp_group_flag=?";
-            }
+            selection += " and is_me_belongs=1 and temp_group_flag=?";
             return _fetchGroupChatRooms(
                     selection,
-                    new String[] { Integer.toString(tempFlag) });
+                    new String[] {
+                            GroupChatRoom.CATEGORY_SCHOOL,
+                            GroupChatRoom.CATEGORY_CLASSROOM,
+                            Integer.toString(tempFlag) });
         }
 	}
 

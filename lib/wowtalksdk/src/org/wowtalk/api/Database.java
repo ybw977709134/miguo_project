@@ -12,7 +12,6 @@ import android.media.MediaPlayer;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Pair;
-
 import org.wowtalk.Log;
 
 import java.io.File;
@@ -5999,6 +5998,76 @@ public class Database {
                 "id = ?",
                 new String[] {reviewId});
         markDBTableModified(TBL_MOMENT_REVIEWS);
+    }
+
+    public List<GroupChatRoom> fetchSchools() {
+        List<GroupChatRoom> schools = _fetchGroupChatRooms(
+                "category=?", new String[] { GroupChatRoom.CATEGORY_SCHOOL });
+        if (schools != null && !schools.isEmpty()) {
+            for (GroupChatRoom school : schools) {
+                fetchClassRooms(school);
+            }
+        }
+
+        return schools;
+    }
+
+    private void fetchClassRooms(GroupChatRoom parent) {
+        ArrayList<GroupChatRoom> classrooms = _fetchGroupChatRooms(
+                "parent_group_id=?", new String[] { parent.groupID });
+        if (classrooms != null && !classrooms.isEmpty()) {
+            parent.childGroups = classrooms;
+            for (GroupChatRoom classroom : classrooms) {
+                classroom.level = parent.level + 1;
+
+                // recursive
+                fetchClassRooms(classroom);
+            }
+        }
+
+        ArrayList<GroupMember> students = fetchGroupMembers(parent.groupID);
+        if (students != null && !students.isEmpty()) {
+            for (Buddy student : students) {
+                parent.addMember(student);
+            }
+        }
+    }
+
+    public void storeSchools(List<GroupChatRoom> schools) {
+
+        // clear old data
+        database.delete(TBL_GROUP, "category=?", new String[] { GroupChatRoom.CATEGORY_SCHOOL });
+        database.delete(TBL_GROUP, "category=?", new String[] { GroupChatRoom.CATEGORY_CLASSROOM });
+
+        for (GroupChatRoom school : schools) {
+            school.category = GroupChatRoom.CATEGORY_SCHOOL;
+            storeGroupChatRoom(school);
+
+            if (school.childGroups != null && !school.childGroups.isEmpty()) {
+                for (GroupChatRoom classroom : school.childGroups) {
+                    storeClassRoom(classroom);
+                }
+            }
+        }
+    }
+
+    private void storeClassRoom(GroupChatRoom classroom) {
+        classroom.category = GroupChatRoom.CATEGORY_CLASSROOM;
+        storeGroupChatRoom(classroom);
+        if (classroom.memberList != null) {
+            ArrayList<String> studentIds = new ArrayList<>(classroom.memberList.size());
+            for (Buddy student : classroom.memberList) {
+                studentIds.add(student.userID);
+            }
+            storeGroupMemberIds(classroom.groupID, studentIds);
+        }
+
+        // recursive
+        if (classroom.childGroups != null && !classroom.childGroups.isEmpty()) {
+            for (GroupChatRoom subClassroom : classroom.childGroups) {
+                storeClassRoom(subClassroom);
+            }
+        }
     }
 
     public long storeLesson(Lesson lesson) {

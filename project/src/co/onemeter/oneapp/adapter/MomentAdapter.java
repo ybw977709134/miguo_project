@@ -294,13 +294,14 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             	String mMyUid = PrefUtil.getInstance(context).getUid();
                 if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
                 	MomentDetailActivity.launch(context, moment,"had");//跳转到自己的详情页
-                } else {
+                } else if (!moment.owner.userID.equals(mMyUid)) {
                 	MomentDetailActivity.launch(context, moment);//跳转到好友的详情页
-                }               
+                }   
 
-                if (mReplyDelegate != null) {
-                    mReplyDelegate.onMomentClicked(position, moment);
-                }
+ 
+//                if (mReplyDelegate != null) {
+//                    mReplyDelegate.onMomentClicked(position, moment);
+//                }
             }
         });
 

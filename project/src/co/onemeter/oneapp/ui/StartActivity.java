@@ -149,25 +149,25 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
             case HANDLER_FINISHED:
-                mMsgbBox.dismissWait();
+//                mMsgbBox.dismissWait();
                 break;
             case HANDLER_GET_COMPANY_STRUCTURE:
-                mMsgbBox.showOrUpdateWatiMsg(R.string.start_downloading_company_structure);
+//                mMsgbBox.showOrUpdateWatiMsg(R.string.start_downloading_company_structure);
                 break;
             case HANDLER_GET_DEPTS:
-                mMsgbBox.showOrUpdateWatiMsg(R.string.start_downloading_depts);
+//                mMsgbBox.showOrUpdateWatiMsg(R.string.start_downloading_depts);
                 break;
             case HANDLER_GET_TEMP_GROUPS:
-                mMsgbBox.showOrUpdateWatiMsg(R.string.start_downloading_temp_groups);
+//                mMsgbBox.showOrUpdateWatiMsg(R.string.start_downloading_temp_groups);
                 break;
             case HANDLER_GET_FAVORITE_GROUPS_AND_CONTACTS:
-                mMsgbBox.showOrUpdateWatiMsg(R.string.start_downloading_favorite_items);
+//                mMsgbBox.showOrUpdateWatiMsg(R.string.start_downloading_favorite_items);
                 break;
             case HANDLER_GET_LATEST_CHAT_TARGETS:
-                mMsgbBox.showOrUpdateWatiMsg(R.string.start_downloading_latest_chat_targets);
+//                mMsgbBox.showOrUpdateWatiMsg(R.string.start_downloading_latest_chat_targets);
                 break;
             case HANDLER_GET_CONTACTS :
-                mMsgbBox.showOrUpdateWatiMsg(R.string.start_downloading_buddies);
+//                mMsgbBox.showOrUpdateWatiMsg(R.string.start_downloading_buddies);
                 break;
             case HANDLER_GET_SECURITY_LEVEL:
                 synchronized (StartActivity.class) {
@@ -1019,7 +1019,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
     private void setupApplication() {
         // 从login进入，才需要从服务器下载信息
         if (mIsStartFromLogin) {
-            mMsgbBox.showWait();
+//            mMsgbBox.showWait();
         }
 
         new Thread(new Runnable() {

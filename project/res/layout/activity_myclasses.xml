@@ -8,7 +8,6 @@
 
 	<RelativeLayout
 		android:id="@+id/title_bar"
-		android:layout_alignParentTop="true"
 		style="?attr/navbar">
 		<ImageButton
 			android:id="@+id/title_back"
@@ -22,6 +21,7 @@
 			android:text="@string/myclasses_title"/>
 	</RelativeLayout>
 
+	<!--  
 	<ScrollView
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content">
@@ -51,6 +51,12 @@
 				android:src="@drawable/class_bg_3"/>
 		</LinearLayout>
 	</ScrollView>
+	-->
 
+	<ListView
+	    android:id="@+id/lv_myClass"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" >
+	</ListView>
 
 </LinearLayout>

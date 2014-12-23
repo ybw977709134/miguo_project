@@ -4377,7 +4377,7 @@ public class WowTalkWebServerIF {
 		}
 	}
 
-	private List<GroupChatRoom> getSchoolClassRooms(String schoolId) {
+	public List<GroupChatRoom> getSchoolClassRooms(String schoolId) {
 		List<GroupChatRoom> result = new LinkedList<GroupChatRoom>();
 
 		String strUID = sPrefUtil.getUid();

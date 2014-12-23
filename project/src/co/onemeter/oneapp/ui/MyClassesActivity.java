@@ -5,10 +5,20 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.liveplayer.VideoPlayingActivity;
+
 import com.androidquery.AQuery;
+
 import org.wowtalk.api.*;
+import org.wowtalk.ui.MessageBox;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -18,20 +28,77 @@ import java.util.List;
  * 我的课堂页面。
  * Created by pzy on 11/10/14.
  */
-public class MyClassesActivity extends Activity implements View.OnClickListener {
+public class MyClassesActivity extends Activity implements View.OnClickListener, OnItemClickListener {
     private static final String TAG = "MyClassesActivity";
-
+    
+    private final String classId = "0b2f933f-a4d7-44de-a711-569abb04846a";
+    
+    
+    private List<GroupChatRoom> classrooms;
+    private List<GroupChatRoom> schoolrooms;
+    
+    private MyClassAdapter adapter;
+    private ListView lvMyClass;
+    private MessageBox msgBox;
+    private WowTalkWebServerIF talkwebserver;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myclasses);
 
         AQuery q = new AQuery(this);
+        msgBox = new MessageBox(this);
+        classrooms = new LinkedList<GroupChatRoom>();
+        talkwebserver =  WowTalkWebServerIF.getInstance(MyClassesActivity.this);
 
         q.find(R.id.title_back).clicked(this);
-        q.find(R.id.livingClass).clicked(this);
+        lvMyClass = (ListView) findViewById(R.id.lv_myClass);
+        //q.find(R.id.livingClass).clicked(this);
 
-        test();
+        //test();
+        
+        
+        lvMyClass.setOnItemClickListener(this);
+        
+        //这里用两层异步任务，先取到学校的信息，在取班级信息
+        new AsyncTask<Void, Void, Void>(){
+
+        	protected void onPreExecute() {
+        		msgBox.showWait();
+        	};
+        	
+			@Override
+			protected Void doInBackground(Void... params) {
+				schoolrooms = talkwebserver.getMyClassRooms();
+				return null;
+			}
+        	
+			@Override
+			protected void onPostExecute(Void result) {
+				if(!isEmpty()){
+					new AsyncTask<Void, Void, Void>(){
+	
+						@Override
+						protected Void doInBackground(Void... params) {
+							for(GroupChatRoom school:schoolrooms){
+								List<GroupChatRoom> claz = talkwebserver.getSchoolClassRooms(school.groupID);
+								for(GroupChatRoom classroom:claz){
+									classrooms.add(classroom);
+								}
+							}
+							return null;
+						}
+						
+						protected void onPostExecute(Void result) {
+							msgBox.dismissWait();
+							adapter = new MyClassAdapter(classrooms);
+							lvMyClass.setAdapter(adapter);
+						};
+					}.execute((Void)null);
+				}
+			}
+        }.execute((Void)null);
     }
 
     @Override
@@ -40,10 +107,10 @@ public class MyClassesActivity extends Activity implements View.OnClickListener 
             case R.id.title_back:
                 onBackPressed();
                 break;
-            case R.id.livingClass:
-            	Intent intent = new Intent(this, VideoPlayingActivity.class);
-            	startActivity(intent);
-            	break;
+//            case R.id.livingClass:
+//            	Intent intent = new Intent(this, VideoPlayingActivity.class);
+//            	startActivity(intent);
+//            	break;
         }
     }
 
@@ -146,4 +213,61 @@ public class MyClassesActivity extends Activity implements View.OnClickListener 
             }
         }.execute((Void)null);
     }
+    
+    class MyClassAdapter extends BaseAdapter{
+    	private List<GroupChatRoom> classrooms;
+    	
+    	public MyClassAdapter(List<GroupChatRoom> classrooms){
+    		this.classrooms = classrooms;
+    	}
+
+		@Override
+		public int getCount() {
+			return classrooms.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return classrooms.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHolder holder = null;
+			if(null == convertView){
+				convertView = getLayoutInflater().inflate(R.layout.listitem_myclass, parent, false);
+				holder = new ViewHolder();
+				holder.item_myclass_textview = (TextView) convertView.findViewById(R.id.item_myclass_textview);
+				holder.item_myclass_imageview = (ImageView) convertView.findViewById(R.id.item_myclass_imageview);
+				convertView.setTag(holder);
+			}else{
+				holder = (ViewHolder) convertView.getTag();
+			}
+			holder.item_myclass_textview.setText(classrooms.get(position).groupNameOriginal);
+			return convertView;
+		}
+		class ViewHolder{
+			ImageView item_myclass_imageview;
+			TextView item_myclass_textview;
+		}
+    	
+    }
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		Intent intent = new Intent(this, ClassDetailActivity.class);
+		intent.putExtra("classroomId", classrooms.get(position).groupID);
+		intent.putExtra("classroomName", classrooms.get(position).groupNameOriginal);
+		startActivity(intent);
+	}
+	
+	private boolean isEmpty(){
+		return schoolrooms == null ||schoolrooms.isEmpty();
+	}
 }

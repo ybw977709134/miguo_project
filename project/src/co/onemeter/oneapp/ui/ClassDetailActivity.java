@@ -1,5 +1,7 @@
 package co.onemeter.oneapp.ui;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,7 +22,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.app.Activity;
 import android.content.Intent;
@@ -29,7 +34,7 @@ import android.content.Intent;
  * 课堂详情页面。
  * Created by yl on 21/12/2014.
  */
-public class ClassDetailActivity extends Activity implements OnClickListener {
+public class ClassDetailActivity extends Activity implements OnClickListener, OnItemClickListener {
 	private AQuery query;
 	private WowLessonWebServerIF lesWebSer;
 	
@@ -37,6 +42,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener {
 	private List<Lesson> lessons;
 	private CourseTableAdapter courseAdapter;
 
+	private ListView lvLessonTable;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,7 +55,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener {
 	private void initView(){
 		query = new AQuery(this);
 		lesWebSer = WowLessonWebServerIF.getInstance(this);
-		lessons = new LinkedList<>();
+		lessons = new LinkedList<Lesson>();
 		courseAdapter = new CourseTableAdapter(lessons);
 		
 		Intent intent = getIntent();
@@ -59,7 +65,10 @@ public class ClassDetailActivity extends Activity implements OnClickListener {
 		query.find(R.id.title_back).clicked(this);
 		query.find(R.id.class_live_class).clicked(this);
 		query.find(R.id.more).clicked(this);
-		query.find(R.id.lvClassTime).adapter(courseAdapter);
+		
+		lvLessonTable = (ListView) findViewById(R.id.lvLessonTable);
+		lvLessonTable.setAdapter(courseAdapter);
+		lvLessonTable.setOnItemClickListener(this);
 		
 		TextView tv_class_live = (TextView) findViewById(R.id.class_live_class);
 		TextView tv_more = (TextView) findViewById(R.id.more);
@@ -147,6 +156,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener {
 	
 	class CourseTableAdapter extends BaseAdapter{
 		private List<Lesson> alessons;
+		private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
 		public CourseTableAdapter(List<Lesson> lessons){
 			this.alessons = lessons;
@@ -181,7 +191,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener {
 				holder = (ViewHodler) convertView.getTag();
 			}
 			holder.item_name.setText(alessons.get(position).title);
-			holder.item_time.setText(alessons.get(position).start_date + "");
+			holder.item_time.setText(sdf.format(new Date(alessons.get(position).start_date * 1000)));
 			holder.item_msg.setText("");
 			return convertView;
 		}
@@ -191,6 +201,16 @@ public class ClassDetailActivity extends Activity implements OnClickListener {
 			TextView item_msg;
 		}
 		
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		Intent intent = new Intent();
+		intent.setClass(this, LessonDetailActivity.class);
+		intent.putExtra("lessonId", lessons.get(position).lesson_id);
+		intent.putExtra("title", lessons.get(position).title);
+		startActivity(intent);
 	}
 
 }

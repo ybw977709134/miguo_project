@@ -137,7 +137,7 @@
             android:textColor="@color/text_gray3" />
     </LinearLayout>
 
-    <ListView android:id="@+id/lvClassTime"
+    <ListView android:id="@+id/lvLessonTable"
         android:layout_below="@id/class_timetable"
         android:layout_height="match_parent"
         android:layout_width="match_parent"

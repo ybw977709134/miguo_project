@@ -285,7 +285,7 @@ public class WowEventWebServerIF {
 	 * 获取活动列表。
 	 * @return errno
 	 */
-	public int fGetLatestEvents() {
+	public int fGetLatestEvents(String get_finished_event_only,String max_startdate) {
 		String uid = mPrefUtil.getUid();
 		String password = mPrefUtil.getPassword();
 		if(uid == null || password == null)
@@ -297,8 +297,13 @@ public class WowEventWebServerIF {
 		for(String action :  actions) {
 			String postStr = "action=" + action
                     + "&uid=" + Utils.urlencodeUtf8(uid)
-                    + "&password=" + Utils.urlencodeUtf8(password)
-                    + "&get_finished_event_only=0";
+                    + "&password=" + Utils.urlencodeUtf8(password);
+			if(null != get_finished_event_only){
+				postStr += "&get_finished_event_only=" + get_finished_event_only;
+			}
+			if(null != max_startdate){
+				postStr += "&max_startdate=" + max_startdate;
+			}
 			Connect2 connect2 = new Connect2();
 			Element root = connect2.Post(postStr);
 //            root=fixEventForTest(action);
@@ -558,6 +563,7 @@ public class WowEventWebServerIF {
                 + "&enddate=" + (data.endTime != null ? data.endTime.getTime() / 1000 : 0)
                 + "&is_open=1"
 				+ "&max_member=" + data.capacity
+				+ "&coin=" + data.costGolds
 				+ "&is_official=" + (data.isOfficial ? 1 : 0)
 				+ "&allow_review=" + (data.allowReview ? 1 : 0) 
 				+ "&need_work=" + (data.needWork ? 1 : 0)

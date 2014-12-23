@@ -348,17 +348,17 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 	private void downloadLatestEvents(final String get_finished_event_only,final String max_startdate) {
         lastRefreshEventTime=System.currentTimeMillis();
 
-//		new Thread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				int errno = WowEventWebServerIF.getInstance(EventActivity.this).fGetLatestEvents(get_finished_event_only,max_startdate);
-//				if (errno == ErrorCode.OK) {
-//                    refresh();
-//				}
-//			}
-//			
-//		}).start();
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				int errno = WowEventWebServerIF.getInstance(EventActivity.this).fGetLatestEvents(get_finished_event_only,max_startdate);
+				if (errno == ErrorCode.OK) {
+                    refresh();
+				}
+			}
+			
+		}).start();
 	}
 
     private void downloadPreviousEvents(final String timestamp) {
@@ -630,43 +630,43 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 	}
 
 	//上啦加载更多
-//	private void uploadmore(final String get_finished_event_only,final String max_startdate,final int position) {
-//		new Thread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				int errno = WowEventWebServerIF.getInstance(EventActivity.this).fGetLatestEvents(get_finished_event_only,max_startdate);
-//				if (errno == ErrorCode.OK) {
-//					runOnUiThread(new Runnable(){
-//						@Override
-//						public void run() {
-//							switch (curEventGroupToShow) {
-//				            case 0:
-//				                acts.addAll(mDb.fetchAllEvents());
-//				                break;
-//				            case 1:
-//				                acts.addAll(mDb.fetchJoinedEvents());
-//				                break;
-//				            case 2:
-//				                acts.addAll(mDb.fetchNotJoinedEvents());
-//				                break;
-//				            default:
-//				                acts.addAll(mDb.fetchAllEvents());
-//				                break;
-//				        }
-//
-//				        fixEventLocalPath();
-//				        eventAdapter = new EventAdapter(EventActivity.this, acts);
-//				        lvEvent.setAdapter(eventAdapter);
-//				        lvEvent.setSelection(position);
-//						eventAdapter.notifyDataSetChanged();
-//						}
-//					});
-//				}
-//			}
-//			
-//		}).start();
-//	}
+	private void uploadmore(final String get_finished_event_only,final String max_startdate,final int position) {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				int errno = WowEventWebServerIF.getInstance(EventActivity.this).fGetLatestEvents(get_finished_event_only,max_startdate);
+				if (errno == ErrorCode.OK) {
+					runOnUiThread(new Runnable(){
+						@Override
+						public void run() {
+							switch (curEventGroupToShow) {
+				            case 0:
+				                acts.addAll(mDb.fetchAllEvents());
+				                break;
+				            case 1:
+				                acts.addAll(mDb.fetchJoinedEvents());
+				                break;
+				            case 2:
+				                acts.addAll(mDb.fetchNotJoinedEvents());
+				                break;
+				            default:
+				                acts.addAll(mDb.fetchAllEvents());
+				                break;
+				        }
+
+				        fixEventLocalPath();
+				        eventAdapter = new EventAdapter(EventActivity.this, acts);
+				        lvEvent.setAdapter(eventAdapter);
+				        lvEvent.setSelection(position);
+						eventAdapter.notifyDataSetChanged();
+						}
+					});
+				}
+			}
+			
+		}).start();
+	}
 	
 	@Override
 	public void onLastItemVisible() {
@@ -675,19 +675,19 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 		//即将进行
 		case 0:
 			time = acts.get(acts.size()-1).startTime.getTime() + "";
-//			uploadmore(GET_FINISHED_EVENT0,time.substring(0, time.length()-3),acts.size());
+			uploadmore(GET_FINISHED_EVENT0,time.substring(0, time.length()-3),acts.size());
 			break;
 
 		//进行中
 		case 1:
 			time = acts.get(acts.size()-1).startTime.getTime() + "";
-//			uploadmore(null,time.substring(0, time.length()-3),acts.size());
+			uploadmore(null,time.substring(0, time.length()-3),acts.size());
 			break;
 			
 		//已过期
 		case 2:
 			time = acts.get(0).startTime.getTime() + "";
-//			uploadmore(GET_FINISHED_EVENT1,time.substring(0, time.length()-3),acts.size());
+			uploadmore(GET_FINISHED_EVENT1,time.substring(0, time.length()-3),acts.size());
 			break;
 		default: break;
 		}

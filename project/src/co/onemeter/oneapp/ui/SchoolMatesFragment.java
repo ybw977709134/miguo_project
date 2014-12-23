@@ -56,7 +56,7 @@ public class SchoolMatesFragment extends Fragment
     }
 
     public void refresh() {
-        msgbox.showWait();
+//        msgbox.showWait();
 
         new AsyncTask<Void, Void, Integer>() {
             @Override
@@ -67,7 +67,7 @@ public class SchoolMatesFragment extends Fragment
 
             @Override
             public void onPostExecute(Integer errno) {
-                msgbox.dismissWait();
+//                msgbox.dismissWait();
                 if (!isEmpty()) {
                     adapter = new GroupTreeAdapter(getActivity(), classrooms);
                     aQuery.find(R.id.listview).adapter(adapter);
@@ -146,5 +146,10 @@ public class SchoolMatesFragment extends Fragment
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    public void onResume() {
+    	super.onResume();
+    	refresh();
     }
 }

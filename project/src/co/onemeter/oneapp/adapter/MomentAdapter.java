@@ -659,7 +659,14 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 msgBox.dismissWait();
                 switch (errno) {
                 case ErrorCode.OK:
-                	btnSurvey.setVisibility(View.GONE);   
+                	btnSurvey.setVisibility(View.GONE);
+
+                    // 保存我的投票结果到 Moment 对象
+                    Moment updatedMoment = new Database(context).fetchMoment(moment.id);
+                    if (updatedMoment != null) {
+                        moment.surveyOptions = updatedMoment.surveyOptions;
+                    }
+
                 	setSurveyInfo(context,moment,voteSurveyLayout,lvSurveyOptions,choosed,btnSurvey);              
                     break;
                 case ErrorCode.MOMENT_SURVEY_OUTOFDATE:

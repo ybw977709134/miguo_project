@@ -6727,6 +6727,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         if (oldVersion == 6) {
+            database.execSQL("ALTER TABLE event ADD COLUMN is_get_member_info INTEGER;");
+
             database.execSQL(DATABASE_CREATE_TBL_LESSON);
             database.execSQL(DATABASE_CREATE_TBL_LESSON_PERFORMANCE);
             database.execSQL(DATABASE_CREATE_TBL_LESSON_HOMEWORK);

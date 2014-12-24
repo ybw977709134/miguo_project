@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.liveplayer.VideoPlayingActivity;
 
 import com.androidquery.AQuery;
 
@@ -71,7 +70,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
         	
 			@Override
 			protected Void doInBackground(Void... params) {
-				schoolrooms = talkwebserver.getMyClassRooms();
+				schoolrooms = talkwebserver.getMySchools();
 				return null;
 			}
         	

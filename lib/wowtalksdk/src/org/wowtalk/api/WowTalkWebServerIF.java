@@ -4335,9 +4335,13 @@ public class WowTalkWebServerIF {
         return errno;
     }
 
-	public List<GroupChatRoom> getMyClassRooms() {
+	/**
+	 * 获取我的校园组织架构。
+	 * @return 学校列表，包含班级和同学。
+	 */
+	public List<GroupChatRoom> getMySchools() {
 		List<GroupChatRoom> result = new LinkedList<>();
-		List<Pair<String, String>> schools = getMySchools();
+		List<Pair<String, String>> schools = getMySchoolList();
 		for (Pair<String, String> school : schools) {
 			GroupChatRoom schoolNode = new GroupChatRoom(school.first, school.second, school.second,
 					null, 0, 0, false);
@@ -4512,7 +4516,7 @@ public class WowTalkWebServerIF {
 	/**
 	 * @return Pair(school-id, school-name)
 	 */
-	private List<Pair<String, String>> getMySchools() {
+	private List<Pair<String, String>> getMySchoolList() {
 		List<Pair<String, String>> result = new LinkedList<>();
 
 		String strUID = sPrefUtil.getUid();

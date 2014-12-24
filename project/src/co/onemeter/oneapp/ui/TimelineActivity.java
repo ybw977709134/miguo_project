@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import co.onemeter.oneapp.R;
+
 import com.androidquery.AQuery;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
@@ -59,7 +62,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         q.find(R.id.vg_new_question).clicked(this);
         q.find(R.id.vg_new_study).clicked(this);
         q.find(R.id.vg_new_life).clicked(this);
-        q.find(R.id.vg_new_vote).clicked(this);
+        q.find(R.id.vg_new_vote).clicked(this); 
         q.find(R.id.vg_new_notice).clicked(this);
         q.find(R.id.vg_new_video).clicked(this);
 
@@ -78,12 +81,18 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         hideNewMomentPanel();
 
         if (uid != null) {
-            switchToSingle();
+        	if (!TextUtils.isEmpty(pageTitle)) {
+        		switchToSingle();
+        		setTitle(pageTitle);
+        	} else {
+        		switchToSingle();
+        	}
+            
         } else {
             switchToAll();
         }
 
-        setTitle(pageTitle);
+        
     }
 
     @Override
@@ -224,6 +233,13 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         Intent intent = new Intent(context, TimelineActivity.class);
         intent.putExtra(EXTRA_UID, uid);
         intent.putExtra(EXTRA_PAGE_TITLE, pageTitle);
+        context.startActivity(intent);
+    }
+    
+    public static void launch(Context context, String uid, String pageTitle,String myInfo) {
+        Intent intent = new Intent(context, TimelineActivity.class);
+        intent.putExtra(EXTRA_UID, uid);
+//        intent.putExtra(EXTRA_PAGE_TITLE, pageTitle);
         context.startActivity(intent);
     }
 

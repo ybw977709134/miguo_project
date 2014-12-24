@@ -596,6 +596,7 @@
 	<string name="contacts_add_buddy_succeed_without_pending">好友添加成功</string>
 	<string name="contacts_add_buddy_pending_out">请求已发出，对方验证通过后即会出现在您的联系人中</string>
 	<string name="contacts_not_found">查无此人</string>
+    <string name="contacts_goto_classroom_chat"><u>进入班级群聊</u></string>
 
 	<string name="group_chat_title_default">群聊</string>
 	<string name="group_chat_name">未设置</string>
@@ -828,5 +829,5 @@
     <string name="class_very_very_good">棒极了</string>
     <string name="class_very_good">好</string>
     <string name="class_good">有待加强</string>
-    
+
 </resources>

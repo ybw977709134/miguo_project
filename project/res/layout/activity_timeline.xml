@@ -28,8 +28,7 @@
 			android:src="@drawable/nav_add_selector"/>
 		<TextView
 			android:id="@+id/title_text"
-			style="?attr/navbar_title"
-			android:text="dummy title"/>
+			style="?attr/navbar_title" />
 		<LinearLayout
 			android:id="@+id/btn_layout"
 			android:layout_height="wrap_content"

@@ -38,6 +38,9 @@ public class TimelineTagbar {
                 case R.id.btn_tag_survey:
                     index = 5;
                     break;
+                case R.id.btn_tag_video:
+                	index = 6;
+                    break;
             }
 
             updateIndicatesVisibility(index);
@@ -65,14 +68,16 @@ public class TimelineTagbar {
         q.find(R.id.btn_tag_study).clicked(onClickListener);
         q.find(R.id.btn_tag_life).clicked(onClickListener);
         q.find(R.id.btn_tag_survey).clicked(onClickListener);
+        q.find(R.id.btn_tag_video).clicked(onClickListener);
 
-        indicates = new View[6];
+        indicates = new View[7];
         indicates[0] = view.findViewById(R.id.img_tag_all);
         indicates[1] = view.findViewById(R.id.img_tag_notice);
         indicates[2] = view.findViewById(R.id.img_tag_qa);
         indicates[3] = view.findViewById(R.id.img_tag_study);
         indicates[4] = view.findViewById(R.id.img_tag_life);
         indicates[5] = view.findViewById(R.id.img_tag_survey);
+        indicates[6] = view.findViewById(R.id.img_tag_vedio);
     }
 
     public View getView() {

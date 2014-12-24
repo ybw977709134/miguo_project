@@ -673,9 +673,9 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         
         int isShow = getIntent().getIntExtra("isowner", 0);
         
-        if (isShow == 1) {
+        if (isShow == 1) {//自己
         	momentOp.setVisibility(View.VISIBLE);
-        } else {
+        } else {//好友
         	momentOp.setVisibility(View.GONE);
         }
 

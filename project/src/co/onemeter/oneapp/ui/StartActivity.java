@@ -853,9 +853,16 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 
     public void fRefreshTabBadge_contact() {
         ArrayList<PendingRequest> pendingRequests=new ArrayList<PendingRequest>();
+        ArrayList<PendingRequest> pendings = new ArrayList<PendingRequest>();
+        mDb.fetchPendingRequest(pendingRequests);
+        for (PendingRequest p : pendingRequests) {
+            if (p.type != PendingRequest.GROUP_OUT) {
+                pendings.add(p);
+            }
+        }
         Database.open(StartActivity.this).fetchPendingRequest(pendingRequests);
         boolean pendingRequestExist=false;
-        if(pendingRequests.size() > 0) {
+        if(pendings.size() > 0) {
             for(PendingRequest p : pendingRequests) {
                 if (p.type == PendingRequest.BUDDY_IN
                         || p.type == PendingRequest.GROUP_IN
@@ -869,7 +876,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         if (!pendingRequestExist) {
             txt_pendingin_requests.setVisibility(View.GONE);
         } else {
-        	txt_pendingin_requests.setText(pendingRequests.size()+"");
+        	txt_pendingin_requests.setText(pendings.size()+"");
             txt_pendingin_requests.setVisibility(View.VISIBLE);
         }
     }

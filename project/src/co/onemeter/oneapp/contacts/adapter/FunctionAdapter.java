@@ -28,11 +28,13 @@ import java.util.List;
 public class FunctionAdapter extends BaseAdapter {
     private Context mContext;
     private List<HashMap<String, Integer>> list;
+    private Database mDb = null;
 
     public FunctionAdapter(Context context,
         List<HashMap<String, Integer>> list) {
         mContext = context;
         this.list = list;
+        mDb = new Database(mContext);
     }
     @Override
     public int getCount() {
@@ -61,9 +63,16 @@ public class FunctionAdapter extends BaseAdapter {
         txtName.setText(mContext.getResources().getString(list.get(position).get("text")));
         
         ArrayList<PendingRequest> pendingRequests=new ArrayList<PendingRequest>();
+        ArrayList<PendingRequest> pendings = new ArrayList<PendingRequest>();
+        mDb.fetchPendingRequest(pendingRequests);
+        for (PendingRequest p : pendingRequests) {
+            if (p.type != PendingRequest.GROUP_OUT) {
+                pendings.add(p);
+            }
+        }
         Database.open(mContext).fetchPendingRequest(pendingRequests);
         boolean pendingRequestExist=false;
-        if(pendingRequests.size() > 0) {
+        if(pendings.size() > 0) {
             for(PendingRequest p : pendingRequests) {
                 if (p.type == PendingRequest.BUDDY_IN
                         || p.type == PendingRequest.GROUP_IN
@@ -77,7 +86,7 @@ public class FunctionAdapter extends BaseAdapter {
         if (!pendingRequestExist) {
         	txtInfo.setVisibility(View.GONE);
         } else {
-        	txtInfo.setText(pendingRequests.size()+"");
+        	txtInfo.setText(pendings.size()+"");
         	txtInfo.setVisibility(View.VISIBLE);
         }
         int badge = list.get(position).get("badge");

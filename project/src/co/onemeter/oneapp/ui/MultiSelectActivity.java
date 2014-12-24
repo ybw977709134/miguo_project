@@ -30,6 +30,7 @@ import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.IDBTableChangeListener;
+import org.wowtalk.api.LatestChatTarget;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
@@ -37,6 +38,7 @@ import org.wowtalk.ui.msg.RoundedImageView;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -161,6 +163,7 @@ public class MultiSelectActivity extends Activity implements OnClickListener {
 	private ContactListAdapter contactAdapter;
 	private SelectedAdapter selectedAdapter;
 	private ArrayList<Person> mSelectedPerson = new ArrayList<Person>();
+	ArrayList<LatestChatTarget> latestContacts = new ArrayList<LatestChatTarget>();
 	private String[] mCurrentMemberIds;
 
 	/**
@@ -409,6 +412,10 @@ public class MultiSelectActivity extends Activity implements OnClickListener {
                         mMsgBox.toast(R.string.operation_failed);
                         setResult(Activity.RESULT_CANCELED);
                     } else {
+                        
+                        LatestChatTarget latest = new LatestChatTarget(gid, "", true);
+                        latestContacts.add(latest);
+                        mDbHelper.storeLatestChatTargets(latestContacts, true);
                         Intent data = new Intent();
 //                        data.putExtra("is_group_chat", true);
                         data.putExtra("persons", persons);

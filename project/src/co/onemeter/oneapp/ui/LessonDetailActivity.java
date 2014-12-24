@@ -66,7 +66,8 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			startActivity(intent);
 			break;
 		case R.id.les_lay_third:
-			
+			intent.setClass(this, LessonParentFeedbackActivity.class);
+			startActivity(intent);
 			break;
 		default:
 			break;

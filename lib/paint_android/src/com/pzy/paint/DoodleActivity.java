@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.SeekBar;
+import android.widget.Toast;
+
 import com.androidquery.AQuery;
 
 import java.io.FileOutputStream;
@@ -57,6 +59,7 @@ public class DoodleActivity extends Activity implements View.OnClickListener {
         q.find(R.id.stroke_opacity).getSeekBar().setProgress(strokeOpacity);
         q.find(R.id.title_back).clicked(this);
         q.find(R.id.title_confirm).clicked(this);
+        q.find(R.id.LinearLayout_cancel).clicked(this);
     }
 
     private void setupEventHandlers() {
@@ -177,6 +180,8 @@ public class DoodleActivity extends Activity implements View.OnClickListener {
         } else if (i == R.id.title_confirm) {
             setResult();
             finish();
+        }else if (i == R.id.LinearLayout_cancel){
+        	surfaceView.clear();
         }
     }
 

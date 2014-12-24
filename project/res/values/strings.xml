@@ -15,6 +15,7 @@
     <string name="registration_logging">连接中...</string>
     <string name="registration_failed">一米家校(连接解除)</string>
     <string name="registration_success"/>
+    <string name="save">保存</string>
 
 	<string name="tab_sms">消息</string>
 	<string name="tab_contacts">小伙伴</string>
@@ -803,12 +804,12 @@
     
     <!-- Class -->
     <string name="class_timetable">课表：</string>
-    <string name="class_term">学期：%s</string>
-    <string name="class_grade">年级：%s</string>
-    <string name="class_subject">学科：%s</string>
-    <string name="class_date">日期：%s</string>
-    <string name="class_time">时间：%s</string>
-    <string name="class_place">地点：%s</string>
+    <string name="class_term">学期：</string>
+    <string name="class_grade">年级：</string>
+    <string name="class_subject">学科：</string>
+    <string name="class_date">日期：</string>
+    <string name="class_time">时间：</string>
+    <string name="class_place">地点：</string>
     <string name="class_live_class">课堂直播</string>
     <string name="class_class_status_comfired">上课状况已确认</string>
     <string name="class_class_status_not_comfired">上课状况未确认</string>
@@ -829,5 +830,6 @@
     <string name="class_very_very_good">棒极了</string>
     <string name="class_very_good">好</string>
     <string name="class_good">有待加强</string>
-
+	<string name="class_info">班级信息</string>
+	<string name="class_coursetable_info">课表信息</string>
 </resources>

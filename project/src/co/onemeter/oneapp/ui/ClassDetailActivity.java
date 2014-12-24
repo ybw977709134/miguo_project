@@ -128,7 +128,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                     @Override
                     public void onClick(View view) {
                         
-
+                    	
                         bottomBoard.dismiss();
                     }
                 });
@@ -137,7 +137,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                 new OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        
+                        Intent intent = new Intent(ClassDetailActivity.this, LessonInfoEditActivity.class);
+                        intent.putExtra("tag", LessonInfoEditActivity.TAG_CLASS_INFO);
+                        startActivity(intent);
                         bottomBoard.dismiss();
                     }
                 });
@@ -146,7 +148,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                 new OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        
+                    	Intent intent = new Intent(ClassDetailActivity.this, LessonInfoEditActivity.class);
+                    	intent.putExtra("tag", LessonInfoEditActivity.TAG_LES_TABLE);
+                        startActivity(intent);
                         bottomBoard.dismiss();
                     }
                 });

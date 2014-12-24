@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_dark"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        style="?attr/navbar"
+        android:layout_width="fill_parent" >
+
+        <TextView
+            android:id="@+id/cancel"
+            style="?attr/navbar_btn_left"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/contacts_search_cancel"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/title"
+            style="?attr/navbar_title"
+            android:text="dummy" />
+
+        <TextView
+            android:id="@+id/save"
+            style="?attr/navbar_txt_right"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/save"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/lay_info_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_medium"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_marginTop="@dimen/padding_small" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/class_term" />
+
+            <EditText
+                android:id="@+id/ed_lesinfo_term"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/table_white"
+                android:ems="10"
+                android:padding="@dimen/padding_small"
+                android:textColor="@color/text_gray2" >
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_marginTop="@dimen/padding_small" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/class_grade" />
+
+            <EditText
+                android:id="@+id/ed_lesinfo_grade"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/table_white"
+                android:ems="10"
+                android:padding="@dimen/padding_small"
+                android:textColor="@color/text_gray2" >
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_marginTop="@dimen/padding_small" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/class_subject" />
+
+            <EditText
+                android:id="@+id/ed_lesinfo_subject"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/table_white"
+                android:ems="10"
+                android:padding="@dimen/padding_small"
+                android:textColor="@color/text_gray2" >
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_marginTop="@dimen/padding_small" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/class_date" />
+
+            <EditText
+                android:id="@+id/ed_lesinfo_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/table_white"
+                android:ems="10"
+                android:padding="@dimen/padding_small"
+                android:textColor="@color/text_gray2" >
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_marginTop="@dimen/padding_small" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/class_time" />
+
+            <EditText
+                android:id="@+id/ed_lesinfo_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/table_white"
+                android:ems="10"
+                android:padding="@dimen/padding_small"
+                android:textColor="@color/text_gray2" >
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_marginTop="@dimen/padding_small" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/class_place" />
+
+            <EditText
+                android:id="@+id/ed_lesinfo_place"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/table_white"
+                android:ems="10"
+                android:padding="@dimen/padding_small"
+                android:textColor="@color/text_gray2" >
+            </EditText>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lay_les_edit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/lv_courtable"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:divider="@drawable/divider"
+            android:padding="@dimen/padding_medium" >
+        </ListView>
+
+        <LinearLayout
+            android:id="@+id/lay_les_edit_add"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/icon_add_green" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:text="增加课程" />
+        </LinearLayout>
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/divider" />
+    </LinearLayout>
+
+</LinearLayout>

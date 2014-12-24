@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import android.widget.ImageView.ScaleType;
+
 import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.Account;
@@ -23,6 +24,7 @@ import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.*;
 import org.wowtalk.ui.msg.Utils;
 import org.wowtalk.ui.msg.InputBoardManager;
+
 import co.onemeter.oneapp.R;
 
 import java.io.File;
@@ -173,6 +175,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public void onClick(View v) {
 		switch (v.getId()) {
             case R.id.title_back:
@@ -300,7 +303,14 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 	protected Dialog onCreateDialog(int id) {
 		switch(id) {
 		case 1:
-			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay);
+			//得到当前的生日
+			String bs = mPrefUtil.getMyBirthday();
+			if(!Utils.isNullOrEmpty(bs)) {//"0000-00--00"
+				mYear = Integer.valueOf(bs.substring(0, 4));
+				mMonth = Integer.valueOf(bs.substring(5, 7))-1;
+				mDay = Integer.valueOf(bs.substring(9));
+			}                   
+			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay);//弹框时显示的是原先设置的生日
 		default:
 			break;
 		}

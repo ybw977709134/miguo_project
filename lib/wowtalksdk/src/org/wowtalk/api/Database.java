@@ -5289,7 +5289,8 @@ public class Database {
         }
 
         final String tblMoment = "moment";
-
+        
+        
         Cursor cur = database.query(true, tblMoment,
                 new String[] {
                         "allow_review",
@@ -5450,7 +5451,7 @@ public class Database {
     }
     
     /**
-     * 同过uid来加载好友圈的动态
+     * 通过uid来加载好友圈的动态
      * @param countType
      * @param maxTimestamp
      * @param count
@@ -5471,6 +5472,21 @@ public class Database {
     	}
     	
     	return data;
+    }
+    
+    /**
+     * 通过uid来获得账号的类型
+     * @param uid
+     * @return
+     * @author hutianfeng
+     */
+    public int getBuddyCountType(String uid) {//account_type 
+    	Cursor cursor = database.query("buddydetail", null, "uid = ?", new String[]{uid}, null, null, null);
+    	int countType = -1;
+    	while (cursor.moveToNext()) {
+    		countType = cursor.getInt(cursor.getColumnIndex("account_type"));//查询获得账号的类型
+    	}
+    	return countType; 
     }
 
     /**

@@ -59,11 +59,10 @@ public class HomeworkActivity extends Activity implements View.OnClickListener {
 				if(ErrorCode.OK == result){
 					Database db = Database.getInstance(HomeworkActivity.this);
 					lessonHomeworkz = db.fetchLessonHomework(lessonId);
-					for(LessonHomework homework:lessonHomeworkz){
-			        	homeworktitles.add(homework.title);
+					for(int i = 0;i < lessonHomeworkz.size();i++){
+			        	homeworktitles.add(i + 1 + "." + lessonHomeworkz.get(i).title);
 			        }
-			        
-			        ArrayAdapter<String> adapter = new ArrayAdapter<>(HomeworkActivity.this, android.R.id.text1, homeworktitles);
+			        ArrayAdapter<String> adapter = new ArrayAdapter<>(HomeworkActivity.this, android.R.layout.simple_list_item_1, android.R.id.text1, homeworktitles);
 			        q.find(R.id.lv_homework).adapter(adapter);
 				}
 			};

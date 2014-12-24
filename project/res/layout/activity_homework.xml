@@ -8,8 +8,7 @@
     <RelativeLayout
         android:id="@+id/title_bar"
         style="?attr/navbar"
-        android:layout_width="fill_parent"
-        android:layout_alignParentTop="true" >
+        android:layout_width="fill_parent" >
 
         <ImageButton
             android:id="@+id/title_back"
@@ -58,7 +57,7 @@
     <ListView
         android:id="@+id/lv_homework"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:divider="@drawable/divider" >
     </ListView>
 

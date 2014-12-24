@@ -94,7 +94,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     private View newReviewView=null;
 
     private boolean isWithFavorite;
+    public int countType = -1;//-1全部，0公众账号，1学生账号，2老师账号
     
+    //默认的全部adapter
 	public MomentAdapter(Context context, Activity activity, ArrayList<Moment> moments, boolean isSingle,boolean favorite,
                          ImageResizer mImageResizer,
                          MomentActionHandler replyDelegate,String uid,MessageBox box) {
@@ -110,6 +112,25 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
         mediaPlayerWraper=new MediaPlayerWraper(activity, true);
 	}
+	
+	
+	//0公众账号，1学生账号，2老师账号,账号对应的adapter
+	public MomentAdapter(Context context, Activity activity, ArrayList<Moment> moments, boolean isSingle,boolean favorite,
+            ImageResizer mImageResizer,
+            MomentActionHandler replyDelegate,String uid,MessageBox box,int countType) {
+		super(context, 0, 0, moments);
+		this.context = context;
+		this.activity = activity;
+		targetUid=uid;
+		this.isSingle = isSingle;
+		mReplyDelegate = replyDelegate;
+		this.mImageResizer = mImageResizer;
+		mMsgBox=box;
+		isWithFavorite=favorite;
+		this.countType = countType;
+		mediaPlayerWraper=new MediaPlayerWraper(activity, true);
+}
+	
 
     public void setNewReviewCount(int count) {
         newReviewCount=count;
@@ -220,6 +241,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 		if (null == convertView || null == convertView.getTag()) {
             convertView = LayoutInflater.from(context).inflate(R.layout.listitem_trend_friend, null);
 			holder = new ViewHolder();
+			
+//			holder.layout_friend_item = (LinearLayout) convertView.findViewById(R.id.layout_friend_item);
+			
 			holder.imgThumbnail = (ImageView) convertView.findViewById(R.id.img_thumbnail);
             holder.txtDate = (TextView) convertView.findViewById(R.id.txt_date);
 			holder.txtName = (TextView) convertView.findViewById(R.id.txt_name);
@@ -287,10 +311,16 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //			}
 //		});
         
-        
+		final WFile file = voiceFile;
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            	if (file != null) {//主要是为了在播放音频的情况下进入详情页，停止播放音频
+            		mediaPlayerWraper.stop();
+            		holder.micButton.setImageResource(R.drawable.timeline_player_play);
+                    holder.micTime.setText(String.format(TimerTextView.VOICE_LEN_DEF_FORMAT, file.duration / 60, file.duration % 60));
+                    
+            	}
             	String mMyUid = PrefUtil.getInstance(context).getUid();
                 if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
                 	MomentDetailActivity.launch(context, moment,"had");//跳转到自己的详情页
@@ -437,6 +467,21 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             });
         }
         
+        //通过对convertView的筛选,得到对应的账号结果
+//        if (countType == -1) {
+//        	return convertView;	
+//        } else {
+//        	String countUid = PrefUtil.getInstance(context).getUid();
+//            if (dbHelper.getBuddyCountType(countUid) == countType) {
+//            	return convertView;	
+//            } else {
+//  //          	convertView.setVisibility(View.GONE);
+//  //          	return null;	
+// //           	holder.layout_friend_item.setVisibility(View.GONE);
+//            	return null;
+//            }
+//        }
+
 		return convertView;	 
 	}
 	
@@ -1038,6 +1083,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
 
     static class ViewHolder {
+    	
+//    	LinearLayout layout_friend_item;//item的整个布局
+    	
 		ImageView imgThumbnail;
 		TextView txtName;
         TextView txtDate;

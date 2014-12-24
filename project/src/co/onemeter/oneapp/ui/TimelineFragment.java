@@ -10,6 +10,7 @@ import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
 
+import com.baidu.cyberplayer.utils.ad;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -31,10 +32,15 @@ public abstract class TimelineFragment extends ListFragment
     private static final int REQ_COMMENT = 123;
     protected Database dbHelper;
     private MomentAdapter adapter;
+
+    
     // selected tag index on UI
     private int selectedTag = 0;
     // record max timestamp for convenience of loading more
     private long maxTimestamp = 0;
+    
+    //用于区分账号的类型
+//    private int countType = -1;//默认全部
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +68,7 @@ public abstract class TimelineFragment extends ListFragment
      * @param tag Tag index. -1 means not limited.
      * @return
      */
-    protected abstract ArrayList<Moment> loadLocalMoments(long maxTimestmap, String tag);
+    protected abstract ArrayList<Moment> loadLocalMoments (long maxTimestmap, String tag);
 
     /**
      * Load moments from web server.
@@ -96,23 +102,33 @@ public abstract class TimelineFragment extends ListFragment
             setupListAdapter(lst);
         }
     }
-
+    
+    /**
+     * 重新修改的绑定adapter
+     * @param items
+     * @author hutianfeng
+     */
     private void setupListAdapter(ArrayList<Moment> items) {
-        ImageResizer imageResizer = new ImageResizer(getActivity(), DensityUtil.dip2px(getActivity(), 100));
-
-        adapter = new MomentAdapter(getActivity(),
-                getActivity(),
-                items,
-                false,
-                false,
-                imageResizer,
-                this,
-                null,
-                new MessageBox(getActivity()));/////////// 传入listview
-        adapter.setShowLoadMoreAsLastItem(!items.isEmpty());
-        adapter.setLoadDelegate(this);
-        setListAdapter(adapter);
+        
+//        	countTypeFromUiToDb(countType, items);
+    	
+        	ImageResizer imageResizer = new ImageResizer(getActivity(), DensityUtil.dip2px(getActivity(), 100));
+        	adapter = new MomentAdapter(getActivity(),
+                    getActivity(),
+                    items,
+                    false,
+                    false,
+                    imageResizer,
+                    this,
+                    null,
+                    new MessageBox(getActivity()));/////////// 传入listview
+            adapter.setShowLoadMoreAsLastItem(!items.isEmpty());
+            adapter.setLoadDelegate(this);
+            setListAdapter(adapter);
+ 
     }
+    
+   
 
     public void checkNewMoments() {
         new RefreshMomentsTask().execute(Long.valueOf(0));
@@ -258,19 +274,28 @@ public abstract class TimelineFragment extends ListFragment
     public void onSenderChanged(int index) {
 //        Toast.makeText(getActivity(),
 //                "sender: " + index, Toast.LENGTH_SHORT).show();
-    	int newindex = 0;
+//    	int newindex = 0;
+//        adapter.clear();
     	if (index == 0) {//全部
+//    		countType = index -1;
+//    		adapter.countType = index -1;
     		fillListView(loadLocalMoments(0, tagIdxFromUiToDb(index)), false);
     	} else if (index == 1) {//官方账号 0
-    		newindex = index -1;
-    		fillListView(loadUidMoments(newindex, 0), false);
+ //   		countType = index -1;	
+ //   		adapter.countType = index -1;
+    		fillListView(loadUidMoments(0, 0), false);
     	} else if (index == 2) {//老师账号2
-    		newindex = index;
-    		fillListView(loadUidMoments(newindex, 0), false);
+//    		countType = index;
+//    		adapter.countType = index;
+    		fillListView(loadUidMoments(2, 0), false);
     	} else if (index == 3) {//学生账号1
-    		newindex = index - 2;
-    		fillListView(loadUidMoments(newindex, 0), false);
+//    		countType = index - 2;
+//    		adapter.countType = index -2;
+    		fillListView(loadUidMoments(1, 0), false);
     	}
+//    	fillListView(loadLocalMoments(0, tagIdxFromUiToDb(0)), false);
+//    	setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(0)));
+    	
     	
     }
     
@@ -280,6 +305,7 @@ public abstract class TimelineFragment extends ListFragment
     @Override
     public void onTagChanged(int index) {
         selectedTag = index;
+        adapter.countType = index -1;
         fillListView(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag)), false);
         //Toast.makeText(getActivity(), "tag: " + index, Toast.LENGTH_SHORT).show();
     }
@@ -340,6 +366,26 @@ public abstract class TimelineFragment extends ListFragment
             break;
         }
         return tag;
+    }
+    
+    /**
+     * 区分账号
+     * @author hutianfeng
+     */
+    private void countTypeFromUiToDb(int countType,ArrayList<Moment> items) {
+    	ImageResizer imageResizer = new ImageResizer(getActivity(), DensityUtil.dip2px(getActivity(), 100));
+    	adapter = new MomentAdapter(getActivity(),
+                getActivity(),
+                items,
+                false,
+                false,
+                imageResizer,
+                this,
+                null,
+                new MessageBox(getActivity()),countType);/////////// 传入listview
+        adapter.setShowLoadMoreAsLastItem(!items.isEmpty());
+        adapter.setLoadDelegate(this);
+        setListAdapter(adapter);
     }
 
     /**

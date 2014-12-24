@@ -46,6 +46,8 @@ public class SchoolMatesFragment extends Fragment
 
         schools = new Database(getActivity()).fetchSchools();
         updateUi();
+        if (isEmpty())
+            refresh();
 
         return v;
     }
@@ -158,10 +160,5 @@ public class SchoolMatesFragment extends Fragment
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    @Override
-    public void onResume() {
-    	super.onResume();
-    	refresh();
     }
 }

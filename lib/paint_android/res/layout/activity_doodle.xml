@@ -24,7 +24,6 @@
             android:layout_alignParentRight="true"
             android:background="@null"
             android:src="@drawable/nav_confirm_selector"/>
-
     </RelativeLayout>
 
     <com.pzy.paint.DoodleSurfaceView
@@ -32,7 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/title_bar"/>
-    
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -40,22 +38,6 @@
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:id="@+id/linearLayout">
-        
-        <LinearLayout
-            android:id="@+id/LinearLayout_cancel"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/linearLayout"
-            android:layout_alignLeft="@+id/doodle_canvas"
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal" >
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/stroke_cancel" />
-        </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -141,7 +123,5 @@
 
         </LinearLayout>
     </LinearLayout>
-
-
 
 </RelativeLayout>

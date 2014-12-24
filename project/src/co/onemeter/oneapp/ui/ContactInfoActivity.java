@@ -469,7 +469,10 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                     if (0 != (Buddy.RELATIONSHIP_FRIEND_HERE & buddy.getFriendShipWithMe())) {
                         mMsgBox.toast(R.string.contacts_add_buddy_succeed_without_pending);
                     } else if (0 != (Buddy.RELATIONSHIP_PENDING_OUT & buddy.getFriendShipWithMe())) {
-                        mMsgBox.show(null, getString(R.string.contacts_add_buddy_pending_out));
+//                        mMsgBox.show(null, getString(R.string.contacts_add_buddy_pending_out));
+                    	Toast.makeText(ContactInfoActivity.this, 
+                    			getString(R.string.contacts_add_buddy_pending_out), 
+                    			Toast.LENGTH_SHORT).show();
                     }
                 } else if (result == ErrorCode.ERR_OPERATION_DENIED){
                     mMsgBox.show(null, getString(R.string.contactinfo_add_friend_denied));

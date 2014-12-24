@@ -27,6 +27,7 @@
         android:id="@+id/lesson_detail_teacher"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="vertical"
         android:padding="5dp" >
 
@@ -44,6 +45,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:padding="5dp"
                 android:text="@string/class_lesson_situation"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -53,7 +55,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableRight="@drawable/history_next_disable" />
+                android:drawableRight="@drawable/history_next_disable"
+                android:gravity="right"
+                android:padding="5dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -70,6 +74,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:padding="5dp"
                 android:text="@string/class_homework"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -79,7 +84,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableRight="@drawable/history_next_disable" />
+                android:drawableRight="@drawable/history_next_disable"
+                android:gravity="right"
+                android:padding="5dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -96,6 +103,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:padding="5dp"
                 android:text="@string/class_parent_suggestion"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -105,7 +113,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableRight="@drawable/history_next_disable" />
+                android:drawableRight="@drawable/history_next_disable"
+                android:gravity="right"
+                android:padding="5dp" />
         </LinearLayout>
     </LinearLayout>
 

@@ -3,6 +3,11 @@ package co.onemeter.oneapp.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.wowtalk.api.Buddy;
+import org.wowtalk.api.PrefUtil;
+
+import android.content.Context;
+
 
 public class Utils {
 
@@ -124,5 +129,12 @@ public class Utils {
             isMatch = true;
         }
         return isMatch;
+    }
+    
+    public static boolean isAccoTeacher(Context context){
+    	if(PrefUtil.getInstance(context).getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER){
+    		return true;
+    	}
+    	return false;
     }
 }

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_dark"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        style="?attr/navbar"
+        android:layout_width="fill_parent" >
+
+        <ImageButton
+            android:id="@+id/title_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:background="@null"
+            android:src="@drawable/nav_back_selector" />
+
+        <TextView
+            style="?attr/navbar_title"
+            android:text="@string/class_parent_suggestion" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_medium"
+        android:background="@drawable/divider" />
+
+    <EditText
+        android:id="@+id/txt_parent_feedback_content"
+        style="@style/inputbox_white"
+        android:layout_width="fill_parent"
+        android:layout_height="140dp"
+        android:gravity="top"
+        android:hint="@string/moments_compose_hint"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/divider" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_medium"
+        android:background="@drawable/divider" />
+
+    <co.onemeter.oneapp.ui.ImageVideoInputWidget
+        android:id="@+id/vg_input_imagevideo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/padding_small" >
+    </co.onemeter.oneapp.ui.ImageVideoInputWidget>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/divider" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_medium"
+        android:background="@drawable/divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btn_voice_record"
+            style="@style/button_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/timeline_record"
+            android:drawablePadding="@dimen/padding_medium"
+            android:padding="@dimen/padding_medium"
+            android:text="@string/moment_add_touch_to_record" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_large"
+        android:gravity="right" >
+
+        <Button
+            android:id="@+id/btn_parent_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_voice_record"
+            android:padding="@dimen/padding_small"
+            android:text="提交意见" />
+    </LinearLayout>
+
+</LinearLayout>

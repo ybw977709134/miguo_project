@@ -82,6 +82,8 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
 
     public boolean isOfficial = false;
     
+    public boolean isOpen = true;
+    
     /**
      * need to submit a work.
      */

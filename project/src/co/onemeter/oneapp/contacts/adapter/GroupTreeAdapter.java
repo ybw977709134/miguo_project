@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.ContactTreeNode;
+import co.onemeter.oneapp.ui.MessageComposerActivity;
 import com.androidquery.AQuery;
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.ui.PhotoDisplayHelper;
@@ -22,8 +23,10 @@ import java.util.Collection;
  * Created by pzy on 11/30/14.
  */
 public class GroupTreeAdapter extends BaseAdapter {
-	private final static int VIEW_TYPE_GROUP = 0;
-	private final static int VIEW_TYPE_BUDDY = 1;
+	private final static int VIEW_TYPE_GROUP_SCHOOL = 0;
+	private final static int VIEW_TYPE_GROUP_CLASSROOM = 1;
+	private final static int VIEW_TYPE_BUDDY = 2;
+	private final static int VIEW_TYPE_COUNT = 3;
 
 	private Context context;
 	private ArrayList<ContactTreeNode> items;
@@ -53,12 +56,20 @@ public class GroupTreeAdapter extends BaseAdapter {
 
 	@Override
 	public int getViewTypeCount() {
-		return 2;
+		return VIEW_TYPE_COUNT;
 	}
 
 	@Override
 	public int getItemViewType(int position) {
-		return items.get(position).isGroup() ? VIEW_TYPE_GROUP : VIEW_TYPE_BUDDY;
+		ContactTreeNode node = items.get(position);
+		if (node.isGroup()) {
+			if (node.getIndentLevel() == 0)
+				return VIEW_TYPE_GROUP_SCHOOL;
+			else
+				return VIEW_TYPE_GROUP_CLASSROOM;
+		} else {
+			return VIEW_TYPE_BUDDY;
+		}
 	}
 
 	@Override
@@ -66,18 +77,35 @@ public class GroupTreeAdapter extends BaseAdapter {
 		final ContactTreeNode node = items.get(position);
 
 		View lView;
+		int viewType = getItemViewType(position);
 		if (convertView != null) {
 			lView = convertView;
 		} else {
-			lView = LayoutInflater.from(context).inflate(
-					node.isGroup() ? R.layout.listitem_group_tree : R.layout.listitem_contact,
-					null);
+			switch (viewType) {
+				case VIEW_TYPE_GROUP_SCHOOL:
+					lView = LayoutInflater.from(context).inflate(R.layout.listitem_school, null);
+					break;
+				case VIEW_TYPE_GROUP_CLASSROOM:
+					lView = LayoutInflater.from(context).inflate(R.layout.listitem_classroom, null);
+					break;
+				case VIEW_TYPE_BUDDY:
+				default:
+					lView = LayoutInflater.from(context).inflate(R.layout.listitem_contact, null);
+					break;
+			}
 		}
 
-		if (node.isGroup()) {
-			setupGroupItemView(position, node, lView);
-		} else {
-			setupBuddyItemView(node, lView);
+		switch (viewType) {
+			case VIEW_TYPE_GROUP_SCHOOL:
+				setupSchoolItemView(position, node, lView);
+				break;
+			case VIEW_TYPE_GROUP_CLASSROOM:
+				setupClassRoomItemView(position, node, lView);
+				break;
+			case VIEW_TYPE_BUDDY:
+			default:
+				setupBuddyItemView(node, lView);
+				break;
 		}
 
 		return lView;
@@ -92,6 +120,21 @@ public class GroupTreeAdapter extends BaseAdapter {
 				R.drawable.default_avatar_90, node, true);
 
 		indent(node, view);
+	}
+
+	private void setupSchoolItemView(final int position, final ContactTreeNode node, View view) {
+		setupGroupItemView(position, node, view);
+	}
+
+	private void setupClassRoomItemView(final int position, final ContactTreeNode node, View view) {
+		setupGroupItemView(position, node, view);
+
+		new AQuery(view).find(R.id.btn_chat).clicked(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				MessageComposerActivity.launchToChatWithGroup(context, MessageComposerActivity.class, node.getGUID());
+			}
+		});
 	}
 
 	private void setupGroupItemView(final int position, final ContactTreeNode node, View view) {

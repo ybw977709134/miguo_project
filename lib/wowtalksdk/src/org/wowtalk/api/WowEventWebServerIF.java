@@ -561,7 +561,7 @@ public class WowEventWebServerIF {
                 + "&category=" + Utils.urlencodeUtf8(data.category)
 				+ "&startdate=" + (data.startTime != null ? data.startTime.getTime() / 1000 : 0)
                 + "&enddate=" + (data.endTime != null ? data.endTime.getTime() / 1000 : 0)
-                + "&is_open=1"
+                + "&is_open=" + (data.isOpen ? 1 : 0)
 				+ "&max_member=" + data.capacity
 				+ "&coin=" + data.costGolds
 				+ "&is_official=" + (data.isOfficial ? 1 : 0)

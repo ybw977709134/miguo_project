@@ -12,7 +12,6 @@ import android.media.MediaPlayer;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Pair;
-
 import org.wowtalk.Log;
 
 import java.io.File;
@@ -3461,6 +3460,7 @@ public class Database {
 
 	/**
 	 * wowcity获取所有群组（自己仍然是群组成员的群组）， biz获取群组时用 {@link #fetchAllGroupChatRooms(boolean)}
+     * 忽略校园组织架构。
 	 * @param
 	 * @return
 	 */
@@ -3481,18 +3481,19 @@ public class Database {
 	 * @return
 	 */
 	public ArrayList<GroupChatRoom> fetchTempGroupChatRooms() {
-		return _fetchGroupChatRooms(1, false);
+		return _fetchGroupChatRooms(1);
 	}
 
 	/**
      * （wowcity获取群组自己仍然是群组成员的群组， biz获取群组时不用考虑自己是否属于此群组）
-     * 
+     * 忽略校园组织架构。
+     *
      * @param
      * @return
      */
     public ArrayList<GroupChatRoom> fetchAllGroupChatRooms(boolean isForBiz) {
         ArrayList<GroupChatRoom> list = new ArrayList<GroupChatRoom>();
-        return _fetchGroupChatRooms(2, isForBiz);
+        return _fetchGroupChatRooms(2);
     }
 
     /**
@@ -3502,7 +3503,7 @@ public class Database {
      */
     public ArrayList<GroupChatRoom> fetchNonTempGroupChatRooms(boolean isForBiz) {
         ArrayList<GroupChatRoom> list = new ArrayList<GroupChatRoom>();
-        return _fetchGroupChatRooms(0, isForBiz);
+        return _fetchGroupChatRooms(0);
     }
 
 	/**
@@ -3526,29 +3527,30 @@ public class Database {
 	}
 
 	/**
-	 * 获取群组（wowcity获取群组自己仍然是群组成员的群组， biz获取群组时不用考虑自己是否属于此群组）
+	 * 获取群组（wowcity获取群组自己仍然是群组成员的群组， biz获取群组时不用考虑自己是否属于此群组）。
+     * 忽略校园组织架构。
 	 * @param tempFlag 0:normal group, 1:temp group, 2:all
-	 * @param isForBiz biz获取群组时，不用考虑自己是否属于此群组
 	 * @return
 	 */
-	private ArrayList<GroupChatRoom> _fetchGroupChatRooms(int tempFlag, boolean isForBiz) {
+	private ArrayList<GroupChatRoom> _fetchGroupChatRooms(int tempFlag) {
         if (isDBUnavailable()) {
-            return new ArrayList<GroupChatRoom>();
+            return new ArrayList<>();
         }
-        String isMeBelongsSelection = " is_me_belongs=1 ";
+        String selection = " (category <> ? AND category <> ?) ";
         if (tempFlag == 2) {
-            return _fetchGroupChatRooms(isForBiz ? null : isMeBelongsSelection, null);
+            return _fetchGroupChatRooms( selection,
+                    new String[] {
+                            GroupChatRoom.CATEGORY_SCHOOL,
+                            GroupChatRoom.CATEGORY_CLASSROOM });
         }
         else {
-            String selection = "";
-            if (isForBiz) {
-                selection = " temp_group_flag=?";
-            } else {
-                selection = isMeBelongsSelection + " and temp_group_flag=?";
-            }
+            selection += " and is_me_belongs=1 and temp_group_flag=?";
             return _fetchGroupChatRooms(
                     selection,
-                    new String[] { Integer.toString(tempFlag) });
+                    new String[] {
+                            GroupChatRoom.CATEGORY_SCHOOL,
+                            GroupChatRoom.CATEGORY_CLASSROOM,
+                            Integer.toString(tempFlag) });
         }
 	}
 
@@ -6015,6 +6017,76 @@ public class Database {
                 "id = ?",
                 new String[] {reviewId});
         markDBTableModified(TBL_MOMENT_REVIEWS);
+    }
+
+    public List<GroupChatRoom> fetchSchools() {
+        List<GroupChatRoom> schools = _fetchGroupChatRooms(
+                "category=?", new String[] { GroupChatRoom.CATEGORY_SCHOOL });
+        if (schools != null && !schools.isEmpty()) {
+            for (GroupChatRoom school : schools) {
+                fetchClassRooms(school);
+            }
+        }
+
+        return schools;
+    }
+
+    private void fetchClassRooms(GroupChatRoom parent) {
+        ArrayList<GroupChatRoom> classrooms = _fetchGroupChatRooms(
+                "parent_group_id=?", new String[] { parent.groupID });
+        if (classrooms != null && !classrooms.isEmpty()) {
+            parent.childGroups = classrooms;
+            for (GroupChatRoom classroom : classrooms) {
+                classroom.level = parent.level + 1;
+
+                // recursive
+                fetchClassRooms(classroom);
+            }
+        }
+
+        ArrayList<GroupMember> students = fetchGroupMembers(parent.groupID);
+        if (students != null && !students.isEmpty()) {
+            for (Buddy student : students) {
+                parent.addMember(student);
+            }
+        }
+    }
+
+    public void storeSchools(List<GroupChatRoom> schools) {
+
+        // clear old data
+        database.delete(TBL_GROUP, "category=?", new String[] { GroupChatRoom.CATEGORY_SCHOOL });
+        database.delete(TBL_GROUP, "category=?", new String[] { GroupChatRoom.CATEGORY_CLASSROOM });
+
+        for (GroupChatRoom school : schools) {
+            school.category = GroupChatRoom.CATEGORY_SCHOOL;
+            storeGroupChatRoom(school);
+
+            if (school.childGroups != null && !school.childGroups.isEmpty()) {
+                for (GroupChatRoom classroom : school.childGroups) {
+                    storeClassRoom(classroom);
+                }
+            }
+        }
+    }
+
+    private void storeClassRoom(GroupChatRoom classroom) {
+        classroom.category = GroupChatRoom.CATEGORY_CLASSROOM;
+        storeGroupChatRoom(classroom);
+        if (classroom.memberList != null) {
+            ArrayList<String> studentIds = new ArrayList<>(classroom.memberList.size());
+            for (Buddy student : classroom.memberList) {
+                studentIds.add(student.userID);
+            }
+            storeGroupMemberIds(classroom.groupID, studentIds);
+        }
+
+        // recursive
+        if (classroom.childGroups != null && !classroom.childGroups.isEmpty()) {
+            for (GroupChatRoom subClassroom : classroom.childGroups) {
+                storeClassRoom(subClassroom);
+            }
+        }
     }
 
     public long storeLesson(Lesson lesson) {

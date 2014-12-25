@@ -9,6 +9,11 @@ import android.util.Log;
 import java.util.ArrayList;
 
 public class GroupChatRoom extends TreeNode implements IHasPhoto{
+    /** 学校的 category 值 */
+    public final static String CATEGORY_SCHOOL = "__school__";
+    /** 班级（课堂）的 category 值 */
+    public final static String CATEGORY_CLASSROOM = "__classroom__";
+
 	/*************************************************************************/
 	/**
 	 * A flag value indicating some fields are valid in certain context.

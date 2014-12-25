@@ -449,6 +449,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     
     private void changeIsPublic(boolean isPublic) {
     	mIsPublic = isPublic;
+    	wevent.isOpen = mIsPublic;
     	isBtnPublic.setBackgroundResource(mIsPublic ? R.drawable.icon_switch_on : R.drawable.icon_switch_off);
 	}
 

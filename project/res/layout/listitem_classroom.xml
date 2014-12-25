@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    style="@style/standard_list_item" >
+    <TextView
+        android:id="@+id/group_name"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        style="@style/standard_text"
+        android:text="dummy text"/>
+
+    <TextView
+        android:id="@+id/btn_chat"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="40dp"
+        style="@style/standard_text"
+        android:textColor="@color/blue"
+        android:text="@string/contacts_goto_classroom_chat"/>
+</RelativeLayout>

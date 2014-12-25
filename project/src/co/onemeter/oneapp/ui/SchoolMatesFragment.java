@@ -34,7 +34,7 @@ public class SchoolMatesFragment extends Fragment
     Adapter adapter;
     AQuery aQuery;
     MessageBox msgbox;
-    List<GroupChatRoom> classrooms;
+    List<GroupChatRoom> schools;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,7 +43,12 @@ public class SchoolMatesFragment extends Fragment
         aQuery.find(R.id.listview).itemClicked(this);
 
         msgbox = new MessageBox(getActivity());
-        refresh();
+
+        schools = new Database(getActivity()).fetchSchools();
+        updateUi();
+        if (isEmpty())
+            refresh();
+
         return v;
     }
 
@@ -56,27 +61,36 @@ public class SchoolMatesFragment extends Fragment
     }
 
     public void refresh() {
-//        msgbox.showWait();
+        msgbox.showWait();
 
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... voids) {
-                classrooms = WowTalkWebServerIF.getInstance(getActivity()).getMyClassRooms();
-                return null;
+                schools = WowTalkWebServerIF.getInstance(getActivity()).getMySchools();
+                return schools != null && !schools.isEmpty() ? ErrorCode.OK : ErrorCode.OPERATION_FAILED;
             }
 
             @Override
             public void onPostExecute(Integer errno) {
-//                msgbox.dismissWait();
-                if (!isEmpty()) {
-                    adapter = new GroupTreeAdapter(getActivity(), classrooms);
-                    aQuery.find(R.id.listview).adapter(adapter);
-                    aQuery.find(R.id.schoolmate_emptyview).visibility(View.GONE);
-                } else {
-                    aQuery.find(R.id.schoolmate_emptyview).visibility(View.VISIBLE);
+                msgbox.dismissWait();
+
+                if (errno == ErrorCode.OK) {
+                    new Database(getActivity()).storeSchools(schools);
                 }
+
+                updateUi();
             }
         }.execute((Void)null);
+    }
+
+    private void updateUi() {
+        if (!isEmpty()) {
+            adapter = new GroupTreeAdapter(getActivity(), schools);
+            aQuery.find(R.id.listview).adapter(adapter);
+            aQuery.find(R.id.schoolmate_emptyview).visibility(View.GONE);
+        } else {
+            aQuery.find(R.id.schoolmate_emptyview).visibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -118,7 +132,7 @@ public class SchoolMatesFragment extends Fragment
     }
 
     public boolean isEmpty() {
-        return classrooms == null || classrooms.isEmpty();
+        return schools == null || schools.isEmpty();
     }
 
     @Override
@@ -146,10 +160,5 @@ public class SchoolMatesFragment extends Fragment
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    @Override
-    public void onResume() {
-    	super.onResume();
-    	refresh();
     }
 }

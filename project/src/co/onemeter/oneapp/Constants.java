@@ -43,4 +43,7 @@ public class Constants {
      *  切前台时，自动下载群组/联系人/timeline。
      */
     public static final int SECURITY_LEVEL_HIGH = 3;
+    
+    //lessonId常量
+    public static final String LESSONID = "lessonId";
 }

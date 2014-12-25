@@ -580,6 +580,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                             deadLineCalendar=endCalendar;
                             updateSurveyDeadLine();
                         }
+                        rlSurveyVoteDeadLine.setEnabled(true);
                     }
                 };
 
@@ -618,7 +619,8 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.survey_vote_dead_line_layout:
-                showPickTimeLayout();
+            	rlSurveyVoteDeadLine.setEnabled(false);
+                showPickTimeLayout(); //在方法执行后  rlSurveyVoteDeadLine.setEnabled(true);                                                            
                 break;
             case R.id.btn_create_option:
 //                showAddSurveyOptionPopup();

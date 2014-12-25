@@ -37,10 +37,13 @@ import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.RoundedImageView;
 
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TimeZone;
 
 public class MultiSelectActivity extends Activity implements OnClickListener {
 
@@ -412,8 +415,12 @@ public class MultiSelectActivity extends Activity implements OnClickListener {
                         mMsgBox.toast(R.string.operation_failed);
                         setResult(Activity.RESULT_CANCELED);
                     } else {
+                    	SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");   
+                    	formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    	Date curDate = new Date(System.currentTimeMillis());    
+                    	String str = formatter.format(curDate);   
                         
-                        LatestChatTarget latest = new LatestChatTarget(gid, "", true);
+                        LatestChatTarget latest = new LatestChatTarget(gid, str, true);
                         latestContacts.add(latest);
                         mDbHelper.storeLatestChatTargets(latestContacts, true);
                         Intent data = new Intent();

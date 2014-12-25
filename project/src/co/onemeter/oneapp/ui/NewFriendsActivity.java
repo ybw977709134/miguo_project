@@ -490,7 +490,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
       ArrayList<PendingRequest> pendingRequests = new ArrayList<PendingRequest>();
       dbHelper.fetchPendingRequest(pendingRequests);
       for (PendingRequest p : pendingRequests) {
-          if (p.type != PendingRequest.GROUP_OUT) {
+          if (p.type != PendingRequest.GROUP_OUT && p.type != PendingRequest.BUDDY_OUT ) {
               pendings.add(p);
           }
       }

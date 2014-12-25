@@ -66,7 +66,7 @@ public class FunctionAdapter extends BaseAdapter {
         ArrayList<PendingRequest> pendings = new ArrayList<PendingRequest>();
         mDb.fetchPendingRequest(pendingRequests);
         for (PendingRequest p : pendingRequests) {
-            if (p.type != PendingRequest.GROUP_OUT) {
+            if (p.type != PendingRequest.GROUP_OUT && p.type != PendingRequest.BUDDY_OUT) {
                 pendings.add(p);
             }
         }

@@ -37,8 +37,10 @@ public class FriendValidateActivity extends Activity implements OnClickListener{
 	private Database mDbHelper = new Database(this);
 	WowTalkWebServerIF mwebserver;
     private ArrayList<Buddy> buddyList = null;
+    private ArrayList<Buddy> buddyList2 = null;
     private int position;
 	private Buddy buddy;
+
 
     @SuppressWarnings("unchecked")
 	@Override
@@ -47,8 +49,8 @@ public class FriendValidateActivity extends Activity implements OnClickListener{
 		setContentView(R.layout.activity_friend_validate);
 		initView();
 		buddyList = (ArrayList<Buddy>) getIntent().getSerializableExtra("buddyList");
-		
-		position = getIntent().getExtras().getInt("position");
+		buddyList2 = (ArrayList<Buddy>) getIntent().getSerializableExtra("buddyList2");
+		position = getIntent().getExtras().getInt("position");;
 	}
 
 	private void initView() {
@@ -80,9 +82,14 @@ public class FriendValidateActivity extends Activity implements OnClickListener{
 			break;
 		case R.id.textView_validate_send:
 			android.util.Log.d("--------------", buddyList+"");
-			String messageContent = editText_validate_message.getText().toString();
-			buddy = buddyList.get(position);
-			onAddFriendPressed(buddy, messageContent);
+//			String messageContent = editText_validate_message.getText().toString();
+			
+			if(buddyList2 != null){
+				buddy = buddyList2.get(0);
+			}else{
+				buddy = buddyList.get(position);
+			}
+			onAddFriendPressed(buddy);
 			sendMessage();
 			
 			break;
@@ -90,7 +97,8 @@ public class FriendValidateActivity extends Activity implements OnClickListener{
 		
 	}
 	
-    private void onAddFriendPressed(final Buddy buddy,final String message) {
+    private void onAddFriendPressed(final Buddy buddy) {
+    	final String messageContent = editText_validate_message.getText().toString();
 //        mMsgBox.showWait();
         new AsyncTask<Buddy, Integer, Void>() {
         	int errno = ErrorCode.OK;
@@ -98,12 +106,12 @@ public class FriendValidateActivity extends Activity implements OnClickListener{
         	@Override
             protected Void doInBackground(Buddy... params) {
             	Buddy b =  params[0];
-                errno = mwebserver.faddBuddy_askforRequest(b.userID,message);
+                errno = mwebserver.faddBuddy_askforRequest(b.userID,messageContent);
                 if (ErrorCode.OK == errno) {
                     pr = new PendingRequest();
-                    pr.uid = b.getGUID();
+                    pr.uid = b.userID;
                     pr.nickname = b.nickName;
-                    pr.buddy_photo_timestamp = b.getPhotoUploadedTimestamp();
+                    pr.buddy_photo_timestamp = b.photoUploadedTimeStamp;
                     pr.type = PendingRequest.BUDDY_OUT;
                    
                 }

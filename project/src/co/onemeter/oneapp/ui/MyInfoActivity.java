@@ -305,10 +305,10 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 		case 1:
 			//得到当前的生日
 			String bs = mPrefUtil.getMyBirthday();
-			if(!Utils.isNullOrEmpty(bs)) {//"0000-00--00"
+			if(!Utils.isNullOrEmpty(bs)) {//"0000-00-00"
 				mYear = Integer.valueOf(bs.substring(0, 4));
 				mMonth = Integer.valueOf(bs.substring(5, 7))-1;
-				mDay = Integer.valueOf(bs.substring(9));
+				mDay = Integer.valueOf(bs.substring(8));
 			}                   
 			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay);//弹框时显示的是原先设置的生日
 		default:

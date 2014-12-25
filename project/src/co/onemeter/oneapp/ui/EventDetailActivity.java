@@ -434,7 +434,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         // cost
         q.find(R.id.event_cost).text(helper.formatField(
                 getResources().getString(R.string.event_cost_label),
-                String.format(getResources().getString(R.string.event_cost_value), eventDetail.costGolds),
+                String.format(getResources().getString(R.string.event_cost_yuan), eventDetail.costGolds),
                 getResources().getColor(R.color.text_gray3),
                 getResources().getColor(R.color.red)));
 

@@ -80,4 +80,5 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		}
 		return false;
 	}
+	
 }

@@ -8,9 +8,11 @@ import java.util.List;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.Lesson;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowLessonWebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.BottomButtonBoard;
 
 import com.androidquery.AQuery;
@@ -20,6 +22,7 @@ import co.onemeter.oneapp.R;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -44,6 +47,13 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private CourseTableAdapter courseAdapter;
 
 	private ListView lvLessonTable;
+	private TextView tvTerm;
+	private TextView tvGrade;
+	private TextView tvSubject;
+	private TextView tvDate;
+	private TextView tvTime;
+	private TextView tvPlace;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,14 +64,22 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	}
 
 	private void initView(){
+		
+		tvTerm = (TextView) findViewById(R.id.class_term);
+		tvGrade = (TextView) findViewById(R.id.class_grade);
+		tvSubject = (TextView) findViewById(R.id.class_subject);
+		tvDate = (TextView) findViewById(R.id.class_date);
+		tvTime = (TextView) findViewById(R.id.class_time);
+		tvPlace = (TextView) findViewById(R.id.class_place);
+		
 		query = new AQuery(this);
 		lesWebSer = WowLessonWebServerIF.getInstance(this);
 		lessons = new LinkedList<Lesson>();
 		courseAdapter = new CourseTableAdapter(lessons);
 		
 		Intent intent = getIntent();
-		classId = "0b2f933f-a4d7-44de-a711-569abb04846a";
-		//classId = intent.getStringExtra("classroomId");
+//		classId = "0b2f933f-a4d7-44de-a711-569abb04846a";
+		classId = intent.getStringExtra("classroomId");
 		query.find(R.id.class_detail_title).text(intent.getStringExtra("classroomName"));
 		query.find(R.id.title_back).clicked(this);
 		query.find(R.id.class_live_class).clicked(this);
@@ -82,6 +100,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		}
 		
 		getLessonInfo();
+		setClassInfo();
 	}
 	
 	private void getLessonInfo(){
@@ -103,6 +122,34 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		}.execute((Void)null);
 	}
 	
+	private String[] getStrsByComma(String str){
+		if(TextUtils.isEmpty(str)){
+			return null;
+		}
+		return str.split(Constants.COMMA);
+	}
+	
+	private void setClassInfo(){
+		final String term = getString(R.string.class_term);
+		final String grade = getString(R.string.class_grade);
+		final String subject = getString(R.string.class_subject);
+		final String date = getString(R.string.class_date);
+		final String time = getString(R.string.class_time);
+		final String place = getString(R.string.class_place);
+		Database db = new Database(this);
+		
+		GroupChatRoom room = db.fetchGroupChatRoom(classId);
+		String[] infos = getStrsByComma(room.place);
+		if(null != infos && infos.length == 6){
+			tvTerm.setText(term + infos[0]);
+			tvGrade.setText(grade + infos[1]);
+			tvSubject.setText(subject + infos[2]);
+			tvDate.setText(date + infos[3]);
+			tvTime.setText(time + infos[4]);
+			tvPlace.setText(place + infos[5]);
+		}
+	}
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -120,6 +167,10 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		}
 	}
 
+	private String forthToEndStr(String str){
+		return str.substring(3);
+	}
+	
 	private void showMore(View parentView) {
         final BottomButtonBoard bottomBoard = new BottomButtonBoard(this, parentView);
         // class live
@@ -138,7 +189,15 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(ClassDetailActivity.this, LessonInfoEditActivity.class);
+                        intent.putExtra("classId", classId);
                         intent.putExtra("tag", LessonInfoEditActivity.TAG_CLASS_INFO);
+                        intent.putExtra(LessonInfoEditActivity.TERM, forthToEndStr(tvTerm.getText().toString()));
+                        intent.putExtra(LessonInfoEditActivity.GRADE, forthToEndStr(tvGrade.getText().toString()));
+                        intent.putExtra(LessonInfoEditActivity.SUBJECT, forthToEndStr(tvSubject.getText().toString()));
+                        intent.putExtra(LessonInfoEditActivity.DATE, forthToEndStr(tvDate.getText().toString()));
+                        intent.putExtra(LessonInfoEditActivity.TIME, forthToEndStr(tvTime.getText().toString()));
+                        intent.putExtra(LessonInfoEditActivity.PLACE, forthToEndStr(tvPlace.getText().toString()));
+
                         startActivity(intent);
                         bottomBoard.dismiss();
                     }
@@ -149,6 +208,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                     @Override
                     public void onClick(View view) {
                     	Intent intent = new Intent(ClassDetailActivity.this, LessonInfoEditActivity.class);
+                    	intent.putExtra("classId", classId);
                     	intent.putExtra("tag", LessonInfoEditActivity.TAG_LES_TABLE);
                         startActivity(intent);
                         bottomBoard.dismiss();

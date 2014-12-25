@@ -832,4 +832,6 @@
     <string name="class_good">有待加强</string>
 	<string name="class_info">班级信息</string>
 	<string name="class_coursetable_info">课表信息</string>
+	<string name="class_err_denied">操作未授权！</string>
+	<string name="class_add_lesson">添加课程</string>
 </resources>

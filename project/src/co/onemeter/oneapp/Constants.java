@@ -46,4 +46,6 @@ public class Constants {
     
     //lessonId常量
     public static final String LESSONID = "lessonId";
+    
+    public final static String COMMA = ",";
 }

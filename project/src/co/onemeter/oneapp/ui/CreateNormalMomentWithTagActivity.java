@@ -692,9 +692,32 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 }
                 break;
             case R.id.title_back:
-                releaseMediaFiles();
-                finish();
+            	//发布动态退出时的提示
+            	Builder builderBack = new AlertDialog.Builder(CreateNormalMomentWithTagActivity.this);
+            	builderBack.setTitle("提示");
+            	builderBack.setMessage("未完成发布，是否退出");
+            	builderBack.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						releaseMediaFiles();
+		                finish();
+						
+					}
+				});
+            	builderBack.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+					}
+				});
+    			
+            	builderBack.create().show();
+    			
+//                releaseMediaFiles();
+//                finish();
                 break;
+                
             case R.id.title_moment_send:
             	if (!isContentValid()) {
             		Toast.makeText(CreateNormalMomentWithTagActivity.this, "请填写信息", Toast.LENGTH_LONG).show();

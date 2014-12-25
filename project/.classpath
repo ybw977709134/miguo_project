@@ -11,8 +11,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/SimpleQRCodeLib"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/wowtalksdk"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/MyActivity"/>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="libs/cyberplayer-sdk.jar"/>
 	<classpathentry kind="lib" path="libs/eventbus.jar"/>
 	<classpathentry kind="lib" path="libs/gson-2.1.jar"/>
@@ -20,5 +18,7 @@
 	<classpathentry kind="lib" path="libs/okhttp-2.1.0.jar"/>
 	<classpathentry kind="lib" path="libs/okio-1.0.1.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

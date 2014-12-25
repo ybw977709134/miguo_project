@@ -719,43 +719,55 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 break;
                 
             case R.id.title_moment_send:
+//            	Builder builder = new AlertDialog.Builder(CreateNormalMomentWithTagActivity.this);
             	if (!isContentValid()) {
-            		Toast.makeText(CreateNormalMomentWithTagActivity.this, "请填写信息", Toast.LENGTH_LONG).show();
+            		Toast.makeText(CreateNormalMomentWithTagActivity.this, "你还没有填写任何信息", Toast.LENGTH_LONG).show();
             	} else {
       	
-            		if (TextUtils.isEmpty(etMomentMsgContent.getText().toString())) {
-            			Toast.makeText(CreateNormalMomentWithTagActivity.this, "内容不能为空", Toast.LENGTH_LONG).show();
-            		}
-//            		else if (listPhoto == null || listPhoto.isEmpty()) {
-//            			Toast.makeText(CreateNormalMomentWithTagActivity.this, "请添加图片", Toast.LENGTH_LONG).show();
-//            		} else if (mLastVoiceFile == null || !mLastVoiceFile.exists()) {
-//            			Toast.makeText(CreateNormalMomentWithTagActivity.this, "请录音", Toast.LENGTH_LONG).show();
-//            		} 
-            		else {
-            			Builder builder = new AlertDialog.Builder(CreateNormalMomentWithTagActivity.this);
-            			builder.setTitle("提交前请确认信息是否完整");
-            			builder.setMessage("你确定要提交吗？");
-            			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-							
-							@Override
-							public void onClick(DialogInterface arg0, int arg1) {
-								createMoment();
-								
-							}
-						});
-            			builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-							
-							@Override
-							public void onClick(DialogInterface arg0, int arg1) {
-							}
-						});
-            			builder.create().show();
-            			
-            		}
+//            		if (TextUtils.isEmpty(etMomentMsgContent.getText().toString())) {
+//            			Toast.makeText(CreateNormalMomentWithTagActivity.this, "内容不能为空", Toast.LENGTH_LONG).show();
+//            		}
+////            		else if (listPhoto == null || listPhoto.isEmpty()) {
+////            			Toast.makeText(CreateNormalMomentWithTagActivity.this, "请添加图片", Toast.LENGTH_LONG).show();
+////            			
+////            		} else if (mLastVoiceFile == null || !mLastVoiceFile.exists()) {
+////            			Toast.makeText(CreateNormalMomentWithTagActivity.this, "请录音", Toast.LENGTH_LONG).show();
+////            		} 
+//            		else {
+//            			
+//            			if (listPhoto == null || listPhoto.isEmpty()) {
+//                			builder.setTitle("你还没有添加图片");
+//                			
+//                		} else if (mLastVoiceFile == null || !mLastVoiceFile.exists()) {
+//                			builder.setTitle("你还没有录音");
+//                		} else {
+//                			builder.setTitle("信息填写完整了吗？");
+//                		}
+//            			
+////            			builder.setTitle("提交前请确认信息是否完整");
+//            			builder.setMessage("你确定要提交吗？");
+//            			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//							
+//							@Override
+//							public void onClick(DialogInterface arg0, int arg1) {
+//								createMoment();
+//								
+//							}
+//						});
+//            			builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//							
+//							@Override
+//							public void onClick(DialogInterface arg0, int arg1) {
+//							}
+//						});
+//            			builder.create().show();
+//            			
+//            		}
             		
-            	}
-            	
-            	
+            		//只要填写了任何信息都可以发布
+            		createMoment();
+            		
+            	}     	
 //                createMoment();
                 break;
             case R.id.share_range_layout:

@@ -69,12 +69,14 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
 
         mMsgBox = new MessageBox(getActivity());
     }
 
     private String uid() {
         Bundle args = getArguments();
+        
         return args != null ? args.getString(EXTRA_UID) : null;
     }
 
@@ -162,7 +164,10 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         albumCoverImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAlbumCoverMenu();
+            	//判断是否是自己，如果是才能更换封面，如果不是，就不能更换
+            	if (isMe()) {
+            		showAlbumCoverMenu();
+            	}
             }
         });
 

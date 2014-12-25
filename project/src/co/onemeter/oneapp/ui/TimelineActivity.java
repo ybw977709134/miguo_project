@@ -81,11 +81,11 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         hideNewMomentPanel();
 
         if (uid != null) {
-        	if (!TextUtils.isEmpty(pageTitle)) {
+        	if (!TextUtils.isEmpty(pageTitle)) {//好友的成长日记
         		switchToSingle();
         		setTitle(pageTitle);
         	} else {
-        		switchToSingle();
+        		switchToSingle();//自己的成长日记
         	}
             
         } else {
@@ -229,6 +229,12 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         currTimelineFragment = myTimelineFragment;
     }
 
+    /**
+     * 跳转到好友成长日志页面
+     * @param context
+     * @param uid
+     * @param pageTitle
+     */
     public static void launch(Context context, String uid, String pageTitle) {
         Intent intent = new Intent(context, TimelineActivity.class);
         intent.putExtra(EXTRA_UID, uid);
@@ -236,6 +242,13 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         context.startActivity(intent);
     }
     
+    /**
+     * 跳转到自己的成长日志页面
+     * @param context
+     * @param uid
+     * @param pageTitle
+     * @param myInfo
+     */
     public static void launch(Context context, String uid, String pageTitle,String myInfo) {
         Intent intent = new Intent(context, TimelineActivity.class);
         intent.putExtra(EXTRA_UID, uid);

@@ -80,11 +80,12 @@ public class HomeworkActivity extends Activity implements View.OnClickListener {
 				}
 				adapter = new ArrayAdapter<>(HomeworkActivity.this,
 						android.R.layout.simple_list_item_1,
-						android.R.id.text2, homeworktitles);
+						android.R.id.text1, homeworktitles);
 				if (Utils.isAccoTeacher(HomeworkActivity.this)) {
 					lvHomework.addFooterView(footerView());
 				}
 				lvHomework.setAdapter(adapter);
+				
 			};
 		}.execute((Void) null);
 	}
@@ -143,12 +144,9 @@ public class HomeworkActivity extends Activity implements View.OnClickListener {
 				if (ErrorCode.OK == result) {
 					homeworktitles.clear();
 					lessonHomeworkz.clear();
-					lessonHomeworkz.addAll(Database.getInstance(
-							HomeworkActivity.this)
-							.fetchLessonHomework(lessonId));
+					lessonHomeworkz.addAll(Database.getInstance(HomeworkActivity.this).fetchLessonHomework(lessonId));
 					for (int i = 0; i < lessonHomeworkz.size(); i++) {
-						homeworktitles.add(i + 1 + "."
-								+ lessonHomeworkz.get(i).title);
+						homeworktitles.add(i + 1 + "."+ lessonHomeworkz.get(i).title);
 					}
 					adapter.notifyDataSetChanged();
 				}

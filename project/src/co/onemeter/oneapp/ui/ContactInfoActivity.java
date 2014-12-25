@@ -1,5 +1,7 @@
 package co.onemeter.oneapp.ui;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -343,6 +345,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                         .fGetBuddyWithUID(buddy.userID);
                 if (resultCode == ErrorCode.OK) {
                     buddy = dbHelper.buddyWithUserID(buddy.userID);
+
                     // 获取buddy的部门,此部门为组合的部门信息，不是纯粹的单个部门
                     GroupChatRoom dept = dbHelper.getDeptInfoByMemberId(buddy.userID);
                     // 如果不属于任何子部门，则隐藏
@@ -419,7 +422,13 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                 TimelineActivity.launch(this, buddy.userID, buddy.nickName);
                 break;
             case R.id.btn_add:
-                addBuddy();
+                android.util.Log.d("---------------------", buddy+"");
+            	Intent intent = new Intent(this, FriendValidateActivity.class);
+            	ArrayList<Buddy> buddyList = new ArrayList<Buddy>();
+            	buddyList.add(buddy);
+            	intent.putExtra("buddyList2", buddyList);
+            	startActivity(intent);
+//                addBuddy();
                 break;
             case R.id.btn_delete:
             	Builder builder = new AlertDialog.Builder(this);

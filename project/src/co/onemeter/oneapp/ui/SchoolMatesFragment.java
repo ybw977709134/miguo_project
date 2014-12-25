@@ -161,4 +161,9 @@ public class SchoolMatesFragment extends Fragment
             e.printStackTrace();
         }
     }
+    @Override
+    public void onResume() {
+    	super.onResume();
+    	refresh();
+    }
 }

@@ -49,7 +49,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
         AQuery q = new AQuery(this);
         msgBox = new MessageBox(this);
         classrooms = new LinkedList<GroupChatRoom>();
-        talkwebserver =  WowTalkWebServerIF.getInstance(MyClassesActivity.this);
+        
 
         q.find(R.id.title_back).clicked(this);
         lvMyClass = (ListView) findViewById(R.id.lv_myClass);
@@ -58,9 +58,9 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
         //test();
 //        test1();
         
-        
         lvMyClass.setOnItemClickListener(this);
         
+        talkwebserver =  WowTalkWebServerIF.getInstance(MyClassesActivity.this);
         //这里用两层异步任务，先取到学校的信息，在取班级信息
         new AsyncTask<Void, Void, Void>(){
 
@@ -96,9 +96,23 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 							lvMyClass.setAdapter(adapter);
 						};
 					}.execute((Void)null);
+				}else{
+					msgBox.dismissWait();
+					msgBox.toast(R.string.not_binded);
 				}
 			}
         }.execute((Void)null);
+        
+//        Database db = Database.getInstance(this);
+//        schoolrooms = db.fetchSchools();
+//        for(GroupChatRoom school:schoolrooms){
+//			List<GroupChatRoom> claz = talkwebserver.getSchoolClassRooms(school.groupID);
+//			for(GroupChatRoom classroom:claz){
+//				classrooms.add(classroom);
+//			}
+//		}
+//        adapter = new MyClassAdapter(classrooms);
+//		lvMyClass.setAdapter(adapter);
     }
 
     @Override
@@ -335,7 +349,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 			}else{
 				holder = (ViewHolder) convertView.getTag();
 			}
-			holder.item_myclass_textview.setText(classrooms.get(position).groupNameOriginal);
+			holder.item_myclass_textview.setText("--" + classrooms.get(position).groupNameOriginal);
 			return convertView;
 		}
 		class ViewHolder{

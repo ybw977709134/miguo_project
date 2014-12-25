@@ -30,6 +30,7 @@ import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -88,11 +89,12 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		mMsgBox = new MessageBox(this);
 		mDBHelper = new Database(this);
 		AQuery q = new AQuery(this);
+		
+		lvCourtable.addFooterView(footerView());
 		lvCourtable.setAdapter(adapter);
 		
 		q.find(R.id.cancel).clicked(this);
 		q.find(R.id.save).clicked(this);
-		q.find(R.id.lay_les_edit_add).clicked(this);
 
 		classroom = mDBHelper.fetchGroupChatRoom(classId);
 		
@@ -128,7 +130,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 				updateClassInfo();
 			}
 			break;
-		case R.id.lay_les_edit_add:
+		case R.id.lay_footer_add:
 			showAddLessonDialog();
 			break;
 		default:
@@ -136,6 +138,15 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		}
 	}
 
+	private View footerView() {
+		View view = getLayoutInflater().inflate(R.layout.lay_lv_footer, null);
+		TextView txt_footer = (TextView) view.findViewById(R.id.txt_footer_add);
+		txt_footer.setText(getString(R.string.class_add_homework));
+		LinearLayout layout = (LinearLayout) view.findViewById(R.id.lay_footer_add);
+		layout.setOnClickListener(this);
+		return view;
+	}
+	
 	private void showAddLessonDialog(){
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		View view = getLayoutInflater().inflate(R.layout.lay_add_lesson, null);

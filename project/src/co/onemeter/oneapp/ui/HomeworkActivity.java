@@ -75,8 +75,7 @@ public class HomeworkActivity extends Activity implements View.OnClickListener {
 				Database db = Database.getInstance(HomeworkActivity.this);
 				lessonHomeworkz = db.fetchLessonHomework(lessonId);
 				for (int i = 0; i < lessonHomeworkz.size(); i++) {
-					homeworktitles.add(i + 1 + "."
-							+ lessonHomeworkz.get(i).title);
+					homeworktitles.add(i + 1 + "." + lessonHomeworkz.get(i).title);
 				}
 				adapter = new ArrayAdapter<>(HomeworkActivity.this,
 						android.R.layout.simple_list_item_1,

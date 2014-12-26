@@ -112,7 +112,8 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         if (headerView_tagbar == null || getListView().getHeaderViewsCount() == originalHeaderViewsCount) {
             originalHeaderViewsCount = getListView().getHeaderViewsCount();
             setupListHeaderView_albumCover();
-            setupListHeaderView_tagbar();
+            int flag = dbHelper.getBuddyCountType(uid());
+            setupListHeaderView_tagbar(flag);
         }
     }
 
@@ -263,8 +264,16 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         return TextUtils.equals(uid(), PrefUtil.getInstance(getActivity()).getUid());
     }
 
-    private void setupListHeaderView_tagbar() {
-        TimelineTagbar timelineTagbar = new TimelineTagbar(getActivity());
+    private void setupListHeaderView_tagbar(int flag) { 
+    	TimelineTagbar timelineTagbar = null;
+//    	if (flag == 1) {//为学生，看不到通知和视频
+    		timelineTagbar = new TimelineTagbar(getActivity(),flag);
+//    	} else {
+//    		timelineTagbar = new TimelineTagbar(getActivity());
+//    	}
+        
+//    	TimelineTagbar timelineTagbar = new TimelineTagbar(getActivity());
+    	
         headerView_tagbar = timelineTagbar.getView();
         getListView().addHeaderView(headerView_tagbar);
         timelineTagbar.setListener(this);

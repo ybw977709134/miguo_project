@@ -78,7 +78,8 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/textView1"
             android:textColor="@color/black"
-            android:gravity="center_vertical"/>
+            android:gravity="center_vertical"
+            android:text="@string/contacts_validate_detail"/>
     </RelativeLayout>
     
     <RelativeLayout

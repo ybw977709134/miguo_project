@@ -115,6 +115,7 @@
     <string name="contacts_friend_validate">朋友验证</string>
     <string name="contacts_validate_send">发送</string>
     <string name="contacts_validate_message">你需要发送验证申请，等对方通过</string>
+    <string name="contacts_validate_detail">我是</string>
     <string name="contacts_validate_name">为好友设置备注名</string>
     <string name="contacts_validate_toast">发送成功</string>
 	<string name="friends_moments_pagetitle">动态</string>

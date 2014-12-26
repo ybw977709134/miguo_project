@@ -120,7 +120,7 @@ public class BuddySearchItemAdapter extends BaseAdapter {
                 	intent.putExtra("buddyList", buddyList);
                 	intent.putExtra("position", position);
                 	contextRef.startActivity(intent);
-                	btnAdd.setVisibility(View.GONE);
+//                	btnAdd.setVisibility(View.GONE);
 
 //                    onAddFriendPressed(buddy,btnAdd);
                 }

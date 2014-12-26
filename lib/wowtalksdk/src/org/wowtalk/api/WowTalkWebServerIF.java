@@ -3881,7 +3881,6 @@ public class WowTalkWebServerIF {
 						GroupMember buddyTmp = new GroupMember(null, groupID);
                         XmlHelper.parseGroupMember(user, buddyTmp);
 						buddyTmp.isBlocked = true;
-                        buddyTmp.setAccountType(Buddy.ACCOUNT_TYPE_STUDENT);
 
 						Log.i("get blocked buddy:", buddyTmp.userID + ","
 								+ buddyTmp.nickName);

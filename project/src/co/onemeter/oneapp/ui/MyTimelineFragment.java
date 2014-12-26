@@ -81,8 +81,8 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
     }
 
     @Override
-    protected ArrayList<Moment> loadLocalMoments(long maxTimestamp, String tag) {
-        return dbHelper.fetchMomentsOfSingleBuddy(uid(), maxTimestamp, PAGE_SIZE, tag);
+    protected ArrayList<Moment> loadLocalMoments(long maxTimestamp, String tag,int countType) {
+        return dbHelper.fetchMomentsOfSingleBuddy(uid(), maxTimestamp, PAGE_SIZE, tag,countType);
     }
 
     @Override
@@ -91,10 +91,10 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         return web.fGetMomentsOfBuddy(uid(), maxTimestamp, PAGE_SIZE, true);
     }
     
-    @Override
-    protected ArrayList<Moment> loadUidMoments(int countType,long maxTimestamp) {
-    	return dbHelper.fetchBuddyDetailUID(countType, maxTimestamp, PAGE_SIZE);
-    }
+//    @Override
+//    protected ArrayList<Moment> loadUidMoments(int countType,long maxTimestamp) {
+//    	return dbHelper.fetchBuddyDetailUID(countType, maxTimestamp, PAGE_SIZE);
+//    }
 
     @Override
     public void onResume() {

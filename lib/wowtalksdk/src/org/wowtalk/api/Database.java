@@ -5282,7 +5282,7 @@ public class Database {
      * @return
      */
     private ArrayList<Moment> fetchMoments(
-            String selection, String[] selectionArgs, int count) {
+            String selection, String[] selectionArgs, int count,int countType) {
         ArrayList<Moment> data = new ArrayList<Moment>();
         if (isDBUnavailable()) {
             return data;
@@ -5350,8 +5350,12 @@ public class Database {
 //            e.setVotedOption(cur.getString(++i));
             e.surveyDeadLine=cur.getString(++i);
             e.setLimitedDepartment(cur.getString(++i));
-            e.isFavorite=cur.getInt(++i)==1?true:false;
-            data.add(e);
+            e.isFavorite=cur.getInt(++i)==1?true:false; 
+            
+            if (e.owner.getAccountType() == countType || countType == -1) {//账号为对应的类型或者全部，才可以加入data
+            	data.add(e);
+            }
+            
         } while(cur.moveToNext());
         cur.close();
 
@@ -5458,21 +5462,21 @@ public class Database {
      * @author hutianfeng
      * @return
      */
-    public ArrayList<Moment> fetchBuddyDetailUID(int countType, long maxTimestamp, int count) {
-    	Cursor cursor = database.query("buddydetail", null, "account_type = ?", new String[]{countType+""}, null, null, null);
-    	
-//    	String sql = "select uid form buddydetail where account_type = "+countType+"";
-    	ArrayList<Moment> data = new ArrayList<Moment>();
-    	
-    	while (cursor.moveToNext()) {
-    		String uid = cursor.getString(cursor.getColumnIndex("uid"));
-    		ArrayList<Moment> data1 = new ArrayList<Moment>();
-    		data1 = fetchMomentsOfSingleBuddy(uid, maxTimestamp, count);
-    		data.addAll(data1);
-    	}
-    	
-    	return data;
-    }
+//    public ArrayList<Moment> fetchBuddyDetailUID(int countType, long maxTimestamp, int count) {
+//    	Cursor cursor = database.query("buddydetail", null, "account_type = ?", new String[]{countType+""}, null, null, null);
+//    	
+////    	String sql = "select uid form buddydetail where account_type = "+countType+"";
+//    	ArrayList<Moment> data = new ArrayList<Moment>();
+//    	
+//    	while (cursor.moveToNext()) {
+//    		String uid = cursor.getString(cursor.getColumnIndex("uid"));
+//    		ArrayList<Moment> data1 = new ArrayList<Moment>();
+//    		data1 = fetchMomentsOfSingleBuddy(uid, maxTimestamp, count);
+//    		data.addAll(data1);
+//    	}
+//    	
+//    	return data;
+//    }
     
     /**
      * 通过uid来获得账号的类型
@@ -5497,7 +5501,7 @@ public class Database {
      * @param tag Tag index, 0 means not limited
      * @return
      */
-    public ArrayList<Moment> fetchMomentsOfSingleBuddy(String uid, long maxTimestamp, int count, String tag) {
+    public ArrayList<Moment> fetchMomentsOfSingleBuddy(String uid, long maxTimestamp, int count, String tag,int countType) {
         String[] selection = new String[3];
         selection[0] = "owner_uid=?";
         selection[1] = (maxTimestamp > 0) ? "timestamp<?" : "1";
@@ -5525,11 +5529,11 @@ public class Database {
                 args.add(tag);
             }
         }
-        return fetchMoments(TextUtils.join(" AND ", selection), args.toArray(new String[args.size()]), count);
+        return fetchMoments(TextUtils.join(" AND ", selection), args.toArray(new String[args.size()]), count,countType);
     }
 
-    public ArrayList<Moment> fetchMomentsOfSingleBuddy(String uid, long maxTimestamp, int count) {
-        return fetchMomentsOfSingleBuddy(uid, maxTimestamp, count, "-1");
+    public ArrayList<Moment> fetchMomentsOfSingleBuddy(String uid, long maxTimestamp, int count,int countType) {
+        return fetchMomentsOfSingleBuddy(uid, maxTimestamp, count, "-1",countType);
     }
 
     /**
@@ -5539,7 +5543,7 @@ public class Database {
      * @param count
      * @return
      */
-    public ArrayList<Moment> fetchMomentsOfAllBuddies(long maxTimestamp, int count, String tag) {
+    public ArrayList<Moment> fetchMomentsOfAllBuddies(long maxTimestamp, int count, String tag,int countType) {
         String[] selection = new String[2];
         selection[0] = (maxTimestamp > 0) ? "timestamp<?" : "1";
         // tag == -1 全部
@@ -5565,23 +5569,23 @@ public class Database {
                 args.add(tag);
             }
         }
-        return fetchMoments(TextUtils.join(" AND ", selection), args.toArray(new String[args.size()]), count);
+        return fetchMoments(TextUtils.join(" AND ", selection), args.toArray(new String[args.size()]), count,countType);
     }
-    public ArrayList<Moment> fetchMomentsOfAllBuddies(long maxTimestamp, int count) {
-        return fetchMomentsOfAllBuddies(maxTimestamp, count, "-1");
+    public ArrayList<Moment> fetchMomentsOfAllBuddies(long maxTimestamp, int count,int countType) {
+        return fetchMomentsOfAllBuddies(maxTimestamp, count, "-1",countType);
     }
 
-    public ArrayList<Moment> fetchMomentsOfFavorite(long maxTimestamp, int count) {
+    public ArrayList<Moment> fetchMomentsOfFavorite(long maxTimestamp, int count,int countType) {
         if (maxTimestamp > 0) {
             return fetchMoments("timestamp<? and is_favorite=?",
-                    new String[]{String.valueOf(maxTimestamp),String.valueOf(1)}, count);
+                    new String[]{String.valueOf(maxTimestamp),String.valueOf(1)}, count,countType);
         } else {
-            return fetchMoments("is_favorite=?", new String[]{String.valueOf(1)}, count);
+            return fetchMoments("is_favorite=?", new String[]{String.valueOf(1)}, count,countType);
         }
     }
 
     public Moment fetchMoment(String id) {
-        ArrayList<Moment> lst = fetchMoments("id=?", new String[]{id}, 1);
+        ArrayList<Moment> lst = fetchMoments("id=?", new String[]{id}, 1,-1);//传入参数-1，代表全部
         if (lst != null && !lst.isEmpty())
             return lst.get(0);
         return null;
@@ -5656,7 +5660,7 @@ public class Database {
         if (isDBUnavailable()) {
             return false;
         }
-        ArrayList<Moment> moments = fetchMomentsOfAllBuddies(0, 0);
+        ArrayList<Moment> moments = fetchMomentsOfAllBuddies(0, 0,-1);
 
         boolean ret= database.delete("moment", null, null) >= 0;
         markDBTableModified("moment");

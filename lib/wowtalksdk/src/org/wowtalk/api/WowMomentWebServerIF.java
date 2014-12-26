@@ -575,7 +575,7 @@ public class WowMomentWebServerIF {
 				}
 
                 //clear moments not in server
-                List<Moment> moments = db.fetchMomentsOfSingleBuddy(owner_id,0, -1);
+                List<Moment> moments = db.fetchMomentsOfSingleBuddy(owner_id,0, -1,-1);
                 deleteLocalMoment(maxTimestamp,count,moments,momentIdFromServerList);
 			} else {
 				errno = Integer.parseInt(errorStr);
@@ -815,7 +815,7 @@ public class WowMomentWebServerIF {
             rootRoomId=rootRoom.groupID;
         }
         if(TextUtils.isEmpty(groupId) || groupId.equals(rootRoomId)) {
-            List<Moment> moments = db.fetchMomentsOfAllBuddies(0, -1);
+            List<Moment> moments = db.fetchMomentsOfAllBuddies(0, -1,-1);
             deleteLocalMoment(maxTimestamp,count,moments,momentIdFromServerList);
         }
 

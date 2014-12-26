@@ -97,7 +97,7 @@ public class AllMyReviewActivity extends Activity implements View.OnClickListene
             protected ArrayList < Moment > doInBackground(Void... params) {
                 return mDb.fetchMomentsOfSingleBuddy(
                         PrefUtil.getInstance(AllMyReviewActivity.this).getUid(),
-                        -1, -1);
+                        -1, -1,-1);
             }
 
             @Override

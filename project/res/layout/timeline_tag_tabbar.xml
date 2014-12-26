@@ -19,11 +19,12 @@
             android:weightSum="6"
             android:orientation="horizontal" >
             
+            <!-- 全部 -->
             <RelativeLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="center"
-		android:layout_weight="1" >
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:layout_weight="1" >
 		<TextView
 			android:id="@+id/btn_tag_all"
 			android:layout_width="wrap_content"
@@ -43,7 +44,9 @@
 			android:background="@color/gray"/>
 	</RelativeLayout>
 
+    <!-- 通知 -->
 	<RelativeLayout
+	    android:id="@+id/layout_timebar_notice"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:gravity="center"
@@ -67,6 +70,7 @@
 			android:background="@color/moment_tag_notice"/>
 	</RelativeLayout>
 
+	<!-- 问答 -->
 	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -91,6 +95,7 @@
 			android:background="@color/moment_tag_qa"/>
 	</RelativeLayout>
 
+	<!-- 学习 -->
 	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -114,7 +119,8 @@
 			android:layout_alignParentBottom="true"
 			android:background="@color/moment_tag_study"/>
 	</RelativeLayout>
-
+	
+	<!-- 生活 -->
 	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -139,6 +145,7 @@
 			android:background="@color/moment_tag_life"/>
 	</RelativeLayout>
 
+	<!-- 投票 -->
 	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -163,8 +170,9 @@
 			android:background="@color/moment_tag_survey"/>
 	</RelativeLayout>
 	
-	
+	<!-- 视频 -->
 		<RelativeLayout
+		android:id="@+id/layout_timebar_video"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:gravity="center"

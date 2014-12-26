@@ -45,7 +45,7 @@ public abstract class TimelineFragment extends ListFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        
         dbHelper = new Database(getActivity());
 
         if (savedInstanceState != null) {
@@ -305,7 +305,7 @@ public abstract class TimelineFragment extends ListFragment
     @Override
     public void onTagChanged(int index) {
         selectedTag = index;
-        adapter.countType = index -1;
+//        adapter.countType = index -1;
         fillListView(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag)), false);
         //Toast.makeText(getActivity(), "tag: " + index, Toast.LENGTH_SHORT).show();
     }

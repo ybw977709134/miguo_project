@@ -898,16 +898,26 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         }
     }
 
+    /**
+     * 跳转到好友
+     * @param context
+     * @param moment
+     */
     public static void launch(Context context, Moment moment) {
         Intent intent = new Intent(context, MomentDetailActivity.class);
         intent.putExtra("moment", moment);
         context.startActivity(intent);
     }
     
-    public static void launch(Context context, Moment moment,String isowner) {
+    /**
+     * 跳转到自己
+     * @param context
+     * @param moment
+     */
+    public static void launchForOwner(Context context, Moment moment) {
         Intent intent = new Intent(context, MomentDetailActivity.class);
         intent.putExtra("moment", moment);
-        intent.putExtra("isowner", 1);
+        intent.putExtra("isowner", 1);//给自己多传一个标志值
         context.startActivity(intent);
     }
 

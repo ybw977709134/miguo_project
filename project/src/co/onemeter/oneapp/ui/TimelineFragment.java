@@ -40,7 +40,7 @@ public abstract class TimelineFragment extends ListFragment
     private long maxTimestamp = 0;
     
     //用于区分账号的类型
-//    private int countType = -1;//默认全部
+    private int countType = -1;//默认全部
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public abstract class TimelineFragment extends ListFragment
         }
 
         // load moments
-        setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag)));
+        setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag),-1));
         checkNewMoments();
     }
 
@@ -68,7 +68,7 @@ public abstract class TimelineFragment extends ListFragment
      * @param tag Tag index. -1 means not limited.
      * @return
      */
-    protected abstract ArrayList<Moment> loadLocalMoments (long maxTimestmap, String tag);
+    protected abstract ArrayList<Moment> loadLocalMoments (long maxTimestmap, String tag,int countType);
 
     /**
      * Load moments from web server.
@@ -83,7 +83,7 @@ public abstract class TimelineFragment extends ListFragment
      * @return
      * @author hutianfeng
      */
-    protected abstract ArrayList<Moment> loadUidMoments(int countType,long maxTimestamp);
+//    protected abstract ArrayList<Moment> loadUidMoments(int countType,long maxTimestamp);
 
     /**
      * fill/append/clear list view, set visibility of the "load more" item.
@@ -276,25 +276,32 @@ public abstract class TimelineFragment extends ListFragment
 //                "sender: " + index, Toast.LENGTH_SHORT).show();
 //    	int newindex = 0;
 //        adapter.clear();
+
     	if (index == 0) {//全部
 //    		countType = index -1;
 //    		adapter.countType = index -1;
-    		fillListView(loadLocalMoments(0, tagIdxFromUiToDb(index)), false);
+//    		fillListView(loadLocalMoments(0, tagIdxFromUiToDb(index)), false);
+    		countType = -1;
     	} else if (index == 1) {//官方账号 0
  //   		countType = index -1;	
  //   		adapter.countType = index -1;
-    		fillListView(loadUidMoments(0, 0), false);
+//    		fillListView(loadUidMoments(0, 0), false);
+    		countType = 0;
     	} else if (index == 2) {//老师账号2
 //    		countType = index;
 //    		adapter.countType = index;
-    		fillListView(loadUidMoments(2, 0), false);
+ //   		fillListView(loadUidMoments(2, 0), false);
+    		countType = 2;
     	} else if (index == 3) {//学生账号1
 //    		countType = index - 2;
 //    		adapter.countType = index -2;
-    		fillListView(loadUidMoments(1, 0), false);
+//    		fillListView(loadUidMoments(1, 0), false);
+    		countType = 1;
     	}
 //    	fillListView(loadLocalMoments(0, tagIdxFromUiToDb(0)), false);
 //    	setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(0)));
+    	
+    	fillListView(loadLocalMoments(0, tagIdxFromUiToDb(0),countType), false);
     	
     	
     }
@@ -306,7 +313,8 @@ public abstract class TimelineFragment extends ListFragment
     public void onTagChanged(int index) {
         selectedTag = index;
 //        adapter.countType = index -1;
-        fillListView(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag)), false);
+//        int countType = -1;//-1为全部
+        fillListView(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag),countType), false);
         //Toast.makeText(getActivity(), "tag: " + index, Toast.LENGTH_SHORT).show();
     }
 
@@ -403,7 +411,7 @@ public abstract class TimelineFragment extends ListFragment
         @Override
         protected void onPostExecute(Integer errno) {
             if (errno == ErrorCode.OK) {
-                ArrayList<Moment> lst = loadLocalMoments(maxTimestamp, tagIdxFromUiToDb(selectedTag));
+                ArrayList<Moment> lst = loadLocalMoments(maxTimestamp, tagIdxFromUiToDb(selectedTag),countType);
                 if (lst != null && !lst.isEmpty()) {
                     fillListView(lst, maxTimestamp > 0);
 

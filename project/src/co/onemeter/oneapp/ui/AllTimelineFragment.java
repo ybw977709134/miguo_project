@@ -38,8 +38,8 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
     }
 
     @Override
-    protected ArrayList<Moment> loadLocalMoments(long maxTimestamp, String tag) {
-        return dbHelper.fetchMomentsOfAllBuddies(maxTimestamp, PAGE_SIZE, tag);
+    protected ArrayList<Moment> loadLocalMoments(long maxTimestamp, String tag,int countType) {
+        return dbHelper.fetchMomentsOfAllBuddies(maxTimestamp, PAGE_SIZE, tag,countType);
     }
 
     @Override
@@ -52,10 +52,10 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
      * 重写uid加载动态的抽象方法
      * @author hutianfeng
      */
-    @Override
-    protected ArrayList<Moment> loadUidMoments(int countType,long maxTimestamp) {
-    	return dbHelper.fetchBuddyDetailUID(countType, maxTimestamp, PAGE_SIZE);
-    }
+//    @Override
+//    protected ArrayList<Moment> loadUidMoments(int countType,long maxTimestamp) {
+//    	return dbHelper.fetchBuddyDetailUID(countType, maxTimestamp, PAGE_SIZE);
+//    }
 
     @Override
     public void onResume() {

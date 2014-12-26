@@ -1,6 +1,7 @@
 package co.onemeter.oneapp.ui;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,16 +10,19 @@ import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GroupChatRoom;
+import org.wowtalk.api.GroupMember;
 import org.wowtalk.api.Lesson;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowLessonWebServerIF;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.BottomButtonBoard;
+import org.wowtalk.ui.PhotoDisplayHelper;
 
 import com.androidquery.AQuery;
 
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.contacts.model.Person;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,6 +33,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.app.Activity;
@@ -41,12 +46,17 @@ import android.content.Intent;
 public class ClassDetailActivity extends Activity implements OnClickListener, OnItemClickListener {
 	private AQuery query;
 	private WowLessonWebServerIF lesWebSer;
+	private WowTalkWebServerIF mWTWebSer;
+	private Database mdb;
 	
 	private String classId;
 	private List<Lesson> lessons;
+	private List<GroupMember> buddies;
 	private CourseTableAdapter courseAdapter;
+	private TeachersAdapter teaAdapter;
 
 	private ListView lvLessonTable;
+	private YQGridView grid_class_teachers;
 	private TextView tvTerm;
 	private TextView tvGrade;
 	private TextView tvSubject;
@@ -71,15 +81,45 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		tvDate = (TextView) findViewById(R.id.class_date);
 		tvTime = (TextView) findViewById(R.id.class_time);
 		tvPlace = (TextView) findViewById(R.id.class_place);
+		grid_class_teachers = (YQGridView) findViewById(R.id.grid_class_teachers);
+		
+		lesWebSer = WowLessonWebServerIF.getInstance(this);
+		mWTWebSer = WowTalkWebServerIF.getInstance(this);
+		mdb = Database.getInstance(this);
 		
 		query = new AQuery(this);
-		lesWebSer = WowLessonWebServerIF.getInstance(this);
 		lessons = new LinkedList<Lesson>();
 		courseAdapter = new CourseTableAdapter(lessons);
+		
+		
 		
 		Intent intent = getIntent();
 //		classId = "0b2f933f-a4d7-44de-a711-569abb04846a";
 		classId = intent.getStringExtra("classroomId");
+		
+		buddies = mdb.fetchGroupMembers(classId);
+		if(buddies == null || buddies.isEmpty()){
+			new AsyncTask<Void, Void, Integer>(){
+
+				@Override
+				protected Integer doInBackground(Void... params) {
+					return (Integer) WowTalkWebServerIF.getInstance(ClassDetailActivity.this).fGroupChat_GetMembers(classId).get("code");
+				}
+				
+				protected void onPostExecute(Integer result) {
+					if(ErrorCode.OK == result){
+						buddies = mdb.fetchGroupMembers(classId);
+						teaAdapter = new TeachersAdapter(buddies);
+						grid_class_teachers.setAdapter(teaAdapter);
+					}
+				};
+				
+			}.execute((Void)null);
+		}else{
+			teaAdapter = new TeachersAdapter(buddies);
+			grid_class_teachers.setAdapter(teaAdapter);
+		}
+		
 		query.find(R.id.class_detail_title).text(intent.getStringExtra("classroomName"));
 		query.find(R.id.title_back).clicked(this);
 		query.find(R.id.class_live_class).clicked(this);
@@ -101,6 +141,10 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		
 		getLessonInfo();
 		setClassInfo();
+	}
+	
+	private void getBuddiesFromServer(){
+		
 	}
 	
 	private void getLessonInfo(){
@@ -218,6 +262,82 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
         bottomBoard.addCancelBtn(getString(R.string.close));
         bottomBoard.show();
     }
+	
+	class TeachersAdapter extends BaseAdapter{
+		private List<GroupMember> buddies;
+		public TeachersAdapter(List<GroupMember> lists){
+			buddies = new ArrayList<GroupMember>();
+			for(GroupMember buddy:lists){
+				if(Buddy.ACCOUNT_TYPE_TEACHER == buddy.getAccountType()){
+					buddies.add(buddy);
+				}
+			}
+		}
+		
+		@Override
+		public int getCount() {
+			return buddies.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return buddies.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(final int position, View convertView, ViewGroup parent) {
+			ViewHolder holder = null;
+			if(null == convertView){
+				holder = new ViewHolder();
+				convertView = getLayoutInflater().inflate(R.layout.listitem_groupchat_member, parent, false);
+				holder.img_photo = (ImageView) convertView.findViewById(R.id.img_photo);
+				holder.txt_name = (TextView) convertView.findViewById(R.id.txt_name);
+				convertView.findViewById(R.id.img_delete).setVisibility(View.GONE);
+				convertView.setTag(holder);
+			}else{
+				holder = (ViewHolder) convertView.getTag();
+			}
+			Buddy buddy = buddies.get(position);
+			holder.txt_name.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
+			PhotoDisplayHelper.displayPhoto(ClassDetailActivity.this, holder.img_photo, R.drawable.default_avatar_90, buddy, true);
+			
+			View.OnClickListener listener = new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					String userID = PrefUtil.getInstance(ClassDetailActivity.this).getUid();
+				 GroupMember member = buddies.get(position);
+	             if (null != member && !TextUtils.isEmpty(member.userID)) {
+	                 int friendType = ContactInfoActivity.BUDDY_TYPE_NOT_FRIEND;
+	                 if (member.userID.equals(userID)) {
+	                     friendType = ContactInfoActivity.BUDDY_TYPE_MYSELF;
+	                 } else if (0 != (member.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE)) {
+	                     friendType = ContactInfoActivity.BUDDY_TYPE_IS_FRIEND;
+	                 }
+	                 ContactInfoActivity.launch(ClassDetailActivity.this,
+	                         Person.fromBuddy(member),
+	                         friendType);
+	             }
+				}
+			};
+			
+			holder.img_photo.setOnClickListener(listener);
+			
+			
+			return convertView;
+		}
+		
+		class ViewHolder{
+			ImageView img_photo;
+			TextView txt_name;
+		}
+		
+	}
 	
 	class CourseTableAdapter extends BaseAdapter{
 		private List<Lesson> alessons;

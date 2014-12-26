@@ -31,6 +31,8 @@ public class SchoolMatesFragment extends Fragment
         implements BottomButtonBoard.OptionsMenuProvider, AdapterView.OnItemClickListener {
 
     private static final int REQ_ADD_CLASS = 1;
+    private static boolean autoRefreshed = false;
+
     Adapter adapter;
     AQuery aQuery;
     MessageBox msgbox;
@@ -46,8 +48,12 @@ public class SchoolMatesFragment extends Fragment
 
         schools = new Database(getActivity()).fetchSchools();
         updateUi();
-        if (isEmpty())
+
+        // 如果本地没有数据，则刷新。但这种事只做一次，以防服务器也没有数据时，客户端反复刷新
+        if (isEmpty() && !autoRefreshed) {
+            autoRefreshed = true;
             refresh();
+        }
 
         return v;
     }
@@ -160,13 +166,5 @@ public class SchoolMatesFragment extends Fragment
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    @Override
-    public void onResume() {
-    	super.onResume();
-    	if(!isEmpty()){
-    		refresh();
-    	}
-
     }
 }

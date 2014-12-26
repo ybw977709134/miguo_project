@@ -4,4 +4,5 @@
 	<string name="stroke_width">笔尖宽度</string>
 	<string name="stoke_opacity">不透明度</string>
 	<string name="stroke_color">颜色</string>
+	<string name="stroke_cancel">全部清除</string>
 </resources>

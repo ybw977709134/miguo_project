@@ -124,4 +124,21 @@
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/linearLayout_cancel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignLeft="@+id/doodle_canvas"
+        android:layout_marginBottom="17dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/stroke_cancel"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
 </RelativeLayout>

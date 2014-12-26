@@ -766,8 +766,19 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 //            			
 //            		}
             		
+            		if (tagType == 6) {//如果选择发布视频，那么就必须要添加视频才能发布
+            			if (listPhoto == null || listPhoto.isEmpty()) {
+            				Toast.makeText(CreateNormalMomentWithTagActivity.this, "请添加视频", Toast.LENGTH_LONG).show();
+            			} else {
+            				createMoment();
+            			}
+            		} else {
+            			//只要填写了任何信息都可以发布
+            			createMoment();
+            		}
+            		
             		//只要填写了任何信息都可以发布
-            		createMoment();
+            	//	createMoment();
             		
             	}     	
 //                createMoment();

@@ -157,12 +157,6 @@
 			android:windowSoftInputMode="adjustResize" >
 		</activity>
 		<activity
-            android:name=".ui.ContactsActivityForBiz"
-            android:theme="@style/Theme.Blue"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" >
-        </activity>
-        <activity
             android:name=".ui.FavoriteGroupsSortActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" >

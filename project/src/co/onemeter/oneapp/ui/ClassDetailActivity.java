@@ -16,6 +16,7 @@ import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowLessonWebServerIF;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.BottomButtonBoard;
+import org.wowtalk.ui.HorizontalListView;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
 
@@ -58,7 +59,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private TeachersAdapter teaAdapter;
 
 	private ListView lvLessonTable;
-	private YQGridView grid_class_teachers;
+	private HorizontalListView lvTeachers;
 	private TextView tvTerm;
 	private TextView tvGrade;
 	private TextView tvSubject;
@@ -83,7 +84,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		tvDate = (TextView) findViewById(R.id.class_date);
 		tvTime = (TextView) findViewById(R.id.class_time);
 		tvPlace = (TextView) findViewById(R.id.class_place);
-		grid_class_teachers = (YQGridView) findViewById(R.id.grid_class_teachers);
+		lvTeachers = (HorizontalListView) findViewById(R.id.hor_lv_teachers);
 		
 		lesWebSer = WowLessonWebServerIF.getInstance(this);
 		mWTWebSer = WowTalkWebServerIF.getInstance(this);
@@ -114,14 +115,14 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 						members = mdb.fetchGroupMembers(classId);
 						//android.util.Log.i("-->>", buddies.toString());
 						teaAdapter = new TeachersAdapter(members);
-						grid_class_teachers.setAdapter(teaAdapter);
+						lvTeachers.setAdapter(teaAdapter);
 					}
 				};
 				
 			}.execute((Void)null);
 		}else{
 			teaAdapter = new TeachersAdapter(members);
-			grid_class_teachers.setAdapter(teaAdapter);
+			lvTeachers.setAdapter(teaAdapter);
 		}
 		
 		query.find(R.id.class_detail_title).text(intent.getStringExtra("classroomName"));
@@ -265,13 +266,24 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
         bottomBoard.show();
     }
 	
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		Intent intent = new Intent();
+		intent.setClass(this, LessonDetailActivity.class);
+		intent.putExtra(Constants.LESSONID, lessons.get(position).lesson_id);
+		intent.putExtra("title", lessons.get(position).title);
+		intent.putExtra("classId", classId);
+		startActivity(intent);
+	}
+	
 	class TeachersAdapter extends BaseAdapter{
 		private List<GroupMember> members;
 		
 		public TeachersAdapter(List<GroupMember> lists){
 			members = new ArrayList<GroupMember>();
 			for(GroupMember buddy:lists){
-				android.util.Log.i("-->>", buddy.getAccountType() + "");
+				//android.util.Log.i("-->>", buddy.getAccountType() + "");
 				if(Buddy.ACCOUNT_TYPE_TEACHER == buddy.getAccountType()){
 					members.add(buddy);
 				}
@@ -298,10 +310,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			ViewHolder holder = null;
 			if(null == convertView){
 				holder = new ViewHolder();
-				convertView = getLayoutInflater().inflate(R.layout.listitem_groupchat_member, parent, false);
+				convertView = getLayoutInflater().inflate(R.layout.listitem_class_detail_teacher, parent, false);
 				holder.img_photo = (ImageView) convertView.findViewById(R.id.img_photo);
 				holder.txt_name = (TextView) convertView.findViewById(R.id.txt_name);
-				convertView.findViewById(R.id.img_delete).setVisibility(View.GONE);
 				convertView.setTag(holder);
 			}else{
 				holder = (ViewHolder) convertView.getTag();
@@ -330,8 +341,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			};
 			
 			holder.img_photo.setOnClickListener(listener);
-			
-			
 			return convertView;
 		}
 		
@@ -389,17 +398,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			TextView item_msg;
 		}
 		
-	}
-
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		Intent intent = new Intent();
-		intent.setClass(this, LessonDetailActivity.class);
-		intent.putExtra(Constants.LESSONID, lessons.get(position).lesson_id);
-		intent.putExtra("title", lessons.get(position).title);
-		intent.putExtra("classId", classId);
-		startActivity(intent);
 	}
 
 }

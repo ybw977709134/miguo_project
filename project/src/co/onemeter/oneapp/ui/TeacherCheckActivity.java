@@ -98,19 +98,46 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 		titleBack.setOnClickListener(this);
 	}
 	
-	class StuAdapter extends BaseAdapter{
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		Intent intent = new Intent();
+		intent.putExtra(Constants.LESSONID, lessonId);
+		if(lvFlag == LESSITUATION){
+			intent.putExtra(LessonStatusActivity.FALG, true);
+			intent.setClass(this, LessonStatusActivity.class);
+		}else if(lvFlag == PARENTSUG){
+			intent.putExtra(LessonStatusActivity.FALG, true);
+			intent.setClass(this, LessonParentFeedbackActivity.class);
+		}
+		startActivity(intent);
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.title_back:
+			finish();
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+class StuAdapter extends BaseAdapter{
 		
 		private List<GroupMember> members;
 		
 		public StuAdapter(List<GroupMember> list){
-//			members = new ArrayList<>();
-//			for (GroupMember m: list) {
-//				android.util.Log.i("-->>", m.getAccountType() +"");
-//				if(m.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
-//					members.add(m);
-//				}
-//			}
-			members = list;
+			members = new ArrayList<>();
+			for (GroupMember m: list) {
+				android.util.Log.i("-->>", m.getAccountType() +"");
+				if(m.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
+					members.add(m);
+				}
+			}
 		}
 
 		@Override
@@ -151,32 +178,5 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 			TextView msg;
 		}
 		
-	}
-
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		Intent intent = new Intent();
-		intent.putExtra(Constants.LESSONID, lessonId);
-		if(lvFlag == LESSITUATION){
-			intent.putExtra(LessonStatusActivity.FALG, true);
-			intent.setClass(this, LessonStatusActivity.class);
-		}else if(lvFlag == PARENTSUG){
-			intent.putExtra(LessonStatusActivity.FALG, true);
-			intent.setClass(this, LessonParentFeedbackActivity.class);
-		}
-		startActivity(intent);
-	}
-
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.title_back:
-			finish();
-			break;
-
-		default:
-			break;
-		}
 	}
 }

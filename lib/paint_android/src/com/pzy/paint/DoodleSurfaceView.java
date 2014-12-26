@@ -23,7 +23,7 @@ public class DoodleSurfaceView extends SurfaceView
         public int opacity;
 
         public StrokeAttr() {
-            this.width = 10;
+            this.width = 0;
             this.color = Color.RED;
             this.opacity = 255;
         }

@@ -408,6 +408,16 @@
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
+			android:name="com.pzy.paint.BitmapPreviewActivity"
+			android:theme="@style/Theme.Red"
+			android:screenOrientation="portrait" >
+		</activity>
+		<activity
+			android:name="org.wowtalk.ui.msg.BitmapPreviewActivity"
+			android:theme="@style/Theme.Red"
+			android:screenOrientation="portrait" >
+		</activity>
+		<activity
 			android:name=".ui.NearbyActivity"
 			android:theme="@style/Theme.Blue"
 			android:screenOrientation="portrait">

@@ -3,17 +3,22 @@ package co.onemeter.oneapp.ui;
 import java.util.List;
 
 import org.wowtalk.api.LessonPerformance;
+import org.wowtalk.api.WowLessonWebServerIF;
 
 import com.androidquery.AQuery;
 
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.Utils;
 import android.app.Activity;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -23,7 +28,10 @@ import android.widget.TextView;
  */
 public class LessonStatusActivity extends Activity implements OnClickListener{
 
+	public static final String FALG = "isTeacher";
+	
 	private int lessonId;
+	private boolean isTeacher;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +45,17 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 		String[] preforms = getResources().getStringArray(R.array.lesson_performance_names);
 		AQuery q = new AQuery(this);
 		q.find(R.id.lv_les_status).adapter(new LessonStatusAdapter(preforms, null));
-		q.find(R.id.btn_parent_confirm).clicked(this);
 		q.find(R.id.title_back).clicked(this);
 		
-		lessonId = getIntent().getIntExtra(Constants.LESSONID,0);
+		Button btn = (Button) findViewById(R.id.btn_parent_confirm);
+		btn.setOnClickListener(this);
+		
+		Intent intent = getIntent();
+		lessonId = intent.getIntExtra(Constants.LESSONID,0);
+		isTeacher = intent.getBooleanExtra(FALG, false);
+		if(isTeacher){
+			btn.setText(R.string.login_retrieve_password_btn);
+		}
 	}
 	
 
@@ -48,7 +63,7 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_parent_confirm:
-			
+			submitStuPerformance();
 			break;
 		case R.id.title_back:
 			finish();
@@ -56,6 +71,17 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 		default:
 			break;
 		}
+	}
+	
+	private void submitStuPerformance(){
+		new AsyncTask<Void, Void, Integer>() {
+
+			@Override
+			protected Integer doInBackground(Void... params) {
+				return WowLessonWebServerIF.getInstance(LessonStatusActivity.this).addOrModifyLessonPerformance(null);
+			}
+			
+		}.execute((Void)null);
 	}
 	
 	class LessonStatusAdapter extends BaseAdapter{
@@ -95,6 +121,10 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 				holder = (ViewHolder) convertView.getTag();
 			}
 			holder.tv_per.setText(pers[position]);
+			if(!Utils.isAccoTeacher(LessonStatusActivity.this)){
+				holder.rg_per.setEnabled(false);
+				
+			}
 			return convertView;
 		}
 		

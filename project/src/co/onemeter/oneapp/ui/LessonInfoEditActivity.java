@@ -125,7 +125,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			break;
 		case R.id.save:
 			if (tag == TAG_LES_TABLE) {
-
+				finish();
 			} else {
 				updateClassInfo();
 			}

@@ -53,6 +53,7 @@ public class SingleContactChatDetailActivity extends Activity implements OnClick
                         ThemeHelper.putExtraCurrThemeResId(addIntent, SingleContactChatDetailActivity.this);
                         String[] memberIds = new String[] {mTargetUId};
                         addIntent.putExtra("currentMemberIds", memberIds);
+                        addIntent.putExtra(MultiSelectActivity.INTENT_CHANGE_MULTI_FROM_SINGLE, true);
                         startActivityForResult(addIntent, REQ_ADD_MEMBER);
                     } else {
                         Buddy member = chatMembers.get(position);

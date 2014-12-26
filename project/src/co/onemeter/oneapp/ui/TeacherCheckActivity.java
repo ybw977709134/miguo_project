@@ -133,7 +133,7 @@ class StuAdapter extends BaseAdapter{
 		public StuAdapter(List<GroupMember> list){
 			members = new ArrayList<>();
 			for (GroupMember m: list) {
-				android.util.Log.i("-->>", m.getAccountType() +"");
+				//android.util.Log.i("-->>", m.getAccountType() +"");
 				if(m.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
 					members.add(m);
 				}

@@ -18,7 +18,6 @@ import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.ui.BottomButtonBoard;
-import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
 
@@ -50,12 +49,8 @@ public class SingleContactChatDetailActivity extends Activity implements OnClick
                     String userID = PrefUtil.getInstance(SingleContactChatDetailActivity.this).getUid();
                     if (position == chatMembers.size() - 1) {
                         Intent addIntent = new Intent();
-                        if (GlobalValue.RELEASE_AS_WOWCITY) {
-                            addIntent.setClass(SingleContactChatDetailActivity.this, MultiSelectActivity.class);
-                            ThemeHelper.putExtraCurrThemeResId(addIntent, SingleContactChatDetailActivity.this);
-                        } else if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
-                            addIntent.setClass(SingleContactChatDetailActivity.this, MultiSelectActivityForBiz.class);
-                        }
+                        addIntent.setClass(SingleContactChatDetailActivity.this, MultiSelectActivity.class);
+                        ThemeHelper.putExtraCurrThemeResId(addIntent, SingleContactChatDetailActivity.this);
                         String[] memberIds = new String[] {mTargetUId};
                         addIntent.putExtra("currentMemberIds", memberIds);
                         startActivityForResult(addIntent, REQ_ADD_MEMBER);

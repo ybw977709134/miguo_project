@@ -17,7 +17,6 @@ import co.onemeter.oneapp.utils.ThemeHelper;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.BottomButtonBoard;
-import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.MessageComposerActivityBase;
@@ -91,12 +90,8 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
                         } else {
                             if (position == groupMembers.size() - 1) {
                                 Intent addIntent = new Intent();
-                                if (GlobalValue.RELEASE_AS_WOWCITY) {
-                                    addIntent.setClass(GroupChatInfoActivity.this, MultiSelectActivity.class);
-                                    ThemeHelper.putExtraCurrThemeResId(addIntent, GroupChatInfoActivity.this);
-                                } else if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
-                                    addIntent.setClass(GroupChatInfoActivity.this, MultiSelectActivityForBiz.class);
-                                }
+                                addIntent.setClass(GroupChatInfoActivity.this, MultiSelectActivity.class);
+                                ThemeHelper.putExtraCurrThemeResId(addIntent, GroupChatInfoActivity.this);
                                 String[] memberIds = getCurrentMemberIds();
                                 addIntent.putExtra("currentMemberIds", memberIds);
                                 addIntent.putExtra("group_id", groupId);
@@ -378,11 +373,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 //                    dbHelper.deleteChatMessageWithUser(groupId);
 //                    dbHelper.deleteGroupChatRoomWithID(groupId);
                     PickTempGroupActivity.instance().finish();
-                    if (GlobalValue.RELEASE_AS_WOWCITY) {
-                        MultiSelectActivity.instance().finish();
-                    } else if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
-                        MultiSelectActivityForBiz.instance().finish();
-                    }
+                    MultiSelectActivity.instance().finish();
                     MessageComposerActivity.instance().finish(); // XXX null pointer exception!
                     finish();
                 }
@@ -409,11 +400,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
                     dbHelper.deleteBuddyFromGroupChatRoom(groupId, myUid);
                     dbHelper.deleteMyselfFlagFromGroupChatRoom(groupId);
                     PickTempGroupActivity.instance().finish();
-                    if (GlobalValue.RELEASE_AS_WOWCITY) {
-                        MultiSelectActivity.instance().finish();
-                    } else if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
-                        MultiSelectActivityForBiz.instance().finish();
-                    }
+                    MultiSelectActivity.instance().finish();
                     MessageComposerActivity.instance().finish();
                     finish();
                 }

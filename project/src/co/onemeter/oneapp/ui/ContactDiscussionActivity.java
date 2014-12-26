@@ -21,7 +21,6 @@ import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.oneapp.utils.Utils;
 import org.wowtalk.api.*;
-import org.wowtalk.ui.GlobalValue;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -182,12 +181,8 @@ public class ContactDiscussionActivity extends Activity implements OnClickListen
             break;
         case R.id.title_edit:
             Intent discussionIntent = new Intent();
-            if (GlobalValue.RELEASE_AS_WOWCITY) {
-                discussionIntent.setClass(this, MultiSelectActivity.class);
-                ThemeHelper.putExtraCurrThemeResId(discussionIntent, this);
-            } else if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
-                discussionIntent.setClass(this, MultiSelectActivityForBiz.class);
-            }
+            discussionIntent.setClass(this, MultiSelectActivity.class);
+            ThemeHelper.putExtraCurrThemeResId(discussionIntent, this);
             startActivityForResult(discussionIntent, REQ_CREATE_DISCUSSION);
             break;
         case R.id.field_clear:

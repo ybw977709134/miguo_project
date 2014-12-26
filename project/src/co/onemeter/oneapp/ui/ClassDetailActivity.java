@@ -16,6 +16,7 @@ import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowLessonWebServerIF;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.BottomButtonBoard;
+import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
 
 import com.androidquery.AQuery;
@@ -48,10 +49,11 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private WowLessonWebServerIF lesWebSer;
 	private WowTalkWebServerIF mWTWebSer;
 	private Database mdb;
+	private MessageBox msgBox;
 	
 	private String classId;
 	private List<Lesson> lessons;
-	private List<GroupMember> buddies;
+	private List<GroupMember> members;
 	private CourseTableAdapter courseAdapter;
 	private TeachersAdapter teaAdapter;
 
@@ -87,6 +89,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		mWTWebSer = WowTalkWebServerIF.getInstance(this);
 		mdb = Database.getInstance(this);
 		
+		msgBox = new MessageBox(this);
 		query = new AQuery(this);
 		lessons = new LinkedList<Lesson>();
 		courseAdapter = new CourseTableAdapter(lessons);
@@ -97,8 +100,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 //		classId = "0b2f933f-a4d7-44de-a711-569abb04846a";
 		classId = intent.getStringExtra("classroomId");
 		
-		buddies = mdb.fetchGroupMembers(classId);
-		if(buddies == null || buddies.isEmpty()){
+		members = mdb.fetchGroupMembers(classId);
+		if(members == null || members.isEmpty()){
 			new AsyncTask<Void, Void, Integer>(){
 
 				@Override
@@ -108,15 +111,16 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				
 				protected void onPostExecute(Integer result) {
 					if(ErrorCode.OK == result){
-						buddies = mdb.fetchGroupMembers(classId);
-						teaAdapter = new TeachersAdapter(buddies);
+						members = mdb.fetchGroupMembers(classId);
+						//android.util.Log.i("-->>", buddies.toString());
+						teaAdapter = new TeachersAdapter(members);
 						grid_class_teachers.setAdapter(teaAdapter);
 					}
 				};
 				
 			}.execute((Void)null);
 		}else{
-			teaAdapter = new TeachersAdapter(buddies);
+			teaAdapter = new TeachersAdapter(members);
 			grid_class_teachers.setAdapter(teaAdapter);
 		}
 		
@@ -143,10 +147,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		setClassInfo();
 	}
 	
-	private void getBuddiesFromServer(){
-		
-	}
-	
 	private void getLessonInfo(){
 		new AsyncTask<Void, Void, Integer>() {
 
@@ -167,7 +167,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	}
 	
 	private String[] getStrsByComma(String str){
-		if(TextUtils.isEmpty(str)){
+		if(TextUtils.isEmpty(str)&& !str.contains(Constants.COMMA)){
 			return null;
 		}
 		return str.split(Constants.COMMA);
@@ -183,15 +183,18 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		Database db = new Database(this);
 		
 		GroupChatRoom room = db.fetchGroupChatRoom(classId);
-		String[] infos = getStrsByComma(room.place);
-		if(null != infos && infos.length == 6){
-			tvTerm.setText(term + infos[0]);
-			tvGrade.setText(grade + infos[1]);
-			tvSubject.setText(subject + infos[2]);
-			tvDate.setText(date + infos[3]);
-			tvTime.setText(time + infos[4]);
-			tvPlace.setText(place + infos[5]);
+		if(room != null){
+			String[] infos = getStrsByComma(room.place);
+			if(null != infos && infos.length == 6){
+				tvTerm.setText(term + infos[0]);
+				tvGrade.setText(grade + infos[1]);
+				tvSubject.setText(subject + infos[2]);
+				tvDate.setText(date + infos[3]);
+				tvTime.setText(time + infos[4]);
+				tvPlace.setText(place + infos[5]);
+			}
 		}
+			
 	}
 	
 	@Override
@@ -201,7 +204,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			finish();
 			break;
 		case R.id.class_live_class:
-			
+			msgBox.toast("功能正在实现中...");
 			break;
 		case R.id.more:
 			showMore(v);
@@ -222,8 +225,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                 new OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        
-                    	
+                    	msgBox.toast("功能正在实现中...");
                         bottomBoard.dismiss();
                     }
                 });
@@ -264,24 +266,26 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
     }
 	
 	class TeachersAdapter extends BaseAdapter{
-		private List<GroupMember> buddies;
+		private List<GroupMember> members;
+		
 		public TeachersAdapter(List<GroupMember> lists){
-			buddies = new ArrayList<GroupMember>();
+			members = new ArrayList<GroupMember>();
 			for(GroupMember buddy:lists){
+				android.util.Log.i("-->>", buddy.getAccountType() + "");
 				if(Buddy.ACCOUNT_TYPE_TEACHER == buddy.getAccountType()){
-					buddies.add(buddy);
+					members.add(buddy);
 				}
 			}
 		}
 		
 		@Override
 		public int getCount() {
-			return buddies.size();
+			return members.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			return buddies.get(position);
+			return members.get(position);
 		}
 
 		@Override
@@ -290,7 +294,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		}
 
 		@Override
-		public View getView(final int position, View convertView, ViewGroup parent) {
+		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder = null;
 			if(null == convertView){
 				holder = new ViewHolder();
@@ -302,16 +306,15 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			}else{
 				holder = (ViewHolder) convertView.getTag();
 			}
-			Buddy buddy = buddies.get(position);
-			holder.txt_name.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
-			PhotoDisplayHelper.displayPhoto(ClassDetailActivity.this, holder.img_photo, R.drawable.default_avatar_90, buddy, true);
+			final GroupMember member = members.get(position);
+			holder.txt_name.setText(TextUtils.isEmpty(member.alias) ? member.nickName : member.alias);
+			PhotoDisplayHelper.displayPhoto(ClassDetailActivity.this, holder.img_photo, R.drawable.default_avatar_90, member, true);
 			
 			View.OnClickListener listener = new View.OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					String userID = PrefUtil.getInstance(ClassDetailActivity.this).getUid();
-				 GroupMember member = buddies.get(position);
+				String userID = PrefUtil.getInstance(ClassDetailActivity.this).getUid();
 	             if (null != member && !TextUtils.isEmpty(member.userID)) {
 	                 int friendType = ContactInfoActivity.BUDDY_TYPE_NOT_FRIEND;
 	                 if (member.userID.equals(userID)) {
@@ -395,6 +398,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		intent.setClass(this, LessonDetailActivity.class);
 		intent.putExtra(Constants.LESSONID, lessons.get(position).lesson_id);
 		intent.putExtra("title", lessons.get(position).title);
+		intent.putExtra("classId", classId);
 		startActivity(intent);
 	}
 

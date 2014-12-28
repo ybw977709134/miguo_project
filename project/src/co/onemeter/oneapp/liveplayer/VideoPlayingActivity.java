@@ -16,11 +16,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxCallback;
+import com.androidquery.callback.AjaxStatus;
 import com.baidu.cyberplayer.core.BVideoView;
 import com.baidu.cyberplayer.core.BVideoView.*;
+import com.google.gson.Gson;
 import de.greenrobot.event.EventBus;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -32,6 +35,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * 
  */
 public class VideoPlayingActivity extends Activity {
+
+	private static final String TAG = "VideoPlayingActivity";
 
 	class EventHandler extends Handler {
 		public EventHandler(Looper looper) {
@@ -457,32 +462,29 @@ public class VideoPlayingActivity extends Activity {
 	 * @param fre
 	 */
 	public void onEventBackgroundThread(FetchRtmpEvent fre) {
-		try {
-		Live live = Live.getRtmp(fre.getLiveplayUrl());
-		if (TextUtils.isEmpty(live.getStatus()) || Integer.parseInt(live.getStatus()) <= 0) {
-//		mVideoSource = "";
-		//mVideoSource = "rtmp://cdn-sov-2.musicradio.com:80/LiveVideo/Capital";
-//		mVideoSource = "http://119.188.38.82/youku/6573F6708B53282529E4E24285/0300080100539A52ACC84E0182ECB0A0A37A56-D3AF-E97E-ECA2-C52485E883C6.mp4";
-		} else {
-		mVideoSource = live.getUrl();
-
-
-		//rtmp测试地址
-//		mVideoSource = "rtmp://qd.bms.baidu.com:1935/live/ad6a71fc859f11e4815aac853dd1c904?deviceid=130077497566464&sign=DTAES-CqnyQSm05YocyMV8Skl5IwA2-Vg5RoMgnv0eXf8hmtAphNb7STzo%3D&time=1418810545&expire=1418810780&liveid=141881054576125";
-
-		L.e("mVideoSource-->" + mVideoSource);
-		}
-		EventBus.getDefault().post(mEventHandler);
-		} catch (IOException e) {
-		e.printStackTrace();
-		}
-		}
+		Log.i(TAG, "onEventBackgroundThread");
+		new AQuery(this).ajax(fre.getLiveplayUrl(), String.class, new AjaxCallback<String>(){
+			public void callback(String url, String response, AjaxStatus status) {
+				Log.i(TAG, "get rtmp source " + response);
+				if  (status.getCode() / 200 == 1) {
+					Gson gson = new Gson();
+					Live live = gson.fromJson(response, Live.class);
+					if (live != null && !TextUtils.isEmpty(live.getStatus()) && Integer.parseInt(live.getStatus()) > 0) {
+						mVideoSource = live.getUrl();
+						Log.i(TAG, "mVideoSource " + mVideoSource);
+						EventBus.getDefault().post(mEventHandler);
+					}
+				}
+			}
+		});
+	}
 
 	/**
 	 * 发起直播
 	 * @param lle
 	 */
 	public void onEventMainThread(EventHandler handler) {
+		Log.i(TAG, "onEventMainThread");
 		sendPlayMessage();
 	}
 

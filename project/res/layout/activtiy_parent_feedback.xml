@@ -75,6 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_large"
+        android:visibility="gone"
         android:orientation="horizontal" >
 
         <Button
@@ -110,6 +111,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@drawable/divider" />
 
     <LinearLayout

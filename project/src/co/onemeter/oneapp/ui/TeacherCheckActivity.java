@@ -7,7 +7,13 @@ import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GroupMember;
+import org.wowtalk.api.LessonParentFeedback;
+import org.wowtalk.api.Moment;
+import org.wowtalk.api.WowEventWebServerIF;
+import org.wowtalk.api.WowLessonWebServerIF;
+import org.wowtalk.api.WowMomentWebServerIF;
 import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.ui.MessageBox;
 
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
@@ -15,6 +21,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -45,6 +53,14 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 	private List<GroupMember> stus;
 	private Database mdbHelper;
 	private StuAdapter adapter;
+	
+	private Handler mHandler = new Handler(){
+		public void handleMessage(android.os.Message msg) {
+			if(msg.what != ErrorCode.OK){
+				new MessageBox(TeacherCheckActivity.this).toast(R.string.class_parent_opinion_not_submitted);
+			}
+		};
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,17 +130,33 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		Intent intent = new Intent();
-		intent.putExtra(Constants.LESSONID, lessonId);
-		intent.putExtra(Constants.STUID, stus.get(position).userID);
 		if(lvFlag == LESSITUATION){
+			Intent intent = new Intent();
+			intent.putExtra(Constants.LESSONID, lessonId);
+			intent.putExtra(Constants.STUID, stus.get(position).userID);
 			intent.putExtra(LessonStatusActivity.FALG, true);
 			intent.setClass(this, LessonStatusActivity.class);
+			startActivity(intent);
 		}else if(lvFlag == PARENTSUG){
-			intent.putExtra(LessonStatusActivity.FALG, true);
-			intent.setClass(this, LessonParentFeedbackActivity.class);
+//			intent.putExtra(LessonStatusActivity.FALG, true);
+//			intent.setClass(this, LessonParentFeedbackActivity.class);
+			final int pos = position;
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					int errno = WowLessonWebServerIF.getInstance(TeacherCheckActivity.this).getLessonParentFeedback(lessonId, stus.get(pos).userID);
+					if(errno == ErrorCode.OK){
+						Database db = new Database(TeacherCheckActivity.this);
+						LessonParentFeedback feedback = db.fetchLessonParentFeedback(lessonId, stus.get(pos).userID);
+						Moment moment = db.fetchMoment(feedback.moment_id + "");
+						MomentDetailActivity.launch(TeacherCheckActivity.this,moment);
+					}else{
+						mHandler.sendEmptyMessage(errno);
+					}
+				}
+			}).start();
 		}
-		startActivity(intent);
 	}
 
 	@Override

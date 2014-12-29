@@ -321,10 +321,12 @@
         </activity>
 		<activity
             android:name=".ui.AlbumCoverChangeActivity"
+            android:theme="@style/Theme.Blue"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.ProviderAlbumCoverActivity"
+            android:theme="@style/Theme.Blue"
             android:screenOrientation="portrait" >
         </activity>
 		<activity

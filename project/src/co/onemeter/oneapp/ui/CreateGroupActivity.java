@@ -211,6 +211,8 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
                     // update the display name of chatmessages.
                     mDBHelper.updateChatMessageDisplayNameWithUser(groupRoom.groupID, groupRoom.groupNameOriginal);
                     setResult(RESULT_OK);
+                    ContactsFragment fragment = new ContactsFragment();
+                    fragment.refresh();
                     finish();
                 }
             }

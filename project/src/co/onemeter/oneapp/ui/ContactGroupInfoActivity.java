@@ -15,12 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.GroupMembersGridAdapter;
-import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.ThemeHelper;
-
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.*;
 import org.wowtalk.ui.msg.MessageComposerActivityBase;
@@ -392,6 +389,8 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
         	navbar_btn_right.setVisibility(View.GONE);
         }
 
+        // 由于群组资料的更新没有推送通知，这里应该自动刷新
+        refreshGroupInfo();
 	}
 
     private void setDisplayOfGroup() {
@@ -633,22 +632,22 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
         }
 	}
 
-//    private void refreshGroupInfo() {
-//        new AsyncTask<Void, Void, Integer>() {
-//            @Override
-//            protected Integer doInBackground(Void... params) {
-//                return mWebif.fGroupChat_GetGroupDetail(groupRoom.groupID);
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Integer result) {
-//                if (ErrorCode.OK == result) {
-//                    groupRoom = mDbHelper.fetchGroupChatRoom(groupRoom.groupID);
-//                    setDisplayOfGroup();
-//                }
-//            }
-//        }.execute((Void)null);
-//    }
+    private void refreshGroupInfo() {
+        new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return mWebif.fGroupChat_GetGroupDetail(groupRoom.groupID);
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                if (ErrorCode.OK == result) {
+                    groupRoom = mDbHelper.fetchGroupChatRoom(groupRoom.groupID);
+                    setDisplayOfGroup();
+                }
+            }
+        }.execute((Void)null);
+    }
 
     @Override
     public boolean onKeyDown (int keyCode, KeyEvent event) {

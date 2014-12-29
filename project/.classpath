@@ -15,8 +15,6 @@
 	<classpathentry kind="lib" path="libs/eventbus.jar"/>
 	<classpathentry kind="lib" path="libs/gson-2.1.jar"/>
 	<classpathentry kind="lib" path="libs/liveplayer.jar"/>
-	<classpathentry kind="lib" path="libs/okhttp-2.1.0.jar"/>
-	<classpathentry kind="lib" path="libs/okio-1.0.1.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>

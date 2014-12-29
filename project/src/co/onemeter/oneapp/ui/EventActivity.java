@@ -306,8 +306,22 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 		pullListView = (PullToRefreshListView) findViewById(R.id.event_list);
 		lvEvent = pullListView.getRefreshableView();
         newEventPanel = findViewById(R.id.new_event_panel);
-        if(Buddy.ACCOUNT_TYPE_TEACHER != PrefUtil.getInstance(this).getMyAccountType()){
-        	ibRight.setVisibility(View.GONE);
+
+        // 只有已关联到学校的教师才可发布活动
+        ibRight.setVisibility(View.GONE);
+        if(Buddy.ACCOUNT_TYPE_TEACHER == PrefUtil.getInstance(this).getMyAccountType()){
+            // 检查是否有学校
+            new AsyncTask<Void, Void, Boolean>() {
+                @Override
+                protected Boolean doInBackground(Void... voids) {
+                    return !WowTalkWebServerIF.getInstance(EventActivity.this).getMySchools(false).isEmpty();
+                }
+
+                @Override
+                protected void onPostExecute(Boolean hasSchools) {
+                    ibRight.setVisibility(hasSchools ? View.VISIBLE : View.GONE);
+                }
+            }.execute((Void)null);
         }
 
         ibRight.setOnClickListener(this);

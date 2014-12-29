@@ -102,6 +102,7 @@
     <string name="contacts_newfriend_extra_info">附加信息</string>
     <string name="contacts_group_no_introduce">暂无群组介绍</string>
     <string name="contacts_group_edit_info">编辑群组资料</string>
+    <string name="contacts_group_classInfo">班</string>
     <string name="contacts_temp_group_delete_and_exit">删除并退出</string>
     <string name="newfriends_accept">同意</string>
     <string name="contacts_latest_contacts">最近联系人</string>

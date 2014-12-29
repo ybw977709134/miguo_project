@@ -47,18 +47,19 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 		
 		// hold file id, to avoid redundant downloading.
 		private HashSet<String> mDownloadingLocks = new HashSet<String>();
-		
+
 		public EventAdapter(Context context, ArrayList<WEvent> list) {
 			inflater = LayoutInflater.from(context);
 			this.eventList = new CopyOnWriteArrayList<WEvent>(list);
 		}
+
 		@Override
 		public int getCount() {
 			return eventList.size();
 		}
 
 		@Override
-		public Object getItem(int position) {
+		public WEvent getItem(int position) {
 			return eventList.get(position);
 		}
 
@@ -66,7 +67,13 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 		public long getItemId(int position) {
 			return position;
 		}
-		
+
+        public void replaceItem(int position, WEvent newValue) {
+            eventList.remove(position);
+            eventList.add(position, newValue);
+            notifyDataSetChanged();
+        }
+
 		public void setDataSource(ArrayList<WEvent> list) {
             this.eventList = new CopyOnWriteArrayList<WEvent>(list);
             notifyDataSetChanged();
@@ -278,6 +285,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 
     private FilterBar tf;
     private int tag = 0;
+    private String outletEventId;
 
 
 //	public static EventActivity instance() {
@@ -432,6 +440,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 	private void fGointoASpecificEvent(WEvent wa) {
 		if (wa == null)
 			return;
+        outletEventId = wa.id;
 		Intent intent = new Intent(this, EventDetailActivity.class);
 		Bundle b = new Bundle();
 		b.putParcelable(EVENT_DETAIL_BUNDLE, wa);
@@ -531,6 +540,21 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 
         if(System.currentTimeMillis()-lastRefreshEventTime >= REFRESH_EVENT_INTERVAL) {
             downloadLatestEvents(GET_FINISHED_EVENT0,null);
+        }
+
+        // 活动对象的状态可能已经发生了变化（比如报名人数），
+        // 因此从数据库中读取最新状态。
+        if (eventAdapter != null && outletEventId != null) {
+            for (int i = 0; i < eventAdapter.getCount(); ++i) {
+                if (TextUtils.equals(eventAdapter.getItem(i).id, outletEventId)) {
+                    WEvent e = mDb.fetchEvent(outletEventId);
+                    if (e != null) {
+                        WEventUiHelper.fixMediaLocalPath(e);
+                        eventAdapter.replaceItem(i, e);
+                    }
+                    break;
+                }
+            }
         }
 	}
 	

@@ -260,11 +260,18 @@ public abstract class TimelineFragment extends ListFragment
     }
 
     public void onMomentClicked(int position, Moment moment) {
-        startActivityForResult(
-                new Intent(this.getActivity(), MomentDetailActivity.class)
-                        .putExtra("moment", moment),
-                REQ_COMMENT
-        );
+        Activity context = getActivity();
+
+        Intent intent = new Intent(this.getActivity(), MomentDetailActivity.class)
+                .putExtra("moment", moment);
+
+        String mMyUid = PrefUtil.getInstance(context).getUid();
+        if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
+            intent.putExtra("isowner", 1);//给自己多传一个标志值
+        }
+
+        // 用户可能在详情页点赞或评论，或删除动态，总之可那需要在 onActivityResult 中刷新UI
+        startActivityForResult(intent, REQ_COMMENT);
     }
 
     /**

@@ -321,17 +321,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                     holder.micTime.setText(String.format(TimerTextView.VOICE_LEN_DEF_FORMAT, file.duration / 60, file.duration % 60));
                     
             	}
-            	String mMyUid = PrefUtil.getInstance(context).getUid();
-                if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
-                	MomentDetailActivity.launchForOwner(context, moment);//跳转到自己的详情页
-                } else if (!moment.owner.userID.equals(mMyUid)) {
-                	MomentDetailActivity.launch(context, moment);//跳转到好友的详情页
-                }   
-
- 
-//                if (mReplyDelegate != null) {
-//                    mReplyDelegate.onMomentClicked(position, moment);
-//                }
+                if (mReplyDelegate != null) {
+                    mReplyDelegate.onMomentClicked(position, moment);
+                }
             }
         });
 

@@ -25,6 +25,10 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * 学生列表页面。
+ * Created by yl on 25/12/2014.
+ */
 public class TeacherCheckActivity extends Activity implements OnItemClickListener, OnClickListener {
 
 	public static final int LESSITUATION = 0;
@@ -38,6 +42,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 	private String classId;
 	
 	private List<GroupMember> members;
+	private List<GroupMember> stus;
 	private Database mdbHelper;
 	private StuAdapter adapter;
 	
@@ -70,7 +75,9 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 			}
 		}
 		
-		members = mdbHelper.fetchGroupMembers(classId);
+		stus = new ArrayList<GroupMember>();
+		
+//		members = mdbHelper.fetchGroupMembers(classId);
 //		android.util.Log.i("-->>", members.toString());
 		if(members == null || members.isEmpty()){
 			new AsyncTask<Void, Void, Integer>(){
@@ -83,14 +90,19 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 				protected void onPostExecute(Integer result) {
 					if(ErrorCode.OK == result){
 						members = mdbHelper.fetchGroupMembers(classId);
-						adapter = new StuAdapter(members);
+						for (GroupMember m: members) {
+							if(m.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
+								stus.add(m);
+							}
+						}
+						adapter = new StuAdapter(stus);
 						lvStu.setAdapter(adapter);
 					}
 				};
 				
 			}.execute((Void)null);
 		}else{
-			adapter = new StuAdapter(members);
+			adapter = new StuAdapter(stus);
 			lvStu.setAdapter(adapter);
 		}
 		
@@ -104,6 +116,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 			long id) {
 		Intent intent = new Intent();
 		intent.putExtra(Constants.LESSONID, lessonId);
+		intent.putExtra(Constants.STUID, stus.get(position).userID);
 		if(lvFlag == LESSITUATION){
 			intent.putExtra(LessonStatusActivity.FALG, true);
 			intent.setClass(this, LessonStatusActivity.class);
@@ -131,13 +144,7 @@ class StuAdapter extends BaseAdapter{
 		private List<GroupMember> members;
 		
 		public StuAdapter(List<GroupMember> list){
-			members = new ArrayList<>();
-			for (GroupMember m: list) {
-				//android.util.Log.i("-->>", m.getAccountType() +"");
-				if(m.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
-					members.add(m);
-				}
-			}
+			this.members = list;
 		}
 
 		@Override

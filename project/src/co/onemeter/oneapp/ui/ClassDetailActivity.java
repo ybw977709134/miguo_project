@@ -25,7 +25,6 @@ import com.androidquery.AQuery;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -101,13 +100,13 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 //		classId = "0b2f933f-a4d7-44de-a711-569abb04846a";
 		classId = intent.getStringExtra("classroomId");
 		
-		members = mdb.fetchGroupMembers(classId);
+//		members = mdb.fetchGroupMembers(classId);
 		if(members == null || members.isEmpty()){
 			new AsyncTask<Void, Void, Integer>(){
 
 				@Override
 				protected Integer doInBackground(Void... params) {
-					return (Integer) WowTalkWebServerIF.getInstance(ClassDetailActivity.this).fGroupChat_GetMembers(classId).get("code");
+					return (Integer)mWTWebSer.fGroupChat_GetMembers(classId).get("code");
 				}
 				
 				protected void onPostExecute(Integer result) {
@@ -185,7 +184,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		
 		GroupChatRoom room = db.fetchGroupChatRoom(classId);
 		if(room != null){
-			String[] infos = getStrsByComma(room.place);
+			String[] infos = getStrsByComma(room.description);
 			if(null != infos && infos.length == 6){
 				tvTerm.setText(term + infos[0]);
 				tvGrade.setText(grade + infos[1]);

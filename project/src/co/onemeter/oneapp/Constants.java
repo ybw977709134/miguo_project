@@ -48,4 +48,6 @@ public class Constants {
     public static final String LESSONID = "lessonId";
     
     public final static String COMMA = ",";
+    
+    public final static String STUID = "STUID";
 }

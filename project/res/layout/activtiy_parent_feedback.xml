@@ -35,7 +35,7 @@
         android:layout_width="fill_parent"
         android:layout_height="140dp"
         android:gravity="top"
-        android:hint="@string/moments_compose_hint"
+        android:hint="@string/class_parent_suggestion"
         android:padding="5dp"
         android:textColor="@color/black"
         android:textColorHint="@color/gray" />
@@ -71,8 +71,11 @@
         android:background="@drawable/divider" />
 
     <LinearLayout
+        android:id="@+id/vg_input_voice"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_large"
+        android:orientation="horizontal" >
 
         <Button
             android:id="@+id/btn_voice_record"
@@ -83,6 +86,25 @@
             android:drawablePadding="@dimen/padding_medium"
             android:padding="@dimen/padding_medium"
             android:text="@string/moment_add_touch_to_record" />
+
+        <org.wowtalk.ui.msg.TimerTextView
+            android:id="@+id/btn_voice_preview"
+            style="@style/button_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/timeline_play"
+            android:drawablePadding="@dimen/padding_medium"
+            android:padding="@dimen/padding_medium"
+            android:text="00:08" />
+
+        <ImageButton
+            android:id="@+id/btn_voice_del"
+            style="@style/button_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_medium"
+            android:padding="@dimen/padding_medium"
+            android:src="@drawable/timeline_close" />
     </LinearLayout>
 
     <ImageView

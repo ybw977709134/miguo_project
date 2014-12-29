@@ -838,4 +838,6 @@
 	<string name="class_err_denied">操作未授权！</string>
 	<string name="class_add_lesson">添加课程</string>
 	<string name="class_add_homework">添加练习</string>
+	<string name="class_submit_success">提交成功</string>
+	<string name="class_submit_failed">提交失败</string>
 </resources>

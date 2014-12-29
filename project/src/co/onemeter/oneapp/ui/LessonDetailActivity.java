@@ -53,6 +53,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
+		PrefUtil mPre = PrefUtil.getInstance(this);
 		Intent intent = new Intent();
 		intent.putExtra(Constants.LESSONID, lessonId);
 		switch (v.getId()) {
@@ -65,6 +66,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 				intent.putExtra("classId", classId);
 				intent.putExtra("lvFlag", 0);
 			}else{
+				intent.putExtra(Constants.STUID, mPre.getUid());
 				intent.putExtra(LessonStatusActivity.FALG, false);
 				intent.setClass(this, LessonStatusActivity.class);
 			}
@@ -80,6 +82,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 				intent.putExtra("classId", classId);
 				intent.putExtra("lvFlag", 1);
 			}else{
+				intent.putExtra(Constants.STUID, mPre.getUid());
 				intent.putExtra(LessonStatusActivity.FALG, false);
 				intent.setClass(this, LessonParentFeedbackActivity.class);
 			}

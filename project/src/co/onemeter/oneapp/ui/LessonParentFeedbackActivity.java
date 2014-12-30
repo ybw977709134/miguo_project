@@ -495,7 +495,6 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
     public void onDestroy() {
         super.onDestroy();
         recycleStoredBitmapDrawable();
-        Log.w("create moment destroyed");
     }
 
 }

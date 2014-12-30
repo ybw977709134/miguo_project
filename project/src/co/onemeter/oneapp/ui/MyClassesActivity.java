@@ -349,7 +349,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 			}else{
 				holder = (ViewHolder) convertView.getTag();
 			}
-			holder.item_myclass_textview.setText("--" + classrooms.get(position).groupNameOriginal);
+			holder.item_myclass_textview.setText((position + 1) + "." + classrooms.get(position).groupNameOriginal);
 			return convertView;
 		}
 		class ViewHolder{

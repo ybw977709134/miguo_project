@@ -158,11 +158,11 @@
 	<string name="event_member_count_value">%s人</string>
     <string name="event_joined_count_suffix">人报名</string>
 	<string name="event_category_label">类型</string>
-	<string name="event_details">活动详情</string>
+	<string name="event_details">详情</string>
 	<string name="event_submitinfo">提供报名者信息</string>
 	<string name="event_play_video">播放语音介绍</string>
 	<string name="event_pics">图片:</string>
-    <string name="event_detail_introduce">详细说明:</string>
+    <string name="event_detail_introduce">详情:</string>
 	<string name="event_title">标题</string>
 	<string name="event_timebeforeafter">活动结束时间不能早于开始时间</string>
 	<string name="event_desc">详情</string>

@@ -190,8 +190,11 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		}.execute((Void)null);
 	}
 	
-	//暂时以GroupChatRoom中place字段存储信息
 	private void updateClassInfo() {
+		if(classroom == null){
+			mMsgBox.toast(R.string.class_err_denied, 500);
+			return;
+		}
 		classroom.isEditable = true;
 		classroom.description = dtTerm.getText().toString() 
 				+ Constants.COMMA + dtGrade.getText().toString()

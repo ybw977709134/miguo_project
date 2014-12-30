@@ -2,6 +2,7 @@ package org.wowtalk.api;
 
 import android.content.Context;
 import android.text.TextUtils;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -10,8 +11,10 @@ import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -869,6 +872,75 @@ public class WowEventWebServerIF {
 		return errno;
 	}
 
+	/**
+	 * 获取报名活动的信息列表。
+	 * <p>
+	 * 包括：
+	 * <ul>
+	 * <li>我自己</li>
+	 * <li>正式成员</li>
+	 * <li>已申请加入但尚未通过审核的成员</li>
+	 * <li>已被邀请加入但尚未接受的成员</li>
+	 * </ul>
+	 * 
+	 * @return errno
+	 */
+	public int fGetApplicantsInfo(ArrayList<Buddy> result, String event_id) {
+		String uid = mPrefUtil.getUid();
+		String password = mPrefUtil.getPassword();
+		if(uid == null || password == null)
+			return ErrorCode.INVALID_ARGUMENT;
+		
+		final String action = "get_event_members"; 
+		String postStr = "action=" + action
+				+ "&uid=" + Utils.urlencodeUtf8(uid) 
+				+ "&password=" + Utils.urlencodeUtf8(password);
+		if(event_id != null)
+			postStr += "&event_id=" + Utils.urlencodeUtf8(event_id);
+		
+		Connect2 connect2 = new Connect2();
+		Element root = connect2.Post(postStr);
+	
+		int errno = ErrorCode.BAD_RESPONSE;
+		if (root != null) {
+			NodeList errorList = root.getElementsByTagName("err_no");
+			Element errorElement = (Element) errorList.item(0);
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				errno = 0;
+
+				Element resultElement = Utils.getFirstElementByTagName(root, action); 
+				if(resultElement != null) {
+					NodeList nids = resultElement.getElementsByTagName("member");
+					if(nids != null) {
+						for(int i = 0, n = nids.getLength(); i < n; ++i) {
+							Buddy a = new Buddy();
+							Element e;
+
+//							e = Utils.getFirstElementByTagName((Element)nids.item(i), "member_id");
+//							if(e != null)
+//								a.userID = e.getTextContent();
+//							e = Utils.getFirstElementByTagName((Element)nids.item(i), "wowtalk_id");
+//							if(e != null)
+//								a.wowtalkID = e.getTextContent();
+							e = Utils.getFirstElementByTagName((Element)nids.item(i), "nickname");
+							if(e != null)
+								a.nickName = e.getTextContent();
+//							e = Utils.getFirstElementByTagName((Element)nids.item(i), "status");
+//							if(e != null)
+//								a.tag = Utils.tryParseInt(e.getTextContent(), 0);
+
+							result.add(a);
+						}
+					}
+				}
+			} else {
+				errno = Integer.parseInt(errorStr);
+			}
+		}
+		return errno;
+	}
     /**
 	 * Ask for joining a event.
 	 * 

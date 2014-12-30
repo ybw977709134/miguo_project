@@ -11,9 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnLongClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
@@ -28,8 +26,6 @@ import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 import org.wowtalk.ui.msg.InputBoardManager;
 import org.wowtalk.ui.msg.Stamp;
 import org.wowtalk.ui.msg.TimerTextView;
-
-import com.amap.api.a.m;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -52,8 +48,6 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     public static final String EXTRA_CHANGED_MOMENT_ID = "changed_moment_id";
     /** 输出被删除了的 moment id */
     public static final String EXTRA_DELETED_MOMENT_ID = "deleted_moment_id";
-    
-    private int isComment = 0;
 
     private ImageButton btnTitleBack;
 
@@ -678,38 +672,12 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         momentOp=(ImageButton) findViewById(R.id.moment_op);
         
         int isShow = getIntent().getIntExtra("isowner", 0);
-        isComment = getIntent().getIntExtra("comment", 0);
         
         if (isShow == 1) {//自己
         	momentOp.setVisibility(View.VISIBLE);
         } else {//好友
         	momentOp.setVisibility(View.GONE);
         }
-        
-//        if (isComment == 1) {//从评论按钮进入，自动弹出输入键盘
-//        	Toast.makeText(this, "通过评论按钮进入", Toast.LENGTH_SHORT).show();
-// //       	this.getInputBoardMangager().setInputMode(8, true);
-////        	mInputMgr.setSoftKeyboardVisibility(true);
-////        	InputBoardManager inputBoardManager = new InputBoardManager(this, (ViewGroup)findViewById(R.id.input_board_holder), null, null);
-//        	
-////        	inputBoardManager.setInputMode(1, true);
-//        	
-////        	InputBoardManager boardManager = new InputBoardManager();
-//
-//        	
-////        	inputBoardManager.setSoftKeyboardVisibility(true);
-////        	setSoftKeyboardVisibility
-//        	
-//        	//获得系统对输入法的控制
-//        	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-//        	//对控件的进行控制
-////        	imm.showSoftInput(mTxtContent, 0);
-//        	
-//        	
-//        } else {
-//        
-//        	Toast.makeText(this, "通过普通点击进入", Toast.LENGTH_SHORT).show();
-//        }
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
@@ -770,8 +738,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     protected void onResume() {
         super.onResume();
         mImageResizer.setExitTasksEarly(false);
-        AppStatusService.setIsMonitoring(true);        
-        
+        AppStatusService.setIsMonitoring(true);
     }
 
     @Override
@@ -780,6 +747,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         mImageResizer.setPauseWork(false);
         mImageResizer.setExitTasksEarly(true);
         mImageResizer.flushCache();
+
         mImageResizer.clearCacheInMem();
     }
 
@@ -903,10 +871,10 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         ImageView ivMomentShareRange=(ImageView) findViewById(R.id.iv_share_rang_ind);
         if(TextUtils.isEmpty(moment.shareRange) || moment.shareRange.equals(Moment.SERVER_SHARE_RANGE_PUBLIC)) {
 //            tvMomentShareRange.setText(R.string.share_range_public_short);
-//            ivMomentShareRange.setImageResource(R.drawable.timeline_public);
+            ivMomentShareRange.setImageResource(R.drawable.timeline_public);
         } else {
-//            tvMomentShareRange.setText(R.string.share_range_private);
-//            ivMomentShareRange.setImageResource(R.drawable.timeline_limited);
+            tvMomentShareRange.setText(R.string.share_range_private);
+            ivMomentShareRange.setImageResource(R.drawable.timeline_limited);
         }
         View.OnClickListener clickListener=new View.OnClickListener() {
             @Override
@@ -925,8 +893,8 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             tvMomentShareRange.setVisibility(View.GONE);
             ivMomentShareRange.setVisibility(View.GONE);
         } else {
-//            tvMomentShareRange.setVisibility(View.VISIBLE);
-//            ivMomentShareRange.setVisibility(View.VISIBLE);
+            tvMomentShareRange.setVisibility(View.VISIBLE);
+            ivMomentShareRange.setVisibility(View.VISIBLE);
         }
     }
 
@@ -1091,7 +1059,6 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 //                mInputMgr.hide();
             } else {
                 mInputMgr.show(InputBoardManager.FLAG_SHOW_TEXT);
-                
                 return;
             }
         }

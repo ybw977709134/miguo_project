@@ -255,20 +255,20 @@ public abstract class TimelineFragment extends ListFragment
             }.execute(moment.id);
         } else {
         	
-        	String mMyUid = PrefUtil.getInstance(this.getActivity()).getUid();
-            if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {//跳转到自己的详情页
-            	TimelineFragment.launchForOwnerComment(getActivity(), moment);
-                
-            } else if (!moment.owner.userID.equals(mMyUid)) {//跳转到好友的详情页
-            	TimelineFragment.launchComment(getActivity(), moment);
-            	
-            }
+//        	String mMyUid = PrefUtil.getInstance(this.getActivity()).getUid();
+//            if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {//跳转到自己的详情页
+//            	TimelineFragment.launchForOwnerComment(getActivity(), moment);
+//                
+//            } else if (!moment.owner.userID.equals(mMyUid)) {//跳转到好友的详情页
+//            	TimelineFragment.launchComment(getActivity(), moment);
+//            	
+//            }
             
-//            startActivityForResult(
-//                    new Intent(this.getActivity(), MomentDetailActivity.class)
-//                            .putExtra("moment", moment),
-//                    REQ_COMMENT
-//            );
+            startActivityForResult(
+                    new Intent(this.getActivity(), MomentDetailActivity.class)
+                            .putExtra("moment", moment),
+                    REQ_COMMENT
+            );
         }
     }
     
@@ -295,30 +295,30 @@ public abstract class TimelineFragment extends ListFragment
 //        ((Activity) context).startActivityForResult(intent, REQ_COMMENT);
 //    }
     
-    /**
-     * 点击评论按钮跳转到好友
-     * @param context
-     * @param moment
-     */
-    public static void launchComment(Context context, Moment moment) {
-        Intent intent = new Intent(context, MomentDetailActivity.class);
-        intent.putExtra("moment", moment);
-        intent.putExtra("comment", 1);//这是点击评论按钮跳转到详情页
-        ((Activity) context).startActivityForResult(intent, REQ_COMMENT);
-    }
-    
-    /**
-     * 点击评论按钮跳转到自己
-     * @param context
-     * @param moment
-     */
-    public static void launchForOwnerComment(Context context, Moment moment) {
-        Intent intent = new Intent(context, MomentDetailActivity.class);
-        intent.putExtra("moment", moment);
-        intent.putExtra("isowner", 1);//给自己多传一个标志值
-        intent.putExtra("comment", 1);//这是点击评论按钮跳转到详情页
-        ((Activity) context).startActivityForResult(intent, REQ_COMMENT);
-    }
+//    /**
+//     * 点击评论按钮跳转到好友
+//     * @param context
+//     * @param moment
+//     */
+//    public static void launchComment(Context context, Moment moment) {
+//        Intent intent = new Intent(context, MomentDetailActivity.class);
+//        intent.putExtra("moment", moment);
+//        intent.putExtra("comment", 1);//这是点击评论按钮跳转到详情页
+//        ((Activity) context).startActivityForResult(intent, REQ_COMMENT);
+//    }
+//    
+//    /**
+//     * 点击评论按钮跳转到自己
+//     * @param context
+//     * @param moment
+//     */
+//    public static void launchForOwnerComment(Context context, Moment moment) {
+//        Intent intent = new Intent(context, MomentDetailActivity.class);
+//        intent.putExtra("moment", moment);
+//        intent.putExtra("isowner", 1);//给自己多传一个标志值
+//        intent.putExtra("comment", 1);//这是点击评论按钮跳转到详情页
+//        ((Activity) context).startActivityForResult(intent, REQ_COMMENT);
+//    }
 
     public void onMomentClicked(int position, Moment moment) {
 

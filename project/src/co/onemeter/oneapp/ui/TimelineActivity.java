@@ -155,30 +155,10 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     }
 
     private void hideUnavailableNewMomentButtons() {
-        // 有些动态类型，只有已关联到学校的教师才可发布
         if (Buddy.ACCOUNT_TYPE_TEACHER != PrefUtil.getInstance(this).getMyAccountType()) {
-            hideNonTeacherNewMomentButtons();
-        } else {
-            // 检查是否有学校
-            new AsyncTask<Void, Void, Boolean>() {
-                @Override
-                protected Boolean doInBackground(Void... voids) {
-                    return !WowTalkWebServerIF.getInstance(TimelineActivity.this).getMySchools(false).isEmpty();
-                }
-
-                @Override
-                protected void onPostExecute(Boolean hasSchools) {
-                    if (!hasSchools) {
-                        hideNonTeacherNewMomentButtons();
-                    }
-                }
-            }.execute((Void)null);
+            q.find(R.id.vg_new_notice).invisible();
+            q.find(R.id.vg_new_video).invisible();
         }
-    }
-
-    private void hideNonTeacherNewMomentButtons() {
-        q.find(R.id.vg_new_notice).invisible();
-        q.find(R.id.vg_new_video).invisible();
     }
 
     @Override

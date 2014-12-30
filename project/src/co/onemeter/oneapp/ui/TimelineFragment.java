@@ -10,18 +10,13 @@ import android.text.TextUtils;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
-
-import com.baidu.cyberplayer.utils.ad;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-
-import org.apache.http.util.LangUtils;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p>浏览动态。</p>
@@ -43,6 +38,7 @@ public abstract class TimelineFragment extends ListFragment
     
     //用于区分账号的类型
     private int countType = -1;//默认全部
+    private boolean viewCreated = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +53,12 @@ public abstract class TimelineFragment extends ListFragment
         // load moments
         setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag),-1));
         checkNewMoments();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        viewCreated = true;
     }
 
     @Override
@@ -319,21 +321,19 @@ public abstract class TimelineFragment extends ListFragment
     }
 
     public void onMomentClicked(int position, Moment moment) {
-    	
-    	String mMyUid = PrefUtil.getInstance(this.getActivity()).getUid();
-        if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {//跳转到自己的详情页
-        	TimelineFragment.launchForOwnerComment(getActivity(), moment);
-            
-        } else if (!moment.owner.userID.equals(mMyUid)) {//跳转到好友的详情页
-        	TimelineFragment.launchComment(getActivity(), moment);
-        	
+
+        Activity context = getActivity();
+
+        Intent intent = new Intent(this.getActivity(), MomentDetailActivity.class)
+                .putExtra("moment", moment);
+
+        String mMyUid = PrefUtil.getInstance(context).getUid();
+        if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
+            intent.putExtra("isowner", 1);//给自己多传一个标志值
         }
-        
-//        startActivityForResult(
-//                new Intent(this.getActivity(), MomentDetailActivity.class)
-//                        .putExtra("moment", moment),
-//                REQ_COMMENT
-//        );
+
+        // 用户可能在详情页点赞或评论，或删除动态，总之可那需要在 onActivityResult 中刷新UI
+        startActivityForResult(intent, REQ_COMMENT);
     }
 
     /**
@@ -470,8 +470,12 @@ public abstract class TimelineFragment extends ListFragment
                     fillListView(lst, maxTimestamp > 0);
 
                     // 如果是刷新，滚到列表顶部
-                    if (maxTimestamp == 0) {
-                        getListView().setSelection(0);
+                    if (maxTimestamp == 0 && viewCreated) {
+                        if (getPullToRefreshListView() != null) {
+                            getPullToRefreshListView().getRefreshableView().setSelection(0);
+                        } else {
+                            getListView().setSelection(0);
+                        }
                     }
                 }
             } else {

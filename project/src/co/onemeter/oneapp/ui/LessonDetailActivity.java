@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 public class LessonDetailActivity extends Activity implements OnClickListener {
 	
 	private int lessonId;
+	private String classId;
 	
 	protected void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,6 +33,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		if(null != intent){
 			q.find(R.id.lesson_title).text(intent.getStringExtra("title"));
 			lessonId = intent.getIntExtra(Constants.LESSONID,0);
+			classId = intent.getStringExtra("classId");
 		}
 		q.find(R.id.title_back).clicked(this);
 		if(isTeacher()){
@@ -51,6 +53,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
+		PrefUtil mPre = PrefUtil.getInstance(this);
 		Intent intent = new Intent();
 		intent.putExtra(Constants.LESSONID, lessonId);
 		switch (v.getId()) {
@@ -58,7 +61,15 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			finish();
 			break;
 		case R.id.les_lay_first:
-			intent.setClass(this, LessonStatusActivity.class);
+			if(isTeacher()){
+				intent.setClass(this, TeacherCheckActivity.class);
+				intent.putExtra("classId", classId);
+				intent.putExtra("lvFlag", 0);
+			}else{
+				intent.putExtra(Constants.STUID, mPre.getUid());
+				intent.putExtra(LessonStatusActivity.FALG, false);
+				intent.setClass(this, LessonStatusActivity.class);
+			}
 			startActivity(intent);
 			break;
 		case R.id.les_lay_second:
@@ -66,7 +77,15 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			startActivity(intent);
 			break;
 		case R.id.les_lay_third:
-			intent.setClass(this, LessonParentFeedbackActivity.class);
+			if(isTeacher()){
+				intent.setClass(this, TeacherCheckActivity.class);
+				intent.putExtra("classId", classId);
+				intent.putExtra("lvFlag", 1);
+			}else{
+				intent.putExtra(Constants.STUID, mPre.getUid());
+				intent.putExtra(LessonStatusActivity.FALG, false);
+				intent.setClass(this, LessonParentFeedbackActivity.class);
+			}
 			startActivity(intent);
 			break;
 		default:

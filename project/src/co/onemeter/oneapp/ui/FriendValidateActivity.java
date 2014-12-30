@@ -71,7 +71,8 @@ public class FriendValidateActivity extends Activity implements OnClickListener{
 		imageOK.setImageResource(R.drawable.icon_contact_add_success);
 		toastView.addView(imageOK, 0);
 		toast.show();
-		finish();
+		Intent intent = new Intent(this, StartActivity.class);
+		startActivity(intent);
 	}
 
 	@Override

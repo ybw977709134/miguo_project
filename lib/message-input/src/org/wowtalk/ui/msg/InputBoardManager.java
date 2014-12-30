@@ -21,6 +21,7 @@ import android.widget.*;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.pzy.paint.BitmapPreviewActivity;
 import com.pzy.paint.DoodleActivity;
 
 import org.wowtalk.Log;
@@ -202,6 +203,7 @@ public class InputBoardManager implements Parcelable,
     private Runnable mRunnableOnResize;
 
     private String doodleOutFilename;
+    private String previewOutFilename;
 
     /**
      * @param context need to be able to receive Activity result.
@@ -519,6 +521,7 @@ public class InputBoardManager implements Parcelable,
             setInputMode(FLAG_SHOW_STAMP);
         } else if (i == R.id.btn_input_pic) {
             inputImage(REQ_INPUT_PHOTO);
+//            inputImage(REQ_INPUT_PHOTO_FOR_DOODLE);
 
         } else if (i == R.id.btn_input_video) {
             inputVideo();
@@ -1163,10 +1166,18 @@ public class InputBoardManager implements Parcelable,
                             PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
                             PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
                             photoPath)) {
-                        mResultHandler.onPhotoInputted(photoPath[0], photoPath[1]);
-                        result = true;
+                        doodleOutFilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
+                        mContext.startActivityForResult(
+                                new Intent(mContext, BitmapPreviewActivity.class)
+                                        .putExtra(BitmapPreviewActivity.EXTRA_MAX_WIDTH, PHOTO_SEND_WIDTH)
+                                        .putExtra(BitmapPreviewActivity.EXTRA_MAX_HEIGHT, PHOTO_SEND_HEIGHT)
+                                        .putExtra(BitmapPreviewActivity.EXTRA_BACKGROUND_FILENAME, photoPath[0])
+                                        .putExtra(BitmapPreviewActivity.EXTRA_OUTPUT_FILENAME, doodleOutFilename),
+                                REQ_INPUT_DOODLE
+                        );
                     }
                 }
+                result = true;
                 break;
             case REQ_INPUT_DOODLE: {
                 String[] photoPath = new String[2];

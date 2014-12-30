@@ -2,6 +2,7 @@ package com.pzy.paint;
 
 import android.content.Context;
 import android.graphics.*;
+import android.graphics.PorterDuff.Mode;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -23,8 +24,8 @@ public class DoodleSurfaceView extends SurfaceView
         public int opacity;
 
         public StrokeAttr() {
-            this.width = 10;
-            this.color = Color.RED;
+            this.width = 0;
+            this.color = Color.BLUE;
             this.opacity = 255;
         }
 
@@ -180,14 +181,17 @@ public class DoodleSurfaceView extends SurfaceView
     public void clear() {
         synchronized (strokes) {
             strokes.clear();
+            strokeAttrs.clear();
         }
 
         synchronized (currStroke) {
             currStroke = new Path();
         }
 
+
         setDirty();
     }
+
 
     public void setStrokeAttr(int width, int color, int opacity) {
         currStrokeAttr.width = width;

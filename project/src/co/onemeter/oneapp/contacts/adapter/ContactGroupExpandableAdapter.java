@@ -12,13 +12,16 @@ import org.wowtalk.api.*;
 import org.wowtalk.ui.PhotoDisplayHelper;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
-import co.onemeter.oneapp.ui.ContactsActivityForBiz;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContactGroupExpandableAdapter extends BaseExpandableListAdapter {
 
+    /**
+     * the groupId of latestContact, indicates the groupChatRoom is latestContact
+     */
+    public static final String GROUP_ID_OF_LATEST_CONTACT = "-1";
     private List<GroupChatRoom> mParentGroups;
     private List<List> mChildGroupMembers;
 
@@ -121,7 +124,7 @@ public class ContactGroupExpandableAdapter extends BaseExpandableListAdapter {
             holder = (ViewHolderParent) convertView.getTag();
         }
 
-        if (ContactsActivityForBiz.GROUP_ID_OF_LATEST_CONTACT.equals(group.groupID)) {
+        if (GROUP_ID_OF_LATEST_CONTACT.equals(group.groupID)) {
             holder.groupName.setText(mContext.getString(R.string.contacts_latest_contacts));
         } else {
             holder.groupName.setText(group.groupNameOriginal);

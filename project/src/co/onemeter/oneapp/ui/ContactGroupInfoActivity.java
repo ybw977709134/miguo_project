@@ -9,17 +9,15 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.GroupMembersGridAdapter;
-import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.ThemeHelper;
-
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.*;
 import org.wowtalk.ui.msg.MessageComposerActivityBase;
@@ -82,6 +80,8 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 	private int myLevel = GroupMember.LEVEL_DEFAULT;
 
 	private Intent mActivityResult = new Intent();
+	
+	private ImageButton navbar_btn_right;
 
 	// show a dummy buddy at the end of group members list
 	private boolean mShowDummyBuddy = true;
@@ -118,6 +118,8 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 		findViewById(R.id.img_thumbnail).setOnClickListener(this);
 		findViewById(R.id.message_history_layout).setOnClickListener(this);
         vgPendingMembers.setVisibility(View.GONE);
+        
+        navbar_btn_right = (ImageButton) findViewById(R.id.navbar_btn_right);
 	}
 
 	@Override
@@ -383,7 +385,12 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
             Log.e("ContractGroupInfoActivity.onCreate(), load data faliure: groupId = " + groupID);
             mMsgBox.show(null, getString(R.string.contactgroupinfo_load_failure));
         }
+        if(txtGroupName.getText().toString().endsWith(getString(R.string.contacts_group_classInfo))){
+        	navbar_btn_right.setVisibility(View.GONE);
+        }
 
+        // 由于群组资料的更新没有推送通知，这里应该自动刷新
+        refreshGroupInfo();
 	}
 
     private void setDisplayOfGroup() {
@@ -625,22 +632,22 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
         }
 	}
 
-//    private void refreshGroupInfo() {
-//        new AsyncTask<Void, Void, Integer>() {
-//            @Override
-//            protected Integer doInBackground(Void... params) {
-//                return mWebif.fGroupChat_GetGroupDetail(groupRoom.groupID);
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Integer result) {
-//                if (ErrorCode.OK == result) {
-//                    groupRoom = mDbHelper.fetchGroupChatRoom(groupRoom.groupID);
-//                    setDisplayOfGroup();
-//                }
-//            }
-//        }.execute((Void)null);
-//    }
+    private void refreshGroupInfo() {
+        new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return mWebif.fGroupChat_GetGroupDetail(groupRoom.groupID);
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                if (ErrorCode.OK == result) {
+                    groupRoom = mDbHelper.fetchGroupChatRoom(groupRoom.groupID);
+                    setDisplayOfGroup();
+                }
+            }
+        }.execute((Void)null);
+    }
 
     @Override
     public boolean onKeyDown (int keyCode, KeyEvent event) {

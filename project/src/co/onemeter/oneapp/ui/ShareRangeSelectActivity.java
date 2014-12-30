@@ -1,9 +1,11 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.*;
 import org.wowtalk.api.Database;
@@ -49,6 +51,40 @@ public class ShareRangeSelectActivity extends Activity implements View.OnClickLi
 
     private ShareRangeLimitedDepAdapter limitedDepAdapter;
     private boolean isShownOnly;
+
+    /**
+     * 利用GroupChatRoom的parentGrupId属性，构造GroupChatRoom的树形结构
+     */
+    public static ArrayList<GroupChatRoom> treeAllGroupRooms(Context context, ArrayList<GroupChatRoom> mAllGroupRooms) {
+        ArrayList<GroupChatRoom> rootGroups = new ArrayList<GroupChatRoom>();
+        GroupChatRoom outerGroup = null;
+        GroupChatRoom innerGroup = null;
+        for (int i = 0; i < mAllGroupRooms.size(); i++) {
+            outerGroup = mAllGroupRooms.get(i);
+            if (null == outerGroup.childGroups) {
+                outerGroup.childGroups = new ArrayList<GroupChatRoom>();
+            }
+            if (!outerGroup.isEditable && TextUtils.isEmpty(outerGroup.parentGroupId)) {
+                outerGroup.groupNameOriginal = context.getString(R.string.contactsforbiz_root_group_name_display);
+                rootGroups.add(outerGroup);
+            }
+            for (int j = i + 1; j < mAllGroupRooms.size(); j++) {
+                innerGroup = mAllGroupRooms.get(j);
+                // outerGroup可能是innerGroup的父节点；也可能是innerGroup的子节点
+                if (!TextUtils.isEmpty(innerGroup.parentGroupId)
+                        && innerGroup.parentGroupId.equals(outerGroup.groupID)) {
+                    outerGroup.childGroups.add(innerGroup);
+                } else if (!TextUtils.isEmpty(outerGroup.parentGroupId)
+                        && outerGroup.parentGroupId.equals(innerGroup.groupID)) {
+                    if (null == innerGroup.childGroups) {
+                        innerGroup.childGroups = new ArrayList<GroupChatRoom>();
+                    }
+                    innerGroup.childGroups.add(outerGroup);
+                }
+            }
+        }
+        return rootGroups;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +202,7 @@ public class ShareRangeSelectActivity extends Activity implements View.OnClickLi
                     departmentList=mDb.fetchNonTempGroupChatRooms(true);
 
                     rootGroups = new ArrayList<GroupChatRoom>();
-                    rootGroups.addAll(ContactsActivityForBiz.treeAllGroupRooms(ShareRangeSelectActivity.this, departmentList));
+                    rootGroups.addAll(treeAllGroupRooms(ShareRangeSelectActivity.this, departmentList));
                     return null;
                 }
 

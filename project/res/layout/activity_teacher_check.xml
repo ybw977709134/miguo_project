@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_dark"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        style="?attr/navbar"
+        android:layout_width="fill_parent" >
+
+        <ImageButton
+            android:id="@+id/title_back"
+            style="?attr/navbar_btn_left"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:src="@drawable/nav_back_selector" />
+
+        <TextView
+            android:id="@+id/txt_title"
+            style="?attr/navbar_title"
+            android:text="dummy" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/lvStu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </ListView>
+
+</LinearLayout>

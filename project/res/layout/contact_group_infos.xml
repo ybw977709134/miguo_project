@@ -112,7 +112,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="2"
                         android:gravity="center_vertical"
-                        android:text="dummy cagtegory"
+                        
                         style="@style/standard_text"/>
                 </LinearLayout>
                 <ImageView

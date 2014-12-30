@@ -439,17 +439,7 @@ public abstract class MessageComposerActivityBase extends Activity
 		mHandler.post(new Runnable() {
 			public void run() {
                 if (_targetUID != null) {
-
-                    Object[] info = new Object[2];
-                    if(getLocalContactInfo(_targetGlobalPhoneNumber, info)) {
-                        _targetDisplayName = (String)info[0];
-                        txtTitle.setText(_targetDisplayName);
-                        _targetThumbnail = (Bitmap)info[1];
-                        myAdapter.setTargetThumbnail(_targetThumbnail);
-                    } else {
-                        txtTitle.setText(_targetGlobalPhoneNumber);
-                        // we dont have this number in contactbook
-                    }
+                    txtTitle.setText(getTargetDisplayName());
                 }
 			}
 		});
@@ -1034,6 +1024,11 @@ public abstract class MessageComposerActivityBase extends Activity
 
         if (hello != null)
             fSendTextMsg_async(hello);
+
+        if (_targetIsNormalGroup) {
+            // 由于群组资料的更新没有推送通知，这里应该自动刷新
+            refreshGroupInfo(_targetUID);
+        }
     }
 
     @Override
@@ -1135,6 +1130,24 @@ public abstract class MessageComposerActivityBase extends Activity
 		 */
 		//refreshUnreadMsg();
 	}
+
+    private void refreshGroupInfo(final String groupId) {
+        new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return mWebif.fGroupChat_GetGroupDetail(groupId);
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                if (ErrorCode.OK == result) {
+                    GroupChatRoom groupRoom = mDbHelper.fetchGroupChatRoom(groupId);
+                    _targetDisplayName = groupRoom.getDisplayName();
+                    txtTitle.setText(getTargetDisplayName());
+                }
+            }
+        }.execute((Void)null);
+    }
 
     protected void configInputBoardDrawable(InputBoardManager mgr) {
         mgr.drawableResId().open = R.drawable.sms_add_btn;
@@ -1696,16 +1709,6 @@ public abstract class MessageComposerActivityBase extends Activity
                 }
             }
         }, 300);
-    }
-
-    /**
-     *
-     * @param phoneNumber
-     * @param dest dest[0] = (String)display name; dest[1] = (Bitmap)thumbnail
-     * @return
-     */
-    protected boolean getLocalContactInfo(String phoneNumber, Object[] dest) {
-        return false;
     }
 
     protected void confirmOutgoingCall(final String uid,final String displayName,final boolean initWithVideo) {

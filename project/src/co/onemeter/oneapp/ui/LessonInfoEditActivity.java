@@ -125,7 +125,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			break;
 		case R.id.save:
 			if (tag == TAG_LES_TABLE) {
-
+				finish();
 			} else {
 				updateClassInfo();
 			}
@@ -193,7 +193,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 	//暂时以GroupChatRoom中place字段存储信息
 	private void updateClassInfo() {
 		classroom.isEditable = true;
-		classroom.place = dtTerm.getText().toString() 
+		classroom.description = dtTerm.getText().toString() 
 				+ Constants.COMMA + dtGrade.getText().toString()
 				+ Constants.COMMA + dtSubject.getText().toString()
 				+ Constants.COMMA + dtDate.getText().toString()

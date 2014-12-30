@@ -1,19 +1,30 @@
 package co.onemeter.oneapp.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.wowtalk.api.Database;
+import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.LessonPerformance;
+import org.wowtalk.api.WowLessonWebServerIF;
+import org.wowtalk.ui.MessageBox;
 
-import com.androidquery.AQuery;
 
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.Utils;
 import android.app.Activity;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -23,7 +34,32 @@ import android.widget.TextView;
  */
 public class LessonStatusActivity extends Activity implements OnClickListener{
 
+	public static final String FALG = "isTeacher";
+	
 	private int lessonId;
+	private String stuId;
+	private boolean isTeacher;
+	
+	private List<LessonPerformance> lesPersToPost;
+	private List<LessonPerformance> stuPersFromNet;
+	private String[] preformstrs;
+	
+	private MessageBox mMsgBox;
+	private WowLessonWebServerIF lessonServer;
+	private Database mDBHelper;
+	
+	private ListView lvPerformances;
+	
+	private Handler handler = new Handler(){
+		public void handleMessage(android.os.Message msg) {
+			if(msg.what == ErrorCode.OK){
+				stuPersFromNet.addAll(mDBHelper.fetchLessonPerformance(lessonId, stuId));
+				lvPerformances.setAdapter(new LessonStatusAdapter(preformstrs));
+			}else{
+				mMsgBox.toast("...");
+			}
+		};
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +70,29 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 	}
 	
 	private void initView(){
-		String[] preforms = getResources().getStringArray(R.array.lesson_performance_names);
-		AQuery q = new AQuery(this);
-		q.find(R.id.lv_les_status).adapter(new LessonStatusAdapter(preforms, null));
-		q.find(R.id.btn_parent_confirm).clicked(this);
-		q.find(R.id.title_back).clicked(this);
+		lesPersToPost = new ArrayList<LessonPerformance>();
+		stuPersFromNet = new ArrayList<LessonPerformance>();
 		
-		lessonId = getIntent().getIntExtra(Constants.LESSONID,0);
+		mMsgBox = new MessageBox(this);
+		lessonServer = WowLessonWebServerIF.getInstance(LessonStatusActivity.this);
+		mDBHelper = Database.open(this);
+		
+		preformstrs = getResources().getStringArray(R.array.lesson_performance_names);
+		
+		lvPerformances = (ListView) findViewById(R.id.lv_les_status);
+		findViewById(R.id.title_back).setOnClickListener(this);
+		
+		Button btn = (Button) findViewById(R.id.btn_parent_confirm);
+		btn.setOnClickListener(this);
+		
+		Intent intent = getIntent();
+		lessonId = intent.getIntExtra(Constants.LESSONID,0);
+		stuId = intent.getStringExtra(Constants.STUID);
+		isTeacher = intent.getBooleanExtra(FALG, false);
+		if(isTeacher){
+			btn.setText(R.string.login_retrieve_password_btn);
+		}
+		getStuPerformceById();
 	}
 	
 
@@ -48,7 +100,7 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_parent_confirm:
-			
+			submitStuPerformance();
 			break;
 		case R.id.title_back:
 			finish();
@@ -58,12 +110,46 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 		}
 	}
 	
+	private void getStuPerformceById(){
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				int errno = lessonServer.getLessonPerformance(lessonId, stuId);
+				handler.sendEmptyMessage(errno);
+			}
+		}).start();;
+	}
+	
+	private void submitStuPerformance(){
+		new AsyncTask<Void, Void, Integer>() {
+
+			protected void onPreExecute() {
+				mMsgBox.showWait();
+			};
+			
+			@Override
+			protected Integer doInBackground(Void... params) {
+				return lessonServer.addOrModifyLessonPerformance(lesPersToPost);
+			}
+			
+			protected void onPostExecute(Integer result) {
+				mMsgBox.dismissWait();
+				if(ErrorCode.OK == result){
+					mMsgBox.toast(R.string.class_submit_success);
+					finish();
+				}else {
+					mMsgBox.toast(R.string.class_submit_failed);
+				}
+			};
+			
+		}.execute((Void)null);
+	}
+	
 	class LessonStatusAdapter extends BaseAdapter{
 		private String[] pers;
-		private List<LessonPerformance> lesPers;
 		
-		public LessonStatusAdapter(String[] pers,List<LessonPerformance> lesPers){
-			this.lesPers = lesPers;
+		public LessonStatusAdapter(String[] pers){
 			this.pers = pers;
 		}
 		
@@ -90,17 +176,65 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 				convertView = getLayoutInflater().inflate(R.layout.listitem_lesson_status, parent, false);
 				holder.tv_per = (TextView) convertView.findViewById(R.id.item_les_perform_tv);
 				holder.rg_per = (RadioGroup) convertView.findViewById(R.id.item_les_radioGroup);
+				holder.radio0 = (RadioButton) convertView.findViewById(R.id.radio0);
+				holder.radio1 = (RadioButton) convertView.findViewById(R.id.radio1);
+				holder.radio2 = (RadioButton) convertView.findViewById(R.id.radio2);
 				convertView.setTag(holder);
 			}else{
 				holder = (ViewHolder) convertView.getTag();
 			}
 			holder.tv_per.setText(pers[position]);
+			if(!Utils.isAccoTeacher(LessonStatusActivity.this)){
+				int value = stuPersFromNet.get(position).property_value;
+				switch (value) {
+					case 1:
+						holder.radio0.setChecked(true);
+						break;
+					case 2:
+						holder.radio1.setChecked(true);
+						break;
+					case 3:
+						holder.radio2.setChecked(true);
+						break;
+				}
+				holder.rg_per.setEnabled(false);
+			}else{
+				final int pos = position;
+				holder.rg_per.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+					
+					@Override
+					public void onCheckedChanged(RadioGroup group, int checkedId) {
+						LessonPerformance performance = new LessonPerformance();
+						performance.lesson_id = lessonId;
+						performance.student_id = stuId;
+						performance.property_id = pos + 1;
+						switch (checkedId) {
+						case R.id.radio0:
+							performance.property_value = 1;
+							break;
+						case R.id.radio1:
+							performance.property_value = 2;
+							break;
+						case R.id.radio2:
+							performance.property_value = 3;
+							break;
+						default:
+								break;
+						}
+						lesPersToPost.add(performance);
+					}
+				});
+			}
+			
 			return convertView;
 		}
 		
 		class ViewHolder{
 			TextView tv_per;
 			RadioGroup rg_per;
+			RadioButton radio0;
+			RadioButton radio1;
+			RadioButton radio2;
 		}
 		
 	}

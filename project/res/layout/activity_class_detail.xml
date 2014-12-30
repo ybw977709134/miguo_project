@@ -48,22 +48,21 @@
             android:visibility="gone" />
     </RelativeLayout>
 
-    <co.onemeter.oneapp.ui.YQGridView
-        android:id="@+id/grid_class_teachers"
+    <org.wowtalk.ui.HorizontalListView
+        android:id="@+id/hor_lv_teachers"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_below="@id/title_bar"
         android:layout_marginTop="10dp"
         android:background="@color/background_light"
         android:horizontalSpacing="0dp"
-        android:numColumns="3"
         android:verticalSpacing="10dp" />
 
     <LinearLayout
         android:id="@+id/class_detail_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/grid_class_teachers"
+        android:layout_below="@id/hor_lv_teachers"
         android:layout_marginTop="10dp"
         android:background="@color/background_light"
         android:orientation="horizontal" >

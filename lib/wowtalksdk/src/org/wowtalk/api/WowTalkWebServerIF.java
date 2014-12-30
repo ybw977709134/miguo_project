@@ -3881,7 +3881,6 @@ public class WowTalkWebServerIF {
 						GroupMember buddyTmp = new GroupMember(null, groupID);
                         XmlHelper.parseGroupMember(user, buddyTmp);
 						buddyTmp.isBlocked = true;
-                        buddyTmp.setAccountType(Buddy.ACCOUNT_TYPE_STUDENT);
 
 						Log.i("get blocked buddy:", buddyTmp.userID + ","
 								+ buddyTmp.nickName);
@@ -4338,14 +4337,18 @@ public class WowTalkWebServerIF {
 	/**
 	 * 获取我的校园组织架构。
 	 * @return 学校列表，包含班级和同学。
+	 * @param withClassRooms
 	 */
-	public List<GroupChatRoom> getMySchools() {
+	public List<GroupChatRoom> getMySchools(boolean withClassRooms) {
 		List<GroupChatRoom> result = new LinkedList<>();
 		List<Pair<String, String>> schools = getMySchoolList();
 		for (Pair<String, String> school : schools) {
 			GroupChatRoom schoolNode = new GroupChatRoom(school.first, school.second, school.second,
 					null, 0, 0, false);
 			result.add(schoolNode);
+
+			if (!withClassRooms)
+				continue;
 
 			List<GroupChatRoom> classRooms = getSchoolClassRooms(school.first);
 			schoolNode.childGroups = new ArrayList<>(classRooms);

@@ -59,6 +59,8 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 				if(stuPersFromNet.isEmpty()){
 					findViewById(R.id.btn_parent_confirm).setVisibility(View.VISIBLE);
 				}
+			}else{
+				mMsgBox.toast(R.string.class_class_status_not_comfired);
 			}
 		};
 	};

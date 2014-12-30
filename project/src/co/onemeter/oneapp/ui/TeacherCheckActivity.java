@@ -54,10 +54,15 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 	private Database mdbHelper;
 	private StuAdapter adapter;
 	
+	private MessageBox mMsgBox;
+	
 	private Handler mHandler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
 			if(msg.what != ErrorCode.OK){
-				new MessageBox(TeacherCheckActivity.this).toast(R.string.class_parent_opinion_not_submitted);
+				mMsgBox.dismissWait();
+				mMsgBox.toast(R.string.class_parent_opinion_not_submitted,500);
+			}else {
+				mMsgBox.dismissWait();
 			}
 		};
 	};
@@ -76,7 +81,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 		txtTitle = (TextView) findViewById(R.id.txt_title);
 		ImageButton titleBack = (ImageButton) findViewById(R.id.title_back);
 		
-		
+		mMsgBox = new MessageBox(TeacherCheckActivity.this);
 		mdbHelper = Database.getInstance(this);
 		
 		Intent intent = getIntent();
@@ -141,22 +146,39 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 //			intent.putExtra(LessonStatusActivity.FALG, true);
 //			intent.setClass(this, LessonParentFeedbackActivity.class);
 			final int pos = position;
+			mMsgBox.showWait();
 			new Thread(new Runnable() {
 				
 				@Override
 				public void run() {
-					int errno = WowLessonWebServerIF.getInstance(TeacherCheckActivity.this).getLessonParentFeedback(lessonId, stus.get(pos).userID);
-					if(errno == ErrorCode.OK){
-						Database db = new Database(TeacherCheckActivity.this);
-						LessonParentFeedback feedback = db.fetchLessonParentFeedback(lessonId, stus.get(pos).userID);
-						Moment moment = db.fetchMoment(feedback.moment_id + "");
-						MomentDetailActivity.launch(TeacherCheckActivity.this,moment);
-					}else{
-						mHandler.sendEmptyMessage(errno);
+					int errno;
+					try {
+						errno = WowLessonWebServerIF.getInstance(TeacherCheckActivity.this).getLessonParentFeedback(lessonId, stus.get(pos).userID);
+						if(errno == ErrorCode.OK){
+							Database db = new Database(TeacherCheckActivity.this);
+							LessonParentFeedback feedback = db.fetchLessonParentFeedback(lessonId, stus.get(pos).userID);
+							//android.util.Log.i("-->>", feedback.toString());
+							Moment moment = db.fetchMoment(feedback.moment_id + "");
+							if(moment != null){
+								MomentDetailActivity.launch(TeacherCheckActivity.this,moment);
+								mHandler.sendEmptyMessage(errno);
+							}else{
+								mHandler.sendEmptyMessage(errno);
+							}
+						}else{
+							mHandler.sendEmptyMessage(errno);
+						}
+					} catch (Exception e) {
+						mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);
 					}
 				}
 			}).start();
 		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
 	}
 
 	@Override

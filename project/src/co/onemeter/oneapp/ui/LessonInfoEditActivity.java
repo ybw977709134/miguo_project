@@ -24,8 +24,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.DatePicker;
@@ -69,6 +71,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		setContentView(R.layout.activity_lessoninfo_edit);
 
 		initView();
+		registerForContextMenu(lvCourtable);
 	}
 
 	private void initView() {
@@ -137,6 +140,12 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			break;
 		}
 	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+	}
 
 	private View footerView() {
 		View view = getLayoutInflater().inflate(R.layout.lay_lv_footer, null);
@@ -190,8 +199,11 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		}.execute((Void)null);
 	}
 	
-	//暂时以GroupChatRoom中place字段存储信息
 	private void updateClassInfo() {
+		if(classroom == null){
+			mMsgBox.toast(R.string.class_err_denied, 500);
+			return;
+		}
 		classroom.isEditable = true;
 		classroom.description = dtTerm.getText().toString() 
 				+ Constants.COMMA + dtGrade.getText().toString()

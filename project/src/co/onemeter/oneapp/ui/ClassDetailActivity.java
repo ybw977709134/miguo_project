@@ -143,27 +143,33 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			tv_more.setVisibility(View.GONE);
 		}
 		
-		getLessonInfo();
 		setClassInfo();
 	}
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		getLessonInfo();
+	}
+	
 	private void getLessonInfo(){
-		new AsyncTask<Void, Void, Integer>() {
-
-			@Override
-			protected Integer doInBackground(Void... params) {
-				return lesWebSer.getLesson(classId);
-			}
-			
-			protected void onPostExecute(Integer result) {
-				if(ErrorCode.OK == result){
-					Database db = Database.open(ClassDetailActivity.this);
-					lessons.addAll(db.fetchLesson(classId));
-					courseAdapter.notifyDataSetChanged();
+			new AsyncTask<Void, Void, Integer>() {
+	
+				@Override
+				protected Integer doInBackground(Void... params) {
+					return lesWebSer.getLesson(classId);
 				}
-			};
-			
-		}.execute((Void)null);
+				
+				protected void onPostExecute(Integer result) {
+					if(ErrorCode.OK == result){
+						lessons.clear();
+						Database db = Database.open(ClassDetailActivity.this);
+						lessons.addAll(db.fetchLesson(classId));
+						courseAdapter.notifyDataSetChanged();
+					}
+				};
+				
+			}.execute((Void)null);
 	}
 	
 	private String[] getStrsByComma(String str){

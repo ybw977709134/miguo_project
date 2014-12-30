@@ -255,46 +255,46 @@ public class SmsActivity extends Activity implements OnClickListener {
 
                 final BottomButtonBoard board = new BottomButtonBoard(SmsActivity.this, parentView);
                 String[] texts = new String[]{
-                        getString(R.string.session_delete),
-                        getString(R.string.session_delete_chat_target),
-                        getString(R.string.session_clear),
-                        getString(R.string.session_clear_chat_target)
+//                        getString(R.string.session_delete),
+                        getString(R.string.session_delete_chat_target)
+//                        getString(R.string.session_clear),
+//                        getString(R.string.session_clear_chat_target)
                 };
                 int[] btnStyles = new int[]{
-                        BottomButtonBoard.BUTTON_BLUE,
-                        BottomButtonBoard.BUTTON_BLUE,
-                        BottomButtonBoard.BUTTON_RED,
-                        BottomButtonBoard.BUTTON_RED
+//                        BottomButtonBoard.BUTTON_BLUE,
+                        BottomButtonBoard.BUTTON_BLUE
+//                        BottomButtonBoard.BUTTON_RED,
+//                        BottomButtonBoard.BUTTON_RED
                 };
                 OnClickListener[] listeners = new OnClickListener[texts.length];
+//                listeners[0] = new OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        mDb.deleteChatMessageWithUser(msg.chatUserName);
+//                        board.dismiss();
+//                    }
+//                };
                 listeners[0] = new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mDb.deleteChatMessageWithUser(msg.chatUserName);
-                        board.dismiss();
-                    }
-                };
-                listeners[1] = new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mDb.deleteLatestChatTarget(msg.chatUserName);
                         board.dismiss();
                     }
                 };
-                listeners[2] = new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mDb.deleteAllChatMessages();
-                        board.dismiss();
-                    }
-                };
-                listeners[3] = new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mDb.clearLatestChatTargets();
-                        board.dismiss();
-                    }
-                };
+//                listeners[2] = new OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        mDb.deleteAllChatMessages();
+//                        board.dismiss();
+//                    }
+//                };
+//                listeners[3] = new OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        mDb.clearLatestChatTargets();
+//                        board.dismiss();
+//                    }
+//                };
                 board.add(texts, btnStyles, listeners).show();
                 return true;
             }

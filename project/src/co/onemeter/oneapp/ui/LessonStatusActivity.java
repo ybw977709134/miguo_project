@@ -56,6 +56,9 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 //				android.util.Log.i("-->>", stuPersFromNet.toString());
 				stuPersFromNet.addAll(mDBHelper.fetchLessonPerformance(lessonId, stuId));
 				lvPerformances.setAdapter(new LessonStatusAdapter(preformstrs));
+				if(stuPersFromNet.isEmpty()){
+					findViewById(R.id.btn_parent_confirm).setVisibility(View.VISIBLE);
+				}
 			}
 		};
 	};
@@ -187,9 +190,8 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 				holder = (ViewHolder) convertView.getTag();
 			}
 			holder.tv_per.setText(pers[position]);
-			if(!isTeacher){
-				if(!stuPersFromNet.isEmpty()){
-					if(position < 7){
+			if(!stuPersFromNet.isEmpty()){
+				if(position < stuPersFromNet.size()){
 						int value = stuPersFromNet.get(position).property_value;
 						switch (value) {
 							case 1:
@@ -202,22 +204,21 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 								holder.radio2.setChecked(true);
 								break;
 						}
-					}
 				}
 				holder.rg_per.setEnabled(false);
 				holder.radio0.setEnabled(false);
 				holder.radio1.setEnabled(false);
 				holder.radio2.setEnabled(false);
 			}else{
-				final int pos = position;
+				final LessonPerformance performance = new LessonPerformance();
+				performance.property_value = 1;
+				performance.lesson_id = lessonId;
+				performance.student_id = stuId;
+				performance.property_id = position + 1;
 				holder.rg_per.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 					
 					@Override
 					public void onCheckedChanged(RadioGroup group, int checkedId) {
-						LessonPerformance performance = new LessonPerformance();
-						performance.lesson_id = lessonId;
-						performance.student_id = stuId;
-						performance.property_id = pos + 1;
 						switch (checkedId) {
 						case R.id.radio0:
 							performance.property_value = 1;
@@ -229,11 +230,12 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 							performance.property_value = 3;
 							break;
 						default:
+							performance.property_value = 1;
 								break;
 						}
-						lesPersToPost.add(performance);
 					}
 				});
+				lesPersToPost.add(performance);
 			}
 			
 			return convertView;

@@ -18,9 +18,11 @@ import android.util.DisplayMetrics;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.pzy.paint.DoodleActivity;
+
 import org.wowtalk.Log;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.Moment;
@@ -142,7 +144,8 @@ public class InputBoardManager implements Parcelable,
 
     private Activity mContext;
     private ViewGroup mContainer;
-    private View mRootView;
+//    private View mRootView = View.inflate(mContext, R.layout.msg_input_dialog, null);
+    public View mRootView = View.inflate(mContext, R.layout.msg_input_dialog, null);
     /* layoutTextInnerWrapper aligns to the top of layoutTextWrapper,
      * distance from the bottom of layoutTextInnerWrapper to the bottom of layoutTextWrapper
      * should be the height of layoutMediaWrapper or layoutStampWrapper.
@@ -154,10 +157,12 @@ public class InputBoardManager implements Parcelable,
     private EditText mTxtContent;
     private View mBtnSend;
     private View mBtnMedia;
-    private Button mBtnEmotion;
+    private Button mBtnEmotion; 
     private Dialog voicePreviewDlg;
     private TextView btnSpeak;
     private TimerTextView mVoiceTimer;
+    
+//    public static EditText pubContent = (EditText) mRootView.findViewById(R.id.layoutText).findViewById(R.id.txt_content);
 
     private View layoutVoiceWrapper;
     private FrameLayout mIndicatorBg;
@@ -210,6 +215,9 @@ public class InputBoardManager implements Parcelable,
         mShowingFlags = FLAG_SHOW_NONE;
         init(context, container, handler, listener);
     }
+    
+    //无参的构造方法
+    public InputBoardManager(){}
 
     public void setIsWithMultimediaMethod(boolean isWithMultimediaMethod) {
         mIsWithMultimediaMethod = isWithMultimediaMethod;

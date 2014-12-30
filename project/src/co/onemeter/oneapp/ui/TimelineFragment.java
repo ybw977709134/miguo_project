@@ -1,6 +1,7 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import com.baidu.cyberplayer.utils.ad;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import org.apache.http.util.LangUtils;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
@@ -204,7 +206,9 @@ public abstract class TimelineFragment extends ListFragment
         }
     }
     
-    
+    /**
+     * 点赞和评论的局部刷新
+     */
     @Override
     public void replyToMoment(int position, final Moment moment, Review replyTo, boolean like) {
         if (like) {
@@ -248,20 +252,88 @@ public abstract class TimelineFragment extends ListFragment
                 }
             }.execute(moment.id);
         } else {
-            startActivityForResult(
-                    new Intent(this.getActivity(), MomentDetailActivity.class)
-                            .putExtra("moment", moment),
-                    REQ_COMMENT
-            );
+        	
+        	String mMyUid = PrefUtil.getInstance(this.getActivity()).getUid();
+            if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {//跳转到自己的详情页
+            	TimelineFragment.launchForOwnerComment(getActivity(), moment);
+                
+            } else if (!moment.owner.userID.equals(mMyUid)) {//跳转到好友的详情页
+            	TimelineFragment.launchComment(getActivity(), moment);
+            	
+            }
+            
+//            startActivityForResult(
+//                    new Intent(this.getActivity(), MomentDetailActivity.class)
+//                            .putExtra("moment", moment),
+//                    REQ_COMMENT
+//            );
         }
+    }
+    
+//    /**
+//     * 跳转到好友
+//     * @param context
+//     * @param moment
+//     */
+//    public static void launch(Context context, Moment moment) {
+//        Intent intent = new Intent(context, MomentDetailActivity.class);
+//        intent.putExtra("moment", moment);
+//        ((Activity) context).startActivityForResult(intent, REQ_COMMENT);
+//    }
+//    
+//    /**
+//     * 跳转到自己
+//     * @param context
+//     * @param moment
+//     */
+//    public static void launchForOwner(Context context, Moment moment) {
+//        Intent intent = new Intent(context, MomentDetailActivity.class);
+//        intent.putExtra("moment", moment);
+//        intent.putExtra("isowner", 1);//给自己多传一个标志值   
+//        ((Activity) context).startActivityForResult(intent, REQ_COMMENT);
+//    }
+    
+    /**
+     * 点击评论按钮跳转到好友
+     * @param context
+     * @param moment
+     */
+    public static void launchComment(Context context, Moment moment) {
+        Intent intent = new Intent(context, MomentDetailActivity.class);
+        intent.putExtra("moment", moment);
+        intent.putExtra("comment", 1);//这是点击评论按钮跳转到详情页
+        ((Activity) context).startActivityForResult(intent, REQ_COMMENT);
+    }
+    
+    /**
+     * 点击评论按钮跳转到自己
+     * @param context
+     * @param moment
+     */
+    public static void launchForOwnerComment(Context context, Moment moment) {
+        Intent intent = new Intent(context, MomentDetailActivity.class);
+        intent.putExtra("moment", moment);
+        intent.putExtra("isowner", 1);//给自己多传一个标志值
+        intent.putExtra("comment", 1);//这是点击评论按钮跳转到详情页
+        ((Activity) context).startActivityForResult(intent, REQ_COMMENT);
     }
 
     public void onMomentClicked(int position, Moment moment) {
-        startActivityForResult(
-                new Intent(this.getActivity(), MomentDetailActivity.class)
-                        .putExtra("moment", moment),
-                REQ_COMMENT
-        );
+    	
+    	String mMyUid = PrefUtil.getInstance(this.getActivity()).getUid();
+        if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {//跳转到自己的详情页
+        	TimelineFragment.launchForOwnerComment(getActivity(), moment);
+            
+        } else if (!moment.owner.userID.equals(mMyUid)) {//跳转到好友的详情页
+        	TimelineFragment.launchComment(getActivity(), moment);
+        	
+        }
+        
+//        startActivityForResult(
+//                new Intent(this.getActivity(), MomentDetailActivity.class)
+//                        .putExtra("moment", moment),
+//                REQ_COMMENT
+//        );
     }
 
     /**
@@ -272,34 +344,16 @@ public abstract class TimelineFragment extends ListFragment
 
     @Override
     public void onSenderChanged(int index) {
-//        Toast.makeText(getActivity(),
-//                "sender: " + index, Toast.LENGTH_SHORT).show();
-//    	int newindex = 0;
-//        adapter.clear();
 
     	if (index == 0) {//全部
-//    		countType = index -1;
-//    		adapter.countType = index -1;
-//    		fillListView(loadLocalMoments(0, tagIdxFromUiToDb(index)), false);
     		countType = -1;
     	} else if (index == 1) {//官方账号 0
- //   		countType = index -1;	
- //   		adapter.countType = index -1;
-//    		fillListView(loadUidMoments(0, 0), false);
     		countType = 0;
     	} else if (index == 2) {//老师账号2
-//    		countType = index;
-//    		adapter.countType = index;
- //   		fillListView(loadUidMoments(2, 0), false);
     		countType = 2;
     	} else if (index == 3) {//学生账号1
-//    		countType = index - 2;
-//    		adapter.countType = index -2;
-//    		fillListView(loadUidMoments(1, 0), false);
     		countType = 1;
     	}
-//    	fillListView(loadLocalMoments(0, tagIdxFromUiToDb(0)), false);
-//    	setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(0)));
     	
     	fillListView(loadLocalMoments(0, tagIdxFromUiToDb(0),countType), false);
     	

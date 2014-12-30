@@ -160,6 +160,8 @@ public class NewReviewsActivity extends ListActivity implements View.OnClickList
             return;
 
         MomentDetailActivity.launch(this, m);
+//        TimelineFragment.launch(this, m);
+//        TimelineFragment.launch(this, m);
 
 
     }

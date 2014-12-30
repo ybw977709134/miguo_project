@@ -324,8 +324,11 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             	String mMyUid = PrefUtil.getInstance(context).getUid();
                 if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
                 	MomentDetailActivity.launchForOwner(context, moment);//跳转到自己的详情页
+                	//通过这种方式可以实现详情页刷新点赞和品论数
+//                	TimelineFragment.launchForOwner(activity, moment);//跳转到自己的详情页
                 } else if (!moment.owner.userID.equals(mMyUid)) {
                 	MomentDetailActivity.launch(context, moment);//跳转到好友的详情页
+//                	TimelineFragment.launch(activity, moment);//跳转到好友的详情页
                 }   
 
  

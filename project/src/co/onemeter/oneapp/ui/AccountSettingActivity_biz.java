@@ -1,6 +1,9 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.Connect2;
@@ -18,6 +22,7 @@ import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkVoipIF;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
+
 import co.onemeter.oneapp.R;
 
 public class AccountSettingActivity_biz extends Activity implements OnClickListener{
@@ -134,12 +139,27 @@ public class AccountSettingActivity_biz extends Activity implements OnClickListe
 			finish();
 			break;
 		case R.id.btn_logout:
-            if(mPrefUtil.getMyWowtalkIdChangedState()
-                    && mPrefUtil.getMyPasswordChangedState()) {
-                logout();
-            } else {
-                mMsgBox.show(null, getString(R.string.settings_account_logout_without_set_id_pwd));
-            }
+			//添加用户退出弹出框
+			Builder builder = new AlertDialog.Builder(AccountSettingActivity_biz.this);
+			builder.setTitle("提示");
+			builder.setMessage("你确认要退出账户吗？");
+			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					
+					if(mPrefUtil.getMyWowtalkIdChangedState()
+		                    && mPrefUtil.getMyPasswordChangedState()) {
+		                logout();
+		            } else {
+		                mMsgBox.show(null, getString(R.string.settings_account_logout_without_set_id_pwd));
+		            }
+					
+				}
+			});
+			
+			builder.setNegativeButton("取消", null);			
+			builder.create().show();		
 			break;
 		case R.id.layout_password:
 			Intent passwordIntent = new Intent(AccountSettingActivity_biz.this, SettingPasswordActivity.class);

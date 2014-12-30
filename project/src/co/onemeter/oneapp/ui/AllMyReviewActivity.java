@@ -73,6 +73,7 @@ public class AllMyReviewActivity extends Activity implements View.OnClickListene
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Review r = ((NewReviewAdapter)lvReviewList.getAdapter()).getItem(position);
                 MomentDetailActivity.launch(AllMyReviewActivity.this, mDb.fetchMoment(r.hostId));
+//                TimelineFragment.launch(AllMyReviewActivity.this, mDb.fetchMoment(r.hostId));
             }
         });
 

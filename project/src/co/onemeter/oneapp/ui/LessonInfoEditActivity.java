@@ -24,8 +24,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.DatePicker;
@@ -69,6 +71,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		setContentView(R.layout.activity_lessoninfo_edit);
 
 		initView();
+		registerForContextMenu(lvCourtable);
 	}
 
 	private void initView() {
@@ -136,6 +139,12 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		default:
 			break;
 		}
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
 	}
 
 	private View footerView() {

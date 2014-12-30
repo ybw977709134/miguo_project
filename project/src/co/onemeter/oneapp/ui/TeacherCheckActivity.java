@@ -151,8 +151,9 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 				
 				@Override
 				public void run() {
+					int errno;
 					try {
-						int errno = WowLessonWebServerIF.getInstance(TeacherCheckActivity.this).getLessonParentFeedback(lessonId, stus.get(pos).userID);
+						errno = WowLessonWebServerIF.getInstance(TeacherCheckActivity.this).getLessonParentFeedback(lessonId, stus.get(pos).userID);
 						if(errno == ErrorCode.OK){
 							Database db = new Database(TeacherCheckActivity.this);
 							LessonParentFeedback feedback = db.fetchLessonParentFeedback(lessonId, stus.get(pos).userID);
@@ -162,7 +163,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 								MomentDetailActivity.launch(TeacherCheckActivity.this,moment);
 								mHandler.sendEmptyMessage(errno);
 							}else{
-								mHandler.sendEmptyMessage(100);
+								mHandler.sendEmptyMessage(errno);
 							}
 						}else{
 							mHandler.sendEmptyMessage(errno);

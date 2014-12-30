@@ -53,10 +53,9 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 	private Handler handler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
 			if(msg.what == ErrorCode.OK){
+//				android.util.Log.i("-->>", stuPersFromNet.toString());
 				stuPersFromNet.addAll(mDBHelper.fetchLessonPerformance(lessonId, stuId));
 				lvPerformances.setAdapter(new LessonStatusAdapter(preformstrs));
-			}else{
-				mMsgBox.toast("...");
 			}
 		};
 	};
@@ -100,7 +99,11 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_parent_confirm:
-			submitStuPerformance();
+			if(isTeacher){
+				submitStuPerformance();
+			}else{
+				
+			}
 			break;
 		case R.id.title_back:
 			finish();
@@ -184,20 +187,27 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 				holder = (ViewHolder) convertView.getTag();
 			}
 			holder.tv_per.setText(pers[position]);
-			if(!Utils.isAccoTeacher(LessonStatusActivity.this)){
-				int value = stuPersFromNet.get(position).property_value;
-				switch (value) {
-					case 1:
-						holder.radio0.setChecked(true);
-						break;
-					case 2:
-						holder.radio1.setChecked(true);
-						break;
-					case 3:
-						holder.radio2.setChecked(true);
-						break;
+			if(!isTeacher){
+				if(!stuPersFromNet.isEmpty()){
+					if(position < 7){
+						int value = stuPersFromNet.get(position).property_value;
+						switch (value) {
+							case 1:
+								holder.radio0.setChecked(true);
+								break;
+							case 2:
+								holder.radio1.setChecked(true);
+								break;
+							case 3:
+								holder.radio2.setChecked(true);
+								break;
+						}
+					}
 				}
 				holder.rg_per.setEnabled(false);
+				holder.radio0.setEnabled(false);
+				holder.radio1.setEnabled(false);
+				holder.radio2.setEnabled(false);
 			}else{
 				final int pos = position;
 				holder.rg_per.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

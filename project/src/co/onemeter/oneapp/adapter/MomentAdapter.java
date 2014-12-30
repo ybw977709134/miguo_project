@@ -751,10 +751,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
         if(TextUtils.isEmpty(moment.shareRange) || moment.shareRange.equals(Moment.SERVER_SHARE_RANGE_PUBLIC)) {
 //            holder.tvMomentShareRange.setText(R.string.share_range_public_short);
-            holder.ivMomentShareRange.setImageResource(R.drawable.timeline_public);
+//            holder.ivMomentShareRange.setImageResource(R.drawable.timeline_public);
         } else {
-            holder.tvMomentShareRange.setText(R.string.share_range_private);
-            holder.ivMomentShareRange.setImageResource(R.drawable.timeline_limited);
+//            holder.tvMomentShareRange.setText(R.string.share_range_private);
+//            holder.ivMomentShareRange.setImageResource(R.drawable.timeline_limited);
         }
 
         View.OnClickListener clickListener=new View.OnClickListener() {
@@ -766,16 +766,16 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 context.startActivity(intent);
             }
         };
-        holder.tvMomentShareRange.setOnClickListener(clickListener);
-        holder.ivMomentShareRange.setOnClickListener(clickListener);
+//        holder.tvMomentShareRange.setOnClickListener(clickListener);
+//        holder.ivMomentShareRange.setOnClickListener(clickListener);
 
         String mMyUid = PrefUtil.getInstance(context).getUid();
         if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && !moment.owner.userID.equals(mMyUid)) {
             holder.tvMomentShareRange.setVisibility(View.GONE);
             holder.ivMomentShareRange.setVisibility(View.GONE);
         } else {
-            holder.tvMomentShareRange.setVisibility(View.VISIBLE);
-            holder.ivMomentShareRange.setVisibility(View.VISIBLE);
+//            holder.tvMomentShareRange.setVisibility(View.VISIBLE);
+//            holder.ivMomentShareRange.setVisibility(View.VISIBLE);
         }
     }
 

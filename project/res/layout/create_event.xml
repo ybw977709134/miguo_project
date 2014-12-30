@@ -26,7 +26,8 @@
 		    style="@style/page_title"
 		    android:textStyle="normal"
 		    android:textColor="@color/white"
-		    android:text="dummy title"/>
+		    android:text="dummy title"
+		    android:visibility="gone"/>
 
         <ImageButton
             android:id="@+id/title_confirm"

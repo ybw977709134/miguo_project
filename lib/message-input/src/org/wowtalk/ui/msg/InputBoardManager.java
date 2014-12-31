@@ -145,8 +145,7 @@ public class InputBoardManager implements Parcelable,
 
     private Activity mContext;
     private ViewGroup mContainer;
-//    private View mRootView = View.inflate(mContext, R.layout.msg_input_dialog, null);
-    public View mRootView = View.inflate(mContext, R.layout.msg_input_dialog, null);
+    public View mRootView;
     /* layoutTextInnerWrapper aligns to the top of layoutTextWrapper,
      * distance from the bottom of layoutTextInnerWrapper to the bottom of layoutTextWrapper
      * should be the height of layoutMediaWrapper or layoutStampWrapper.
@@ -217,9 +216,6 @@ public class InputBoardManager implements Parcelable,
         mShowingFlags = FLAG_SHOW_NONE;
         init(context, container, handler, listener);
     }
-    
-    //无参的构造方法
-    public InputBoardManager(){}
 
     public void setIsWithMultimediaMethod(boolean isWithMultimediaMethod) {
         mIsWithMultimediaMethod = isWithMultimediaMethod;

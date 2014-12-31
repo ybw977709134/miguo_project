@@ -14,9 +14,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.adapter.ApplicationInfoItemAdapter;
+import co.onemeter.oneapp.utils.ListViewUtils;
 
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
@@ -41,6 +44,9 @@ public class EventDetailActivity extends Activity implements OnClickListener {
     private MessageBox msgbox;
     private TextView btn_right_up;
     private TextView btn_right_down;
+    private ListView listView_applicantsInfo;
+    private ArrayList<Buddy> BuddyList=new ArrayList<Buddy>();
+    private ApplicationInfoItemAdapter applicationInfoItemAdapter = null;
 
     private void downloadImage(final WFile aFile, final boolean thumbnail, final ImageView imageView) {
 
@@ -238,6 +244,8 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         
         btn_right_up = (TextView) findViewById(R.id.right_button_up);
         btn_right_down = (TextView) findViewById(R.id.right_button_down);
+//        detail_applicants = (TextView) findViewById(R.id.detail_applicants);
+        listView_applicantsInfo = (ListView) findViewById(R.id.listView_applicantsInfo);
 
         eventDetail = getIntent().getExtras().getParcelable(EventActivity.EVENT_DETAIL_BUNDLE);
         
@@ -257,6 +265,8 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         msgbox = new MessageBox(this);
 
 		initView();
+		applicationInfoItemAdapter = new ApplicationInfoItemAdapter(this, BuddyList);
+		showApplicantsInfo();
 	}
 
     @Override
@@ -280,7 +290,30 @@ public class EventDetailActivity extends Activity implements OnClickListener {
     		joinEventWithDetail(name,phone);//参加报名，填写信息。
     	}
     }
-    
+    private void showApplicantsInfo(){   	
+    	new AsyncTask<Void, Void, Integer>(){
+    		int errno = ErrorCode.OK;
+			@Override
+			protected Integer doInBackground(Void... arg0) {
+				WowEventWebServerIF web = WowEventWebServerIF.getInstance(EventDetailActivity.this);
+				errno = web.fGetApplicantsInfo(BuddyList, eventDetail.id);
+				return errno;
+			}
+			@Override
+			protected void onPostExecute(Integer errno) {
+				 if (errno == ErrorCode.OK) {
+					 listView_applicantsInfo.setAdapter(applicationInfoItemAdapter);
+					 ListViewUtils.setListViewHeightBasedOnChildren(listView_applicantsInfo);
+				 }
+				 else{
+					 
+				 }
+			};
+    		
+    	}.execute((Void)null);
+    	
+    	
+    }
     private void joinEvent() {
    //     msgbox.showWait();
         new AsyncTask<Void, Void, Integer>(){

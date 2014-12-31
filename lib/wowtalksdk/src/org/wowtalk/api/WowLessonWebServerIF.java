@@ -465,4 +465,25 @@ public class WowLessonWebServerIF {
         }
         return errno;
     }
+    
+    public int deleteLesson(String lesson_id) {
+        String uid = mPrefUtil.getUid();
+        String password = mPrefUtil.getPassword();
+        if(uid == null || password == null)
+            return ErrorCode.NOT_LOGGED_IN;
+
+        final String action = "del_lesson";
+        String postStr = "action=" + action
+                + "&uid=" + Utils.urlencodeUtf8(uid)
+                + "&password=" + Utils.urlencodeUtf8(password)
+                + "&lesson_id=" + lesson_id;
+
+
+        int errno = _doRequestWithoutResponse(postStr);
+        if(errno == ErrorCode.OK){
+        	Database db = new Database(mContext);
+        	db.deleteLessonById(lesson_id);
+        }
+        return errno;
+    }
 }

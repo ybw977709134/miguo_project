@@ -1,6 +1,7 @@
 package co.onemeter.oneapp.ui;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -24,11 +25,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -64,6 +69,16 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 	private MessageBox mMsgBox;
 	private CourseTableAdapter adapter;
 	private List<Lesson> lessons;
+	private List<String> delLessons;
+	
+	private Handler mHandler = new Handler(){
+		public void handleMessage(android.os.Message msg) {
+			if(msg.what == 0){
+				mMsgBox.dismissWait();
+				finish();
+			}
+		};
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +103,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		lvCourtable = (ListView) findViewById(R.id.lv_courtable);
 
 		lessons = new LinkedList<Lesson>();
+		delLessons = new ArrayList<String>();
 		adapter = new CourseTableAdapter(lessons);
 		mMsgBox = new MessageBox(this);
 		mDBHelper = new Database(this);
@@ -120,6 +136,21 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		}
 	}
 
+	private void deleteLessons(){
+		mMsgBox.showWait();
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				WowLessonWebServerIF webserver = WowLessonWebServerIF.getInstance(LessonInfoEditActivity.this);
+				for(String lesson_id:delLessons){
+					webserver.deleteLesson(lesson_id);
+				}
+				mHandler.sendEmptyMessage(0);
+			}
+		}).start();
+	}
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -128,7 +159,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			break;
 		case R.id.save:
 			if (tag == TAG_LES_TABLE) {
-				finish();
+				deleteLessons();
 			} else {
 				updateClassInfo();
 			}
@@ -144,7 +175,24 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
+		menu.add(0, 1, Menu.NONE, getString(R.string.contacts_local_delete)); 
+	}
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		AdapterView.AdapterContextMenuInfo menuInfo=(AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+	    final int id=(int) menuInfo.id;
+		switch (item.getItemId()) {
+		case 1:
+			delLessons.add(lessons.get(id).lesson_id + "");
+			lessons.remove(id);
+			adapter.notifyDataSetChanged();
+			break;
+
+		default:
+			break;
+		}
+		return true;
 	}
 
 	private View footerView() {
@@ -233,6 +281,12 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 				}
 			}
 		}.execute((Void) null);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
 	}
 	
 	class CourseTableAdapter extends BaseAdapter{

@@ -6138,6 +6138,14 @@ public class Database {
         else
             return database.delete(TBL_LESSON, "class_id=?", new String[] { class_id });
     }
+    
+    /**通过lessonId删除本地lesson
+     * @param 
+     * @return
+     */
+    public long deleteLessonById(String lessonId) {
+         return database.delete(TBL_LESSON, "lesson_id=?", new String[] { lessonId });
+    }
 
     public long deleteLessonPerformance(int lesson_id, String student_id) {
         return database.delete(TBL_LESSON_PERFORMANCE, "lesson_id=? AND student_id=?",

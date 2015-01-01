@@ -449,7 +449,7 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            int errno = WowMomentWebServerIF.getInstance(LessonParentFeedbackActivity.this).fAddMoment(moment);
+                            int errno = WowMomentWebServerIF.getInstance(LessonParentFeedbackActivity.this).fAddMoment(moment,true);
                             LessonParentFeedback feedback = new LessonParentFeedback();
                             feedback.lesson_id = lessonId;
                             feedback.student_id = stuId;

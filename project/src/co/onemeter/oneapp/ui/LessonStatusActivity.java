@@ -53,11 +53,14 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 	private Handler handler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
 			if(msg.what == ErrorCode.OK){
-//				android.util.Log.i("-->>", stuPersFromNet.toString());
 				stuPersFromNet.addAll(mDBHelper.fetchLessonPerformance(lessonId, stuId));
+//				android.util.Log.i("-->>", stuPersFromNet.toString());
 				lvPerformances.setAdapter(new LessonStatusAdapter(preformstrs));
 				if(stuPersFromNet.isEmpty()){
 					findViewById(R.id.btn_parent_confirm).setVisibility(View.VISIBLE);
+				}
+				if(!isTeacher){
+					findViewById(R.id.btn_parent_confirm).setVisibility(View.GONE);
 				}
 			}else{
 				mMsgBox.toast(R.string.class_class_status_not_comfired);
@@ -95,6 +98,8 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 		isTeacher = intent.getBooleanExtra(FALG, false);
 		if(isTeacher){
 			btn.setText(R.string.login_retrieve_password_btn);
+		}else{
+			btn.setVisibility(View.GONE);
 		}
 		getStuPerformceById();
 	}
@@ -207,10 +212,6 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 								break;
 						}
 				}
-				holder.rg_per.setEnabled(false);
-				holder.radio0.setEnabled(false);
-				holder.radio1.setEnabled(false);
-				holder.radio2.setEnabled(false);
 			}else{
 				final LessonPerformance performance = new LessonPerformance();
 				performance.property_value = 1;
@@ -239,7 +240,12 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 				});
 				lesPersToPost.add(performance);
 			}
-			
+			if(!isTeacher){
+				holder.rg_per.setEnabled(false);
+				holder.radio0.setEnabled(false);
+				holder.radio1.setEnabled(false);
+				holder.radio2.setEnabled(false);
+			}
 			return convertView;
 		}
 		

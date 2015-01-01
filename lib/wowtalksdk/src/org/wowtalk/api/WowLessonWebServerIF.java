@@ -449,11 +449,16 @@ public class WowLessonWebServerIF {
                 Element resultElement = Utils.getFirstElementByTagName(root, action);
                 if(resultElement != null) {
                     Database db = new Database(mContext);
-                    NodeList performanceNodes = resultElement.getElementsByTagName("performance");
+                    NodeList performanceNodes = resultElement.getElementsByTagName("lesson_performance");
+//                    android.util.Log.i("-->>", performanceNodes.toString() + "");
                     for (int i = 0; i < performanceNodes.getLength(); ++i) {
                         Node performanceNode = performanceNodes.item(i);
                         if (performanceNode instanceof Element) {
                             LessonPerformance feedback = XmlHelper.parseLessonPerformance((Element)performanceNode);
+                            feedback.lesson_id = lesson_id;
+                            feedback.student_id = student_id;
+                            		
+//                            android.util.Log.i("-->>", feedback.property_value + "");
                             if (feedback != null)
                                 db.storeLessonPerformance(feedback);
                         }

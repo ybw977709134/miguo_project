@@ -77,9 +77,11 @@
 			<TextView
 				android:id="@+id/settings_privacy"
 				android:text="@string/settings_privacy"
+				android:visibility="gone"
 				style="@style/standard_list_item_with_arrow"/>
 
 			<ImageView
+				android:visibility="gone"
 				style="@style/standard_list_divider"/>
 
 			<ImageView

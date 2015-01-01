@@ -5279,41 +5279,61 @@ public class Database {
      * @param selection see Database.query()
      * @param selectionArgs see Database.query()
      * @param count
+     * @param accountType -1 means all.
      * @return
      */
     private ArrayList<Moment> fetchMoments(
-            String selection, String[] selectionArgs, int count,int countType) {
-        ArrayList<Moment> data = new ArrayList<Moment>();
+            String selection, String[] selectionArgs, int count,int accountType) {
+        ArrayList<Moment> data = new ArrayList<>();
         if (isDBUnavailable()) {
             return data;
         }
 
-        final String tblMoment = "moment";
-        
-        
-        Cursor cur = database.query(true, tblMoment,
-                new String[] {
-                        "allow_review",
-                        "id",
-                        "latitude",
-                        "longitude",
-                        "liked_by_me",
-                        "owner_uid",
-                        "place",
-                        "privacy_level",
-                        "timestamp",
-                        "text",
-                        "tag",
-                        "share_range",
-                        "survey_allow_multi_select",
-//                        "survey_voted_option",
-                        "survey_dead_line",
-                        "limited_departments",
-                        "is_favorite"
-                },
-                selection, selectionArgs, null, null,
-                "timestamp DESC",
-                count > 0 ? String.valueOf(count) : null);
+        // 注意我自己不在 buddydetail 表里，所以 JOIN 查询中 buddydetail 记录可那为空
+        StringBuilder sql = new StringBuilder("SELECT " +
+                        "a.allow_review," +
+                        "a.id," +
+                        "a.latitude," +
+                        "a.longitude," +
+                        "a.liked_by_me," +
+                        "a.owner_uid," +
+                        "a.place," +
+                        "a.privacy_level," +
+                        "a.timestamp," +
+                        "a.text," +
+                        "a.tag," +
+                        "a.share_range," +
+                        "a.survey_allow_multi_select," +
+                        "a.survey_dead_line," +
+                        "a.limited_departments," +
+                        "a.is_favorite " +
+                        "FROM moment AS a " +
+                        "LEFT JOIN buddydetail as b " +
+                        "ON (a.owner_uid = b.uid) ");
+
+        sql.append(" WHERE ");
+        if (accountType != -1) {
+            sql.append("(")
+                    .append(" b.account_type=").append(String.valueOf(accountType));
+            int myAccountType = PrefUtil.getInstance(context).getMyAccountType();
+            if (myAccountType == accountType) {
+                String myUid = PrefUtil.getInstance(context).getUid();
+                sql.append(" OR a.owner_uid='").append(myUid).append("'");
+            }
+            sql.append(") AND ");
+        }
+
+        if (TextUtils.isEmpty(selection))
+            sql.append("1");
+        else
+            sql.append(selection);
+
+        sql.append(" ORDER BY a.timestamp DESC ");
+
+        if (count > 0)
+            sql.append(" LIMIT ").append(String.valueOf(count));
+
+        Cursor cur = database.rawQuery(sql.toString(), selectionArgs);
 
         if(cur == null || !cur.moveToFirst()) {
             if (null != cur && !cur.isClosed()) {
@@ -5347,15 +5367,10 @@ public class Database {
             e.tag=cur.getString(++i);
             e.shareRange=cur.getString(++i);
             e.isSurveyAllowMultiSelect=(cur.getInt(++i)==1);
-//            e.setVotedOption(cur.getString(++i));
             e.surveyDeadLine=cur.getString(++i);
             e.setLimitedDepartment(cur.getString(++i));
             e.isFavorite=cur.getInt(++i)==1?true:false; 
-            
-            if (e.owner.getAccountType() == countType || countType == -1) {//账号为对应的类型或者全部，才可以加入data
-            	data.add(e);
-            }
-            
+            data.add(e);
         } while(cur.moveToNext());
         cur.close();
 

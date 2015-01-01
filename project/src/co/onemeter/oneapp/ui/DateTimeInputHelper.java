@@ -50,7 +50,7 @@ public class DateTimeInputHelper {
                         
                     }
                 },
-                now.get(Calendar.HOUR),
+                now.get(Calendar.HOUR_OF_DAY),
                 now.get(Calendar.MINUTE),
                 true
         ).show();

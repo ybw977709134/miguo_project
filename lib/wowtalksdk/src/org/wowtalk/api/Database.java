@@ -5559,7 +5559,7 @@ public class Database {
      * @return
      */
     public ArrayList<Moment> fetchMomentsOfAllBuddies(long maxTimestamp, int count, String tag,int countType) {
-        String[] selection = new String[2];
+        String[] selection = new String[3]; // timestamp, tag, owner_uid
         selection[0] = (maxTimestamp > 0) ? "timestamp<?" : "1";
         // tag == -1 全部
         if ("-1".equals(tag)) {
@@ -5570,6 +5570,7 @@ public class Database {
         } else {
             selection[1] = "tag=?";
         }
+        selection[2] = "owner_uid<>'(anonymous)'";
 
         ArrayList<String> args = new ArrayList<String>();
         if (maxTimestamp > 0) {
@@ -5588,15 +5589,6 @@ public class Database {
     }
     public ArrayList<Moment> fetchMomentsOfAllBuddies(long maxTimestamp, int count,int countType) {
         return fetchMomentsOfAllBuddies(maxTimestamp, count, "-1",countType);
-    }
-
-    public ArrayList<Moment> fetchMomentsOfFavorite(long maxTimestamp, int count,int countType) {
-        if (maxTimestamp > 0) {
-            return fetchMoments("timestamp<? and is_favorite=?",
-                    new String[]{String.valueOf(maxTimestamp),String.valueOf(1)}, count,countType);
-        } else {
-            return fetchMoments("is_favorite=?", new String[]{String.valueOf(1)}, count,countType);
-        }
     }
 
     public Moment fetchMoment(String id) {

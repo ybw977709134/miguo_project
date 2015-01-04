@@ -269,8 +269,8 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.layoutLike = (LinearLayout) convertView.findViewById(R.id.layout_like);
             holder.layoutComment = (LinearLayout) convertView.findViewById(R.id.layout_comment);
             holder.layoutAnswer = (LinearLayout) convertView.findViewById(R.id.layout_answer);
-            holder.rlMomentFavoriteLayout=(RelativeLayout) convertView.findViewById(R.id.moment_favorite_layout);
-            holder.ivMomentFavorite=(ImageView) convertView.findViewById(R.id.moment_favorite);
+//            holder.rlMomentFavoriteLayout=(RelativeLayout) convertView.findViewById(R.id.moment_favorite_layout);
+//            holder.ivMomentFavorite=(ImageView) convertView.findViewById(R.id.moment_favorite);
 
 //            holder.reviewButtons = (LinearLayout) convertView.findViewById(R.id.review_btn);
 //            holder.ivMomentOpEllipse=(ImageView) convertView.findViewById(R.id.iv_moment_op_ellipse);
@@ -283,7 +283,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //            holder.layoutLike = (LinearLayout) convertView.findViewById(R.id.layout_like);
 //            holder.layoutComment = (LinearLayout) convertView.findViewById(R.id.layout_comment);
             holder.tvMomentTagDesc=(TextView) convertView.findViewById(R.id.moment_item_tag);
-            holder.ivMomentTagColor=(ImageView) convertView.findViewById(R.id.iv_moment_item_tag_color_line);
+            holder.ivMomentTagColor=(ImageView) convertView.findViewById(R.id.iv_moment_item_tag_color_flag);
             holder.tvMomentShareRange=(TextView) convertView.findViewById(R.id.tv_share_rang_ind);
             holder.ivMomentShareRange=(ImageView) convertView.findViewById(R.id.iv_share_rang_ind);
 
@@ -553,23 +553,30 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
     public static void setTagdesc(final Context context,final Moment moment,ImageView iv,TextView tv,
                                   LinearLayout voteSurveyLayout,final LinearLayoutAsListView lvSurveyOptions,final ArrayList<String> choosed,final Button btnSurvey) {
-        if(TextUtils.isEmpty(moment.tag) || moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_LIFE)) {
-            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_life));
+        if(TextUtils.isEmpty(moment.tag) || moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_LIFE)) {//生活
+//            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_life));
+        	iv.setImageResource(R.drawable.share_point_life);
             tv.setText(R.string.moment_tag_life);
-        } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_QA)) {
-            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_qa));
+        } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_QA)) {//问答
+//            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_qa));
+            iv.setImageResource(R.drawable.share_point_question);
             tv.setText(R.string.moment_tag_qa);
-        } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_NOTICE)) {
-            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_notice));
+        } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_NOTICE)) {//通知
+//            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_notice));
+        	iv.setImageResource(R.drawable.share_point_notice);
             tv.setText(R.string.moment_tag_notice);
         } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE) || moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI)) {
-            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_survey));
+            //投票
+//        	iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_survey));
+        	iv.setImageResource(R.drawable.share_point_vote);
             tv.setText(R.string.moment_tag_survey);
-        } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_STUDY)) {
-            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_study));
+        } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_STUDY)) {//学习
+//            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_study));
+        	iv.setImageResource(R.drawable.share_point_study);
             tv.setText(R.string.moment_tag_study);
-        } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_VIDEO)) {
-            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_video));
+        } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_VIDEO)) {//视频
+//            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_video));
+        	iv.setImageResource(R.drawable.share_point_video);
             tv.setText(R.string.moment_tag_video);
         }
 
@@ -870,12 +877,12 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //        	holder.btnComment.setBackgroundResource(R.drawable.profile_btn_message_p);
 //        }
         if(commentReview.size()>0){
-        	holder.btnComment.setBackgroundResource(R.drawable.profile_btn_message_p);
+        	holder.btnComment.setBackgroundResource(R.drawable.timeline_comment_a);
         	holder.btnAnswer.setBackgroundResource(R.drawable.profile_btn_message_p);
         	holder.tvComment.setVisibility(View.VISIBLE);
         	holder.tvAnswer.setVisibility(View.VISIBLE);
         }else{
-        	holder.btnComment.setBackgroundResource(R.drawable.share_icon_comment);
+        	holder.btnComment.setBackgroundResource(R.drawable.timeline_comment);
         	holder.btnAnswer.setBackgroundResource(R.drawable.share_icon_comment);
         	holder.tvComment.setVisibility(View.GONE);
         	holder.tvAnswer.setVisibility(View.GONE);
@@ -939,14 +946,14 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             }
         });
 
-        setMomentFavoriteStatus(moment,holder.ivMomentFavorite);
+//        setMomentFavoriteStatus(moment,holder.ivMomentFavorite);
 
-        holder.rlMomentFavoriteLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                triggerMomentFavorite(context,moment,holder.ivMomentFavorite);
-            }
-        });
+//        holder.rlMomentFavoriteLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                triggerMomentFavorite(context,moment,holder.ivMomentFavorite);
+//            }
+//        });
     }
 
     private View getNewReviewView() {
@@ -1120,8 +1127,8 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         TextView tvCommentCountInd;
         TextView tvAnswerCountInd;
 
-        RelativeLayout rlMomentFavoriteLayout;
-        ImageView ivMomentFavorite;
+//        RelativeLayout rlMomentFavoriteLayout;
+//        ImageView ivMomentFavorite;
 //        ImageView ivMomentOpEllipse;
 		
 		LinearLayout layoutReview;

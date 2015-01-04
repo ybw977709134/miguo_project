@@ -871,10 +871,10 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         ImageView ivMomentShareRange=(ImageView) findViewById(R.id.iv_share_rang_ind);
         if(TextUtils.isEmpty(moment.shareRange) || moment.shareRange.equals(Moment.SERVER_SHARE_RANGE_PUBLIC)) {
 //            tvMomentShareRange.setText(R.string.share_range_public_short);
-            ivMomentShareRange.setImageResource(R.drawable.timeline_public);
+//            ivMomentShareRange.setImageResource(R.drawable.timeline_public);
         } else {
-            tvMomentShareRange.setText(R.string.share_range_private);
-            ivMomentShareRange.setImageResource(R.drawable.timeline_limited);
+//            tvMomentShareRange.setText(R.string.share_range_private);
+//            ivMomentShareRange.setImageResource(R.drawable.timeline_limited);
         }
         View.OnClickListener clickListener=new View.OnClickListener() {
             @Override
@@ -888,14 +888,14 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         tvMomentShareRange.setOnClickListener(clickListener);
         ivMomentShareRange.setOnClickListener(clickListener);
 
-        String mMyUid = mPrefUtil.getUid();
-        if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && !moment.owner.userID.equals(mMyUid)) {
-            tvMomentShareRange.setVisibility(View.GONE);
-            ivMomentShareRange.setVisibility(View.GONE);
-        } else {
-            tvMomentShareRange.setVisibility(View.VISIBLE);
-            ivMomentShareRange.setVisibility(View.VISIBLE);
-        }
+//        String mMyUid = mPrefUtil.getUid();
+//        if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && !moment.owner.userID.equals(mMyUid)) {
+//            tvMomentShareRange.setVisibility(View.GONE);
+//            ivMomentShareRange.setVisibility(View.GONE);
+//        } else {
+//            tvMomentShareRange.setVisibility(View.VISIBLE);
+//            ivMomentShareRange.setVisibility(View.VISIBLE);
+//        }
     }
 
     /**

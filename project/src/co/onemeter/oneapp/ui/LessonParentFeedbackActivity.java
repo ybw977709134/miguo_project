@@ -427,7 +427,6 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
             new AsyncTask<Void, Integer, Integer>() {
                 @Override
                 protected Integer doInBackground(Void... params) {
-                    String uid = PrefUtil.getInstance(LessonParentFeedbackActivity.this).getUid();
                     //alias id and timestamp,timestamp should be the largest
                     //will be updated when returned by server
                     moment.id = ALIAS_ID_PREFIX+System.currentTimeMillis();
@@ -435,7 +434,7 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
                     Log.w("local moment timestamp set to "+moment.timestamp);
                     if (null == moment.owner)
                         moment.owner = new Buddy();
-                    moment.owner.userID = uid;
+                    moment.owner.userID = "(anonymous)";
                     moment.likedByMe = false;
                     mDb.storeMoment(moment,null);
                     for (WFile f : moment.multimedias) {

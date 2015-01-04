@@ -55,6 +55,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 
 	private int tag;
 	private String classId;
+	private int originSize;
 
 	private ListView lvCourtable;
 	private EditText dtTerm;
@@ -70,6 +71,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 	private CourseTableAdapter adapter;
 	private List<Lesson> lessons;
 	private List<String> delLessons;
+	private List<Lesson> addLessons;
 	
 	private Handler mHandler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
@@ -104,6 +106,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 
 		lessons = new LinkedList<Lesson>();
 		delLessons = new ArrayList<String>();
+		addLessons = new ArrayList<Lesson>();
 		adapter = new CourseTableAdapter(lessons);
 		mMsgBox = new MessageBox(this);
 		mDBHelper = new Database(this);
@@ -123,6 +126,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			q.find(R.id.title).text(getString(R.string.class_coursetable_info));
 			lessons.addAll(mDBHelper.fetchLesson(classId));
 			adapter.notifyDataSetChanged();
+			originSize = lessons.size();
 		} else {
 			q.find(R.id.title).text(getString(R.string.class_info));
 			findViewById(R.id.lay_info_edit).setVisibility(View.VISIBLE);
@@ -159,7 +163,12 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			break;
 		case R.id.save:
 			if (tag == TAG_LES_TABLE) {
-				deleteLessons();
+				if(!delLessons.isEmpty()){
+					deleteLessons();
+				}
+				if(!addLessons.isEmpty()){
+					addPostLesson(addLessons);
+				}
 			} else {
 				updateClassInfo();
 			}
@@ -184,8 +193,12 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 	    final int id=(int) menuInfo.id;
 		switch (item.getItemId()) {
 		case 1:
+			originSize = lessons.size() - addLessons.size();
 			delLessons.add(lessons.get(id).lesson_id + "");
 			lessons.remove(id);
+			if(!addLessons.isEmpty() && id >= originSize){
+				addLessons.remove(id - originSize);
+			}
 			adapter.notifyDataSetChanged();
 			break;
 
@@ -198,7 +211,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 	private View footerView() {
 		View view = getLayoutInflater().inflate(R.layout.lay_lv_footer, null);
 		TextView txt_footer = (TextView) view.findViewById(R.id.txt_footer_add);
-		txt_footer.setText(getString(R.string.class_add_homework));
+		txt_footer.setText(getString(R.string.class_add_lesson));
 		LinearLayout layout = (LinearLayout) view.findViewById(R.id.lay_footer_add);
 		layout.setOnClickListener(this);
 		return view;
@@ -221,27 +234,36 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 				result.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth());
 				lesson.start_date = result.getTimeInMillis()/1000;
 				lesson.end_date = result.getTimeInMillis()/1000 + 45 * 60;
-				addPostLesson(lesson);
+				addLessons.add(lesson);
+				lessons.add(lesson);
+				adapter.notifyDataSetChanged();
 			}
 		}).setNegativeButton(getString(R.string.cancel), null).create();
 		builder.show();
 	}
 	
-	private void addPostLesson(final Lesson lesson){
+	private void addPostLesson(final List<Lesson> lessons){
 		new AsyncTask<Void, Void, Integer>(){
 
+			protected void onPreExecute() {
+				mMsgBox.showWait();
+			};
+			
 			@Override
 			protected Integer doInBackground(Void... params) {
-				
-				return WowLessonWebServerIF.getInstance(LessonInfoEditActivity.this).addOrModifyLesson(lesson);
+				WowLessonWebServerIF lesWeb = WowLessonWebServerIF.getInstance(LessonInfoEditActivity.this);
+				int errno = 0;
+				for(Lesson lesson: lessons){
+					errno = lesWeb.addOrModifyLesson(lesson);
+				}
+				return errno;
 			}
 			
 			protected void onPostExecute(Integer result) {
+				mMsgBox.dismissWait();
 				if(ErrorCode.OK == result){
-					mMsgBox.toast("添加成功");
-					lessons.clear();
-					lessons.addAll(mDBHelper.fetchLesson(classId));
-					adapter.notifyDataSetChanged();
+					mMsgBox.toast(R.string.class_submit_success);
+					finish();
 				}
 			};
 		}.execute((Void)null);

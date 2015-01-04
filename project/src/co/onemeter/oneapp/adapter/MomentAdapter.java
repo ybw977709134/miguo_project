@@ -877,12 +877,12 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //        	holder.btnComment.setBackgroundResource(R.drawable.profile_btn_message_p);
 //        }
         if(commentReview.size()>0){
-        	holder.btnComment.setBackgroundResource(R.drawable.profile_btn_message_p);
+        	holder.btnComment.setBackgroundResource(R.drawable.timeline_comment_a);
         	holder.btnAnswer.setBackgroundResource(R.drawable.profile_btn_message_p);
         	holder.tvComment.setVisibility(View.VISIBLE);
         	holder.tvAnswer.setVisibility(View.VISIBLE);
         }else{
-        	holder.btnComment.setBackgroundResource(R.drawable.share_icon_comment);
+        	holder.btnComment.setBackgroundResource(R.drawable.timeline_comment);
         	holder.btnAnswer.setBackgroundResource(R.drawable.share_icon_comment);
         	holder.tvComment.setVisibility(View.GONE);
         	holder.tvAnswer.setVisibility(View.GONE);

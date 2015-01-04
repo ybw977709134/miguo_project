@@ -1090,11 +1090,6 @@ public abstract class MessageComposerActivityBase extends Activity
 
 		btnBack.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-//                if(null != mInputMgr) {
-//                    mInputMgr.hide();
-//                }
-//				finish();
-				
 				//聊完天后都直接 跳转到主消息页面
 				Intent intent = new Intent(MessageComposerActivityBase.this,StartActivity.class);
 				startActivity(intent);
@@ -1107,7 +1102,6 @@ public abstract class MessageComposerActivityBase extends Activity
 			}
 		});
 
-//        log_msg = mDbHelper.fetchChatMessagesWithUser(_targetUID);
         log_msg = new ArrayList<ChatMessage>();
         myAdapter = new MessageDetailAdapter(this, log_msg, false, mHandler, mMessageDetailListener);
         lv_message.setAdapter(myAdapter);
@@ -1117,18 +1111,7 @@ public abstract class MessageComposerActivityBase extends Activity
         }
         mInputMgr.setCanSendMsg(mCanSendMsg == CAN_SEND_MSG_OK);
 
-//        if (null != b && b.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
-//            mInputMgr.show(InputBoardManager.FLAG_SHOW_MEDIA);
-//            mInputMgr.setLayoutForFamily();
-//        } else {
-//            mInputMgr.show(InputBoardManager.FLAG_SHOW_TEXT);
-//        }
         mInputMgr.show(InputBoardManager.FLAG_SHOW_TEXT);
-
-		/*
-		 * refresh unread message shown on StartActivity
-		 */
-		//refreshUnreadMsg();
 	}
 
     private void refreshGroupInfo(final String groupId) {

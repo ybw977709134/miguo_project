@@ -293,21 +293,6 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     /** 根据我与当前用户的关系设置界面元素的可见性 */
     private void initView_visibilities() {
 
-//        AQuery q = new AQuery(this);
-//
-//        if (buddyType != BUDDY_TYPE_IS_FRIEND) {
-//        	q.find(R.id.module_chat).invisible();
-//            q.find(R.id.btn_goto_moments).gone();
-//            q.find(R.id.btn_delete).gone();
-//            q.find(R.id.btn_add).visible();
-//            }
-//        else {
-//            q.find(R.id.module_chat).visible();
-//            q.find(R.id.btn_goto_moments).visible();
-//            q.find(R.id.btn_delete).visible();
-//            q.find(R.id.btn_add).gone();
-//        }
-    	
     	  AQuery q = new AQuery(this);
     	  if(buddyType == BUDDY_TYPE_IS_FRIEND){
               q.find(R.id.module_chat).visible();

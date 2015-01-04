@@ -74,7 +74,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     private LinearLayout layoutLike;
     private LinearLayout layoutComment;
     private LinearLayout layoutAnswer;
-    private ImageView ivMomentFavorite;
+//    private ImageView ivMomentFavorite;
     
   //详情页中的赞数和评论数
     private LinearLayout layout_detailcomment_review;
@@ -145,7 +145,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         layoutLike = (LinearLayout) findViewById(R.id.layout_like);
         layoutComment = (LinearLayout) findViewById(R.id.layout_comment);
         layoutAnswer = (LinearLayout) findViewById(R.id.layout_answer);
-        ivMomentFavorite=(ImageView) findViewById(R.id.moment_favorite);
+//        ivMomentFavorite=(ImageView) findViewById(R.id.moment_favorite);
         
         //赞和评论的布局
         layout_detailcomment_review = (LinearLayout) findViewById(R.id.layout_detailcomment_review);
@@ -221,8 +221,8 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         btnTitleBack.setOnClickListener(this);
         imgPhoto.setOnClickListener(this);
 
-        MomentAdapter.setMomentFavoriteStatus(moment,ivMomentFavorite);
-        findViewById(R.id.moment_favorite_layout).setOnClickListener(this);
+//        MomentAdapter.setMomentFavoriteStatus(moment,ivMomentFavorite);
+//        findViewById(R.id.moment_favorite_layout).setOnClickListener(this);
 
 //        findViewById(R.id.new_moment_op_layout).setVisibility(View.GONE);
         reviewButtons.setVisibility(View.VISIBLE);
@@ -547,9 +547,9 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             case R.id.img_photo:
                 TimelineActivity.launch(this, moment.owner.userID, moment.owner.nickName);
                 break;
-            case R.id.moment_favorite_layout:
-                MomentAdapter.triggerMomentFavorite(this,moment,ivMomentFavorite);
-                break;
+//            case R.id.moment_favorite_layout:
+//                MomentAdapter.triggerMomentFavorite(this,moment,ivMomentFavorite);
+//                break;
             default:
                 break;
         }
@@ -860,7 +860,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         }
 
         TextView tvMomentTagDesc=(TextView) findViewById(R.id.moment_item_tag);
-        ImageView ivMomentTagColor=(ImageView) findViewById(R.id.iv_moment_item_tag_color_line);
+        ImageView ivMomentTagColor=(ImageView) findViewById(R.id.iv_moment_item_tag_color_flag);
         MomentAdapter.setTagdesc(this, moment, ivMomentTagColor, tvMomentTagDesc,
                 (LinearLayout) findViewById(R.id.vote_survey_layout),
                 (LinearLayoutAsListView) findViewById(R.id.vote_survey_options),

@@ -143,13 +143,14 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginRight="@dimen/padding_small"
-                            android:visibility="visible">
+                            android:visibility="visible">                       
+                        
                         <ImageView
-                                android:id="@+id/moment_favorite"
-                                android:layout_width="15dp"
-                                android:layout_height="15dp"
-                                android:scaleType="fitCenter"
-                                android:src="@drawable/timeline_favorite"/>
+                                android:id="@+id/iv_moment_item_tag_color_flag"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:scaleType="fitCenter" />
+
                     </RelativeLayout>
 
                     <TextView
@@ -158,15 +159,8 @@
                             android:layout_width="wrap_content"
                             android:gravity="center_vertical"
                             style="@style/moment_datetime"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="5dp"
-                            android:background="@color/background_dark"/>
-
-                    <ImageView
-                            android:id="@+id/iv_moment_item_tag_color_line"
-                            android:layout_width="@dimen/create_moment_option_tag_left_img_width"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_vertical"/>
+                            android:layout_marginRight="5dp" />
+                    
                 </LinearLayout>
             </RelativeLayout>
             <include layout="@layout/piece_moment_content"/>

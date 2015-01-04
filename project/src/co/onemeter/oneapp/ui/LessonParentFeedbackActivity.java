@@ -1,37 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.GlobalSetting;
-import org.wowtalk.api.LessonParentFeedback;
-import org.wowtalk.api.Moment;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.Utils;
-import org.wowtalk.api.WFile;
-import org.wowtalk.api.WowLessonWebServerIF;
-import org.wowtalk.api.WowMomentWebServerIF;
-import org.wowtalk.ui.MediaInputHelper;
-import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
-import org.wowtalk.ui.msg.BmpUtils;
-import org.wowtalk.ui.msg.FileUtils;
-import org.wowtalk.ui.msg.TimerTextView;
-
-import com.androidquery.AQuery;
-import com.umeng.analytics.MobclickAgent;
-
-import co.onemeter.oneapp.Constants;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.CreateMomentActivity.WMediaFile;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -44,6 +12,26 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import co.onemeter.oneapp.Constants;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.ui.CreateMomentActivity.WMediaFile;
+import com.androidquery.AQuery;
+import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.MediaInputHelper;
+import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.PhotoDisplayHelper;
+import org.wowtalk.ui.msg.BmpUtils;
+import org.wowtalk.ui.msg.FileUtils;
+import org.wowtalk.ui.msg.TimerTextView;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class LessonParentFeedbackActivity extends Activity implements OnClickListener {
 
@@ -434,7 +422,7 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
                     Log.w("local moment timestamp set to "+moment.timestamp);
                     if (null == moment.owner)
                         moment.owner = new Buddy();
-                    moment.owner.userID = "(anonymous)";
+                    moment.owner.userID = Moment.ANONYMOUS_UID;
                     moment.likedByMe = false;
                     mDb.storeMoment(moment,null);
                     for (WFile f : moment.multimedias) {

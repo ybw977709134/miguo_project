@@ -272,9 +272,10 @@ public class WowMomentWebServerIF {
                         moment.id = e.getTextContent();
                         moment.timestamp = Utils.getFirstLongByTagName(resultElement, "timestamp",
                                 new Date().getTime() / 1000);
-                        if (null == moment.owner)
+                        if (null == moment.owner) {
                             moment.owner = new Buddy();
-                        moment.owner.userID = uid;
+                            moment.owner.userID = uid;
+                        }
                         moment.likedByMe = false;
 
                         db.storeMoment(moment,oldMomentId);

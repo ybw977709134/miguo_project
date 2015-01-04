@@ -5570,7 +5570,7 @@ public class Database {
         } else {
             selection[1] = "tag=?";
         }
-        selection[2] = "owner_uid<>'(anonymous)'";
+        selection[2] = "owner_uid<>'" + Moment.ANONYMOUS_UID + "'";
 
         ArrayList<String> args = new ArrayList<String>();
         if (maxTimestamp > 0) {

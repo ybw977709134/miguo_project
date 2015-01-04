@@ -1106,13 +1106,49 @@ public abstract class MessageComposerActivityBase extends Activity
         myAdapter = new MessageDetailAdapter(this, log_msg, false, mHandler, mMessageDetailListener);
         lv_message.setAdapter(myAdapter);
 
+        updateUiAboutCanSendMsg();
+        if (mCanSendMsg != CAN_SEND_MSG_OK) {
+            recheckIfCanSendMsg();
+        }
+
+        mInputMgr.show(InputBoardManager.FLAG_SHOW_TEXT);
+	}
+
+    private void updateUiAboutCanSendMsg() {
+        ImageView btnNaviRight = (ImageView) findViewById(R.id.img_call);
         if (mCanSendMsg != CAN_SEND_MSG_OK) {
             btnNaviRight.setVisibility(View.INVISIBLE);
         }
         mInputMgr.setCanSendMsg(mCanSendMsg == CAN_SEND_MSG_OK);
+    }
 
-        mInputMgr.show(InputBoardManager.FLAG_SHOW_TEXT);
-	}
+    private void recheckIfCanSendMsg() {
+        new AsyncTask<Void, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                if (_targetIsNormalGroup || _targetIsTmpGroup) {
+                    // TODO
+                } else {
+                    if (ErrorCode.OK == mWebif.fGetBuddyWithUID(_targetUID)) {
+                        Buddy buddy = new Database(MessageComposerActivityBase.this).buddyWithUserID(_targetUID);
+                        if (0 != (buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean result) {
+                if (result && mCanSendMsg != CAN_SEND_MSG_OK) {
+                    Log.i("MessageComposerActivityBase recheck send availability succeed.");
+                    mCanSendMsg = CAN_SEND_MSG_OK;
+                    updateUiAboutCanSendMsg();
+                }
+            }
+        }.execute((Void)null);
+    }
 
     private void refreshGroupInfo(final String groupId) {
         new AsyncTask<Void, Void, Integer>() {

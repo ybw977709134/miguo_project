@@ -1644,19 +1644,20 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         for (int i = 0; i < reviews.size(); i++) {
             final Review review = reviews.get(i);
             if (review == null || review.type != Review.TYPE_LIKE)
-                continue;
+                continue;																																																																								
 
             if (cnt > 0) {
                 textView.append(context.getResources().getString(R.string.symbol_comma), null,
                         0, 0, 0, null);
             }
             ++cnt;
+            
             if (!TextUtils.isEmpty(review.nickname)) {
                 textView.append(review.nickname, null,
-                        context.getResources().getColor(R.color.blue),
+                        context.getResources().getColor(R.color.blue),																																																																																																																																																																																																																																																																																																					
                         0,
-                        context.getResources().getColor(R.color.text_gray3),
-                        new View.OnClickListener() {
+                        context.getResources().getColor(R.color.text_gray3),																																																																																																																																																																																																		
+                        new View.OnClickListener() {																																																																																					
                     @Override
                     public void onClick(View v) {
                         TimelineActivity.launch(context, review.uid, review.nickname);

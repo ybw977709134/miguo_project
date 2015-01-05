@@ -240,11 +240,13 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                     break;
                 }
             }
+                      
             if(null != likeReview) {
                 TimelineActivity.deleteMomentReview(this,moment.id,likeReview,onMomentReviewDeleteListener);
                 moment.reviews.remove(likeReview);
                 dbHelper.storeMoment(moment, moment.id);
                 setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, moment.id));
+                
             } else {
                 Log.e("delete like review null");
             }
@@ -280,6 +282,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                     }
 
                     dbHelper.storeMoment(moment, moment.id);
+                    //实现点赞异步刷新
                     setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, momentId));
                 } else {
                     mMsgBox.toast(R.string.msg_operation_failed);
@@ -336,7 +339,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 
     private void addReviewToList(Review r) {
         moment.reviews.add(moment.reviews.size(), r);
-        setupContent(moment);
+//        setupContent(moment);//去掉此方法的调用，否则在详情页中点赞，多一次刷新
     }
 
     private void showVoiceFile(WFile file) {
@@ -772,7 +775,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         format = new SimpleDateFormat("HH:mm");
         String strTime = format.format(time);
         txtDate.setText(strDate);
-        txtTime.setText(strTime);
+        txtTime.setText(strTime); 
 
         PhotoDisplayHelper.displayPhoto(this, imgPhoto, R.drawable.default_avatar_90, moment.owner, true);
         if (moment.latitude == 0 && moment.longitude == 0) { // XXX compare double with int?!
@@ -867,26 +870,28 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                 surveyMomentSelectedItem,
                 (Button) findViewById(R.id.vote_survey_button));
 
-        TextView tvMomentShareRange=(TextView) findViewById(R.id.tv_share_rang_ind);
-        ImageView ivMomentShareRange=(ImageView) findViewById(R.id.iv_share_rang_ind);
-        if(TextUtils.isEmpty(moment.shareRange) || moment.shareRange.equals(Moment.SERVER_SHARE_RANGE_PUBLIC)) {
+//        TextView tvMomentShareRange=(TextView) findViewById(R.id.tv_share_rang_ind);
+//        ImageView ivMomentShareRange=(ImageView) findViewById(R.id.iv_share_rang_ind);
+//        if(TextUtils.isEmpty(moment.shareRange) || moment.shareRange.equals(Moment.SERVER_SHARE_RANGE_PUBLIC)) {
 //            tvMomentShareRange.setText(R.string.share_range_public_short);
 //            ivMomentShareRange.setImageResource(R.drawable.timeline_public);
-        } else {
+//        } else {
 //            tvMomentShareRange.setText(R.string.share_range_private);
 //            ivMomentShareRange.setImageResource(R.drawable.timeline_limited);
-        }
-        View.OnClickListener clickListener=new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MomentDetailActivity.this,ShareRangeSelectActivity.class);
-                intent.putStringArrayListExtra(ShareRangeSelectActivity.LITMITED_DEPS,moment.limitedDepartmentList);
-                intent.putExtra(ShareRangeSelectActivity.SHOWN_ONLY,true);
-                startActivity(intent);
-            }
-        };
-        tvMomentShareRange.setOnClickListener(clickListener);
-        ivMomentShareRange.setOnClickListener(clickListener);
+//        }
+        
+//        View.OnClickListener clickListener=new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MomentDetailActivity.this,ShareRangeSelectActivity.class);
+//                intent.putStringArrayListExtra(ShareRangeSelectActivity.LITMITED_DEPS,moment.limitedDepartmentList);
+//                intent.putExtra(ShareRangeSelectActivity.SHOWN_ONLY,true);
+//                startActivity(intent);
+//            }
+//        };
+        
+//        tvMomentShareRange.setOnClickListener(clickListener);
+//        ivMomentShareRange.setOnClickListener(clickListener);
 
 //        String mMyUid = mPrefUtil.getUid();
 //        if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && !moment.owner.userID.equals(mMyUid)) {

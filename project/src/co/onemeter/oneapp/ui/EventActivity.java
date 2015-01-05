@@ -170,7 +170,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 									
 									f = arg0[0];
 									
-									WowTalkWebServerIF.getInstance(EventActivity.this)
+									WebServerIF.getInstance(EventActivity.this)
 									.fGetFileFromServer(
                                             f.thumb_fileid,
                                             WEvent.MEDIA_FILE_REMOTE_DIR,
@@ -322,7 +322,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
             new AsyncTask<Void, Void, Boolean>() {
                 @Override
                 protected Boolean doInBackground(Void... voids) {
-                    return !WowTalkWebServerIF.getInstance(EventActivity.this).getMySchools(false).isEmpty();
+                    return !WebServerIF.getInstance(EventActivity.this).getMySchools(false).isEmpty();
                 }
 
                 @Override
@@ -374,7 +374,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 
 			@Override
 			public void run() {
-				int errno = WowEventWebServerIF.getInstance(EventActivity.this).fGetLatestEvents(get_finished_event_only,max_startdate);
+				int errno = EventWebServerIF.getInstance(EventActivity.this).fGetLatestEvents(get_finished_event_only,max_startdate);
 				if (errno == ErrorCode.OK) {
                     refresh();
 				}
@@ -388,7 +388,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 
             @Override
             public void run() {
-                int errno = WowEventWebServerIF.getInstance(EventActivity.this).fGetPreviousEvents(timestamp);
+                int errno = EventWebServerIF.getInstance(EventActivity.this).fGetPreviousEvents(timestamp);
                 if (errno == ErrorCode.OK) {
                     refresh();
                 }
@@ -673,7 +673,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 
 			@Override
 			public void run() {
-				int errno = WowEventWebServerIF.getInstance(EventActivity.this).fGetLatestEvents(get_finished_event_only,max_startdate);
+				int errno = EventWebServerIF.getInstance(EventActivity.this).fGetLatestEvents(get_finished_event_only,max_startdate);
 				if (errno == ErrorCode.OK) {
 					runOnUiThread(new Runnable(){
 						@Override

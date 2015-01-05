@@ -145,7 +145,7 @@ public class GroupMemberManageActivity extends Activity implements View.OnClickL
 
                 @Override
                 protected Integer doInBackground(Void... params) {
-                    int resultCode = WowTalkWebServerIF.getInstance(mContext).fGroupChat_SetMemberLevel(groupID, userID, targetLevel);
+                    int resultCode = WebServerIF.getInstance(mContext).fGroupChat_SetMemberLevel(groupID, userID, targetLevel);
                     return resultCode;
                 }
 

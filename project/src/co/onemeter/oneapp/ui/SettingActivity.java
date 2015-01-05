@@ -38,7 +38,7 @@ public class SettingActivity extends Activity implements OnClickListener {
 	private ImageView imgPhoto;
 	private MessageBox mMsgBox;
 
-    private WowTalkWebServerIF mWeb;
+    private WebServerIF mWeb;
     private PrefUtil mPrefUtil;
 
     private AppUpgradeTask mUpgradeTask;
@@ -320,7 +320,7 @@ public class SettingActivity extends Activity implements OnClickListener {
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
         mMsgBox = new MessageBox(this);
-        mWeb = WowTalkWebServerIF.getInstance(SettingActivity.this);
+        mWeb = WebServerIF.getInstance(SettingActivity.this);
         mPrefUtil = PrefUtil.getInstance(this);
         initView();
     }

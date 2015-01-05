@@ -17,7 +17,7 @@ import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
 
 public class RegisterActivity extends Activity implements OnClickListener{
@@ -105,7 +105,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 
 				@Override
 				public void run() {
-                    int result = WowTalkWebServerIF.getInstance(RegisterActivity.this)
+                    int result = WebServerIF.getInstance(RegisterActivity.this)
                             .fRegister(strUserName, strPassword, userType, buddy);
 					Log.i("register, the result_code is " + result);
 

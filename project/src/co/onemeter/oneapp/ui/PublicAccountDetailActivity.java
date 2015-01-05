@@ -16,7 +16,7 @@ import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.ImageViewActivity;
 import org.wowtalk.ui.MessageBox;
@@ -117,7 +117,7 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(PublicAccountDetailActivity.this)
+                return WebServerIF.getInstance(PublicAccountDetailActivity.this)
                         .fOperateBuddy(buddy);
             }
 
@@ -186,7 +186,7 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(PublicAccountDetailActivity.this)
+                return WebServerIF.getInstance(PublicAccountDetailActivity.this)
                         .fRemoveBuddy(buddy.userID);
             }
 
@@ -205,7 +205,7 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(PublicAccountDetailActivity.this)
+                return WebServerIF.getInstance(PublicAccountDetailActivity.this)
                         .fAddBuddy(buddy.userID);
             }
 

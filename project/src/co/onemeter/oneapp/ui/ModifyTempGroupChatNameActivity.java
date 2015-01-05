@@ -12,7 +12,7 @@ import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 
@@ -44,7 +44,7 @@ public class ModifyTempGroupChatNameActivity extends Activity {
 
             @Override
             protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(ModifyTempGroupChatNameActivity.this)
+                return WebServerIF.getInstance(ModifyTempGroupChatNameActivity.this)
                         .fGroupChat_UpdateInfo(chatRoom);
             }
             @Override

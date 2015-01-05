@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import org.wowtalk.Log;
 import org.wowtalk.api.NetworkIFDelegate;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 
 /**
  * 批量上传文件，得到的ID保存在 fileIds 中。
@@ -25,7 +25,7 @@ class PostFileTask extends AsyncTask<String, Integer, Boolean> {
 
 		for (int i = 0; i < pathes.length; ++i) {
 			final int fileIdx = i;
-			WowTalkWebServerIF.getInstance(context).fPostFileToServer(
+			WebServerIF.getInstance(context).fPostFileToServer(
 					pathes[i],
 					new NetworkIFDelegate() {
 

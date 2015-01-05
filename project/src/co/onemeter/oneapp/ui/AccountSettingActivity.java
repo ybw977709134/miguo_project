@@ -16,7 +16,7 @@ import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkVoipIF;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 
@@ -40,7 +40,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 	private String[] binds = new String[2];
 	private static AccountSettingActivity instance;
 
-    WowTalkWebServerIF mWeb;
+    WebServerIF mWeb;
     private PrefUtil mPrefUtil;
 	private MessageBox mMsgBox;
 
@@ -99,7 +99,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				return WowTalkWebServerIF.getInstance(AccountSettingActivity.this).fGetBindedStuff(binds);
+				return WebServerIF.getInstance(AccountSettingActivity.this).fGetBindedStuff(binds);
 			}
 
 			@Override
@@ -231,7 +231,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
         mMsgBox = new MessageBox(this);
-        mWeb = WowTalkWebServerIF.getInstance(this);
+        mWeb = WebServerIF.getInstance(this);
         mPrefUtil = PrefUtil.getInstance(this);
 		instance = this;
 		initView();

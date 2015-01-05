@@ -210,7 +210,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
     private NewFriendAdapter friendAdapter;
     private ArrayList<PendingRequest> pendings;
 
-    private WowTalkWebServerIF mWeb;
+    private WebServerIF mWeb;
     private Database dbHelper;
     private PrefUtil mPrefUtil;
 
@@ -233,7 +233,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
 //        }
         btnTitleBack = (ImageButton) findViewById(R.id.title_back);
         mListView = (ListView)findViewById(R.id.list);
-        mWeb = WowTalkWebServerIF.getInstance(this);
+        mWeb = WebServerIF.getInstance(this);
         mMsgBox = new MessageBox(this);
 
 //        mListView.setAdapter(mAdapter);
@@ -512,7 +512,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(NewFriendsActivity.this)
+                return WebServerIF.getInstance(NewFriendsActivity.this)
                         .fGetPendingRequests();
             }
 

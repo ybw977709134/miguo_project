@@ -175,7 +175,7 @@ public class NewReviewsActivity extends ListActivity implements View.OnClickList
                 @Override
                 protected Void doInBackground(Moment... moments) {
 //                MomentActivity.requestCheckNewReviews();
-                    WowMomentWebServerIF.getInstance(NewReviewsActivity.this).fSetReviewRead(reviewId);
+                    MomentWebServerIF.getInstance(NewReviewsActivity.this).fSetReviewRead(reviewId);
                     return null;
                 }
 
@@ -195,7 +195,7 @@ public class NewReviewsActivity extends ListActivity implements View.OnClickList
                 @Override
                 protected Void doInBackground(Moment... moments) {
 //                MomentActivity.requestCheckNewReviews();
-                    WowMomentWebServerIF.getInstance(NewReviewsActivity.this).fSetReviewRead(moments[0]);
+                    MomentWebServerIF.getInstance(NewReviewsActivity.this).fSetReviewRead(moments[0]);
                     return null;
                 }
 

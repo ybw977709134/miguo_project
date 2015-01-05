@@ -87,7 +87,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
 
     @Override
     protected int loadRemoteMoments(long maxTimestamp) {
-        WowMomentWebServerIF web = WowMomentWebServerIF.getInstance(getActivity());
+        MomentWebServerIF web = MomentWebServerIF.getInstance(getActivity());
         return web.fGetMomentsOfBuddy(uid(), maxTimestamp, PAGE_SIZE, true);
     }
     
@@ -243,7 +243,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
     }
 
     private void removeCoverImage() {
-        WowTalkWebServerIF mWeb = WowTalkWebServerIF.getInstance(getActivity());
+        WebServerIF mWeb = WebServerIF.getInstance(getActivity());
         if (ErrorCode.OK == mWeb.removeAlbumCover()) {
             mAlbumCover = new AlbumCover();
             mAlbumCover.timestamp = -1;
@@ -457,7 +457,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
             @Override
             protected Integer doInBackground(Void... params) {
                 try {
-                    WowTalkWebServerIF mWeb = WowTalkWebServerIF.getInstance(getActivity());
+                    WebServerIF mWeb = WebServerIF.getInstance(getActivity());
                     return mWeb.fGetAlbumCover(uid(), ac);
                 } catch (Exception e) {
                     e.printStackTrace();

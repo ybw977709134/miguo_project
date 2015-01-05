@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
-import android.media.Image;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
@@ -36,8 +35,6 @@ import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
 import org.wowtalk.ui.msg.InputBoardManager;
-
-import com.baidu.cyberplayer.utils.bu;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -1298,10 +1295,10 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                         public void run() {
                             int errno=ErrorCode.UNKNOWN;
                             if(TimelineActivity.TAG_SURVEY_IDX == tagType) {
-                                errno = WowMomentWebServerIF.getInstance(CreateNormalMomentWithTagActivity.this).fAddMomentForSurvey(moment);
+                                errno = MomentWebServerIF.getInstance(CreateNormalMomentWithTagActivity.this).fAddMomentForSurvey(moment);
                             } else {
                             	//android.util.Log.i("-->>>", moment.place);
-                                errno = WowMomentWebServerIF.getInstance(CreateNormalMomentWithTagActivity.this).fAddMoment(moment);
+                                errno = MomentWebServerIF.getInstance(CreateNormalMomentWithTagActivity.this).fAddMoment(moment);
                             }
                             if (errno == ErrorCode.OK) {
                                 Intent intent = new Intent(CreateNormalMomentWithTagActivity.this, DownloadingAndUploadingService.class);

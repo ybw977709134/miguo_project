@@ -197,7 +197,7 @@ public class PrefUtil {
     /**
      * 判断是否升级了，用于上报客户端信息（如果升级了，则将新的app_version_code写入SP）
      * @return true, 升级了； false, 未升级
-     * @see WowTalkWebServerIF#fReportInfoWithPushToken()
+     * @see WebServerIF#fReportInfoWithPushToken()
      */
     public boolean isAppUpgraded() {
         // 当前版本app_version_code

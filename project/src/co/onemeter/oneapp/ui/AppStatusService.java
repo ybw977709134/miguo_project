@@ -10,9 +10,9 @@ import android.os.IBinder;
 import co.onemeter.oneapp.Constants;
 import org.wowtalk.Log;
 import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowMomentWebServerIF;
+import org.wowtalk.api.MomentWebServerIF;
 import org.wowtalk.api.WowTalkVoipIF;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.GlobalValue;
 
 import java.util.List;
@@ -32,8 +32,8 @@ public class AppStatusService extends Service {
     private ActivityManager mActivityManager;
     private String mPackageName;
     private PrefUtil mPrefUtil;
-    private WowMomentWebServerIF mMomentIF;
-    private WowTalkWebServerIF mWebIF;
+    private MomentWebServerIF mMomentIF;
+    private WebServerIF mWebIF;
 
     private boolean mIsStopThread;
     private boolean mIsPreviousOnForeground;
@@ -165,7 +165,7 @@ public class AppStatusService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                WowTalkWebServerIF.getInstance(context).getOfflineMessages(timeStamp);
+                WebServerIF.getInstance(context).getOfflineMessages(timeStamp);
                 sIsGettingOfflineMsg = false;
             }
         }).start();
@@ -193,8 +193,8 @@ public class AppStatusService extends Service {
     public IBinder onBind(Intent intent) {
         Log.i("AppStatusService#onBind");
         mPrefUtil = PrefUtil.getInstance(this);
-        mWebIF = WowTalkWebServerIF.getInstance(this);
-        mMomentIF = WowMomentWebServerIF.getInstance(this);
+        mWebIF = WebServerIF.getInstance(this);
+        mMomentIF = MomentWebServerIF.getInstance(this);
         mActivityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         mPackageName = this.getPackageName();
         return mBinder;

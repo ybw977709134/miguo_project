@@ -17,7 +17,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.bitmapfun.util.AsyncTask;
@@ -174,7 +174,7 @@ public class PublicSearchActivity extends Activity {
         	
             @Override
             protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(PublicSearchActivity.this)
+                return WebServerIF.getInstance(PublicSearchActivity.this)
                         .fSearchBuddy(searchContent, Buddy.ACCOUNT_TYPE_PUBLIC, publicBuddies);
             }
 

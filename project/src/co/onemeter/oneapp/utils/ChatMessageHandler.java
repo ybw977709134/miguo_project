@@ -11,7 +11,6 @@ import co.onemeter.oneapp.BuildConfig;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.ui.Log;
-import co.onemeter.oneapp.ui.LoginActivity;
 import co.onemeter.oneapp.ui.StartActivity;
 
 import java.util.ArrayList;
@@ -51,13 +50,13 @@ public class ChatMessageHandler {
 
     private Context context;
     private Database mDb;
-    private WowTalkWebServerIF mWeb;
+    private WebServerIF mWeb;
     private PrefUtil mPrefUtil;
     private boolean mSaveDb = false;
 
     public ChatMessageHandler(Context context) {
         this.context = context;
-        mWeb = WowTalkWebServerIF.getInstance(context);
+        mWeb = WebServerIF.getInstance(context);
         mDb = Database.open(context);
         mPrefUtil = PrefUtil.getInstance(context);
     }
@@ -82,7 +81,7 @@ public class ChatMessageHandler {
         if (group_id == null || buddy_id == null || buddy_nickname == null)
             return false;
 
-        WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(context);
+        WebServerIF web = WebServerIF.getInstance(context);
 
         String myUid = PrefUtil.getInstance(context).getUid();
 
@@ -355,7 +354,7 @@ public class ChatMessageHandler {
             String uid = msg.getEntityIdAsBuddyProfileUpdated();
             if(uid != null) {
                 if(mWeb == null)
-                    mWeb = WowTalkWebServerIF.getInstance(context);
+                    mWeb = WebServerIF.getInstance(context);
                 new AsyncTask<String, Integer, Void>() {
                     @Override
                     protected Void doInBackground(String... params) {
@@ -371,7 +370,7 @@ public class ChatMessageHandler {
             String gid = msg.getEntityIdAsGroupProfileUpdated();
             if(gid != null) {
                 if(mWeb == null)
-                    mWeb = WowTalkWebServerIF.getInstance(context);
+                    mWeb = WebServerIF.getInstance(context);
                 new AsyncTask<String, Integer, Void>() {
                     @Override
                     protected Void doInBackground(String... params) {

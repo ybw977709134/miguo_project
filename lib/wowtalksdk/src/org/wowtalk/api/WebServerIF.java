@@ -20,9 +20,9 @@ import java.util.*;
 
 /**
  * <p>Interface for communicating with WowTalk Web Server.</p>
- * <p>See {@link WowEventWebServerIF}, {@link WowMomentWebServerIF} for more functions.</p>
+ * <p>See {@link EventWebServerIF}, {@link MomentWebServerIF} for more functions.</p>
  */
-public class WowTalkWebServerIF {
+public class WebServerIF {
 
     /** You can download a pseudo photo. */
 	public static String PSEUDO_FILEID_PHOTO_LANDSCAPE1 = "3e799dac2f8f6ae7006e73dbed4eb547";
@@ -35,19 +35,19 @@ public class WowTalkWebServerIF {
     /** You can download a pseudo photo. */
 	public static String PSEUDO_FILEID_AUDIO = "cac4d5c8947eeaaada97993bf1e697ca";
 
-    private static WowTalkWebServerIF instance;
+    private static WebServerIF instance;
     private static PrefUtil sPrefUtil;
 //    private static SharedPreferences mPref;
     private Context mContext;
 
-	public static final WowTalkWebServerIF getInstance(Context context) {
+	public static final WebServerIF getInstance(Context context) {
 		if (instance == null) {
-			instance = new WowTalkWebServerIF(context);
+			instance = new WebServerIF(context);
 		}
 		return instance;
 	}
 
-    private WowTalkWebServerIF(Context context) {
+    private WebServerIF(Context context) {
         mContext = context.getApplicationContext();
         sPrefUtil = PrefUtil.getInstance(context);
     }

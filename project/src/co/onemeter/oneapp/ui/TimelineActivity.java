@@ -300,7 +300,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                WowMomentWebServerIF mMomentWeb = WowMomentWebServerIF.getInstance(activity);
+                MomentWebServerIF mMomentWeb = MomentWebServerIF.getInstance(activity);
                 return mMomentWeb.fDeleteMomentReview(momentId,replyTo);
             }
 

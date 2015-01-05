@@ -3,7 +3,7 @@ package co.onemeter.oneapp.ui;
 import android.graphics.PixelFormat;
 
 import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 
@@ -35,7 +35,7 @@ public class PrivacySettingActivity extends Activity implements OnClickListener{
     private boolean mIsAuthNeeded = true;
     private boolean mIsNearbyCanFindMe = true;
 
-    private WowTalkWebServerIF mWebIF;
+    private WebServerIF mWebIF;
     private MessageBox mMsgBox;
     private PrefUtil mPrefUtil;
 
@@ -47,7 +47,7 @@ public class PrivacySettingActivity extends Activity implements OnClickListener{
         getWindow().setFormat(PixelFormat.RGBA_8888);
         
         mMsgBox = new MessageBox(this);
-        mWebIF = WowTalkWebServerIF.getInstance(this);
+        mWebIF = WebServerIF.getInstance(this);
         mPrefUtil = PrefUtil.getInstance(this);
 
         initView();

@@ -39,7 +39,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
     private MyClassAdapter adapter;
     private ListView lvMyClass;
     private MessageBox msgBox;
-    private WowTalkWebServerIF talkwebserver;
+    private WebServerIF talkwebserver;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
         
         lvMyClass.setOnItemClickListener(this);
         
-        talkwebserver =  WowTalkWebServerIF.getInstance(MyClassesActivity.this);
+        talkwebserver =  WebServerIF.getInstance(MyClassesActivity.this);
         //这里用两层异步任务，先取到学校的信息，在取班级信息
         new AsyncTask<Void, Void, Void>(){
 
@@ -135,7 +135,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
             @Override
             protected Void doInBackground(Void... voids) {
                 final String classId = "0b2f933f-a4d7-44de-a711-569abb04846a";
-                WowLessonWebServerIF lessonWeb = WowLessonWebServerIF.getInstance(MyClassesActivity.this);
+                LessonWebServerIF lessonWeb = LessonWebServerIF.getInstance(MyClassesActivity.this);
                 Database db = new Database(MyClassesActivity.this);
                 String myUid = PrefUtil.getInstance(MyClassesActivity.this).getUid();
 
@@ -235,7 +235,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
             @Override
             protected Void doInBackground(Void... voids) {
                 final String classId = "0b2f933f-a4d7-44de-a711-569abb04846a";
-                WowLessonWebServerIF lessonWeb = WowLessonWebServerIF.getInstance(MyClassesActivity.this);
+                LessonWebServerIF lessonWeb = LessonWebServerIF.getInstance(MyClassesActivity.this);
                 Database db = new Database(MyClassesActivity.this);
                 String myUid = PrefUtil.getInstance(MyClassesActivity.this).getUid();
 

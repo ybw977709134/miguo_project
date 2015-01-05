@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.LocationHelper;
@@ -36,7 +36,7 @@ public class EmergencyContactActivity extends Activity implements View.OnClickLi
     private Location myLocation;
     private String   myAddress;
 
-    private WowTalkWebServerIF mWeb;
+    private WebServerIF mWeb;
 
     private ImageView ivOptionSelectIndSafe;
     private ImageView ivOptionSelectIndNeedHelp;
@@ -53,7 +53,7 @@ public class EmergencyContactActivity extends Activity implements View.OnClickLi
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
-        mWeb = WowTalkWebServerIF.getInstance(this);
+        mWeb = WebServerIF.getInstance(this);
 
         mMsgBox = new MessageBox(this);
 

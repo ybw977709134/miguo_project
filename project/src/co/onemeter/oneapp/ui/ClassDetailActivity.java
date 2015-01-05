@@ -14,8 +14,8 @@ import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.GroupMember;
 import org.wowtalk.api.Lesson;
 import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowLessonWebServerIF;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.LessonWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.HorizontalListView;
 import org.wowtalk.ui.MessageBox;
@@ -25,7 +25,6 @@ import com.androidquery.AQuery;
 
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.R.color;
 import co.onemeter.oneapp.contacts.model.Person;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,7 +40,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 
 /**
  * 课堂详情页面。
@@ -49,8 +47,8 @@ import android.graphics.Color;
  */
 public class ClassDetailActivity extends Activity implements OnClickListener, OnItemClickListener {
 	private AQuery query;
-	private WowLessonWebServerIF lesWebSer;
-	private WowTalkWebServerIF mWTWebSer;
+	private LessonWebServerIF lesWebSer;
+	private WebServerIF mWTWebSer;
 	private Database mdb;
 	private MessageBox msgBox;
 	
@@ -88,8 +86,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		tvPlace = (TextView) findViewById(R.id.class_place);
 		lvTeachers = (HorizontalListView) findViewById(R.id.hor_lv_teachers);
 		
-		lesWebSer = WowLessonWebServerIF.getInstance(this);
-		mWTWebSer = WowTalkWebServerIF.getInstance(this);
+		lesWebSer = LessonWebServerIF.getInstance(this);
+		mWTWebSer = WebServerIF.getInstance(this);
 		mdb = Database.getInstance(this);
 		
 		msgBox = new MessageBox(this);

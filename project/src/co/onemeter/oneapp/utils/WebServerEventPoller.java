@@ -48,7 +48,7 @@ public class WebServerEventPoller {
     private Runnable newFriendReqTask = new Runnable() {
         @Override
         public void run() {
-            WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(context);
+            WebServerIF web = WebServerIF.getInstance(context);
             web.fGetPendingRequests();
         }
     };
@@ -56,7 +56,7 @@ public class WebServerEventPoller {
     private Runnable newReviewsTask = new Runnable() {
             @Override
             public void run() {
-                WowMomentWebServerIF web = WowMomentWebServerIF.getInstance(context);
+                MomentWebServerIF web = MomentWebServerIF.getInstance(context);
                 LinkedList<Review> reviews = new LinkedList<Review>();
                 int errno = web.fGetReviewsOnMe(reviews);
 

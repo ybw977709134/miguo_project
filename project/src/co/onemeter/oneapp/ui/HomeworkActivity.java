@@ -1,14 +1,12 @@
 package co.onemeter.oneapp.ui;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.Lesson;
 import org.wowtalk.api.LessonHomework;
-import org.wowtalk.api.WowLessonWebServerIF;
+import org.wowtalk.api.LessonWebServerIF;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,7 +15,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -64,7 +61,7 @@ public class HomeworkActivity extends Activity implements View.OnClickListener {
 			@Override
 			protected Integer doInBackground(Void... params) {
 				try {
-					return WowLessonWebServerIF.getInstance(
+					return LessonWebServerIF.getInstance(
 							HomeworkActivity.this).getLessonHomework(lessonId);
 				} catch (Exception e) {
 					return ErrorCode.BAD_RESPONSE;
@@ -135,7 +132,7 @@ public class HomeworkActivity extends Activity implements View.OnClickListener {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				return WowLessonWebServerIF.getInstance(HomeworkActivity.this)
+				return LessonWebServerIF.getInstance(HomeworkActivity.this)
 						.addOrModifyLessonHomework(homework);
 			}
 

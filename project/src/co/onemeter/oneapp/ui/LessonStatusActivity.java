@@ -6,13 +6,12 @@ import java.util.List;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.LessonPerformance;
-import org.wowtalk.api.WowLessonWebServerIF;
+import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.ui.MessageBox;
 
 
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.utils.Utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -45,7 +44,7 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 	private String[] preformstrs;
 	
 	private MessageBox mMsgBox;
-	private WowLessonWebServerIF lessonServer;
+	private LessonWebServerIF lessonServer;
 	private Database mDBHelper;
 	
 	private ListView lvPerformances;
@@ -81,7 +80,7 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 		stuPersFromNet = new ArrayList<LessonPerformance>();
 		
 		mMsgBox = new MessageBox(this);
-		lessonServer = WowLessonWebServerIF.getInstance(LessonStatusActivity.this);
+		lessonServer = LessonWebServerIF.getInstance(LessonStatusActivity.this);
 		mDBHelper = Database.open(this);
 		
 		preformstrs = getResources().getStringArray(R.array.lesson_performance_names);

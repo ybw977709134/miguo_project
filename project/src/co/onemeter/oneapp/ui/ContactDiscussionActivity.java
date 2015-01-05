@@ -155,7 +155,7 @@ public class ContactDiscussionActivity extends Activity implements OnClickListen
 
             @Override
             protected Integer doInBackground(Void... params) {
-                int errno = WowTalkWebServerIF.getInstance(ContactDiscussionActivity.this).fGroupChat_GetMyGroups();
+                int errno = WebServerIF.getInstance(ContactDiscussionActivity.this).fGroupChat_GetMyGroups();
                 return errno;
             }
 

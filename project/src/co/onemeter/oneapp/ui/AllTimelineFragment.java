@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import co.onemeter.oneapp.R;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import org.wowtalk.api.Moment;
-import org.wowtalk.api.WowMomentWebServerIF;
+import org.wowtalk.api.MomentWebServerIF;
 
 import java.util.ArrayList;
 
@@ -44,7 +44,7 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
 
     @Override
     protected int loadRemoteMoments(long maxTimestamp) {
-        WowMomentWebServerIF web = WowMomentWebServerIF.getInstance(getActivity());
+        MomentWebServerIF web = MomentWebServerIF.getInstance(getActivity());
         return web.fGetMomentsOfAll(maxTimestamp, PAGE_SIZE, true);
     }
     

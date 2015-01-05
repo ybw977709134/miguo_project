@@ -9,10 +9,8 @@ import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GroupMember;
 import org.wowtalk.api.LessonParentFeedback;
 import org.wowtalk.api.Moment;
-import org.wowtalk.api.WowEventWebServerIF;
-import org.wowtalk.api.WowLessonWebServerIF;
-import org.wowtalk.api.WowMomentWebServerIF;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.LessonWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
 
 import co.onemeter.oneapp.Constants;
@@ -22,7 +20,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -105,7 +102,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 
 				@Override
 				protected Integer doInBackground(Void... params) {
-					return (Integer) WowTalkWebServerIF.getInstance(TeacherCheckActivity.this).fGroupChat_GetMembers(classId).get("code");
+					return (Integer) WebServerIF.getInstance(TeacherCheckActivity.this).fGroupChat_GetMembers(classId).get("code");
 				}
 				
 				protected void onPostExecute(Integer result) {
@@ -153,7 +150,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 				public void run() {
 					int errno;
 					try {
-						errno = WowLessonWebServerIF.getInstance(TeacherCheckActivity.this).getLessonParentFeedback(lessonId, stus.get(pos).userID);
+						errno = LessonWebServerIF.getInstance(TeacherCheckActivity.this).getLessonParentFeedback(lessonId, stus.get(pos).userID);
 						if(errno == ErrorCode.OK){
 							Database db = new Database(TeacherCheckActivity.this);
 							LessonParentFeedback feedback = db.fetchLessonParentFeedback(lessonId, stus.get(pos).userID);

@@ -14,29 +14,28 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.Locale;
 
 /**
  * 活动模块相关功能。
  */
-public class WowEventWebServerIF {
+public class EventWebServerIF {
 
 	private Context mContext;
 
     private PrefUtil mPrefUtil;
 
-	private static WowEventWebServerIF instance;
+	private static EventWebServerIF instance;
 
-    private WowEventWebServerIF(Context context) {
+    private EventWebServerIF(Context context) {
         mContext = context.getApplicationContext();
         mPrefUtil = PrefUtil.getInstance(context);
     }
 
-	public static final WowEventWebServerIF getInstance(Context context) {
+	public static final EventWebServerIF getInstance(Context context) {
 		if (instance == null) {
-			instance = new WowEventWebServerIF(context);
+			instance = new EventWebServerIF(context);
 		}
 		return instance;
 	}

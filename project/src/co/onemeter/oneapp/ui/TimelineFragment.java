@@ -1,7 +1,6 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -218,7 +217,7 @@ public abstract class TimelineFragment extends ListFragment
                 Review r = new Review(); // 添加或删除的赞
                 @Override
                 protected Integer doInBackground(String... params) {
-                    WowMomentWebServerIF web = WowMomentWebServerIF.getInstance(getActivity());
+                    MomentWebServerIF web = MomentWebServerIF.getInstance(getActivity());
                     if (!moment.likedByMe) { // 点赞
                         return web.fReviewMoment(params[0], Review.TYPE_LIKE, null, null, r);
                     } else { // 撤销赞

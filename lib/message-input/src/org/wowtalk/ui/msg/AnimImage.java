@@ -10,7 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
 import org.wowtalk.api.NetworkIFDelegate;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -158,7 +158,7 @@ public class AnimImage extends ImageView implements OnClickListener {
 
 				@Override
 				protected Void doInBackground(Void... params) {
-				    WowTalkWebServerIF.getInstance(mContext).fGetFileFromShop(fremoteFilePath,
+				    WebServerIF.getInstance(mContext).fGetFileFromShop(fremoteFilePath,
 				            new NetworkIFDelegate() {
 
                         @Override
@@ -333,7 +333,7 @@ public class AnimImage extends ImageView implements OnClickListener {
 
 				@Override
 				protected Void doInBackground(Void... arg0) {
-					WowTalkWebServerIF.getInstance(mContext).fGetFileFromShop(remoteFilePath,
+					WebServerIF.getInstance(mContext).fGetFileFromShop(remoteFilePath,
 							new NetworkIFDelegate() {
 
 						@Override

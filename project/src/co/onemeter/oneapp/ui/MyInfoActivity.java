@@ -20,7 +20,7 @@ import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.*;
 import org.wowtalk.ui.msg.Utils;
 import org.wowtalk.ui.msg.InputBoardManager;
@@ -74,7 +74,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
     public final static int PHOTO_SEND_HEIGHT = 600;
 	
 	private MediaInputHelper mMediaInputHelper = null;
-	WowTalkWebServerIF wif = null;
+	WebServerIF wif = null;
     private MessageBox mMsgBox;
     private PrefUtil mPrefUtil;
 
@@ -334,7 +334,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
         mMsgBox = new MessageBox(this);
-		wif = WowTalkWebServerIF.getInstance(MyInfoActivity.this);
+		wif = WebServerIF.getInstance(MyInfoActivity.this);
         bottomBoard = new BottomButtonBoard(this, getWindow().getDecorView());
         mPrefUtil = PrefUtil.getInstance(MyInfoActivity.this);
 		

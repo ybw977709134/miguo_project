@@ -1,8 +1,6 @@
 package co.onemeter.oneapp.ui;
 
-import android.R.integer;
 import android.app.Activity;
-import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -10,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -22,12 +19,10 @@ import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.msg.InputBoardManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class CreateEventActivity extends Activity implements OnClickListener {
@@ -156,7 +151,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
             protected Integer doInBackground(WEvent... wEvents) {
                 context = CreateEventActivity.this;
                 final WEvent e = wEvents[0];
-                final WowEventWebServerIF eventweb = WowEventWebServerIF.getInstance(context);
+                final EventWebServerIF eventweb = EventWebServerIF.getInstance(context);
 
                 // create event record
                 int errno = eventweb.fAdd(e);

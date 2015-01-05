@@ -13,9 +13,8 @@ import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.IDBTableChangeListener;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkVoipIF;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.BottomButtonBoard;
-import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
@@ -47,7 +46,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
     private static final int HANDLER_GET_ACCOUNT_UNREAD_COUNT = 1;
 
     private MessageBox mMsgBox;
-    private WowTalkWebServerIF mWeb;
+    private WebServerIF mWeb;
     private PrefUtil mPrefUtil;
 
     private ImageButton mBackBtn;
@@ -133,7 +132,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
-        mWeb = WowTalkWebServerIF.getInstance(this);
+        mWeb = WebServerIF.getInstance(this);
         mMsgBox = new MessageBox(this);
         mPrefUtil = PrefUtil.getInstance(this);
         mBottomMenu = new BottomButtonBoard(ManageAccountsActivity.this, getWindow().getDecorView());
@@ -453,7 +452,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
                 msg1.obj = String.format(context.getString(R.string.manage_account_switching_login),
                         newAccount.wowtalkId);
                 handler.sendMessage(msg1);
-                WowTalkWebServerIF webIF = WowTalkWebServerIF
+                WebServerIF webIF = WebServerIF
                         .getInstance(context);
                 PrefUtil prefUtil = PrefUtil.getInstance(context);
                 // 1. close DB
@@ -476,7 +475,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
                     return;
                 }
                 // profile，更新头像
-                int getProfileCode = WowTalkWebServerIF.getInstance(context).fGetMyProfile();
+                int getProfileCode = WebServerIF.getInstance(context).fGetMyProfile();
                 if (getProfileCode != ErrorCode.OK) {
                     prefUtil.fillNewSP(oldAccount.uid);
                     Message msg3 = handler.obtainMessage();
@@ -490,7 +489,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
                 // album_cover
                 // 获取新帐户的动态封面(网络请求操作)
                 AlbumCover ac = new AlbumCover();
-                if (ErrorCode.OK == WowTalkWebServerIF.getInstance(context)
+                if (ErrorCode.OK == WebServerIF.getInstance(context)
                         .fGetAlbumCover(prefUtil.getUid(), ac)) {
                     newAccount.albumCoverFileId = null == ac.fileId ? "" : ac.fileId;
                     newAccount.albumCoverExt = null == ac.ext ? "" : ac.ext;
@@ -546,7 +545,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
      * 3.start wowtalkservice, checkAppUpdate, getSecurityLevel, report info , and so on.
      */
     public static void setupWowtalkService(Context context) {
-        WowTalkWebServerIF webIF = WowTalkWebServerIF.getInstance(context);
+        WebServerIF webIF = WebServerIF.getInstance(context);
         // 下面调用的所有的网络操作，除第一个(后续网络操作的前提)和最后一个（后面没有操作了，且此处调用的地方已经是子线程）外，
         // 其他的都重启子线程完成，因为它们之间没有先后顺序
         webIF.getServerInfo();

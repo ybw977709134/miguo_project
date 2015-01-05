@@ -13,20 +13,18 @@ import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.Lesson;
-import org.wowtalk.api.WowLessonWebServerIF;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.LessonWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
 
 import com.androidquery.AQuery;
 
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.R.color;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,7 +42,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class LessonInfoEditActivity extends Activity implements OnClickListener {
 
@@ -152,7 +149,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			
 			@Override
 			public void run() {
-				WowLessonWebServerIF webserver = WowLessonWebServerIF.getInstance(LessonInfoEditActivity.this);
+				LessonWebServerIF webserver = LessonWebServerIF.getInstance(LessonInfoEditActivity.this);
 				for(String lesson_id:delLessons){
 					webserver.deleteLesson(lesson_id);
 				}
@@ -261,7 +258,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			
 			@Override
 			protected Integer doInBackground(Void... params) {
-				WowLessonWebServerIF lesWeb = WowLessonWebServerIF.getInstance(LessonInfoEditActivity.this);
+				LessonWebServerIF lesWeb = LessonWebServerIF.getInstance(LessonInfoEditActivity.this);
 				int errno = 0;
 				for(Lesson lesson: lessons){
 					errno = lesWeb.addOrModifyLesson(lesson);
@@ -296,7 +293,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			@Override
 			protected Integer doInBackground(Void... params) {
 				mDBHelper.updateGroupChatRoom(classroom);
-				return WowTalkWebServerIF.getInstance(LessonInfoEditActivity.this).fGroupChat_UpdateInfo(classroom);
+				return WebServerIF.getInstance(LessonInfoEditActivity.this).fGroupChat_UpdateInfo(classroom);
 			}
 
 			@Override

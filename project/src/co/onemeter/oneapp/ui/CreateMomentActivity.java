@@ -436,7 +436,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            int errno = WowMomentWebServerIF.getInstance(CreateMomentActivity.this).fAddMoment(moment);
+                            int errno = MomentWebServerIF.getInstance(CreateMomentActivity.this).fAddMoment(moment);
                             if (errno == ErrorCode.OK) {
                                 Intent intent = new Intent(CreateMomentActivity.this, DownloadingAndUploadingService.class);
                                 intent.putExtra(DownloadingAndUploadingService.EXTRA_ACTION,

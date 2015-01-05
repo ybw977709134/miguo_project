@@ -9,7 +9,7 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import com.androidquery.AQuery;
 import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
 
 /**
@@ -55,7 +55,7 @@ public class AddClassActivity extends Activity implements View.OnClickListener {
         new AsyncTask<String, Void, Integer>() {
             @Override
             protected Integer doInBackground(String... strings) {
-                int errno = WowTalkWebServerIF.getInstance(AddClassActivity.this)
+                int errno = WebServerIF.getInstance(AddClassActivity.this)
                         .fBindInvitationCode(strings[0]);
                 return errno;
             }

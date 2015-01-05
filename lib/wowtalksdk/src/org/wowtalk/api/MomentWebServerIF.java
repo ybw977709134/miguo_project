@@ -14,22 +14,22 @@ import java.util.Locale;
 /**
  * 好友动态功能。
  */
-public class WowMomentWebServerIF {
+public class MomentWebServerIF {
 
 	private Context mContext;
 
     private PrefUtil mPrefUtil;
 	
-	private static WowMomentWebServerIF instance;
+	private static MomentWebServerIF instance;
 
-	private WowMomentWebServerIF(Context context) {
+	private MomentWebServerIF(Context context) {
 		mContext = context.getApplicationContext();
         mPrefUtil = PrefUtil.getInstance(context);
 	}
 	
-	public static WowMomentWebServerIF getInstance(Context context) {
+	public static MomentWebServerIF getInstance(Context context) {
 		if(instance == null) {
-			instance = new WowMomentWebServerIF(context);
+			instance = new MomentWebServerIF(context);
 		}
 		return instance;
 	}

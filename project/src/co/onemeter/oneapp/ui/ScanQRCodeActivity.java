@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.Toast;
 import co.onemeter.oneapp.utils.ThemeHelper;
 
 import com.zxing.activity.CaptureActivity;
@@ -30,7 +29,7 @@ import com.zxing.decoding.CaptureActivityHandler;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.BmpUtils;
 
@@ -91,7 +90,7 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
     private boolean isFlashOn=false;
 
     private MessageBox mMsgbBox;
-    private WowTalkWebServerIF mWebif = null;
+    private WebServerIF mWebif = null;
 //    private Camera camera;
 
     private final static int INTENT_ID_PICK_PHOTO=3;
@@ -107,7 +106,7 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
         mMsgbBox = new MessageBox(this);
-        mWebif = WowTalkWebServerIF.getInstance(this);
+        mWebif = WebServerIF.getInstance(this);
 
         initView();
         

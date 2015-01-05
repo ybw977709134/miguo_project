@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -55,7 +54,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
             @Override
             protected Void doInBackground(Void... arg0) {
-                WowTalkWebServerIF.getInstance(EventDetailActivity.this)
+                WebServerIF.getInstance(EventDetailActivity.this)
                         .fGetFileFromServer(thumbnail ? aFile.thumb_fileid : aFile.fileid,
                                 WEvent.MEDIA_FILE_REMOTE_DIR, new NetworkIFDelegate(){
                                     @Override
@@ -300,7 +299,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
     		int errno = ErrorCode.OK;
 			@Override
 			protected Integer doInBackground(Void... arg0) {
-				WowEventWebServerIF web = WowEventWebServerIF.getInstance(EventDetailActivity.this);
+				EventWebServerIF web = EventWebServerIF.getInstance(EventDetailActivity.this);
 				errno = web.fGetApplicantsInfo(BuddyList, eventDetail.id);
 				return errno;
 			}
@@ -325,7 +324,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
             @Override
             protected Integer doInBackground(Void... voids) {
-                WowEventWebServerIF web = WowEventWebServerIF.getInstance(EventDetailActivity.this);
+                EventWebServerIF web = EventWebServerIF.getInstance(EventDetailActivity.this);
                 return web.fJoinEvent(eventDetail.id);
                
             }
@@ -350,7 +349,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
             @Override
             protected Integer doInBackground(Void... voids) {
-                WowEventWebServerIF web = WowEventWebServerIF.getInstance(EventDetailActivity.this);
+                EventWebServerIF web = EventWebServerIF.getInstance(EventDetailActivity.this);
                 return web.fJoinEventWithDetail(eventDetail.id, name, phone_number);
             }
 
@@ -378,7 +377,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
             @Override
             protected Integer doInBackground(Void... voids) {
-                 WowEventWebServerIF web = WowEventWebServerIF.getInstance(EventDetailActivity.this);
+                 EventWebServerIF web = EventWebServerIF.getInstance(EventDetailActivity.this);
                 return web.fDeleteEvent(eventDetail.id);                
              }
 
@@ -404,7 +403,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
             @Override
             protected Integer doInBackground(Void... voids) {
-                WowEventWebServerIF web = WowEventWebServerIF.getInstance(EventDetailActivity.this);
+                EventWebServerIF web = EventWebServerIF.getInstance(EventDetailActivity.this);
                 return web.fGetEventInfo(eventDetail.id);
             }
 

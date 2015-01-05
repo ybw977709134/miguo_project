@@ -48,7 +48,7 @@ public class MessageHistoryActivity extends Activity implements OnClickListener,
     private ListView mMsgHistoryListView;
 
     private Database mDBHelper;
-    private WowTalkWebServerIF mWebIF;
+    private WebServerIF mWebIF;
     private MessageBox mMsgBox;
     private Handler mHandler = new Handler();
     private int mCurrentPage;
@@ -104,7 +104,7 @@ public class MessageHistoryActivity extends Activity implements OnClickListener,
         mTargetName = getIntent().getStringExtra(MessageComposerActivity.KEY_TARGET_DISPLAYNAME);
         mDBHelper = new Database(this);
         mMsgBox = new MessageBox(this);
-        mWebIF = WowTalkWebServerIF.getInstance(this);
+        mWebIF = WebServerIF.getInstance(this);
         initView();
 
         getMessageHistoryCounts();

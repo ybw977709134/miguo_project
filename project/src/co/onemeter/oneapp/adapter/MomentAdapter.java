@@ -707,11 +707,11 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                int resultCode = WowMomentWebServerIF.getInstance(context)
+                int resultCode = MomentWebServerIF.getInstance(context)
                         .voteMomentSurvey(moment,selectedOptionList);
                 // 投票过期，但界面显示未过期，则是本地时间有误差导致，需要重新获取服务器时间offset
                 if (ErrorCode.MOMENT_SURVEY_OUTOFDATE == resultCode) {
-                    WowTalkWebServerIF.getInstance(context).fAdjustUTCTimeWithServer();
+                    WebServerIF.getInstance(context).fAdjustUTCTimeWithServer();
                 }
                 return resultCode;
             }
@@ -1215,7 +1215,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             final String path = PhotoDisplayHelper.makeLocalFilePath(aContext.fileId, aContext.fileType);
             @Override
             protected Void doInBackground(Void... params) {
-                WowTalkWebServerIF.getInstance(aContext.context).fGetFileFromServer(aContext.fileId, GlobalSetting.S3_MOMENT_FILE_DIR,
+                WebServerIF.getInstance(aContext.context).fGetFileFromServer(aContext.fileId, GlobalSetting.S3_MOMENT_FILE_DIR,
                         new NetworkIFDelegate() {
                     @Override
                     public void didFinishNetworkIFCommunication(int i, byte[] bytes) {
@@ -1327,7 +1327,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             // need download
             new AsyncTask<Void, Void, Integer>() {
 
-                private WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(context);
+                private WebServerIF web = WebServerIF.getInstance(context);
                 private boolean status;
                 MessageBox msgbox = new MessageBox(context);
 
@@ -1417,7 +1417,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 				boolean ok;
 				@Override
 				protected Void doInBackground(Void... voids) {
-					WowTalkWebServerIF.getInstance(context).fGetFileFromServer(
+					WebServerIF.getInstance(context).fGetFileFromServer(
 							file.fileid, GlobalSetting.S3_MOMENT_FILE_DIR,
 							new NetworkIFDelegate() {
 								@Override

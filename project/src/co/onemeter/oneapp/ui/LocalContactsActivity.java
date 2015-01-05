@@ -22,7 +22,7 @@ import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
@@ -150,7 +150,7 @@ public class LocalContactsActivity extends Activity implements OnClickListener, 
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                int errno = WowTalkWebServerIF.getInstance(LocalContactsActivity.this).fAddBuddy(buddy.userID);
+                int errno = WebServerIF.getInstance(LocalContactsActivity.this).fAddBuddy(buddy.userID);
                 return errno;
             }
             @Override
@@ -391,7 +391,7 @@ public class LocalContactsActivity extends Activity implements OnClickListener, 
                     if (!TextUtils.isEmpty(phoneNumber)) {
                         List<Buddy> buddies = new ArrayList<Buddy>();
                         phoneNumber = phoneNumber.replace("-", "").replace(" ", "");
-                        result = WowTalkWebServerIF.getInstance(LocalContactsActivity.this).fGetBuddyWithPhoneNumber(phoneNumber, buddies);
+                        result = WebServerIF.getInstance(LocalContactsActivity.this).fGetBuddyWithPhoneNumber(phoneNumber, buddies);
                         if(0 == result) {
                             Log.i("There are " + buddies.size() + " persons associated with the phoneNumber " + phoneNumber);
                             if (!buddies.isEmpty()) {

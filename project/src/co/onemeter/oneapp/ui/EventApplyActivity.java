@@ -5,7 +5,7 @@ import android.text.TextWatcher;
 import android.widget.TextView;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.WowEventWebServerIF;
+import org.wowtalk.api.EventWebServerIF;
 import co.onemeter.oneapp.R;
 
 import android.app.Activity;
@@ -93,7 +93,7 @@ public class EventApplyActivity extends Activity implements OnClickListener{
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				final int errno = WowEventWebServerIF.getInstance(EventApplyActivity.this).fAskForJoining(actId, strApplyInfo);
+				final int errno = EventWebServerIF.getInstance(EventApplyActivity.this).fAskForJoining(actId, strApplyInfo);
 				if (errno == ErrorCode.OK) {
 					Message msg = Message.obtain();
 					msg.what = MSG_EVENT_APPLY_SUCCESS;

@@ -89,7 +89,7 @@ public class PickTempGroupActivity extends Activity {
                         new AsyncTask<Void, Void, Map<String, Object>>() {
                             @Override
                             protected Map<String, Object> doInBackground(Void... params) {
-                                Map<String, Object> resultMap = WowTalkWebServerIF.getInstance(mContext)
+                                Map<String, Object> resultMap = WebServerIF.getInstance(mContext)
                                         .fGroupChat_GetMembers(group.groupID);
                                 return resultMap;
                             }
@@ -167,7 +167,7 @@ public class PickTempGroupActivity extends Activity {
 	private GroupAdapter groupAdapter;
 	private ArrayList<GroupChatRoom> groupChats = new ArrayList<GroupChatRoom>();
     private PhotoDisplayHelper mPhotoDisplayHelper;
-    private WowTalkWebServerIF mWeb;
+    private WebServerIF mWeb;
     private MessageBox mMsgBox;
     private HashMap<String, PhotoDisplayHelper.Params> mPhotoDisplayParams
             = new HashMap<String, PhotoDisplayHelper.Params>();
@@ -268,7 +268,7 @@ public class PickTempGroupActivity extends Activity {
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
-        mWeb = WowTalkWebServerIF.getInstance(PickTempGroupActivity.this);
+        mWeb = WebServerIF.getInstance(PickTempGroupActivity.this);
         mMsgBox = new MessageBox(PickTempGroupActivity.this);
 		dbHelper = new Database(this);
         mPhotoDisplayHelper = new PhotoDisplayHelper(this);

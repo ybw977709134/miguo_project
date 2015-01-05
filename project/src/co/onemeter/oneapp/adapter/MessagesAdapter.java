@@ -122,7 +122,7 @@ public class MessagesAdapter extends BaseAdapter {
                 new AsyncTask<Void, Void, Integer> () {
                     @Override
                     protected Integer doInBackground(Void... params) {
-                        return WowTalkWebServerIF.getInstance(mContext)
+                        return WebServerIF.getInstance(mContext)
                                 .fGetBuddyWithUID(msg.chatUserName);
                     }
 
@@ -165,7 +165,7 @@ public class MessagesAdapter extends BaseAdapter {
                     new AsyncTask<Void, Void, Integer> () {
                         @Override
                         protected Integer doInBackground(Void... params) {
-                            Map<String, Object> resultMap = WowTalkWebServerIF.getInstance(mContext)
+                            Map<String, Object> resultMap = WebServerIF.getInstance(mContext)
                                     .fGroupChat_GetMembers(g.groupID);
                             return (Integer)resultMap.get("code");
                         }
@@ -200,7 +200,7 @@ public class MessagesAdapter extends BaseAdapter {
                     new AsyncTask<Void, Void, String> () {
                         @Override
                         protected String doInBackground(Void... params) {
-                            Map<String, Object> resultMap = WowTalkWebServerIF.getInstance(mContext)
+                            Map<String, Object> resultMap = WebServerIF.getInstance(mContext)
                                     .fGroupChat_GetMembers(g.groupID);
                             StringBuffer displayName = new StringBuffer();
                             if (ErrorCode.OK == (Integer)resultMap.get("code")) {
@@ -282,7 +282,7 @@ public class MessagesAdapter extends BaseAdapter {
                 new AsyncTask<Void, Void, Integer>() {
                     @Override
                     protected Integer doInBackground(Void... params) {
-                        return WowTalkWebServerIF.getInstance(mContext)
+                        return WebServerIF.getInstance(mContext)
                                 .fGroupChat_GetGroupDetail(msg.chatUserName);
                     }
 
@@ -357,7 +357,7 @@ public class MessagesAdapter extends BaseAdapter {
                     new AsyncTask<Void, Void, Integer>() {
                         @Override
                         protected Integer doInBackground(Void... params) {
-                            return WowTalkWebServerIF.getInstance(mContext)
+                            return WebServerIF.getInstance(mContext)
                                     .fGroupChat_GetGroupDetail(message.chatUserName);
                         }
 

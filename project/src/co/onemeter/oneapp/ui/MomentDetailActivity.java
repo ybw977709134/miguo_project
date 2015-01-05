@@ -81,9 +81,9 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     private TextView textView_commentdetail_like;//赞
     private TextView textView_commentdetail_comment;//评论
 
-    private WowTalkWebServerIF mWeb;
+    private WebServerIF mWeb;
     private PrefUtil mPrefUtil;
-    private WowMomentWebServerIF mMomentWeb;
+    private MomentWebServerIF mMomentWeb;
     private Database dbHelper;
     private ImageResizer mImageResizer;
 //    private MediaPlayer mPlayer;
@@ -359,7 +359,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             boolean ok;
             @Override
             protected Void doInBackground(Void... voids) {
-                WowTalkWebServerIF.getInstance(MomentDetailActivity.this).fGetFileFromServer(file.fileid,
+                WebServerIF.getInstance(MomentDetailActivity.this).fGetFileFromServer(file.fileid,
                         GlobalSetting.S3_MOMENT_FILE_DIR,
                         new NetworkIFDelegate() {
                             @Override
@@ -705,9 +705,9 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 
         mMsgBox = new MessageBox(this);
         dbHelper = Database.open(this);
-        mWeb = WowTalkWebServerIF.getInstance(this);
+        mWeb = WebServerIF.getInstance(this);
         mPrefUtil = PrefUtil.getInstance(this);
-        mMomentWeb = WowMomentWebServerIF.getInstance(this);
+        mMomentWeb = MomentWebServerIF.getInstance(this);
 
         ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams(this, IMAGE_CACHE_DIR);
         mImageResizer = new ImageResizer(this, DensityUtil.dip2px(this, 100));

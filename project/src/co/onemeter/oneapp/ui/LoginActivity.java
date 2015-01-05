@@ -61,7 +61,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     private MessageBox mMsgBox;
     private static LoginActivity instance;
     private static PrefUtil mPrefUtil;
-    private WowTalkWebServerIF mWebIF;
+    private WebServerIF mWebIF;
 
     /**
      * 是否从添加帐户界面进入此界面的
@@ -85,10 +85,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 
             @Override
             protected Integer doInBackground(Void... params) {
-                int ret= WowTalkWebServerIF.getInstance(LoginActivity.this).fGetMyProfile();
+                int ret= WebServerIF.getInstance(LoginActivity.this).fGetMyProfile();
 
                 if(ErrorCode.OK == ret) {
-                    WowTalkWebServerIF webIF = WowTalkWebServerIF.getInstance(LoginActivity.this);
+                    WebServerIF webIF = WebServerIF.getInstance(LoginActivity.this);
                     // login 成功后再 logout
                     if (mIsAddAccount) {
                         webIF.logoutByUid(oldAccount.uid, oldAccount.password);
@@ -324,7 +324,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     }
                 }
 
-                WowTalkWebServerIF webIF = WowTalkWebServerIF.getInstance(LoginActivity.this);
+                WebServerIF webIF = WebServerIF.getInstance(LoginActivity.this);
                 if (mIsAddAccount) {
                     Database database = new Database(LoginActivity.this);
                     database.close();
@@ -385,7 +385,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         mIsAddAccount = getIntent().getBooleanExtra(EXTRA_IS_ADD_ACCOUNT, false);
 
         initView();
-        mWebIF = WowTalkWebServerIF.getInstance(LoginActivity.this);
+        mWebIF = WebServerIF.getInstance(LoginActivity.this);
         mPrefUtil = PrefUtil.getInstance(LoginActivity.this);
         // the value of Connect2.context will be changed in StartActivity
         Connect2.setContext(this);

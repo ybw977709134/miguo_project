@@ -450,7 +450,7 @@ public class NearbyActivity extends Activity implements OnClickListener {
             @Override
             protected Integer doInBackground(Void... params) {
                 buddies = new ArrayList<Buddy>();
-                return WowTalkWebServerIF.getInstance(NearbyActivity.this).fGetBuddiesNearby(false, latitude, longitude, buddies);
+                return WebServerIF.getInstance(NearbyActivity.this).fGetBuddiesNearby(false, latitude, longitude, buddies);
             }
             @Override
             protected void onPostExecute(Integer result) {
@@ -486,7 +486,7 @@ public class NearbyActivity extends Activity implements OnClickListener {
                buddy.lastLocation = new WLocation();
                buddy.lastLocation.latitude = mLocation.getLatitude();
                buddy.lastLocation.longitude = mLocation.getLongitude();
-               return WowTalkWebServerIF.getInstance(NearbyActivity.this).fUpdateMyProfile(buddy, Buddy.FIELD_FLAG_SPOT);
+               return WebServerIF.getInstance(NearbyActivity.this).fUpdateMyProfile(buddy, Buddy.FIELD_FLAG_SPOT);
            }
            @Override
            protected void onPostExecute(Integer result) {
@@ -505,7 +505,7 @@ public class NearbyActivity extends Activity implements OnClickListener {
             @Override
             protected Integer doInBackground(Void... params) {
                 groups = new ArrayList<GroupChatRoom>();
-                return WowTalkWebServerIF.getInstance(NearbyActivity.this).fGroupChat_GetNearBy(false, latitude, longitude, groups);
+                return WebServerIF.getInstance(NearbyActivity.this).fGroupChat_GetNearBy(false, latitude, longitude, groups);
             }
             @Override
             protected void onPostExecute(Integer result) {

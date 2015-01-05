@@ -12,22 +12,22 @@ import java.util.List;
  * 课堂相关的功能。
  * Created by pzy on 12/21/14.
  */
-public class WowLessonWebServerIF {
+public class LessonWebServerIF {
 
 	private Context mContext;
 
     private PrefUtil mPrefUtil;
 
-	private static WowLessonWebServerIF instance;
+	private static LessonWebServerIF instance;
 
-	private WowLessonWebServerIF(Context context) {
+	private LessonWebServerIF(Context context) {
 		mContext = context.getApplicationContext();
         mPrefUtil = PrefUtil.getInstance(context);
 	}
 
-	public static WowLessonWebServerIF getInstance(Context context) {
+	public static LessonWebServerIF getInstance(Context context) {
 		if(instance == null) {
-			instance = new WowLessonWebServerIF(context);
+			instance = new LessonWebServerIF(context);
 		}
 		return instance;
 	}
@@ -240,7 +240,7 @@ public class WowLessonWebServerIF {
             return ErrorCode.NOT_LOGGED_IN;
 
         if (moment != null && TextUtils.isEmpty(moment.id)) {
-            int errno = WowMomentWebServerIF.getInstance(mContext).fAddMoment(moment, true);
+            int errno = MomentWebServerIF.getInstance(mContext).fAddMoment(moment, true);
             if (errno != ErrorCode.OK) {
                 return errno;
             }
@@ -408,7 +408,7 @@ public class WowLessonWebServerIF {
                             if (feedback != null) {
                                 db.storeLessonParentFeedback(feedback);
                                 if (feedback.moment_id > 0) {
-                                    WowMomentWebServerIF.getInstance(mContext).fGetMomentById(feedback.moment_id);
+                                    MomentWebServerIF.getInstance(mContext).fGetMomentById(feedback.moment_id);
                                 }
                             }
                         }

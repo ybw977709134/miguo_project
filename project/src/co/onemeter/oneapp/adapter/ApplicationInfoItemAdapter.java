@@ -9,8 +9,6 @@ import android.widget.TextView;
 import co.onemeter.oneapp.R;
 
 import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.WowTalkWebServerIF;
 
 import java.util.ArrayList;
 import java.util.List;

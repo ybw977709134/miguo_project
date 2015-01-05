@@ -3,7 +3,6 @@ package co.onemeter.oneapp.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -18,15 +17,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.FriendValidateActivity;
-import co.onemeter.oneapp.ui.StartActivity;
 
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.PendingRequest;
 import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.PhotoDisplayHelper;
 
@@ -49,7 +46,7 @@ public class BuddySearchItemAdapter extends BaseAdapter {
     private MessageBox mMsgBox;
 
     public final static String NAME_SPLIT=":";
-    private WowTalkWebServerIF mWebif = null;
+    private WebServerIF mWebif = null;
     private Database mDbHelper = null;
     public BuddySearchItemAdapter(Context context, ArrayList<Buddy> buddy, String str,MessageBox box) {
         contextRef=context;
@@ -163,7 +160,7 @@ public class BuddySearchItemAdapter extends BaseAdapter {
         	@Override
             protected Void doInBackground(Buddy... params) {
             	Buddy b =  params[0];
-                errno = WowTalkWebServerIF.getInstance(contextRef).faddBuddy_askforRequest(b.userID,message);
+                errno = WebServerIF.getInstance(contextRef).faddBuddy_askforRequest(b.userID,message);
                 if (ErrorCode.OK == errno) {
                     pr = new PendingRequest();
                     pr.uid = b.getGUID();

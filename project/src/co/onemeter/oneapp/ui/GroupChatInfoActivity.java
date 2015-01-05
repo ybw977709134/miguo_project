@@ -183,7 +183,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 	private boolean _isDeleteMode = false;
     private boolean _isCreator = false;
 	private Database dbHelper;
-    private WowTalkWebServerIF mWeb;
+    private WebServerIF mWeb;
 	private MemberAdapter memberAdapter;
 	private ArrayList<GroupMember> groupMembers = new ArrayList<GroupMember>();
 	private boolean mIsClearedChatHistory;
@@ -293,7 +293,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				return WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
+				return WebServerIF.getInstance(GroupChatInfoActivity.this)
                         .fGroupChat_RemoveMember(groupId, buddy.userID);
 			}
 
@@ -319,7 +319,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return (Integer) WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
+                return (Integer) WebServerIF.getInstance(GroupChatInfoActivity.this)
                         .fGroupChat_GetMembers(groupId).get("code");
             }
 
@@ -362,7 +362,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
+                return WebServerIF.getInstance(GroupChatInfoActivity.this)
                         .fGroupChat_LeaveGroup(groupId);
             }
 
@@ -386,7 +386,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
+                return WebServerIF.getInstance(GroupChatInfoActivity.this)
                         .fGroupChat_Disband(groupId);
             }
 
@@ -494,7 +494,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
         mMsgBox = new MessageBox(this);
-        mWeb = WowTalkWebServerIF.getInstance(this);
+        mWeb = WebServerIF.getInstance(this);
 		Intent intent = getIntent();
 		groupId = getIntent().getStringExtra(GROUP_ID); 
 		if (groupId == null)

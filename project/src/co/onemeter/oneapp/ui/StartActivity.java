@@ -105,7 +105,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 	private TextView txt_unreadMsg;
     private TextView txt_friends_news;
     private TextView txt_pendingin_requests;
-    private WowTalkWebServerIF mWeb = null;
+    private WebServerIF mWeb = null;
     private Database mDb = null;
     private PrefUtil mPrefUtil;
     private MessageBox mMsgbBox;
@@ -364,7 +364,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         UmengUpdateAgent.update(this);
         PinyinHelper.instance().init(this, R.raw.pinyin);
 
-        mWeb = WowTalkWebServerIF.getInstance(this);
+        mWeb = WebServerIF.getInstance(this);
         mDb = new Database(this);
         mPrefUtil = PrefUtil.getInstance(this);
         mMsgbBox = new MessageBox(this);
@@ -1084,7 +1084,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
             public void run() {
                 AlbumCover ac = new AlbumCover();
                 String uid = mPrefUtil.getUid();
-                if (ErrorCode.OK == WowTalkWebServerIF.getInstance(StartActivity.this)
+                if (ErrorCode.OK == WebServerIF.getInstance(StartActivity.this)
                         .fGetAlbumCover(uid, ac)) {
                     String myUid = mPrefUtil.getUid();
                     ArrayList<Account> accounts = mPrefUtil.getAccountList();
@@ -1141,7 +1141,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
             sIsDownloading = true;
         }
 
-        WowTalkWebServerIF webIF = WowTalkWebServerIF.getInstance(context);
+        WebServerIF webIF = WebServerIF.getInstance(context);
         Database dbHelper = new Database(context);
         PrefUtil prefUtil = PrefUtil.getInstance(context);
         prefUtil.setGroupMembersUptodatePerfectly(false);
@@ -1227,7 +1227,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         if (null != handler) {
             handler.sendEmptyMessage(HANDLER_GET_LATEST_CHAT_TARGETS);
         }
-        WowTalkWebServerIF.getInstance(context).getLatestChatTargets(
+        WebServerIF.getInstance(context).getLatestChatTargets(
                 0, SmsActivity.LIMIT_COUNT_PER_PAGE, true);
     }
 
@@ -1299,7 +1299,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(StartActivity.this).fGetPendingRequests();
+                return WebServerIF.getInstance(StartActivity.this).fGetPendingRequests();
             }
         }.execute((Void)null);
     }

@@ -287,7 +287,7 @@ public class ImageViewActivity extends Activity implements View.OnClickListener 
         mMsgBox.showWait();
         new AsyncTask<Void, Void, Integer>() {
 
-            private WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(ImageViewActivity.this);
+            private WebServerIF web = WebServerIF.getInstance(ImageViewActivity.this);
             private int downloadFileIndex=mCurPhotoIdx;
             @Override
             protected Integer doInBackground(Void... voids) {

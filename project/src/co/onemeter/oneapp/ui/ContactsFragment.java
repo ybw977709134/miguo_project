@@ -70,7 +70,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
     private FunctionAdapter fucAdapter;
 	private ArrayList<GroupChatRoom> groupRooms;
 
-	private WowTalkWebServerIF mWebif = null;
+	private WebServerIF mWebif = null;
     private PrefUtil mPrefUtil;
 
     private MessageBox mMsgBox;
@@ -268,11 +268,11 @@ public class ContactsFragment extends Fragment implements OnClickListener,
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                WowTalkWebServerIF.getInstance(getActivity())
+                WebServerIF.getInstance(getActivity())
                         .fGroupChat_GetMyGroups();
-                WowTalkWebServerIF.getInstance(getActivity())
+                WebServerIF.getInstance(getActivity())
                         .fGetBuddyList();
-                WowTalkWebServerIF.getInstance(getActivity())
+                WebServerIF.getInstance(getActivity())
                         .fGetPendingRequests();
                 return null;
             }
@@ -290,7 +290,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
 			@Override
 			protected Void doInBackground(Void... params) {
 				if (ErrorCode.OK == mWebif.fGetBuddyList()) {
-                    WowMomentWebServerIF.getInstance(getActivity())
+                    MomentWebServerIF.getInstance(getActivity())
                             .fGetMomentsOfAll(0, 10, true);
                     mPrefUtil.setContactUptodate(true);
 				}
@@ -321,7 +321,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
 
 			@Override
 			public void run() {
-				final int errno = WowTalkWebServerIF.getInstance(getActivity()).fGroupChat_GetMyGroups();
+				final int errno = WebServerIF.getInstance(getActivity()).fGroupChat_GetMyGroups();
 				if (errno == ErrorCode.OK) {
 					mPrefUtil.setLocalGroupListLastModified();
 //					mHandler.sendEmptyMessage(HANDLER_FINISH_GET_SERVER_GROUP);
@@ -413,7 +413,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
 
         mMsgBox = new MessageBox(getActivity());
         mPrefUtil = PrefUtil.getInstance(getActivity());
-		mWebif = WowTalkWebServerIF.getInstance(getActivity());
+		mWebif = WebServerIF.getInstance(getActivity());
 		if(savedInstanceState != null) {
 			mLastReadLocalGroupList = savedInstanceState.getLong("mLastReadLocalGroupList");
 		}

@@ -20,7 +20,7 @@ import org.wowtalk.api.Connect2;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkVoipIF;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
 
 import co.onemeter.oneapp.R;
@@ -39,7 +39,7 @@ public class AccountSettingActivity_biz extends Activity implements OnClickListe
 	private LinearLayout mPassword;
 	private static AccountSettingActivity_biz instance;
 
-    WowTalkWebServerIF mWeb;
+    WebServerIF mWeb;
     private PrefUtil mPrefUtil;
 	private MessageBox mMsgBox;
 
@@ -179,7 +179,7 @@ public class AccountSettingActivity_biz extends Activity implements OnClickListe
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
         mMsgBox = new MessageBox(this);
-        mWeb = WowTalkWebServerIF.getInstance(this);
+        mWeb = WebServerIF.getInstance(this);
         mPrefUtil = PrefUtil.getInstance(this);
 		instance = this;
 		initView();

@@ -15,7 +15,7 @@ import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.Account;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
@@ -35,7 +35,7 @@ public class SettingPasswordActivity extends Activity {
 
             @Override
             protected Integer doInBackground(Void... params) {
-                int resultCode = WowTalkWebServerIF.getInstance(SettingPasswordActivity.this)
+                int resultCode = WebServerIF.getInstance(SettingPasswordActivity.this)
                         .fChangePassword(password, oldPassword);
                 if (resultCode == ErrorCode.OK) {
                     // 更新SP_root中的帐号信息

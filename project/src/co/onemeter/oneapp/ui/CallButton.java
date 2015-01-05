@@ -10,7 +10,7 @@ import android.widget.Button;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.WowTalkVoipIF;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;
@@ -37,8 +37,8 @@ public class CallButton extends Button implements OnClickListener{
 				if (address == null)
 					return;
 				Log.e("CallAddress=" + address);
-				final String globalPhoneNumber = WowTalkWebServerIF.getInstance(context).fTranslatePhoneNumberToGlobalPhoneNumber(address);
-				final String encriptedglobalNumber = WowTalkWebServerIF.fGetEncriptedPhoneNumber(globalPhoneNumber);
+				final String globalPhoneNumber = WebServerIF.getInstance(context).fTranslatePhoneNumberToGlobalPhoneNumber(address);
+				final String encriptedglobalNumber = WebServerIF.fGetEncriptedPhoneNumber(globalPhoneNumber);
 				Database dbHelper = new Database(context);
 				
 				Buddy buddy = dbHelper.buddyWithPhoneNumber(encriptedglobalNumber);
@@ -50,7 +50,7 @@ public class CallButton extends Button implements OnClickListener{
 						public void run() {
 							ArrayList<String> list = new ArrayList<String>();
 							list.add(globalPhoneNumber);
-							WowTalkWebServerIF.getInstance(context).fScanPhoneNumbersForBuddy(list);
+							WebServerIF.getInstance(context).fScanPhoneNumbersForBuddy(list);
 						}
 					}.start();
 					//GlobaleValue._weStartNormalPhoneCall = true;

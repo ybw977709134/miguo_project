@@ -8,7 +8,6 @@ import org.wowtalk.api.*;
 import co.onemeter.oneapp.contacts.model.Person;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,7 +24,7 @@ public class GroupChatRoomHelper {
      * @return group id.
      */
     public static String createTmp(Parcelable[] persons,
-                                   WowTalkWebServerIF webIf,
+                                   WebServerIF webIf,
                                    Database dbHelper,
                                    Context context) {
         return addMembers(null, persons, webIf, dbHelper, context)[0];
@@ -40,7 +39,7 @@ public class GroupChatRoomHelper {
      * @return result[0], group id; result[1], isAddMembersSuccess.
      */
     public static String[] addMembers(String gid, Parcelable[] persons,
-                                    WowTalkWebServerIF webIf,
+                                    WebServerIF webIf,
                                     Database dbHelper,
                                     Context context) {
         String[] results = new String[2];

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.WebServerIF;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.*;
 
@@ -240,7 +240,7 @@ public class ContactGroupIterationAdapter extends BaseAdapter {
                 new AsyncTask<Void, Void, Integer>() {
                     @Override
                     protected Integer doInBackground(Void... params) {
-                        return WowTalkWebServerIF.getInstance(mContext).updateGroupFavorite(group.groupID, group.isFavorite);
+                        return WebServerIF.getInstance(mContext).updateGroupFavorite(group.groupID, group.isFavorite);
                     }
 
                     protected void onPostExecute(Integer result) {

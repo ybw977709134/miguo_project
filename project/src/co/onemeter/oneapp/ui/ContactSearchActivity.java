@@ -26,7 +26,6 @@ import co.onemeter.oneapp.utils.ListViewUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.*;
-import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;

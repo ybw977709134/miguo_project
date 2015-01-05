@@ -3,7 +3,6 @@ package co.onemeter.oneapp.ui;
 import android.content.Intent;
 import android.os.IBinder;
 import org.wowtalk.api.*;
-import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.FileUtils;
 
 import java.util.ArrayList;

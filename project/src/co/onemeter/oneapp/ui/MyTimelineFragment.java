@@ -23,10 +23,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import org.wowtalk.api.*;
-import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.InputBoardManager;
 
 import java.util.ArrayList;

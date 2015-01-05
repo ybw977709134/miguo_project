@@ -18,9 +18,7 @@ import co.onemeter.oneapp.adapter.MomentAdapter;
 import co.onemeter.oneapp.utils.MyUrlSpanHelper;
 
 import org.wowtalk.api.*;
-import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 import org.wowtalk.ui.msg.InputBoardManager;

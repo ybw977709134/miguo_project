@@ -7,7 +7,6 @@ import android.text.style.ForegroundColorSpan;
 import co.onemeter.oneapp.R;
 import org.wowtalk.api.WEvent;
 import org.wowtalk.api.WFile;
-import org.wowtalk.ui.PhotoDisplayHelper;
 
 import java.util.HashMap;
 

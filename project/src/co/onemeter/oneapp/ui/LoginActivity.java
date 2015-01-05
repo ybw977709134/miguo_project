@@ -24,7 +24,6 @@ import co.onemeter.oneapp.utils.ThemeHelper;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
-import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;

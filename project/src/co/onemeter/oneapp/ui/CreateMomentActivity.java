@@ -21,7 +21,6 @@ import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
 import org.wowtalk.ui.msg.InputBoardManager;
@@ -179,7 +178,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                 if (h < oldh) {
                     msg.arg1 = SMALLER;
                 }
-                if (h > oldh && h > ((org.wowtalk.ui.GlobalValue.screenH / 5) * 4)) {
+                if (h > oldh && h > ((GlobalValue.screenH / 5) * 4)) {
                     msg.arg1 = BIGGER;
                 }
                 mHandler.sendMessage(msg);

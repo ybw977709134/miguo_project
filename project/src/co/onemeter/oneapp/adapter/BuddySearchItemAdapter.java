@@ -25,7 +25,7 @@ import org.wowtalk.api.PendingRequest;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
+import co.onemeter.oneapp.ui.PhotoDisplayHelper;
 
 import java.util.ArrayList;
 import java.util.List;

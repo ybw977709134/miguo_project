@@ -174,7 +174,7 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
                     Notification note = new Notification(R.drawable.icon_notification, strTickerMsg,
                             System.currentTimeMillis());
                     note.setLatestEventInfo(context, strCompositeName, strMessage, intent);
-                    notiManager.notify(org.wowtalk.ui.GlobalValue.NOTIFICATION_FOR_CHATMESSAGE, note);
+                    notiManager.notify(GlobalValue.NOTIFICATION_FOR_CHATMESSAGE, note);
                 }
             }
 

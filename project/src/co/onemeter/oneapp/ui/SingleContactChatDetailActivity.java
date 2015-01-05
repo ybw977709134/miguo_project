@@ -17,9 +17,7 @@ import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.PrefUtil;
-import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
 
 import java.util.ArrayList;
 

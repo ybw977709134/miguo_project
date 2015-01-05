@@ -24,8 +24,6 @@ import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.*;
-import org.wowtalk.ui.GlobalValue;
-import org.wowtalk.ui.ImageViewActivity;
 import org.wowtalk.ui.MessageBox;
 
 import java.io.File;

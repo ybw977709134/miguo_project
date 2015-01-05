@@ -35,7 +35,7 @@ public class IncomeMissedCallIntentReceiver extends BroadcastReceiver {
 		
 		PendingIntent intent = PendingIntent.getActivity(context, 0, new Intent(context, StartActivity.class), 0);
 		note.setLatestEventInfo(context, strCompositeName, context.getString(R.string.app_name), intent);
-		notiManager.notify(org.wowtalk.ui.GlobalValue.NOTIFICATION_FOR_CHATMESSAGE, note);
+		notiManager.notify(GlobalValue.NOTIFICATION_FOR_CHATMESSAGE, note);
 	}
 
 }

@@ -3,7 +3,7 @@ package co.onemeter.oneapp.contacts.adapter;
 import java.util.List;
 
 import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.ui.PhotoDisplayHelper;
+import co.onemeter.oneapp.ui.PhotoDisplayHelper;
 import co.onemeter.oneapp.R;
 
 import android.content.Context;

@@ -7,7 +7,7 @@ import org.wowtalk.api.Account;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.GlobalSetting;
 import org.wowtalk.api.PrefUtil;
-import org.wowtalk.ui.PhotoDisplayHelper;
+import co.onemeter.oneapp.ui.PhotoDisplayHelper;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.CircleImageView;
 import co.onemeter.oneapp.ui.ManageAccountsActivity.RemoveAccountListener;

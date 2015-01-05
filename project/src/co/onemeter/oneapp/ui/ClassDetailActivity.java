@@ -16,10 +16,8 @@ import org.wowtalk.api.Lesson;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.WebServerIF;
-import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.HorizontalListView;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
 
 import com.androidquery.AQuery;
 

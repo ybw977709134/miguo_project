@@ -12,9 +12,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
-import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.LocationHelper;
@@ -269,7 +267,7 @@ public class NearbyActivity extends Activity implements OnClickListener {
         personList = (ListView) findViewById(R.id.person_list);
         personGrid = (GridView) findViewById(R.id.person_grid);
 
-        personGrid.setColumnWidth(org.wowtalk.ui.GlobalValue.screenW / 4);
+        personGrid.setColumnWidth(GlobalValue.screenW / 4);
 		
 		btnTitleBack.setOnClickListener(this);
 		btnTitleViewType.setOnClickListener(this);

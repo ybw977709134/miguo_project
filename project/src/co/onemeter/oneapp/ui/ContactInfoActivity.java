@@ -25,9 +25,7 @@ import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.*;
-import org.wowtalk.ui.ImageViewActivity;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
 
 public class ContactInfoActivity extends Activity implements OnClickListener{
     private static final int MOMENT_NUMBER = 3;

@@ -19,7 +19,6 @@ import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.bitmapfun.util.AsyncTask;
 import org.wowtalk.ui.msg.RoundedImageView;
 

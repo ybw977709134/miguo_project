@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.wowtalk.api.*;
-import org.wowtalk.ui.PhotoDisplayHelper;
+import co.onemeter.oneapp.ui.PhotoDisplayHelper;
 import co.onemeter.oneapp.R;
 
 import java.text.SimpleDateFormat;

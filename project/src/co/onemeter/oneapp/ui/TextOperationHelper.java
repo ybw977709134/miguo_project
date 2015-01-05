@@ -4,9 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.ClipboardManager;
 import android.view.View;
-import org.wowtalk.helper.HyperLinkHelper;
-import org.wowtalk.helper.PhoneNumberHelper;
-import org.wowtalk.ui.BottomButtonBoard;
+import co.onemeter.oneapp.helper.HyperLinkHelper;
+import co.onemeter.oneapp.helper.PhoneNumberHelper;
 import co.onemeter.oneapp.R;
 
 /**

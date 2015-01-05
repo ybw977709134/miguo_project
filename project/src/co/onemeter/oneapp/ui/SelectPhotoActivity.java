@@ -262,7 +262,7 @@ public class SelectPhotoActivity extends Activity implements View.OnClickListene
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
         mImageThumbSpacing = DensityUtil.dip2px(this, 2);
-        mImageThumbSize = (org.wowtalk.ui.GlobalValue.screenW - mImageThumbSpacing * 5) / 4;
+        mImageThumbSize = (GlobalValue.screenW - mImageThumbSpacing * 5) / 4;
 
         ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams(this, IMAGE_CACHE_DIR);
         mImageFetcher = new ImageResizer(this, mImageThumbSize);

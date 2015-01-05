@@ -9,7 +9,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.wowtalk.api.*;
-import org.wowtalk.ui.PhotoDisplayHelper;
+import co.onemeter.oneapp.ui.PhotoDisplayHelper;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 

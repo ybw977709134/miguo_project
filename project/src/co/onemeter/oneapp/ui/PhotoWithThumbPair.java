@@ -1,4 +1,4 @@
-package org.wowtalk.ui;
+package co.onemeter.oneapp.ui;
 
 /**
  * Created with IntelliJ IDEA.

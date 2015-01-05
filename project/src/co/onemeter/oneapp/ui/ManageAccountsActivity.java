@@ -14,7 +14,6 @@ import org.wowtalk.api.IDBTableChangeListener;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkVoipIF;
 import org.wowtalk.api.WebServerIF;
-import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;

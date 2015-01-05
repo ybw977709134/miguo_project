@@ -20,7 +20,7 @@ import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.*;
-import org.wowtalk.ui.msg.MessageComposerActivityBase;
+import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
 
 import java.io.File;
 import java.util.ArrayList;

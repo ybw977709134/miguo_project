@@ -2,7 +2,7 @@ package co.onemeter.oneapp.utils;
 
 import android.content.Context;
 import org.wowtalk.api.*;
-import org.wowtalk.ui.GlobalValue;
+import co.onemeter.oneapp.ui.GlobalValue;
 
 import java.util.LinkedList;
 

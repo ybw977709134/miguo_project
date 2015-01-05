@@ -14,7 +14,7 @@ import org.wowtalk.NetworkManager;
 import org.wowtalk.api.JapaneseHelper;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkVoipIF;
-import org.wowtalk.ui.GlobalValue;
+import co.onemeter.oneapp.ui.GlobalValue;
 
 import java.io.*;
 

@@ -23,8 +23,6 @@ import co.onemeter.oneapp.utils.ThemeHelper;
 import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.*;
-import org.wowtalk.ui.BottomButtonBoard;
-import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.bitmapfun.util.AsyncTask;
 
 import java.util.ArrayList;

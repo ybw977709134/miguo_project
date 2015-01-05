@@ -11,9 +11,8 @@ import android.widget.TextView;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.GroupMember;
-import org.wowtalk.ui.PhotoDisplayHelper;
+import co.onemeter.oneapp.ui.PhotoDisplayHelper;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.Log;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package org.wowtalk.ui;
+package co.onemeter.oneapp.ui;
 
 
 import android.app.Dialog;

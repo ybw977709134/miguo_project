@@ -13,7 +13,6 @@ import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.MomentWebServerIF;
 import org.wowtalk.api.WowTalkVoipIF;
 import org.wowtalk.api.WebServerIF;
-import org.wowtalk.ui.GlobalValue;
 
 import java.util.List;
 

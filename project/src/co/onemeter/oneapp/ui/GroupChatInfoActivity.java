@@ -16,10 +16,8 @@ import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
-import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
-import org.wowtalk.ui.msg.MessageComposerActivityBase;
+import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
 
 import java.util.ArrayList;
 

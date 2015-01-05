@@ -17,10 +17,7 @@ import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WebServerIF;
-import org.wowtalk.ui.GlobalValue;
-import org.wowtalk.ui.ImageViewActivity;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
 
 /**
  * Created with IntelliJ IDEA.

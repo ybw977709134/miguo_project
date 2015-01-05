@@ -8,11 +8,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.StartActivity;
 
 import org.wowtalk.api.Database;
 import org.wowtalk.api.PendingRequest;
-import org.wowtalk.ui.GlobalValue;
+import co.onemeter.oneapp.ui.GlobalValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;

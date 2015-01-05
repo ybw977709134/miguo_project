@@ -6,7 +6,6 @@ import java.util.Iterator;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.PendingRequest;
-import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.RoundedImageView;
 import co.onemeter.oneapp.R;
 

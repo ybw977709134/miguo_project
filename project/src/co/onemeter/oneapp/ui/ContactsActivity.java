@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
 import org.wowtalk.api.PrefUtil;
-import org.wowtalk.ui.BottomButtonBoard;
 
 /**
  * <p>联系人页面。</p>

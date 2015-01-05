@@ -18,9 +18,7 @@ import android.widget.*;
 import co.onemeter.oneapp.R;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
-import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.RoundedImageView;
 
 import java.util.ArrayList;

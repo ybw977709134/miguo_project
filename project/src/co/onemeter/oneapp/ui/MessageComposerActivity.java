@@ -6,14 +6,14 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
+import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.ui.BottomButtonBoard;
 
-public class MessageComposerActivity extends org.wowtalk.ui.msg.MessageComposerActivityBase {
+public class MessageComposerActivity extends MessageComposerActivityBase {
 
     public static final String IS_CLEAR_CHAT_HISTORY = "is_clear_chat_history";
     private static MessageComposerActivity instance;

@@ -15,8 +15,7 @@ import com.androidquery.AQuery;
 
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.ui.PhotoDisplayHelper;
+import co.onemeter.oneapp.ui.PhotoDisplayHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,4 +1,4 @@
-package org.wowtalk.helper;
+package co.onemeter.oneapp.helper;
 
 import co.onemeter.oneapp.utils.Utils;
 

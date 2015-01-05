@@ -20,7 +20,6 @@ import org.wowtalk.WowTalkOnCallStateChangedListener;
 import org.wowtalk.api.WowTalkVoipIF;
 import org.wowtalk.core.WowTalkCall;
 import org.wowtalk.core.WowTalkCallState;
-import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.component.HangCallButton;
 import org.wowtalk.ui.component.IncallTimer;
 import org.wowtalk.video.CameraConfiguration;

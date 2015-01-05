@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.wowtalk.api.*;
-import org.wowtalk.ui.PhotoDisplayHelper;
+import co.onemeter.oneapp.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.Log;

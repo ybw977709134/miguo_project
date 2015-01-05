@@ -1,4 +1,4 @@
-package org.wowtalk.ui.msg;
+package co.onemeter.oneapp.ui.msg;
 
 import android.content.Context;
 import android.os.AsyncTask;

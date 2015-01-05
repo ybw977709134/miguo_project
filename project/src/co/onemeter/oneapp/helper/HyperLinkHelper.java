@@ -1,4 +1,4 @@
-package org.wowtalk.helper;
+package co.onemeter.oneapp.helper;
 
 import android.text.TextUtils;
 import co.onemeter.oneapp.adapter.MomentAdapter;

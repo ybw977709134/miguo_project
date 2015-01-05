@@ -25,8 +25,8 @@ public class PhoneStateChangedReceiver extends BroadcastReceiver {
 			} else if (extraState.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
 				fAdjustWowTalkEngineForGSMCall(context, false);
 				
-				if (org.wowtalk.ui.GlobalValue._weStartANormalPhoneCall) {
-					org.wowtalk.ui.GlobalValue._weStartANormalPhoneCall = false;
+				if (GlobalValue._weStartANormalPhoneCall) {
+					GlobalValue._weStartANormalPhoneCall = false;
 					Intent startWowTalkIntent = new Intent(context, StartActivity.class);
 					startWowTalkIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(startWowTalkIntent);

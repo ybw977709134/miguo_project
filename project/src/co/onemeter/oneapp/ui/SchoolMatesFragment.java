@@ -18,7 +18,6 @@ import co.onemeter.oneapp.contacts.model.ContactTreeNode;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import com.androidquery.AQuery;
 import org.wowtalk.api.*;
-import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
 
 import java.util.List;

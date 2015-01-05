@@ -20,10 +20,7 @@ import org.json.JSONObject;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WebServerIF;
-import org.wowtalk.ui.BottomButtonBoard;
-import org.wowtalk.ui.ImageViewActivity;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;

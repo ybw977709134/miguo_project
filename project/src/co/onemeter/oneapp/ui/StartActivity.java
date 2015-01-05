@@ -26,7 +26,6 @@ import org.wowtalk.Log;
 import org.wowtalk.api.*;
 import org.wowtalk.core.RegistrationState;
 import org.wowtalk.core.WowTalkChatMessageState;
-import org.wowtalk.ui.GlobalValue;
 import org.wowtalk.ui.MessageBox;
 
 import co.onemeter.oneapp.Constants;
@@ -483,12 +482,12 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         isOnStackTop = true;
 
 		NotificationManager notifManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		notifManager.cancel(org.wowtalk.ui.GlobalValue.NOTIFICATION_FOR_CHATMESSAGE);
+		notifManager.cancel(GlobalValue.NOTIFICATION_FOR_CHATMESSAGE);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        org.wowtalk.ui.GlobalValue.screenW = displayMetrics.widthPixels;
-        org.wowtalk.ui.GlobalValue.screenH = displayMetrics.heightPixels;
+        GlobalValue.screenW = displayMetrics.widthPixels;
+        GlobalValue.screenH = displayMetrics.heightPixels;
 
         MobclickAgent.onResume(this);
 

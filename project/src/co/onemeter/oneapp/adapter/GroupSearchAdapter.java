@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.ui.PhotoDisplayHelper;
+import co.onemeter.oneapp.ui.PhotoDisplayHelper;
 
 import java.util.ArrayList;
 import java.util.List;

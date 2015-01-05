@@ -1,4 +1,4 @@
-package org.wowtalk.ui.msg;
+package co.onemeter.oneapp.ui.msg;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,6 +28,9 @@ import org.json.JSONObject;
 import org.wowtalk.Log;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.msg.InputBoardManager;
+import org.wowtalk.ui.msg.PickLocActivity;
+import org.wowtalk.ui.msg.Stamp;
 
 import java.util.ArrayList;
 import java.util.Date;

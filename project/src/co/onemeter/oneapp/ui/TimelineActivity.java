@@ -14,7 +14,6 @@ import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
 
 import org.wowtalk.api.*;
-import org.wowtalk.ui.BottomButtonBoard;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.InputBoardManager;
 

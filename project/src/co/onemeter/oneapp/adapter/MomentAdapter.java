@@ -21,9 +21,9 @@ import co.onemeter.oneapp.ui.*;
 import co.onemeter.oneapp.utils.LocationHelper;
 
 import org.wowtalk.api.*;
-import org.wowtalk.ui.ImageViewActivity;
+import co.onemeter.oneapp.ui.ImageViewActivity;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
+import co.onemeter.oneapp.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.bitmapfun.ui.RecyclingImageView;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 import org.wowtalk.ui.msg.TimerTextView;

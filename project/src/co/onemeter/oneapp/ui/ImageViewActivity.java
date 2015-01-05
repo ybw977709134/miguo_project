@@ -1,4 +1,4 @@
-package org.wowtalk.ui;
+package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,10 +22,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.wowtalk.api.*;
+import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.Log;
 import co.onemeter.oneapp.widget.scale_viewpager.PhotoView;
 import co.onemeter.oneapp.widget.scale_viewpager.PhotoViewPager;
 

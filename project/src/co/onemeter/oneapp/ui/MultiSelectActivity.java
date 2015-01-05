@@ -33,7 +33,6 @@ import org.wowtalk.api.IDBTableChangeListener;
 import org.wowtalk.api.LatestChatTarget;
 import org.wowtalk.api.WebServerIF;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.msg.RoundedImageView;
 
 import java.io.InputStream;

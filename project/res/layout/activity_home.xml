@@ -229,6 +229,7 @@
 					android:visibility="visible"
 					android:orientation="vertical">
 					<ImageButton
+					    android:id="@+id/btn_live_play"
 						android:layout_width="@dimen/home_icon_size"
 						android:layout_height="@dimen/home_icon_size"
 						android:background="@null"

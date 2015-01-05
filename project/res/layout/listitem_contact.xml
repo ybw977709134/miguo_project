@@ -24,6 +24,7 @@
             android:layout_marginRight="5dp"
             android:layout_gravity="center_vertical"
             android:visibility="gone"/>
+
         <FrameLayout 
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -49,6 +50,15 @@
                 android:layout_width="@dimen/contact_icon_size"
                 android:background="@drawable/avatar_mask_50"/>
  -->
+
+	        <ImageView
+	            android:id="@+id/imageView_tag_stu_tea"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="right"
+	            android:src="@drawable/icon_avatar_teacher" 
+	            android:visibility="invisible"/>
+
         </FrameLayout>
         
         

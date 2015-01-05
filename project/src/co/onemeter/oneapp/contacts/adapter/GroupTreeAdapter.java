@@ -10,8 +10,12 @@ import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.ContactTreeNode;
 import co.onemeter.oneapp.ui.MessageComposerActivity;
+
 import com.androidquery.AQuery;
+
+import org.wowtalk.api.Buddy;
 import org.wowtalk.api.GroupChatRoom;
+import org.wowtalk.api.PrefUtil;
 import org.wowtalk.ui.PhotoDisplayHelper;
 
 import java.util.ArrayList;
@@ -118,6 +122,11 @@ public class GroupTreeAdapter extends BaseAdapter {
 		q.find(R.id.contact_state).invisible();
 		PhotoDisplayHelper.displayPhoto(context, q.find(R.id.contact_photo).getImageView(),
 				R.drawable.default_avatar_90, node, true);
+		if(node.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER){
+			q.find(R.id.imageView_tag_stu_tea).visible();
+		}else{
+			q.find(R.id.imageView_tag_stu_tea).gone();
+		}
 
 		indent(node, view);
 	}

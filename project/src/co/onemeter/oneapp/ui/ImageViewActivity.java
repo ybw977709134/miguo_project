@@ -26,8 +26,8 @@ import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.widget.scale_viewpager.PhotoView;
-import co.onemeter.oneapp.widget.scale_viewpager.PhotoViewPager;
+import co.onemeter.oneapp.ui.scale_viewpager.PhotoView;
+import co.onemeter.oneapp.ui.scale_viewpager.PhotoViewPager;
 
 import java.io.File;
 import java.io.FileOutputStream;

@@ -1,4 +1,4 @@
-package co.onemeter.oneapp.widget.scale_viewpager;
+package co.onemeter.oneapp.ui.scale_viewpager;
 
 /*******************************************************************************
  * Copyright 2011, 2012 Chris Banes.

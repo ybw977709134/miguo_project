@@ -1,4 +1,4 @@
-package co.onemeter.oneapp.widget.scale_viewpager;
+package co.onemeter.oneapp.ui.scale_viewpager;
 
 import co.onemeter.oneapp.ui.Log;
 

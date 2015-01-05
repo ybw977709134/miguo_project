@@ -4,7 +4,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
-    <co.onemeter.oneapp.widget.scale_viewpager.PhotoViewPager
+    <co.onemeter.oneapp.ui.scale_viewpager.PhotoViewPager
             android:id="@+id/mainViewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package co.onemeter.oneapp.widget.scale_viewpager;
+package co.onemeter.oneapp.ui.scale_viewpager;
 
-import co.onemeter.oneapp.widget.scale_viewpager.PhotoViewAttacher.OnMatrixChangedListener;
-import co.onemeter.oneapp.widget.scale_viewpager.PhotoViewAttacher.OnPhotoTapListener;
-import co.onemeter.oneapp.widget.scale_viewpager.PhotoViewAttacher.OnViewTapListener;
+import co.onemeter.oneapp.ui.scale_viewpager.PhotoViewAttacher.OnMatrixChangedListener;
+import co.onemeter.oneapp.ui.scale_viewpager.PhotoViewAttacher.OnPhotoTapListener;
+import co.onemeter.oneapp.ui.scale_viewpager.PhotoViewAttacher.OnViewTapListener;
 
 import android.content.Context;
 import android.graphics.RectF;

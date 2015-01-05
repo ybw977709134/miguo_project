@@ -1,4 +1,4 @@
-package co.onemeter.oneapp.widget.scale_viewpager;
+package co.onemeter.oneapp.ui.scale_viewpager;
 
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;

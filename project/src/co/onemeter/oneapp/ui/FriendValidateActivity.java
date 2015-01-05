@@ -6,34 +6,25 @@ import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.PendingRequest;
-import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.MessageBox;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.adapter.BuddySearchItemAdapter;
 
 public class FriendValidateActivity extends Activity implements OnClickListener{
 	private TextView textView_validate_cancel;
 	private TextView textView_validate_send;
 	private EditText editText_validate_message;
-	private EditText editText_validate_name;
-	private String validateContent = "";
-	private MessageBox mMsgBox;
 	private Database mDbHelper = new Database(this);
 	WowTalkWebServerIF mwebserver;
     private ArrayList<Buddy> buddyList = null;
@@ -50,14 +41,14 @@ public class FriendValidateActivity extends Activity implements OnClickListener{
 		initView();
 		buddyList = (ArrayList<Buddy>) getIntent().getSerializableExtra("buddyList");
 		buddyList2 = (ArrayList<Buddy>) getIntent().getSerializableExtra("buddyList2");
-		position = getIntent().getExtras().getInt("position");;
+		position = getIntent().getExtras().getInt("position");
 	}
 
 	private void initView() {
 		textView_validate_send = (TextView) findViewById(R.id.textView_validate_send);
 		textView_validate_cancel = (TextView) findViewById(R.id.textView_validate_cancel);
 		editText_validate_message =  (EditText) findViewById(R.id.editText_validate_message);
-		editText_validate_name =  (EditText) findViewById(R.id.editText_validate_name);
+//		editText_validate_name =  (EditText) findViewById(R.id.editText_validate_name);
 		textView_validate_send.setOnClickListener(this);
 		textView_validate_cancel.setOnClickListener(this);
 		mwebserver = WowTalkWebServerIF.getInstance(this);

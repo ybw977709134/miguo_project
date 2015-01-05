@@ -9,3 +9,4 @@ BuildConfig.java
 R.java
 **/bin/
 tmp/
+.gitignore

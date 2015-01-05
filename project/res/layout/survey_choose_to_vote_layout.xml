@@ -11,7 +11,7 @@
             android:layout_height="30dp"
             android:layout_gravity="left"
             android:padding="5dp"
-            android:src="@drawable/timeline_unchecked"
+            android:src="@drawable/share_vote_unchecked"
             android:scaleType="fitXY"/>
     <TextView
             android:id="@+id/option_desc"

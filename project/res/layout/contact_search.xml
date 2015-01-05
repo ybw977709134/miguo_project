@@ -9,42 +9,66 @@
 		android:id="@+id/title_bar"
 		android:layout_height="@dimen/title_bar_height"
 		android:layout_width="fill_parent"
-		android:layout_alignParentTop="true"
 		style="?attr/navbar">
-
+		
 		<LinearLayout
-		    android:id="@+id/layout_btn"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_centerVertical="true"
-		    android:gravity="center_vertical"
-		    android:orientation="horizontal"
-		    android:paddingLeft="10dp"
-		    android:paddingRight="10dp"
-		    android:visibility="visible" >
-
-			<include
-			    android:id="@+id/relativeLayout01"
-			    android:layout_width="fill_parent"
-			    android:layout_height="wrap_content"
-			    layout="@layout/piece_search_bar" 
-			    android:layout_weight="1"
-			    />
-
-            <TextView
-                android:id="@+id/search_cancel"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/contacts_search_cancel"
-                android:textSize="15sp"
-                android:textColor="@color/white" 
-                android:clickable="true"
-                android:layout_weight="5"/>
-
+            android:id="@+id/layout_select"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:orientation="horizontal"
+			android:layout_centerInParent="true"
+            android:visibility="visible">
+			<Button
+				android:id="@+id/search_nickname"
+				android:layout_height="wrap_content"
+				android:layout_width="70dp"
+                android:lines="1"
+                android:background="@drawable/tab_button_left_white_a"
+				android:textColor="@color/green"
+				android:textSize="14sp"
+				android:text="昵称搜索"/>
+			<Button
+				android:id="@+id/search_uid"
+				android:layout_height="wrap_content"
+				android:layout_width="70dp"
+                android:lines="1"
+                android:background="@drawable/tab_button_right_white"
+				android:textColor="@color/white"
+				android:textSize="14sp"
+				android:text="ID搜索"/>
 		</LinearLayout>
-
 	</RelativeLayout>
+
+	<LinearLayout
+	    android:id="@+id/layout_btn"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:gravity="center_vertical"
+	    android:orientation="horizontal"
+	    android:paddingLeft="10dp"
+	    android:paddingRight="10dp"
+	    android:visibility="visible" 
+	    style="?attr/navbar"
+	    android:background="@color/gray">
+
+	    <include
+	        android:id="@+id/relativeLayout01"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        layout="@layout/piece_search_bar" />
+
+	    <TextView
+	        android:id="@+id/search_cancel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:gravity="center"
+	        android:text="@string/contacts_search_cancel"
+	        android:textColor="@color/black_30"
+	        android:textSize="15sp" />
+
+	</LinearLayout>
+
 	<TextView
 	    android:paddingTop="20dp"
 	    android:id="@+id/search_empty"
@@ -85,6 +109,7 @@
                     android:layout_width="fill_parent"
                     android:divider="@drawable/table_divider_white"
                     android:cacheColorHint="@null"/>
+                <!--  
                  <ImageView
 					android:layout_marginLeft="@dimen/padding_small"
 					style="@style/standard_list_divider"/>
@@ -98,6 +123,7 @@
                  <ImageView
 					android:layout_marginLeft="@dimen/padding_small"
 					style="@style/standard_list_divider"/>
+					-->
                 <ListView
                     android:id="@+id/list_group_find"
                     android:layout_height="match_parent"

@@ -457,7 +457,7 @@ public class PhotoDisplayHelper extends ImageWorker {
         //as Database need this function too,move it there
         //Database is in wowtalksdk,it cannot reference this class
         return Database.makeLocalFilePath(fileid,ext);
-//		File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/wowtalk/.cache/file/");
+//		File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/onemeter/.cache/file/");
 //		if (! mediaStorageDir.exists()){
 //			if (! mediaStorageDir.mkdirs()){
 //				return null;
@@ -550,7 +550,7 @@ public class PhotoDisplayHelper extends ImageWorker {
 	}
 
 	private static String makeLocalPath(String uid, String subtype) {
-		File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/wowtalk/.cache/profile/" + subtype + "/");
+		File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/onemeter/.cache/profile/" + subtype + "/");
 		if (! mediaStorageDir.exists()){
 			if (! mediaStorageDir.mkdirs()){
 				return "";

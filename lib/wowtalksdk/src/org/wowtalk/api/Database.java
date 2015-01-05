@@ -5603,7 +5603,7 @@ public class Database {
         if (TextUtils.isEmpty(fileid)) {
             return "";
         }
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/wowtalk/.cache/file/");
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/onemeter/.cache/file/");
         if (! mediaStorageDir.exists()){
             if (! mediaStorageDir.mkdirs()){
                 return "";

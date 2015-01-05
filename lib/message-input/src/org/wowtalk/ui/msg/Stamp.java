@@ -1,26 +1,24 @@
 package org.wowtalk.ui.msg;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.Context;
-import android.content.res.AssetManager;
-
 /**
  * Format/parse stamp message, load stamp configurations, etc.
  */
 public class Stamp {
 	
-	public static final String HOME = "/wowtalk/.cache/moji/";
+	public static final String HOME = "/onemeter/.cache/moji/";
 	
 	/**
 	 * stamp animation.

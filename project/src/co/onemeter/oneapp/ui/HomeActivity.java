@@ -34,6 +34,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         q.find(R.id.btn_grow).clicked(this);
         q.find(R.id.vg_grow).clicked(this);
         q.find(R.id.btn_add).clicked(this);
+        q.find(R.id.btn_live_play).clicked(this);
         q.find(R.id.btn_funnyevent).clicked(this);
         q.find(R.id.btn_myclasses).clicked(this);
         q.find(R.id.live_play).clicked(this);
@@ -62,7 +63,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             case R.id.btn_myclasses:
                 startActivity(new Intent(this, MyClassesActivity.class));
                 break;
-            case R.id.live_play:
+            case R.id.btn_live_play:
             	startActivity(new Intent(this, VideoPlayingActivity.class));
             	break;
             default:

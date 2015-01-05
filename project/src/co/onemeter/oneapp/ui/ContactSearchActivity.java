@@ -40,8 +40,11 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //    public static final String EXTRA_SEARCH =  "extra_search";
 
 	private static final int GET_BUDDY_BY_WOWTALK_ID = 1000;
+	private static final int GET_BUDDY_BY_UID = 1002;
 	private static final int GET_GROUP_BY_NAME = 1001;
+	private static final int GET_GROUP_BY_GID = 1003;
 	private int searchKind = GET_BUDDY_BY_WOWTALK_ID;
+	
 	
 	private ImageButton btnTitleBack;
 //    private LinearLayout mLayoutButton;
@@ -85,6 +88,9 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 	private Database mDbHelper = null;
     private MessageBox mMsgBox;
     private TextView search_empty;
+    
+    private Button search_nickname;
+    private Button search_uid;
 
 //	private int searchType;
 
@@ -130,6 +136,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
         }
     };
 
+  //通过群组名称搜索
 	private void searchGroup() {
 		final String keyword = edtSearchContent.getText().toString().trim();
 
@@ -166,6 +173,49 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 		}.execute((Void)null);
 	}
 	
+	//通过uid搜索
+	private void searchBuddy_uid() {
+		final String wowtalkId = edtSearchContent.getText().toString();
+
+        mMsgBox.showWait();
+
+		new AsyncTask<Void, Integer, Void>() {
+			int errno = ErrorCode.OK;
+            ArrayList<Buddy> results = new ArrayList<Buddy>();
+
+            @Override
+            protected void onPreExecute() {
+                if (buddyAdapter != null)
+                    buddyAdapter.clear();
+                else
+                    searchedBuddyList.clear();
+            }
+
+			@Override
+			protected Void doInBackground(Void... arg0) {
+				errno = mWebif.fSearchBuddy_uid(wowtalkId,Buddy.ACCOUNT_TYPE_STUDENT, results);
+				return null;
+			}
+			
+			@Override
+			protected void onPostExecute(Void v) {
+                mMsgBox.dismissWait();
+
+                if (buddyAdapter != null) {
+                    buddyAdapter.addAll(results);
+                    setSearchResultStatus();
+                } else {
+                    searchedBuddyList.addAll(results);
+                    fShowBuddyResult();
+                }
+				if (errno == ErrorCode.USER_NOT_EXISTS) {
+                    mMsgBox.toast(R.string.login_user_not_exists);
+				}
+			}
+			
+		}.execute((Void)null);
+	}
+	//通过wowtalkId搜索
 	private void searchBuddy() {
 		final String wowtalkId = edtSearchContent.getText().toString();
 
@@ -246,7 +296,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //		txtResultCount.setText(String.format(getResources().getString(R.string.search_result_count), groupRooms.size()));
 		groupAdapter = new GroupSearchAdapter(ContactSearchActivity.this, searchedGroupRoomList, strContent);
 		lvGroups.setAdapter(groupAdapter);
-		ListViewUtils.setListViewHeightBasedOnChildren(lvGroups);
+//		ListViewUtils.setListViewHeightBasedOnChildren(lvGroups);
         setSearchResultStatus();
 	}
 	
@@ -290,12 +340,19 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //            searchPublicAccount();
 //        }
 //        if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
-            searchBuddy();
+//            searchBuddy();
 //        } else {
-            searchGroup();
+//            searchGroup();
 //        }
 //        ListViewUtils.setListViewHeightBasedOnChildren(lvBuddy);
 //        ListViewUtils.setListViewHeightBasedOnChildren(lvGroups);
+		if(searchKind == GET_BUDDY_BY_WOWTALK_ID){
+			searchBuddy();
+//			searchGroup();
+		}else if(searchKind == GET_BUDDY_BY_UID){
+			searchBuddy_uid();
+//			searchGroup();
+		}
 	}
 
     private void setSearchResultStatus() {
@@ -349,6 +406,19 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //		}
 //        setSearchResultStatus();
 //	}
+    private void setTitleMode(){
+    	if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
+    		search_nickname.setBackgroundResource(R.drawable.tab_button_left_white_a);
+    		search_uid.setBackgroundResource(R.drawable.tab_button_right_white);
+    		search_nickname.setTextColor(getResources().getColor(R.color.blue));
+    		search_uid.setTextColor(getResources().getColor(R.color.white));
+    	}else if(searchKind == GET_BUDDY_BY_UID){
+    		search_uid.setBackgroundResource(R.drawable.tab_button_left_white_a);
+    		search_nickname.setBackgroundResource(R.drawable.tab_button_right_white);
+    		search_uid.setTextColor(getResources().getColor(R.color.blue));
+    		search_nickname.setTextColor(getResources().getColor(R.color.white));
+    	}
+    }
 	
 	private void initView() {
 //		mPersonLayout = (RelativeLayout) findViewById(R.id.personLayout);
@@ -371,6 +441,9 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
         searchResultLayout=(LinearLayout) findViewById(R.id.search_result_layout);
         lvBuddy=(ListView) findViewById(R.id.list_buddy_find);
 		lvGroups = (ListView) findViewById(R.id.list_group_find);
+		
+		search_nickname = (Button) findViewById(R.id.search_nickname);
+		search_uid = (Button) findViewById(R.id.search_uid);
 
 //        if (searchType == REQ_NORMAL_ACCOUNT) {
 //            mLayoutButton.setVisibility(View.VISIBLE);
@@ -403,6 +476,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //		btnSearchPerson.setOnClickListener(this);
 //		btnSearch.setOnClickListener(this);
 //		btnAdd.setOnClickListener(this);
+        search_nickname.setOnClickListener(this);
+        search_uid.setOnClickListener(this);
         search_cancel.setOnClickListener(this);
 		
 		lvGroups.setOnItemClickListener(new OnItemClickListener() {
@@ -599,6 +674,16 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //		case R.id.btn_add:
 //            onAddFriendPressed();
 //            break;
+		case R.id.search_nickname:
+			searchKind = GET_BUDDY_BY_WOWTALK_ID;
+			setTitleMode();
+			edtSearchContent.setText("");
+			break;
+		case R.id.search_uid:
+			searchKind = GET_BUDDY_BY_UID;
+			setTitleMode();
+			edtSearchContent.setText("");
+			break;
 		default:
 			break;
 		}
@@ -649,7 +734,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //        searchType = getIntent().getIntExtra(EXTRA_SEARCH, REQ_NORMAL_ACCOUNT);
 		initView();
 		searchAuto();
-//		setTitleMode();
+		setTitleMode();
 
         mMsgBox = new MessageBox(this);
 		mWebif = WowTalkWebServerIF.getInstance(this);

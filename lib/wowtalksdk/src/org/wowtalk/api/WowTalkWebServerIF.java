@@ -2953,6 +2953,65 @@ public class WowTalkWebServerIF {
 		return errno;
 	}
 
+	
+    /**
+    *
+    * @param id
+    * @param accountType can be null. Buddy.ACCOUNT_TYPE_* constants.
+    * @return
+    */
+   public int fSearchBuddy_uid(String id, Integer accountType, ArrayList<Buddy> result) {
+       if (null == result) {
+           return ErrorCode.INVALID_ARGUMENT;
+       }
+
+       String strUID = sPrefUtil.getUid();
+       String strPwd = sPrefUtil.getPassword();
+
+       if (isAuthEmpty(strUID, strPwd)) {
+           return ErrorCode.NOT_LOGGED_IN;
+       }
+
+       String postStr = "action=search_buddy&uid=" + Utils.urlencodeUtf8(strUID) + "&password="
+               + Utils.urlencodeUtf8(strPwd) + "&id=" + Utils.urlencodeUtf8(id);
+       if (accountType != null) {
+           // 搜索学生或老师
+           if (Buddy.ACCOUNT_TYPE_STUDENT == accountType) {
+               postStr += "&acc_type[]=1 & acc_type[]=2";
+           } else {
+               postStr += "&acc_type=" + accountType;
+           }
+       }
+
+       Connect2 connect2 = new Connect2();
+       Element root = connect2.Post(postStr);
+
+       int errno = 0;
+       if (root != null) {
+           Element errEle = Utils.getFirstElementByTagName(root, "err_no");
+           errno = Utils.tryParseInt(errEle.getTextContent(), ErrorCode.BAD_RESPONSE);
+
+           if (ErrorCode.OK == errno) {
+               NodeList userList = root.getElementsByTagName("buddy");
+
+               Database dbHelper = new Database(mContext);
+
+               for (int i = 0; i < userList.getLength(); i++) {
+                   try {
+                       Element user = (Element) userList.item(i);
+                       Buddy buddy = new Buddy();
+                       XmlHelper.parseBuddy(user, buddy);
+                       result.add(buddy);
+                       dbHelper.storeNewBuddyDetailWithUpdate(buddy);
+                   } catch (Exception e) {
+                       continue;
+                   }
+               }
+           }
+       }
+
+       return errno;
+   }
     /**
      *
      * @param q

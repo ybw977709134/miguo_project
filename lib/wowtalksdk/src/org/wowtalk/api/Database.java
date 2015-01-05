@@ -108,7 +108,7 @@ public class Database {
      */
     public static final String DUMMY_LATEST_CONTACTS_UPDATE = "dummy_latest_contacts_update";
 
-    private static final String LOG_TAG = "WowTalk/Database";
+    private static final String LOG_TAG = "onemeter/Database";
 
     public static int sFlagIndex;
     private int mFlagIndex;
@@ -318,7 +318,7 @@ public class Database {
         if (isDBUnavailable()) {
             return -1;
         }
-//		if (buddy.userID.endsWith(WowTalkWebServerIF.getInstance(context)
+//		if (buddy.userID.endsWith(WebServerIF.getInstance(context)
 //				.fGetMyUserIDFromLocal())) {
 //			Log.w("storeNewBuddyWithUpdate(): this buddy has the same userID as mine, don't store.");
 //			return 0;

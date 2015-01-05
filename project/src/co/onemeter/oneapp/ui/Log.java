@@ -7,7 +7,7 @@ import static android.util.Log.WARN;
 
 public final class Log {
 	
-	public static final String TAG = "wowbiz";
+	public static final String TAG = "onemeter";
 	public static final boolean useIsLogable = true;
 	
 	@SuppressWarnings("unused")

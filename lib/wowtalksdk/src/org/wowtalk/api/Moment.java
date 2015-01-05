@@ -26,6 +26,9 @@ public class Moment implements Parcelable, IHasMultimedia, IHasReview {
     public Buddy owner;
 	public boolean likedByMe;
 
+    /** 匿名动态的 owner uid. */
+    public final static String ANONYMOUS_UID ="(anonymous)";
+
     public final static String SERVER_MOMENT_TAG_FOR_NOTICE ="0";
     public final static String SERVER_MOMENT_TAG_FOR_QA ="1";
     public final static String SERVER_MOMENT_TAG_FOR_STUDY ="2";

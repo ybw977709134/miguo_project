@@ -139,7 +139,7 @@ public class ImageViewActivity extends Activity implements View.OnClickListener 
         if(mMsgBox == null)
             mMsgBox = new MessageBox(this);
 
-        if(!dataSrcFound) {
+        if(!dataSrcFound && mPhotoEntity != null) {
             //if no image inputted,show the single default image
             String defImagePath=PhotoDisplayHelper.makeLocalThumbnailPath(this, DEFAULT_IMAGE_ID_ON_NO_IMAGE + mPhotoEntity.getAccountType());
             if(!new File(defImagePath).exists()) {
@@ -260,9 +260,11 @@ public class ImageViewActivity extends Activity implements View.OnClickListener 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        for(View aView : mImageViews) {
-            ImageView iv = (ImageView) aView;
-            freeABitmapDrawable((BitmapDrawable)iv.getDrawable());
+        if (mImageViews != null) {
+            for (View aView : mImageViews) {
+                ImageView iv = (ImageView) aView;
+                freeABitmapDrawable((BitmapDrawable) iv.getDrawable());
+            }
         }
     }
 

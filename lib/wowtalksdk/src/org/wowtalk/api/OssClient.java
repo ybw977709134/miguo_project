@@ -287,7 +287,7 @@ public class OssClient {
 	 * @return
 	 */
 	private String getDateForHttp() {
-		SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss", Locale.ENGLISH);
+		SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		return sdf.format(Calendar.getInstance().getTime()) + " GMT";
 	}

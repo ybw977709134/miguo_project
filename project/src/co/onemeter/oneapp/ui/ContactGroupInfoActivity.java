@@ -491,6 +491,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 
         refreshMemberGrid();
         setTitleSettingImage();
+        refreshGroupInfo();
         Database.addDBTableChangeListener(Database.TBL_BUDDIES,buddiesObserver);
         Database.addDBTableChangeListener(Database.TBL_GROUP_MEMBER,groupMembersObserver);
         if (GlobalValue.RELEASE_AS_WOWCITY) {

@@ -194,6 +194,9 @@
     <string name="event_join_coin_free">免费</string>
     <string name="event_finish_info">发布活动需要完成所有信息的填写！</string>
     <string name="event_info_fill">请先填写信息！</string>
+    <string name="event_cancel_join_msg">你确认取消报名吗？</string>
+    <string name="event_quota_full">该活动名额已满!</string>
+    <string name="event_detail_applicants">报名名单</string>
 
     <string name="settings_myinfo">个人信息</string>
     <string name="my_treasure">我的百宝箱</string>
@@ -841,5 +844,6 @@
 	<string name="class_add_homework">添加练习</string>
 	<string name="class_submit_success">提交成功</string>
 	<string name="class_submit_failed">提交失败</string>
-    <string name="event_detail_applicants">报名名单</string>
+	<string name="class_time_ealier">时间不能早于现在!</string>
+	
 </resources>

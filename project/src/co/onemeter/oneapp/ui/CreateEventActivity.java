@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -69,11 +70,21 @@ public class CreateEventActivity extends Activity implements OnClickListener {
 
     private EditText edtContent;
     private MessageBox msgBox;
+    
+    private LinearLayout lay_starttime;
+    private LinearLayout lay_endtime;
+    
+    private Handler hanlder = new Handler(){
+    	public void handleMessage(android.os.Message msg) {
+    		if(msg.what == 0){
+    			lay_starttime.setEnabled(true);
+    			lay_endtime.setEnabled(true);
+    		}
+    	};
+    };
 
     private void initView(Bundle bundle) {
         AQuery q = new AQuery(this);
-        q.find(R.id.layout_starttime).clicked(this);
-        q.find(R.id.layout_endtime).clicked(this);
         q.find(R.id.layout_capacity).clicked(this);
         q.find(R.id.layout_coins).clicked(this);
 
@@ -96,6 +107,9 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         imgNeedToUpdateMulti = (ImageView) findViewById(R.id.img_needtoupdatemulti);
         isBtnInfo = (ImageButton) findViewById(R.id.btn_isinfo);
         isBtnPublic = (ImageButton) findViewById(R.id.btn_ispublic);
+        
+        lay_starttime = (LinearLayout) findViewById(R.id.layout_starttime);
+        lay_endtime = (LinearLayout)findViewById(R.id.layout_endtime);
 
         btnTitleBack.setOnClickListener(this);
         btnTitleConfirm.setOnClickListener(this);
@@ -107,10 +121,10 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         isBtnInfo.setOnClickListener(this);
         isBtnPublic.setOnClickListener(this);
 
+        lay_starttime.setOnClickListener(this);
+        lay_endtime.setOnClickListener(this);
         findViewById(R.id.layout_title).setOnClickListener(this);
         findViewById(R.id.layout_loc).setOnClickListener(this);
-        findViewById(R.id.layout_starttime).setOnClickListener(this);
-        findViewById(R.id.layout_endtime).setOnClickListener(this);
         findViewById(R.id.layout_repeat).setOnClickListener(this);
         findViewById(R.id.layout_openlevel).setOnClickListener(this);
         findViewById(R.id.layout_targetuser).setOnClickListener(this);
@@ -280,19 +294,24 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                         REQ_INPUT_PLACE);
                 break;
             case R.id.layout_starttime:
-                DateTimeInputHelper.inputStartDateTime(this, new DateTimeInputHelper.OnDateTimeSetListener() {
-                    @Override
-                    public void onDateTimeResult(Calendar result) {
-                        wevent.startTime = result.getTime();
-                        if(wevent.startTime.getTime() > System.currentTimeMillis()){
-                        	updateUI();
-                        }else{
-                        	Toast.makeText(CreateEventActivity.this, R.string.event_time_start_earlier_now, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+            	lay_starttime.setEnabled(false);
+            	hanlder.sendEmptyMessageDelayed(0, 1000);
+	            DateTimeInputHelper.inputStartDateTime(this, new DateTimeInputHelper.OnDateTimeSetListener() {
+	                 @Override
+	                 public void onDateTimeResult(Calendar result) {
+	                     wevent.startTime = result.getTime();
+	                     if(wevent.startTime.getTime() > System.currentTimeMillis()){
+	                        	updateUI();
+	                     }else{
+	                        Toast.makeText(CreateEventActivity.this, R.string.event_time_start_earlier_now, Toast.LENGTH_SHORT).show();
+	                     }
+	                     lay_starttime.setEnabled(true);
+	                  }
+	            });
                 break;
             case R.id.layout_endtime:
+            	lay_endtime.setEnabled(false);
+            	hanlder.sendEmptyMessageDelayed(0, 1000);
                 DateTimeInputHelper.inputStartDateTime(this, new DateTimeInputHelper.OnDateTimeSetListener() {
                     @Override
                     public void onDateTimeResult(Calendar result) {
@@ -306,7 +325,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                         }else{
                         	Toast.makeText(CreateEventActivity.this, R.string.event_time_start_earlier_now, Toast.LENGTH_SHORT).show();
                         }
-                        
+                        lay_endtime.setEnabled(true);
                     }
                 });
                 break;

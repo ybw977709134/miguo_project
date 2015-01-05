@@ -3,6 +3,8 @@ package co.onemeter.oneapp.ui;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,10 +21,12 @@ import com.androidquery.AQuery;
 
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.R.color;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +44,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LessonInfoEditActivity extends Activity implements OnClickListener {
 
@@ -125,6 +130,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			findViewById(R.id.lay_les_edit).setVisibility(View.VISIBLE);
 			q.find(R.id.title).text(getString(R.string.class_coursetable_info));
 			lessons.addAll(mDBHelper.fetchLesson(classId));
+			Collections.sort(lessons, new LessonComparator());
 			adapter.notifyDataSetChanged();
 			originSize = lessons.size();
 		} else {
@@ -227,11 +233,15 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				Calendar result = Calendar.getInstance();
+				result.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth());
+				if(result.getTimeInMillis() < System.currentTimeMillis()){
+					mMsgBox.toast(R.string.class_time_ealier);
+					return;
+				}
 				Lesson lesson = new Lesson();
 				lesson.class_id = classId;
 				lesson.title = edName.getText().toString();
-				Calendar result = Calendar.getInstance();
-				result.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth());
 				lesson.start_date = result.getTimeInMillis()/1000;
 				lesson.end_date = result.getTimeInMillis()/1000 + 45 * 60;
 				addLessons.add(lesson);
@@ -311,9 +321,24 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		
 	}
 	
+	static class LessonComparator implements Comparator<Lesson>{
+
+		@Override
+		public int compare(Lesson arg0, Lesson arg1) {
+			long start0 = arg0.start_date;
+			long start1 = arg1.start_date;
+			if(start0 > start1){
+				return 1;
+			}else if(start0 < start1){
+				return -1;
+			}
+			return 0;
+		}
+		
+	}
+	
 	class CourseTableAdapter extends BaseAdapter{
 		private List<Lesson> alessons;
-		private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
 		public CourseTableAdapter(List<Lesson> lessons){
 			this.alessons = lessons;
@@ -336,6 +361,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			ViewHodler holder = null;
 			if(null == convertView){
 				holder = new ViewHodler();
@@ -348,6 +374,9 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 				holder = (ViewHodler) convertView.getTag();
 			}
 			holder.item_name.setText(alessons.get(position).title);
+			if(alessons.get(position).end_date * 1000 < System.currentTimeMillis()){
+				holder.item_name.setTextColor(0xff8eb4e6);
+			}
 			holder.item_time.setText(sdf.format(new Date(alessons.get(position).start_date * 1000)));
 			holder.item_msg.setText("");
 			return convertView;

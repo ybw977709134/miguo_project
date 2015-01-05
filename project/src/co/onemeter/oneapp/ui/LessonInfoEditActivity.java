@@ -235,7 +235,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			public void onClick(DialogInterface dialog, int which) {
 				Calendar result = Calendar.getInstance();
 				result.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth());
-				if(result.getTimeInMillis() > System.currentTimeMillis()){
+				if(result.getTimeInMillis() < System.currentTimeMillis()){
 					mMsgBox.toast(R.string.class_time_ealier);
 					return;
 				}

@@ -194,7 +194,12 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 finish();
                 break;
             case R.id.right_button_up:
-            	Log.i("----->>>>", ""+eventDetail.is_get_member_info);
+            	Log.i("--membercount", eventDetail.joinedMemberCount + "");
+            	Log.i("--capacity", eventDetail.capacity + "");
+            	if(eventDetail.joinedMemberCount >= eventDetail.capacity){
+            		msgbox.toast(R.string.event_quota_full);
+            		return;
+            	}
             	if(eventDetail.is_get_member_info){
             		Intent intent = new Intent(this, SubmitInformationActivity.class);
             		startActivityForResult(intent, 100);
@@ -207,9 +212,9 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 break;
             case R.id.right_button_down:
             	Builder builder = new AlertDialog.Builder(EventDetailActivity.this);
-            	builder.setTitle("提示");
-            	builder.setMessage("你确认取消报名吗？");
-            	builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            	builder.setTitle(getString(R.string.contacts_QRcode_dialogtitle));
+            	builder.setMessage(getString(R.string.event_cancel_join_msg));
+            	builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -219,7 +224,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 		            	Toast.makeText(EventDetailActivity.this, R.string.require_cancel_event_joined, Toast.LENGTH_SHORT).show();
 					}
 				});
-            	builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            	builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -249,7 +254,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
         eventDetail = getIntent().getExtras().getParcelable(EventActivity.EVENT_DETAIL_BUNDLE);
         
-        
+        int i =  eventDetail.capacity;
 
         if (eventDetail == null) { 
             return;
@@ -352,7 +357,6 @@ public class EventDetailActivity extends Activity implements OnClickListener {
             @Override
             public void onPostExecute(Integer errno) {
      //           msgbox.dismissWait();
-            	Log.i("-->>", errno+"");
                 if (errno == ErrorCode.OK) {
                     msgbox.toast(R.string.require_join_event_success);
                     btn_right_up.setVisibility(View.GONE);

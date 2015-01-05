@@ -296,11 +296,6 @@
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
-			android:name=".ui.AccountSettingActivity_biz"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
             android:name=".ui.PrivacySettingActivity"
             android:theme="@style/Theme.Green"
             android:screenOrientation="portrait" >

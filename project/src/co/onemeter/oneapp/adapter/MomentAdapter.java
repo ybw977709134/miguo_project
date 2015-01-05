@@ -660,16 +660,16 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 //not vote yet,show to vote
                 btnSurvey.setVisibility(View.VISIBLE);
                 SurveyChooseToVoteAdapter adapter=new SurveyChooseToVoteAdapter(context,moment.surveyOptions,choosed,moment.isSurveyAllowMultiSelect);
-                adapter.setOnChooseChangeListener(new SurveyChooseToVoteAdapter.OnChooseChangeListener() {
-                    @Override
-                    public void onChooseChange(int count) {
-                        if(0 == count) {
-                            btnSurvey.setBackgroundResource(R.drawable.btn_gray_selector);
-                        } else {
-                            btnSurvey.setBackgroundResource(R.drawable.btn_blue_selector);
-                        }
-                    }
-                });
+//                adapter.setOnChooseChangeListener(new SurveyChooseToVoteAdapter.OnChooseChangeListener() {
+//                    @Override
+//                    public void onChooseChange(int count) {
+//                        if(0 == count) {
+//                            btnSurvey.setBackgroundResource(R.drawable.btn_gray_selector);
+//                        } else {
+//                            btnSurvey.setBackgroundResource(R.drawable.btn_blue_selector);
+//                        }
+//                    }
+//                });
                 lvSurveyOptions.setListAdapter(adapter);
 //                ListHeightUtil.setListHeight(lvSurveyOptions);
 
@@ -686,12 +686,12 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
              
                 
-                
-                if(0 == choosed.size()) {
-                    btnSurvey.setBackgroundResource(R.drawable.btn_gray_selector);
-                } else {
-                    btnSurvey.setBackgroundResource(R.drawable.btn_blue_selector);
-                }
+                //现在投票刷新后就不需要进行显示按钮了
+//                if(0 == choosed.size()) {
+//                    btnSurvey.setBackgroundResource(R.drawable.btn_gray_selector);
+//                } else {
+//                    btnSurvey.setBackgroundResource(R.drawable.btn_blue_selector);
+//                }
             }
         } else {
             voteSurveyLayout.setVisibility(View.GONE);
@@ -756,23 +756,23 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         setTagdesc(context,moment,holder.ivMomentTagColor,holder.tvMomentTagDesc,
                 holder.voteSurveyLayout,holder.lvSurveyOptions,surveyMomentChoosedItemList.get(moment.id),holder.btnSurvey);
 
-        if(TextUtils.isEmpty(moment.shareRange) || moment.shareRange.equals(Moment.SERVER_SHARE_RANGE_PUBLIC)) {
+//        if(TextUtils.isEmpty(moment.shareRange) || moment.shareRange.equals(Moment.SERVER_SHARE_RANGE_PUBLIC)) {
 //            holder.tvMomentShareRange.setText(R.string.share_range_public_short);
 //            holder.ivMomentShareRange.setImageResource(R.drawable.timeline_public);
-        } else {
+//        } else {
 //            holder.tvMomentShareRange.setText(R.string.share_range_private);
 //            holder.ivMomentShareRange.setImageResource(R.drawable.timeline_limited);
-        }
+//        }
 
-        View.OnClickListener clickListener=new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context,ShareRangeSelectActivity.class);
-                intent.putStringArrayListExtra(ShareRangeSelectActivity.LITMITED_DEPS,moment.limitedDepartmentList);
-                intent.putExtra(ShareRangeSelectActivity.SHOWN_ONLY,true);
-                context.startActivity(intent);
-            }
-        };
+//        View.OnClickListener clickListener=new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(context,ShareRangeSelectActivity.class);
+//                intent.putStringArrayListExtra(ShareRangeSelectActivity.LITMITED_DEPS,moment.limitedDepartmentList);
+//                intent.putExtra(ShareRangeSelectActivity.SHOWN_ONLY,true);
+//                context.startActivity(intent);
+//            }
+//        };
 //        holder.tvMomentShareRange.setOnClickListener(clickListener);
 //        holder.ivMomentShareRange.setOnClickListener(clickListener);
 

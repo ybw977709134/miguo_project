@@ -699,6 +699,7 @@
 	<string name="moment_tag_study">学习</string>
 	<string name="moment_tag_life">生活</string>
 	<string name="moment_tag_survey">投票</string>
+	<string name="moment_vote_submit">提交</string>
 	<string name="moment_tag_video">视频</string>
     <string name="moment_survey_has_voted">您已经投过票了</string>
     <string name="new_moment_title">新建-%s</string>

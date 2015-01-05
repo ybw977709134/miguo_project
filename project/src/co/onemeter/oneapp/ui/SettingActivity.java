@@ -43,33 +43,6 @@ public class SettingActivity extends Activity implements OnClickListener {
 
     private ArrayList<Account> mAccountDatas;
 
-    private Handler mSwitchAccountHandler = new Handler() {
-        public void handleMessage(android.os.Message msg) {
-            switch (msg.what) {
-            case ManageAccountsActivity.HANDLER_SWITCHING_ACCOUNT:
-                mMsgBox.showOrUpdateWatiMsg(String.valueOf(msg.obj));
-                break;
-            case ManageAccountsActivity.HANDLER_SWITCH_ACCOUNT_SUCCESSFUL:
-                mMsgBox.dismissWait();
-                updateNoticeStatus();
-                Buddy me = new Buddy();
-                me.userID = PrefUtil.getInstance(SettingActivity.this).getUid();
-                me.photoUploadedTimeStamp = PrefUtil.getInstance(SettingActivity.this).getMyPhotoUploadedTimestamp();
-                PhotoDisplayHelper.displayPhoto(SettingActivity.this, imgPhoto, R.drawable.default_avatar_90, me, true);
-                setAccountData();
-                getAccountUnreadCounts();
-                break;
-            case ManageAccountsActivity.HANDLER_SWITCH_ACCOUNT_FAILURE:
-                mMsgBox.dismissWait();
-                mMsgBox.show(null, String.valueOf(msg.obj));
-                break;
-
-            default:
-                break;
-            }
-        };
-    };
-
     private Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {

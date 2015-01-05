@@ -436,7 +436,7 @@ public class ChatMessage {
 		Database db = Database.open(context);
         Buddy b = new Buddy(uid);
         if (null != db.fetchBuddyDetail(b)) {
-            return Utils.isNullOrEmpty(b.nickName) ? b.wowtalkID : b.nickName;
+            return Utils.isNullOrEmpty(b.nickName) ? b.username : b.nickName;
         }
 		return TextUtils.isEmpty(displayName)?context.getString(defaultValue):displayName;
 	}

@@ -491,17 +491,13 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 
         MobclickAgent.onResume(this);
 
-        if (GlobalValue.RELEASE_AS_WOWCITY) {
-            fRefreshTabBadge_contact();
-        }
+        fRefreshTabBadge_contact();
 
         Database.addDBTableChangeListener(Database.DUMMY_TBL_SWITCH_ACCOUNT, mSwitchAccountObserver);
         Database.addDBTableChangeListener(Database.TBL_LATEST_CHAT_TARGET, chatmessageObserver);
         Database.addDBTableChangeListener(Database.TBL_LATEST_CHAT_TARGET_UNREAD_COUNT, chatmessageObserver);
         Database.addDBTableChangeListener(Database.TBL_MOMENT_REVIEWS,momentReviewObserver);
-        if (GlobalValue.RELEASE_AS_WOWCITY) {
-            Database.addDBTableChangeListener(Database.TBL_PENDING_REQUESTS,pendingRequestObserver);
-        }
+        Database.addDBTableChangeListener(Database.TBL_PENDING_REQUESTS,pendingRequestObserver);
 
         setTab(_selectedTabIndex);
 
@@ -551,9 +547,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         Database.removeDBTableChangeListener(mSwitchAccountObserver);
         Database.removeDBTableChangeListener(chatmessageObserver);
         Database.removeDBTableChangeListener(momentReviewObserver);
-        if (GlobalValue.RELEASE_AS_WOWCITY) {
-            Database.removeDBTableChangeListener(pendingRequestObserver);
-        }
+        Database.removeDBTableChangeListener(pendingRequestObserver);
     }
 	
 	@Override
@@ -1154,9 +1148,9 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         int errno = webIF.getCompanyStructure(companyId);
         Log.i("StartActivity#downloadContactsAndGroups, Finish downloading(1/4) company structure (errno:" + errno);
 
-        // 公司用来发通知的buddy信息,其wowtalk_id格式为companyId_companyId
+        // 公司用来发通知的buddy信息,其 username 格式为companyId_companyId
         // 此过程不需要显示在界面上（属于组织架构部分）
-        errno = webIF.fGetBuddyByWowtalkId(companyId + "_" + companyId, new Buddy());
+        errno = webIF.fGetBuddyByUsername(companyId + "_" + companyId, new Buddy());
 
         // 2. 部门
         Log.i("downloading(2/4) all depts for biz");

@@ -852,7 +852,7 @@ public class EventWebServerIF {
 								a.userID = e.getTextContent();
 							e = Utils.getFirstElementByTagName((Element)nids.item(i), "wowtalk_id");
 							if(e != null)
-								a.wowtalkID = e.getTextContent();
+								a.username = e.getTextContent();
 							e = Utils.getFirstElementByTagName((Element)nids.item(i), "nickname");
 							if(e != null)
 								a.nickName = e.getTextContent();
@@ -922,7 +922,7 @@ public class EventWebServerIF {
 //								a.userID = e.getTextContent();
 //							e = Utils.getFirstElementByTagName((Element)nids.item(i), "wowtalk_id");
 //							if(e != null)
-//								a.wowtalkID = e.getTextContent();
+//								a.username = e.getTextContent();
 							e = Utils.getFirstElementByTagName((Element)nids.item(i), "nickname");
 							if(e != null)
 								a.nickName = e.getTextContent();

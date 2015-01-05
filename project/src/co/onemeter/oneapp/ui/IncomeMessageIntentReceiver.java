@@ -72,7 +72,7 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
                     if(msg.isGroupChatMessage) {
                         Buddy b = database.buddyWithUserID(msg.groupChatSenderID);
                         if (null != b) {
-                            name2show=TextUtils.isEmpty(b.nickName) ? b.wowtalkID : b.nickName;
+                            name2show=TextUtils.isEmpty(b.nickName) ? b.username : b.nickName;
                         }
                     }
                     return name2show;

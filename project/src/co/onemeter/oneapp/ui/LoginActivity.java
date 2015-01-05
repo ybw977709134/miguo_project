@@ -294,10 +294,10 @@ public class LoginActivity extends Activity implements OnClickListener {
     private void login(final String username, final String pwdStr) {
         // 添加帐号时，判断此帐号是否已经存在于account_list中
         if (mIsAddAccount) {
-            String tempWowtalkId = username;
+            String tempUsername = username;
             ArrayList<Account> accounts = mPrefUtil.getAccountList();
             for (Account account : accounts) {
-                if (tempWowtalkId.equalsIgnoreCase(account.wowtalkId)) {
+                if (tempUsername.equalsIgnoreCase(account.username)) {
                     alert(R.string.manage_account_add_user_exists);
                     return;
                 }

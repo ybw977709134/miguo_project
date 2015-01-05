@@ -42,7 +42,7 @@ public class Person implements IHasPhoto, Parcelable{
 	
 	private String phoneticName;
 	
-	private String wowtalkId;
+	private String username;
 	
 	private String personState;
 	
@@ -76,7 +76,7 @@ public class Person implements IHasPhoto, Parcelable{
 //            person.sortKey = buddy.nickName.substring(0, 1);
             person.name = buddy.nickName;
         } else {
-            person.name = buddy.wowtalkID;
+            person.name = buddy.username;
         }
 //        person.sortKey=person.name;
         if (TextUtils.isEmpty(buddy.sortKey)) {
@@ -93,7 +93,7 @@ public class Person implements IHasPhoto, Parcelable{
         }
 		person.accountType = buddy.getAccountType();
 
-        person.wowtalkId = buddy.wowtalkID;
+        person.username = buddy.username;
         person.rigion = buddy.area;
         person.emailAddress = buddy.getEmail();
         person.personState = buddy.status;
@@ -109,7 +109,7 @@ public class Person implements IHasPhoto, Parcelable{
     public Buddy toBuddy() {
         Buddy b = new Buddy();
         b.userID = ID;
-        b.wowtalkID = wowtalkId;
+        b.username = username;
         b.nickName = name;
         b.setSexFlag(sexFlag);
         b.status = personState;
@@ -123,7 +123,7 @@ public class Person implements IHasPhoto, Parcelable{
 
     public void fillBuddy(Buddy b) {
         b.userID = ID;
-        b.wowtalkID = wowtalkId;
+        b.username = username;
         b.nickName = name;
         b.setSexFlag(sexFlag);
         b.status = personState;
@@ -161,13 +161,14 @@ public class Person implements IHasPhoto, Parcelable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public String getWowTalkId() {
-		return wowtalkId;
+
+	/** 等同于 {@link Buddy#username} */
+	public String getUsername() {
+		return username;
 	}
 	
-	public void setWowTalkId(String wowtalkId) {
-		this.wowtalkId = wowtalkId;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 	public void setSexFlag(int sex) {
@@ -320,7 +321,7 @@ public class Person implements IHasPhoto, Parcelable{
 		dest.writeString(ID);
 		dest.writeString(sortKey);
 		dest.writeString(name);
-		dest.writeString(wowtalkId);
+		dest.writeString(username);
 		dest.writeString(phoneticName);
 		dest.writeString(personState);
 		dest.writeString(globalPhonenumber);
@@ -347,7 +348,7 @@ public class Person implements IHasPhoto, Parcelable{
      * @return
      */
     public String toStringForFiltering() {
-        return (name + " " + wowtalkId + " " + globalPhonenumber).toLowerCase();
+        return (name + " " + username + " " + globalPhonenumber).toLowerCase();
     }
 	
 	public static final Parcelable.Creator<Person> CREATOR = 
@@ -369,7 +370,7 @@ public class Person implements IHasPhoto, Parcelable{
 					p.ID = source.readString();
 					p.sortKey = source.readString();
 					p.name = source.readString();
-					p.wowtalkId = source.readString();
+					p.username = source.readString();
 					p.phoneticName = source.readString();
 					p.personState = source.readString();
 					p.globalPhonenumber = source.readString();

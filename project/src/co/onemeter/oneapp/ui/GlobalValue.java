@@ -1,16 +1,10 @@
 package co.onemeter.oneapp.ui;
 
-import co.onemeter.oneapp.ui.Log;
-
 import java.util.HashSet;
 
 public class GlobalValue {
-    /** Release option, release as WowCity? */
-    public final static boolean RELEASE_AS_WOWCITY = true;
-    /** Release option, release as WowTalkBiz? */
-    public final static boolean RELEASE_AS_WOWTALKBIZ = false;
 
-	/*don't change this*/
+    /*don't change this*/
 	public static final String INCOME_MISSEDCALL_INTENT="org.wowtalk.intent.missedcall";
     /*end of this*/
 	public final static  String BROADCAST_SHOULD_SHOW_KEYPAD_ACTION = "org.wowtalk.intent.should_showkeypad";

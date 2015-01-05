@@ -140,11 +140,7 @@ public class SettingActivity extends Activity implements OnClickListener {
                 break;
             }
             case R.id.settings_account:
-                if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
-                    intent.setClass(SettingActivity.this, AccountSettingActivity_biz.class);
-                } else {
-                    intent.setClass(SettingActivity.this, AccountSettingActivity.class);
-                }
+                intent.setClass(SettingActivity.this, AccountSettingActivity.class);
                 startActivity(intent);
                 break;
             case R.id.settings_privacy:

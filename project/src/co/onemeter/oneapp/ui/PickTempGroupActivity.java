@@ -291,8 +291,7 @@ public class PickTempGroupActivity extends Activity {
             mNoneTempGroupText.setVisibility(View.VISIBLE);
         }
 
-        // biz版本中，在MultiSelectActivityForBiz中已经判断过是否已经加载完群组成员
-        if (GlobalValue.RELEASE_AS_WOWCITY && !PrefUtil.getInstance(PickTempGroupActivity.this).isGroupMembersUptodatePerfectly()) {
+        if (!PrefUtil.getInstance(PickTempGroupActivity.this).isGroupMembersUptodatePerfectly()) {
             mMsgBox.showWait();
         }
 

@@ -1040,7 +1040,7 @@ public class WebServerIF {
      *
      * 如果搜索结果为空，result.userID 将被置为 null。
 	 */
-	public int fGetBuddyByWowtalkId(String wowtalkID, Buddy result) {
+	public int fGetBuddyByUsername(String wowtalkID, Buddy result) {
         String uid = sPrefUtil.getUid();
         String password = sPrefUtil.getPassword();
         if(isAuthEmpty(uid, password) || TextUtils.isEmpty(wowtalkID))
@@ -1064,7 +1064,7 @@ public class WebServerIF {
 			if (errorStr.equals("0")) {
 				errno = 0;
 				
-				result.wowtalkID = wowtalkID;
+				result.username = wowtalkID;
 
 				Element resultElement = Utils.getFirstElementByTagName(root, action); 
 				if(resultElement != null) {
@@ -1156,7 +1156,7 @@ public class WebServerIF {
 
 				if(result != null) {
                     clearLocalData();
-                    result.wowtalkID = wowtalk_id;
+                    result.username = wowtalk_id;
 
                     sPrefUtil.setWowtalkIdChanged(true);
                     sPrefUtil.setPasswordChanged(true);
@@ -1347,7 +1347,7 @@ public class WebServerIF {
     }
 
     /**
-	 * @param result Buddy, output uid,domain,password,wowtalkId
+	 * @param result Buddy, output uid,domain,password,username
 	 * @return
 	 */
 	public int fLoginWithInvitationCode(String invitationCode, Buddy result) {
@@ -1448,18 +1448,18 @@ public class WebServerIF {
         return errno;
     }
 
-	public int fChangeWowtalkId(String wowtalkId) {
+	public int fChangeUsername(String username) {
         String uid = sPrefUtil.getUid();
         String password = sPrefUtil.getPassword();
-        if(isAuthEmpty(uid, password) || Utils.isNullOrEmpty(wowtalkId))
+        if(isAuthEmpty(uid, password) || Utils.isNullOrEmpty(username))
 			return ErrorCode.INVALID_ARGUMENT;
 		
 		final String action = "change_wowtalk_id";
 		String postStr = "action=" + action
 				+ "&uid=" + Utils.urlencodeUtf8(uid)
 				+ "&password=" + Utils.urlencodeUtf8(password)
-				+ "&new_wowtalk_id=" + Utils.urlencodeUtf8(wowtalkId.trim()) // compliant
-				+ "&wowtalk_id=" + Utils.urlencodeUtf8(wowtalkId.trim()); // compliant
+				+ "&new_wowtalk_id=" + Utils.urlencodeUtf8(username.trim()) // compliant
+				+ "&wowtalk_id=" + Utils.urlencodeUtf8(username.trim()); // compliant
 		Connect2 connect2 = new Connect2();
 		Element root = connect2.Post(postStr);
 
@@ -1471,7 +1471,7 @@ public class WebServerIF {
 			if (errorStr.equals("0")) {
 				errno = 0;
 
-                sPrefUtil.setWowtalkId(wowtalkId);
+                sPrefUtil.setWowtalkId(username);
                 sPrefUtil.setWowtalkIdChanged(true);
             } else {
 				errno = Integer.parseInt(errorStr);
@@ -1674,7 +1674,7 @@ public class WebServerIF {
 				editor.putInt(PrefUtil.MY_SEX, me.getSexFlag());
 				editor.putString(PrefUtil.MY_AREA, me.area);
 				editor.putLong(PrefUtil.MY_PHOTO_UPLOADED_TIMESTAMP, me.photoUploadedTimeStamp);
-				editor.putString(PrefUtil.WOWTALK_ID, me.wowtalkID);
+				editor.putString(PrefUtil.WOWTALK_ID, me.username);
 				editor.putString(PrefUtil.MY_PRONUNCIATION, me.pronunciation);
 				editor.putString(PrefUtil.MY_PHONE, me.phoneNumber);
 				editor.putString(PrefUtil.MY_MOBILE, me.mobile);

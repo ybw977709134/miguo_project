@@ -109,7 +109,7 @@ public class ExternalSearchActivity extends Activity {
     private void searchExternalContact() {
         String companyID = edtCompany.getText().toString();
         String id = edtID.getText().toString();
-        final String wowtalkId = new StringBuilder().append(companyID).append("_").append(id).toString();
+        final String username = new StringBuilder().append(companyID).append("_").append(id).toString();
         if (companyID == null || companyID.equals("")) {
             return;
         }
@@ -121,7 +121,7 @@ public class ExternalSearchActivity extends Activity {
             @Override
             protected Integer doInBackground(Void... params) {
                 return WebServerIF.getInstance(ExternalSearchActivity.this)
-                        .fGetBuddyByWowtalkId(wowtalkId, buddy);
+                        .fGetBuddyByUsername(username, buddy);
             }
 
             @Override

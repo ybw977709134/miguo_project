@@ -126,9 +126,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 
 		btnTitleBack.setOnClickListener(this);
 		change_avatar.setOnClickListener(this);
-        if (GlobalValue.RELEASE_AS_WOWCITY) {
-            findViewById(R.id.boxNick).setOnClickListener(this);
-        }
+        findViewById(R.id.boxNick).setOnClickListener(this);
 		findViewById(R.id.boxSex).setOnClickListener(this);
 		findViewById(R.id.boxAge).setOnClickListener(this);
 		findViewById(R.id.boxArea).setOnClickListener(this);

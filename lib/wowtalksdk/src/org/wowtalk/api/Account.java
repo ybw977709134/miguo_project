@@ -22,7 +22,7 @@ public class Account implements Parcelable{
 
     public String uid = "";
     public String password;
-    public String wowtalkId;
+    public String username;
     public String name = "";
     public String company = "";
     /**
@@ -43,7 +43,7 @@ public class Account implements Parcelable{
             JSONObject jsonObject = new JSONObject(jsonString);
             uid = jsonObject.getString(KEY_UID);
             password = jsonObject.getString(KEY_PASSWORD);
-            wowtalkId = jsonObject.getString(KEY_WOWTALK_ID);
+            username = jsonObject.getString(KEY_WOWTALK_ID);
             name = jsonObject.getString(KEY_NAME);
             company = jsonObject.getString(KEY_COMPANY);
             photoUploadTimeStamp = jsonObject.getLong(KEY_PORTRAIT_UPLOAD_TIME_STAMP);
@@ -64,7 +64,7 @@ public class Account implements Parcelable{
         try {
             json.put(KEY_UID, uid);
             json.put(KEY_PASSWORD, password);
-            json.put(KEY_WOWTALK_ID, wowtalkId);
+            json.put(KEY_WOWTALK_ID, username);
             json.put(KEY_NAME, name);
             json.put(KEY_COMPANY, company);
             json.put(KEY_PORTRAIT_UPLOAD_TIME_STAMP, photoUploadTimeStamp);
@@ -92,7 +92,7 @@ public class Account implements Parcelable{
         Account account = new Account();
         account.uid = prefUtil.getUid();
         account.password = prefUtil.getPassword();
-        account.wowtalkId = prefUtil.getMyWowtalkID();
+        account.username = prefUtil.getMyUsername();
         account.name = prefUtil.getMyNickName();
         account.company = prefUtil.getCompanyId();
         account.photoUploadTimeStamp = prefUtil.getMyPhotoUploadedTimestamp();
@@ -108,7 +108,7 @@ public class Account implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(uid);
         dest.writeString(password);
-        dest.writeString(wowtalkId);
+        dest.writeString(username);
         dest.writeString(name);
         dest.writeString(company);
         dest.writeLong(photoUploadTimeStamp);
@@ -126,7 +126,7 @@ public class Account implements Parcelable{
                     Account account = new Account();
                     account.uid = source.readString();
                     account.password = source.readString();
-                    account.wowtalkId = source.readString();
+                    account.username = source.readString();
                     account.name = source.readString();
                     account.company = source.readString();
                     account.photoUploadTimeStamp = source.readLong();

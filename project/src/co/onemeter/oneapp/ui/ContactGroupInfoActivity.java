@@ -473,7 +473,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
      * 设置右上角的菜单按钮是否要有新请求的小红点
      */
     private void setTitleSettingImage() {
-        if (GlobalValue.RELEASE_AS_WOWCITY && (GroupMember.LEVEL_CREATOR == myLevel || GroupMember.LEVEL_ADMIN == myLevel)) {
+        if (GroupMember.LEVEL_CREATOR == myLevel || GroupMember.LEVEL_ADMIN == myLevel) {
             int pendingCounts = Database.open(ContactGroupInfoActivity.this).fetchPendingCountsByGroupId(groupRoom.groupID);
             Log.i("ContactGroupInfoActivity, mPendingRequestObserver, the counts of pendings is " + pendingCounts);
             if (pendingCounts == 0) {
@@ -494,9 +494,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
         refreshGroupInfo();
         Database.addDBTableChangeListener(Database.TBL_BUDDIES,buddiesObserver);
         Database.addDBTableChangeListener(Database.TBL_GROUP_MEMBER,groupMembersObserver);
-        if (GlobalValue.RELEASE_AS_WOWCITY) {
-            Database.addDBTableChangeListener(Database.TBL_PENDING_REQUESTS,mPendingRequestObserver);
-        }
+        Database.addDBTableChangeListener(Database.TBL_PENDING_REQUESTS,mPendingRequestObserver);
 	}
 
     @Override
@@ -506,9 +504,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 
         Database.removeDBTableChangeListener(buddiesObserver);
         Database.removeDBTableChangeListener(groupMembersObserver);
-        if (GlobalValue.RELEASE_AS_WOWCITY) {
-            Database.removeDBTableChangeListener(mPendingRequestObserver);
-        }
+        Database.removeDBTableChangeListener(mPendingRequestObserver);
     }
 
     @Override

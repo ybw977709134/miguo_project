@@ -133,9 +133,9 @@ public class MessagesAdapter extends BaseAdapter {
                                 saveNameBuff(msg.chatUserName, buddy.nickName, textView);
                                 // 重新加载头像
                                 IHasPhoto entity = buddy;
-                                // 公司发通知时，发起人采用的是buddy，此buddy的wowtalkid格式为"公司id_公司id"
+                                // 公司发通知时，发起人采用的是buddy，此buddy的 username 格式为"公司id_公司id"
                                 String companyId = PrefUtil.getInstance(mContext).getCompanyId();
-                                if ((companyId + "_" + companyId).equals(buddy.wowtalkID)) {
+                                if ((companyId + "_" + companyId).equals(buddy.username)) {
                                     // 公司默认头像暂时使用群组默认头像
                                     PhotoDisplayHelper.displayPhoto(mContext, photoImageView,
                                             R.drawable.default_group_avatar_90, entity, true);
@@ -377,9 +377,9 @@ public class MessagesAdapter extends BaseAdapter {
             Buddy buddy = mDbHelper.buddyWithUserID(message.chatUserName);
             IHasPhoto entity = buddy;
             if(entity != null) {
-                // 公司发通知时，发起人采用的是buddy，此buddy的wowtalkid格式为"公司id_公司id"
+                // 公司发通知时，发起人采用的是buddy，此buddy的 username 格式为"公司id_公司id"
                 String companyId = PrefUtil.getInstance(mContext).getCompanyId();
-                if ((companyId + "_" + companyId).equals(buddy.wowtalkID)) {
+                if ((companyId + "_" + companyId).equals(buddy.username)) {
                     // 公司默认头像暂时使用群组默认头像
                     PhotoDisplayHelper.displayPhoto(mContext, photoImageView,
                             R.drawable.default_group_avatar_90, entity, true);

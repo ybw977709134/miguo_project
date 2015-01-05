@@ -1,7 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -20,12 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
-
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
+
+import java.util.ArrayList;
 
 public class ContactInfoActivity extends Activity implements OnClickListener{
     private static final int MOMENT_NUMBER = 3;
@@ -549,7 +547,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 		Log.i("person signature : " + person.getPersonState()
 				+ " rigion : " + person.getRigion()
 				+ " photoUploadedTimestamp: " + person.photoUploadedTimestamp
-				+ " wowtalkId : " + person.getWowTalkId());
+				+ " username : " + person.getUsername());
         dbHelper = new Database(this);
 		buddy = dbHelper.buddyWithUserID(person.getID());
 		if(buddy == null) {

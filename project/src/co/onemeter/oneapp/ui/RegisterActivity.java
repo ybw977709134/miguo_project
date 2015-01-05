@@ -89,8 +89,8 @@ public class RegisterActivity extends Activity implements OnClickListener{
         final int userType = new AQuery(this).find(R.id.rad_teacher).isChecked() ?
                 Buddy.ACCOUNT_TYPE_TEACHER : Buddy.ACCOUNT_TYPE_STUDENT;
 
-        if (!Utils.verifyWowTalkId(strUserName)) {
-            mMsgBox.toast(R.string.setting_wowtalkid_format_error);
+        if (!Utils.verifyUsername(strUserName)) {
+            mMsgBox.toast(R.string.setting_username_format_error);
             return;
         }
 

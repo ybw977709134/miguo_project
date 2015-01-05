@@ -33,7 +33,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 	private TextView txtEmail;
 	private Button btnLogout;
 	
-	private LinearLayout mWowTalkId;
+	private LinearLayout mUsername;
 	private LinearLayout mPassword;
 	private LinearLayout mBindPhone;
 	private LinearLayout mBindEmail;
@@ -57,7 +57,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 		txtPwdSetting = (TextView) findViewById(R.id.pwd_text);
 		txtPhonenumber = (TextView) findViewById(R.id.phonenumber_text);
 		txtEmail = (TextView) findViewById(R.id.email_text);
-		mWowTalkId = (LinearLayout) findViewById(R.id.layout_id);
+		mUsername = (LinearLayout) findViewById(R.id.layout_id);
 		mPassword = (LinearLayout) findViewById(R.id.layout_password);
 		mBindPhone = (LinearLayout) findViewById(R.id.layout_phone);
 		mBindEmail = (LinearLayout) findViewById(R.id.layout_email);
@@ -66,7 +66,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 		
 		btnTitleBack.setOnClickListener(this);
 		btnLogout.setOnClickListener(this);
-		mWowTalkId.setOnClickListener(this);
+		mUsername.setOnClickListener(this);
 		mPassword.setOnClickListener(this);
 		mBindPhone.setOnClickListener(this);
 		mBindEmail.setOnClickListener(this);
@@ -82,8 +82,8 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
             txtPwdSetting.setTextColor(getResources().getColor(R.color.orange));
 		}
 
-        if (mPrefUtil.getMyWowtalkIdChangedState()) {
-            txtYuanquID.setText(mPrefUtil.getMyWowtalkID());
+        if (mPrefUtil.getMyUsernameChangedState()) {
+            txtYuanquID.setText(mPrefUtil.getMyUsername());
             txtYuanquID.setTextColor(getResources().getColor(R.color.text_gray1));
         } else {
             txtYuanquID.setText(getResources().getString(R.string.settings_account_not_set));
@@ -169,7 +169,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 			finish();
 			break;
 		case R.id.btn_logout:
-            if(mPrefUtil.getMyWowtalkIdChangedState()
+            if(mPrefUtil.getMyUsernameChangedState()
                     && mPrefUtil.getMyPasswordChangedState()) {
                 logout();
             } else {
@@ -177,11 +177,11 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
             }
 			break;
 		case R.id.layout_id:
-			Intent idIntent = new Intent(AccountSettingActivity.this, SettingWowTalkIdActivity.class);
-            idIntent.putExtra(SettingWowTalkIdActivity.EXTRA_WOWID,
-                    mPrefUtil.getMyWowtalkID());
-            idIntent.putExtra(SettingWowTalkIdActivity.EXTRA_READONLY,
-                    mPrefUtil.getMyWowtalkIdChangedState());
+			Intent idIntent = new Intent(AccountSettingActivity.this, SettingUsernameActivity.class);
+            idIntent.putExtra(SettingUsernameActivity.EXTRA_WOWID,
+                    mPrefUtil.getMyUsername());
+            idIntent.putExtra(SettingUsernameActivity.EXTRA_READONLY,
+                    mPrefUtil.getMyUsernameChangedState());
 			startActivityForResult(idIntent, REQ_INPUT_ID);
 			break;
 		case R.id.layout_password:

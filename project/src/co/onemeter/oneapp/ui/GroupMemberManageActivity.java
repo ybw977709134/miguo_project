@@ -485,18 +485,14 @@ public class GroupMemberManageActivity extends Activity implements View.OnClickL
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
-        if (GlobalValue.RELEASE_AS_WOWCITY) {
-            Database.addDBTableChangeListener(Database.TBL_PENDING_REQUESTS,mPendingRequestObserver);
-        }
+        Database.addDBTableChangeListener(Database.TBL_PENDING_REQUESTS,mPendingRequestObserver);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
-        if (GlobalValue.RELEASE_AS_WOWCITY) {
-            Database.removeDBTableChangeListener(mPendingRequestObserver);
-        }
+        Database.removeDBTableChangeListener(mPendingRequestObserver);
     }
 
     @Override

@@ -38,11 +38,11 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
 //    public static final String EXTRA_SEARCH =  "extra_search";
 
-	private static final int GET_BUDDY_BY_WOWTALK_ID = 1000;
+	private static final int GET_BUDDY_BY_USERNAME = 1000;
 	private static final int GET_BUDDY_BY_UID = 1002;
 	private static final int GET_GROUP_BY_NAME = 1001;
 	private static final int GET_GROUP_BY_GID = 1003;
-	private int searchKind = GET_BUDDY_BY_WOWTALK_ID;
+	private int searchKind = GET_BUDDY_BY_USERNAME;
 	
 	
 	private ImageButton btnTitleBack;
@@ -174,7 +174,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 	
 	//通过uid搜索
 	private void searchBuddy_uid() {
-		final String wowtalkId = edtSearchContent.getText().toString();
+		final String username = edtSearchContent.getText().toString();
 
         mMsgBox.showWait();
 
@@ -192,7 +192,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
 			@Override
 			protected Void doInBackground(Void... arg0) {
-				errno = mWebif.fSearchBuddy_uid(wowtalkId,Buddy.ACCOUNT_TYPE_STUDENT, results);
+				errno = mWebif.fSearchBuddy_uid(username,Buddy.ACCOUNT_TYPE_STUDENT, results);
 				return null;
 			}
 			
@@ -214,9 +214,9 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 			
 		}.execute((Void)null);
 	}
-	//通过wowtalkId搜索
+	//通过 username 搜索
 	private void searchBuddy() {
-		final String wowtalkId = edtSearchContent.getText().toString();
+		final String username = edtSearchContent.getText().toString();
 
         mMsgBox.showWait();
 
@@ -234,7 +234,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
 			@Override
 			protected Void doInBackground(Void... arg0) {
-				errno = mWebif.fSearchBuddy(wowtalkId,Buddy.ACCOUNT_TYPE_STUDENT, results);
+				errno = mWebif.fSearchBuddy(username,Buddy.ACCOUNT_TYPE_STUDENT, results);
 				return null;
 			}
 			
@@ -258,7 +258,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 	}
 
 //    private void searchPublicAccount() {
-//        final String wowtalkId = edtSearchContent.getText().toString();
+//        final String username = edtSearchContent.getText().toString();
 //
 //        new AsyncTask<Void, Integer, Void>() {
 //            int errno = ErrorCode.OK;
@@ -266,7 +266,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //            @Override
 //            protected Void doInBackground(Void... params) {
 //                buddy = new Buddy();
-//                errno = mWebif.fGetBuddyByWowtalkId(wowtalkId, buddy);
+//                errno = mWebif.fGetBuddyByUsername(username, buddy);
 //
 //                if (errno == ErrorCode.OK && !Utils.isNullOrEmpty(buddy.userID)
 //                        && (buddy.getFriendShipWithMe() == Buddy.RELATIONSHIP_FRIEND_BOTH
@@ -330,7 +330,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(edtSearchContent.getWindowToken(), 0);
 //        if (searchType == REQ_NORMAL_ACCOUNT) {
-//            if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
+//            if (searchKind == GET_BUDDY_BY_USERNAME) {
 //                searchBuddy();
 //            } else {
 //                searchGroup();
@@ -338,14 +338,14 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //        } else {
 //            searchPublicAccount();
 //        }
-//        if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
+//        if (searchKind == GET_BUDDY_BY_USERNAME) {
 //            searchBuddy();
 //        } else {
 //            searchGroup();
 //        }
 //        ListViewUtils.setListViewHeightBasedOnChildren(lvBuddy);
 //        ListViewUtils.setListViewHeightBasedOnChildren(lvGroups);
-		if(searchKind == GET_BUDDY_BY_WOWTALK_ID){
+		if(searchKind == GET_BUDDY_BY_USERNAME){
 			searchBuddy();
 //			searchGroup();
 		}else if(searchKind == GET_BUDDY_BY_UID){
@@ -355,7 +355,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 	}
 
     private void setSearchResultStatus() {
-//        if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
+//        if (searchKind == GET_BUDDY_BY_USERNAME) {
 //            txtResultCount.setText(String.format(getResources().getString(R.string.search_result_count), searchedBuddyList.size()));
 //            lvBuddy.setVisibility(View.VISIBLE);
 //            lvGroups.setVisibility(View.GONE);
@@ -381,7 +381,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 	
 //	private void setTitleMode() {
 ////        edtSearchContent.setText("");
-//		if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
+//		if (searchKind == GET_BUDDY_BY_USERNAME) {
 //            edtSearchContent.setText(buddySearchContent);
 //
 //			btnSearchPerson.setBackgroundResource(R.drawable.tab_button_left_white_a);
@@ -406,7 +406,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //        setSearchResultStatus();
 //	}
     private void setTitleMode(){
-    	if (searchKind == GET_BUDDY_BY_WOWTALK_ID) {
+    	if (searchKind == GET_BUDDY_BY_USERNAME) {
     		search_nickname.setBackgroundResource(R.drawable.tab_button_left_white_a);
     		search_uid.setBackgroundResource(R.drawable.tab_button_right_white);
     		search_nickname.setTextColor(getResources().getColor(R.color.blue));
@@ -664,7 +664,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //			setTitleMode();
 //			break;
 //		case R.id.search_person:
-//			searchKind = GET_BUDDY_BY_WOWTALK_ID;
+//			searchKind = GET_BUDDY_BY_USERNAME;
 //			setTitleMode();
 //			break;
 //		case R.id.btn_search:
@@ -674,7 +674,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //            onAddFriendPressed();
 //            break;
 		case R.id.search_nickname:
-			searchKind = GET_BUDDY_BY_WOWTALK_ID;
+			searchKind = GET_BUDDY_BY_USERNAME;
 			setTitleMode();
 			edtSearchContent.setText("");
 			break;

@@ -1,12 +1,11 @@
 package co.onemeter.oneapp.utils;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import android.content.Context;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.PrefUtil;
 
-import android.content.Context;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Utils {
@@ -31,12 +30,12 @@ public class Utils {
     public final static String QR_CODE_KEY_PUBLIC_ACCOUNT_ID="public_account_id";
     /**
      * 可以使用2-20个字母，数字，下划线和减号
-     * @param strWowTalkId
+     * @param username
      * @return
      */
-    public static boolean verifyWowTalkId(String strWowTalkId) {
+    public static boolean verifyUsername(String username) {
         String pattern = "[a-zA-Z0-9_-]{2,20}";
-        return verify(pattern, strWowTalkId);
+        return verify(pattern, username);
     }
 
     /**

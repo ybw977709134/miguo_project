@@ -87,12 +87,12 @@ public class BuddySearchItemAdapter extends BaseAdapter {
                 R.drawable.default_avatar_90, buddyList.get(position), true);
 
 
-        TextView wowtalkId=(TextView) convertView.findViewById(R.id.wowtalk_id);
+        TextView username=(TextView) convertView.findViewById(R.id.username);
         TextView nickName=(TextView) convertView.findViewById(R.id.nick_name);
         TextView alias=(TextView) convertView.findViewById(R.id.alias);
 
         final Buddy buddy=buddyList.get(position);
-        setNameWithColor(wowtalkId,contextRef.getString(R.string.settings_account_wowid)+NAME_SPLIT+" "+buddy.wowtalkID);
+        setNameWithColor(username,contextRef.getString(R.string.settings_account_wowid)+NAME_SPLIT+" "+buddy.username);
         setNameWithColor(nickName,contextRef.getString(R.string.settings_name)+NAME_SPLIT+" "+buddy.nickName);
 
         if(TextUtils.isEmpty(buddy.alias)) {

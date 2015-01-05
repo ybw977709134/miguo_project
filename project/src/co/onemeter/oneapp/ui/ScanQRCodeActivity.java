@@ -382,7 +382,7 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
     private void doHandlePublicAccount(final String publicAccountId) {
         Database db = new Database(this);
         Buddy publicAccount = db.buddyWithUserID(publicAccountId);
-        if(null != publicAccount && !TextUtils.isEmpty(publicAccount.wowtalkID)
+        if(null != publicAccount && !TextUtils.isEmpty(publicAccount.username)
                 && !TextUtils.isEmpty(publicAccount.userID)
                 && !TextUtils.isEmpty(publicAccount.nickName)) {
             Log.i("public account exist local");
@@ -400,7 +400,7 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
                 @Override
                 protected Buddy doInBackground(String... param) {
                     Buddy buddy = new Buddy();
-                    int errno2ret = mWebif.fGetBuddyByWowtalkId(param[0], buddy);
+                    int errno2ret = mWebif.fGetBuddyByUsername(param[0], buddy);
 
                     if(ErrorCode.OK != errno2ret || TextUtils.isEmpty(buddy.userID)) {
                         errno2ret = mWebif.fGetBuddyWithUID(param[0]);
@@ -449,7 +449,7 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
             @Override
             protected Buddy doInBackground(String... param) {
                 Buddy buddy = new Buddy();
-                int errno2ret = mWebif.fGetBuddyByWowtalkId(param[0], buddy);
+                int errno2ret = mWebif.fGetBuddyByUsername(param[0], buddy);
 
                 if(ErrorCode.OK != errno2ret || TextUtils.isEmpty(buddy.userID)) {
                     errno2ret = mWebif.fGetBuddyWithUID(param[0]);

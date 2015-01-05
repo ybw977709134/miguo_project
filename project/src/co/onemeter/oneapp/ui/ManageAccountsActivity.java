@@ -1,24 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import org.wowtalk.api.Account;
-import org.wowtalk.api.AlbumCover;
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Connect2;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.IDBTableChangeListener;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkVoipIF;
-import org.wowtalk.api.WebServerIF;
-import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.Constants;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.adapter.AccountsListAdapter;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -32,8 +13,16 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import co.onemeter.oneapp.Constants;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.adapter.AccountsListAdapter;
 import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.MessageBox;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class ManageAccountsActivity extends Activity implements OnClickListener, OnItemClickListener {
 
@@ -142,7 +131,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
     protected void showRemoveAccountMenu(final Account account) {
         mBottomMenu.clearView();
         mBottomMenu.add(
-                String.format(getString(R.string.manage_account_delete_confirm), account.wowtalkId),
+                String.format(getString(R.string.manage_account_delete_confirm), account.username),
                 BottomButtonBoard.BUTTON_RED,
                 new View.OnClickListener() {
                     @Override
@@ -313,7 +302,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
                 msg1.what = HANDLER_SWITCHING_ACCOUNT;
                 msg1.obj = String.format(
                         getString(R.string.manage_account_switching_logout),
-                        mPrefUtil.getMyWowtalkID());
+                        mPrefUtil.getMyUsername());
                 handler.sendMessage(msg1);
                 int resultCode =  mWeb.fLogout();
                 if (resultCode == ErrorCode.OK) {
@@ -344,7 +333,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
                             msg3.what = HANDLER_SWITCHING_ACCOUNT;
                             msg3.obj = String.format(
                                     getString(R.string.manage_account_switching_login),
-                                    newAccount.wowtalkId);
+                                    newAccount.username);
                             handler.sendMessage(msg3);
                             loginCode = mWeb.loginByHashedPwdForBiz(newAccount.company, newAccount.uid, newAccount.password, new Buddy());
                             if (loginCode == ErrorCode.OK) {
@@ -388,7 +377,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
     private void showSwitchAccountOption(final int position) {
         final Account newAccount = mAccountDatas.get(position);
         final BottomButtonBoard bottomBoard = new BottomButtonBoard(this, getWindow().getDecorView());
-        bottomBoard.add(String.format(getString(R.string.manage_account_switch_confirm), newAccount.wowtalkId), BottomButtonBoard.BUTTON_BLUE,
+        bottomBoard.add(String.format(getString(R.string.manage_account_switch_confirm), newAccount.username), BottomButtonBoard.BUTTON_BLUE,
                 new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -449,7 +438,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
                 Message msg1 = handler.obtainMessage();
                 msg1.what = HANDLER_SWITCHING_ACCOUNT;
                 msg1.obj = String.format(context.getString(R.string.manage_account_switching_login),
-                        newAccount.wowtalkId);
+                        newAccount.username);
                 handler.sendMessage(msg1);
                 WebServerIF webIF = WebServerIF
                         .getInstance(context);

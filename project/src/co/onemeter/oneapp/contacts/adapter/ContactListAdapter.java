@@ -5,22 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.IHasPhoto;
-import co.onemeter.oneapp.ui.GlobalValue;
-import co.onemeter.oneapp.ui.PhotoDisplayHelper;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
+import co.onemeter.oneapp.ui.PhotoDisplayHelper;
+import org.wowtalk.api.Buddy;
+import org.wowtalk.api.Database;
+import org.wowtalk.api.IHasPhoto;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class ContactListAdapter extends BaseAdapter implements Filterable {
 	private Context context;
@@ -54,12 +47,7 @@ public class ContactListAdapter extends BaseAdapter implements Filterable {
             tempPerson = iterator.next();
             personId = tempPerson.getID();
             if (currentIds.contains(personId)){
-                if (GlobalValue.RELEASE_AS_WOWCITY) {
-                    iterator.remove();
-                } else if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
-                    // show all persons contains the selected persons in biz.
-                    tempPerson.setSelected(true);
-                }
+                iterator.remove();
             }
         }
 	}

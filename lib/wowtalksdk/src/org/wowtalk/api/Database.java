@@ -442,7 +442,7 @@ public class Database {
             ContentValues values = new ContentValues();
             values.put("uid", ident.userID);
             values.put("nickname", ident.nickName);
-            values.put("wowtalkid", ident.wowtalkID);
+            values.put("wowtalkid", ident.username);
             values.put("last_status", ident.status);
             values.put("sex", ident.getSexFlag());
             values.put("area", ident.area);
@@ -772,7 +772,7 @@ public class Database {
             result.needToDownloadPhoto = (cursor.getInt(++i) == 1);
             result.needToDownloadThumbnail = (cursor.getInt(++i) == 1);
             result.mayNotExist = (cursor.getString(++i) == null);
-            result.wowtalkID = cursor.getString(++i);
+            result.username = cursor.getString(++i);
             result.setEmail(cursor.getString(++i));
             result.area = cursor.getString(++i);
             result.jobTitle = cursor.getString(++i);
@@ -845,7 +845,7 @@ public class Database {
         if(null != allBuddy) {
             for(Buddy aBuddy : allBuddy) {
                 //for test only
-//                if(aBuddy.wowtalkID.equals("522849998d8f8")) {
+//                if(aBuddy.username.equals("522849998d8f8")) {
 //                    aBuddy.setAccountType(Buddy.ACCOUNT_TYPE_TEACHER);
 //                    storeNewBuddyWithUpdate(aBuddy);
 //                }

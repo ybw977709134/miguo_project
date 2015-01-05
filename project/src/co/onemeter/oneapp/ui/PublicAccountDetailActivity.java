@@ -66,11 +66,7 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
         btnShow = (ImageView) findViewById(R.id.img_show);
 
         txtAccoutName.setText(person.getName());
-        if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
-            txtAccountId.setText(String.format(getString(R.string.contact_info_wowid), person.getWowTalkId()));
-        } else {
-            txtAccountId.setText(person.getWowTalkId());
-        }
+        txtAccountId.setText(person.getUsername());
         txtFunctionDetail.setText(person.getPersonState());
         refreshView();
 

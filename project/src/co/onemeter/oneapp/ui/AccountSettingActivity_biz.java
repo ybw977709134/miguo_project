@@ -76,15 +76,15 @@ public class AccountSettingActivity_biz extends Activity implements OnClickListe
             txtPwdSetting.setTextColor(getResources().getColor(R.color.orange));
 		}
 
-        if (mPrefUtil.getMyWowtalkIdChangedState()) {
-            String wowtalkIdWithCompanyId = mPrefUtil.getMyWowtalkID();
+        if (mPrefUtil.getMyUsernameChangedState()) {
+            String wowtalkIdWithCompanyId = mPrefUtil.getMyUsername();
             String wowtalkId = wowtalkIdWithCompanyId;
-            // companyId 和 wowtalkId 不区分大小写
-            // 为不改变登录时的 companyId 和 wowtalkId 的大小写，使用tempXxxx进行判断
+            // companyId 和 username 不区分大小写
+            // 为不改变登录时的 companyId 和 username 的大小写，使用tempXxxx进行判断
             String tempLowerCompanyId = companyId.toLowerCase();
             String tempLowerwowtalkIdWithCompanyId = wowtalkIdWithCompanyId.toLowerCase();
             if (tempLowerwowtalkIdWithCompanyId.startsWith(tempLowerCompanyId + "_")) {
-                // companyId + "_" + wowtalkId
+                // companyId + "_" + username
                 wowtalkId = wowtalkIdWithCompanyId.substring(companyId.length() + 1);
             }
             txtYuanquID.setText(wowtalkId);
@@ -148,7 +148,7 @@ public class AccountSettingActivity_biz extends Activity implements OnClickListe
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					
-					if(mPrefUtil.getMyWowtalkIdChangedState()
+					if(mPrefUtil.getMyUsernameChangedState()
 		                    && mPrefUtil.getMyPasswordChangedState()) {
 		                logout();
 		            } else {

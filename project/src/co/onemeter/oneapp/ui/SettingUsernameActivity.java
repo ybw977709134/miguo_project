@@ -19,28 +19,28 @@ import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
 
-public class SettingWowTalkIdActivity extends Activity {
+public class SettingUsernameActivity extends Activity {
     public static final String EXTRA_WOWID = "wowid";
     public static final String EXTRA_READONLY = "rdonly";
 
     private ImageButton btnTitleBack;
     private ImageButton btnTitleConfirm;
     private ImageButton fieldClear;
-    private EditText edtWowTalkId;
+    private EditText edtUsername;
     private MessageBox mMsgBox;
     private boolean mReadonly = false;
     private String mOrigWowId = null;
     private WebServerIF mWeb;
 
-    private void resetWowTalkId(final String wowtalkId) {
+    private void resetUsername(final String username) {
         mMsgBox.showWait();
 
         new AsyncTask<Void, Integer, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... params) {
-                return WebServerIF.getInstance(SettingWowTalkIdActivity.this)
-                        .fChangeWowtalkId(wowtalkId);
+                return WebServerIF.getInstance(SettingUsernameActivity.this)
+                        .fChangeUsername(username);
             }
             @Override
             protected void onPostExecute(Integer result) {
@@ -50,7 +50,7 @@ public class SettingWowTalkIdActivity extends Activity {
                     finish();
                 } else {
                     if(mMsgBox == null)
-                        mMsgBox = new MessageBox(SettingWowTalkIdActivity.this);
+                        mMsgBox = new MessageBox(SettingUsernameActivity.this);
 
                     if (result == ErrorCode.USER_ALREADY_EXISTS) {
                         mMsgBox.show(getString(R.string.operation_failed),
@@ -69,11 +69,11 @@ public class SettingWowTalkIdActivity extends Activity {
     private void initView() {
         btnTitleBack = (ImageButton) findViewById(R.id.title_back);
         btnTitleConfirm = (ImageButton) findViewById(R.id.title_confirm);
-        edtWowTalkId = (EditText) findViewById(R.id.edt_wowtalkid);
+        edtUsername = (EditText) findViewById(R.id.edt_username);
         fieldClear = (ImageButton) findViewById(R.id.field_clear);
 
-        edtWowTalkId.setEnabled(!mReadonly);
-        edtWowTalkId.setText(mOrigWowId == null ? "" : mOrigWowId);
+        edtUsername.setEnabled(!mReadonly);
+        edtUsername.setText(mOrigWowId == null ? "" : mOrigWowId);
 
         btnTitleBack.setOnClickListener(new OnClickListener() {
 
@@ -93,28 +93,28 @@ public class SettingWowTalkIdActivity extends Activity {
                     return;
                 }
 
-                final String strWowTalkId = edtWowTalkId.getText().toString().trim();
+                final String strUsername = edtUsername.getText().toString().trim();
 
                 // doesn't modify.
-                if (!TextUtils.isEmpty(mOrigWowId) && mOrigWowId.equals(strWowTalkId)) {
+                if (!TextUtils.isEmpty(mOrigWowId) && mOrigWowId.equals(strUsername)) {
                     finish();
                     return;
                 }
 
-                if (!Utils.verifyWowTalkId(strWowTalkId)) {
-                    mMsgBox.show(null, getString(R.string.setting_wowtalkid_format_error));
+                if (!Utils.verifyUsername(strUsername)) {
+                    mMsgBox.show(null, getString(R.string.setting_username_format_error));
                     return;
                 }
 
-                new AlertDialog.Builder(SettingWowTalkIdActivity.this)
-                        .setTitle(R.string.setting_wowtalkid_dialog_title)
-                        .setMessage(String.format(getResources().getString(R.string.setting_wowtalkid_dialog_msg), strWowTalkId))
+                new AlertDialog.Builder(SettingUsernameActivity.this)
+                        .setTitle(R.string.setting_username_dialog_title)
+                        .setMessage(String.format(getResources().getString(R.string.setting_username_dialog_msg), strUsername))
                         .setPositiveButton(R.string.confirm,
                                 new DialogInterface.OnClickListener() {
 
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        resetWowTalkId(strWowTalkId);
+                                        resetUsername(strUsername);
                                     }
                                 })
                         .create().show();
@@ -125,10 +125,10 @@ public class SettingWowTalkIdActivity extends Activity {
         	
             @Override
             public void onClick(View v) {
-                edtWowTalkId.setText("");
+                edtUsername.setText("");
             }
         });
-        edtWowTalkId.addTextChangedListener(new TextWatcher() {
+        edtUsername.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable arg0) {
@@ -161,7 +161,7 @@ public class SettingWowTalkIdActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_wowtalkid);
+        setContentView(R.layout.activity_settings_username);
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);

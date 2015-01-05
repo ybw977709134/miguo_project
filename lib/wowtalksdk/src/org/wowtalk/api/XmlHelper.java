@@ -470,7 +470,7 @@ public class XmlHelper {
 
         e = Utils.getFirstElementByTagName(buddyElement, "wowtalk_id");
         if(e != null) {
-            result.wowtalkID = e.getTextContent();
+            result.username = e.getTextContent();
         }
 
         e = Utils.getFirstElementByTagName(buddyElement, "block_msg");

@@ -365,7 +365,7 @@
             android:screenOrientation="portrait" >
         </activity>
 		<activity
-			android:name=".ui.SettingWowTalkIdActivity"
+			android:name=".ui.SettingUsernameActivity"
 			android:theme="@style/Theme.Green"
 			android:screenOrientation="portrait" >
 		</activity>

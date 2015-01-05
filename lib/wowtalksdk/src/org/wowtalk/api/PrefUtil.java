@@ -59,7 +59,7 @@ public class PrefUtil {
     private static final String PASSWORD_HASHED_FOR_SIP = "password_preference"; // for sip
     private static final String PASSWORD_HASHED = "web_password_preference"; // for web
 //  private static final String PREF_DOMAIN = "domain_preference";
-    private static final String WOWTALKID_CHANGED = "wowtalkid_changed_pref";
+    private static final String USERNAME_CHANGED = "wowtalkid_changed_pref";
     private static final String PASSWORD_CHANGED = "password_changed_pref";
     /**
      * Indicate login state.
@@ -1045,7 +1045,7 @@ public class PrefUtil {
         editor.commit();
     }
 
-    public String getMyWowtalkID() {
+    public String getMyUsername() {
         return sPref.getString(WOWTALK_ID, "");
     }
 
@@ -1065,12 +1065,12 @@ public class PrefUtil {
 
     public void setWowtalkIdChanged(boolean isChanged) {
         Editor editor = sPref.edit();
-        editor.putBoolean(WOWTALKID_CHANGED, isChanged);
+        editor.putBoolean(USERNAME_CHANGED, isChanged);
         editor.commit();
     }
 
-    public boolean getMyWowtalkIdChangedState() {
-        return sPref.getBoolean(WOWTALKID_CHANGED, false);
+    public boolean getMyUsernameChangedState() {
+        return sPref.getBoolean(USERNAME_CHANGED, false);
     }
 
     public String getMyArea() {
@@ -1236,7 +1236,7 @@ public class PrefUtil {
         editor.remove(COMPANY_ID);
         editor.remove(UID);
         editor.remove(PASSWORD_HASHED);
-        editor.remove(WOWTALKID_CHANGED);
+        editor.remove(USERNAME_CHANGED);
         editor.remove(PASSWORD_CHANGED);
         editor.remove(DEMO_MODE_CODE);
         editor.remove(APPLY_TIMES);

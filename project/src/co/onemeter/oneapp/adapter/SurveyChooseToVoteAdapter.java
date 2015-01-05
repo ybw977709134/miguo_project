@@ -99,12 +99,28 @@ public class SurveyChooseToVoteAdapter implements LinearLayoutAsListAdapter {
             }
         });
 
-        if(choosedOptionsIdList.contains(optionId)) {
-            ivCheck.setImageResource(R.drawable.timeline_checked);
-        } else {
-            ivCheck.setImageResource(R.drawable.timeline_unchecked);
+        if(withMultiChoose) {//多选时表现的投票选中项
+        	if(choosedOptionsIdList.contains(optionId)) {
+        		ivCheck.setImageResource(R.drawable.share_vote_chb_1);
+        	} else {
+        		ivCheck.setImageResource(R.drawable.share_vote_chb);
+        	}
+        } else {//单选时表现的投票选中项
+        	if(choosedOptionsIdList.contains(optionId)) {
+        		ivCheck.setImageResource(R.drawable.share_vote_checked);
+        	} else {
+        		ivCheck.setImageResource(R.drawable.share_vote_unchecked);
+        	}
         }
+        
+        
+//        if(choosedOptionsIdList.contains(optionId)) {
+//            ivCheck.setImageResource(R.drawable.timeline_checked);
+//        } else {//单选时表现的投票选中项
+//            ivCheck.setImageResource(R.drawable.timeline_unchecked);
+//        }
 
+        
         TextView tvDesc=(TextView) convertView.findViewById(R.id.option_desc);
         tvDesc.setText(surveyOptions.get(position).optionDesc);
 

@@ -45,7 +45,39 @@
                         android:background="@drawable/tabbar_more_selector"
                         android:visibility="gone"/>
             </LinearLayout>
+            
+            <!-- 问答 -->
+            
+            <LinearLayout
+                    android:id="@+id/layout_answer"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:background="@color/transparent"
+                    android:visibility="gone">
+
+                <Button
+                        android:id="@+id/btn_answer"
+                        android:layout_height="20dp"
+                        android:layout_width="23dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/share_icon_comment"/>
+
+                <!--             android:text="@string/answer_qa" -->
+                <TextView
+                        android:id="@+id/tv_moment_op_answer"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_gravity="center_vertical"
+           
+                        android:textSize="@dimen/moment_op_txt_size"
+                        android:textColor="@color/default_text"/>
+            </LinearLayout>
              
+            <!-- 评论 -->
             <LinearLayout
                     android:id="@+id/layout_comment"
                     android:layout_width="0dp"
@@ -73,6 +105,8 @@
                         android:textSize="@dimen/moment_op_txt_size"
                         android:textColor="@color/default_text"/>
             </LinearLayout>
+            
+            <!-- 赞 -->
             
             <LinearLayout
                     android:id="@+id/layout_like"
@@ -105,34 +139,7 @@
 
 
 
-            <LinearLayout
-                    android:id="@+id/layout_answer"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
-                    android:background="@color/transparent"
-                    android:visibility="gone">
-
-                <Button
-                        android:id="@+id/btn_answer"
-                        android:layout_height="20dp"
-                        android:layout_width="23dp"
-                        android:layout_gravity="center_vertical"
-                        android:background="@drawable/share_icon_comment"/>
-
-                <!--             android:text="@string/answer_qa" -->
-                <TextView
-                        android:id="@+id/tv_moment_op_answer"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_gravity="center_vertical"
-           
-                        android:textSize="@dimen/moment_op_txt_size"
-                        android:textColor="@color/default_text"/>
-            </LinearLayout>
+            
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

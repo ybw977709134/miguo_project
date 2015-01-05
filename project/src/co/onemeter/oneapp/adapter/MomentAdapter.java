@@ -660,16 +660,16 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 //not vote yet,show to vote
                 btnSurvey.setVisibility(View.VISIBLE);
                 SurveyChooseToVoteAdapter adapter=new SurveyChooseToVoteAdapter(context,moment.surveyOptions,choosed,moment.isSurveyAllowMultiSelect);
-                adapter.setOnChooseChangeListener(new SurveyChooseToVoteAdapter.OnChooseChangeListener() {
-                    @Override
-                    public void onChooseChange(int count) {
-                        if(0 == count) {
-                            btnSurvey.setBackgroundResource(R.drawable.btn_gray_selector);
-                        } else {
-                            btnSurvey.setBackgroundResource(R.drawable.btn_blue_selector);
-                        }
-                    }
-                });
+//                adapter.setOnChooseChangeListener(new SurveyChooseToVoteAdapter.OnChooseChangeListener() {
+//                    @Override
+//                    public void onChooseChange(int count) {
+//                        if(0 == count) {
+//                            btnSurvey.setBackgroundResource(R.drawable.btn_gray_selector);
+//                        } else {
+//                            btnSurvey.setBackgroundResource(R.drawable.btn_blue_selector);
+//                        }
+//                    }
+//                });
                 lvSurveyOptions.setListAdapter(adapter);
 //                ListHeightUtil.setListHeight(lvSurveyOptions);
 
@@ -686,12 +686,12 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
              
                 
-                
-                if(0 == choosed.size()) {
-                    btnSurvey.setBackgroundResource(R.drawable.btn_gray_selector);
-                } else {
-                    btnSurvey.setBackgroundResource(R.drawable.btn_blue_selector);
-                }
+                //现在投票刷新后就不需要进行显示按钮了
+//                if(0 == choosed.size()) {
+//                    btnSurvey.setBackgroundResource(R.drawable.btn_gray_selector);
+//                } else {
+//                    btnSurvey.setBackgroundResource(R.drawable.btn_blue_selector);
+//                }
             }
         } else {
             voteSurveyLayout.setVisibility(View.GONE);
@@ -756,23 +756,23 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         setTagdesc(context,moment,holder.ivMomentTagColor,holder.tvMomentTagDesc,
                 holder.voteSurveyLayout,holder.lvSurveyOptions,surveyMomentChoosedItemList.get(moment.id),holder.btnSurvey);
 
-        if(TextUtils.isEmpty(moment.shareRange) || moment.shareRange.equals(Moment.SERVER_SHARE_RANGE_PUBLIC)) {
+//        if(TextUtils.isEmpty(moment.shareRange) || moment.shareRange.equals(Moment.SERVER_SHARE_RANGE_PUBLIC)) {
 //            holder.tvMomentShareRange.setText(R.string.share_range_public_short);
 //            holder.ivMomentShareRange.setImageResource(R.drawable.timeline_public);
-        } else {
+//        } else {
 //            holder.tvMomentShareRange.setText(R.string.share_range_private);
 //            holder.ivMomentShareRange.setImageResource(R.drawable.timeline_limited);
-        }
+//        }
 
-        View.OnClickListener clickListener=new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context,ShareRangeSelectActivity.class);
-                intent.putStringArrayListExtra(ShareRangeSelectActivity.LITMITED_DEPS,moment.limitedDepartmentList);
-                intent.putExtra(ShareRangeSelectActivity.SHOWN_ONLY,true);
-                context.startActivity(intent);
-            }
-        };
+//        View.OnClickListener clickListener=new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(context,ShareRangeSelectActivity.class);
+//                intent.putStringArrayListExtra(ShareRangeSelectActivity.LITMITED_DEPS,moment.limitedDepartmentList);
+//                intent.putExtra(ShareRangeSelectActivity.SHOWN_ONLY,true);
+//                context.startActivity(intent);
+//            }
+//        };
 //        holder.tvMomentShareRange.setOnClickListener(clickListener);
 //        holder.ivMomentShareRange.setOnClickListener(clickListener);
 
@@ -878,12 +878,12 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //        }
         if(commentReview.size()>0){
         	holder.btnComment.setBackgroundResource(R.drawable.timeline_comment_a);
-        	holder.btnAnswer.setBackgroundResource(R.drawable.profile_btn_message_p);
+        	holder.btnAnswer.setBackgroundResource(R.drawable.timeline_comment_a);
         	holder.tvComment.setVisibility(View.VISIBLE);
         	holder.tvAnswer.setVisibility(View.VISIBLE);
         }else{
         	holder.btnComment.setBackgroundResource(R.drawable.timeline_comment);
-        	holder.btnAnswer.setBackgroundResource(R.drawable.share_icon_comment);
+        	holder.btnAnswer.setBackgroundResource(R.drawable.timeline_comment);
         	holder.tvComment.setVisibility(View.GONE);
         	holder.tvAnswer.setVisibility(View.GONE);
         }
@@ -1644,19 +1644,20 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         for (int i = 0; i < reviews.size(); i++) {
             final Review review = reviews.get(i);
             if (review == null || review.type != Review.TYPE_LIKE)
-                continue;
+                continue;																																																																								
 
             if (cnt > 0) {
                 textView.append(context.getResources().getString(R.string.symbol_comma), null,
                         0, 0, 0, null);
             }
             ++cnt;
+            
             if (!TextUtils.isEmpty(review.nickname)) {
                 textView.append(review.nickname, null,
-                        context.getResources().getColor(R.color.blue),
+                        context.getResources().getColor(R.color.blue),																																																																																																																																																																																																																																																																																																					
                         0,
-                        context.getResources().getColor(R.color.text_gray3),
-                        new View.OnClickListener() {
+                        context.getResources().getColor(R.color.text_gray3),																																																																																																																																																																																																		
+                        new View.OnClickListener() {																																																																																					
                     @Override
                     public void onClick(View v) {
                         TimelineActivity.launch(context, review.uid, review.nickname);

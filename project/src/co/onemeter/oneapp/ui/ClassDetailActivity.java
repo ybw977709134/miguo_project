@@ -2,6 +2,7 @@ package co.onemeter.oneapp.ui;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +25,7 @@ import com.androidquery.AQuery;
 
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.R.color;
 import co.onemeter.oneapp.contacts.model.Person;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,6 +41,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 
 /**
  * 课堂详情页面。
@@ -165,6 +168,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 						lessons.clear();
 						Database db = Database.open(ClassDetailActivity.this);
 						lessons.addAll(db.fetchLesson(classId));
+						Collections.sort(lessons, new LessonInfoEditActivity.LessonComparator());
 						courseAdapter.notifyDataSetChanged();
 					}
 				};
@@ -358,7 +362,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	
 	class CourseTableAdapter extends BaseAdapter{
 		private List<Lesson> alessons;
-		private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
 		public CourseTableAdapter(List<Lesson> lessons){
 			this.alessons = lessons;
@@ -393,6 +396,10 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				holder = (ViewHodler) convertView.getTag();
 			}
 			holder.item_name.setText(alessons.get(position).title);
+			if(alessons.get(position).end_date * 1000 < System.currentTimeMillis()){
+				holder.item_name.setTextColor(0xff8eb4e6);
+			}
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			holder.item_time.setText(sdf.format(new Date(alessons.get(position).start_date * 1000)));
 			holder.item_msg.setText("");
 			return convertView;

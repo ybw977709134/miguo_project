@@ -194,8 +194,8 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 finish();
                 break;
             case R.id.right_button_up:
-            	Log.i("--membercount", eventDetail.joinedMemberCount + "");
-            	Log.i("--capacity", eventDetail.capacity + "");
+            	//Log.i("--membercount", eventDetail.joinedMemberCount + "");
+            	//Log.i("--capacity", eventDetail.capacity + "");
             	if(eventDetail.joinedMemberCount >= eventDetail.capacity){
             		msgbox.toast(R.string.event_quota_full);
             		return;

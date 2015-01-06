@@ -5132,15 +5132,18 @@ public class Database {
         MediaPlayer player=new MediaPlayer();
 
         for (WFile file : moment.multimedias) {
-            if (file.getExt().equals("aac") || file.getExt().equals("m4a") || file.getExt().equals("3gpp")) {
+            if ((file.getExt().equals("aac") || file.getExt().equals("m4a") || file.getExt().equals("3gpp"))
+                    && file.duration <= 0) {
                 String filePath=makeLocalFilePath(file.fileid, file.getExt());
-                try {
-                    player.setDataSource(filePath);
-                    player.prepare();
+                if (new File(filePath).exists()) {
+                    try {
+                        player.setDataSource(filePath);
+                        player.prepare();
 
-                    file.duration=player.getDuration()/1000;
-                } catch (Exception e) {
-                    e.printStackTrace();
+                        file.duration = player.getDuration() / 1000;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

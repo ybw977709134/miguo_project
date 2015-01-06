@@ -148,8 +148,6 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
 						120.67f,
 						strIntroduce);
                 if (null != groupids && groupids.length > 0 && null != groupids[0]) {
-//                    PrefUtil.getInstance(CreateGroupActivity.this)
-//                            .setGroupUptodate(false);
 //                    // save the group in local db.
 //                    groupRoom.groupID = groupids[0];
 //                    groupRoom.shortGroupID = groupids[1];

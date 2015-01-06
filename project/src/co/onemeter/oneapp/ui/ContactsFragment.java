@@ -282,27 +282,6 @@ public class ContactsFragment extends Fragment implements OnClickListener,
             }
         }.execute((Void)null);
     }
-	
-	private void getMyBuddyListFromServer() {
-		new AsyncTask<Void, Integer, Void>() {
-
-			@Override
-			protected Void doInBackground(Void... params) {
-				if (ErrorCode.OK == mWebif.fGetBuddyList()) {
-                    MomentWebServerIF.getInstance(getActivity())
-                            .fGetMomentsOfAll(0, 10, true);
-                    mPrefUtil.setContactUptodate(true);
-				}
-				return null;
-			}
-			
-			@Override
-			protected void onPostExecute(Void v) {
-                mPrefUtil.setLocalContactListLastModified();
-				getMyBuddyListFromLocal();
-			}
-		}.execute((Void)null);
-	}
 
     //normal buddy
     private void getMyBuddyListFromLocal() {
@@ -315,22 +294,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
         }).start();
 	}
 
-	private void getMyGroupsFromServer() {
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				final int errno = WebServerIF.getInstance(getActivity()).fGroupChat_GetMyGroups();
-				if (errno == ErrorCode.OK) {
-					mPrefUtil.setLocalGroupListLastModified();
-//					mHandler.sendEmptyMessage(HANDLER_FINISH_GET_SERVER_GROUP);
-				}
-			}
-			
-		}).start();
-	}
-
-	private void getMyGroupsFromLocal() {
+    private void getMyGroupsFromLocal() {
 
         new Thread(new Runnable() {
             @Override
@@ -466,38 +430,14 @@ public class ContactsFragment extends Fragment implements OnClickListener,
         theActiveInstance = this;
         MobclickAgent.onResume(getActivity());
 
-        invalidateListView();
-
         getMyGroupsFromLocal();
         getMyBuddyListFromLocal();
+        showFunctionList();
+
         Database.addDBTableChangeListener(Database.TBL_BUDDIES,contactBuddyObserver);
         Database.addDBTableChangeListener(Database.TBL_GROUP,contactGroupObserver);
         Database.addDBTableChangeListener(Database.TBL_PENDING_REQUESTS,pendingRequestObserver);
 	}
-
-    /**
-     * Invalidate list view, forcing to reload it.
-     *
-     * Note, call me on UI thread.
-     */
-    public void invalidateListView() {
-
-//        if (mLastReadLocalContactList < mPrefUtil.getLocalContactListLastModified()) {
-//            getMyBuddyListFromLocal();
-//        }
-
-		if(!mPrefUtil.isContactUptodate()) {
-			getMyBuddyListFromServer();
-		}
-
-		if(!mPrefUtil.isGroupUptodate()) {
-			getMyGroupsFromServer();
-		} else if (mLastReadLocalGroupList < mPrefUtil.getLocalGroupListLastModified()) {
-//			getMyGroupsFromLocal();
-		}
-
-        showFunctionList();
-    }
 
     @Override
     public void onPause() {
@@ -587,8 +527,4 @@ public class ContactsFragment extends Fragment implements OnClickListener,
                 return false;
         }
     }
-    
-//    public boolean isEmpty(){
-//    	return ContactUtil.allPersons == null || ContactUtil.allPersons.isEmpty();
-//    }
 }

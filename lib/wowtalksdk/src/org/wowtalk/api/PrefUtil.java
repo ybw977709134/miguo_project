@@ -552,26 +552,6 @@ public class PrefUtil {
 		editor.putInt(CONTACT_NEARBY_RESULT_LAYOUT, layout);
 		editor.commit();
 	}
-	
-	public boolean isContactUptodate() {
-		return sPref.getBoolean(CONTACT_UP_TO_DATE, false);
-	}
-	
-	public void setContactUptodate(boolean isContactUptodate) {
-		Editor editor = sPref.edit();
-		editor.putBoolean(CONTACT_UP_TO_DATE, isContactUptodate);
-		editor.commit();
-	}
-	
-	public boolean isGroupUptodate() {
-		return sPref.getBoolean(GROUP_UP_TO_DATE, false);
-	}
-	
-	public void setGroupUptodate(boolean isGroupUptodate) {
-		Editor editor = sPref.edit();
-		editor.putBoolean(GROUP_UP_TO_DATE, isGroupUptodate);
-		editor.commit();
-	}
 
     public boolean isFavoritesUptodate() {
         return sPref.getBoolean(FAVORITES_UP_TO_DATE, false);

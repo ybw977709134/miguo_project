@@ -308,7 +308,6 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
 //                    dbHelper.storeNewBuddyWithUpdate(makeBuddyFromPendingRequest(p));
 //                    pendings.remove(p);
 //                    friendAdapter.notifyDataSetChanged();
-                    mPrefUtil.setContactUptodate(false);
                     mPrefUtil.setLocalContactListLastModified();
 
                     MessageComposerActivity.launchToChatWithBuddy(

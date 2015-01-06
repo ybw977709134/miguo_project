@@ -1161,7 +1161,6 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         Log.i("StartActivity#downloadContactsAndGroups, finish downloading(2/4) all groups for biz (errno:" + errno);
         if (ErrorCode.OK == errno) {
             prefUtil.setLocalGroupListLastModified();
-            prefUtil.setGroupUptodate(true);
         }
 
         // 3. 临时会话群组

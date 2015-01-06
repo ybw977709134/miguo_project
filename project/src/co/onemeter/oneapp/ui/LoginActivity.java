@@ -21,8 +21,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ThemeHelper;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
@@ -208,7 +210,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         q.find(R.id.forgotPassWord).clicked(this);
         q.find(R.id.login_username).clicked(this);
-        q.find(R.id.login_qrcode).clicked(this);
+//        q.find(R.id.login_qrcode).clicked(this);
+        q.find(R.id.btn_signup).clicked(this);
         fieldClear.setOnClickListener(this);
 
 		edtPassword.addTextChangedListener(new TextWatcher() {
@@ -253,16 +256,19 @@ public class LoginActivity extends Activity implements OnClickListener {
 		case R.id.login_username:
 			login();
 			break;
-		case R.id.login_qrcode:
-        {
-            Intent i = new Intent(this, ScanQRCodeActivity.class)
-                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_WITH_LAYOUT, true)
-                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_LAYOUT_ID, R.layout.scan_qr_code_layout)
-                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_FINISH_AFTER_DECODE, false);
-            ThemeHelper.putExtraCurrThemeResId(i, this);
-            startActivityForResult(i, REQ_SCAN);
+//		case R.id.login_qrcode:
+//        {
+//            Intent i = new Intent(this, ScanQRCodeActivity.class)
+//                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_WITH_LAYOUT, true)
+//                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_LAYOUT_ID, R.layout.scan_qr_code_layout)
+//                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_FINISH_AFTER_DECODE, false);
+//            ThemeHelper.putExtraCurrThemeResId(i, this);
+//            startActivityForResult(i, REQ_SCAN);
+//            break;
+//        }
+        case R.id.btn_signup:
+            startActivity(new Intent(this, RegisterActivity.class));
             break;
-        }
 		case R.id.forgotPassWord:
 			fGotoFetchPwd();
 			break;

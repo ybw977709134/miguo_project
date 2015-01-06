@@ -8,19 +8,26 @@
         android:layout_width="match_parent"
         android:layout_height="140dp"
         android:padding="5dp" >
-        <ImageView 
+
+        <ImageView
             android:id="@+id/item_myclass_imageview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/class_bg_3"/>
-        <TextView android:id="@+id/item_myclass_textview"
+            android:src="@drawable/class_bg_3" />
+
+        <TextView
+            android:id="@+id/item_myclass_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:gravity="center"
+            android:shadowColor="@color/black"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="5"
             android:text="dummytext"
-            android:textSize="20sp"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textSize="20sp" />
     </RelativeLayout>
 
 </LinearLayout>

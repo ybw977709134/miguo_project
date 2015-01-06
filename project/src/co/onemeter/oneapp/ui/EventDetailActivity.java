@@ -254,7 +254,6 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
         eventDetail = getIntent().getExtras().getParcelable(EventActivity.EVENT_DETAIL_BUNDLE);
         
-        int i =  eventDetail.capacity;
 
         if (eventDetail == null) { 
             return;
@@ -271,7 +270,13 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
 		initView();
 		applicationInfoItemAdapter = new ApplicationInfoItemAdapter(this, BuddyList);
-		showApplicantsInfo();
+		if(eventDetail.owner_uid.equals(PrefUtil.getInstance(this).getUid())){
+			showApplicantsInfo();
+		}else{
+			findViewById(R.id.event_table_apply).setVisibility(View.GONE);
+			listView_applicantsInfo.setVisibility(View.GONE);
+		}
+		
 	}
 
     @Override
@@ -295,6 +300,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
     		joinEventWithDetail(name,phone);//参加报名，填写信息。
     	}
     }
+    
     private void showApplicantsInfo(){   	
     	new AsyncTask<Void, Void, Integer>(){
     		int errno = ErrorCode.OK;
@@ -307,11 +313,14 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 			@Override
 			protected void onPostExecute(Integer errno) {
 				 if (errno == ErrorCode.OK) {
+					 if(BuddyList.isEmpty()){
+						 findViewById(R.id.event_table_apply).setVisibility(View.GONE);
+						 return;
+					 }
 					 listView_applicantsInfo.setAdapter(applicationInfoItemAdapter);
 					 ListViewUtils.setListViewHeightBasedOnChildren(listView_applicantsInfo);
-				 }
-				 else{
-					 
+				 }else{
+					 findViewById(R.id.event_table_apply).setVisibility(View.GONE);
 				 }
 			};
     		

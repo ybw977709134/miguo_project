@@ -262,7 +262,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
     }
 
     public void refresh() {
-//        mMsgBox.showWait();
+        mMsgBox.showWait();
 
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -278,7 +278,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
 
             @Override
             protected void onPostExecute(Void v) {
-//                mMsgBox.dismissWait();
+                mMsgBox.dismissWait();
             }
         }.execute((Void)null);
     }
@@ -467,7 +467,6 @@ public class ContactsFragment extends Fragment implements OnClickListener,
         MobclickAgent.onResume(getActivity());
 
         invalidateListView();
-        refresh();
 
         getMyGroupsFromLocal();
         getMyBuddyListFromLocal();

@@ -609,17 +609,17 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         String myUid = mPrefUtil.getUid();
         if(!TextUtils.isEmpty(myUid) && myUid.equals(moment.owner.userID)) {
             //moment is mine
-            bottomBoard.add(getString(R.string.view_share_range),
-                    BottomButtonBoard.BUTTON_BLUE, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(MomentDetailActivity.this,ShareRangeSelectActivity.class);
-                    intent.putStringArrayListExtra(ShareRangeSelectActivity.LITMITED_DEPS,moment.limitedDepartmentList);
-                    intent.putExtra(ShareRangeSelectActivity.SHOWN_ONLY,true);
-                    startActivity(intent);
-                    bottomBoard.dismiss();
-                }
-            });
+//            bottomBoard.add(getString(R.string.view_share_range),
+//                    BottomButtonBoard.BUTTON_BLUE, new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent intent = new Intent(MomentDetailActivity.this,ShareRangeSelectActivity.class);
+//                    intent.putStringArrayListExtra(ShareRangeSelectActivity.LITMITED_DEPS,moment.limitedDepartmentList);
+//                    intent.putExtra(ShareRangeSelectActivity.SHOWN_ONLY,true);
+//                    startActivity(intent);
+//                    bottomBoard.dismiss();
+//                }
+//            });
 
             bottomBoard.add(getString(R.string.delete_moment),
                     BottomButtonBoard.BUTTON_RED, new View.OnClickListener() {
@@ -631,7 +631,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             });
         }
 
-//        bottomBoard.addCancelBtn(getString(R.string.close));
+        bottomBoard.addCancelBtn(getString(R.string.close));
         bottomBoard.show();
     }
 

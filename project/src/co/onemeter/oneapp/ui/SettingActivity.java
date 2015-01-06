@@ -303,34 +303,8 @@ public class SettingActivity extends Activity implements OnClickListener {
 
         updateNoticeStatus();
         setAccountData();
-        getAccountUnreadCounts();
 
         Database.addDBTableChangeListener(Database.DUMMY_TBL_ALBUM_COVER_GOT, mAlbumCoverObserver);
-    }
-
-    private void getAccountUnreadCounts() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                HashMap<String, Integer> accountUnreadMap = new HashMap<String, Integer>();
-                int resultCode = mWeb.getAccountUnreadCounts(mPrefUtil.getAccountIds(), accountUnreadMap);
-                if (resultCode == ErrorCode.OK) {
-                    if (!accountUnreadMap.isEmpty()) {
-                        ArrayList<Account> tempAccounts = mPrefUtil.getAccountList();
-                        Account tempAccount = null;
-                        for (Iterator<Account> iterator = tempAccounts.iterator(); iterator.hasNext();) {
-                            tempAccount = iterator.next();
-                            if (!mPrefUtil.getUid().equals(tempAccount.uid)) {
-                                tempAccount.unreadCounts = accountUnreadMap.get(tempAccount.uid);
-                            }
-                        }
-                        mPrefUtil.setAccountList(tempAccounts);
-                        mAccountDatas = tempAccounts;
-                        mHandler.sendEmptyMessage(HANDLER_GET_ACCOUNT_UNREAD_COUNT);
-                    }
-                }
-            }
-        }).start();
     }
 
     private void setAccountData() {

@@ -3,6 +3,7 @@ package co.onemeter.oneapp.ui;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.Lesson;
 import org.wowtalk.api.LessonParentFeedback;
 import org.wowtalk.api.Moment;
 import org.wowtalk.api.PrefUtil;
@@ -25,6 +26,8 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 	
 	private int lessonId;
 	private String classId;
+	private Lesson lesson;
+	private MessageBox mMsgBox = new MessageBox(this);
 	
 	protected void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,6 +42,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			q.find(R.id.lesson_title).text(intent.getStringExtra("title"));
 			lessonId = intent.getIntExtra(Constants.LESSONID,0);
 			classId = intent.getStringExtra("classId");
+			lesson = intent.getParcelableExtra("lesson");
 		}
 		q.find(R.id.title_back).clicked(this);
 		if(isTeacher()){
@@ -80,6 +84,12 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			finish();
 			break;
 		case R.id.les_lay_first:
+			if(lesson.start_date * 1000 > System.currentTimeMillis()){
+				if(!mMsgBox.isWaitShowing()){
+					mMsgBox.toast(R.string.class_lesson_no_start);
+				}
+				return;
+			}
 			if(isTeacher()){
 				intent.setClass(this, TeacherCheckActivity.class);
 				intent.putExtra("classId", classId);
@@ -92,10 +102,22 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			startActivity(intent);
 			break;
 		case R.id.les_lay_second:
+			if(lesson.start_date * 1000 > System.currentTimeMillis()){
+				if(!mMsgBox.isWaitShowing()){
+					mMsgBox.toast(R.string.class_lesson_no_start);
+				}
+				return;
+			}
 			intent.setClass(this, HomeworkActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.les_lay_third:
+			if(lesson.start_date * 1000 > System.currentTimeMillis()){
+				if(!mMsgBox.isWaitShowing()){
+					mMsgBox.toast(R.string.class_lesson_no_start);
+				}
+				return;
+			}
 			if(isTeacher()){
 				intent.setClass(this, TeacherCheckActivity.class);
 				intent.putExtra("classId", classId);

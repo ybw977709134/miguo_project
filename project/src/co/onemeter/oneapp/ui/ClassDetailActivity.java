@@ -283,6 +283,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		intent.putExtra(Constants.LESSONID, lessons.get(position).lesson_id);
 		intent.putExtra("title", lessons.get(position).title);
 		intent.putExtra("classId", classId);
+		intent.putExtra("lesson", lessons.get(position));
 		startActivity(intent);
 	}
 	

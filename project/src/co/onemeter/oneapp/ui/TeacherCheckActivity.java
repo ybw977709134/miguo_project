@@ -98,7 +98,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 		
 		stus = new ArrayList<GroupMember>();
 		
-//		members = mdbHelper.fetchGroupMembers(classId);
+		members = mdbHelper.fetchGroupMembers(classId);
 //		android.util.Log.i("-->>", members.toString());
 		if(members == null || members.isEmpty()){
 			new AsyncTask<Void, Void, Integer>(){
@@ -123,6 +123,11 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 				
 			}.execute((Void)null);
 		}else{
+			for (GroupMember m: members) {
+				if(m.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
+					stus.add(m);
+				}
+			}
 			adapter = new StuAdapter(stus);
 			lvStu.setAdapter(adapter);
 		}

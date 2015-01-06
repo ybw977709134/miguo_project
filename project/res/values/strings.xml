@@ -196,7 +196,7 @@
     <string name="event_info_fill">请先填写信息！</string>
     <string name="event_cancel_join_msg">你确认取消报名吗？</string>
     <string name="event_quota_full">该活动名额已满!</string>
-    <string name="event_detail_applicants">报名名单</string>
+    <string name="event_detail_applicants">报名名单:</string>
 
     <string name="settings_myinfo">个人信息</string>
     <string name="my_treasure">我的百宝箱</string>
@@ -845,5 +845,7 @@
 	<string name="class_submit_success">提交成功</string>
 	<string name="class_submit_failed">提交失败</string>
 	<string name="class_time_ealier">时间不能早于现在!</string>
+	<string name="class_not_del_earlier">已经上过的课不能删除!</string>
+	<string name="class_lesson_no_start">该节课还未开始!</string>
 	
 </resources>

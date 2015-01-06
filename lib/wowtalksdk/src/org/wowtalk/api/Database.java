@@ -371,6 +371,10 @@ public class Database {
 		// update the display name of chat message
 		updateChatMessageDisplayNameWithUser(buddy.userID, TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
 
+        // 既然已经是好友了，加入 pending requests 表中有相关条目，应该清理掉
+        if (Buddy.RELATIONSHIP_FRIEND_BOTH == (buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_BOTH))
+            deletePendingRequest(null, buddy.userID);
+
 		return rst;
 	}
 
@@ -830,6 +834,18 @@ public class Database {
 		}
 		return list;
 	}
+
+    /** 是否存在发出的好友请求 */
+    public boolean hasPendingOutBuddies() {
+        ArrayList<PendingRequest> reqs = new ArrayList<>();
+        fetchPendingRequest(reqs);
+        for (PendingRequest p : reqs) {
+            if (p.type == PendingRequest.BUDDY_OUT)
+                return true;
+        }
+
+        return false;
+    }
 
     /**
      * Teachers and students
@@ -5836,7 +5852,7 @@ public class Database {
         if (isDBUnavailable()) {
             return;
         }
-        database.delete(TBL_PENDING_REQUESTS,
+        int n = database.delete(TBL_PENDING_REQUESTS,
                 "group_id=? AND uid=?",
                 new String[] { group_id, uid });
         markDBTableModified(TBL_PENDING_REQUESTS);

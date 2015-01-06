@@ -13,10 +13,10 @@ import java.util.LinkedList;
  */
 public class WebServerEventPoller {
 
-    private final static String TASK_ID_NEW_FRIEND_REQ = "2fe13e73-6128-43ef-be7f-a82342766000";
-    private final static String TASK_ID_NEW_REVIEWS = "2fe13e73-6128-43ef-be7f-a82342766001";
-    private final static String TASK_ID_REFRESH_BUDDIES = "2fe13e73-6128-43ef-be7f-a82342766002";
-    private final static String TASK_ID_REFRESH_GROUPS = "2fe13e73-6128-43ef-be7f-a82342766003";
+    public final static String TASK_ID_NEW_FRIEND_REQ = "2fe13e73-6128-43ef-be7f-a82342766000";
+    public final static String TASK_ID_NEW_REVIEWS = "2fe13e73-6128-43ef-be7f-a82342766001";
+    public final static String TASK_ID_REFRESH_BUDDIES = "2fe13e73-6128-43ef-be7f-a82342766002";
+    public final static String TASK_ID_REFRESH_GROUPS = "2fe13e73-6128-43ef-be7f-a82342766003";
 
     private static WebServerEventPoller theInstance;
     private Context context;
@@ -45,6 +45,17 @@ public class WebServerEventPoller {
             @Override
             public void run() {
                 PeriodRunnableManager.instance().invoke();
+            }
+        }).start();
+    }
+
+    public void invokeImmediately(final String taskId) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                PeriodRunnableManager.Task task = PeriodRunnableManager.instance().findTask(taskId);
+                if (task != null)
+                    task.runnable.run();
             }
         }).start();
     }

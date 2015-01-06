@@ -23,6 +23,7 @@ import co.onemeter.oneapp.contacts.adapter.ContactListAdapter;
 import co.onemeter.oneapp.contacts.adapter.FunctionAdapter;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
+import co.onemeter.oneapp.utils.WebServerEventPoller;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
@@ -437,6 +438,13 @@ public class ContactsFragment extends Fragment implements OnClickListener,
         Database.addDBTableChangeListener(Database.TBL_BUDDIES,contactBuddyObserver);
         Database.addDBTableChangeListener(Database.TBL_GROUP,contactGroupObserver);
         Database.addDBTableChangeListener(Database.TBL_PENDING_REQUESTS,pendingRequestObserver);
+
+        // 如果有发出的好友请求，则总是频繁刷新好友列表，因为我们不知道对方什么时候同意，
+        // 为了让用户被同意后即时看到新好友，只能如此。
+        if (new Database(getActivity()).hasPendingOutBuddies()) {
+            WebServerEventPoller.instance(getActivity()).invokeImmediately(
+                    WebServerEventPoller.TASK_ID_REFRESH_BUDDIES);
+        }
 	}
 
     @Override

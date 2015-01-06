@@ -147,32 +147,43 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 //			intent.setClass(this, LessonParentFeedbackActivity.class);
 			final int pos = position;
 			mMsgBox.showWait();
-			new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					int errno;
-					try {
-						errno = WowLessonWebServerIF.getInstance(TeacherCheckActivity.this).getLessonParentFeedback(lessonId, stus.get(pos).userID);
-						if(errno == ErrorCode.OK){
-							Database db = new Database(TeacherCheckActivity.this);
-							LessonParentFeedback feedback = db.fetchLessonParentFeedback(lessonId, stus.get(pos).userID);
-							//android.util.Log.i("-->>", feedback.toString());
-							Moment moment = db.fetchMoment(feedback.moment_id + "");
-							if(moment != null){
-								MomentDetailActivity.launch(TeacherCheckActivity.this,moment);
-								mHandler.sendEmptyMessage(errno);
+			final Database db = new Database(TeacherCheckActivity.this);
+			LessonParentFeedback feedback0 = db.fetchLessonParentFeedback(lessonId, stus.get(pos).userID);
+			if(feedback0 == null){
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						int errno;
+						try {
+							errno = WowLessonWebServerIF.getInstance(TeacherCheckActivity.this).getLessonParentFeedback(lessonId, stus.get(pos).userID);
+							if(errno == ErrorCode.OK){
+								LessonParentFeedback feedback = db.fetchLessonParentFeedback(lessonId, stus.get(pos).userID);
+								//android.util.Log.i("-->>", feedback.toString());
+								Moment moment = db.fetchMoment(feedback.moment_id + "");
+								if(moment != null){
+									MomentDetailActivity.launch(TeacherCheckActivity.this,moment);
+									mHandler.sendEmptyMessage(errno);
+								}else{
+									mHandler.sendEmptyMessage(errno);
+								}
 							}else{
 								mHandler.sendEmptyMessage(errno);
 							}
-						}else{
-							mHandler.sendEmptyMessage(errno);
+						} catch (Exception e) {
+							mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);
 						}
-					} catch (Exception e) {
-						mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);
 					}
+				}).start();
+			}else{
+				Moment moment = db.fetchMoment(feedback0.moment_id + "");
+				if(moment != null){
+					MomentDetailActivity.launch(TeacherCheckActivity.this,moment);
+					mHandler.sendEmptyMessage(ErrorCode.OK);
+				}else{
+					mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);
 				}
-			}).start();
+			}
 		}
 	}
 	

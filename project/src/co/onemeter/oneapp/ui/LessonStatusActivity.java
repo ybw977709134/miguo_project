@@ -212,6 +212,10 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 								break;
 						}
 				}
+				holder.rg_per.setEnabled(false);
+				holder.radio0.setEnabled(false);
+				holder.radio1.setEnabled(false);
+				holder.radio2.setEnabled(false);
 			}else{
 				final LessonPerformance performance = new LessonPerformance();
 				performance.property_value = 1;

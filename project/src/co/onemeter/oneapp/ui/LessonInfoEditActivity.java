@@ -147,6 +147,9 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 	}
 
 	private void deleteLessons(){
+		if(delLessons.isEmpty()){
+			return;
+		}
 		mMsgBox.showWait();
 		new Thread(new Runnable() {
 			
@@ -199,6 +202,10 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 	    final int id=(int) menuInfo.id;
 		switch (item.getItemId()) {
 		case 1:
+			if(lessons.get(id).start_date * 1000 < System.currentTimeMillis()){
+				mMsgBox.toast(R.string.class_not_del_earlier);
+				return true;
+			}
 			originSize = lessons.size() - addLessons.size();
 			delLessons.add(lessons.get(id).lesson_id + "");
 			lessons.remove(id);

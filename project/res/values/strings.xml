@@ -844,5 +844,6 @@
 	<string name="class_submit_success">提交成功</string>
 	<string name="class_submit_failed">提交失败</string>
 	<string name="class_time_ealier">时间不能早于现在!</string>
+	<string name="class_not_del_earlier">已经上过的课不能删除!</string>
 	
 </resources>

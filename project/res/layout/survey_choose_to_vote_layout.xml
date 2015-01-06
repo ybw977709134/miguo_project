@@ -4,21 +4,60 @@
               android:id="@+id/choose_layout"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content" 
+              android:background="@color/white" >
     <ImageView
             android:id="@+id/choose_layout_inner_check"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="left"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
             android:padding="5dp"
             android:src="@drawable/share_vote_unchecked"
             android:scaleType="fitXY"/>
-    <TextView
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        
+        <TextView
             android:id="@+id/option_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:gravity="center_vertical"
-            android:textColor="@color/black"
-            android:textSize="15sp"/>
+            android:layout_marginBottom="3dp"
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="15dp">
+        <ImageView
+                android:id="@+id/option_voted_iv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/share_vote_1"/>
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minWidth="@dimen/survey_right_voted_info_min_width"
+                android:layout_marginLeft="3dp"
+                android:layout_toRightOf="@id/option_voted_iv_desc"
+                android:orientation="horizontal">
+            <TextView
+                    android:id="@+id/voted_factor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="12sp"
+                    android:textColor="@color/gray"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+        
+    </LinearLayout>
+    
+
 </LinearLayout>

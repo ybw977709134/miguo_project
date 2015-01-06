@@ -670,6 +670,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //                        }
 //                    }
 //                });
+                
                 lvSurveyOptions.setListAdapter(adapter);
 //                ListHeightUtil.setListHeight(lvSurveyOptions);
 

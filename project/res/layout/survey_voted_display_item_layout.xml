@@ -10,41 +10,44 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textColor="@color/black"/>
 
     <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="25dp">
+            android:layout_height="15dp"
+            android:layout_marginLeft="5dp">
         <ImageView
                 android:id="@+id/option_voted_iv_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
-                android:background="@color/blue"/>
+                android:background="@drawable/share_vote_1"/>
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:minWidth="@dimen/survey_right_voted_info_min_width"
-                android:layout_marginLeft="3dp"
+                android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@id/option_voted_iv_desc"
                 android:orientation="horizontal">
             <TextView
                     android:id="@+id/voted_factor"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:layout_alignParentLeft="true"
                     android:layout_toLeftOf="@+id/voted_num"
-                    android:textSize="20sp"
+                    android:textSize="12sp"
                     android:textColor="@color/gray"/>
             <TextView
                     android:id="@+id/voted_num"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
-                    android:textSize="20sp"
-                    android:textColor="@color/blue"/>
+                    android:textSize="15sp"
+                    android:textColor="@color/blue"
+                    android:visibility="gone"/>
         </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>

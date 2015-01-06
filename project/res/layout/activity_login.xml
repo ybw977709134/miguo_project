@@ -133,7 +133,16 @@
 					android:textColor="@color/text_gray3"
 					android:text="@string/login_otherwise"/>
 			</RelativeLayout>
-
+			<Button
+				android:id="@+id/btn_signup"
+				style="@style/button_blue"
+				android:text="@string/login_signup"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/padding_large"
+				android:layout_marginLeft="@dimen/padding_large"
+				android:layout_marginRight="@dimen/padding_large"/>
+			<!--  
 			<Button
 				android:id="@+id/login_qrcode"
 				style="@style/button_blue"
@@ -141,7 +150,7 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginLeft="@dimen/padding_large"
-				android:layout_marginRight="@dimen/padding_large"/>
+				android:layout_marginRight="@dimen/padding_large"/>-->
 		</LinearLayout>
 	</RelativeLayout>
 

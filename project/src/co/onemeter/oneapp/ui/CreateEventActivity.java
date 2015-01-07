@@ -371,6 +371,11 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(resultCode, resultCode, data);
 
+        if (REQ_INPUT_IMAGE == requestCode) {
+            imageInputWidget.handleActivityResult(requestCode, resultCode, data);
+            return;
+        }
+
         if (resultCode != RESULT_OK)
             return;
 
@@ -409,10 +414,6 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                     }
                 }
                 updateUI();
-                break;
-            }
-            case REQ_INPUT_IMAGE: {
-                imageInputWidget.handleActivityResult(REQ_INPUT_IMAGE, resultCode, data);
                 break;
             }
         }

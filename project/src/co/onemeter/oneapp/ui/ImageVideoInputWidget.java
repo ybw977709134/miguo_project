@@ -24,8 +24,8 @@ import java.util.HashMap;
  *     <li>{@link #setup(android.app.Activity, co.onemeter.oneapp.ui.ImageVideoInputWidget.MediaType, int)}</li>
  *     <li>in {@link Activity#onSaveInstanceState(android.os.Bundle)} call {@link #saveInstanceState(android.os.Bundle)}</li>
  *     <li>in {@link Activity#onCreate(android.os.Bundle)} call {@link #restoreInstanceState(android.os.Bundle)}</li>
- *     <li>in {@link android.app.Activity#onActivityResult(int, int, android.content.Intent)} call
- *     {@link #handleActivityResult(int, int, android.content.Intent)}</li>
+ *     <li>in {@link android.app.Activity#onActivityResult(int, int, android.content.Intent)} ALWAYS call
+ *     {@link #handleActivityResult(int, int, android.content.Intent)} (even if resultCode != RESULT_OK)</li>
  * </ul>
  *
  * Created by pzy on 11/8/14.
@@ -35,6 +35,8 @@ import java.util.HashMap;
  *  # hint
  */
 public class ImageVideoInputWidget extends HorizontalScrollView {
+
+    private static final String TAG = "ImageVideoInputWidget";
 
     // key for saving instance state of MediaInputHelper.
     private static final String INSTANCE_STATE_KEY_MEDIA_INPUT_HELPER = "465d472ae381d_mihelper";
@@ -54,6 +56,7 @@ public class ImageVideoInputWidget extends HorizontalScrollView {
     private MediaInputHelper inputHelper;
     private MediaType mediaType = MediaType.Photo;
     private int requestCode;
+    private boolean activityRequestInProgress = false;
     private ArrayList<WFile> files = new ArrayList<WFile>();
     private HashMap<String, ImageView> grids = new HashMap<String, ImageView>();
     private int gridSize;
@@ -109,6 +112,11 @@ public class ImageVideoInputWidget extends HorizontalScrollView {
 
     // Interactively Add new photo or video.
     public void addItem() {
+        if (activityRequestInProgress) {
+            Log.d(TAG, " addItem cancelled since a former request is still in progress.");
+            return;
+        }
+
         if (inputHelper == null) {
             inputHelper = new MediaInputHelper();
         }
@@ -117,6 +125,7 @@ public class ImageVideoInputWidget extends HorizontalScrollView {
         } else {
             inputHelper.inputVideo(activity, requestCode);
         }
+        activityRequestInProgress = true;
     }
 
     public void addItem(WFile f) {
@@ -164,12 +173,18 @@ public class ImageVideoInputWidget extends HorizontalScrollView {
     /**
      * 请在 {@link android.app.Activity#onActivityResult(int, int, android.content.Intent)}
      * 中调用。
+     * <p>注意：即时 resultCode != RESULT_OK，也要调用该方法。</p>
      * @param requestCode
      * @param resultCode
      * @param data
      * @return true: consumed.
      */
     public boolean handleActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == this.requestCode) {
+            Log.d(TAG, " activity request done");
+            activityRequestInProgress = false;
+        }
+
         if (resultCode == Activity.RESULT_OK && requestCode == this.requestCode) {
             if (mediaType == MediaType.Photo) {
                 String[] path = new String[2];
@@ -190,13 +205,12 @@ public class ImageVideoInputWidget extends HorizontalScrollView {
                 } else {
                     Toast.makeText(activity, R.string.operation_failed, Toast.LENGTH_SHORT).show();
                 }
-                return true;
             } else if (mediaType == MediaType.Video) {
-                return true;
+                // TODO not implemented
             }
         }
 
-        return false;
+        return (requestCode == this.requestCode);
     }
 
     private void appendThumbnail(final WFile f) {

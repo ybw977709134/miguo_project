@@ -364,9 +364,7 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch(requestCode) {
             case REQ_IMAGE:
-                if (resultCode == RESULT_OK) {
-                    imageInputWidget.handleActivityResult(requestCode, resultCode, data);
-                }
+				imageInputWidget.handleActivityResult(requestCode, resultCode, data);
                 break;
             default:
                 break;

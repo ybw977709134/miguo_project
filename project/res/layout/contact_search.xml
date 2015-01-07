@@ -26,7 +26,7 @@
                 android:background="@drawable/tab_button_left_white_a"
 				android:textColor="@color/green"
 				android:textSize="14sp"
-				android:text="昵称搜索"/>
+				android:text="名字搜索"/>
 			<Button
 				android:id="@+id/search_uid"
 				android:layout_height="wrap_content"

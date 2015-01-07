@@ -816,7 +816,7 @@ public class MomentWebServerIF {
             rootRoomId=rootRoom.groupID;
         }
         if(TextUtils.isEmpty(groupId) || groupId.equals(rootRoomId)) {
-            List<Moment> moments = db.fetchMomentsOfAllBuddies(0, -1,-1);
+            List<Moment> moments = db.fetchMomentsOfAllBuddies(0, -1, -1);
             deleteLocalMoment(maxTimestamp,count,moments,momentIdFromServerList);
         }
 

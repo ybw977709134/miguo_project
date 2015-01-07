@@ -522,6 +522,8 @@ public class Buddy implements IHasPhoto, Parcelable {
             case ACCOUNT_TYPE_PUBLIC:
                 at = "ACCOUNT_TYPE_PUBLIC";
                 break;
+            case ACCOUNT_TYPE_TEACHER:
+            	at = "ACCOUNT_TYPE_TEACHER";
             default:
                 at = "?";
                 break;

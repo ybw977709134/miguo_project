@@ -1095,6 +1095,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         mIsLoading = false;
         if (null != mLoadMoreView) {
             ((TextView)mLoadMoreView.findViewById(R.id.text)).setText(R.string.load_more);
+//            ((TextView)mLoadMoreView.findViewById(R.id.text)).setText("没有更多分享了，自己创建一条吧");
         }
     }
 

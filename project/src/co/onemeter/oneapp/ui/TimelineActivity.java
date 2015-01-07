@@ -81,11 +81,9 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
 
         if (uid != null) {
         	if (!TextUtils.isEmpty(pageTitle)) {//好友的成长日记
-        		switchToSingle();
         		setTitle(pageTitle);
-        	} else {
-        		switchToSingle();//自己的成长日记
-        	}
+        	} 
+        	switchToSingle();//自己的成长日记
             
         } else {
             switchToAll();

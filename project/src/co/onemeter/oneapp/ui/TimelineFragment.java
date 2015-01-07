@@ -96,35 +96,28 @@ public abstract class TimelineFragment extends ListFragment
     private void fillListView(ArrayList<Moment> lst, boolean append) {
         maxTimestamp = lst.isEmpty() ? 0 : lst.get(lst.size() - 1).timestamp;
         if (adapter != null) {
-            if (!append)
-                adapter.clear();
-            adapter.addAll(lst);
-            adapter.setShowLoadMoreAsLastItem(!append || lst.size() >= PAGE_SIZE);
-            adapter.notifyDataSetChanged();
+            if (!append) 
+                adapter.clear();          	
+            	adapter.addAll(lst);
+//            	adapter.setShowLoadMoreAsLastItem(!append || lst.size() >= PAGE_SIZE);
+            	adapter.setShowLoadMoreAsLastItem(true);
+            	adapter.notifyDataSetChanged();
         } else {
             setupListAdapter(lst);
         }
     }
     
-    /**
-     * 重新修改的绑定adapter
-     * @param items
-     * @author hutianfeng
-     */
-    private void setupListAdapter(ArrayList<Moment> items) {
-        
-//        	countTypeFromUiToDb(countType, items);
-    	
+    private void setupListAdapter(ArrayList<Moment> items) {  	
         	ImageResizer imageResizer = new ImageResizer(getActivity(), DensityUtil.dip2px(getActivity(), 100));
         	adapter = new MomentAdapter(getActivity(),
                     getActivity(),
                     items,
-                    false,
+                    false,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
                     false,
                     imageResizer,
                     this,
                     null,
-                    new MessageBox(getActivity()));/////////// 传入listview
+                    new MessageBox(getActivity()));
             adapter.setShowLoadMoreAsLastItem(!items.isEmpty());
             adapter.setLoadDelegate(this);
             setListAdapter(adapter);
@@ -353,8 +346,9 @@ public abstract class TimelineFragment extends ListFragment
     	} else if (index == 3) {//学生账号1
     		countType = 1;
     	}
-    	
-    	fillListView(loadLocalMoments(0, tagIdxFromUiToDb(0),countType), false);
+    	//重新定位到全部内容
+    	selectedTag = 0;
+    	fillListView(loadLocalMoments (0, tagIdxFromUiToDb(selectedTag),countType), false);
     	
     	
     }
@@ -365,8 +359,7 @@ public abstract class TimelineFragment extends ListFragment
     @Override
     public void onTagChanged(int index) {
         selectedTag = index;
-//        adapter.countType = index -1;
-//        int countType = -1;//-1为全部
+        countType = -1;//-1为全部
         fillListView(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag),countType), false);
         //Toast.makeText(getActivity(), "tag: " + index, Toast.LENGTH_SHORT).show();
     }
@@ -427,27 +420,7 @@ public abstract class TimelineFragment extends ListFragment
             break;
         }
         return tag;
-    }
-    
-    /**
-     * 区分账号
-     * @author hutianfeng
-     */
-    private void countTypeFromUiToDb(int countType,ArrayList<Moment> items) {
-    	ImageResizer imageResizer = new ImageResizer(getActivity(), DensityUtil.dip2px(getActivity(), 100));
-    	adapter = new MomentAdapter(getActivity(),
-                getActivity(),
-                items,
-                false,
-                false,
-                imageResizer,
-                this,
-                null,
-                new MessageBox(getActivity()),countType);/////////// 传入listview
-        adapter.setShowLoadMoreAsLastItem(!items.isEmpty());
-        adapter.setLoadDelegate(this);
-        setListAdapter(adapter);
-    }
+    }  
 
     /**
      * Params[0] should be max timestamp.

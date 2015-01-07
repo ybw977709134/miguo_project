@@ -88,11 +88,6 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         MomentWebServerIF web = MomentWebServerIF.getInstance(getActivity());
         return web.fGetMomentsOfBuddy(uid(), maxTimestamp, PAGE_SIZE, true);
     }
-    
-//    @Override
-//    protected ArrayList<Moment> loadUidMoments(int countType,long maxTimestamp) {
-//    	return dbHelper.fetchBuddyDetailUID(countType, maxTimestamp, PAGE_SIZE);
-//    }
 
     @Override
     public void onResume() {

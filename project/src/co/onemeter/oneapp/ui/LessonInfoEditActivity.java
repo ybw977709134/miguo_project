@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
@@ -238,6 +239,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				Calendar result = Calendar.getInstance();
+				result.setTimeZone(TimeZone.getTimeZone("GMT"));
 				result.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth());
 				if(result.getTimeInMillis() < System.currentTimeMillis()){
 					mMsgBox.toast(R.string.class_time_ealier);

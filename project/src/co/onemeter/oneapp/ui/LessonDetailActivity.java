@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
 
 /**
  * 课表详情页面。
@@ -45,6 +46,18 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			lesson = intent.getParcelableExtra("lesson");
 		}
 		q.find(R.id.title_back).clicked(this);
+		
+		LinearLayout lay_first = (LinearLayout) q.find(R.id.les_lay_first).getView();
+		LinearLayout lay_second = (LinearLayout) q.find(R.id.les_lay_second).getView();
+		LinearLayout lay_third = (LinearLayout) q.find(R.id.les_lay_third).getView();
+		if(lesson.end_date * 1000 > System.currentTimeMillis()){
+			lay_first.setBackgroundColor(getResources().getColor(R.color.black_30));
+			lay_second.setBackgroundColor(getResources().getColor(R.color.black_30));
+			lay_third.setBackgroundColor(getResources().getColor(R.color.black_30));
+			lay_first.setEnabled(false);;
+			lay_second.setEnabled(false);
+			lay_third.setEnabled(false);
+		}
 		if(isTeacher()){
 			q.find(R.id.text_first).text(getString(R.string.class_lesson_situation_table));
 			q.find(R.id.text_second).text(getString(R.string.class_set_homework));
@@ -54,9 +67,9 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		}else{
 			q.find(R.id.text_first_r).text(getString(R.string.class_wait_confirm));
 		}
-		q.find(R.id.les_lay_first).clicked(this);
-		q.find(R.id.les_lay_second).clicked(this);
-		q.find(R.id.les_lay_third).clicked(this);
+		lay_first.setOnClickListener(this);
+		lay_second.setOnClickListener(this);
+		lay_third.setOnClickListener(this);
 	}
 
 	@Override
@@ -84,12 +97,6 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			finish();
 			break;
 		case R.id.les_lay_first:
-			if(lesson.start_date * 1000 > System.currentTimeMillis()){
-				if(!mMsgBox.isWaitShowing()){
-					mMsgBox.toast(R.string.class_lesson_no_start);
-				}
-				return;
-			}
 			if(isTeacher()){
 				intent.setClass(this, TeacherCheckActivity.class);
 				intent.putExtra("classId", classId);
@@ -102,22 +109,10 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			startActivity(intent);
 			break;
 		case R.id.les_lay_second:
-			if(lesson.start_date * 1000 > System.currentTimeMillis()){
-				if(!mMsgBox.isWaitShowing()){
-					mMsgBox.toast(R.string.class_lesson_no_start);
-				}
-				return;
-			}
 			intent.setClass(this, HomeworkActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.les_lay_third:
-			if(lesson.start_date * 1000 > System.currentTimeMillis()){
-				if(!mMsgBox.isWaitShowing()){
-					mMsgBox.toast(R.string.class_lesson_no_start);
-				}
-				return;
-			}
 			if(isTeacher()){
 				intent.setClass(this, TeacherCheckActivity.class);
 				intent.putExtra("classId", classId);

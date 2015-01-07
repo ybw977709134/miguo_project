@@ -193,10 +193,6 @@ public class EventDetailActivity extends Activity implements OnClickListener {
             case R.id.right_button_up:
             	//Log.i("--membercount", eventDetail.joinedMemberCount + "");
             	//Log.i("--capacity", eventDetail.capacity + "");
-            	if(eventDetail.joinedMemberCount >= eventDetail.capacity){
-            		msgbox.toast(R.string.event_quota_full);
-            		return;
-            	}
             	if(eventDetail.is_get_member_info){
             		Intent intent = new Intent(this, SubmitInformationActivity.class);
             		startActivityForResult(intent, 100);
@@ -446,6 +442,12 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         
 //        btn_right_up = (TextView) findViewById(R.id.right_button_up);
 //        btn_right_down = (TextView) findViewById(R.id.right_button_down);
+        
+        if(eventDetail.joinedMemberCount >= eventDetail.capacity){
+        	btn_right_up.setText(getString(R.string.event_quota_full));
+        	btn_right_up.setTextSize(12);
+        	btn_right_up.setEnabled(false);
+    	}
         
         updateUI(true);
     }

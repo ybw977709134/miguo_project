@@ -12,6 +12,7 @@ import android.media.MediaPlayer;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Pair;
+
 import org.wowtalk.Log;
 
 import java.io.File;
@@ -5389,6 +5390,9 @@ public class Database {
             e.surveyDeadLine=cur.getString(++i);
             e.setLimitedDepartment(cur.getString(++i));
             e.isFavorite=cur.getInt(++i)==1?true:false; 
+//            if (accountType == -1 || accountType == mPrefUtil.getMyAccountType()) {
+//            	data.add(e);
+//            }  
             data.add(e);
         } while(cur.moveToNext());
         cur.close();
@@ -5606,6 +5610,7 @@ public class Database {
         }
         return fetchMoments(TextUtils.join(" AND ", selection), args.toArray(new String[args.size()]), count,countType);
     }
+    
     public ArrayList<Moment> fetchMomentsOfAllBuddies(long maxTimestamp, int count,int countType) {
         return fetchMomentsOfAllBuddies(maxTimestamp, count, "-1",countType);
     }

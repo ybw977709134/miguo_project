@@ -749,7 +749,7 @@ public class IncallActivity extends Activity implements OnClickListener,
                 new AsyncTask<Void, Void, Integer>() {
                     @Override
                     protected Integer doInBackground(Void... params) {
-                        return WebServerIF.getInstance(IncallActivity.this)
+                        return WowTalkWebServerIF.getInstance(IncallActivity.this)
                                 .fGetBuddyWithUID(uid);
                     }
 
@@ -876,7 +876,7 @@ public class IncallActivity extends Activity implements OnClickListener,
             int errno = ErrorCode.OK;
             @Override
             protected Void doInBackground(Void... params) {
-                errno = WebServerIF.getInstance(IncallActivity.this).fGetBuddyWithUID(userId);
+                errno = WowTalkWebServerIF.getInstance(IncallActivity.this).fGetBuddyWithUID(userId);
                 return null;  //To change body of implemented methods use File | Settings | File Templates.
             }
 

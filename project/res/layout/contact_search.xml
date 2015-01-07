@@ -37,6 +37,12 @@
 				android:textSize="14sp"
 				android:text="ID搜索"/>
 		</LinearLayout>
+
+        <ImageButton
+            android:id="@+id/search_title_back"
+            style="?attr/navbar_btn_left"
+            android:src="@drawable/nav_back_selector"/>
+
 	</RelativeLayout>
 
 	<LinearLayout
@@ -58,14 +64,7 @@
 	        android:layout_weight="1"
 	        layout="@layout/piece_search_bar" />
 
-	    <TextView
-	        android:id="@+id/search_cancel"
-	        android:layout_width="wrap_content"
-	        android:layout_height="match_parent"
-	        android:gravity="center"
-	        android:text="@string/contacts_search_cancel"
-	        android:textColor="@color/black_30"
-	        android:textSize="15sp" />
+
 
 	</LinearLayout>
 

@@ -79,7 +79,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     private TextView textView_commentdetail_like;//赞
     private TextView textView_commentdetail_comment;//评论
 
-    private WebServerIF mWeb;
+    private WowTalkWebServerIF mWeb;
     private PrefUtil mPrefUtil;
     private MomentWebServerIF mMomentWeb;
     private Database dbHelper;
@@ -357,7 +357,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             boolean ok;
             @Override
             protected Void doInBackground(Void... voids) {
-                WebServerIF.getInstance(MomentDetailActivity.this).fGetFileFromServer(file.fileid,
+                WowTalkWebServerIF.getInstance(MomentDetailActivity.this).fGetFileFromServer(file.fileid,
                         GlobalSetting.S3_MOMENT_FILE_DIR,
                         new NetworkIFDelegate() {
                             @Override
@@ -703,7 +703,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 
         mMsgBox = new MessageBox(this);
         dbHelper = Database.open(this);
-        mWeb = WebServerIF.getInstance(this);
+        mWeb = WowTalkWebServerIF.getInstance(this);
         mPrefUtil = PrefUtil.getInstance(this);
         mMomentWeb = MomentWebServerIF.getInstance(this);
 

@@ -10,7 +10,7 @@ import co.onemeter.oneapp.R;
 import com.androidquery.AQuery;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 
 /**
@@ -64,7 +64,7 @@ public class LoginInvitedActivity extends Activity implements View.OnClickListen
 
             @Override
             protected Integer doInBackground(String... invitationCode) {
-                WebServerIF web = WebServerIF.getInstance(context);
+                WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(context);
                 int errno = web.fLoginWithInvitationCode(
                         invitationCode[0], result);
                 if (errno == ErrorCode.OK) {

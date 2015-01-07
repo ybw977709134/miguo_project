@@ -79,7 +79,7 @@ public class PeriodRunnableManager {
         tasks.remove(findTask(uuid));
     }
 
-    private Task findTask(String uuid) {
+    public Task findTask(String uuid) {
         for (Task task : tasks) {
             if (TextUtils.equals(task.id, uuid)) {
                 return task;

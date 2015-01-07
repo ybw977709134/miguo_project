@@ -197,7 +197,7 @@ public class PrefUtil {
     /**
      * 判断是否升级了，用于上报客户端信息（如果升级了，则将新的app_version_code写入SP）
      * @return true, 升级了； false, 未升级
-     * @see WebServerIF#fReportInfoWithPushToken()
+     * @see WowTalkWebServerIF#fReportInfoWithPushToken()
      */
     public boolean isAppUpgraded() {
         // 当前版本app_version_code
@@ -550,26 +550,6 @@ public class PrefUtil {
 	public void setNearbyResultLayout(int layout) {
 		Editor editor = sPref.edit();
 		editor.putInt(CONTACT_NEARBY_RESULT_LAYOUT, layout);
-		editor.commit();
-	}
-	
-	public boolean isContactUptodate() {
-		return sPref.getBoolean(CONTACT_UP_TO_DATE, false);
-	}
-	
-	public void setContactUptodate(boolean isContactUptodate) {
-		Editor editor = sPref.edit();
-		editor.putBoolean(CONTACT_UP_TO_DATE, isContactUptodate);
-		editor.commit();
-	}
-	
-	public boolean isGroupUptodate() {
-		return sPref.getBoolean(GROUP_UP_TO_DATE, false);
-	}
-	
-	public void setGroupUptodate(boolean isGroupUptodate) {
-		Editor editor = sPref.edit();
-		editor.putBoolean(GROUP_UP_TO_DATE, isGroupUptodate);
 		editor.commit();
 	}
 

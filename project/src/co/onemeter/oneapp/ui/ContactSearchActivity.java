@@ -82,7 +82,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
 //	private Buddy buddy;
 	
-	private WebServerIF mWebif = null;
+	private WowTalkWebServerIF mWebif = null;
     private PrefUtil mPrefUtil;
 	private Database mDbHelper = null;
     private MessageBox mMsgBox;
@@ -90,6 +90,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
     
     private Button search_nickname;
     private Button search_uid;
+    
+    private ImageButton search_title_back;
 
 //	private int searchType;
 
@@ -430,7 +432,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //        txtPublicSearch = (TextView) findViewById(R.id.public_search);
 //		btnSearch = (Button) findViewById(R.id.btn_search);
 		edtSearchContent = (EditText) findViewById(R.id.edt_search);
-		search_cancel = (TextView) findViewById(R.id.search_cancel);
+//		search_cancel = (TextView) findViewById(R.id.search_cancel);
         fieldClear = (ImageButton) findViewById(R.id.field_clear);
         search_empty = (TextView) findViewById(R.id.search_empty);
 //		txtPersonName = (TextView) findViewById(R.id.person_name_text);
@@ -440,6 +442,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
         searchResultLayout=(LinearLayout) findViewById(R.id.search_result_layout);
         lvBuddy=(ListView) findViewById(R.id.list_buddy_find);
 		lvGroups = (ListView) findViewById(R.id.list_group_find);
+		
+		search_title_back = (ImageButton) findViewById(R.id. search_title_back);
 		
 		search_nickname = (Button) findViewById(R.id.search_nickname);
 		search_uid = (Button) findViewById(R.id.search_uid);
@@ -477,8 +481,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //		btnAdd.setOnClickListener(this);
         search_nickname.setOnClickListener(this);
         search_uid.setOnClickListener(this);
-        search_cancel.setOnClickListener(this);
-		
+//        search_cancel.setOnClickListener(this);
+        search_title_back.setOnClickListener(this);
 		lvGroups.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -643,7 +647,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.search_cancel:
+		case R.id.search_title_back:
 			finish();
 			break;
 //		case R.id.photo_frame:
@@ -736,7 +740,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 		setTitleMode();
 
         mMsgBox = new MessageBox(this);
-		mWebif = WebServerIF.getInstance(this);
+		mWebif = WowTalkWebServerIF.getInstance(this);
         mPrefUtil = PrefUtil.getInstance(this);
 		mDbHelper = new Database(this);
 	}

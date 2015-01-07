@@ -2,7 +2,6 @@ package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
@@ -20,7 +19,9 @@ import co.onemeter.oneapp.contacts.adapter.ContactDiscussionAdapter;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.oneapp.utils.Utils;
-import org.wowtalk.api.*;
+import org.wowtalk.api.Database;
+import org.wowtalk.api.GroupChatRoom;
+import org.wowtalk.api.PrefUtil;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -137,9 +138,6 @@ public class ContactDiscussionActivity extends Activity implements OnClickListen
 
     private void refreshData() {
         refreshGroupsFromLocal();
-        if (!mPrefUtil.isGroupUptodate()) {
-            refreshGroupsFromServer();
-        }
     }
 
     private void refreshGroupsFromLocal() {
@@ -148,25 +146,6 @@ public class ContactDiscussionActivity extends Activity implements OnClickListen
         mFilterGroupRooms.addAll(mInitGroupRooms);
         mGroupAdapter = new ContactDiscussionAdapter(this, mFilterGroupRooms);
         mGroupLists.setAdapter(mGroupAdapter);
-    }
-
-    private void refreshGroupsFromServer() {
-        new AsyncTask<Void, Void, Integer>() {
-
-            @Override
-            protected Integer doInBackground(Void... params) {
-                int errno = WebServerIF.getInstance(ContactDiscussionActivity.this).fGroupChat_GetMyGroups();
-                return errno;
-            }
-
-            @Override
-            protected void onPostExecute(Integer result) {
-                super.onPostExecute(result);
-                if (result == ErrorCode.OK) {
-                    refreshGroupsFromLocal();
-                }
-            }
-        };
     }
 
     private void handleBackEvent() {

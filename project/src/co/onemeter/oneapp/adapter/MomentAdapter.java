@@ -712,7 +712,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                         .voteMomentSurvey(moment,selectedOptionList);
                 // 投票过期，但界面显示未过期，则是本地时间有误差导致，需要重新获取服务器时间offset
                 if (ErrorCode.MOMENT_SURVEY_OUTOFDATE == resultCode) {
-                    WebServerIF.getInstance(context).fAdjustUTCTimeWithServer();
+                    WowTalkWebServerIF.getInstance(context).fAdjustUTCTimeWithServer();
                 }
                 return resultCode;
             }
@@ -1217,7 +1217,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             final String path = PhotoDisplayHelper.makeLocalFilePath(aContext.fileId, aContext.fileType);
             @Override
             protected Void doInBackground(Void... params) {
-                WebServerIF.getInstance(aContext.context).fGetFileFromServer(aContext.fileId, GlobalSetting.S3_MOMENT_FILE_DIR,
+                WowTalkWebServerIF.getInstance(aContext.context).fGetFileFromServer(aContext.fileId, GlobalSetting.S3_MOMENT_FILE_DIR,
                         new NetworkIFDelegate() {
                     @Override
                     public void didFinishNetworkIFCommunication(int i, byte[] bytes) {
@@ -1329,7 +1329,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             // need download
             new AsyncTask<Void, Void, Integer>() {
 
-                private WebServerIF web = WebServerIF.getInstance(context);
+                private WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(context);
                 private boolean status;
                 MessageBox msgbox = new MessageBox(context);
 
@@ -1419,7 +1419,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 				boolean ok;
 				@Override
 				protected Void doInBackground(Void... voids) {
-					WebServerIF.getInstance(context).fGetFileFromServer(
+					WowTalkWebServerIF.getInstance(context).fGetFileFromServer(
 							file.fileid, GlobalSetting.S3_MOMENT_FILE_DIR,
 							new NetworkIFDelegate() {
 								@Override

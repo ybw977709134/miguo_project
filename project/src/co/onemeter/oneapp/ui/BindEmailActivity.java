@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
@@ -66,7 +66,7 @@ public class BindEmailActivity extends Activity implements OnClickListener{
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				return WebServerIF.getInstance(BindEmailActivity.this).fBindEmail(strEmail, password, mIsForceBound);
+				return WowTalkWebServerIF.getInstance(BindEmailActivity.this).fBindEmail(strEmail, password, mIsForceBound);
 			}
 			@Override
 			protected void onPostExecute(Integer result) {

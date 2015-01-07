@@ -12,7 +12,7 @@ import org.wowtalk.Log;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.MomentWebServerIF;
 import org.wowtalk.api.WowTalkVoipIF;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class AppStatusService extends Service {
     private String mPackageName;
     private PrefUtil mPrefUtil;
     private MomentWebServerIF mMomentIF;
-    private WebServerIF mWebIF;
+    private WowTalkWebServerIF mWebIF;
 
     private boolean mIsStopThread;
     private boolean mIsPreviousOnForeground;
@@ -164,7 +164,7 @@ public class AppStatusService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                WebServerIF.getInstance(context).getOfflineMessages(timeStamp);
+                WowTalkWebServerIF.getInstance(context).getOfflineMessages(timeStamp);
                 sIsGettingOfflineMsg = false;
             }
         }).start();
@@ -192,7 +192,7 @@ public class AppStatusService extends Service {
     public IBinder onBind(Intent intent) {
         Log.i("AppStatusService#onBind");
         mPrefUtil = PrefUtil.getInstance(this);
-        mWebIF = WebServerIF.getInstance(this);
+        mWebIF = WowTalkWebServerIF.getInstance(this);
         mMomentIF = MomentWebServerIF.getInstance(this);
         mActivityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         mPackageName = this.getPackageName();

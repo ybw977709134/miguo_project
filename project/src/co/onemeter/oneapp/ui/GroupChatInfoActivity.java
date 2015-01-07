@@ -14,9 +14,12 @@ import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.ThemeHelper;
+
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
+
 import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
 
 import java.util.ArrayList;
@@ -44,6 +47,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
+			final GroupMember member = groupMembers.get(position);
             OnClickListener listener = new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -119,6 +123,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 			ImageView imgPhoto = (ImageView) convertView.findViewById(R.id.img_photo);
 			ImageView imgDelete = (ImageView) convertView.findViewById(R.id.img_delete);
 			TextView txtName = (TextView) convertView.findViewById(R.id.txt_name);
+			TextView adminView = (TextView) convertView.findViewById(R.id.admin_view);
             imgPhoto.setOnClickListener(listener);
 			if (_isDeleteMode) {
 				imgDelete.setVisibility(View.VISIBLE);
@@ -131,13 +136,28 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 			} else {
                 if (_isCreator) {
                     if (position < groupMembers.size() - 2) {
+                        if(member.getLevel() == GroupMember.LEVEL_CREATOR){
+                        	adminView.setVisibility(View.VISIBLE);
+                        }else if(member.getLevel() == GroupMember.LEVEL_DEFAULT){
+                        	adminView.setVisibility(View.GONE);
+                        }
                         Buddy buddy = groupMembers.get(position);
                         PhotoDisplayHelper.displayPhoto(GroupChatInfoActivity.this, imgPhoto, R.drawable.default_avatar_90, buddy, true);
-                        txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
+                        txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);   
                     } else if (position == groupMembers.size() - 2 && position!=0) {
+                        if(member.getLevel() == GroupMember.LEVEL_CREATOR){
+                        	adminView.setVisibility(View.VISIBLE);
+                        }else if(member.getLevel() == GroupMember.LEVEL_DEFAULT){
+                        	adminView.setVisibility(View.GONE);
+                        }
                         PhotoDisplayHelper.displayPhoto(GroupChatInfoActivity.this, imgPhoto, R.drawable.chat_invite, new Buddy(), true);
                         txtName.setText(getResources().getString(R.string.add));
                     } else if (position == groupMembers.size() - 1 && position!=0) {
+                        if(member.getLevel() == GroupMember.LEVEL_CREATOR){
+                        	adminView.setVisibility(View.VISIBLE);
+                        }else if(member.getLevel() == GroupMember.LEVEL_DEFAULT){
+                        	adminView.setVisibility(View.GONE);
+                        }
                         PhotoDisplayHelper.displayPhoto(GroupChatInfoActivity.this, imgPhoto, R.drawable.chat_remove, new Buddy(), true);
                         txtName.setText(getResources().getString(R.string.contacts_local_delete));
                     }
@@ -181,10 +201,14 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 	private boolean _isDeleteMode = false;
     private boolean _isCreator = false;
 	private Database dbHelper;
-    private WebServerIF mWeb;
+    private WowTalkWebServerIF mWeb;
 	private MemberAdapter memberAdapter;
 	private ArrayList<GroupMember> groupMembers = new ArrayList<GroupMember>();
 	private boolean mIsClearedChatHistory;
+	private int myLevel = GroupMember.LEVEL_DEFAULT;
+	private Database mDbHelper = null;
+	private GroupChatRoom groupRoom;
+	private PrefUtil mPrefUtil;
 	
 	private void initView() {
 		btnTitleBack = (ImageButton) findViewById(R.id.title_back);
@@ -204,6 +228,10 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 		gridMembers = (YQGridView) findViewById(R.id.grid_members);
 		memberAdapter = new MemberAdapter();
         gridMembers.setAdapter(memberAdapter);
+        
+        mDbHelper = new Database(this);
+        mPrefUtil = PrefUtil.getInstance(this);
+        groupRoom = mDbHelper.fetchGroupChatRoom(groupId);
 
 		btnTitleBack.setOnClickListener(this);
 		mGroupNameLayout.setOnClickListener(this);
@@ -291,7 +319,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				return WebServerIF.getInstance(GroupChatInfoActivity.this)
+				return WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
                         .fGroupChat_RemoveMember(groupId, buddy.userID);
 			}
 
@@ -317,7 +345,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return (Integer) WebServerIF.getInstance(GroupChatInfoActivity.this)
+                return (Integer) WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
                         .fGroupChat_GetMembers(groupId).get("code");
             }
 
@@ -360,7 +388,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WebServerIF.getInstance(GroupChatInfoActivity.this)
+                return WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
                         .fGroupChat_LeaveGroup(groupId);
             }
 
@@ -376,7 +404,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
                     finish();
                 }
             }
-        }.execute((Void)null);
+        }.execute((Void) null);
     }
 
     private void disbandTempGroup() {
@@ -384,7 +412,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WebServerIF.getInstance(GroupChatInfoActivity.this)
+                return WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
                         .fGroupChat_Disband(groupId);
             }
 
@@ -492,7 +520,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
         mMsgBox = new MessageBox(this);
-        mWeb = WebServerIF.getInstance(this);
+        mWeb = WowTalkWebServerIF.getInstance(this);
 		Intent intent = getIntent();
 		groupId = getIntent().getStringExtra(GROUP_ID); 
 		if (groupId == null)
@@ -506,12 +534,14 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 		initView();
 		getGroupChatMemberFromLocal();
 		getGroupChatMemberFromServer();
+		refreshMemberGrid();
 	}
 
     @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
+        refreshMemberGrid();
     }
 
     @Override
@@ -532,5 +562,40 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
             mGroupNameText.setText(mGroupName);
         }
     }
+    
+    private ArrayList<GroupMember> sortMembersInGroup(ArrayList<GroupMember> members) {
+        ArrayList<GroupMember> creator = new ArrayList<GroupMember>();
+        ArrayList<GroupMember> member = new ArrayList<GroupMember>();
+        for (GroupMember g : members) {
+            if (g.getLevel() == GroupMember.LEVEL_CREATOR) {
+                creator.add(g);
+            }else if (g.getLevel() == GroupMember.LEVEL_DEFAULT) {
+                member.add(g);
+            }
+        }
+        ArrayList<GroupMember> list = new ArrayList<GroupMember>();
+        list.addAll(creator);
+        list.addAll(member);
+        return list;
+    }
+    
+    private void refreshMemberGrid() {
+		groupMembers = mDbHelper.fetchGroupMembers(groupRoom.groupID);
+        groupMembers = sortMembersInGroup(groupMembers);
+		Log.i("group member count : " + groupMembers.size());
+
+		// determine my level
+		myLevel = GroupMember.LEVEL_DEFAULT;
+		String myUid = mPrefUtil.getUid();
+		for(GroupMember b : groupMembers) {
+			if(b != null && b.userID != null && b.userID.equals(myUid)) {
+				myLevel = b.getLevel();
+				Log.i("myLevel : " + myLevel+"");
+				break;
+			}
+		}
+		memberAdapter = new MemberAdapter();
+		gridMembers.setAdapter(memberAdapter);
+	}
 
 }

@@ -23,6 +23,7 @@ import co.onemeter.oneapp.contacts.adapter.ContactListAdapter;
 import co.onemeter.oneapp.contacts.adapter.FunctionAdapter;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
+import co.onemeter.oneapp.utils.WebServerEventPoller;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
@@ -69,7 +70,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
     private FunctionAdapter fucAdapter;
 	private ArrayList<GroupChatRoom> groupRooms;
 
-	private WebServerIF mWebif = null;
+	private WowTalkWebServerIF mWebif = null;
     private PrefUtil mPrefUtil;
 
     private MessageBox mMsgBox;
@@ -262,47 +263,26 @@ public class ContactsFragment extends Fragment implements OnClickListener,
     }
 
     public void refresh() {
-//        mMsgBox.showWait();
+        mMsgBox.showWait();
 
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                WebServerIF.getInstance(getActivity())
+                WowTalkWebServerIF.getInstance(getActivity())
                         .fGroupChat_GetMyGroups();
-                WebServerIF.getInstance(getActivity())
+                WowTalkWebServerIF.getInstance(getActivity())
                         .fGetBuddyList();
-                WebServerIF.getInstance(getActivity())
+                WowTalkWebServerIF.getInstance(getActivity())
                         .fGetPendingRequests();
                 return null;
             }
 
             @Override
             protected void onPostExecute(Void v) {
-//                mMsgBox.dismissWait();
+                mMsgBox.dismissWait();
             }
         }.execute((Void)null);
     }
-	
-	private void getMyBuddyListFromServer() {
-		new AsyncTask<Void, Integer, Void>() {
-
-			@Override
-			protected Void doInBackground(Void... params) {
-				if (ErrorCode.OK == mWebif.fGetBuddyList()) {
-                    MomentWebServerIF.getInstance(getActivity())
-                            .fGetMomentsOfAll(0, 10, true);
-                    mPrefUtil.setContactUptodate(true);
-				}
-				return null;
-			}
-			
-			@Override
-			protected void onPostExecute(Void v) {
-                mPrefUtil.setLocalContactListLastModified();
-				getMyBuddyListFromLocal();
-			}
-		}.execute((Void)null);
-	}
 
     //normal buddy
     private void getMyBuddyListFromLocal() {
@@ -315,22 +295,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
         }).start();
 	}
 
-	private void getMyGroupsFromServer() {
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				final int errno = WebServerIF.getInstance(getActivity()).fGroupChat_GetMyGroups();
-				if (errno == ErrorCode.OK) {
-					mPrefUtil.setLocalGroupListLastModified();
-//					mHandler.sendEmptyMessage(HANDLER_FINISH_GET_SERVER_GROUP);
-				}
-			}
-			
-		}).start();
-	}
-
-	private void getMyGroupsFromLocal() {
+    private void getMyGroupsFromLocal() {
 
         new Thread(new Runnable() {
             @Override
@@ -412,7 +377,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
 
         mMsgBox = new MessageBox(getActivity());
         mPrefUtil = PrefUtil.getInstance(getActivity());
-		mWebif = WebServerIF.getInstance(getActivity());
+		mWebif = WowTalkWebServerIF.getInstance(getActivity());
 		if(savedInstanceState != null) {
 			mLastReadLocalGroupList = savedInstanceState.getLong("mLastReadLocalGroupList");
 		}
@@ -466,39 +431,21 @@ public class ContactsFragment extends Fragment implements OnClickListener,
         theActiveInstance = this;
         MobclickAgent.onResume(getActivity());
 
-        invalidateListView();
-        refresh();
-
         getMyGroupsFromLocal();
         getMyBuddyListFromLocal();
+        showFunctionList();
+
         Database.addDBTableChangeListener(Database.TBL_BUDDIES,contactBuddyObserver);
         Database.addDBTableChangeListener(Database.TBL_GROUP,contactGroupObserver);
         Database.addDBTableChangeListener(Database.TBL_PENDING_REQUESTS,pendingRequestObserver);
+
+        // 如果有发出的好友请求，则总是频繁刷新好友列表，因为我们不知道对方什么时候同意，
+        // 为了让用户被同意后即时看到新好友，只能如此。
+        if (new Database(getActivity()).hasPendingOutBuddies()) {
+            WebServerEventPoller.instance(getActivity()).invokeImmediately(
+                    WebServerEventPoller.TASK_ID_REFRESH_BUDDIES);
+        }
 	}
-
-    /**
-     * Invalidate list view, forcing to reload it.
-     *
-     * Note, call me on UI thread.
-     */
-    public void invalidateListView() {
-
-//        if (mLastReadLocalContactList < mPrefUtil.getLocalContactListLastModified()) {
-//            getMyBuddyListFromLocal();
-//        }
-
-		if(!mPrefUtil.isContactUptodate()) {
-			getMyBuddyListFromServer();
-		}
-
-		if(!mPrefUtil.isGroupUptodate()) {
-			getMyGroupsFromServer();
-		} else if (mLastReadLocalGroupList < mPrefUtil.getLocalGroupListLastModified()) {
-//			getMyGroupsFromLocal();
-		}
-
-        showFunctionList();
-    }
 
     @Override
     public void onPause() {
@@ -588,8 +535,4 @@ public class ContactsFragment extends Fragment implements OnClickListener,
                 return false;
         }
     }
-    
-//    public boolean isEmpty(){
-//    	return ContactUtil.allPersons == null || ContactUtil.allPersons.isEmpty();
-//    }
 }

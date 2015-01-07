@@ -9,15 +9,15 @@ import android.os.Parcelable;
 public class PendingRequest implements Parcelable {
     public static final int INVALID_TYPE_VALUE = -1;
 
-    /** 有人请求加我为朋友 */
+    /** type: 有人请求加我为朋友 */
     public static final int BUDDY_IN = 0;
-    /** 我请求加某人为朋友 */
+    /** type: 我请求加某人为朋友 */
     public static final int BUDDY_OUT = 1;
-    /** 某群邀请我加入 */
+    /** type: 某群邀请我加入 */
     public static final int GROUP_IN = 2;
-    /** 我请求加入某群 */
+    /** type: 我请求加入某群 */
     public static final int GROUP_OUT = 3;
-    /** 有人请求加入我的群 */
+    /** type: 有人请求加入我的群 */
     public static final int GROUP_ADMIN = 4;
 
     /** id in local db. */

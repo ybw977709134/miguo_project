@@ -223,7 +223,7 @@ public class PhotoDisplayHelper extends ImageWorker {
                         }
                     }
                     if (needDownload) {
-                        WebServerIF.getInstance(mContext).fGetThumbnailForUserID(
+                        WowTalkWebServerIF.getInstance(mContext).fGetThumbnailForUserID(
                                 target.getGUID(),
                                 new NetworkIFDelegate() {
                                     @Override
@@ -397,7 +397,7 @@ public class PhotoDisplayHelper extends ImageWorker {
 				
 				view = arg0[0];
 				
-				WebServerIF.getInstance(context).fGetFileFromServer(fileid,
+				WowTalkWebServerIF.getInstance(context).fGetFileFromServer(fileid,
                         fileDir,
 						new NetworkIFDelegate(){
 
@@ -513,10 +513,10 @@ public class PhotoDisplayHelper extends ImageWorker {
 
 				};
 				if(thumbnail)
-					WebServerIF.getInstance(context).fGetThumbnailForUserID(
+					WowTalkWebServerIF.getInstance(context).fGetThumbnailForUserID(
 							buddy.getGUID(), nd, 0, path);
 				else
-					WebServerIF.getInstance(context).fGetPhotoForUserID(
+					WowTalkWebServerIF.getInstance(context).fGetPhotoForUserID(
 							buddy.getGUID(), nd, 0, path);
 				return null;
 			}

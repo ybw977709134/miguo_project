@@ -21,8 +21,6 @@ import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
 public class SettingActivity extends Activity implements OnClickListener {
     ;
@@ -35,7 +33,7 @@ public class SettingActivity extends Activity implements OnClickListener {
 	private ImageView imgPhoto;
 	private MessageBox mMsgBox;
 
-    private WebServerIF mWeb;
+    private WowTalkWebServerIF mWeb;
     private PrefUtil mPrefUtil;
 
     private AppUpgradeTask mUpgradeTask;
@@ -286,7 +284,7 @@ public class SettingActivity extends Activity implements OnClickListener {
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
         mMsgBox = new MessageBox(this);
-        mWeb = WebServerIF.getInstance(SettingActivity.this);
+        mWeb = WowTalkWebServerIF.getInstance(SettingActivity.this);
         mPrefUtil = PrefUtil.getInstance(this);
         initView();
     }
@@ -303,34 +301,8 @@ public class SettingActivity extends Activity implements OnClickListener {
 
         updateNoticeStatus();
         setAccountData();
-        getAccountUnreadCounts();
 
         Database.addDBTableChangeListener(Database.DUMMY_TBL_ALBUM_COVER_GOT, mAlbumCoverObserver);
-    }
-
-    private void getAccountUnreadCounts() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                HashMap<String, Integer> accountUnreadMap = new HashMap<String, Integer>();
-                int resultCode = mWeb.getAccountUnreadCounts(mPrefUtil.getAccountIds(), accountUnreadMap);
-                if (resultCode == ErrorCode.OK) {
-                    if (!accountUnreadMap.isEmpty()) {
-                        ArrayList<Account> tempAccounts = mPrefUtil.getAccountList();
-                        Account tempAccount = null;
-                        for (Iterator<Account> iterator = tempAccounts.iterator(); iterator.hasNext();) {
-                            tempAccount = iterator.next();
-                            if (!mPrefUtil.getUid().equals(tempAccount.uid)) {
-                                tempAccount.unreadCounts = accountUnreadMap.get(tempAccount.uid);
-                            }
-                        }
-                        mPrefUtil.setAccountList(tempAccounts);
-                        mAccountDatas = tempAccounts;
-                        mHandler.sendEmptyMessage(HANDLER_GET_ACCOUNT_UNREAD_COUNT);
-                    }
-                }
-            }
-        }).start();
     }
 
     private void setAccountData() {

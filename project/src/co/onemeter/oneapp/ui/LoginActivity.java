@@ -20,9 +20,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.utils.ThemeHelper;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
@@ -60,7 +61,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     private MessageBox mMsgBox;
     private static LoginActivity instance;
     private static PrefUtil mPrefUtil;
-    private WebServerIF mWebIF;
+    private WowTalkWebServerIF mWebIF;
 
     /**
      * 是否从添加帐户界面进入此界面的
@@ -84,10 +85,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 
             @Override
             protected Integer doInBackground(Void... params) {
-                int ret= WebServerIF.getInstance(LoginActivity.this).fGetMyProfile();
+                int ret= WowTalkWebServerIF.getInstance(LoginActivity.this).fGetMyProfile();
 
                 if(ErrorCode.OK == ret) {
-                    WebServerIF webIF = WebServerIF.getInstance(LoginActivity.this);
+                    WowTalkWebServerIF webIF = WowTalkWebServerIF.getInstance(LoginActivity.this);
                     // login 成功后再 logout
                     if (mIsAddAccount) {
                         webIF.logoutByUid(oldAccount.uid, oldAccount.password);
@@ -208,7 +209,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         q.find(R.id.forgotPassWord).clicked(this);
         q.find(R.id.login_username).clicked(this);
-        q.find(R.id.login_qrcode).clicked(this);
+//        q.find(R.id.login_qrcode).clicked(this);
+        q.find(R.id.btn_signup).clicked(this);
         fieldClear.setOnClickListener(this);
 
 		edtPassword.addTextChangedListener(new TextWatcher() {
@@ -253,16 +255,19 @@ public class LoginActivity extends Activity implements OnClickListener {
 		case R.id.login_username:
 			login();
 			break;
-		case R.id.login_qrcode:
-        {
-            Intent i = new Intent(this, ScanQRCodeActivity.class)
-                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_WITH_LAYOUT, true)
-                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_LAYOUT_ID, R.layout.scan_qr_code_layout)
-                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_FINISH_AFTER_DECODE, false);
-            ThemeHelper.putExtraCurrThemeResId(i, this);
-            startActivityForResult(i, REQ_SCAN);
+//		case R.id.login_qrcode:
+//        {
+//            Intent i = new Intent(this, ScanQRCodeActivity.class)
+//                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_WITH_LAYOUT, true)
+//                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_LAYOUT_ID, R.layout.scan_qr_code_layout)
+//                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_FINISH_AFTER_DECODE, false);
+//            ThemeHelper.putExtraCurrThemeResId(i, this);
+//            startActivityForResult(i, REQ_SCAN);
+//            break;
+//        }
+        case R.id.btn_signup:
+            startActivity(new Intent(this, RegisterActivity.class));
             break;
-        }
 		case R.id.forgotPassWord:
 			fGotoFetchPwd();
 			break;
@@ -323,7 +328,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     }
                 }
 
-                WebServerIF webIF = WebServerIF.getInstance(LoginActivity.this);
+                WowTalkWebServerIF webIF = WowTalkWebServerIF.getInstance(LoginActivity.this);
                 if (mIsAddAccount) {
                     Database database = new Database(LoginActivity.this);
                     database.close();
@@ -384,7 +389,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         mIsAddAccount = getIntent().getBooleanExtra(EXTRA_IS_ADD_ACCOUNT, false);
 
         initView();
-        mWebIF = WebServerIF.getInstance(LoginActivity.this);
+        mWebIF = WowTalkWebServerIF.getInstance(LoginActivity.this);
         mPrefUtil = PrefUtil.getInstance(LoginActivity.this);
         // the value of Connect2.context will be changed in StartActivity
         Connect2.setContext(this);

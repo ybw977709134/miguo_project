@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
@@ -108,7 +108,7 @@ public class BindPhoneActivity extends Activity implements OnClickListener {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				return WebServerIF.getInstance(BindPhoneActivity.this).fBindMobile(strNum, strPassword, mIsForceBound);
+				return WowTalkWebServerIF.getInstance(BindPhoneActivity.this).fBindMobile(strNum, strPassword, mIsForceBound);
 			}
 			
 			@Override

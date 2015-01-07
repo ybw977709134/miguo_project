@@ -4,7 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import org.wowtalk.api.NetworkIFDelegate;
 import org.wowtalk.api.WFile;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class MediaFilesBatchUploader {
             final Context context, final List<WFile> files, final int index,
             final OnMediaFilesUploadedListener callback) {
 
-        final WebServerIF wowweb = WebServerIF.getInstance(context);
+        final WowTalkWebServerIF wowweb = WowTalkWebServerIF.getInstance(context);
         final WFile f = files.get(index);
         if (TextUtils.isEmpty(f.remoteDir)) {
             throw new RuntimeException("WFile.remoteDir not set before uploading.");

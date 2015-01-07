@@ -7,13 +7,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
 import co.onemeter.oneapp.ui.IncallActivity;
+import co.onemeter.oneapp.ui.LoginActivity;
 import co.onemeter.oneapp.ui.LoginInvitedActivity;
 import co.onemeter.oneapp.ui.StartActivity;
+
 import com.bugsense.trace.BugSenseHandler;
+
 import org.wowtalk.NetworkManager;
 import org.wowtalk.api.JapaneseHelper;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkVoipIF;
+
 import co.onemeter.oneapp.ui.GlobalValue;
 
 import java.io.*;
@@ -169,7 +173,8 @@ public class YuanquActivity extends Activity {
 				intent.setClass(YuanquActivity.this, StartActivity.class);
 			} else {
 			    GlobalValue.IS_BOOT_FROM_LOGIN = true;
-				intent.setClass(YuanquActivity.this, LoginInvitedActivity.class);
+//				intent.setClass(YuanquActivity.this, LoginInvitedActivity.class);
+			    intent.setClass(YuanquActivity.this, LoginActivity.class);
 			}
 			startActivity(intent);
 			

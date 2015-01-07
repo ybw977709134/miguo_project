@@ -73,7 +73,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 //    private BottomButtonBoard bottomBoard;
 
 	private Database mDbHelper = null;
-	private WebServerIF mWebif = null;
+	private WowTalkWebServerIF mWebif = null;
 	private MediaInputHelper mMediaInput = null;
 	private PrefUtil mPrefUtil;
 
@@ -366,7 +366,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
         mMsgBox = new MessageBox(this);
         mPrefUtil = PrefUtil.getInstance(this);
 		mDbHelper = new Database(this);
-		mWebif = WebServerIF.getInstance(this);
+		mWebif = WowTalkWebServerIF.getInstance(this);
 
 		groupRoom = mDbHelper.fetchGroupChatRoom(groupID);
         if (groupRoom != null) {
@@ -889,7 +889,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 
             @Override
             protected Integer doInBackground(Void... params) {
-                int resultCode = WebServerIF.getInstance(ContactGroupInfoActivity.this).fGroupChat_SetMemberLevel(groupID, userID, levelAdmin);
+                int resultCode = WowTalkWebServerIF.getInstance(ContactGroupInfoActivity.this).fGroupChat_SetMemberLevel(groupID, userID, levelAdmin);
                 return resultCode;
             }
 

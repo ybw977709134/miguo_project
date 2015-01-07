@@ -22,7 +22,7 @@ import java.util.*;
  * <p>Interface for communicating with WowTalk Web Server.</p>
  * <p>See {@link EventWebServerIF}, {@link MomentWebServerIF} for more functions.</p>
  */
-public class WebServerIF {
+public class WowTalkWebServerIF {
 
     /** You can download a pseudo photo. */
 	public static String PSEUDO_FILEID_PHOTO_LANDSCAPE1 = "3e799dac2f8f6ae7006e73dbed4eb547";
@@ -35,19 +35,19 @@ public class WebServerIF {
     /** You can download a pseudo photo. */
 	public static String PSEUDO_FILEID_AUDIO = "cac4d5c8947eeaaada97993bf1e697ca";
 
-    private static WebServerIF instance;
+    private static WowTalkWebServerIF instance;
     private static PrefUtil sPrefUtil;
 //    private static SharedPreferences mPref;
     private Context mContext;
 
-	public static final WebServerIF getInstance(Context context) {
+	public static final WowTalkWebServerIF getInstance(Context context) {
 		if (instance == null) {
-			instance = new WebServerIF(context);
+			instance = new WowTalkWebServerIF(context);
 		}
 		return instance;
 	}
 
-    private WebServerIF(Context context) {
+    private WowTalkWebServerIF(Context context) {
         mContext = context.getApplicationContext();
         sPrefUtil = PrefUtil.getInstance(context);
     }
@@ -1375,77 +1375,6 @@ public class WebServerIF {
                 + "&uid=" + Utils.urlencodeUtf8(uid)
                 + "&password=" + Utils.urlencodeUtf8(hashedPwd);
         return _doRequestWithoutResponse(postStr);
-    }
-
-    /**
-     * 获取多帐号未读的信息条数
-     * @param accountIds 所有的帐号id，可以包含当前帐号（会在此方法实现中排除）
-     * @param resultMap
-     * @return
-     */
-    public int getAccountUnreadCounts(ArrayList<String> accountIds, HashMap<String, Integer> resultMap) {
-        String uid = sPrefUtil.getUid();
-        String password = sPrefUtil.getPassword();
-
-        if (isAuthEmpty(uid, password)
-                || null == accountIds || accountIds.isEmpty()
-                || null == resultMap) {
-            return ErrorCode.INVALID_ARGUMENT;
-        }
-
-        String accountIdString = "";
-        for (String accountId : accountIds) {
-            if (!uid.equals(accountId)) {
-                accountIdString += "&account_id[]=" + Utils.urlencodeUtf8(accountId);
-            }
-        }
-
-        String action = "get_accounts_unread_counts";
-        String postStr = "action=" + action
-                + "&uid=" + Utils.urlencodeUtf8(uid)
-                + "&password=" + Utils.urlencodeUtf8(password)
-                + accountIdString;
-
-        Connect2 connect2 = new Connect2();
-        Element root = connect2.Post(postStr);
-
-        int errno = ErrorCode.BAD_RESPONSE;
-        if (root != null) {
-
-            NodeList errorList = root.getElementsByTagName("err_no");
-            Element errorElement = (Element) errorList.item(0);
-            String errorStr = errorElement.getFirstChild().getNodeValue();
-
-            if ("0".equals(errorStr)) {
-                errno = 0;
-                NodeList unreadList = root.getElementsByTagName("unread_set");
-
-                Element tempElement = null;
-                Element accountIdElement = null;
-                Element unreadCountElement = null;
-                String accountId = null;
-                int unreadCount = 0;
-                for (int i = 0; i < unreadList.getLength(); i++) {
-                    tempElement = (Element) unreadList.item(i);
-                    accountIdElement = Utils.getFirstElementByTagName(
-                            tempElement, "account_id");
-                    if(null != accountIdElement) {
-                        unreadCountElement = Utils.getFirstElementByTagName(
-                                tempElement, "unread_count");
-                        if (null != unreadCountElement) {
-                            accountId = accountIdElement.getTextContent();
-                            unreadCount = Integer.parseInt(unreadCountElement.getTextContent());
-                            resultMap.put(accountId, unreadCount);
-                        }
-                    }
-                }
-            } else {
-                errno = Integer.parseInt(errorStr);
-            }
-        } else {
-            errno = -1;
-        }
-        return errno;
     }
 
 	public int fChangeUsername(String username) {

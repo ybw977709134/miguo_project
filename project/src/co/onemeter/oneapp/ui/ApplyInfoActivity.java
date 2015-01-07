@@ -79,7 +79,7 @@ public class ApplyInfoActivity extends Activity implements View.OnClickListener 
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WebServerIF.getInstance(ApplyInfoActivity.this)
+                return WowTalkWebServerIF.getInstance(ApplyInfoActivity.this)
                         .fGroupChat_AddMembers(mPendingRequest.group_id, buddyList, true);
             }
 
@@ -114,7 +114,7 @@ public class ApplyInfoActivity extends Activity implements View.OnClickListener 
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WebServerIF.getInstance(ApplyInfoActivity.this)
+                return WowTalkWebServerIF.getInstance(ApplyInfoActivity.this)
                         .fGroupChat_Reject(mPendingRequest.group_id, mPendingRequest.uid);
             }
 

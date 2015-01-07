@@ -24,7 +24,7 @@ public class GroupChatRoomHelper {
      * @return group id.
      */
     public static String createTmp(Parcelable[] persons,
-                                   WebServerIF webIf,
+                                   WowTalkWebServerIF webIf,
                                    Database dbHelper,
                                    Context context) {
         return addMembers(null, persons, webIf, dbHelper, context)[0];
@@ -39,7 +39,7 @@ public class GroupChatRoomHelper {
      * @return result[0], group id; result[1], isAddMembersSuccess.
      */
     public static String[] addMembers(String gid, Parcelable[] persons,
-                                    WebServerIF webIf,
+                                    WowTalkWebServerIF webIf,
                                     Database dbHelper,
                                     Context context) {
         String[] results = new String[2];

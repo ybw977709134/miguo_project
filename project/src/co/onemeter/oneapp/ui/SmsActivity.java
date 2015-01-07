@@ -67,7 +67,7 @@ public class SmsActivity extends Activity implements OnClickListener {
 	
 	private MessagesAdapter myAdapter;
 	
-    private WebServerIF mWebIF;
+    private WowTalkWebServerIF mWebIF;
     private PrefUtil mPrefUtil;
     private Database mDb;
 
@@ -372,7 +372,7 @@ public class SmsActivity extends Activity implements OnClickListener {
 		log_msg = new ArrayList<ChatMessage>();
 		myAdapter = new MessagesAdapter(this, log_msg);
         mDb = new Database(this);
-        mWebIF = WebServerIF.getInstance(this);
+        mWebIF = WowTalkWebServerIF.getInstance(this);
         mPrefUtil = PrefUtil.getInstance(this);
 //        mMsgBox = new MessageBox(this);
 

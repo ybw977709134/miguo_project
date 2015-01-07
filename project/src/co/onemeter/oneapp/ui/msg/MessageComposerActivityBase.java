@@ -114,7 +114,7 @@ public abstract class MessageComposerActivityBase extends Activity
 	private Bitmap _targetThumbnail;
 
 	protected Database mDbHelper;
-    protected WebServerIF mWebif;
+    protected WowTalkWebServerIF mWebif;
     protected PrefUtil mPref;
 
 	protected ArrayList<ChatMessage> log_msg;
@@ -879,7 +879,7 @@ public abstract class MessageComposerActivityBase extends Activity
 
             @Override
             protected Void doInBackground(Void... arg0) {
-                WebServerIF.getInstance(MessageComposerActivityBase.this).fPostFileToServer(
+                WowTalkWebServerIF.getInstance(MessageComposerActivityBase.this).fPostFileToServer(
                         pathOfThumbNail,
                         new NetworkIFDelegate(){
 
@@ -909,7 +909,7 @@ public abstract class MessageComposerActivityBase extends Activity
                     return null;
                 }
 
-                WebServerIF.getInstance(MessageComposerActivityBase.this).fPostFileToServer(
+                WowTalkWebServerIF.getInstance(MessageComposerActivityBase.this).fPostFileToServer(
                         pathOfMultimedia,
                         new NetworkIFDelegate(){
 
@@ -1048,7 +1048,7 @@ public abstract class MessageComposerActivityBase extends Activity
 
     private void initActivity() {
 		mDbHelper = new Database(MessageComposerActivityBase.this);
-		mWebif = WebServerIF.getInstance(this);
+		mWebif = WowTalkWebServerIF.getInstance(this);
         mMsgBox = new MessageBox(this);
         mPref = PrefUtil.getInstance(this);
 
@@ -1448,7 +1448,7 @@ public abstract class MessageComposerActivityBase extends Activity
 
 			@Override
 			protected Void doInBackground(Void... params) {
-				WebServerIF.getInstance(MessageComposerActivityBase.this).fPostFileToServer(
+				WowTalkWebServerIF.getInstance(MessageComposerActivityBase.this).fPostFileToServer(
 						pathOfMultimedia, 
 						new NetworkIFDelegate(){
                             @Override

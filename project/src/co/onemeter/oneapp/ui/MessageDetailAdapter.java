@@ -903,7 +903,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 new AsyncTask<Void, Integer, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {
-                        WebServerIF.getInstance(mContext).fGetFileFromServer(
+                        WowTalkWebServerIF.getInstance(mContext).fGetFileFromServer(
                                 pathofthumbnailincloud, 
                                 new NetworkIFDelegate(){
 
@@ -1045,7 +1045,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                         @Override
                         protected Void doInBackground(
                                 Void... params) {
-                            WebServerIF.getInstance(mContext).fGetFileFromServer(
+                            WowTalkWebServerIF.getInstance(mContext).fGetFileFromServer(
                                     pathoffileincloud, 
                                     new NetworkIFDelegate(){
 
@@ -1251,7 +1251,7 @@ public class MessageDetailAdapter extends BaseAdapter{
 
                 for (int fileIdx = 0; fileIdx < fileNum; ++fileIdx) {
                     final int finalFileIdx = fileIdx;
-                    WebServerIF.getInstance(mContext).fGetFileFromServer(
+                    WowTalkWebServerIF.getInstance(mContext).fGetFileFromServer(
                             pathoffileincloud[fileIdx],
                             new NetworkIFDelegate() {
 

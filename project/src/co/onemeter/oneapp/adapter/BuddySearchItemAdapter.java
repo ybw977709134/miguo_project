@@ -23,7 +23,7 @@ import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.PendingRequest;
 import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.ui.PhotoDisplayHelper;
 
@@ -46,7 +46,7 @@ public class BuddySearchItemAdapter extends BaseAdapter {
     private MessageBox mMsgBox;
 
     public final static String NAME_SPLIT=":";
-    private WebServerIF mWebif = null;
+    private WowTalkWebServerIF mWebif = null;
     private Database mDbHelper = null;
     public BuddySearchItemAdapter(Context context, ArrayList<Buddy> buddy, String str,MessageBox box) {
         contextRef=context;
@@ -160,7 +160,7 @@ public class BuddySearchItemAdapter extends BaseAdapter {
         	@Override
             protected Void doInBackground(Buddy... params) {
             	Buddy b =  params[0];
-                errno = WebServerIF.getInstance(contextRef).faddBuddy_askforRequest(b.userID,message);
+                errno = WowTalkWebServerIF.getInstance(contextRef).faddBuddy_askforRequest(b.userID,message);
                 if (ErrorCode.OK == errno) {
                     pr = new PendingRequest();
                     pr.uid = b.getGUID();

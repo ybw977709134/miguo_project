@@ -10,7 +10,7 @@ import org.wowtalk.api.GroupMember;
 import org.wowtalk.api.LessonParentFeedback;
 import org.wowtalk.api.Moment;
 import org.wowtalk.api.LessonWebServerIF;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 
 import co.onemeter.oneapp.Constants;
@@ -95,14 +95,14 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 		
 		stus = new ArrayList<GroupMember>();
 		
-//		members = mdbHelper.fetchGroupMembers(classId);
+		members = mdbHelper.fetchGroupMembers(classId);
 //		android.util.Log.i("-->>", members.toString());
 		if(members == null || members.isEmpty()){
 			new AsyncTask<Void, Void, Integer>(){
 
 				@Override
 				protected Integer doInBackground(Void... params) {
-					return (Integer) WebServerIF.getInstance(TeacherCheckActivity.this).fGroupChat_GetMembers(classId).get("code");
+					return (Integer) WowTalkWebServerIF.getInstance(TeacherCheckActivity.this).fGroupChat_GetMembers(classId).get("code");
 				}
 				
 				protected void onPostExecute(Integer result) {
@@ -120,6 +120,11 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 				
 			}.execute((Void)null);
 		}else{
+			for (GroupMember m: members) {
+				if(m.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
+					stus.add(m);
+				}
+			}
 			adapter = new StuAdapter(stus);
 			lvStu.setAdapter(adapter);
 		}
@@ -144,32 +149,43 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 //			intent.setClass(this, LessonParentFeedbackActivity.class);
 			final int pos = position;
 			mMsgBox.showWait();
-			new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					int errno;
-					try {
-						errno = LessonWebServerIF.getInstance(TeacherCheckActivity.this).getLessonParentFeedback(lessonId, stus.get(pos).userID);
-						if(errno == ErrorCode.OK){
-							Database db = new Database(TeacherCheckActivity.this);
-							LessonParentFeedback feedback = db.fetchLessonParentFeedback(lessonId, stus.get(pos).userID);
-							//android.util.Log.i("-->>", feedback.toString());
-							Moment moment = db.fetchMoment(feedback.moment_id + "");
-							if(moment != null){
-								MomentDetailActivity.launch(TeacherCheckActivity.this,moment);
-								mHandler.sendEmptyMessage(errno);
+			final Database db = new Database(TeacherCheckActivity.this);
+			LessonParentFeedback feedback0 = db.fetchLessonParentFeedback(lessonId, stus.get(pos).userID);
+			if(feedback0 == null){
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						int errno;
+						try {
+							errno = LessonWebServerIF.getInstance(TeacherCheckActivity.this).getLessonParentFeedback(lessonId, stus.get(pos).userID);
+							if(errno == ErrorCode.OK){
+								LessonParentFeedback feedback = db.fetchLessonParentFeedback(lessonId, stus.get(pos).userID);
+								//android.util.Log.i("-->>", feedback.toString());
+								Moment moment = db.fetchMoment(feedback.moment_id + "");
+								if(moment != null){
+									MomentDetailActivity.launch(TeacherCheckActivity.this,moment);
+									mHandler.sendEmptyMessage(errno);
+								}else{
+									mHandler.sendEmptyMessage(errno);
+								}
 							}else{
 								mHandler.sendEmptyMessage(errno);
 							}
-						}else{
-							mHandler.sendEmptyMessage(errno);
+						} catch (Exception e) {
+							mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);
 						}
-					} catch (Exception e) {
-						mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);
 					}
+				}).start();
+			}else{
+				Moment moment = db.fetchMoment(feedback0.moment_id + "");
+				if(moment != null){
+					MomentDetailActivity.launch(TeacherCheckActivity.this,moment);
+					mHandler.sendEmptyMessage(ErrorCode.OK);
+				}else{
+					mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);
 				}
-			}).start();
+			}
 		}
 	}
 	

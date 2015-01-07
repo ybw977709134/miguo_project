@@ -21,8 +21,6 @@ import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
 public class ManageAccountsActivity extends Activity implements OnClickListener, OnItemClickListener {
 
@@ -34,7 +32,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
     private static final int HANDLER_GET_ACCOUNT_UNREAD_COUNT = 1;
 
     private MessageBox mMsgBox;
-    private WebServerIF mWeb;
+    private WowTalkWebServerIF mWeb;
     private PrefUtil mPrefUtil;
 
     private ImageButton mBackBtn;
@@ -60,7 +58,6 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
             case HANDLER_SWITCH_ACCOUNT_SUCCESSFUL:
                 mMsgBox.dismissWait();
                 setData();
-                getAccountUnreadCounts();
                 break;
             case HANDLER_SWITCH_ACCOUNT_HOME:
                 mMsgBox.dismissWait();
@@ -120,7 +117,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
-        mWeb = WebServerIF.getInstance(this);
+        mWeb = WowTalkWebServerIF.getInstance(this);
         mMsgBox = new MessageBox(this);
         mPrefUtil = PrefUtil.getInstance(this);
         mBottomMenu = new BottomButtonBoard(ManageAccountsActivity.this, getWindow().getDecorView());
@@ -154,7 +151,6 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
         MobclickAgent.onResume(this);
         AppStatusService.setIsMonitoring(true);
         setData();
-        getAccountUnreadCounts();
 
         Database.addDBTableChangeListener(Database.DUMMY_TBL_ALBUM_COVER_GOT, mAlbumCoverObserver);
     }
@@ -174,31 +170,6 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
         ListHeightUtil.setListHeight(mAccountsListView);
 
         resetEditViewStatus();
-    }
-
-    private void getAccountUnreadCounts() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                HashMap<String, Integer> accountUnreadMap = new HashMap<String, Integer>();
-                int resultCode = mWeb.getAccountUnreadCounts(mPrefUtil.getAccountIds(), accountUnreadMap);
-                if (resultCode == ErrorCode.OK) {
-                    if (!accountUnreadMap.isEmpty()) {
-                        ArrayList<Account> tempAccounts = mPrefUtil.getAccountList();
-                        Account tempAccount = null;
-                        for (Iterator<Account> iterator = tempAccounts.iterator(); iterator.hasNext();) {
-                            tempAccount = iterator.next();
-                            if (!mPrefUtil.getUid().equals(tempAccount.uid)) {
-                                tempAccount.unreadCounts = accountUnreadMap.get(tempAccount.uid);
-                            }
-                        }
-                        mPrefUtil.setAccountList(tempAccounts);
-                        mAccountDatas = tempAccounts;
-                        mHandler.sendEmptyMessage(HANDLER_GET_ACCOUNT_UNREAD_COUNT);
-                    }
-                }
-            }
-        }).start();
     }
 
     @Override
@@ -440,7 +411,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
                 msg1.obj = String.format(context.getString(R.string.manage_account_switching_login),
                         newAccount.username);
                 handler.sendMessage(msg1);
-                WebServerIF webIF = WebServerIF
+                WowTalkWebServerIF webIF = WowTalkWebServerIF
                         .getInstance(context);
                 PrefUtil prefUtil = PrefUtil.getInstance(context);
                 // 1. close DB
@@ -463,7 +434,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
                     return;
                 }
                 // profile，更新头像
-                int getProfileCode = WebServerIF.getInstance(context).fGetMyProfile();
+                int getProfileCode = WowTalkWebServerIF.getInstance(context).fGetMyProfile();
                 if (getProfileCode != ErrorCode.OK) {
                     prefUtil.fillNewSP(oldAccount.uid);
                     Message msg3 = handler.obtainMessage();
@@ -477,7 +448,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
                 // album_cover
                 // 获取新帐户的动态封面(网络请求操作)
                 AlbumCover ac = new AlbumCover();
-                if (ErrorCode.OK == WebServerIF.getInstance(context)
+                if (ErrorCode.OK == WowTalkWebServerIF.getInstance(context)
                         .fGetAlbumCover(prefUtil.getUid(), ac)) {
                     newAccount.albumCoverFileId = null == ac.fileId ? "" : ac.fileId;
                     newAccount.albumCoverExt = null == ac.ext ? "" : ac.ext;
@@ -533,7 +504,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
      * 3.start wowtalkservice, checkAppUpdate, getSecurityLevel, report info , and so on.
      */
     public static void setupWowtalkService(Context context) {
-        WebServerIF webIF = WebServerIF.getInstance(context);
+        WowTalkWebServerIF webIF = WowTalkWebServerIF.getInstance(context);
         // 下面调用的所有的网络操作，除第一个(后续网络操作的前提)和最后一个（后面没有操作了，且此处调用的地方已经是子线程）外，
         // 其他的都重启子线程完成，因为它们之间没有先后顺序
         webIF.getServerInfo();

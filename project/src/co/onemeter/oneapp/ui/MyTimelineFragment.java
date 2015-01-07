@@ -236,7 +236,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
     }
 
     private void removeCoverImage() {
-        WebServerIF mWeb = WebServerIF.getInstance(getActivity());
+        WowTalkWebServerIF mWeb = WowTalkWebServerIF.getInstance(getActivity());
         if (ErrorCode.OK == mWeb.removeAlbumCover()) {
             mAlbumCover = new AlbumCover();
             mAlbumCover.timestamp = -1;
@@ -450,7 +450,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
             @Override
             protected Integer doInBackground(Void... params) {
                 try {
-                    WebServerIF mWeb = WebServerIF.getInstance(getActivity());
+                    WowTalkWebServerIF mWeb = WowTalkWebServerIF.getInstance(getActivity());
                     return mWeb.fGetAlbumCover(uid(), ac);
                 } catch (Exception e) {
                     e.printStackTrace();

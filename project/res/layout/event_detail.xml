@@ -183,13 +183,15 @@
                 android:background="@drawable/divider"/>
 
             <TextView
+                android:id="@+id/event_table_apply"
                 android:text="@string/event_detail_applicants"
                 style="@style/event_section_title"/>
             
             <ListView
                     android:id="@+id/listView_applicantsInfo"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:divider="@drawable/divider" >
                 
             </ListView>
 

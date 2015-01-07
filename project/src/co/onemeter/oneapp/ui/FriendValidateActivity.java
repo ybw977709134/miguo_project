@@ -6,7 +6,7 @@ import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.PendingRequest;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -26,7 +26,7 @@ public class FriendValidateActivity extends Activity implements OnClickListener{
 	private TextView textView_validate_send;
 	private EditText editText_validate_message;
 	private Database mDbHelper = new Database(this);
-	WebServerIF mwebserver;
+	WowTalkWebServerIF mwebserver;
     private ArrayList<Buddy> buddyList = null;
     private ArrayList<Buddy> buddyList2 = null;
     private int position;
@@ -51,7 +51,7 @@ public class FriendValidateActivity extends Activity implements OnClickListener{
 //		editText_validate_name =  (EditText) findViewById(R.id.editText_validate_name);
 		textView_validate_send.setOnClickListener(this);
 		textView_validate_cancel.setOnClickListener(this);
-		mwebserver = WebServerIF.getInstance(this);
+		mwebserver = WowTalkWebServerIF.getInstance(this);
 	}
 	private void sendMessage(){
 		Toast toast;

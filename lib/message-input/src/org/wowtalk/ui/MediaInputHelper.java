@@ -1,5 +1,6 @@
 package org.wowtalk.ui;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
@@ -33,12 +34,12 @@ import java.util.Locale;
  * <p>
  * MediaInputHelper is designed to use as instance, you should save it in Activity.onSaveInstanceState()
  * to avoid state lost.
- * 
+ *
  * @version 2013/2/5 11:01
  * @author pan
  */
 public class MediaInputHelper implements Parcelable {
-	
+
 	/*
 	 *  input media message
 	 */
@@ -47,7 +48,7 @@ public class MediaInputHelper implements Parcelable {
 	public static final int MEDIA_TYPE_VIDEO = 2;
 	public static final int MEDIA_TYPE_VOICE = 3;
 	public static final int MEDIA_TYPE_THUMNAIL = 4;
-	
+
 	/* MediaStore.ACTION_IMAGE_CAPTURE will not return the Uri passed as EXTRA_OUTPUT. */
 	private Uri mLastImageUri = null;
 	private Uri mLastVideoUri;
@@ -328,7 +329,7 @@ public class MediaInputHelper implements Parcelable {
     /**
 	 * Call me in Activity.onActivityResult() if the requestCode matches and
 	 * resultCode equals Activity.RESULT_OK.
-	 * 
+	 *
 	 * @param data
 	 * @param thumbnailWidth 0 means thumb nail is not required.
 	 * @param thumbnailHeight 0 means thumb nail is not required.
@@ -465,7 +466,7 @@ public class MediaInputHelper implements Parcelable {
 				operationFailed = true;
 			}
 		}
-		
+
 		if(!operationFailed) {
 			path[0] = filePath;
 			path[1] = thumbnailFile == null ? null : thumbnailFile.getAbsolutePath();
@@ -683,7 +684,8 @@ public class MediaInputHelper implements Parcelable {
 	 * @param mediaType MEDIA_TYPE_* constants
 	 * @return
 	 */
-	private static String resolveMediaPath(Activity activity, Uri uri, int mediaType) {
+	@TargetApi(Build.VERSION_CODES.KITKAT)
+    private static String resolveMediaPath(Activity activity, Uri uri, int mediaType) {
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
         // DocumentProvider
@@ -809,8 +811,8 @@ public class MediaInputHelper implements Parcelable {
 		arg0.writeParcelable(mLastImageUri, 0);
 		arg0.writeParcelable(mLastVideoUri, 0);
 	}
-	
-	public static final Parcelable.Creator<MediaInputHelper> CREATOR = 
+
+	public static final Parcelable.Creator<MediaInputHelper> CREATOR =
 			new Parcelable.Creator<MediaInputHelper>() {
 
 				@Override
@@ -825,6 +827,31 @@ public class MediaInputHelper implements Parcelable {
 				public MediaInputHelper[] newArray(int size) {
 					return new MediaInputHelper[size];
 				}
-		
+
 			};
+
+    /**
+     * Generate thumbnail for image.
+     * @return thumbnail absolute path.
+     */
+    public static String generateThumbnailForImage(
+            String originalFileName, int thumbWidth, int thumbHeight) {
+
+        String result = null;
+        File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_THUMNAIL, ".jpg");
+        if (f != null) {
+            result = f.getAbsolutePath();
+            Bitmap thumbnail = BmpUtils.decodeFile(originalFileName,
+                    thumbWidth, thumbHeight);
+            try {
+                FileOutputStream fos = new FileOutputStream(result);
+                thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+                fos.close();
+            }
+            catch (java.io.IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
 }

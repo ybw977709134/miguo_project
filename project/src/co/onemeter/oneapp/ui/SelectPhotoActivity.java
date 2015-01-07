@@ -257,6 +257,8 @@ public class SelectPhotoActivity extends Activity implements View.OnClickListene
         mTotalPhotoNumAllowed = getIntent().getIntExtra("num", mTotalPhotoNumAllowed);
         setContentView(R.layout.select_photo);
         listSelected = getIntent().getStringArrayListExtra("list");
+        if (listSelected == null)
+            listSelected = new ArrayList<>();
         photoNum = listSelected.size();
         final DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);

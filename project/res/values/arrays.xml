@@ -73,5 +73,10 @@
 		<item>投票</item>
 		<item>线下活动</item>
 	</string-array>
-	
+	<!-- 输入图片时的对话框列表 -->
+	<string-array name="image_video_input_widget_dlg_items_0_take_1_pick">
+		<item>拍摄</item>
+		<item>选择</item>
+	</string-array>
+
 </resources>

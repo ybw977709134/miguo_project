@@ -1,7 +1,7 @@
 package co.onemeter.oneapp.ui;
 
 import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 
@@ -78,10 +78,10 @@ public class UnBindActivity extends Activity implements OnClickListener {
 			    int resultCode = -1;
 			    switch (mUnbindType) {
                 case UNBIND_TYPE_PHONE:
-                    resultCode = WebServerIF.getInstance(UnBindActivity.this).fUnBindMobile(strPassword);
+                    resultCode = WowTalkWebServerIF.getInstance(UnBindActivity.this).fUnBindMobile(strPassword);
                     break;
                 case UNBIND_TYPE_EMAIL:
-                    resultCode = WebServerIF.getInstance(UnBindActivity.this).fUnBindEmail(strPassword);
+                    resultCode = WowTalkWebServerIF.getInstance(UnBindActivity.this).fUnBindEmail(strPassword);
                     break;
                 default:
                     break;

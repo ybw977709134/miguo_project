@@ -21,8 +21,6 @@ import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
 public class SettingActivity extends Activity implements OnClickListener {
     ;
@@ -35,7 +33,7 @@ public class SettingActivity extends Activity implements OnClickListener {
 	private ImageView imgPhoto;
 	private MessageBox mMsgBox;
 
-    private WebServerIF mWeb;
+    private WowTalkWebServerIF mWeb;
     private PrefUtil mPrefUtil;
 
     private AppUpgradeTask mUpgradeTask;
@@ -286,7 +284,7 @@ public class SettingActivity extends Activity implements OnClickListener {
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
         mMsgBox = new MessageBox(this);
-        mWeb = WebServerIF.getInstance(SettingActivity.this);
+        mWeb = WowTalkWebServerIF.getInstance(SettingActivity.this);
         mPrefUtil = PrefUtil.getInstance(this);
         initView();
     }

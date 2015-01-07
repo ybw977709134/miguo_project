@@ -31,7 +31,7 @@ import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.IDBTableChangeListener;
 import org.wowtalk.api.LatestChatTarget;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.RoundedImageView;
 
@@ -391,14 +391,14 @@ public class MultiSelectActivity extends Activity implements OnClickListener {
                     String gid = null;
                     if (TextUtils.isEmpty(mOriginalGid)) {
                         gid = GroupChatRoomHelper.createTmp(params,
-                                WebServerIF.getInstance(MultiSelectActivity.this),
+                                WowTalkWebServerIF.getInstance(MultiSelectActivity.this),
                                 mDbHelper,
                                 MultiSelectActivity.this);
                     } else {
                         GroupChatRoomHelper.addMembers(
                                 mOriginalGid,
                                 params,
-                                WebServerIF.getInstance(MultiSelectActivity.this),
+                                WowTalkWebServerIF.getInstance(MultiSelectActivity.this),
                                 mDbHelper,
                                 MultiSelectActivity.this);
                         gid = mOriginalGid;

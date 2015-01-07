@@ -19,7 +19,7 @@ import com.zxing.encoding.EncodingHandler;
 import org.json.JSONObject;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 
 import java.io.File;
@@ -35,7 +35,7 @@ import java.io.OutputStream;
  */
 public class MyQRCodeActivity extends Activity implements View.OnClickListener{
     private BottomButtonBoard bottomBoard;
-    private WebServerIF wif = null;
+    private WowTalkWebServerIF wif = null;
     private PrefUtil mPrefUtil;
     private MessageBox mMsgbBox;
 
@@ -55,7 +55,7 @@ public class MyQRCodeActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.my_qr_code_layout);
 
         bottomBoard = new BottomButtonBoard(this, getWindow().getDecorView());
-        wif = WebServerIF.getInstance(this);
+        wif = WowTalkWebServerIF.getInstance(this);
         mPrefUtil = PrefUtil.getInstance(this);
         mMsgbBox = new MessageBox(this);
 

@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.utils.ThemeHelper;
 
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
@@ -62,7 +61,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     private MessageBox mMsgBox;
     private static LoginActivity instance;
     private static PrefUtil mPrefUtil;
-    private WebServerIF mWebIF;
+    private WowTalkWebServerIF mWebIF;
 
     /**
      * 是否从添加帐户界面进入此界面的
@@ -86,10 +85,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 
             @Override
             protected Integer doInBackground(Void... params) {
-                int ret= WebServerIF.getInstance(LoginActivity.this).fGetMyProfile();
+                int ret= WowTalkWebServerIF.getInstance(LoginActivity.this).fGetMyProfile();
 
                 if(ErrorCode.OK == ret) {
-                    WebServerIF webIF = WebServerIF.getInstance(LoginActivity.this);
+                    WowTalkWebServerIF webIF = WowTalkWebServerIF.getInstance(LoginActivity.this);
                     // login 成功后再 logout
                     if (mIsAddAccount) {
                         webIF.logoutByUid(oldAccount.uid, oldAccount.password);
@@ -329,7 +328,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     }
                 }
 
-                WebServerIF webIF = WebServerIF.getInstance(LoginActivity.this);
+                WowTalkWebServerIF webIF = WowTalkWebServerIF.getInstance(LoginActivity.this);
                 if (mIsAddAccount) {
                     Database database = new Database(LoginActivity.this);
                     database.close();
@@ -390,7 +389,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         mIsAddAccount = getIntent().getBooleanExtra(EXTRA_IS_ADD_ACCOUNT, false);
 
         initView();
-        mWebIF = WebServerIF.getInstance(LoginActivity.this);
+        mWebIF = WowTalkWebServerIF.getInstance(LoginActivity.this);
         mPrefUtil = PrefUtil.getInstance(LoginActivity.this);
         // the value of Connect2.context will be changed in StartActivity
         Connect2.setContext(this);

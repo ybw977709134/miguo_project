@@ -12,7 +12,7 @@ import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GlobalSetting;
 import org.wowtalk.api.NetworkIFDelegate;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
 
@@ -32,14 +32,14 @@ public class AlbumCoverChangeActivity extends Activity implements OnClickListene
     public static final String EXTRA_FILE_ID = "fileid";
 
     private static MediaInputHelper sMediaInput;
-    private WebServerIF mWebIF;
+    private WowTalkWebServerIF mWebIF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albumcover_change);
 
-        mWebIF = WebServerIF.getInstance(this);
+        mWebIF = WowTalkWebServerIF.getInstance(this);
         initView();
     }
 

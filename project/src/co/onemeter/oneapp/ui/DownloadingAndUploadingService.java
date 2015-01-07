@@ -25,7 +25,7 @@ public class DownloadingAndUploadingService extends android.app.Service {
     public static final int ACTION_UPLOAD_MOMENT_FILE = 0;
     private static final String LOG_TAG = "DUService";
 
-    private WebServerIF mWeb;
+    private WowTalkWebServerIF mWeb;
     private MomentWebServerIF mMomentWeb;
     private Database mDb;
 
@@ -36,7 +36,7 @@ public class DownloadingAndUploadingService extends android.app.Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mWeb = WebServerIF.getInstance(this);
+        mWeb = WowTalkWebServerIF.getInstance(this);
         mMomentWeb = MomentWebServerIF.getInstance(this);
         mDb = Database.open(this);
 

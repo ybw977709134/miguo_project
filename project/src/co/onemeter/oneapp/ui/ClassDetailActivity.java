@@ -15,7 +15,7 @@ import org.wowtalk.api.GroupMember;
 import org.wowtalk.api.Lesson;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.LessonWebServerIF;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.HorizontalListView;
 import org.wowtalk.ui.MessageBox;
 
@@ -46,7 +46,7 @@ import android.content.Intent;
 public class ClassDetailActivity extends Activity implements OnClickListener, OnItemClickListener {
 	private AQuery query;
 	private LessonWebServerIF lesWebSer;
-	private WebServerIF mWTWebSer;
+	private WowTalkWebServerIF mWTWebSer;
 	private Database mdb;
 	private MessageBox msgBox;
 	
@@ -85,7 +85,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		lvTeachers = (HorizontalListView) findViewById(R.id.hor_lv_teachers);
 		
 		lesWebSer = LessonWebServerIF.getInstance(this);
-		mWTWebSer = WebServerIF.getInstance(this);
+		mWTWebSer = WowTalkWebServerIF.getInstance(this);
 		mdb = Database.getInstance(this);
 		
 		msgBox = new MessageBox(this);

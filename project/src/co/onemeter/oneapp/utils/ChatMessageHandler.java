@@ -50,13 +50,13 @@ public class ChatMessageHandler {
 
     private Context context;
     private Database mDb;
-    private WebServerIF mWeb;
+    private WowTalkWebServerIF mWeb;
     private PrefUtil mPrefUtil;
     private boolean mSaveDb = false;
 
     public ChatMessageHandler(Context context) {
         this.context = context;
-        mWeb = WebServerIF.getInstance(context);
+        mWeb = WowTalkWebServerIF.getInstance(context);
         mDb = Database.open(context);
         mPrefUtil = PrefUtil.getInstance(context);
     }
@@ -81,7 +81,7 @@ public class ChatMessageHandler {
         if (group_id == null || buddy_id == null || buddy_nickname == null)
             return false;
 
-        WebServerIF web = WebServerIF.getInstance(context);
+        WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(context);
 
         String myUid = PrefUtil.getInstance(context).getUid();
 
@@ -354,7 +354,7 @@ public class ChatMessageHandler {
             String uid = msg.getEntityIdAsBuddyProfileUpdated();
             if(uid != null) {
                 if(mWeb == null)
-                    mWeb = WebServerIF.getInstance(context);
+                    mWeb = WowTalkWebServerIF.getInstance(context);
                 new AsyncTask<String, Integer, Void>() {
                     @Override
                     protected Void doInBackground(String... params) {
@@ -370,7 +370,7 @@ public class ChatMessageHandler {
             String gid = msg.getEntityIdAsGroupProfileUpdated();
             if(gid != null) {
                 if(mWeb == null)
-                    mWeb = WebServerIF.getInstance(context);
+                    mWeb = WowTalkWebServerIF.getInstance(context);
                 new AsyncTask<String, Integer, Void>() {
                     @Override
                     protected Void doInBackground(String... params) {

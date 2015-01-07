@@ -12,7 +12,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.adapter.GroupMembersGridAdapter;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.ThemeHelper;
 
@@ -202,7 +201,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 	private boolean _isDeleteMode = false;
     private boolean _isCreator = false;
 	private Database dbHelper;
-    private WebServerIF mWeb;
+    private WowTalkWebServerIF mWeb;
 	private MemberAdapter memberAdapter;
 	private ArrayList<GroupMember> groupMembers = new ArrayList<GroupMember>();
 	private boolean mIsClearedChatHistory;
@@ -320,7 +319,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				return WebServerIF.getInstance(GroupChatInfoActivity.this)
+				return WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
                         .fGroupChat_RemoveMember(groupId, buddy.userID);
 			}
 
@@ -346,7 +345,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return (Integer) WebServerIF.getInstance(GroupChatInfoActivity.this)
+                return (Integer) WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
                         .fGroupChat_GetMembers(groupId).get("code");
             }
 
@@ -389,7 +388,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WebServerIF.getInstance(GroupChatInfoActivity.this)
+                return WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
                         .fGroupChat_LeaveGroup(groupId);
             }
 
@@ -405,7 +404,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
                     finish();
                 }
             }
-        }.execute((Void)null);
+        }.execute((Void) null);
     }
 
     private void disbandTempGroup() {
@@ -413,7 +412,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WebServerIF.getInstance(GroupChatInfoActivity.this)
+                return WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
                         .fGroupChat_Disband(groupId);
             }
 
@@ -521,7 +520,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
         mMsgBox = new MessageBox(this);
-        mWeb = WebServerIF.getInstance(this);
+        mWeb = WowTalkWebServerIF.getInstance(this);
 		Intent intent = getIntent();
 		groupId = getIntent().getStringExtra(GROUP_ID); 
 		if (groupId == null)

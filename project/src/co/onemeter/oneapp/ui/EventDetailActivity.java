@@ -52,7 +52,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
             @Override
             protected Void doInBackground(Void... arg0) {
-                WebServerIF.getInstance(EventDetailActivity.this)
+                WowTalkWebServerIF.getInstance(EventDetailActivity.this)
                         .fGetFileFromServer(thumbnail ? aFile.thumb_fileid : aFile.fileid,
                                 WEvent.MEDIA_FILE_REMOTE_DIR, new NetworkIFDelegate(){
                                     @Override

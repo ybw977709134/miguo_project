@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
@@ -30,7 +30,7 @@ public class SettingUsernameActivity extends Activity {
     private MessageBox mMsgBox;
     private boolean mReadonly = false;
     private String mOrigWowId = null;
-    private WebServerIF mWeb;
+    private WowTalkWebServerIF mWeb;
 
     private void resetUsername(final String username) {
         mMsgBox.showWait();
@@ -39,7 +39,7 @@ public class SettingUsernameActivity extends Activity {
 
             @Override
             protected Integer doInBackground(Void... params) {
-                return WebServerIF.getInstance(SettingUsernameActivity.this)
+                return WowTalkWebServerIF.getInstance(SettingUsernameActivity.this)
                         .fChangeUsername(username);
             }
             @Override
@@ -167,7 +167,7 @@ public class SettingUsernameActivity extends Activity {
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
         mMsgBox = new MessageBox(this);
-        mWeb = WebServerIF.getInstance(this);
+        mWeb = WowTalkWebServerIF.getInstance(this);
         mReadonly = getIntent().getBooleanExtra(EXTRA_READONLY, false);
         mOrigWowId = getIntent().getStringExtra(EXTRA_WOWID);
         initView();

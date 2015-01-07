@@ -170,7 +170,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 									
 									f = arg0[0];
 									
-									WebServerIF.getInstance(EventActivity.this)
+									WowTalkWebServerIF.getInstance(EventActivity.this)
 									.fGetFileFromServer(
                                             f.thumb_fileid,
                                             WEvent.MEDIA_FILE_REMOTE_DIR,
@@ -322,14 +322,14 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
             new AsyncTask<Void, Void, Boolean>() {
                 @Override
                 protected Boolean doInBackground(Void... voids) {
-                    return !WebServerIF.getInstance(EventActivity.this).getMySchools(false).isEmpty();
+                    return !WowTalkWebServerIF.getInstance(EventActivity.this).getMySchools(false).isEmpty();
                 }
 
                 @Override
                 protected void onPostExecute(Boolean hasSchools) {
                     ibRight.setVisibility(hasSchools ? View.VISIBLE : View.GONE);
                 }
-            }.execute((Void)null);
+            }.execute((Void) null);
         }
 
         ibRight.setOnClickListener(this);

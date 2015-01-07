@@ -10,7 +10,7 @@ import org.wowtalk.api.GroupMember;
 import org.wowtalk.api.LessonParentFeedback;
 import org.wowtalk.api.Moment;
 import org.wowtalk.api.LessonWebServerIF;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 
 import co.onemeter.oneapp.Constants;
@@ -102,7 +102,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 
 				@Override
 				protected Integer doInBackground(Void... params) {
-					return (Integer) WebServerIF.getInstance(TeacherCheckActivity.this).fGroupChat_GetMembers(classId).get("code");
+					return (Integer) WowTalkWebServerIF.getInstance(TeacherCheckActivity.this).fGroupChat_GetMembers(classId).get("code");
 				}
 				
 				protected void onPostExecute(Integer result) {

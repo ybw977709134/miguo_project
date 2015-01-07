@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 
@@ -115,7 +115,7 @@ public class FavoriteGroupsSortActivity extends ListActivity implements OnClickL
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WebServerIF.getInstance(FavoriteGroupsSortActivity.this).sortFavoriteGroups(favoriteGroupIds);
+                return WowTalkWebServerIF.getInstance(FavoriteGroupsSortActivity.this).sortFavoriteGroups(favoriteGroupIds);
             }
 
             @Override

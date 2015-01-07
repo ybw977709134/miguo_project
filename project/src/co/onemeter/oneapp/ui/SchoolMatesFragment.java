@@ -71,7 +71,7 @@ public class SchoolMatesFragment extends Fragment
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... voids) {
-                schools = WebServerIF.getInstance(getActivity()).getMySchools(true);
+                schools = WowTalkWebServerIF.getInstance(getActivity()).getMySchools(true);
                 return schools != null && !schools.isEmpty() ? ErrorCode.OK : ErrorCode.OPERATION_FAILED;
             }
 

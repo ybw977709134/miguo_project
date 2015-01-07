@@ -10,7 +10,7 @@ import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.Utils;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 
@@ -81,7 +81,7 @@ public class ExternalSearchActivity extends Activity {
             new AsyncTask<Void, Void, Integer>() {
                 @Override
                 protected Integer doInBackground(Void... params) {
-                    return WebServerIF.getInstance(ExternalSearchActivity.this)
+                    return WowTalkWebServerIF.getInstance(ExternalSearchActivity.this)
                             .fAddBuddy(buddy.userID);
                 }
 
@@ -120,7 +120,7 @@ public class ExternalSearchActivity extends Activity {
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WebServerIF.getInstance(ExternalSearchActivity.this)
+                return WowTalkWebServerIF.getInstance(ExternalSearchActivity.this)
                         .fGetBuddyByUsername(username, buddy);
             }
 

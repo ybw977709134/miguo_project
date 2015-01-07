@@ -82,7 +82,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
 //	private Buddy buddy;
 	
-	private WebServerIF mWebif = null;
+	private WowTalkWebServerIF mWebif = null;
     private PrefUtil mPrefUtil;
 	private Database mDbHelper = null;
     private MessageBox mMsgBox;
@@ -740,7 +740,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 		setTitleMode();
 
         mMsgBox = new MessageBox(this);
-		mWebif = WebServerIF.getInstance(this);
+		mWebif = WowTalkWebServerIF.getInstance(this);
         mPrefUtil = PrefUtil.getInstance(this);
 		mDbHelper = new Database(this);
 	}

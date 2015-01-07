@@ -15,7 +15,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 
@@ -69,7 +69,7 @@ public class BindCodeActivity extends Activity {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				return WebServerIF.getInstance(BindCodeActivity.this).fVerifyMobile(mPhoneEmailValue, code);
+				return WowTalkWebServerIF.getInstance(BindCodeActivity.this).fVerifyMobile(mPhoneEmailValue, code);
 			}
 			@Override
 			protected void onPostExecute(Integer result) {
@@ -107,7 +107,7 @@ public class BindCodeActivity extends Activity {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				return WebServerIF.getInstance(BindCodeActivity.this).fVerifyEmail(mPhoneEmailValue, code);
+				return WowTalkWebServerIF.getInstance(BindCodeActivity.this).fVerifyEmail(mPhoneEmailValue, code);
 			}
 			@Override
 			protected void onPostExecute(Integer result) {

@@ -138,7 +138,7 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
 
 			@Override
 			protected String doInBackground(Void... arg0) {
-				String[] groupids = WebServerIF.getInstance(
+				String[] groupids = WowTalkWebServerIF.getInstance(
                         CreateGroupActivity.this).fGroupChat_Create(
 						strGroupName,
 						isTemporaryGroup,
@@ -155,12 +155,12 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
 //                    mDBHelper.storeGroupChatRoom(groupRoom);
 
                     ArrayList<GroupChatRoom> groupList=new ArrayList<GroupChatRoom>();
-                    WebServerIF.getInstance(CreateGroupActivity.this).fGroupChat_Search(groupids[1],groupList);
+                    WowTalkWebServerIF.getInstance(CreateGroupActivity.this).fGroupChat_Search(groupids[1],groupList);
                     if(groupList.size() > 0) {
                         updateGroupThumbnail(groupList.get(0));
                         groupList.get(0).isMeBelongs=true;
                         mDBHelper.storeGroupChatRoom(groupList.get(0));
-                        WebServerIF.getInstance(CreateGroupActivity.this).fGroupChat_GetMembers(groupList.get(0).groupID);
+                        WowTalkWebServerIF.getInstance(CreateGroupActivity.this).fGroupChat_GetMembers(groupList.get(0).groupID);
                     }
 //                    WowTalkWebServerIF.getInstance(CreateGroupActivity.this).fGroupChat_GetMyGroups();
                     return groupids[0];
@@ -196,7 +196,7 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
                     updateGroupThumbnail(groupRoom);
                 }
                 mDBHelper.updateGroupChatRoom(groupRoom);
-                return WebServerIF.getInstance(CreateGroupActivity.this)
+                return WowTalkWebServerIF.getInstance(CreateGroupActivity.this)
                         .fGroupChat_UpdateInfo(groupRoom);
             }
 
@@ -330,7 +330,7 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
         FileUtils.copyFile(path[1], destFilePath);
 
         // upload photo
-        WebServerIF.getInstance(CreateGroupActivity.this)
+        WowTalkWebServerIF.getInstance(CreateGroupActivity.this)
                 .fPostGroupPhoto(groupId, path[0], new NetworkIFDelegate() {
                     @Override
                     public void didFinishNetworkIFCommunication(int i, byte[] bytes) {
@@ -346,11 +346,11 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
                 }, false, 0, true);
 
         // upload thumb
-        WebServerIF.getInstance(CreateGroupActivity.this)
+        WowTalkWebServerIF.getInstance(CreateGroupActivity.this)
                 .fPostGroupPhoto(groupId, path[1], new NetworkIFDelegate() {
                     @Override
                     public void didFinishNetworkIFCommunication(int i, byte[] bytes) {
-                        WebServerIF.getInstance(CreateGroupActivity.this)
+                        WowTalkWebServerIF.getInstance(CreateGroupActivity.this)
                                 .fGroupChat_UpdateInfo(group);
                     }
 

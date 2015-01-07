@@ -14,7 +14,7 @@ import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.Lesson;
 import org.wowtalk.api.LessonWebServerIF;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 
 import com.androidquery.AQuery;
@@ -300,7 +300,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			@Override
 			protected Integer doInBackground(Void... params) {
 				mDBHelper.updateGroupChatRoom(classroom);
-				return WebServerIF.getInstance(LessonInfoEditActivity.this).fGroupChat_UpdateInfo(classroom);
+				return WowTalkWebServerIF.getInstance(LessonInfoEditActivity.this).fGroupChat_UpdateInfo(classroom);
 			}
 
 			@Override

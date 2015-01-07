@@ -63,7 +63,7 @@ public class WebServerEventPoller {
     private Runnable newFriendReqTask = new Runnable() {
         @Override
         public void run() {
-            WebServerIF web = WebServerIF.getInstance(context);
+            WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(context);
             web.fGetPendingRequests();
         }
     };
@@ -84,7 +84,7 @@ public class WebServerEventPoller {
     private Runnable refreshBuddiesTask = new Runnable() {
         @Override
         public void run() {
-            WebServerIF.getInstance(context)
+            WowTalkWebServerIF.getInstance(context)
                     .fGetBuddyList();
         }
     };
@@ -92,7 +92,7 @@ public class WebServerEventPoller {
     private Runnable refreshGroupsTask = new Runnable() {
         @Override
         public void run() {
-            WebServerIF.getInstance(context)
+            WowTalkWebServerIF.getInstance(context)
                     .fGroupChat_GetMyGroups();
         }
     };

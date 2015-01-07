@@ -7,7 +7,7 @@ import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WebServerIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 
@@ -178,7 +178,7 @@ public class InputSimpleTextActivity extends Activity implements OnClickListener
                     return -1;
                 }
 
-                int resultCode = WebServerIF.getInstance(InputSimpleTextActivity.this)
+                int resultCode = WowTalkWebServerIF.getInstance(InputSimpleTextActivity.this)
                         .fUpdateMyProfile(me, whichField);
                 if (resultCode == ErrorCode.OK) {
                     dbHelper.updateMyselfInfo(me, whichField);

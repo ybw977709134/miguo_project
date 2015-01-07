@@ -39,7 +39,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
     private MyClassAdapter adapter;
     private ListView lvMyClass;
     private MessageBox msgBox;
-    private WebServerIF talkwebserver;
+    private WowTalkWebServerIF talkwebserver;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
         
         lvMyClass.setOnItemClickListener(this);
         
-        talkwebserver =  WebServerIF.getInstance(MyClassesActivity.this);
+        talkwebserver =  WowTalkWebServerIF.getInstance(MyClassesActivity.this);
         //这里用两层异步任务，先取到学校的信息，在取班级信息
         new AsyncTask<Void, Void, Void>(){
 

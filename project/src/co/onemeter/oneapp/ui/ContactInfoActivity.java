@@ -342,7 +342,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         new AsyncTask<Void, Void, Integer> () {
             @Override
             protected Integer doInBackground(Void... params) {
-                int resultCode = WebServerIF.getInstance(ContactInfoActivity.this)
+                int resultCode = WowTalkWebServerIF.getInstance(ContactInfoActivity.this)
                         .fGetBuddyWithUID(buddy.userID);
                 if (resultCode == ErrorCode.OK) {
                     buddy = dbHelper.buddyWithUserID(buddy.userID);
@@ -467,7 +467,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WebServerIF.getInstance(context)
+                return WowTalkWebServerIF.getInstance(context)
                         .fAddBuddy(buddy.userID);
             }
 
@@ -499,7 +499,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                return WebServerIF.getInstance(context)
+                return WowTalkWebServerIF.getInstance(context)
                         .fRemoveBuddy(buddy.userID);
             }
 
@@ -634,7 +634,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
             new AsyncTask<Void, Void, Integer>() {
                 @Override
                 protected Integer doInBackground(Void... params) {
-                    WebServerIF web = WebServerIF.getInstance(context);
+                    WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(context);
                     return web.fGetBuddyWithUID(buddyUid);
                 }
                 @Override

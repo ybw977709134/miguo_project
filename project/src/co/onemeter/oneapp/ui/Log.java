@@ -8,11 +8,11 @@ import static android.util.Log.WARN;
 public final class Log {
 	
 	public static final String TAG = "onemeter";
-	public static final boolean useIsLogable = true;
-	
+	public static final int LOG_LEVEL = DEBUG;
+
 	@SuppressWarnings("unused")
 	private static boolean isLoggable(int level) {
-		return useIsLogable && android.util.Log.isLoggable(TAG, level);
+		return level >= LOG_LEVEL;
 	}
 	
 	private static String toString(Object...objects) {

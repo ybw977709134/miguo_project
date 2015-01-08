@@ -595,6 +595,7 @@
 
     <string name="copyright_info">©2014 ONEMETER INC.</string>
     <string name="version_info">版本</string>
+    <string name="version_info_new">Ver</string>
     <string name="follow">关注</string>
     <string name="cancel_follow">取消关注</string>
     <string name="no_sdcard_tips">存储卡已拔出，头像，图片，语音，音频，视频，相册及动态功能不可用</string>

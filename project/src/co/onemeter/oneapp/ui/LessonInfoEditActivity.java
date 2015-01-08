@@ -43,6 +43,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 public class LessonInfoEditActivity extends Activity implements OnClickListener {
 
@@ -64,8 +65,8 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 	private EditText dtTerm;
 	private EditText dtGrade;
 	private EditText dtSubject;
-	private EditText dtDate;
-	private EditText dtTime;
+	private DatePicker dpDate;
+	private TimePicker tpTime;
 	private EditText dtPlace;
 
 	private Database mDBHelper;
@@ -102,11 +103,12 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		dtTerm = (EditText) findViewById(R.id.ed_lesinfo_term);
 		dtGrade = (EditText) findViewById(R.id.ed_lesinfo_grade);
 		dtSubject = (EditText) findViewById(R.id.ed_lesinfo_subject);
-		dtDate = (EditText) findViewById(R.id.ed_lesinfo_date);
-		dtTime = (EditText) findViewById(R.id.ed_lesinfo_time);
+		dpDate = (DatePicker) findViewById(R.id.datePicker_lesinfo_date);
+		tpTime = (TimePicker) findViewById(R.id.timePicker_lesinfo_time);
 		dtPlace = (EditText) findViewById(R.id.ed_lesinfo_place);
 		lvCourtable = (ListView) findViewById(R.id.lv_courtable);
 
+		
 		lessons = new LinkedList<Lesson>();
 		delLessons = new ArrayList<String>();
 		addLessons = new ArrayList<Lesson>();
@@ -132,15 +134,27 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			adapter.notifyDataSetChanged();
 			originSize = lessons.size();
 		} else {
+			tpTime.setIs24HourView(true);
+			
 			q.find(R.id.title).text(getString(R.string.class_info));
 			findViewById(R.id.lay_info_edit).setVisibility(View.VISIBLE);
 			findViewById(R.id.lay_les_edit).setVisibility(View.GONE);
 			dtTerm.setText(intent.getStringExtra(TERM));
 			dtGrade.setText(intent.getStringExtra(GRADE));
 			dtSubject.setText(intent.getStringExtra(SUBJECT));
-			dtDate.setText(intent.getStringExtra(DATE));
-			dtTime.setText(intent.getStringExtra(TIME));
 			dtPlace.setText(intent.getStringExtra(PLACE));
+			
+			String[] trsdates = intent.getStringExtra(SUBJECT).split("-");
+			if(trsdates.length == 3){
+				dpDate.init(Integer.parseInt(trsdates[0]),Integer.parseInt(trsdates[1]) ,Integer.parseInt(trsdates[2]) , null);
+			}
+			
+			String[] trstime = intent.getStringExtra(TIME).split(":");
+			if(trstime.length == 2){
+
+				tpTime.setCurrentHour(Integer.parseInt(trstime[0]));
+				tpTime.setCurrentMinute(Integer.parseInt(trstime[1]));
+			}
 		}
 	}
 
@@ -172,9 +186,10 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			if (tag == TAG_LES_TABLE) {
 				if(!delLessons.isEmpty()){
 					deleteLessons();
-				}
-				if(!addLessons.isEmpty()){
+				}else if(!addLessons.isEmpty()){
 					addPostLesson(addLessons);
+				}else{
+					finish();
 				}
 			} else {
 				updateClassInfo();
@@ -294,8 +309,8 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		classroom.description = dtTerm.getText().toString() 
 				+ Constants.COMMA + dtGrade.getText().toString()
 				+ Constants.COMMA + dtSubject.getText().toString()
-				+ Constants.COMMA + dtDate.getText().toString()
-				+ Constants.COMMA + dtTime.getText().toString()
+				+ Constants.COMMA + dpDate.getYear() + "-" + (dpDate.getMonth() + 1) + "-" + dpDate.getDayOfMonth()
+				+ Constants.COMMA + tpTime.getCurrentHour() + ":" + tpTime.getCurrentMinute() 
 				+ Constants.COMMA + dtPlace.getText().toString();
 		mMsgBox.showWait();
 		new AsyncTask<Void, Void, Integer>() {

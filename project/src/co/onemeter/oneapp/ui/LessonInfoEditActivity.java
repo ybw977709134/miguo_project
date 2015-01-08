@@ -1,5 +1,7 @@
 package co.onemeter.oneapp.ui;
 
+import java.lang.reflect.Field;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,6 +31,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +46,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 public class LessonInfoEditActivity extends Activity implements OnClickListener {
 
@@ -59,13 +63,14 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 	private int tag;
 	private String classId;
 	private int originSize;
+	private long time_openclass;
 
 	private ListView lvCourtable;
 	private EditText dtTerm;
 	private EditText dtGrade;
 	private EditText dtSubject;
-	private EditText dtDate;
-	private EditText dtTime;
+	private DatePicker dpDate;
+	private TimePicker tpTime;
 	private EditText dtPlace;
 
 	private Database mDBHelper;
@@ -97,16 +102,19 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 	private void initView() {
 		Intent intent = getIntent();
 		tag = intent.getIntExtra("tag", 0);
-		classId = intent.getStringExtra("classId");
+		classroom = intent.getParcelableExtra("class");
+		classId = classroom.groupID;
+		//android.util.Log.i("-->>", classroom.groupID);
 
 		dtTerm = (EditText) findViewById(R.id.ed_lesinfo_term);
 		dtGrade = (EditText) findViewById(R.id.ed_lesinfo_grade);
 		dtSubject = (EditText) findViewById(R.id.ed_lesinfo_subject);
-		dtDate = (EditText) findViewById(R.id.ed_lesinfo_date);
-		dtTime = (EditText) findViewById(R.id.ed_lesinfo_time);
+		dpDate = (DatePicker) findViewById(R.id.datePicker_lesinfo_date);
+		tpTime = (TimePicker) findViewById(R.id.timePicker_lesinfo_time);
 		dtPlace = (EditText) findViewById(R.id.ed_lesinfo_place);
 		lvCourtable = (ListView) findViewById(R.id.lv_courtable);
 
+		
 		lessons = new LinkedList<Lesson>();
 		delLessons = new ArrayList<String>();
 		addLessons = new ArrayList<Lesson>();
@@ -121,29 +129,63 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		q.find(R.id.cancel).clicked(this);
 		q.find(R.id.save).clicked(this);
 
-		classroom = mDBHelper.fetchGroupChatRoom(classId);
 		
 		if (tag == TAG_LES_TABLE) {
+			String opentime = classroom.description.split(Constants.COMMA)[3];
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			try {
+				time_openclass = sdf.parse(opentime).getTime();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			
 			findViewById(R.id.lay_info_edit).setVisibility(View.GONE);
 			findViewById(R.id.lay_les_edit).setVisibility(View.VISIBLE);
 			q.find(R.id.title).text(getString(R.string.class_coursetable_info));
+			
 			lessons.addAll(mDBHelper.fetchLesson(classId));
 			Collections.sort(lessons, new LessonComparator());
 			adapter.notifyDataSetChanged();
 			originSize = lessons.size();
 		} else {
+			tpTime.setIs24HourView(true);
+			
 			q.find(R.id.title).text(getString(R.string.class_info));
 			findViewById(R.id.lay_info_edit).setVisibility(View.VISIBLE);
 			findViewById(R.id.lay_les_edit).setVisibility(View.GONE);
-			dtTerm.setText(intent.getStringExtra(TERM));
-			dtGrade.setText(intent.getStringExtra(GRADE));
-			dtSubject.setText(intent.getStringExtra(SUBJECT));
-			dtDate.setText(intent.getStringExtra(DATE));
-			dtTime.setText(intent.getStringExtra(TIME));
-			dtPlace.setText(intent.getStringExtra(PLACE));
+
+
+			if(classroom != null){
+				String[] infos = getStrsByComma(classroom.description);
+				if(null != infos && infos.length == 6){
+					dtTerm.setText(infos[0]);
+					dtGrade.setText(infos[1]);
+					dtSubject.setText(infos[2]);
+					dtPlace.setText(infos[5]);
+					
+					String[] trsdates = infos[3].split("-");
+					if(trsdates.length == 3){
+						dpDate.init(Integer.parseInt(trsdates[0]),Integer.parseInt(trsdates[1]) - 1 ,Integer.parseInt(trsdates[2]) , null);
+					}
+					
+					String[] trstime = infos[4].split(":");
+					if(trstime.length == 2){
+						tpTime.setCurrentHour(Integer.parseInt(trstime[0]));
+						tpTime.setCurrentMinute(Integer.parseInt(trstime[1]));
+					}
+				}
+			}
+			
 		}
 	}
 
+	private String[] getStrsByComma(String str){
+		if(TextUtils.isEmpty(str)&& !str.contains(Constants.COMMA)){
+			return null;
+		}
+		return str.split(Constants.COMMA);
+	}
+	
 	private void deleteLessons(){
 		if(delLessons.isEmpty()){
 			return;
@@ -172,9 +214,10 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			if (tag == TAG_LES_TABLE) {
 				if(!delLessons.isEmpty()){
 					deleteLessons();
-				}
-				if(!addLessons.isEmpty()){
+				}else if(!addLessons.isEmpty()){
 					addPostLesson(addLessons);
+				}else{
+					finish();
 				}
 			} else {
 				updateClassInfo();
@@ -234,28 +277,78 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		final EditText edName = (EditText) view.findViewById(R.id.ed_dialog_time);
 		final DatePicker datepicker = (DatePicker) view.findViewById(R.id.datepicker_dialog);
 		builder.setView(view);
-		builder.setTitle(getString(R.string.class_add_lesson)).setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Calendar result = Calendar.getInstance();
-				result.setTimeZone(TimeZone.getTimeZone("GMT"));
-				result.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth());
-				if(result.getTimeInMillis() < System.currentTimeMillis()){
-					mMsgBox.toast(R.string.class_time_ealier);
+				String content = edName.getText().toString();
+				if(TextUtils.isEmpty(content)){
+					mMsgBox.toast(R.string.class_lessontitle_not_null);
+					notdismissDialog(dialog);
 					return;
 				}
+				
+				Calendar result = Calendar.getInstance();
+				result.setTimeZone(TimeZone.getTimeZone("GMT"));
+				result.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth() - 1);
+				if(result.getTimeInMillis() < System.currentTimeMillis()){
+					mMsgBox.toast(R.string.class_time_ealier);
+					notdismissDialog(dialog);
+					return;
+				}
+				
+				if(result.getTimeInMillis() < time_openclass){
+					mMsgBox.toast(R.string.class_les_not_before_start);
+					notdismissDialog(dialog);
+					return;
+				}
+				
 				Lesson lesson = new Lesson();
 				lesson.class_id = classId;
-				lesson.title = edName.getText().toString();
+				lesson.title = content;
 				lesson.start_date = result.getTimeInMillis()/1000;
 				lesson.end_date = result.getTimeInMillis()/1000 + 45 * 60;
 				addLessons.add(lesson);
 				lessons.add(lesson);
 				adapter.notifyDataSetChanged();
+					
+				dismissDialog(dialog);
 			}
-		}).setNegativeButton(getString(R.string.cancel), null).create();
+		}).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int arg1) {
+				try {
+					Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+					field.setAccessible(true);
+					field.set(dialog, true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}).create();
 		builder.show();
+	}
+	
+	private void notdismissDialog(DialogInterface dialog){
+		//利用反射使得dialog不消失
+		try {
+            Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+            field.setAccessible(true);
+            field.set(dialog, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+	}
+	
+	private void dismissDialog(DialogInterface dialog){
+		try {
+			Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+			field.setAccessible(true);
+			field.set(dialog, true);
+		} catch (Exception e) {
+				e.printStackTrace();
+		}
 	}
 	
 	private void addPostLesson(final List<Lesson> lessons){
@@ -291,11 +384,17 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 			return;
 		}
 		classroom.isEditable = true;
+		
+		Calendar result = Calendar.getInstance();
+		result.setTimeZone(TimeZone.getTimeZone("GMT"));
+		result.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth() - 1);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
 		classroom.description = dtTerm.getText().toString() 
 				+ Constants.COMMA + dtGrade.getText().toString()
 				+ Constants.COMMA + dtSubject.getText().toString()
-				+ Constants.COMMA + dtDate.getText().toString()
-				+ Constants.COMMA + dtTime.getText().toString()
+				+ Constants.COMMA + sdf.format(result.getTimeInMillis())
+				+ Constants.COMMA + tpTime.getCurrentHour() + ":" + tpTime.getCurrentMinute() 
 				+ Constants.COMMA + dtPlace.getText().toString();
 		mMsgBox.showWait();
 		new AsyncTask<Void, Void, Integer>() {

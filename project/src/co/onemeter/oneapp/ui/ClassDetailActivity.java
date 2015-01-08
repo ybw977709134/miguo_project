@@ -26,6 +26,7 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -65,6 +66,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private TextView tvTime;
 	private TextView tvPlace;
 	
+	private GroupChatRoom class_group = new GroupChatRoom();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -97,7 +99,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		
 		Intent intent = getIntent();
 //		classId = "0b2f933f-a4d7-44de-a711-569abb04846a";
-		classId = intent.getStringExtra("classroomId");
+		classId = intent.getStringExtra("classId");
 		
 //		members = mdb.fetchGroupMembers(classId);
 		if(members == null || members.isEmpty()){
@@ -142,13 +144,13 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			tv_more.setVisibility(View.GONE);
 		}
 		
-		setClassInfo();
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		getLessonInfo();
+		setClassInfo();
 	}
 	
 	private void getLessonInfo(){
@@ -186,20 +188,36 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		final String date = getString(R.string.class_date);
 		final String time = getString(R.string.class_time);
 		final String place = getString(R.string.class_place);
-		Database db = new Database(this);
+		final Handler hanlder = new Handler();
 		
-		GroupChatRoom room = db.fetchGroupChatRoom(classId);
-		if(room != null){
-			String[] infos = getStrsByComma(room.description);
-			if(null != infos && infos.length == 6){
-				tvTerm.setText(term + infos[0]);
-				tvGrade.setText(grade + infos[1]);
-				tvSubject.setText(subject + infos[2]);
-				tvDate.setText(date + infos[3]);
-				tvTime.setText(time + infos[4]);
-				tvPlace.setText(place + infos[5]);
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				int errno = WowTalkWebServerIF.getInstance(ClassDetailActivity.this).fGroupChat_GetByID(classId, class_group);
+//				android.util.Log.i("-->>", class_group.description);
+				if(errno == ErrorCode.OK){
+					hanlder.post(new Runnable() {
+						
+						@Override
+						public void run() {
+							if(class_group != null){
+								String[] infos = getStrsByComma(class_group.description);
+								if(null != infos && infos.length == 6){
+									tvTerm.setText(term + infos[0]);
+									tvGrade.setText(grade + infos[1]);
+									tvSubject.setText(subject + infos[2]);
+									tvDate.setText(date + infos[3]);
+									tvTime.setText(time + infos[4]);
+									tvPlace.setText(place + infos[5]);
+								}
+							}
+						}
+					});
+				}
 			}
-		}
+		}).start();
+		
 			
 	}
 	
@@ -241,14 +259,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(ClassDetailActivity.this, LessonInfoEditActivity.class);
-                        intent.putExtra("classId", classId);
+                        intent.putExtra("class", class_group);
                         intent.putExtra("tag", LessonInfoEditActivity.TAG_CLASS_INFO);
-                        intent.putExtra(LessonInfoEditActivity.TERM, forthToEndStr(tvTerm.getText().toString()));
-                        intent.putExtra(LessonInfoEditActivity.GRADE, forthToEndStr(tvGrade.getText().toString()));
-                        intent.putExtra(LessonInfoEditActivity.SUBJECT, forthToEndStr(tvSubject.getText().toString()));
-                        intent.putExtra(LessonInfoEditActivity.DATE, forthToEndStr(tvDate.getText().toString()));
-                        intent.putExtra(LessonInfoEditActivity.TIME, forthToEndStr(tvTime.getText().toString()));
-                        intent.putExtra(LessonInfoEditActivity.PLACE, forthToEndStr(tvPlace.getText().toString()));
 
                         startActivity(intent);
                         bottomBoard.dismiss();
@@ -259,8 +271,12 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                 new OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                    	if(TextUtils.isEmpty(class_group.description)){
+                    		msgBox.toast(R.string.class_editinfo_first);
+                    		return;
+                    	}
                     	Intent intent = new Intent(ClassDetailActivity.this, LessonInfoEditActivity.class);
-                    	intent.putExtra("classId", classId);
+                    	intent.putExtra("class", class_group);
                     	intent.putExtra("tag", LessonInfoEditActivity.TAG_LES_TABLE);
                         startActivity(intent);
                         bottomBoard.dismiss();
@@ -392,12 +408,13 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			}else{
 				holder = (ViewHodler) convertView.getTag();
 			}
-			holder.item_name.setText(alessons.get(position).title);
-			if(alessons.get(position).end_date * 1000 < System.currentTimeMillis()){
+			Lesson lesson = alessons.get(position);
+			holder.item_name.setText(lesson.title);
+			if(lesson.end_date * 1000 < System.currentTimeMillis()){
 				holder.item_name.setTextColor(0xff8eb4e6);
 			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			holder.item_time.setText(sdf.format(new Date(alessons.get(position).start_date * 1000)));
+			holder.item_time.setText(sdf.format(new Date(lesson.start_date * 1000)));
 			holder.item_msg.setText("");
 			return convertView;
 		}

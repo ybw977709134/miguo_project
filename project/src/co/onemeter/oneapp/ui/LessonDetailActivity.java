@@ -51,10 +51,10 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		LinearLayout lay_second = (LinearLayout) q.find(R.id.les_lay_second).getView();
 		LinearLayout lay_third = (LinearLayout) q.find(R.id.les_lay_third).getView();
 		if(lesson.end_date * 1000 > System.currentTimeMillis()){
-			lay_first.setBackgroundColor(getResources().getColor(R.color.black_30));
-			lay_second.setBackgroundColor(getResources().getColor(R.color.black_30));
-			lay_third.setBackgroundColor(getResources().getColor(R.color.black_30));
-			lay_first.setEnabled(false);;
+			q.find(R.id.text_first).textColor(getResources().getColor(R.color.text_gray4));
+			q.find(R.id.text_second).textColor(getResources().getColor(R.color.text_gray4));
+			q.find(R.id.text_third).textColor(getResources().getColor(R.color.text_gray4));
+			lay_first.setEnabled(false);
 			lay_second.setEnabled(false);
 			lay_third.setEnabled(false);
 		}

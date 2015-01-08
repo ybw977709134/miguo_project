@@ -240,6 +240,7 @@ public class GroupChatRoom extends TreeNode implements IHasPhoto{
         d.writeString(groupNameLocal);
         d.writeString(groupNameOriginal);
         d.writeString(groupStatus);
+        d.writeString(description);
         d.writeInt(isTemporaryGroup ? 1 : 0);
         d.writeInt(location == null ? 0 : 1);
         if(location != null) {
@@ -269,6 +270,7 @@ public class GroupChatRoom extends TreeNode implements IHasPhoto{
             g.groupNameLocal = s.readString();
             g.groupNameOriginal = s.readString();
             g.groupStatus = s.readString();
+            g.description = s.readString();
             g.isTemporaryGroup = 1 == s.readInt();
             if(1 == s.readInt()) {
                 g.location = new PointF();

@@ -53,6 +53,7 @@
                     android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:button="@drawable/sel_radiobutton"
+                    android:checked="true"
                     android:gravity="center" />
 
                 <View

@@ -216,6 +216,11 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 				holder.radio1.setEnabled(false);
 				holder.radio2.setEnabled(false);
 			}else{
+				if(!isTeacher){
+					holder.radio0.setChecked(false);
+					holder.radio1.setChecked(false);
+					holder.radio2.setChecked(false);
+				}
 				final LessonPerformance performance = new LessonPerformance();
 				performance.property_value = 1;
 				performance.lesson_id = lessonId;

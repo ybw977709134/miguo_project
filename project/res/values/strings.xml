@@ -214,6 +214,7 @@
 	<string name="settings_avatar">头像</string>
 	<string name="settings_account_type">用户类型</string>
 	<string name="settings_name">名字</string>
+	<string name="settings_nickname">昵称</string>
 	<string name="settings_pinyin">发音</string>
 	<string name="settings_sex">性别</string>
 	<string name="settings_age">生日</string>

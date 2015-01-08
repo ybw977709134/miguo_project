@@ -169,7 +169,7 @@
                         android:textStyle="bold"
                         android:textSize="18sp"
                         android:textColor="@color/black"
-                        android:text="@string/settings_name"
+                        android:text="@string/settings_nickname"
                         android:clickable="false"/>
                     <TextView
                         android:id="@+id/person_name" 

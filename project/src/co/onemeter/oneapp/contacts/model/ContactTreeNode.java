@@ -79,7 +79,7 @@ public class ContactTreeNode implements IHasPhoto {
         if (group != null)
             return group.getDisplayName();
         if (buddy != null)
-            return buddy.nickName;
+            return buddy.alias;
         return "?";
     }
 

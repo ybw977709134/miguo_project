@@ -6,13 +6,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import co.onemeter.oneapp.R;
-
 import com.androidquery.AQuery;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.InputBoardManager;
@@ -38,7 +38,11 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     public final static int TAG_LIFE_IDX =5;
     public final static int TAG_VIDEO_IDX =6;
 
+    private static final String FRAGMENT_TAG_ALL = "all";
+    private static final String FRAGMENT_TAG_MY = "my";
+
     private static final int REQ_CREATE_MOMENT = 124;
+
     private static TimelineActivity instance;
 
     private AllTimelineFragment allTimelineFragment;
@@ -215,18 +219,38 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     private void switchToAll() {
         q.find(R.id.btn_all).background(R.drawable.tab_button_left_white_a).textColorId(R.color.blue);
         q.find(R.id.btn_me).background(R.drawable.tab_button_right_white).textColorId(R.color.white);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, allTimelineFragment)
-                .commit();
+
+        FragmentManager mgr = getSupportFragmentManager();
+        FragmentTransaction trans = mgr.beginTransaction();
+        if (mgr.findFragmentByTag(FRAGMENT_TAG_ALL) == null) {
+            trans.add(R.id.fragment_container, allTimelineFragment, FRAGMENT_TAG_ALL);
+        } else {
+            trans.show(allTimelineFragment);
+        }
+        if (mgr.findFragmentByTag(FRAGMENT_TAG_MY) != null) {
+            trans.hide(myTimelineFragment);
+        }
+        trans.commit();
+
         currTimelineFragment = allTimelineFragment;
     }
 
     private void switchToSingle() {
         q.find(R.id.btn_all).background(R.drawable.tab_button_left_white).textColorId(R.color.white);
         q.find(R.id.btn_me).background(R.drawable.tab_button_right_white_a).textColorId(R.color.blue);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, myTimelineFragment)
-                .commit();
+
+        FragmentManager mgr = getSupportFragmentManager();
+        FragmentTransaction trans = mgr.beginTransaction();
+        if (mgr.findFragmentByTag(FRAGMENT_TAG_MY) == null) {
+            trans.add(R.id.fragment_container, myTimelineFragment, FRAGMENT_TAG_MY);
+        } else {
+            trans.show(myTimelineFragment);
+        }
+        if (mgr.findFragmentByTag(FRAGMENT_TAG_ALL) != null) {
+            trans.hide(allTimelineFragment);
+        }
+        trans.commit();
+
         currTimelineFragment = myTimelineFragment;
     }
 

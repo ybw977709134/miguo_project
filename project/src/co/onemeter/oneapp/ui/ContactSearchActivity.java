@@ -680,12 +680,10 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 		case R.id.search_nickname:
 			searchKind = GET_BUDDY_BY_USERNAME;
 			setTitleMode();
-			edtSearchContent.setText("");
 			break;
 		case R.id.search_uid:
 			searchKind = GET_BUDDY_BY_UID;
 			setTitleMode();
-			edtSearchContent.setText("");
 			break;
 		default:
 			break;

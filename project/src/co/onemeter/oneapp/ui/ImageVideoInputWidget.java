@@ -152,6 +152,13 @@ public class ImageVideoInputWidget extends HorizontalScrollView {
                                 }
                             }
                         })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        activityRequestInProgress = false;
+                        Log.d(TAG, " addItem aborted");
+                    }
+                })
                 .create().show();
     }
 

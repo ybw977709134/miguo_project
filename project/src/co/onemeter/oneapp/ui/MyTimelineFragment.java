@@ -67,9 +67,8 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mMsgBox = new MessageBox(getActivity()); 
         
-
-        mMsgBox = new MessageBox(getActivity());
     }
 
     private String uid() {

@@ -38,6 +38,9 @@ public abstract class TimelineFragment extends ListFragment
     //用于区分账号的类型
     private int countType = -1;//默认全部
     private boolean viewCreated = false;
+    
+    //用于判断是自己还是好友时，动态是否显示新动态提醒
+    public static boolean newReviewFlag = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -123,8 +126,6 @@ public abstract class TimelineFragment extends ListFragment
             setListAdapter(adapter);
  
     }
-    
-   
 
     public void checkNewMoments() {
         new RefreshMomentsTask().execute(Long.valueOf(0));
@@ -140,7 +141,7 @@ public abstract class TimelineFragment extends ListFragment
         if (listView != null) {
             listView.setOnRefreshListener(this);
         }
-
+        
         checkNewReviews();
         Database.addDBTableChangeListener(Database.TBL_MOMENT_REVIEWS,momentReviewObserver);
     }
@@ -148,7 +149,8 @@ public abstract class TimelineFragment extends ListFragment
     @Override
     public void onPause() {
         super.onPause();
-
+      //重新返回到所有好友页面的动态，再次显示新动态提醒
+        TimelineFragment.newReviewFlag = true;
         Database.removeDBTableChangeListener(momentReviewObserver);
     }
 
@@ -247,15 +249,7 @@ public abstract class TimelineFragment extends ListFragment
             }.execute(moment.id);
         } else {
         	
-//        	String mMyUid = PrefUtil.getInstance(this.getActivity()).getUid();
-//            if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {//跳转到自己的详情页
-//            	TimelineFragment.launchForOwnerComment(getActivity(), moment);
-//                
-//            } else if (!moment.owner.userID.equals(mMyUid)) {//跳转到好友的详情页
-//            	TimelineFragment.launchComment(getActivity(), moment);
-//            	
-//            }
-            
+            //评论按钮进入详情页刷新
             startActivityForResult(
                     new Intent(this.getActivity(), MomentDetailActivity.class)
                             .putExtra("moment", moment),
@@ -264,54 +258,11 @@ public abstract class TimelineFragment extends ListFragment
         }
     }
     
-//    /**
-//     * 跳转到好友
-//     * @param context
-//     * @param moment
-//     */
-//    public static void launch(Context context, Moment moment) {
-//        Intent intent = new Intent(context, MomentDetailActivity.class);
-//        intent.putExtra("moment", moment);
-//        ((Activity) context).startActivityForResult(intent, REQ_COMMENT);
-//    }
-//    
-//    /**
-//     * 跳转到自己
-//     * @param context
-//     * @param moment
-//     */
-//    public static void launchForOwner(Context context, Moment moment) {
-//        Intent intent = new Intent(context, MomentDetailActivity.class);
-//        intent.putExtra("moment", moment);
-//        intent.putExtra("isowner", 1);//给自己多传一个标志值   
-//        ((Activity) context).startActivityForResult(intent, REQ_COMMENT);
-//    }
-    
-//    /**
-//     * 点击评论按钮跳转到好友
-//     * @param context
-//     * @param moment
-//     */
-//    public static void launchComment(Context context, Moment moment) {
-//        Intent intent = new Intent(context, MomentDetailActivity.class);
-//        intent.putExtra("moment", moment);
-//        intent.putExtra("comment", 1);//这是点击评论按钮跳转到详情页
-//        ((Activity) context).startActivityForResult(intent, REQ_COMMENT);
-//    }
-//    
-//    /**
-//     * 点击评论按钮跳转到自己
-//     * @param context
-//     * @param moment
-//     */
-//    public static void launchForOwnerComment(Context context, Moment moment) {
-//        Intent intent = new Intent(context, MomentDetailActivity.class);
-//        intent.putExtra("moment", moment);
-//        intent.putExtra("isowner", 1);//给自己多传一个标志值
-//        intent.putExtra("comment", 1);//这是点击评论按钮跳转到详情页
-//        ((Activity) context).startActivityForResult(intent, REQ_COMMENT);
-//    }
 
+    /**
+     * 点击非评论按钮进入详情页刷新
+     * @date 2015/1/8
+     */
     public void onMomentClicked(int position, Moment moment) {
 
         Activity context = getActivity();
@@ -493,7 +444,11 @@ public abstract class TimelineFragment extends ListFragment
     private void checkNewReviews() {
         Moment dummy = new Moment(null);
         Database mDb = new Database(getActivity());
-        int newReviewsCount = mDb.fetchNewReviews(dummy);
+        int newReviewsCount = 0;
+        if (TimelineFragment.newReviewFlag) {//自己   	
+        	newReviewsCount = mDb.fetchNewReviews(dummy);
+        }
+//        int newReviewsCount = mDb.fetchNewReviews(dummy);
         adapter.setNewReviewCount(newReviewsCount);
         adapter.notifyDataSetChanged();
     }

@@ -74,6 +74,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         Bundle args = new Bundle();
         args.putString(MyTimelineFragment.EXTRA_UID,
                 uid != null ? uid : PrefUtil.getInstance(this).getUid());
+        
         myTimelineFragment.setArguments(args);
 
         hideUnavailableNewMomentButtons();
@@ -82,7 +83,10 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         if (uid != null) {
         	if (!TextUtils.isEmpty(pageTitle)) {//好友的成长日记
         		setTitle(pageTitle);
-        	} 
+        		TimelineFragment.newReviewFlag = false;
+        	} else {
+        		TimelineFragment.newReviewFlag = true;
+        	}
         	switchToSingle();//自己的成长日记
             
         } else {
@@ -246,7 +250,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
      * @param pageTitle
      * @param myInfo
      */
-    public static void launch(Context context, String uid, String pageTitle,String myInfo) {
+    public static void launchForOwner(Context context, String uid, String pageTitle) {
         Intent intent = new Intent(context, TimelineActivity.class);
         intent.putExtra(EXTRA_UID, uid);
 //        intent.putExtra(EXTRA_PAGE_TITLE, pageTitle);

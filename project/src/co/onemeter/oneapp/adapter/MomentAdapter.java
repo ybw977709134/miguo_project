@@ -179,6 +179,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
+    
         if(isNewReviewViewAvaliable()) {
             if(0 == position) {
                 //new reivew layout
@@ -217,7 +218,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             }
         }
 
-		final Moment moment = getItem(momentPos);
+        final Moment moment = getItem(momentPos);
 		ArrayList<Review> reviews = moment.reviews;
 		final ArrayList<Review> likeReview = new ArrayList<Review>();
 		ArrayList<Review> commentReview = new ArrayList<Review>();
@@ -241,9 +242,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 		if (null == convertView || null == convertView.getTag()) {
             convertView = LayoutInflater.from(context).inflate(R.layout.listitem_trend_friend, null);
 			holder = new ViewHolder();
-			
-//			holder.layout_friend_item = (LinearLayout) convertView.findViewById(R.id.layout_friend_item);
-			
+		
 			holder.imgThumbnail = (ImageView) convertView.findViewById(R.id.img_thumbnail);
             holder.txtDate = (TextView) convertView.findViewById(R.id.txt_date);
 			holder.txtName = (TextView) convertView.findViewById(R.id.txt_name);
@@ -357,7 +356,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 public void onClick(View v) {
                 	String mMyUid = PrefUtil.getInstance(context).getUid();
                     if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
-                    	TimelineActivity.launch(context, moment.owner.userID, moment.owner.nickName,"owner");//跳转到自己成长日志//可进行发布操作
+                    	TimelineActivity.launchForOwner(context, moment.owner.userID, moment.owner.nickName);//跳转到自己成长日志//可进行发布操作
                     } else {
                     	TimelineActivity.launch(context, moment.owner.userID, moment.owner.nickName);//跳转到好友的成长日志//不可进行发布操作
                     }
@@ -476,27 +475,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             });
         }
         
-        //通过对convertView的筛选,得到对应的账号结果
-//        if (countType == -1) {
-//        	return convertView;	
-//        } else {
-//        	String countUid = PrefUtil.getInstance(context).getUid();
-//            if (dbHelper.getBuddyCountType(countUid) == countType) {
-//            	return convertView;	
-//            } else {
-//  //          	convertView.setVisibility(View.GONE);
-//  //          	return null;	
-// //           	holder.layout_friend_item.setVisibility(View.GONE);
-//            	return null;
-//            }
-//        }
-
 		return convertView;	 
 	}
 	
 
-
-	////////////////////////////////////////////////////////////////
 	
     public static void setStringAsURLIfAvaliable(TextView tv2set,String str,boolean withClick) {
         CharSequence result=str;
@@ -965,7 +947,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //                e.printStackTrace();
 //            }
 //        }
-
+    	
         try {
             newReviewView=LayoutInflater.from(context).inflate(R.layout.new_review_layout, null);
             TextView tvDesc=(TextView) newReviewView.findViewById(R.id.txt_desc);

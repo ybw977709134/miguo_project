@@ -408,12 +408,13 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			}else{
 				holder = (ViewHodler) convertView.getTag();
 			}
-			holder.item_name.setText(alessons.get(position).title);
-			if(alessons.get(position).end_date * 1000 < System.currentTimeMillis()){
+			Lesson lesson = alessons.get(position);
+			holder.item_name.setText(lesson.title);
+			if(lesson.end_date * 1000 < System.currentTimeMillis()){
 				holder.item_name.setTextColor(0xff8eb4e6);
 			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			holder.item_time.setText(sdf.format(new Date(alessons.get(position).start_date * 1000)));
+			holder.item_time.setText(sdf.format(new Date(lesson.start_date * 1000)));
 			holder.item_msg.setText("");
 			return convertView;
 		}

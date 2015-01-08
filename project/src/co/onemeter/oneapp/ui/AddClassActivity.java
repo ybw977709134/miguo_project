@@ -43,7 +43,6 @@ public class AddClassActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btn_add:
                 submit();
-                finish();
                 break;
         }
     }
@@ -69,6 +68,7 @@ public class AddClassActivity extends Activity implements View.OnClickListener {
                 if (errno == ErrorCode.OK) {
                     msgbox.toast(R.string.operation_done);
                     setResult(RESULT_OK);
+                    finish();
                 } else {
 //                    msgbox.toast(getString(R.string.operation_failed_with_errcode_msg,
 //                            errno,

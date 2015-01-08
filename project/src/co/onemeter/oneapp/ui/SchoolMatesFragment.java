@@ -16,13 +16,10 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.adapter.GroupTreeAdapter;
 import co.onemeter.oneapp.contacts.model.ContactTreeNode;
 import co.onemeter.oneapp.utils.ThemeHelper;
-
 import com.androidquery.AQuery;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,12 +55,6 @@ public class SchoolMatesFragment extends Fragment
         }
 
         return v;
-    }
-    @Override
-    public void onResume() {
-    	// TODO Auto-generated method stub
-    	super.onResume(); 
-    	refresh();
     }
 
     public boolean handleBackPress() {

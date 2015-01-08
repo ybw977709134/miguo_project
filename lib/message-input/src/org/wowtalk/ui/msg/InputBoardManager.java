@@ -525,6 +525,7 @@ public class InputBoardManager implements Parcelable,
             inputDoodle();
         } else if (i == R.id.btn_input_picvoice) {
             mResultHandler.onHybirdRequested();
+            setInputMode(FLAG_SHOW_TEXT, false);
         } else if (i == R.id.btn_input_voice) {// replace text inputbox with hold-to-speak button
             PackageManager pm = mContext.getPackageManager();
             if (!pm.hasSystemFeature(PackageManager.FEATURE_MICROPHONE)) {

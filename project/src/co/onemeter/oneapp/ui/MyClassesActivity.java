@@ -363,7 +363,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Intent intent = new Intent(this, ClassDetailActivity.class);
-		intent.putExtra("classroomId", classrooms.get(position).groupID);
+		intent.putExtra("classId", classrooms.get(position).groupID);
 		intent.putExtra("classroomName", classrooms.get(position).groupNameOriginal);
 		startActivity(intent);
 	}

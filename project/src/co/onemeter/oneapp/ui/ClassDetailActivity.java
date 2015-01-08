@@ -99,7 +99,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		
 		Intent intent = getIntent();
 //		classId = "0b2f933f-a4d7-44de-a711-569abb04846a";
-		classId = intent.getStringExtra("classroomId");
+		classId = intent.getStringExtra("classId");
 		
 //		members = mdb.fetchGroupMembers(classId);
 		if(members == null || members.isEmpty()){
@@ -195,7 +195,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			@Override
 			public void run() {
 				int errno = WowTalkWebServerIF.getInstance(ClassDetailActivity.this).fGroupChat_GetByID(classId, class_group);
-				android.util.Log.i("-->>", class_group.description);
+//				android.util.Log.i("-->>", class_group.description);
 				if(errno == ErrorCode.OK){
 					hanlder.post(new Runnable() {
 						
@@ -259,14 +259,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(ClassDetailActivity.this, LessonInfoEditActivity.class);
-                        intent.putExtra("classId", classId);
+                        intent.putExtra("class", class_group);
                         intent.putExtra("tag", LessonInfoEditActivity.TAG_CLASS_INFO);
-                        intent.putExtra(LessonInfoEditActivity.TERM, forthToEndStr(tvTerm.getText().toString()));
-                        intent.putExtra(LessonInfoEditActivity.GRADE, forthToEndStr(tvGrade.getText().toString()));
-                        intent.putExtra(LessonInfoEditActivity.SUBJECT, forthToEndStr(tvSubject.getText().toString()));
-                        intent.putExtra(LessonInfoEditActivity.DATE, tvDate.getText().toString().substring(5));
-                        intent.putExtra(LessonInfoEditActivity.TIME, tvTime.getText().toString().substring(5));
-                        intent.putExtra(LessonInfoEditActivity.PLACE, forthToEndStr(tvPlace.getText().toString()));
 
                         startActivity(intent);
                         bottomBoard.dismiss();
@@ -282,7 +276,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                     		return;
                     	}
                     	Intent intent = new Intent(ClassDetailActivity.this, LessonInfoEditActivity.class);
-                    	intent.putExtra("classId", classId);
+                    	intent.putExtra("class", class_group);
                     	intent.putExtra("tag", LessonInfoEditActivity.TAG_LES_TABLE);
                         startActivity(intent);
                         bottomBoard.dismiss();

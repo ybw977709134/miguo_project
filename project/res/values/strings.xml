@@ -796,7 +796,7 @@
 	<string name="invite_code">邀请码</string>
 	<string name="invite_code_out_time">该邀请码已过期</string>
 	<string name="invite_code_used">该邀请码已绑定</string>
-	<string name="invite_code_school">该邀请码已绑定该学校</string>
+	<string name="invite_code_school">你已经绑定过该学校</string>
 	<string name="invite_code_type_not_match">邀请码对应的用户和自身用户的类型不匹配</string>
 	<string name="moment_add_touch_to_record">按下录音（最大120秒）</string>
 	<string name="moment_add_touch_to_loc">加入当前位置信息</string>

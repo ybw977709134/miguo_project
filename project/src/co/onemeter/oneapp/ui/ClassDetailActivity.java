@@ -74,6 +74,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		
 		initView();
 		
+		getLessonInfo();
 	}
 
 	private void initView(){
@@ -149,7 +150,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	@Override
 	protected void onResume() {
 		super.onResume();
-		getLessonInfo();
+		refreshLessonInfo();
 		setClassInfo();
 	}
 	
@@ -162,16 +163,24 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				}
 				
 				protected void onPostExecute(Integer result) {
-					if(ErrorCode.OK == result){
-						lessons.clear();
-						Database db = Database.open(ClassDetailActivity.this);
-						lessons.addAll(db.fetchLesson(classId));
-						Collections.sort(lessons, new LessonInfoEditActivity.LessonComparator());
-						courseAdapter.notifyDataSetChanged();
-					}
+//					if(ErrorCode.OK == result){
+//						lessons.clear();
+//						Database db = Database.open(ClassDetailActivity.this);
+//						lessons.addAll(db.fetchLesson(classId));
+//						Collections.sort(lessons, new LessonInfoEditActivity.LessonComparator());
+//						courseAdapter.notifyDataSetChanged();
+//					}
 				};
 				
 			}.execute((Void)null);
+	}
+	
+	private void refreshLessonInfo(){
+		lessons.clear();
+		Database db = Database.open(ClassDetailActivity.this);
+		lessons.addAll(db.fetchLesson(classId));
+		Collections.sort(lessons, new LessonInfoEditActivity.LessonComparator());
+		courseAdapter.notifyDataSetChanged();
 	}
 	
 	private String[] getStrsByComma(String str){
@@ -375,6 +384,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	
 	class CourseTableAdapter extends BaseAdapter{
 		private List<Lesson> alessons;
+		private long now = System.currentTimeMillis();
 		
 		public CourseTableAdapter(List<Lesson> lessons){
 			this.alessons = lessons;
@@ -410,7 +420,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			}
 			Lesson lesson = alessons.get(position);
 			holder.item_name.setText(lesson.title);
-			if(lesson.end_date * 1000 < System.currentTimeMillis()){
+			if(lesson.end_date * 1000 < now){
 				holder.item_name.setTextColor(0xff8eb4e6);
 			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

@@ -290,14 +290,16 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 				
 				Calendar result = Calendar.getInstance();
 				result.setTimeZone(TimeZone.getTimeZone("GMT"));
-				result.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth() - 1);
-				if(result.getTimeInMillis() < System.currentTimeMillis()){
+				result.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth());
+				long resultTime = result.getTimeInMillis();
+				
+				if(resultTime < System.currentTimeMillis()){
 					mMsgBox.toast(R.string.class_time_ealier);
 					notdismissDialog(dialog);
 					return;
 				}
 				
-				if(result.getTimeInMillis() < time_openclass){
+				if(resultTime < time_openclass){
 					mMsgBox.toast(R.string.class_les_not_before_start);
 					notdismissDialog(dialog);
 					return;
@@ -306,8 +308,8 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 				Lesson lesson = new Lesson();
 				lesson.class_id = classId;
 				lesson.title = content;
-				lesson.start_date = result.getTimeInMillis()/1000;
-				lesson.end_date = result.getTimeInMillis()/1000 + 45 * 60;
+				lesson.start_date = resultTime/1000;
+				lesson.end_date = resultTime/1000 + 45 * 60;
 				addLessons.add(lesson);
 				lessons.add(lesson);
 				adapter.notifyDataSetChanged();
@@ -390,11 +392,14 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		result.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth() - 1);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
+		int hour = tpTime.getCurrentHour();
+		int minite = tpTime.getCurrentMinute();
 		classroom.description = dtTerm.getText().toString() 
 				+ Constants.COMMA + dtGrade.getText().toString()
 				+ Constants.COMMA + dtSubject.getText().toString()
 				+ Constants.COMMA + sdf.format(result.getTimeInMillis())
-				+ Constants.COMMA + tpTime.getCurrentHour() + ":" + tpTime.getCurrentMinute() 
+				+ Constants.COMMA + (hour < 10 ? ("0"+ String.valueOf(hour)) : String.valueOf(hour)) + ":" 
+				+ (minite < 10 ? ("0"+ String.valueOf(minite)) : String.valueOf(minite))
 				+ Constants.COMMA + dtPlace.getText().toString();
 		mMsgBox.showWait();
 		new AsyncTask<Void, Void, Integer>() {
@@ -444,6 +449,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 	
 	class CourseTableAdapter extends BaseAdapter{
 		private List<Lesson> alessons;
+		private long now = System.currentTimeMillis();
 		
 		public CourseTableAdapter(List<Lesson> lessons){
 			this.alessons = lessons;
@@ -479,7 +485,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 				holder = (ViewHodler) convertView.getTag();
 			}
 			holder.item_name.setText(alessons.get(position).title);
-			if(alessons.get(position).end_date * 1000 < System.currentTimeMillis()){
+			if(alessons.get(position).end_date * 1000 < now){
 				holder.item_name.setTextColor(0xff8eb4e6);
 			}
 			holder.item_time.setText(sdf.format(new Date(alessons.get(position).start_date * 1000)));

@@ -50,7 +50,7 @@
 				android:background="@drawable/tab_button_right_white"
 				android:textSize="14sp"
 				android:textColor="@color/white"
-				android:text="@string/moments_my"/>
+				android:text="@string/moments_owner"/>
 		</LinearLayout>
 	</RelativeLayout>
 

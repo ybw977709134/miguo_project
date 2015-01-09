@@ -36,7 +36,7 @@
 				android:background="@drawable/tab_button_left_white"
 				android:textSize="14sp"
 				android:textColor="@color/white"
-				android:text="@string/contacts_tab_friends"/>
+				android:text="@string/contacts_tab_books"/>
 			<Button
 				android:id="@+id/btn_school"
 				android:layout_height="wrap_content"

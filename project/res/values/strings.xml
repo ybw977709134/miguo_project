@@ -38,6 +38,7 @@
 	<string name="sms_say_hello_to_you">请求加你为好友</string>
 
     <string name="contacts_tab_friends">好友</string>
+    <string name="contacts_tab_books">通讯录</string>
     <string name="contacts_tab_school">校园里</string>
 	<string name="contacts_local_moveto">移动至</string>
 	<string name="contacts_local_delete">删除</string>
@@ -282,6 +283,7 @@
 
 	<string name="moments_all">分享</string>
 	<string name="moments_my">成长日记</string>
+	<string name="moments_owner">我的动态</string>
 	<string name="moments_compose">编写动态</string>
 	<string name="moments_compose_camera">拍照</string>
 	<string name="moments_compose_camera_video">摄像</string>

@@ -680,10 +680,14 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 		case R.id.search_nickname:
 			searchKind = GET_BUDDY_BY_USERNAME;
 			setTitleMode();
+			searchedBuddyList.clear();
+			buddyAdapter.notifyDataSetChanged();
 			break;
 		case R.id.search_uid:
 			searchKind = GET_BUDDY_BY_UID;
 			setTitleMode();
+			searchedBuddyList.clear();
+			buddyAdapter.notifyDataSetChanged();
 			break;
 		default:
 			break;

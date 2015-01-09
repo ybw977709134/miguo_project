@@ -4480,6 +4480,7 @@ public class WowTalkWebServerIF {
 							try {
 								Buddy b = new Buddy(fields.get("uid"));
 								b.nickName = fields.get("nickname");
+								b.alias = fields.get("alias");
 								b.setPhotoUploadedTimestamp(Long.parseLong(fields.get("upload_photo_timestamp")));
 								b.status = fields.get("last_status");
 								b.setAccountType(Integer.parseInt(fields.get("user_type")));

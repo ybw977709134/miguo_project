@@ -2,6 +2,7 @@ package co.onemeter.oneapp.contacts.model;
 
 import android.content.Context;
 import android.os.Parcel;
+import android.text.TextUtils;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.IHasPhoto;
@@ -78,8 +79,12 @@ public class ContactTreeNode implements IHasPhoto {
     public String name() {
         if (group != null)
             return group.getDisplayName();
-        if (buddy != null)
-            return buddy.nickName;
+        if (buddy != null) {
+            if (!TextUtils.isEmpty(buddy.alias))
+                return buddy.alias;
+            else
+                return buddy.nickName;
+        }
         return "?";
     }
 

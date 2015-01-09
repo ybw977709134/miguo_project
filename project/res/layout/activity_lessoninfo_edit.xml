@@ -110,46 +110,39 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_40"
-            android:layout_marginTop="@dimen/padding_small" >
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_small"
+            android:gravity="center_vertical" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/class_date" />
 
-            <EditText
-                android:id="@+id/ed_lesinfo_date"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/table_white"
-                android:ems="10"
-                android:padding="@dimen/padding_small"
-                android:textColor="@color/text_gray2" >
-            </EditText>
+            <DatePicker
+                android:id="@+id/datePicker_lesinfo_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_40"
-            android:layout_marginTop="@dimen/padding_small" >
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_small" 
+            android:gravity="center_vertical" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/class_time" />
 
-            <EditText
-                android:id="@+id/ed_lesinfo_time"
-                android:layout_width="0dp"
+            <TimePicker
+                android:id="@+id/timePicker_lesinfo_time"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/table_white"
-                android:ems="10"
-                android:padding="@dimen/padding_small"
-                android:textColor="@color/text_gray2" >
-            </EditText>
+                 />
+
         </LinearLayout>
 
         <LinearLayout

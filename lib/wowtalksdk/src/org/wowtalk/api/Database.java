@@ -48,6 +48,8 @@ public class Database {
     public static final String TBL_LESSON_PERFORMANCE = "lesson_performance";
     public static final String TBL_LESSON_HOMEWORK = "lesson_homework";
     public static final String TBL_LESSON_PARENT_FEEDBACK = "lesson_parent_feedback";
+    /** 学生在特定学校的备注名称。*/
+    public static final String TBL_STUDENT_ALIAS = "student_alias";
     @Deprecated
     public static final String TBL_LATEST_CONTACTS = "latest_contacts";
     public static final String TBL_LATEST_CHAT_TARGET = "latest_chat_target";
@@ -3868,6 +3870,7 @@ public class Database {
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
+
 		return list;
 
 	}
@@ -6059,14 +6062,14 @@ public class Database {
                 "category=?", new String[] { GroupChatRoom.CATEGORY_SCHOOL });
         if (schools != null && !schools.isEmpty()) {
             for (GroupChatRoom school : schools) {
-                fetchClassRooms(school);
+                fetchClassRooms(school.groupID, school);
             }
         }
 
         return schools;
     }
 
-    private void fetchClassRooms(GroupChatRoom parent) {
+    private void fetchClassRooms(String schoolId, GroupChatRoom parent) {
         ArrayList<GroupChatRoom> classrooms = _fetchGroupChatRooms(
                 "parent_group_id=?", new String[] { parent.groupID });
         if (classrooms != null && !classrooms.isEmpty()) {
@@ -6075,13 +6078,14 @@ public class Database {
                 classroom.level = parent.level + 1;
 
                 // recursive
-                fetchClassRooms(classroom);
+                fetchClassRooms(schoolId, classroom);
             }
         }
 
         ArrayList<GroupMember> students = fetchGroupMembers(parent.groupID);
         if (students != null && !students.isEmpty()) {
             for (Buddy student : students) {
+                student.alias = fetchStudentAlias(schoolId, student.userID);
                 parent.addMember(student);
             }
         }
@@ -6099,27 +6103,30 @@ public class Database {
 
             if (school.childGroups != null && !school.childGroups.isEmpty()) {
                 for (GroupChatRoom classroom : school.childGroups) {
-                    storeClassRoom(classroom);
+                    storeClassRoom(school.groupID, classroom);
                 }
             }
         }
     }
 
-    private void storeClassRoom(GroupChatRoom classroom) {
+    private void storeClassRoom(String schoolId, GroupChatRoom classroom) {
         classroom.category = GroupChatRoom.CATEGORY_CLASSROOM;
         storeGroupChatRoom(classroom);
         if (classroom.memberList != null) {
             ArrayList<String> studentIds = new ArrayList<>(classroom.memberList.size());
             for (Buddy student : classroom.memberList) {
                 studentIds.add(student.userID);
+                // save student alias
+                storeStudentAlias(schoolId, student.userID, student.alias);
             }
             storeGroupMemberIds(classroom.groupID, studentIds);
+            //storeBuddies(classroom.memberList); // TODO, avoid overwrite buddy alias
         }
 
         // recursive
         if (classroom.childGroups != null && !classroom.childGroups.isEmpty()) {
             for (GroupChatRoom subClassroom : classroom.childGroups) {
-                storeClassRoom(subClassroom);
+                storeClassRoom(schoolId, subClassroom);
             }
         }
     }
@@ -6265,6 +6272,32 @@ public class Database {
         return result;
     }
 
+    /**
+     * @param schoolId
+     * @param studentId
+     * @param alias
+     * @return row ID.
+     */
+    public long storeStudentAlias(String schoolId, String studentId, String alias) {
+        ContentValues values = new ContentValues(3);
+        values.put("school_id", schoolId);
+        values.put("student_id", studentId);
+        values.put("alias", alias);
+        return database.insertWithOnConflict(TBL_STUDENT_ALIAS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public String fetchStudentAlias(String schoolId, String studentId) {
+        String result = null;
+        Cursor cur = database.query(TBL_STUDENT_ALIAS,
+                new String[] { "alias" },
+                "school_id=? AND student_id=?", new String[] { schoolId, studentId },
+                null, null, null);
+        if (cur.moveToFirst()) {
+            result = cur.getString(0);
+        }
+        cur.close();
+        return result;
+    }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //db table change notification wraper
@@ -6424,7 +6457,7 @@ public class Database {
 
 class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME_PRE = GlobalSetting.DATABASE_NAME;
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
     public int flagIndex;
     private Context mContext;
 
@@ -6733,6 +6766,14 @@ class DatabaseHelper extends SQLiteOpenHelper {
                     + "moment_id INTEGER NOT NULL"
                     + ");";
 
+    private static final String DATABASE_CREATE_TBL_STUDENT_ALIAS =
+            "CREATE TABLE IF NOT EXISTS " + Database.TBL_STUDENT_ALIAS + " ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "school_id INTEGER NOT NULL,"
+                    + "student_id TEXT NOT NULL,"
+                    + "alias TEXT NOT NULL"
+                    + ");";
+
     private static final String DATABASE_CREATE_INDEX_0="CREATE INDEX IF NOT EXISTS " + " idx_moment_ownUid "
             + " ON " + Database.TBL_MOMENT + " ( " + " owner_uid " + " );";
     private static final String DATABASE_CREATE_INDEX_1="CREATE INDEX IF NOT EXISTS " + " idx_moment_timestamp "
@@ -6747,6 +6788,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
             + " ON " + Database.TBL_LESSON_PERFORMANCE + " ( lesson_id, student_id, property_id );";
     private static final String DATABASE_CREATE_INDEX_6="CREATE UNIQUE INDEX IF NOT EXISTS " + " idx_lesson_parent_feedback "
             + " ON " + Database.TBL_LESSON_PARENT_FEEDBACK + " ( lesson_id, student_id );";
+    private static final String DATABASE_CREATE_INDEX_7="CREATE UNIQUE INDEX IF NOT EXISTS " + " idx_school_student "
+            + " ON " + Database.TBL_STUDENT_ALIAS + " ( school_id, student_id );";
 
     public DatabaseHelper(Context context, String uid, int flagIndex) {
         super(context, DATABASE_NAME_PRE + "_" + uid, null, DATABASE_VERSION);
@@ -6784,6 +6827,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(DATABASE_CREATE_TBL_LESSON_PERFORMANCE);
         database.execSQL(DATABASE_CREATE_TBL_LESSON_HOMEWORK);
         database.execSQL(DATABASE_CREATE_TBL_LESSON_PARENT_FEEDBACK);
+        database.execSQL(DATABASE_CREATE_TBL_STUDENT_ALIAS);
 
         database.execSQL(DATABASE_CREATE_INDEX_0);
         database.execSQL(DATABASE_CREATE_INDEX_1);
@@ -6792,6 +6836,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(DATABASE_CREATE_INDEX_4);
         database.execSQL(DATABASE_CREATE_INDEX_5);
         database.execSQL(DATABASE_CREATE_INDEX_6);
+        database.execSQL(DATABASE_CREATE_INDEX_7);
     }
 
     // Method is called during an upgrade of the database, e.g. if you increase
@@ -6868,6 +6913,12 @@ class DatabaseHelper extends SQLiteOpenHelper {
             database.execSQL(DATABASE_CREATE_INDEX_5);
             database.execSQL(DATABASE_CREATE_INDEX_6);
 
+            ++oldVersion;
+        }
+
+        if (oldVersion == 7) {
+            database.execSQL(DATABASE_CREATE_TBL_STUDENT_ALIAS);
+            database.execSQL(DATABASE_CREATE_INDEX_7);
             ++oldVersion;
         }
     }

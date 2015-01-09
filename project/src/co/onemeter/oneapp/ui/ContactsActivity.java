@@ -3,6 +3,8 @@ package co.onemeter.oneapp.ui;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -23,6 +25,8 @@ public class ContactsActivity extends FragmentActivity implements View.OnClickLi
 
     private static final int TAB_CONTACTS = 0;
     private static final int TAB_SCHOOL = 1;
+    private static final String FRAGMENT_TAG_CONTACTS = "contacts";
+    private static final String FRAGMENT_TAG_SCHOOLMATES = "schoolmates";
 
     private static ContactsActivity instance;
 
@@ -124,19 +128,38 @@ public class ContactsActivity extends FragmentActivity implements View.OnClickLi
     private void switchToContacts() {
         q.find(R.id.btn_contacts).background(R.drawable.tab_button_left_white_a).textColorId(R.color.blue);
         q.find(R.id.btn_school).background(R.drawable.tab_button_right_white).textColorId(R.color.white);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, contactsFragment)
-                .commit();
-        activatedTab = TAB_CONTACTS;
+
+        FragmentManager mgr = getSupportFragmentManager();
+        FragmentTransaction trans = mgr.beginTransaction();
+        if (mgr.findFragmentByTag(FRAGMENT_TAG_CONTACTS) == null) {
+            trans.add(R.id.fragment_container, contactsFragment, FRAGMENT_TAG_CONTACTS);
+        } else {
+            trans.show(contactsFragment);
+        }
+        if (mgr.findFragmentByTag(FRAGMENT_TAG_SCHOOLMATES) != null) {
+            trans.hide(schoolMatesFragment);
+        }
+        trans.commit();
+
         updateMenu();
     }
 
     private void switchToSchool() {
         q.find(R.id.btn_contacts).background(R.drawable.tab_button_left_white).textColorId(R.color.white);
         q.find(R.id.btn_school).background(R.drawable.tab_button_right_white_a).textColorId(R.color.blue);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, schoolMatesFragment)
-                .commit();
+
+        FragmentManager mgr = getSupportFragmentManager();
+        FragmentTransaction trans = mgr.beginTransaction();
+        if (mgr.findFragmentByTag(FRAGMENT_TAG_SCHOOLMATES) == null) {
+            trans.add(R.id.fragment_container, schoolMatesFragment, FRAGMENT_TAG_SCHOOLMATES);
+        } else {
+            trans.show(schoolMatesFragment);
+        }
+        if (mgr.findFragmentByTag(FRAGMENT_TAG_CONTACTS) != null) {
+            trans.hide(contactsFragment);
+        }
+        trans.commit();
+
         activatedTab = TAB_SCHOOL;
         updateMenu();
     }

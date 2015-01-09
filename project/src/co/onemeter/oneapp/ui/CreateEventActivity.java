@@ -295,6 +295,13 @@ public class CreateEventActivity extends Activity implements OnClickListener {
 	                 @Override
 	                 public void onDateTimeResult(Calendar result) {
 	                     wevent.startTime = result.getTime();
+	                     if(wevent.endTime != null){
+	                    	 if(wevent.startTime.getTime() > wevent.endTime.getTime()){
+	                    		 wevent.endTime = wevent.startTime;
+	                    		 msgBox.toast(R.string.event_time_end_earlier);
+	                    		 updateUI();
+	                    	 }
+	                     }
 	                     if(wevent.startTime.getTime() > System.currentTimeMillis()){
 	                        	updateUI();
 	                     }else{

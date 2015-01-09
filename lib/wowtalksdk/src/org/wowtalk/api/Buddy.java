@@ -96,7 +96,7 @@ public class Buddy implements IHasPhoto, Parcelable {
 	/**User Nick Name **/
 	public String nickName;
 
-    /**display name remarked by me.*/
+    /**display name remarked by me or by school.*/
     public String alias;
 
 	/**Latest Status **/

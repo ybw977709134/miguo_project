@@ -6117,7 +6117,8 @@ public class Database {
             for (Buddy student : classroom.memberList) {
                 studentIds.add(student.userID);
                 // save student alias
-                storeStudentAlias(schoolId, student.userID, student.alias);
+                if (student.alias != null)
+                    storeStudentAlias(schoolId, student.userID, student.alias);
             }
             storeGroupMemberIds(classroom.groupID, studentIds);
             //storeBuddies(classroom.memberList); // TODO, avoid overwrite buddy alias
@@ -6275,7 +6276,7 @@ public class Database {
     /**
      * @param schoolId
      * @param studentId
-     * @param alias
+     * @param alias not null.
      * @return row ID.
      */
     public long storeStudentAlias(String schoolId, String studentId, String alias) {

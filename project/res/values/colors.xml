@@ -11,6 +11,15 @@
 	<color name="green">#00c630</color>
 	<color name="blue">#ff1badfa</color>
 	<color name="orange">#ff7200</color>
+	
+	<!-- barColors -->
+	<color name="barAll">#b3b3b3</color><!-- 全部 -->
+	<color name="barNotice">#50E3C2</color><!-- 通知 -->
+	<color name="barAnswer">#FD5152</color><!-- 问答 -->
+	<color name="barStudy">#F5A623</color><!-- 学习 -->
+	<color name="barLife">#0079FF</color><!-- 生活 -->
+	<color name="barVote">#D361F2</color><!-- 投票 -->
+	<color name="barVideo">#00C630</color><!-- 视频 -->
 
 	<!-- background gray -->
 	<color name="background_dark">#EFEFF4</color>

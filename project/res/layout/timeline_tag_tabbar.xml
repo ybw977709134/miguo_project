@@ -41,7 +41,7 @@
 			android:layout_width="@dimen/moment_header_bottom_tag_indicator_min_width"
 			android:layout_centerHorizontal="true"
 			android:layout_alignParentBottom="true"
-			android:background="@color/gray"/>
+			android:background="@color/barAll"/>
 	</RelativeLayout>
 
     <!-- 通知 -->
@@ -67,7 +67,7 @@
 			android:layout_width="@dimen/moment_header_bottom_tag_indicator_min_width"
 			android:layout_centerHorizontal="true"
 			android:layout_alignParentBottom="true"
-			android:background="@color/moment_tag_notice"/>
+			android:background="@color/barNotice"/>
 	</RelativeLayout>
 
 	<!-- 问答 -->
@@ -92,7 +92,7 @@
 			android:layout_width="@dimen/moment_header_bottom_tag_indicator_min_width"
 			android:layout_centerHorizontal="true"
 			android:layout_alignParentBottom="true"
-			android:background="@color/moment_tag_qa"/>
+			android:background="@color/barAnswer"/>
 	</RelativeLayout>
 
 	<!-- 学习 -->
@@ -117,7 +117,7 @@
 			android:layout_width="@dimen/moment_header_bottom_tag_indicator_min_width"
 			android:layout_centerHorizontal="true"
 			android:layout_alignParentBottom="true"
-			android:background="@color/moment_tag_study"/>
+			android:background="@color/barStudy"/>
 	</RelativeLayout>
 	
 	<!-- 生活 -->
@@ -142,7 +142,7 @@
 			android:layout_width="@dimen/moment_header_bottom_tag_indicator_min_width"
 			android:layout_centerHorizontal="true"
 			android:layout_alignParentBottom="true"
-			android:background="@color/moment_tag_life"/>
+			android:background="@color/barLife"/>
 	</RelativeLayout>
 
 	<!-- 投票 -->
@@ -167,7 +167,7 @@
 			android:layout_width="@dimen/moment_header_bottom_tag_indicator_min_width"
 			android:layout_centerHorizontal="true"
 			android:layout_alignParentBottom="true"
-			android:background="@color/moment_tag_survey"/>
+			android:background="@color/barVote"/>
 	</RelativeLayout>
 	
 	<!-- 视频 -->
@@ -193,7 +193,7 @@
 			android:layout_width="@dimen/moment_header_bottom_tag_indicator_min_width"
 			android:layout_centerHorizontal="true"
 			android:layout_alignParentBottom="true"
-			android:background="@color/moment_tag_video"/>
+			android:background="@color/barVideo"/>
 	</RelativeLayout>
 	
 	

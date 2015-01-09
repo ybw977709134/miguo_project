@@ -387,17 +387,17 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		}
 		classroom.isEditable = true;
 		
-		Calendar result = Calendar.getInstance();
-		result.setTimeZone(TimeZone.getTimeZone("GMT"));
-		result.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth() - 1);
+		final Calendar resultTime = Calendar.getInstance();
+		resultTime.setTimeZone(TimeZone.getTimeZone("GMT"));
+		resultTime.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
-		int hour = tpTime.getCurrentHour();
-		int minite = tpTime.getCurrentMinute();
+		final int hour = tpTime.getCurrentHour();
+		final int minite = tpTime.getCurrentMinute();
 		classroom.description = dtTerm.getText().toString() 
 				+ Constants.COMMA + dtGrade.getText().toString()
 				+ Constants.COMMA + dtSubject.getText().toString()
-				+ Constants.COMMA + sdf.format(result.getTimeInMillis())
+				+ Constants.COMMA + sdf.format(resultTime.getTimeInMillis())
 				+ Constants.COMMA + (hour < 10 ? ("0"+ String.valueOf(hour)) : String.valueOf(hour)) + ":" 
 				+ (minite < 10 ? ("0"+ String.valueOf(minite)) : String.valueOf(minite))
 				+ Constants.COMMA + dtPlace.getText().toString();
@@ -415,7 +415,15 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 				if (result == ErrorCode.OK) {
 					// update the display name of chatmessages.
 					mDBHelper.updateChatMessageDisplayNameWithUser(classroom.groupID, classroom.groupNameOriginal);
-					//setResult(RESULT_OK);
+					Intent data = new Intent();
+					data.putExtra(TERM, dtTerm.getText().toString());
+					data.putExtra(GRADE, dtGrade.getText().toString());
+					data.putExtra(SUBJECT, dtSubject.getText().toString());
+					data.putExtra(DATE, new SimpleDateFormat("yyyy-MM-dd").format(resultTime.getTimeInMillis()));
+					data.putExtra(TIME, (hour < 10 ? ("0"+ String.valueOf(hour)) : String.valueOf(hour)) + ":" 
+							+ (minite < 10 ? ("0"+ String.valueOf(minite)) : String.valueOf(minite)));
+					data.putExtra(PLACE, dtPlace.getText().toString());
+					setResult(RESULT_OK, data);
 					finish();
 				}else if(result == ErrorCode.ERR_OPERATION_DENIED){
 					mMsgBox.toast(R.string.class_err_denied, 500);

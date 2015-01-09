@@ -76,6 +76,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		initView();
 		
 		getLessonInfo();
+		setClassInfo();
 	}
 
 	private void initView(){
@@ -152,7 +153,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	protected void onResume() {
 		super.onResume();
 		refreshLessonInfo();
-		setClassInfo();
 	}
 	
 	private void getLessonInfo(){
@@ -248,8 +248,23 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		}
 	}
 
-	private String forthToEndStr(String str){
-		return str.substring(3);
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if(requestCode == 0 && resultCode == RESULT_OK){
+			final String term = getString(R.string.class_term);
+			final String grade = getString(R.string.class_grade);
+			final String subject = getString(R.string.class_subject);
+			final String date = getString(R.string.class_date);
+			final String time = getString(R.string.class_time);
+			final String place = getString(R.string.class_place);
+			tvTerm.setText(term + data.getStringExtra(LessonInfoEditActivity.TERM));
+			tvGrade.setText(grade + data.getStringExtra(LessonInfoEditActivity.GRADE));
+			tvSubject.setText(subject + data.getStringExtra(LessonInfoEditActivity.SUBJECT));
+			tvDate.setText(date + data.getStringExtra(LessonInfoEditActivity.DATE));
+			tvTime.setText(time + data.getStringExtra(LessonInfoEditActivity.TIME));
+			tvPlace.setText(place + data.getStringExtra(LessonInfoEditActivity.PLACE));
+		}
 	}
 	
 	private void showMore(View parentView) {
@@ -272,7 +287,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                         intent.putExtra("class", class_group);
                         intent.putExtra("tag", LessonInfoEditActivity.TAG_CLASS_INFO);
 
-                        startActivity(intent);
+                        startActivityForResult(intent, 0);
                         bottomBoard.dismiss();
                     }
                 });

@@ -8,7 +8,9 @@
 		android:id="@+id/edt_search"
 		android:paddingRight="30dp"
 		android:imeOptions="actionSearch"
-		style="@style/search_inputbox"/>
+		style="@style/search_inputbox"
+		android:focusable="true"
+		android:focusableInTouchMode="true"/>
     <ImageButton
         android:id="@+id/field_clear"
         android:layout_height="19dp"

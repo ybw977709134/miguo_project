@@ -414,8 +414,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 				mMsgBox.dismissWait();
 				if (result == ErrorCode.OK) {
 					// update the display name of chatmessages.
-					mDBHelper.updateChatMessageDisplayNameWithUser(
-							classroom.groupID, classroom.groupNameOriginal);
+					mDBHelper.updateChatMessageDisplayNameWithUser(classroom.groupID, classroom.groupNameOriginal);
 					//setResult(RESULT_OK);
 					finish();
 				}else if(result == ErrorCode.ERR_OPERATION_DENIED){
@@ -485,6 +484,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 				holder = (ViewHodler) convertView.getTag();
 			}
 			holder.item_name.setText(alessons.get(position).title);
+			holder.item_name.setTextColor(getResources().getColor(R.color.gray));
 			if(alessons.get(position).end_date * 1000 < now){
 				holder.item_name.setTextColor(0xff8eb4e6);
 			}

@@ -23,6 +23,7 @@ import com.androidquery.AQuery;
 
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.R.color;
 import co.onemeter.oneapp.contacts.model.Person;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -420,6 +421,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			}
 			Lesson lesson = alessons.get(position);
 			holder.item_name.setText(lesson.title);
+			holder.item_name.setTextColor(getResources().getColor(R.color.gray));
 			if(lesson.end_date * 1000 < now){
 				holder.item_name.setTextColor(0xff8eb4e6);
 			}

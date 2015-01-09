@@ -31,8 +31,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
     private static final String TAG = "MyClassesActivity";
     
     private final String classId = "0b2f933f-a4d7-44de-a711-569abb04846a";
-    
-    
+
     private List<GroupChatRoom> classrooms;
     private List<GroupChatRoom> schoolrooms;
     
@@ -316,6 +315,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
     }
     
     class MyClassAdapter extends BaseAdapter{
+    	private int[] imgbackgroud = {R.drawable.class_bg_1,R.drawable.class_bg_2,R.drawable.class_bg_3};
     	private List<GroupChatRoom> classrooms;
     	
     	public MyClassAdapter(List<GroupChatRoom> classrooms){
@@ -350,6 +350,8 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 				holder = (ViewHolder) convertView.getTag();
 			}
 			holder.item_myclass_textview.setText((position + 1) + "." + classrooms.get(position).groupNameOriginal);
+			int groupId_2 = classrooms.get(position).groupID.charAt(2) - '0';
+			holder.item_myclass_imageview.setImageResource(imgbackgroud[groupId_2 % 3]);
 			return convertView;
 		}
 		class ViewHolder{

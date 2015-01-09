@@ -51,7 +51,7 @@
 		<item>学习</item>
 		<item>生活</item>
 		<item>投票</item>
-		<item>视频</item>
+		<item>视频教程</item>
 	</string-array>
 	<string-array name="timeline_senders">
 		<item>全部</item>

@@ -368,7 +368,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                 tag=context.getString(R.string.moment_tag_life);
                 break;
             case TAG_VIDEO_IDX:
-                tag=context.getString(R.string.moment_tag_video);
+                tag=context.getString(R.string.moment_tag_videoStudy);
                 break;
             default:
                 break;

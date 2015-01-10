@@ -1939,7 +1939,7 @@ public class Database {
                 + "     from chatmessages"
                 + "     group by chattarget) temp_chatmessages"
                 + " on latest_chat_target.target_id=temp_chatmessages.chattarget"
-                + " where temp_chatmessages.id is not null and ((msgtype is not null and msgtype<>?) or msgtype is null)"
+                + " where temp_chatmessages.id is not null and (msgtype is null or msgtype<>?)"
                 + " order by temp_sentdate desc"
                 + " limit ?",
                 new String[]{ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST,

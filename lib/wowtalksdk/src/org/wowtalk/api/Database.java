@@ -851,7 +851,7 @@ public class Database {
     }
 
     /**
-     * Teachers and students
+     * (Teachers or students) and is_my_friend
      * @return
      */
     public ArrayList<Buddy> fetchNormalBuddies() {
@@ -863,13 +863,9 @@ public class Database {
         ArrayList<Buddy> allBuddy=fetchAllBuddies();
         if(null != allBuddy) {
             for(Buddy aBuddy : allBuddy) {
-                //for test only
-//                if(aBuddy.username.equals("522849998d8f8")) {
-//                    aBuddy.setAccountType(Buddy.ACCOUNT_TYPE_TEACHER);
-//                    storeNewBuddyWithUpdate(aBuddy);
-//                }
-                if(Buddy.ACCOUNT_TYPE_STUDENT == aBuddy.getAccountType()
-                        || Buddy.ACCOUNT_TYPE_TEACHER == aBuddy.getAccountType()) {
+                if((Buddy.ACCOUNT_TYPE_STUDENT == aBuddy.getAccountType()
+                        || Buddy.ACCOUNT_TYPE_TEACHER == aBuddy.getAccountType())
+                        && 0 != (aBuddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE)) {
                     normalBuddy.add(aBuddy);
                 }
             }

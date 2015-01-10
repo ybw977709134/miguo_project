@@ -505,9 +505,6 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
      */
     public static void setupWowtalkService(Context context) {
         WowTalkWebServerIF webIF = WowTalkWebServerIF.getInstance(context);
-        // 下面调用的所有的网络操作，除第一个(后续网络操作的前提)和最后一个（后面没有操作了，且此处调用的地方已经是子线程）外，
-        // 其他的都重启子线程完成，因为它们之间没有先后顺序
-        webIF.getServerInfo();
         AppStatusService.getOfflineMessages(context);
         restartWowtalkService(context, true);
 

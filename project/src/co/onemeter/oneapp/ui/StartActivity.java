@@ -378,7 +378,6 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         }
 
         Connect2.setContext(this);
-        // !!! 所有的网络操作，都在此方法中的mWeb.getServerInfo()返回之后，才能调用，因为服务器地址可能有变换
         setupApplication();
 
         Connect2.setOnNetworkStateChangeListener(new Connect2.NetworkStateIndListener() {
@@ -1019,16 +1018,9 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
             @Override
             public void run() {
 
-                // 下面调用的所有的网络操作，除第一个(后续网络操作的前提)和最后一个（后面没有操作了，且此处调用的地方已经是子线程）外，
-                // 其他的都重启子线程完成，因为它们之间没有先后顺序
-                int[] result = mWeb.getServerInfo();
-
                 AppStatusService.getOfflineMessages(StartActivity.this);
 
-                // result[1] == 1，标识sip_domain变化了，需要重启wowtalkservcie;
-                // 否则直接启动
-                boolean isNeedRestart = (result[0] == ErrorCode.OK && result[1] == 1);
-                setupWowtalkService(isNeedRestart);
+                setupWowtalkService(true);
 
                 if (mIsStartFromLogin) {
                     getDatasFromServer();

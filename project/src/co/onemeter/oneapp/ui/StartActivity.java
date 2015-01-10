@@ -1133,24 +1133,13 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 
         int errno;
 
-        // 3. 收藏的群组和常用联系人
+        // 收藏的群组和常用联系人
         Log.i("downloading(3/4) favorite contacts and groups for biz");
         if (null != handler) {
             handler.sendEmptyMessage(HANDLER_GET_FAVORITE_GROUPS_AND_CONTACTS);
         }
         errno = webIF.getFavoriteContactsAndGroups();
         Log.i("StartActivity#downloadContactsAndGroups, finish downloading(3/4) favorite contacts and groups for biz (errno:" + errno);
-        if (ErrorCode.OK == errno) {
-            prefUtil.setFavoritesUptodate(true);
-        }
-
-        // 4. 我的联系人
-        Log.i("downloading(4/4) favorite contacts and groups for biz");
-        if (null != handler) {
-            handler.sendEmptyMessage(HANDLER_GET_CONTACTS);
-        }
-        errno = webIF.fGetBuddyList();
-        Log.i("StartActivity#fGetBuddyList, finish downloading(4/4) (errno:" + errno);
         if (ErrorCode.OK == errno) {
             prefUtil.setFavoritesUptodate(true);
         }

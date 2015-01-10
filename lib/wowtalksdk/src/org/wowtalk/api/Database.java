@@ -6896,9 +6896,9 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
         if (oldVersion == 5) {
             // 添加 path_multimedia2 字段到 chatmessages, chatmessages_history 表
-            database.execSQL("ALTER TABLE " + DATABASE_CREATE_TBL_CHATMESSAGES +
+            database.execSQL("ALTER TABLE " + Database.TBL_MESSAGES +
                 " ADD COLUMN path_multimedia2 TEXT AFTER path_multimedia;");
-            database.execSQL("ALTER TABLE " + DATABASE_CREATE_TBL_CHATMESSAGES_HISTORY +
+            database.execSQL("ALTER TABLE " + Database.TBL_MESSAGES_HISTORY +
                     " ADD COLUMN path_multimedia2 TEXT AFTER path_multimedia;");
             ++oldVersion;
         }

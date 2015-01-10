@@ -301,20 +301,23 @@ public class EventDetailActivity extends Activity implements OnClickListener {
     private void loadApplicantsInfo(){
     	new AsyncTask<Void, Void, Integer>(){
     		int errno = ErrorCode.OK;
+            private ArrayList<Buddy> members = new ArrayList<>();
 			@Override
 			protected Integer doInBackground(Void... arg0) {
 				EventWebServerIF web = EventWebServerIF.getInstance(EventDetailActivity.this);
-				errno = web.fGetApplicantsInfo(BuddyList, eventDetail.id);
+				errno = web.fGetApplicantsInfo(members, eventDetail.id);
 				return errno;
 			}
 			@Override
 			protected void onPostExecute(Integer errno) {
-				 if (errno == ErrorCode.OK) {
-                     listView_applicantsInfo.setAdapter(applicationInfoItemAdapter);
-                     ListViewUtils.setListViewHeightBasedOnChildren(listView_applicantsInfo);
-				 }
+                if (errno == ErrorCode.OK) {
+                    BuddyList.clear();
+                    BuddyList.addAll(members);
+                    listView_applicantsInfo.setAdapter(applicationInfoItemAdapter);
+                    ListViewUtils.setListViewHeightBasedOnChildren(listView_applicantsInfo);
+                }
                 showApplicants(BuddyList.isEmpty());
-			}
+            }
     		
     	}.execute((Void)null);
     }

@@ -6121,7 +6121,7 @@ public class Database {
                     storeStudentAlias(schoolId, student.userID, student.alias);
             }
             storeGroupMemberIds(classroom.groupID, studentIds);
-            //storeBuddies(classroom.memberList); // TODO, avoid overwrite buddy alias
+            storeBuddies(classroom.memberList); // TODO, avoid overwrite buddy alias
         }
 
         // recursive

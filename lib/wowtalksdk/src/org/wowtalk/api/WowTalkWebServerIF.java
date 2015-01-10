@@ -3996,6 +3996,15 @@ public class WowTalkWebServerIF {
             room.groupID = groupID;
 
             Database dbHelper = new Database(mContext);
+
+			// hack: 如果这是个班级，那么我们在保存数据库时需要保留 parentGroupId，
+			// 这个字段是 get_group_info API 不会返回的。
+			GroupChatRoom oldRoom = dbHelper.fetchGroupChatRoom(groupID);
+			if (oldRoom != null && TextUtils.equals(GroupChatRoom.CATEGORY_CLASSROOM, oldRoom.category)) {
+				room.category = oldRoom.category;
+				room.parentGroupId = oldRoom.parentGroupId;
+			}
+
             dbHelper.storeGroupChatRoom(room);
         }
 

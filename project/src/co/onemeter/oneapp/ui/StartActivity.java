@@ -1138,8 +1138,8 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         Database dbHelper = new Database(context);
         PrefUtil prefUtil = PrefUtil.getInstance(context);
         prefUtil.setGroupMembersUptodatePerfectly(false);
-
         String companyId = prefUtil.getCompanyId();
+
         // 1. 组织架构（部门id，成员id的关系）
         Log.i("downloading(1/4) company structure");
         if (null != handler) {
@@ -1147,29 +1147,6 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         }
         int errno = webIF.getCompanyStructure(companyId);
         Log.i("StartActivity#downloadContactsAndGroups, Finish downloading(1/4) company structure (errno:" + errno);
-
-        // 公司用来发通知的buddy信息,其 username 格式为companyId_companyId
-        // 此过程不需要显示在界面上（属于组织架构部分）
-        errno = webIF.fGetBuddyByUsername(companyId + "_" + companyId, new Buddy());
-
-        // 2. 部门
-        Log.i("downloading(2/4) all depts for biz");
-        if (null != handler) {
-            handler.sendEmptyMessage(HANDLER_GET_DEPTS);
-        }
-        errno = webIF.getGroupsByCompanyId(prefUtil.getCompanyId());
-        Log.i("StartActivity#downloadContactsAndGroups, finish downloading(2/4) all groups for biz (errno:" + errno);
-        if (ErrorCode.OK == errno) {
-            prefUtil.setLocalGroupListLastModified();
-        }
-
-        // 3. 临时会话群组
-//        Log.i("downloading(3/4) temp groups for biz");
-//        if (null != handler) {
-//            handler.sendEmptyMessage(HANDLER_GET_TEMP_GROUPS);
-//        }
-//        errno = webIF.fGroupChat_GetMyTempGroups();
-//        Log.i("StartActivity#downloadContactsAndGroups, finish downloading(3/4) temp groups for biz (errno:" + errno);
 
         // 3. 收藏的群组和常用联系人
         Log.i("downloading(3/4) favorite contacts and groups for biz");

@@ -4193,62 +4193,6 @@ public class WowTalkWebServerIF {
     }
 
 	/**
-	 * 获得所有群组，包括组织结构关系
-	 * @param companyId
-	 * @return
-	 */
-	public int getGroupsByCompanyId(String companyId) {
-        String strUID = sPrefUtil.getUid();
-        String strPwd = sPrefUtil.getPassword();
-
-        if (isAuthEmpty(strUID, strPwd) || TextUtils.isEmpty(companyId)) {
-            return ErrorCode.INVALID_ARGUMENT;
-        }
-
-        String action = "get_all_groups_in_corp";
-        String postStr = "action=" + action
-                + "&uid=" + Utils.urlencodeUtf8(strUID)
-                + "&password=" + Utils.urlencodeUtf8(strPwd)
-                + "&corp_id=" + Utils.urlencodeUtf8(companyId);
-
-        Connect2 connect2 = new Connect2();
-        Element root = connect2.Post(postStr);
-
-        int errno;
-        if (root != null) {
-
-            // err_no要素のリストを取得
-            NodeList errorList = root.getElementsByTagName("err_no");
-            // error要素を取得
-            Element errorElement = (Element) errorList.item(0);
-            // error要素の最初の子ノード（テキストノード）の値を取得
-            String errorStr = errorElement.getFirstChild().getNodeValue();
-
-            if (errorStr.equals("0")) {
-                NodeList nodeList = root.getElementsByTagName("group");
-
-                Database dbHelper = new Database(mContext);
-                dbHelper.clearGroupsForBiz(false);
-
-                ArrayList<GroupChatRoom> chatRooms = new ArrayList<GroupChatRoom>();
-                for(int i = 0, n = nodeList.getLength(); i < n; ++i) {
-                    Element groupNode = (Element) nodeList.item(i);
-                    GroupChatRoom g = new GroupChatRoom();
-                    XmlHelper.parseGroup(groupNode, g);
-                    chatRooms.add(g);
-                }
-                dbHelper.storeGroupChatRooms(chatRooms, false);
-                errno = 0;
-            } else {
-                errno = Integer.parseInt(errorStr);
-            }
-        } else {
-            errno = -1;
-        }
-        return errno;
-    }
-
-    /**
      * 获取公司的部门／员工关系，只是id的对应关系，及员工的部分详情
      * @param companyId
      * @return

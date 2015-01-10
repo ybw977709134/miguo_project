@@ -34,6 +34,7 @@ public abstract class TimelineFragment extends ListFragment
     private int selectedTag = 0;
     // record max timestamp for convenience of loading more
     private long maxTimestamp = 0;
+    private boolean mNoMore = false;
     
     //用于区分账号的类型
     private int countType = -1;//默认全部
@@ -387,6 +388,7 @@ public abstract class TimelineFragment extends ListFragment
 
         @Override
         protected void onPostExecute(Integer errno) {
+            mNoMore = true;
             if (errno == ErrorCode.OK) {
                 ArrayList<Moment> lst = loadLocalMoments(maxTimestamp, tagIdxFromUiToDb(selectedTag),countType);
                 if (lst != null && !lst.isEmpty()) {
@@ -400,6 +402,7 @@ public abstract class TimelineFragment extends ListFragment
                             getListView().setSelection(0);
                         }
                     }
+                    mNoMore = false;
                 }
             } else {
                 Toast.makeText(getActivity(), R.string.moments_check_failed, Toast.LENGTH_SHORT).show();
@@ -428,6 +431,11 @@ public abstract class TimelineFragment extends ListFragment
             }
         }.execute(maxTimestamp);
         return true;
+    }
+
+    @Override
+    public boolean noMore() {
+        return mNoMore;
     }
 
     private IDBTableChangeListener momentReviewObserver = new IDBTableChangeListener() {

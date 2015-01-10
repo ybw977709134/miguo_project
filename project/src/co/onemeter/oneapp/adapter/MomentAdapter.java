@@ -52,6 +52,12 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
          * @return true if a loading for more is started.
          */
         public boolean onLoadMore();
+
+        /**
+         * There is no more moments to load?
+         * @return
+         */
+        public boolean noMore();
     }
 
     public interface OnMediaPlayFinishListener {
@@ -938,16 +944,15 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     private View getLoadMoreView() {
         if (null == mLoadMoreView) {
             mLoadMoreView = LayoutInflater.from(context).inflate(R.layout.listitem_load_more, null);
-            ((TextView)mLoadMoreView.findViewById(R.id.text)).setText(
-                    mIsLoading ? R.string.loading_more_in_progress : R.string.load_more);
             mLoadMoreView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (null != mLoadDelegate && !mIsLoading) {
+                    boolean hasMore = mLoadDelegate != null && !mLoadDelegate.noMore();
+                    if (null != mLoadDelegate && !mIsLoading && hasMore) {
                         // notifyLoadingCompleted() may be called before onLoadMore() returns,
                         // so we should not set mIsLoading as true after onLoadMore() return true.
                         mIsLoading = true;
-                        ((TextView)mLoadMoreView.findViewById(R.id.text)).setText(R.string.loading_more_in_progress);
+                        updateLoadMoreText();
                         if (!mLoadDelegate.onLoadMore()) {
                             notifyLoadingCompleted();
                         }
@@ -955,14 +960,26 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 }
             });
         }
+        updateLoadMoreText();
         return mLoadMoreView;
     }
 
     public void notifyLoadingCompleted() {
         mIsLoading = false;
+        updateLoadMoreText();
+    }
+
+    public void updateLoadMoreText() {
         if (null != mLoadMoreView) {
-            ((TextView)mLoadMoreView.findViewById(R.id.text)).setText(R.string.load_more);
-//            ((TextView)mLoadMoreView.findViewById(R.id.text)).setText("没有更多分享了，自己创建一条吧");
+            int resId;
+            if (mIsLoading) {
+                resId = R.string.loading_more_in_progress;
+            } else if (mLoadDelegate != null && !mLoadDelegate.noMore()) {
+                resId = R.string.load_more;
+            } else {
+                resId = R.string.no_more_to_load;
+            }
+            ((TextView)mLoadMoreView.findViewById(R.id.text)).setText(resId);
         }
     }
 

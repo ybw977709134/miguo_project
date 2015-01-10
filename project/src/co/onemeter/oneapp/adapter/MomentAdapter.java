@@ -238,7 +238,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 				commentReview.add(reviews.get(i));
 			}
 		}
-//		convertView.setTag(null);
+
 		if (null == convertView || null == convertView.getTag()) {
             convertView = LayoutInflater.from(context).inflate(R.layout.listitem_trend_friend, null);
 			holder = new ViewHolder();
@@ -268,19 +268,11 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.layoutLike = (LinearLayout) convertView.findViewById(R.id.layout_like);
             holder.layoutComment = (LinearLayout) convertView.findViewById(R.id.layout_comment);
             holder.layoutAnswer = (LinearLayout) convertView.findViewById(R.id.layout_answer);
-//            holder.rlMomentFavoriteLayout=(RelativeLayout) convertView.findViewById(R.id.moment_favorite_layout);
-//            holder.ivMomentFavorite=(ImageView) convertView.findViewById(R.id.moment_favorite);
-
-//            holder.reviewButtons = (LinearLayout) convertView.findViewById(R.id.review_btn);
-//            holder.ivMomentOpEllipse=(ImageView) convertView.findViewById(R.id.iv_moment_op_ellipse);
 			holder.layoutReview = (LinearLayout) convertView.findViewById(R.id.layout_review);
             holder.micLayout = (LinearLayout) convertView.findViewById(R.id.mic_layout);
             holder.progress = (ProgressBar) convertView.findViewById(R.id.progress);
             holder.micButton = (ImageView) convertView.findViewById(R.id.btn_play);
             holder.micTime = (TimerTextView) convertView.findViewById(R.id.mic_timer);
-//            holder.imgLocation = (ImageView) convertView.findViewById(R.id.img_location);
-//            holder.layoutLike = (LinearLayout) convertView.findViewById(R.id.layout_like);
-//            holder.layoutComment = (LinearLayout) convertView.findViewById(R.id.layout_comment);
             holder.tvMomentTagDesc=(TextView) convertView.findViewById(R.id.moment_item_tag);
             holder.ivMomentTagColor=(ImageView) convertView.findViewById(R.id.iv_moment_item_tag_color_flag);
             holder.tvMomentShareRange=(TextView) convertView.findViewById(R.id.tv_share_rang_ind);
@@ -295,21 +287,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		
-//		holder.btnSurvey.setOnClickListener(new View.OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View arg0) {
-//				
-//		        surveyMomentChoosedItemList.put(moment.id,new ArrayList<String>());
-//			
-//		        doVoteSurvey(context, moment, surveyMomentChoosedItemList.get(moment.id), holder.voteSurveyLayout, holder.lvSurveyOptions, surveyMomentChoosedItemList.get(moment.id), holder.btnSurvey);
-//		        
-//		        setTagdesc(context,moment,holder.ivMomentTagColor,holder.tvMomentTagDesc,
-//		                holder.voteSurveyLayout,holder.lvSurveyOptions,surveyMomentChoosedItemList.get(moment.id),holder.btnSurvey);
-//				
-//			}
-//		});
-        
 		final WFile file = voiceFile;
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -320,22 +297,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                     holder.micTime.setText(String.format(TimerTextView.VOICE_LEN_DEF_FORMAT, file.duration / 60, file.duration % 60));
                     
             	}
-//<<<<<<< HEAD
-//            	String mMyUid = PrefUtil.getInstance(context).getUid();
-//                if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
-//                	MomentDetailActivity.launchForOwner(context, moment);//跳转到自己的详情页
-//                	//通过这种方式可以实现详情页刷新点赞和品论数
-////                	TimelineFragment.launchForOwner(activity, moment);//跳转到自己的详情页
-//                } else if (!moment.owner.userID.equals(mMyUid)) {
-//                	MomentDetailActivity.launch(context, moment);//跳转到好友的详情页
-////                	TimelineFragment.launch(activity, moment);//跳转到好友的详情页
-//                }   
-//
-// 
-////                if (mReplyDelegate != null) {
-////                    mReplyDelegate.onMomentClicked(position, moment);
-////                }
-//=======
                 if (mReplyDelegate != null) {
                     mReplyDelegate.onMomentClicked(position, moment);
                 }
@@ -360,7 +321,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                     } else {
                     	TimelineActivity.launch(context, moment.owner.userID, moment.owner.nickName);//跳转到好友的成长日志//不可进行发布操作
                     }
-   //                 TimelineActivity.launch(context, moment.owner.userID, moment.owner.nickName);
                 }
             });
         }
@@ -382,89 +342,14 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.reviewLayout.setVisibility(View.GONE);
         } else {
             holder.reviewLayout.setVisibility(View.GONE);
-//            holder.reviewLayout.setVisibility(View.VISIBLE);
-//            holder.reviewDivider.setVisibility(View.VISIBLE);
         }
-//		if (likeReview.size() == 0) {
-//			holder.txtLikeNames.setVisibility(View.GONE);
-//            holder.reviewDivider.setVisibility(View.GONE);
-//		} else {
-//			holder.txtLikeNames.setVisibility(View.VISIBLE);
-//            setViewForLikeReview(context, holder.txtLikeNames, likeReview);
-//		}
-//		if (commentReview.size() == 0) {
-//            holder.reviewDivider.setVisibility(View.GONE);
-//			holder.mReview.setVisibility(View.GONE);
-//		} else {
-//			holder.mReview.removeAllViews();
-//			holder.mReview.setVisibility(View.VISIBLE);
-//            setViewForCommentReview(context, holder.mReview, commentReview, position, moment.id, mReplyDelegate);
-//		}
-
-        //TODO
-//        holder.ivMomentOpEllipse.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                showMomentOpPopupWindow(view,moment,position);
-//            }
-//        });
-        // like and comment buttons
-        //like and comment is required even if this moment is mine
-//        if (isMyMoment(moment.owner.userID) || !moment.allowReview) {
-//        if (!moment.allowReview) {
-//            holder.reviewButtons.setVisibility(View.GONE);
-//        } else {
-//            holder.reviewButtons.setVisibility(View.VISIBLE);
-//            holder.btnReview.setEnabled(true);
-//
-//            if (moment.likedByMe) {
-//                holder.btnLike.setEnabled(false);
-//                holder.layoutLike.setEnabled(false);
-//                holder.btnLike.setBackgroundResource(R.drawable.icon_btn_liked);
-//            } else {
-//                holder.btnLike.setEnabled(true);
-//                holder.layoutLike.setEnabled(true);
-//                holder.btnLike.setBackgroundResource(R.drawable.icon_btn_like);
-//            }
-//
-//            holder.btnLike.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    holder.layoutLike.performClick();
-//                }
-//            });
-//            holder.layoutLike.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                   MomentActivity a = MomentActivity.instance();
-//                    if (a != null)
-//                        a.doLikeMoment_async(moment);
-//                }
-//            });
-//            holder.btnReview.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    holder.layoutComment.performClick();
-//                }
-//            });
-//            holder.layoutComment.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (mReplyDelegate != null) {
-//                        mReplyDelegate.replyToMoment(position, moment.id, null);
-//                    }
-//                }
-//            });
-//        }
 
 
         setImageLayout(context, mImageResizer, photoFiles, holder.imageTable);
         showVoiceFile(voiceFile, holder.micLayout, holder.progress, holder.micButton, holder.micTime);
         if (moment.latitude == 0 && moment.longitude == 0) {
-//            holder.imgLocation.setVisibility(View.GONE);
             holder.txtLoc.setVisibility(View.GONE);
         } else {
-//            holder.imgLocation.setVisibility(View.GONE);
             holder.txtLoc.setVisibility(View.VISIBLE);
             LocationHelper.getAddressFromLatitudeAndLongitude((int)moment.latitude, (int)moment.longitude, holder.txtLoc);
             holder.txtLoc.setOnClickListener(new View.OnClickListener() {

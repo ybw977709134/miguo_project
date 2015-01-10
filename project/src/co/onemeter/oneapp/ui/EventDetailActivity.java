@@ -263,14 +263,18 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
 		initView();
 		applicationInfoItemAdapter = new ApplicationInfoItemAdapter(this, BuddyList);
-		if(eventDetail.owner_uid.equals(PrefUtil.getInstance(this).getUid())){
-			showApplicantsInfo();
+		if(isApplicantsVisible()){
+            showApplicants(false);
+			loadApplicantsInfo();
 		}else{
-			findViewById(R.id.event_table_apply).setVisibility(View.GONE);
-			listView_applicantsInfo.setVisibility(View.GONE);
+            hideApplicants();
 		}
 		
 	}
+
+    private boolean isApplicantsVisible() {
+        return eventDetail.owner_uid.equals(PrefUtil.getInstance(this).getUid());
+    }
 
     @Override
     protected void onResume() {
@@ -294,7 +298,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
     	}
     }
     
-    private void showApplicantsInfo(){   	
+    private void loadApplicantsInfo(){
     	new AsyncTask<Void, Void, Integer>(){
     		int errno = ErrorCode.OK;
 			@Override
@@ -306,23 +310,28 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 			@Override
 			protected void onPostExecute(Integer errno) {
 				 if (errno == ErrorCode.OK) {
-					 if(BuddyList.isEmpty()){
-						 findViewById(R.id.event_table_apply).setVisibility(View.GONE);
-						 return;
-					 }
-					 listView_applicantsInfo.setAdapter(applicationInfoItemAdapter);
-					 ListViewUtils.setListViewHeightBasedOnChildren(listView_applicantsInfo);
-				 }else{
-					 findViewById(R.id.event_table_apply).setVisibility(View.GONE);
+                     listView_applicantsInfo.setAdapter(applicationInfoItemAdapter);
+                     ListViewUtils.setListViewHeightBasedOnChildren(listView_applicantsInfo);
 				 }
-			};
+                showApplicants(BuddyList.isEmpty());
+			}
     		
     	}.execute((Void)null);
-    	
-    	
     }
+
+    private void hideApplicants() {
+        findViewById(R.id.event_table_apply).setVisibility(View.GONE);
+        findViewById(R.id.txt_no_applicants).setVisibility(View.GONE);
+    }
+
+    private void showApplicants(boolean isEmpty) {
+        findViewById(R.id.event_table_apply).setVisibility(View.VISIBLE);
+        findViewById(R.id.txt_no_applicants).setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        findViewById(R.id.listView_applicantsInfo).setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+    }
+
     private void joinEvent() {
-   //     msgbox.showWait();
+        msgbox.showWait();
         new AsyncTask<Void, Void, Integer>(){
 
             @Override
@@ -334,7 +343,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
             @Override
             public void onPostExecute(Integer errno) {
-     //           msgbox.dismissWait();
+                msgbox.dismissWait();
                 if (errno == ErrorCode.OK) {
                     msgbox.toast(R.string.require_join_event_success);
                     btn_right_up.setVisibility(View.GONE);
@@ -368,7 +377,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                     msgbox.toast(R.string.require_join_event_joined);
                 }
             }
-        }.execute((Void)null);
+        }.execute((Void) null);
     }
     
     /**
@@ -422,6 +431,10 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                         updateUI(needUpdateGallery);
                     }
                 }
+
+                // refresh applicants
+                if(isApplicantsVisible())
+                    loadApplicantsInfo();
             }
         }.execute((Void)null);
     }

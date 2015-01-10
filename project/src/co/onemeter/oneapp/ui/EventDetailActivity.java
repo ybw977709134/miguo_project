@@ -443,7 +443,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 //        btn_right_up = (TextView) findViewById(R.id.right_button_up);
 //        btn_right_down = (TextView) findViewById(R.id.right_button_down);
         
-        if(eventDetail.joinedMemberCount >= eventDetail.capacity){
+        if(eventDetail.capacity > 0 && eventDetail.joinedMemberCount >= eventDetail.capacity){
         	btn_right_up.setText(getString(R.string.event_quota_full));
         	btn_right_up.setTextSize(12);
         	btn_right_up.setEnabled(false);

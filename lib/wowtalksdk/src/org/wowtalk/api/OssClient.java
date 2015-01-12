@@ -77,60 +77,93 @@ public class OssClient {
 
 		Log.i(TAG, " start upload ", inFilename, " => ", remoteDir, fileId);
 
-		int bytesRead, bytesAvailable, bufferSize;
-		byte[] buffer;
-		int maxBufferSize = 1 * 1024 * 1024;
 		HttpURLConnection conn = null;
 
 		try {
+
+			// post data 有三部分：
+			// part 1: createBoundaryMessage()
+			// part 2: file
+			// part 3: end boundary
+
+			File inputFile = new File(inFilename);
+			long fileLength = inputFile.length();
+			Log.i(TAG, " upload file length:", fileLength);
+
+			byte[] postDataPart1 = createBoundaryMessage(postData, inputFile.getName()).getBytes();
+			String endBoundary = "\r\n--" + BOUNDARY + "--\r\n";
+			byte[] postDataPart3 = endBoundary.getBytes();
+
+			// init http client
+
 			conn = (HttpURLConnection) new URL(rootUrl).openConnection();
 			conn.setRequestProperty("Content-Type",
 					"multipart/form-data; boundary=" + BOUNDARY);
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("User-Agent", "Android");
 			conn.setDoOutput(true);
+			conn.setFixedLengthStreamingMode((int)(
+					postDataPart1.length  + fileLength + postDataPart3.length));
 			conn.connect();
 
 			// send post data
 
-			File inputFile = new File(inFilename);
-			long fileLength = inputFile.length();
-			Log.i(TAG, " upload file length:", fileLength);
 			OutputStream os = conn.getOutputStream();
-			os.write(createBoundaryMessage(postData, inputFile.getName()).getBytes());
+			os.write(postDataPart1);
 
 			//
 
+			int bytesToRead = (int) (fileLength / 100);
+			if (bytesToRead < 1024)
+				bytesToRead = 1024;
+			if (bytesToRead > 1024 * 256)
+				bytesToRead = 1024 * 256;
+
 			FileInputStream fileInputStream = new FileInputStream(inputFile);
 			// create a buffer of maximum size
-			bytesAvailable = fileInputStream.available();
-			bufferSize = Math.min(bytesAvailable, maxBufferSize);
-			buffer = new byte[bufferSize];
+			int bytesAvailable = fileInputStream.available();
+			int bufferSize = Math.min(bytesAvailable, bytesToRead);
+			byte[] buffer = new byte[bufferSize];
+
+			// 写文件占整个上传任务的进度的百分比，
+			// 剩余进度分配给 getResponseCode()
+			final int PROGRESS_WEIGHT_WRITE_FILE = 90;
 
 			// read file and write it into form...
 			long total = 0;
-			bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+			int bytesRead = fileInputStream.read(buffer, 0, bufferSize);
 			total += bytesRead;
+			int oldProgress = (int) (total * PROGRESS_WEIGHT_WRITE_FILE / fileLength);
 			while (bytesRead > 0) {
 				os.write(buffer, 0, bufferSize);
 				bytesAvailable = fileInputStream.available();
-				bufferSize = Math.min(bytesAvailable, maxBufferSize);
+				bufferSize = Math.min(bytesAvailable, bytesToRead);
 				bytesRead = fileInputStream.read(buffer, 0, bufferSize);
 				total += bytesRead;
-				if (callback != null)
-					callback.setProgress(callbackTag, (int) (total * 100 / fileLength));
+				int newProgress = (int) (total * PROGRESS_WEIGHT_WRITE_FILE / fileLength);
+				if (newProgress != oldProgress) {
+					Log.i(TAG, " progress ", newProgress, "%");
+					if (callback != null)
+						callback.setProgress(callbackTag, newProgress);
+					oldProgress = newProgress;
+				}
 			}
 			//
 			fileInputStream.close();
 
-			String endBoundary = "\r\n--" + BOUNDARY + "--\r\n";
-			os.write(endBoundary.getBytes());
+			os.write(postDataPart3);
 			os.flush();
 			os.close();
 
 			// read response from server
 			// response code may be 204
+			//
+			// NOTE: getResponseCode() 会阻塞，所以分配一定的进度给它
 			boolean requestOk = conn.getResponseCode() / 200 == 1;
+
+			Log.i(TAG, " progress 100%");
+			if (callback != null)
+				callback.setProgress(callbackTag, 100);
 
 			BufferedReader r = new BufferedReader(new InputStreamReader(
 					requestOk ? conn.getInputStream() : conn.getErrorStream(),

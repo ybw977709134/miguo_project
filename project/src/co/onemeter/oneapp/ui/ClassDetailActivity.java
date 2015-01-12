@@ -23,7 +23,6 @@ import com.androidquery.AQuery;
 
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.R.color;
 import co.onemeter.oneapp.contacts.model.Person;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,7 +48,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private AQuery query;
 	private LessonWebServerIF lesWebSer;
 	private WowTalkWebServerIF mWTWebSer;
-	private Database mdb;
 	private MessageBox msgBox;
 	
 	private String classId;
@@ -91,7 +89,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		
 		lesWebSer = LessonWebServerIF.getInstance(this);
 		mWTWebSer = WowTalkWebServerIF.getInstance(this);
-		mdb = Database.getInstance(this);
 		
 		msgBox = new MessageBox(this);
 		query = new AQuery(this);
@@ -115,7 +112,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				
 				protected void onPostExecute(Integer result) {
 					if(ErrorCode.OK == result){
+						Database mdb = Database.getInstance(ClassDetailActivity.this);
 						members = mdb.fetchGroupMembers(classId);
+						mdb.close();
 						//android.util.Log.i("-->>", buddies.toString());
 						teaAdapter = new TeachersAdapter(members);
 						lvTeachers.setAdapter(teaAdapter);
@@ -164,13 +163,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				}
 				
 				protected void onPostExecute(Integer result) {
-//					if(ErrorCode.OK == result){
-//						lessons.clear();
-//						Database db = Database.open(ClassDetailActivity.this);
-//						lessons.addAll(db.fetchLesson(classId));
-//						Collections.sort(lessons, new LessonInfoEditActivity.LessonComparator());
-//						courseAdapter.notifyDataSetChanged();
-//					}
+					if(ErrorCode.OK == result){
+						refreshLessonInfo();
+					}
 				};
 				
 			}.execute((Void)null);
@@ -180,6 +175,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		lessons.clear();
 		Database db = Database.open(ClassDetailActivity.this);
 		lessons.addAll(db.fetchLesson(classId));
+		db.close();
 		Collections.sort(lessons, new LessonInfoEditActivity.LessonComparator());
 		courseAdapter.notifyDataSetChanged();
 	}

@@ -88,15 +88,6 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	private List<String> delLessons;
 	private List<Lesson> addLessons;
 	
-	private Handler mHandler = new Handler(){
-		public void handleMessage(android.os.Message msg) {
-			if(msg.what == 0){
-				mMsgBox.dismissWait();
-				finish();
-			}
-		};
-	};
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -194,24 +185,6 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		return str.split(Constants.COMMA);
 	}
 	
-	private void deleteLessons(){
-		if(delLessons.isEmpty()){
-			return;
-		}
-		mMsgBox.showWait();
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				LessonWebServerIF webserver = LessonWebServerIF.getInstance(LessonInfoEditActivity.this);
-				for(String lesson_id:delLessons){
-					webserver.deleteLesson(lesson_id);
-				}
-				mHandler.sendEmptyMessage(0);
-			}
-		}).start();
-	}
-	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -220,19 +193,17 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			break;
 		case R.id.save:
 			if (tag == TAG_LES_TABLE) {
-				if(!delLessons.isEmpty()){
-					deleteLessons();
-				}else if(!addLessons.isEmpty()){
-					addPostLesson(addLessons);
-				}else{
+				if(delLessons.isEmpty() && addLessons.isEmpty()){
 					finish();
+				}else{
+					addOrDeletePostLesson(addLessons,delLessons);
 				}
 			} else {
 				updateClassInfo();
 			}
 			break;
 		case R.id.lay_footer_add:
-			showAddLessonDialog();
+			showAddOrModifyLessonDialog(true,null,-1);
 			break;
 		default:
 			break;
@@ -244,7 +215,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			long id) {
 		Lesson lesson = lessons.get(position);
 		if(lesson.start_date * 1000 > System.currentTimeMillis()){
-			showModifyLessonPopupwindow(lesson,view);
+			showAddOrModifyLessonDialog(false,view,position);
 		}
 	}
 	
@@ -279,20 +250,6 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		return true;
 	}
 
-	/*
-	 * 修改课
-	 */
-	private void showModifyLessonPopupwindow(Lesson lesson,View item){
-		View view = getLayoutInflater().inflate(R.layout.lay_add_lesson, null);
-		view.findViewById(R.id.lay_lesson_name).setVisibility(View.GONE);
-		DatePicker datepicker = (DatePicker) view.findViewById(R.id.datepicker_dialog);
-		String[] startTime = ((TextView)item.findViewById(R.id.coursetable_item_time)).getText().toString().split("-");
-		datepicker.init(Integer.parseInt(startTime[0]), Integer.parseInt(startTime[1]) - 1, Integer.parseInt(startTime[2]), null);
-		PopupWindow poView = new PopupWindow(view,LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		poView.setOutsideTouchable(false);
-		poView.showAsDropDown(item);
-	}
-	
 	private View footerView() {
 		View view = getLayoutInflater().inflate(R.layout.lay_lv_footer, null);
 		TextView txt_footer = (TextView) view.findViewById(R.id.txt_footer_add);
@@ -302,50 +259,73 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		return view;
 	}
 	
-	private void showAddLessonDialog(){
+	private void showAddOrModifyLessonDialog(final boolean isAdd,final View item,final int position){
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		View view = getLayoutInflater().inflate(R.layout.lay_add_lesson, null);
 		final EditText edName = (EditText) view.findViewById(R.id.ed_dialog_time);
 		final DatePicker datepicker = (DatePicker) view.findViewById(R.id.datepicker_dialog);
+		
+		if(!isAdd){
+			view.findViewById(R.id.lay_lesson_name).setVisibility(View.GONE);
+			String[] startTime = ((TextView)item.findViewById(R.id.coursetable_item_time)).getText().toString().split("-");
+			datepicker.init(Integer.parseInt(startTime[0]), Integer.parseInt(startTime[1]) - 1, Integer.parseInt(startTime[2]), null);
+		}
+		
 		builder.setView(view);
 		builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				String content = edName.getText().toString();
-				if(TextUtils.isEmpty(content)){
-					mMsgBox.toast(R.string.class_lessontitle_not_null);
-					notdismissDialog(dialog);
-					return;
-				}
-				
 				Calendar result = Calendar.getInstance();
-				result.setTimeZone(TimeZone.getTimeZone("GMT"));
+				//result.setTimeZone(TimeZone.getTimeZone("GMT"));
 				result.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth());
 				long resultTime = result.getTimeInMillis();
 				
-				if(resultTime < System.currentTimeMillis()){
-					mMsgBox.toast(R.string.class_time_ealier);
-					notdismissDialog(dialog);
-					return;
-				}
-				
-				if(resultTime < time_openclass){
-					mMsgBox.toast(R.string.class_les_not_before_start);
-					notdismissDialog(dialog);
-					return;
-				}
-				
-				Lesson lesson = new Lesson();
-				lesson.class_id = classId;
-				lesson.title = content;
-				lesson.start_date = resultTime/1000;
-				lesson.end_date = resultTime/1000 + 45 * 60;
-				addLessons.add(lesson);
-				lessons.add(lesson);
-				adapter.notifyDataSetChanged();
+				if(isAdd){
+					String content = edName.getText().toString();
+					if(TextUtils.isEmpty(content)){
+						mMsgBox.toast(R.string.class_lessontitle_not_null);
+						notdismissDialog(dialog);
+						return;
+					}
 					
-				dismissDialog(dialog);
+					if(resultTime < System.currentTimeMillis()){
+						mMsgBox.toast(R.string.class_time_ealier);
+						notdismissDialog(dialog);
+						return;
+					}
+					
+					if(resultTime < time_openclass){
+						mMsgBox.toast(R.string.class_les_not_before_start);
+						notdismissDialog(dialog);
+						return;
+					}
+					
+					Lesson lesson = new Lesson();
+					lesson.class_id = classId;
+					lesson.title = content;
+					lesson.start_date = resultTime/1000;
+					lesson.end_date = resultTime/1000 + 45 * 60;
+					addLessons.add(lesson);
+					lessons.add(lesson);
+					adapter.notifyDataSetChanged();
+						
+					dismissDialog(dialog);
+				}else{
+					if(position >= 0){
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						((TextView)item.findViewById(R.id.coursetable_item_time)).setText(sdf.format(resultTime));
+						lessons.get(position).start_date = resultTime/1000;
+						lessons.get(position).end_date = resultTime/1000 + 45 * 60;
+						Lesson lesson = lessons.get(position);
+						if(lesson.lesson_id > 0){
+							modifyPostLesson(lesson);
+						}else{
+							addLessons.get(position).start_date = resultTime/1000;
+							addLessons.get(position).end_date = resultTime/1000 + 45 * 60;
+						}
+					}
+				}
 			}
 		}).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
 			
@@ -384,19 +364,44 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		}
 	}
 	
-	private void addPostLesson(final List<Lesson> lessons){
+	private void modifyPostLesson(final Lesson lesson){
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				LessonWebServerIF lesWeb = LessonWebServerIF.getInstance(LessonInfoEditActivity.this);
+				int errno = lesWeb.addOrModifyLesson(lesson);
+				if(errno == ErrorCode.OK){
+					Database db = Database.getInstance(LessonInfoEditActivity.this);
+					db.storeLesson(lesson);
+				}
+			}
+		}).start();
+	}
+	
+	private void addOrDeletePostLesson(final List<Lesson> alessons,final List<String> dlessons){
 		new AsyncTask<Void, Void, Integer>(){
 
 			protected void onPreExecute() {
+				if(dlessons.isEmpty() && alessons.isEmpty()){
+					return;
+				}
 				mMsgBox.showWait();
 			};
 			
 			@Override
 			protected Integer doInBackground(Void... params) {
 				LessonWebServerIF lesWeb = LessonWebServerIF.getInstance(LessonInfoEditActivity.this);
-				int errno = 0;
-				for(Lesson lesson: lessons){
-					errno = lesWeb.addOrModifyLesson(lesson);
+				if(!dlessons.isEmpty()){
+					for(String lesson_id:dlessons){
+						lesWeb.deleteLesson(lesson_id);
+					}
+				}
+				int errno = ErrorCode.BAD_RESPONSE;
+				if(!alessons.isEmpty()){
+					for(Lesson lesson: alessons){
+						errno = lesWeb.addOrModifyLesson(lesson);
+					}
 				}
 				return errno;
 			}
@@ -405,8 +410,8 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 				mMsgBox.dismissWait();
 				if(ErrorCode.OK == result){
 					mMsgBox.toast(R.string.class_submit_success);
-					finish();
 				}
+				finish();
 			};
 		}.execute((Void)null);
 	}
@@ -419,7 +424,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		classroom.isEditable = true;
 		
 		final Calendar resultTime = Calendar.getInstance();
-		resultTime.setTimeZone(TimeZone.getTimeZone("GMT"));
+		//resultTime.setTimeZone(TimeZone.getTimeZone("GMT"));
 		resultTime.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
@@ -466,7 +471,8 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		
+		mDBHelper.close();
+		mMsgBox = null;
 	}
 	
 	/*

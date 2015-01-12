@@ -87,13 +87,13 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         hideNewMomentPanel();
 
         if (uid != null) {
-        	if (!TextUtils.isEmpty(pageTitle)) {//好友的成长日记
+        	if (!TextUtils.isEmpty(pageTitle)) {//好友的动态
         		setTitle(pageTitle);
         		TimelineFragment.newReviewFlag = false;
         	} else {
         		TimelineFragment.newReviewFlag = true;
         	}
-        	switchToSingle();//自己的成长日记
+        	switchToSingle();//自己的动态
         	if (getIntent().getIntExtra(Back_Flag, 0) == 1) {
         		findViewById(R.id.title_left).setVisibility(View.VISIBLE);
         	}
@@ -263,7 +263,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     }
 
     /**
-     * 跳转到好友成长日志页面
+     * 跳转到好友的动态页面
      * @param context
      * @param uid
      * @param pageTitle
@@ -277,7 +277,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     }
     
     /**
-     * 跳转到自己的成长日志页面
+     * 跳转到自己的动态页面
      * @param context
      * @param uid
      * @param pageTitle

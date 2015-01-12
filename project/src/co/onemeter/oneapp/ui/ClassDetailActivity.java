@@ -12,6 +12,7 @@ import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.GroupMember;
+import org.wowtalk.api.IDBTableChangeListener;
 import org.wowtalk.api.Lesson;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.LessonWebServerIF;
@@ -66,6 +67,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private TextView tvPlace;
 	
 	private GroupChatRoom class_group = new GroupChatRoom();
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

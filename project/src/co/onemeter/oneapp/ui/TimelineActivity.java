@@ -27,6 +27,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     public static final String EXTRA_UID = "uid";
     /** If page title is empty, buttons will show instead. */
     public static final String EXTRA_PAGE_TITLE = "title";
+    public static final String Back_Flag = "backFlag";
     public static final int COMMENT_MOST_WORDS = 260;
     public static final int NETWORK_TAG_UPLOADING_ALBUMCOVER = 123;
 
@@ -58,7 +59,8 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
         instance = this;
-
+        
+        q.find(R.id.title_left).clicked(this);
         q.find(R.id.btn_all).clicked(this);
         q.find(R.id.btn_me).clicked(this);
         q.find(R.id.title_edit).clicked(this);
@@ -85,13 +87,16 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         hideNewMomentPanel();
 
         if (uid != null) {
-        	if (!TextUtils.isEmpty(pageTitle)) {//好友的成长日记
+        	if (!TextUtils.isEmpty(pageTitle)) {//好友的动态
         		setTitle(pageTitle);
         		TimelineFragment.newReviewFlag = false;
         	} else {
         		TimelineFragment.newReviewFlag = true;
         	}
-        	switchToSingle();//自己的成长日记
+        	switchToSingle();//自己的动态
+        	if (getIntent().getIntExtra(Back_Flag, 0) == 1) {
+        		findViewById(R.id.title_left).setVisibility(View.VISIBLE);
+        	}
             
         } else {
             switchToAll();
@@ -169,6 +174,9 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+        	case R.id.title_left:
+        		finish();
+        		break;
             case R.id.title_edit:
                 toggleNewMomentPanel();
                 break;
@@ -255,7 +263,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     }
 
     /**
-     * 跳转到好友成长日志页面
+     * 跳转到好友的动态页面
      * @param context
      * @param uid
      * @param pageTitle
@@ -264,11 +272,12 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         Intent intent = new Intent(context, TimelineActivity.class);
         intent.putExtra(EXTRA_UID, uid);
         intent.putExtra(EXTRA_PAGE_TITLE, pageTitle);
+        intent.putExtra(Back_Flag, 1);
         context.startActivity(intent);
     }
     
     /**
-     * 跳转到自己的成长日志页面
+     * 跳转到自己的动态页面
      * @param context
      * @param uid
      * @param pageTitle
@@ -278,6 +287,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         Intent intent = new Intent(context, TimelineActivity.class);
         intent.putExtra(EXTRA_UID, uid);
 //        intent.putExtra(EXTRA_PAGE_TITLE, pageTitle);
+        intent.putExtra(Back_Flag, 1);
         context.startActivity(intent);
     }
 

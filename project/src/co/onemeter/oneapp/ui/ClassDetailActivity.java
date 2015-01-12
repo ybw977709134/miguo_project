@@ -192,12 +192,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	}
 	
 	private void setClassInfo(){
-		final String term = getString(R.string.class_term);
-		final String grade = getString(R.string.class_grade);
-		final String subject = getString(R.string.class_subject);
-		final String date = getString(R.string.class_date);
-		final String time = getString(R.string.class_time);
-		final String place = getString(R.string.class_place);
 		final Handler hanlder = new Handler();
 		
 		new Thread(new Runnable() {
@@ -212,15 +206,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 						@Override
 						public void run() {
 							if(class_group != null){
-								String[] infos = getStrsByComma(class_group.description);
-								if(null != infos && infos.length == 6){
-									tvTerm.setText(term + infos[0]);
-									tvGrade.setText(grade + infos[1]);
-									tvSubject.setText(subject + infos[2]);
-									tvDate.setText(date + infos[3]);
-									tvTime.setText(time + infos[4]);
-									tvPlace.setText(place + infos[5]);
-								}
+								refreshClassInfo();
 							}
 						}
 					});
@@ -229,6 +215,24 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		}).start();
 		
 			
+	}
+	
+	private void refreshClassInfo(){
+		final String term = getString(R.string.class_term);
+		final String grade = getString(R.string.class_grade);
+		final String subject = getString(R.string.class_subject);
+		final String date = getString(R.string.class_date);
+		final String time = getString(R.string.class_time);
+		final String place = getString(R.string.class_place);
+		String[] infos = getStrsByComma(class_group.description);
+		if(null != infos && infos.length == 6){
+			tvTerm.setText(term + infos[0]);
+			tvGrade.setText(grade + infos[1]);
+			tvSubject.setText(subject + infos[2]);
+			tvDate.setText(date + infos[3]);
+			tvTime.setText(time + infos[4]);
+			tvPlace.setText(place + infos[5]);
+		}
 	}
 	
 	@Override
@@ -258,12 +262,24 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			final String date = getString(R.string.class_date);
 			final String time = getString(R.string.class_time);
 			final String place = getString(R.string.class_place);
-			tvTerm.setText(term + data.getStringExtra(LessonInfoEditActivity.TERM));
-			tvGrade.setText(grade + data.getStringExtra(LessonInfoEditActivity.GRADE));
-			tvSubject.setText(subject + data.getStringExtra(LessonInfoEditActivity.SUBJECT));
-			tvDate.setText(date + data.getStringExtra(LessonInfoEditActivity.DATE));
-			tvTime.setText(time + data.getStringExtra(LessonInfoEditActivity.TIME));
-			tvPlace.setText(place + data.getStringExtra(LessonInfoEditActivity.PLACE));
+			String reTerm = data.getStringExtra(LessonInfoEditActivity.TERM);
+			String reGrade = data.getStringExtra(LessonInfoEditActivity.GRADE);
+			String reSubject = data.getStringExtra(LessonInfoEditActivity.SUBJECT);
+			String reDate = data.getStringExtra(LessonInfoEditActivity.DATE);
+			String reTime = data.getStringExtra(LessonInfoEditActivity.TIME);
+			String rePlace = data.getStringExtra(LessonInfoEditActivity.PLACE);
+			tvTerm.setText(term + reTerm);
+			tvGrade.setText(grade + reGrade);
+			tvSubject.setText(subject + reSubject);
+			tvDate.setText(date + reDate);
+			tvTime.setText(time + reTime);
+			tvPlace.setText(place + rePlace);
+			class_group.description = reTerm + Constants.COMMA + 
+					reGrade + Constants.COMMA + 
+					reSubject + Constants.COMMA +
+					reDate + Constants.COMMA +
+					reTime + Constants.COMMA +
+					rePlace;
 		}
 	}
 	

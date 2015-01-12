@@ -39,19 +39,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-public class LessonInfoEditActivity extends Activity implements OnClickListener {
+/**
+ * 课表修改以及班级信息修改页面。
+ * Created by yl on 21/12/2014.
+ */
+public class LessonInfoEditActivity extends Activity implements OnClickListener, OnItemClickListener {
 
-	public static final int TAG_CLASS_INFO = 0;
-	public static final int TAG_LES_TABLE = 1;
+	public static final int TAG_CLASS_INFO = 0;//改班级信息
+	public static final int TAG_LES_TABLE = 1;//改课表
 
 	public static final String TERM = "term";
 	public static final String GRADE = "grade";
@@ -125,6 +132,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		
 		lvCourtable.addFooterView(footerView());
 		lvCourtable.setAdapter(adapter);
+		lvCourtable.setOnItemClickListener(this);
 		
 		q.find(R.id.cancel).clicked(this);
 		q.find(R.id.save).clicked(this);
@@ -232,6 +240,15 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 	}
 	
 	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		Lesson lesson = lessons.get(position);
+		if(lesson.start_date * 1000 > System.currentTimeMillis()){
+			showModifyLessonPopupwindow(lesson,view);
+		}
+	}
+	
+	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		menu.add(0, 1, Menu.NONE, getString(R.string.contacts_local_delete)); 
@@ -262,6 +279,20 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		return true;
 	}
 
+	/*
+	 * 修改课
+	 */
+	private void showModifyLessonPopupwindow(Lesson lesson,View item){
+		View view = getLayoutInflater().inflate(R.layout.lay_add_lesson, null);
+		view.findViewById(R.id.lay_lesson_name).setVisibility(View.GONE);
+		DatePicker datepicker = (DatePicker) view.findViewById(R.id.datepicker_dialog);
+		String[] startTime = ((TextView)item.findViewById(R.id.coursetable_item_time)).getText().toString().split("-");
+		datepicker.init(Integer.parseInt(startTime[0]), Integer.parseInt(startTime[1]) - 1, Integer.parseInt(startTime[2]), null);
+		PopupWindow poView = new PopupWindow(view,LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		poView.setOutsideTouchable(false);
+		poView.showAsDropDown(item);
+	}
+	
 	private View footerView() {
 		View view = getLayoutInflater().inflate(R.layout.lay_lv_footer, null);
 		TextView txt_footer = (TextView) view.findViewById(R.id.txt_footer_add);
@@ -438,6 +469,9 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		
 	}
 	
+	/*
+	 * 将课表按时间从早排序
+	 */
 	static class LessonComparator implements Comparator<Lesson>{
 
 		@Override
@@ -507,4 +541,6 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener 
 		}
 		
 	}
+
+
 }

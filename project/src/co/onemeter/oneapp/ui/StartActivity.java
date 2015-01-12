@@ -378,7 +378,6 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         }
 
         Connect2.setContext(this);
-        // !!! 所有的网络操作，都在此方法中的mWeb.getServerInfo()返回之后，才能调用，因为服务器地址可能有变换
         setupApplication();
 
         Connect2.setOnNetworkStateChangeListener(new Connect2.NetworkStateIndListener() {
@@ -1019,16 +1018,9 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
             @Override
             public void run() {
 
-                // 下面调用的所有的网络操作，除第一个(后续网络操作的前提)和最后一个（后面没有操作了，且此处调用的地方已经是子线程）外，
-                // 其他的都重启子线程完成，因为它们之间没有先后顺序
-                int[] result = mWeb.getServerInfo();
-
                 AppStatusService.getOfflineMessages(StartActivity.this);
 
-                // result[1] == 1，标识sip_domain变化了，需要重启wowtalkservcie;
-                // 否则直接启动
-                boolean isNeedRestart = (result[0] == ErrorCode.OK && result[1] == 1);
-                setupWowtalkService(isNeedRestart);
+                setupWowtalkService(true);
 
                 if (mIsStartFromLogin) {
                     getDatasFromServer();
@@ -1139,56 +1131,15 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         PrefUtil prefUtil = PrefUtil.getInstance(context);
         prefUtil.setGroupMembersUptodatePerfectly(false);
 
-        String companyId = prefUtil.getCompanyId();
-        // 1. 组织架构（部门id，成员id的关系）
-        Log.i("downloading(1/4) company structure");
-        if (null != handler) {
-            handler.sendEmptyMessage(HANDLER_GET_COMPANY_STRUCTURE);
-        }
-        int errno = webIF.getCompanyStructure(companyId);
-        Log.i("StartActivity#downloadContactsAndGroups, Finish downloading(1/4) company structure (errno:" + errno);
+        int errno;
 
-        // 公司用来发通知的buddy信息,其 username 格式为companyId_companyId
-        // 此过程不需要显示在界面上（属于组织架构部分）
-        errno = webIF.fGetBuddyByUsername(companyId + "_" + companyId, new Buddy());
-
-        // 2. 部门
-        Log.i("downloading(2/4) all depts for biz");
-        if (null != handler) {
-            handler.sendEmptyMessage(HANDLER_GET_DEPTS);
-        }
-        errno = webIF.getGroupsByCompanyId(prefUtil.getCompanyId());
-        Log.i("StartActivity#downloadContactsAndGroups, finish downloading(2/4) all groups for biz (errno:" + errno);
-        if (ErrorCode.OK == errno) {
-            prefUtil.setLocalGroupListLastModified();
-        }
-
-        // 3. 临时会话群组
-//        Log.i("downloading(3/4) temp groups for biz");
-//        if (null != handler) {
-//            handler.sendEmptyMessage(HANDLER_GET_TEMP_GROUPS);
-//        }
-//        errno = webIF.fGroupChat_GetMyTempGroups();
-//        Log.i("StartActivity#downloadContactsAndGroups, finish downloading(3/4) temp groups for biz (errno:" + errno);
-
-        // 3. 收藏的群组和常用联系人
+        // 收藏的群组和常用联系人
         Log.i("downloading(3/4) favorite contacts and groups for biz");
         if (null != handler) {
             handler.sendEmptyMessage(HANDLER_GET_FAVORITE_GROUPS_AND_CONTACTS);
         }
         errno = webIF.getFavoriteContactsAndGroups();
         Log.i("StartActivity#downloadContactsAndGroups, finish downloading(3/4) favorite contacts and groups for biz (errno:" + errno);
-        if (ErrorCode.OK == errno) {
-            prefUtil.setFavoritesUptodate(true);
-        }
-
-        // 4. 我的联系人
-        Log.i("downloading(4/4) favorite contacts and groups for biz");
-        if (null != handler) {
-            handler.sendEmptyMessage(HANDLER_GET_CONTACTS);
-        }
-        errno = webIF.fGetBuddyList();
-        Log.i("StartActivity#fGetBuddyList, finish downloading(4/4) (errno:" + errno);
         if (ErrorCode.OK == errno) {
             prefUtil.setFavoritesUptodate(true);
         }

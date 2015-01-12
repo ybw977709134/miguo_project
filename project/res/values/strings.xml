@@ -198,6 +198,7 @@
     <string name="event_cancel_join_msg">你确认取消报名吗？</string>
     <string name="event_quota_full">该活动名额已满!</string>
     <string name="event_detail_applicants">报名名单:</string>
+    <string name="event_detail_no_applicants">目前还没有人报名</string>
 
     <string name="settings_myinfo">个人信息</string>
     <string name="my_treasure">我的百宝箱</string>
@@ -859,5 +860,6 @@
 	<string name="class_editinfo_first">请先编辑班级信息!</string>
 	<string name="class_lessontitle_not_null">课名不得为空！</string>
 	<string name="class_les_not_before_start">课程时间不得早于开班时间！</string>
-	
+    <string name="no_more_to_load">没有更多</string>
+
 </resources>

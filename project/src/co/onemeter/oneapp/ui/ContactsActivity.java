@@ -141,6 +141,7 @@ public class ContactsActivity extends FragmentActivity implements View.OnClickLi
         }
         trans.commit();
 
+        activatedTab = TAB_CONTACTS;
         updateMenu();
     }
 

@@ -186,13 +186,19 @@
                 android:id="@+id/event_table_apply"
                 android:text="@string/event_detail_applicants"
                 style="@style/event_section_title"/>
-            
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:id="@+id/txt_no_applicants"
+                android:text="@string/event_detail_no_applicants"
+                android:padding="@dimen/padding_medium"
+                style="@style/standard_text_gray"/>
             <ListView
                     android:id="@+id/listView_applicantsInfo"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:divider="@drawable/divider" >
-                
             </ListView>
 
             <ImageView

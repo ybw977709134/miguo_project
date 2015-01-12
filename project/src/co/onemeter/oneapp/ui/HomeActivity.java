@@ -63,6 +63,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             case R.id.btn_myclasses:
                 startActivity(new Intent(this, MyClassesActivity.class));
                 break;
+            case R.id.live_play:
             case R.id.btn_live_play:
             	startActivity(new Intent(this, VideoPlayingActivity.class));
             	break;

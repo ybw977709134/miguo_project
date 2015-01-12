@@ -7,7 +7,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:padding="5dp" >
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp" >
 
         <ImageView
             android:id="@+id/item_myclass_imageview"

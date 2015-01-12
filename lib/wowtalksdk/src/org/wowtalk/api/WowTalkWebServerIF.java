@@ -3996,6 +3996,15 @@ public class WowTalkWebServerIF {
             room.groupID = groupID;
 
             Database dbHelper = new Database(mContext);
+
+			// hack: 如果这是个班级，那么我们在保存数据库时需要保留 parentGroupId，
+			// 这个字段是 get_group_info API 不会返回的。
+			GroupChatRoom oldRoom = dbHelper.fetchGroupChatRoom(groupID);
+			if (oldRoom != null && TextUtils.equals(GroupChatRoom.CATEGORY_CLASSROOM, oldRoom.category)) {
+				room.category = oldRoom.category;
+				room.parentGroupId = oldRoom.parentGroupId;
+			}
+
             dbHelper.storeGroupChatRoom(room);
         }
 
@@ -4193,62 +4202,6 @@ public class WowTalkWebServerIF {
     }
 
 	/**
-	 * 获得所有群组，包括组织结构关系
-	 * @param companyId
-	 * @return
-	 */
-	public int getGroupsByCompanyId(String companyId) {
-        String strUID = sPrefUtil.getUid();
-        String strPwd = sPrefUtil.getPassword();
-
-        if (isAuthEmpty(strUID, strPwd) || TextUtils.isEmpty(companyId)) {
-            return ErrorCode.INVALID_ARGUMENT;
-        }
-
-        String action = "get_all_groups_in_corp";
-        String postStr = "action=" + action
-                + "&uid=" + Utils.urlencodeUtf8(strUID)
-                + "&password=" + Utils.urlencodeUtf8(strPwd)
-                + "&corp_id=" + Utils.urlencodeUtf8(companyId);
-
-        Connect2 connect2 = new Connect2();
-        Element root = connect2.Post(postStr);
-
-        int errno;
-        if (root != null) {
-
-            // err_no要素のリストを取得
-            NodeList errorList = root.getElementsByTagName("err_no");
-            // error要素を取得
-            Element errorElement = (Element) errorList.item(0);
-            // error要素の最初の子ノード（テキストノード）の値を取得
-            String errorStr = errorElement.getFirstChild().getNodeValue();
-
-            if (errorStr.equals("0")) {
-                NodeList nodeList = root.getElementsByTagName("group");
-
-                Database dbHelper = new Database(mContext);
-                dbHelper.clearGroupsForBiz(false);
-
-                ArrayList<GroupChatRoom> chatRooms = new ArrayList<GroupChatRoom>();
-                for(int i = 0, n = nodeList.getLength(); i < n; ++i) {
-                    Element groupNode = (Element) nodeList.item(i);
-                    GroupChatRoom g = new GroupChatRoom();
-                    XmlHelper.parseGroup(groupNode, g);
-                    chatRooms.add(g);
-                }
-                dbHelper.storeGroupChatRooms(chatRooms, false);
-                errno = 0;
-            } else {
-                errno = Integer.parseInt(errorStr);
-            }
-        } else {
-            errno = -1;
-        }
-        return errno;
-    }
-
-    /**
      * 获取公司的部门／员工关系，只是id的对应关系，及员工的部分详情
      * @param companyId
      * @return
@@ -5342,96 +5295,6 @@ public class WowTalkWebServerIF {
 		}
 		return errno;
 	}
-
-    /**
-     * get server infos（从中央服务器获取）, 如果返回结果的第二个元素为1，则需要重启wowtalkservcie
-     * @return int[2]: 第一个元素标识errorCode,第二个标识sip_domain是否变化(0,不变;1变化,需要重启wowtalkservcie)
-     */
-    public int[] getServerInfo() {
-        int[] result = new int[2];
-        String companyId = sPrefUtil.getCompanyId();
-        String strUID = sPrefUtil.getUid();
-        String strPwd = sPrefUtil.getPassword();
-        if(TextUtils.isEmpty(companyId) || isAuthEmpty(strUID, strPwd)) {
-            result[0] = ErrorCode.INVALID_ARGUMENT;
-            return result;
-        }
-
-        final String action = "biz_get_server_info";
-        String postStr = "action=" + action
-                + "&admin_id=" + Utils.urlencodeUtf8(companyId)
-                + "&uid=" + Utils.urlencodeUtf8(strUID)
-                + "&password=" + Utils.urlencodeUtf8(strPwd);
-        Connect2 connect2 = new Connect2(true);
-        Element root = connect2.Post(postStr);
-
-        int errno = ErrorCode.BAD_RESPONSE;
-        if (root != null) {
-            NodeList errorList = root.getElementsByTagName("err_no");
-            Element errorElement = (Element) errorList.item(0);
-            String errorStr = errorElement.getFirstChild().getNodeValue();
-
-            if (errorStr.equals("0")) {
-                errno = 0;
-
-                Element bodyElement = Utils.getFirstElementByTagName(root, "body");
-                Element actionElement = Utils.getFirstElementByTagName(bodyElement, "get_server_info");
-
-                Element element = Utils.getFirstElementByTagName(actionElement, "server_utc_time");
-                if (null != element) {
-                    int timeInServer = Integer.valueOf(element.getTextContent());
-                    int timeInLocal = (int)(System.currentTimeMillis() / 1000);
-                    int timeOffset = timeInServer - timeInLocal;
-                    sPrefUtil.setUTCOffset(timeOffset);
-                }
-                element = Utils.getFirstElementByTagName(actionElement, "sip_domain");
-                if (null != element) {
-                    // sip_domain发生变化，需要重启wowtalkservcie
-                    String oldSipDomain = sPrefUtil.getSipDomain();
-                    String sipDomain = element.getTextContent();
-                    result[1] = oldSipDomain.equals(sipDomain) ? 0 : 1;
-                    sPrefUtil.setSipDomain(sipDomain);
-
-                    // sip_domain变化了才重新保存sip_password
-                    if (result[1] == 1) {
-                        element = Utils.getFirstElementByTagName(actionElement, "sip_password");
-                        if (null != element) {
-                            sPrefUtil.setSipPassword(element.getTextContent());
-                        }
-                    }
-                }
-                element = Utils.getFirstElementByTagName(actionElement, "web_domain");
-                if (null != element) {
-                    sPrefUtil.setWebDomain(element.getTextContent());
-                }
-                element = Utils.getFirstElementByTagName(actionElement, "useS3");
-                if (null != element) {
-                    boolean isUseS3 = "1".equals(element.getTextContent());
-                    sPrefUtil.setUseS3(isUseS3);
-                    if (isUseS3) {
-                        element = Utils.getFirstElementByTagName(actionElement, "S3uid");
-                        if (null != element) {
-                            sPrefUtil.setS3Uid(element.getTextContent());
-                        }
-                        element = Utils.getFirstElementByTagName(actionElement, "S3pwd");
-                        if (null != element) {
-                            sPrefUtil.setS3Pwd(element.getTextContent());
-                        }
-                        element = Utils.getFirstElementByTagName(actionElement, "S3bucket");
-                        if (null != element) {
-                            sPrefUtil.setS3Bucket(element.getTextContent());
-                        }
-                    }
-                }
-
-            } else {
-                errno = Integer.parseInt(errorStr);
-            }
-        }
-
-        result[0] = errno;
-        return result;
-    }
 
 	/**
 	 * Set Current Active APP Type to server

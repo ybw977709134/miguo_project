@@ -263,14 +263,18 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
 		initView();
 		applicationInfoItemAdapter = new ApplicationInfoItemAdapter(this, BuddyList);
-		if(eventDetail.owner_uid.equals(PrefUtil.getInstance(this).getUid())){
-			showApplicantsInfo();
+		if(isApplicantsVisible()){
+            showApplicants(false);
+			loadApplicantsInfo();
 		}else{
-			findViewById(R.id.event_table_apply).setVisibility(View.GONE);
-			listView_applicantsInfo.setVisibility(View.GONE);
+            hideApplicants();
 		}
 		
 	}
+
+    private boolean isApplicantsVisible() {
+        return eventDetail.owner_uid.equals(PrefUtil.getInstance(this).getUid());
+    }
 
     @Override
     protected void onResume() {
@@ -294,35 +298,43 @@ public class EventDetailActivity extends Activity implements OnClickListener {
     	}
     }
     
-    private void showApplicantsInfo(){   	
+    private void loadApplicantsInfo(){
     	new AsyncTask<Void, Void, Integer>(){
     		int errno = ErrorCode.OK;
+            private ArrayList<Buddy> members = new ArrayList<>();
 			@Override
 			protected Integer doInBackground(Void... arg0) {
 				EventWebServerIF web = EventWebServerIF.getInstance(EventDetailActivity.this);
-				errno = web.fGetApplicantsInfo(BuddyList, eventDetail.id);
+				errno = web.fGetApplicantsInfo(members, eventDetail.id);
 				return errno;
 			}
 			@Override
 			protected void onPostExecute(Integer errno) {
-				 if (errno == ErrorCode.OK) {
-					 if(BuddyList.isEmpty()){
-						 findViewById(R.id.event_table_apply).setVisibility(View.GONE);
-						 return;
-					 }
-					 listView_applicantsInfo.setAdapter(applicationInfoItemAdapter);
-					 ListViewUtils.setListViewHeightBasedOnChildren(listView_applicantsInfo);
-				 }else{
-					 findViewById(R.id.event_table_apply).setVisibility(View.GONE);
-				 }
-			};
+                if (errno == ErrorCode.OK) {
+                    BuddyList.clear();
+                    BuddyList.addAll(members);
+                    listView_applicantsInfo.setAdapter(applicationInfoItemAdapter);
+                    ListViewUtils.setListViewHeightBasedOnChildren(listView_applicantsInfo);
+                }
+                showApplicants(BuddyList.isEmpty());
+            }
     		
     	}.execute((Void)null);
-    	
-    	
     }
+
+    private void hideApplicants() {
+        findViewById(R.id.event_table_apply).setVisibility(View.GONE);
+        findViewById(R.id.txt_no_applicants).setVisibility(View.GONE);
+    }
+
+    private void showApplicants(boolean isEmpty) {
+        findViewById(R.id.event_table_apply).setVisibility(View.VISIBLE);
+        findViewById(R.id.txt_no_applicants).setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        findViewById(R.id.listView_applicantsInfo).setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+    }
+
     private void joinEvent() {
-   //     msgbox.showWait();
+        msgbox.showWait();
         new AsyncTask<Void, Void, Integer>(){
 
             @Override
@@ -334,7 +346,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
             @Override
             public void onPostExecute(Integer errno) {
-     //           msgbox.dismissWait();
+                msgbox.dismissWait();
                 if (errno == ErrorCode.OK) {
                     msgbox.toast(R.string.require_join_event_success);
                     btn_right_up.setVisibility(View.GONE);
@@ -368,7 +380,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                     msgbox.toast(R.string.require_join_event_joined);
                 }
             }
-        }.execute((Void)null);
+        }.execute((Void) null);
     }
     
     /**
@@ -422,6 +434,10 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                         updateUI(needUpdateGallery);
                     }
                 }
+
+                // refresh applicants
+                if(isApplicantsVisible())
+                    loadApplicantsInfo();
             }
         }.execute((Void)null);
     }
@@ -443,7 +459,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 //        btn_right_up = (TextView) findViewById(R.id.right_button_up);
 //        btn_right_down = (TextView) findViewById(R.id.right_button_down);
         
-        if(eventDetail.joinedMemberCount >= eventDetail.capacity){
+        if(eventDetail.capacity > 0 && eventDetail.joinedMemberCount >= eventDetail.capacity){
         	btn_right_up.setText(getString(R.string.event_quota_full));
         	btn_right_up.setTextSize(12);
         	btn_right_up.setEnabled(false);

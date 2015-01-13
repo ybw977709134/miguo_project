@@ -20,7 +20,7 @@ import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.*;
 import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
-import co.onemeter.oneapp.utils.AsyncTaskExecutor;
+import co.onemeter.utils.AsyncTaskExecutor;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
 import com.handmark.pulltorefresh.widget.PullToRefreshListView;
 import com.handmark.pulltorefresh.widget.PullToRefreshListView.OnRefreshListener;

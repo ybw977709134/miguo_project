@@ -1,4 +1,4 @@
-package co.onemeter.oneapp.utils;
+package co.onemeter.utils;
 
 import android.os.AsyncTask;
 import android.os.Build;

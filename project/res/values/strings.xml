@@ -572,7 +572,7 @@
 	<string name="msg_text_is_empty">不能发送空消息</string>
     <string name="messagecomposerbase_no_friends">你们还不是好友，请先添加好友后再聊天</string>
     <string name="messagecomposerbase_no_group_member">您已不属于该群组，请申请加入该群组后再聊天</string>
-    <string name="messagecomposerbase_local_msg_fully">本地已没有数据，请在聊天记录中查看</string>
+    <string name="messagecomposerbase_local_msg_fully">没有更多消息了</string>
     <string name="messagecomposerbase_upload_file_failure">上传多媒体文件失败</string>
     <string name="messagehistory_no_history_server">服务器没有聊天记录</string>
     <string name="singlecontactchatdetail_title">会话信息</string>

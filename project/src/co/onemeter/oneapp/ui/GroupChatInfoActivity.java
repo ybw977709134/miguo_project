@@ -444,7 +444,12 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
                 finish();
                 break;
             case R.id.group_name_layout:
-                gotoSetGroupName();
+            	if(myLevel == GroupMember.LEVEL_CREATOR){
+            		gotoSetGroupName();
+            	}else{
+            		mMsgBox.toast("您没有权限修改群组名");
+            	}
+                
                 break;
             case R.id.message_history_layout:
                 Intent intent = new Intent(GroupChatInfoActivity.this, MessageHistoryActivity.class);

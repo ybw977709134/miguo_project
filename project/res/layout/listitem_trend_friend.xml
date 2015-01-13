@@ -11,7 +11,7 @@
         	android:id="@+id/layout_friend_item"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:background="@drawable/timeline_card_bg1"
+            android:background="@drawable/timeline_card_bg"
             android:layout_gravity="center_horizontal">
 
         <LinearLayout
@@ -207,7 +207,7 @@
             <include layout="@layout/piece_moment_operations"
                 android:visibility="visible" />
 
-
+			
 
             <ImageView
                     android:layout_height="wrap_content"
@@ -216,9 +216,9 @@
                     android:visibility="gone"
                     android:src="@drawable/divider_320"/>
                     -->
+            <include layout="@layout/piece_moment_operations"/>
         </LinearLayout>
+        
     </RelativeLayout>
 
-
-    <include layout="@layout/piece_moment_operations"/>
 </LinearLayout>

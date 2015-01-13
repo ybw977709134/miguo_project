@@ -8,13 +8,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp" >
+        android:layout_height="30dp"
+        android:id="@+id/lay_lesson_name" >
 
         <TextView
             android:id="@+id/txt_dialog_first"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="课名：" />
+            android:text="课       名：" />
 
         <EditText
             android:id="@+id/ed_dialog_time"

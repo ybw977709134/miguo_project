@@ -12,6 +12,7 @@ import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.GroupMember;
+import org.wowtalk.api.IDBTableChangeListener;
 import org.wowtalk.api.Lesson;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.LessonWebServerIF;
@@ -23,7 +24,6 @@ import com.androidquery.AQuery;
 
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.R.color;
 import co.onemeter.oneapp.contacts.model.Person;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,7 +49,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private AQuery query;
 	private LessonWebServerIF lesWebSer;
 	private WowTalkWebServerIF mWTWebSer;
-	private Database mdb;
 	private MessageBox msgBox;
 	
 	private String classId;
@@ -68,6 +67,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private TextView tvPlace;
 	
 	private GroupChatRoom class_group = new GroupChatRoom();
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -91,7 +91,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		
 		lesWebSer = LessonWebServerIF.getInstance(this);
 		mWTWebSer = WowTalkWebServerIF.getInstance(this);
-		mdb = Database.getInstance(this);
 		
 		msgBox = new MessageBox(this);
 		query = new AQuery(this);
@@ -115,7 +114,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				
 				protected void onPostExecute(Integer result) {
 					if(ErrorCode.OK == result){
+						Database mdb = Database.getInstance(ClassDetailActivity.this);
 						members = mdb.fetchGroupMembers(classId);
+						mdb.close();
 						//android.util.Log.i("-->>", buddies.toString());
 						teaAdapter = new TeachersAdapter(members);
 						lvTeachers.setAdapter(teaAdapter);
@@ -164,13 +165,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				}
 				
 				protected void onPostExecute(Integer result) {
-//					if(ErrorCode.OK == result){
-//						lessons.clear();
-//						Database db = Database.open(ClassDetailActivity.this);
-//						lessons.addAll(db.fetchLesson(classId));
-//						Collections.sort(lessons, new LessonInfoEditActivity.LessonComparator());
-//						courseAdapter.notifyDataSetChanged();
-//					}
+					if(ErrorCode.OK == result){
+						refreshLessonInfo();
+					}
 				};
 				
 			}.execute((Void)null);
@@ -180,6 +177,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		lessons.clear();
 		Database db = Database.open(ClassDetailActivity.this);
 		lessons.addAll(db.fetchLesson(classId));
+		db.close();
 		Collections.sort(lessons, new LessonInfoEditActivity.LessonComparator());
 		courseAdapter.notifyDataSetChanged();
 	}
@@ -192,12 +190,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	}
 	
 	private void setClassInfo(){
-		final String term = getString(R.string.class_term);
-		final String grade = getString(R.string.class_grade);
-		final String subject = getString(R.string.class_subject);
-		final String date = getString(R.string.class_date);
-		final String time = getString(R.string.class_time);
-		final String place = getString(R.string.class_place);
 		final Handler hanlder = new Handler();
 		
 		new Thread(new Runnable() {
@@ -212,15 +204,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 						@Override
 						public void run() {
 							if(class_group != null){
-								String[] infos = getStrsByComma(class_group.description);
-								if(null != infos && infos.length == 6){
-									tvTerm.setText(term + infos[0]);
-									tvGrade.setText(grade + infos[1]);
-									tvSubject.setText(subject + infos[2]);
-									tvDate.setText(date + infos[3]);
-									tvTime.setText(time + infos[4]);
-									tvPlace.setText(place + infos[5]);
-								}
+								refreshClassInfo();
 							}
 						}
 					});
@@ -229,6 +213,24 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		}).start();
 		
 			
+	}
+	
+	private void refreshClassInfo(){
+		final String term = getString(R.string.class_term);
+		final String grade = getString(R.string.class_grade);
+		final String subject = getString(R.string.class_subject);
+		final String date = getString(R.string.class_date);
+		final String time = getString(R.string.class_time);
+		final String place = getString(R.string.class_place);
+		String[] infos = getStrsByComma(class_group.description);
+		if(null != infos && infos.length == 6){
+			tvTerm.setText(term + infos[0]);
+			tvGrade.setText(grade + infos[1]);
+			tvSubject.setText(subject + infos[2]);
+			tvDate.setText(date + infos[3]);
+			tvTime.setText(time + infos[4]);
+			tvPlace.setText(place + infos[5]);
+		}
 	}
 	
 	@Override
@@ -258,12 +260,24 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			final String date = getString(R.string.class_date);
 			final String time = getString(R.string.class_time);
 			final String place = getString(R.string.class_place);
-			tvTerm.setText(term + data.getStringExtra(LessonInfoEditActivity.TERM));
-			tvGrade.setText(grade + data.getStringExtra(LessonInfoEditActivity.GRADE));
-			tvSubject.setText(subject + data.getStringExtra(LessonInfoEditActivity.SUBJECT));
-			tvDate.setText(date + data.getStringExtra(LessonInfoEditActivity.DATE));
-			tvTime.setText(time + data.getStringExtra(LessonInfoEditActivity.TIME));
-			tvPlace.setText(place + data.getStringExtra(LessonInfoEditActivity.PLACE));
+			String reTerm = data.getStringExtra(LessonInfoEditActivity.TERM);
+			String reGrade = data.getStringExtra(LessonInfoEditActivity.GRADE);
+			String reSubject = data.getStringExtra(LessonInfoEditActivity.SUBJECT);
+			String reDate = data.getStringExtra(LessonInfoEditActivity.DATE);
+			String reTime = data.getStringExtra(LessonInfoEditActivity.TIME);
+			String rePlace = data.getStringExtra(LessonInfoEditActivity.PLACE);
+			tvTerm.setText(term + reTerm);
+			tvGrade.setText(grade + reGrade);
+			tvSubject.setText(subject + reSubject);
+			tvDate.setText(date + reDate);
+			tvTime.setText(time + reTime);
+			tvPlace.setText(place + rePlace);
+			class_group.description = reTerm + Constants.COMMA + 
+					reGrade + Constants.COMMA + 
+					reSubject + Constants.COMMA +
+					reDate + Constants.COMMA +
+					reTime + Constants.COMMA +
+					rePlace;
 		}
 	}
 	

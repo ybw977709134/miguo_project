@@ -13,9 +13,11 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -62,6 +64,8 @@ public class LoginActivity extends Activity implements OnClickListener {
     private static LoginActivity instance;
     private static PrefUtil mPrefUtil;
     private WowTalkWebServerIF mWebIF;
+    
+    private InputMethodManager mInputMethodManager;
 
     /**
      * 是否从添加帐户界面进入此界面的
@@ -377,6 +381,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(PixelFormat.RGBA_8888);
+        
+        //点击屏幕的其他的地方可以收起键盘
+        mInputMethodManager = (InputMethodManager) this.getSystemService(this.INPUT_METHOD_SERVICE);
 
         instance = this;
         mMsgBox = new MessageBox(this);
@@ -407,6 +414,17 @@ public class LoginActivity extends Activity implements OnClickListener {
                 }
             }
         }
+    }
+    
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+    	// TODO Auto-generated method stub
+    	  if(event.getAction() == MotionEvent.ACTION_DOWN){  
+    		  if(getCurrentFocus()!=null && getCurrentFocus().getWindowToken()!=null){  
+    			  mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);  
+    			  }  
+    		  }
+    	return super.onTouchEvent(event);
     }
 
     @Override

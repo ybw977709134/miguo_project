@@ -27,7 +27,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     public static final String EXTRA_UID = "uid";
     /** If page title is empty, buttons will show instead. */
     public static final String EXTRA_PAGE_TITLE = "title";
-    public static final String Back_Flag = "backFlag";
+    public static final String EXTRA_BACK_FLAG = "backFlag";
     public static final int COMMENT_MOST_WORDS = 260;
     public static final int NETWORK_TAG_UPLOADING_ALBUMCOVER = 123;
 
@@ -94,7 +94,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         		TimelineFragment.newReviewFlag = true;
         	}
         	switchToSingle();//自己的动态
-        	if (getIntent().getIntExtra(Back_Flag, 0) == 1) {
+        	if (getIntent().getIntExtra(EXTRA_BACK_FLAG, 0) == 1) {
         		findViewById(R.id.title_left).setVisibility(View.VISIBLE);
         	}
             
@@ -272,7 +272,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         Intent intent = new Intent(context, TimelineActivity.class);
         intent.putExtra(EXTRA_UID, uid);
         intent.putExtra(EXTRA_PAGE_TITLE, pageTitle);
-        intent.putExtra(Back_Flag, 1);
+        intent.putExtra(EXTRA_BACK_FLAG, 1);
         context.startActivity(intent);
     }
     
@@ -287,7 +287,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         Intent intent = new Intent(context, TimelineActivity.class);
         intent.putExtra(EXTRA_UID, uid);
 //        intent.putExtra(EXTRA_PAGE_TITLE, pageTitle);
-        intent.putExtra(Back_Flag, 1);
+        intent.putExtra(EXTRA_BACK_FLAG, 1);
         context.startActivity(intent);
     }
 

@@ -79,6 +79,8 @@ public class SchoolMatesFragment extends Fragment
 
                 if (errno == ErrorCode.OK) {
                     new Database(getActivity()).storeSchools(schools);
+                }else{
+                	msgbox.toast(R.string.timeout_message);
                 }
 
                 updateUi();

@@ -40,12 +40,12 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
 	private static final int GET_BUDDY_BY_USERNAME = 1000;
 	private static final int GET_BUDDY_BY_UID = 1002;
-	private static final int GET_GROUP_BY_NAME = 1001;
-	private static final int GET_GROUP_BY_GID = 1003;
+//	private static final int GET_GROUP_BY_NAME = 1001;
+//	private static final int GET_GROUP_BY_GID = 1003;
 	private int searchKind = GET_BUDDY_BY_USERNAME;
 	
 	
-	private ImageButton btnTitleBack;
+//	private ImageButton btnTitleBack;
 //    private LinearLayout mLayoutButton;
 //	private Button btnSearchGroup;
 //	private Button btnSearchPerson;
@@ -66,7 +66,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //	private TextView txtResultCount;
     private ListView lvBuddy;
 	private ListView lvGroups;
-	private TextView search_cancel;
+//	private TextView search_cancel;
+	private TextView btn_search;
 
     private BuddySearchItemAdapter buddyAdapter;
 	private GroupSearchAdapter groupAdapter;
@@ -77,7 +78,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
     private ArrayList<Buddy> searchedBuddyList=new ArrayList<Buddy>();
 	private ArrayList<GroupChatRoom> searchedGroupRoomList=new ArrayList<GroupChatRoom>();
 	
-	private boolean mAllowAdd = true;
+//	private boolean mAllowAdd = true;
 //	private int mFriendType = ContactInfoActivity.BUDDY_TYPE_UNKNOWN;
 
 //	private Buddy buddy;
@@ -138,41 +139,41 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
     };
 
   //通过群组名称搜索
-	private void searchGroup() {
-		final String keyword = edtSearchContent.getText().toString().trim();
-
-		new AsyncTask<Void, Integer, Void>() {
-
-            ArrayList<GroupChatRoom> results = new ArrayList<GroupChatRoom>();
-
-            @Override
-            protected void onPreExecute() {
-                if (groupAdapter != null)
-                    groupAdapter.clear();
-                else
-                    searchedGroupRoomList.clear();
-            }
-
-			@Override
-			protected Void doInBackground(Void... params) {
-				mWebif.fGroupChat_Search(keyword, results);
-				return null;
-			}
-			
-			@Override
-			protected void onPostExecute(Void v) {
-                mMsgBox.dismissWait();
-                if (groupAdapter != null) {
-                    groupAdapter.addAll(results);
-                    setSearchResultStatus();
-                } else {
-                    searchedGroupRoomList.addAll(results);
-                    fShowGroupResult();
-                }
-			}
-			
-		}.execute((Void)null);
-	}
+//	private void searchGroup() {
+//		final String keyword = edtSearchContent.getText().toString().trim();
+//
+//		new AsyncTask<Void, Integer, Void>() {
+//
+//            ArrayList<GroupChatRoom> results = new ArrayList<GroupChatRoom>();
+//
+//            @Override
+//            protected void onPreExecute() {
+//                if (groupAdapter != null)
+//                    groupAdapter.clear();
+//                else
+//                    searchedGroupRoomList.clear();
+//            }
+//
+//			@Override
+//			protected Void doInBackground(Void... params) {
+//				mWebif.fGroupChat_Search(keyword, results);
+//				return null;
+//			}
+//			
+//			@Override
+//			protected void onPostExecute(Void v) {
+//                mMsgBox.dismissWait();
+//                if (groupAdapter != null) {
+//                    groupAdapter.addAll(results);
+//                    setSearchResultStatus();
+//                } else {
+//                    searchedGroupRoomList.addAll(results);
+//                    fShowGroupResult();
+//                }
+//			}
+//			
+//		}.execute((Void)null);
+//	}
 	
 	//通过uid搜索
 	private void searchBuddy_uid() {
@@ -290,16 +291,16 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //        }.execute((Void)null);
 //    }
 
-	private void fShowGroupResult() {
-//		mPersonLayout.setVisibility(View.GONE);
-//		mGroupLayout.setVisibility(View.VISIBLE);
-		final String strContent = edtSearchContent.getText().toString().trim();
-//		txtResultCount.setText(String.format(getResources().getString(R.string.search_result_count), groupRooms.size()));
-		groupAdapter = new GroupSearchAdapter(ContactSearchActivity.this, searchedGroupRoomList, strContent);
-		lvGroups.setAdapter(groupAdapter);
-//		ListViewUtils.setListViewHeightBasedOnChildren(lvGroups);
-        setSearchResultStatus();
-	}
+//	private void fShowGroupResult() {
+////		mPersonLayout.setVisibility(View.GONE);
+////		mGroupLayout.setVisibility(View.VISIBLE);
+//		final String strContent = edtSearchContent.getText().toString().trim();
+////		txtResultCount.setText(String.format(getResources().getString(R.string.search_result_count), groupRooms.size()));
+//		groupAdapter = new GroupSearchAdapter(ContactSearchActivity.this, searchedGroupRoomList, strContent);
+//		lvGroups.setAdapter(groupAdapter);
+////		ListViewUtils.setListViewHeightBasedOnChildren(lvGroups);
+//        setSearchResultStatus();
+//	}
 	
 	private void fShowBuddyResult() {
 //		mPersonLayout.setVisibility(View.VISIBLE);
@@ -433,6 +434,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //		btnSearch = (Button) findViewById(R.id.btn_search);
 		edtSearchContent = (EditText) findViewById(R.id.edt_search);
 //		search_cancel = (TextView) findViewById(R.id.search_cancel);
+		btn_search = (TextView) findViewById(R.id.btn_search);
         fieldClear = (ImageButton) findViewById(R.id.field_clear);
         search_empty = (TextView) findViewById(R.id.search_empty);
 //		txtPersonName = (TextView) findViewById(R.id.person_name_text);
@@ -483,6 +485,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
         search_uid.setOnClickListener(this);
 //        search_cancel.setOnClickListener(this);
         search_title_back.setOnClickListener(this);
+        btn_search.setOnClickListener(this);
 		lvGroups.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -560,36 +563,23 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
             }
         });
     }
-	private void searchAuto(){
-//		edtSearchContent.addTextChangedListener(new TextWatcher() {
+//	private void searchAuto(){
+//		edtSearchContent.setOnEditorActionListener(new OnEditorActionListener() {
 //			
 //			@Override
-//			public void onTextChanged(CharSequence s, int start, int before, int count) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//			
-//			@Override
-//			public void beforeTextChanged(CharSequence s, int start, int count,
-//					int after) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//			
-//			@Override
-//			public void afterTextChanged(Editable s) {
+//			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 //				fStartSearch();
-//
+//				return true;
 //			}
 //		});
-		edtSearchContent.setOnEditorActionListener(new OnEditorActionListener() {
-			
-			@Override
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				fStartSearch();
-				return true;
-			}
-		});
+//	}
+	private void setCheckStatus(){
+		searchedBuddyList.clear();
+		if(buddyAdapter!=null){
+			buddyAdapter.notifyDataSetChanged();
+		}
+        searchResultLayout.setVisibility(View.GONE);
+        search_empty.setVisibility(View.VISIBLE);
 	}
     private void showInputMessageDlg(final GroupChatRoom g) {
         final EditText edtText = new EditText(ContactSearchActivity.this);
@@ -680,14 +670,15 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 		case R.id.search_nickname:
 			searchKind = GET_BUDDY_BY_USERNAME;
 			setTitleMode();
-			searchedBuddyList.clear();
-			buddyAdapter.notifyDataSetChanged();
+			setCheckStatus();
 			break;
 		case R.id.search_uid:
 			searchKind = GET_BUDDY_BY_UID;
 			setTitleMode();
-			searchedBuddyList.clear();
-			buddyAdapter.notifyDataSetChanged();
+			setCheckStatus();
+			break;
+		case R.id.btn_search:
+			fStartSearch();
 			break;
 		default:
 			break;
@@ -738,7 +729,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
 //        searchType = getIntent().getIntExtra(EXTRA_SEARCH, REQ_NORMAL_ACCOUNT);
 		initView();
-		searchAuto();
+//		searchAuto();
 		setTitleMode();
 
         mMsgBox = new MessageBox(this);

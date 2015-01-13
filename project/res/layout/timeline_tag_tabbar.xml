@@ -170,7 +170,7 @@
 			android:background="@color/barVote"/>
 	</RelativeLayout>
 	
-	<!-- 视频 -->
+	<!-- 视频教程-->
 		<RelativeLayout
 		android:id="@+id/layout_timebar_video"
 		android:layout_width="match_parent"

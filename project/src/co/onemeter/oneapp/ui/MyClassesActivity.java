@@ -6,16 +6,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 import co.onemeter.oneapp.R;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
@@ -61,46 +56,50 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
         
         talkwebserver =  WowTalkWebServerIF.getInstance(MyClassesActivity.this);
         //这里用两层异步任务，先取到学校的信息，在取班级信息
-        new AsyncTask<Void, Void, Void>(){
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
 
-        	protected void onPreExecute() {
-        		msgBox.showWait();
-        	};
-        	
-			@Override
-			protected Void doInBackground(Void... params) {
-				schoolrooms = talkwebserver.getMySchools(true);
-				return null;
-			}
-        	
-			@Override
-			protected void onPostExecute(Void result) {
-				if(!isEmpty()){
-					new AsyncTask<Void, Void, Void>(){
-	
-						@Override
-						protected Void doInBackground(Void... params) {
-							for(GroupChatRoom school:schoolrooms){
-								List<GroupChatRoom> claz = talkwebserver.getSchoolClassRooms(school.groupID);
-								for(GroupChatRoom classroom:claz){
-									classrooms.add(classroom);
-								}
-							}
-							return null;
-						}
-						
-						protected void onPostExecute(Void result) {
-							msgBox.dismissWait();
-							adapter = new MyClassAdapter(classrooms);
-							lvMyClass.setAdapter(adapter);
-						};
-					}.execute((Void)null);
-				}else{
-					msgBox.dismissWait();
-					msgBox.toast(R.string.not_binded);
-				}
-			}
-        }.execute((Void)null);
+            protected void onPreExecute() {
+                msgBox.showWait();
+            }
+
+            ;
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                schoolrooms = talkwebserver.getMySchools(true);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                if (!isEmpty()) {
+                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
+
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            for (GroupChatRoom school : schoolrooms) {
+                                List<GroupChatRoom> claz = talkwebserver.getSchoolClassRooms(school.groupID);
+                                for (GroupChatRoom classroom : claz) {
+                                    classrooms.add(classroom);
+                                }
+                            }
+                            return null;
+                        }
+
+                        protected void onPostExecute(Void result) {
+                            msgBox.dismissWait();
+                            adapter = new MyClassAdapter(classrooms);
+                            lvMyClass.setAdapter(adapter);
+                        }
+
+                        ;
+                    });
+                } else {
+                    msgBox.dismissWait();
+                    msgBox.toast(R.string.not_binded);
+                }
+            }
+        });
         
 //        Database db = Database.getInstance(this);
 //        schoolrooms = db.fetchSchools();
@@ -129,7 +128,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 
     // 测试课堂相关的API
     private void test() {
-        new AsyncTask<Void, Void, Void>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... voids) {
@@ -139,7 +138,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
                 String myUid = PrefUtil.getInstance(MyClassesActivity.this).getUid();
 
                 // add lesson1
-                Lesson lesson1 = new  Lesson();
+                Lesson lesson1 = new Lesson();
                 lesson1.class_id = classId;
                 lesson1.title = "第一课";
                 lesson1.start_date = new Date(2014 - 1900, 11, 29, 9, 0).getTime() / 1000;
@@ -147,7 +146,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
                 lessonWeb.addOrModifyLesson(lesson1);
 
                 // add lesson2
-                Lesson lesson2 = new  Lesson();
+                Lesson lesson2 = new Lesson();
                 lesson2.class_id = classId;
                 lesson2.title = "第二课";
                 lesson2.start_date = new Date(2015 - 1900, 0, 8, 14, 30).getTime() / 1000;
@@ -224,12 +223,12 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 
                 return null;
             }
-        }.execute((Void)null);
+        });
     }
     
  // 测试课堂相关的API
     private void test1() {
-        new AsyncTask<Void, Void, Void>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... voids) {
@@ -239,7 +238,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
                 String myUid = PrefUtil.getInstance(MyClassesActivity.this).getUid();
 
                 // add lesson1
-                Lesson lesson1 = new  Lesson();
+                Lesson lesson1 = new Lesson();
                 lesson1.class_id = classId;
                 lesson1.title = "第一课";
                 lesson1.start_date = new Date(2014 - 1900, 11, 29, 9, 0).getTime() / 1000;
@@ -311,7 +310,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 
                 return null;
             }
-        }.execute((Void)null);
+        });
     }
     
     class MyClassAdapter extends BaseAdapter{

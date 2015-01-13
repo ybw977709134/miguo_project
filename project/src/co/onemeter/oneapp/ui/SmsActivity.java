@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -19,11 +20,9 @@ import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MessagesAdapter;
 import co.onemeter.oneapp.utils.ThemeHelper;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.api.*;
-import org.wowtalk.ui.bitmapfun.util.AsyncTask;
 
 import java.util.ArrayList;
 
@@ -455,7 +454,7 @@ public class SmsActivity extends Activity implements OnClickListener {
 //    private IDBTableChangeListener mTempGroupNameObserver = new IDBTableChangeListener() {
 //        public void onDBTableChanged(String tableName) {
 //            Log.d("SmsActivity#mTempGroupNameObserver, reload sms ui.");
-//            new AsyncTask<Void, Void, Void>() {
+//            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
 //                @Override
 //                protected Void doInBackground(Void... params) {
 //                    if (null != myAdapter) {
@@ -468,7 +467,7 @@ public class SmsActivity extends Activity implements OnClickListener {
 //                protected void onPostExecute(Void result) {
 //                    updateContentView(true);
 //                };
-//            }.execute((Void)null);
+//            });
 //        }
 //    };
 
@@ -571,11 +570,11 @@ public class SmsActivity extends Activity implements OnClickListener {
 //	}
     private long loadingId=0;
     protected void loadDatas(final long curLoadingId, final int loadType) {
-        new AsyncTask<Void,Void,ArrayList<ChatMessage>>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, ArrayList<ChatMessage>>() {
             @Override
             protected ArrayList<ChatMessage> doInBackground(Void... contexts) {
                 ArrayList<ChatMessage> cmList = null;
-                if(curLoadingId == loadingId) {
+                if (curLoadingId == loadingId) {
                     cmList = getDatasFromDBOrServer(loadType);
                 }
                 return cmList;
@@ -583,7 +582,7 @@ public class SmsActivity extends Activity implements OnClickListener {
 
             @Override
             protected void onPostExecute(ArrayList<ChatMessage> cmList) {
-                if(curLoadingId == loadingId) {
+                if (curLoadingId == loadingId) {
                     // 需要刷新tab_bar上的未读信息数，在StartActivity中
                     mDb.triggerUnreadCount();
                     log_msg.clear();
@@ -599,7 +598,7 @@ public class SmsActivity extends Activity implements OnClickListener {
                     }
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     private void getMoreFromServer(int offset, int count, boolean isObserver) {

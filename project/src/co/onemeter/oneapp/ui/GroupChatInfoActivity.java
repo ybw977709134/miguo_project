@@ -13,14 +13,12 @@ import android.view.ViewGroup;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
+import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
 import co.onemeter.oneapp.utils.ThemeHelper;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
-
-import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
 
 import java.util.ArrayList;
 
@@ -315,19 +313,19 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 	
 	private void deleteBuddyFromGroup(final Buddy buddy) {
         mMsgBox.showWait();
-		new AsyncTask<Void, Integer, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
-			@Override
-			protected Integer doInBackground(Void... params) {
-				return WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
                         .fGroupChat_RemoveMember(groupId, buddy.userID);
-			}
+            }
 
             @Override
             protected void onPostExecute(Integer result) {
                 mMsgBox.dismissWait();
                 if (ErrorCode.OK == result) {
-					dbHelper.deleteBuddyFromGroupChatRoom(groupId, buddy.userID);
+                    dbHelper.deleteBuddyFromGroupChatRoom(groupId, buddy.userID);
                     groupMembers.remove(buddy);
                     // There are no add/delete buddy.
                     txtMemberCount.setText(String.format(getResources().getString(R.string.groupchat_members),
@@ -337,12 +335,12 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
                 setGridLast();
                 gridMembers.setAdapter(memberAdapter);
             }
-			
-		}.execute((Void)null);
+
+        });
 	}
 	
 	private void getGroupChatMemberFromServer() {
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return (Integer) WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
@@ -359,7 +357,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
                 }
                 memberAdapter.notifyDataSetChanged();
             }
-        }.execute((Void) null);
+        });
 	}
 	
 	private void getGroupChatMemberFromLocal() {
@@ -385,7 +383,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 
     private void quitTempGroup() {
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
@@ -404,12 +402,12 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
                     finish();
                 }
             }
-        }.execute((Void) null);
+        });
     }
 
     private void disbandTempGroup() {
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return WowTalkWebServerIF.getInstance(GroupChatInfoActivity.this)
@@ -431,7 +429,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
                     finish();
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
 	@Override

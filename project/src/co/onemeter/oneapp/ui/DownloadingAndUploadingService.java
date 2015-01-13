@@ -75,7 +75,7 @@ public class DownloadingAndUploadingService extends android.app.Service {
             moment.id = moment_id;
 
             final WFile file=aMomentFile;
-//            new AsyncTask<WFile, Integer, Integer>() {
+//            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<WFile, Integer, Integer>() {
 //                WFile file;
 //
 //                @Override
@@ -151,7 +151,7 @@ public class DownloadingAndUploadingService extends android.app.Service {
 //                protected void onPostExecute(Integer errno) {
 //
 //                }
-//            }.execute(file);
+//            }, file);
 
         }
     }

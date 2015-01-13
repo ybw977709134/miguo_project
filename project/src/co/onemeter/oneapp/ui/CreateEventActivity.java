@@ -13,11 +13,13 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import co.onemeter.oneapp.R;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
-
-import org.wowtalk.api.*;
+import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.EventWebServerIF;
+import org.wowtalk.api.WEvent;
+import org.wowtalk.api.WFile;
 import org.wowtalk.ui.MessageBox;
 
 import java.text.SimpleDateFormat;
@@ -145,8 +147,9 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     private void createEvent() {
         updateData();
         msgBox.showWait();
-        new AsyncTask<WEvent, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<WEvent, Void, Integer>() {
             Context context;
+
             @Override
             protected Integer doInBackground(WEvent... wEvents) {
                 context = CreateEventActivity.this;
@@ -185,15 +188,15 @@ public class CreateEventActivity extends Activity implements OnClickListener {
 
             @Override
             protected void onPostExecute(Integer errno) {
-            	msgBox.dismissWait();
+                msgBox.dismissWait();
                 if (errno == ErrorCode.OK) {
-                	//Log.i("--->>>create", wevent.is_get_member_info+"");
+                    //Log.i("--->>>create", wevent.is_get_member_info+"");
                     finish();
                 } else {
                     Toast.makeText(context, R.string.operation_failed, Toast.LENGTH_SHORT).show();
                 }
             }
-        }.execute(wevent);
+        }, wevent);
     }
 
     @Override

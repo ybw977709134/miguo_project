@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
@@ -332,20 +333,20 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     public static void deleteMomentReview(final Activity activity,final String momentId, final Review replyTo,final OnMomentReviewDeleteListener momentReviewDelListener) {
         final MessageBox msgBox = new MessageBox(activity);
         msgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 MomentWebServerIF mMomentWeb = MomentWebServerIF.getInstance(activity);
-                return mMomentWeb.fDeleteMomentReview(momentId,replyTo);
+                return mMomentWeb.fDeleteMomentReview(momentId, replyTo);
             }
 
             @Override
             protected void onPostExecute(Integer errno) {
                 msgBox.dismissWait();
 
-                if(errno == ErrorCode.OK) {
-                    if(null != momentReviewDelListener) {
-                        momentReviewDelListener.onMomentDelete(momentId,replyTo);
+                if (errno == ErrorCode.OK) {
+                    if (null != momentReviewDelListener) {
+                        momentReviewDelListener.onMomentDelete(momentId, replyTo);
                     }
 //                                        if(null != instance) {
 //                                            instance.deleteAReview(momentId,replyTo);
@@ -354,7 +355,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                     msgBox.toast(R.string.msg_operation_failed);
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     public static String getSelectedTagLocalDesc(Context context,int tagIdx) {
@@ -484,7 +485,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                             menu.dismiss();
                             deleteMomentReview(activity,momentId,replyTo,momentReviewDelListener);
 //                            msgBox.showWait();
-//                            new AsyncTask<Void, Void, Integer>() {
+//                            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 //                                @Override
 //                                protected Integer doInBackground(Void... params) {
 //                                    WowMomentWebServerIF mMomentWeb = WowMomentWebServerIF.getInstance(activity);
@@ -506,7 +507,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
 //                                        msgBox.toast(R.string.msg_operation_failed);
 //                                    }
 //                                }
-//                            }.execute((Void)null);
+//                            });
                         }
                     });
         }

@@ -16,15 +16,13 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.TextView.OnEditorActionListener;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.BuddySearchItemAdapter;
 import co.onemeter.oneapp.adapter.GroupSearchAdapter;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.ListViewUtils;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
@@ -142,7 +140,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //	private void searchGroup() {
 //		final String keyword = edtSearchContent.getText().toString().trim();
 //
-//		new AsyncTask<Void, Integer, Void>() {
+//		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
 //
 //            ArrayList<GroupChatRoom> results = new ArrayList<GroupChatRoom>();
 //
@@ -172,7 +170,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //                }
 //			}
 //			
-//		}.execute((Void)null);
+//		});
 //	}
 	
 	//通过uid搜索
@@ -181,8 +179,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
         mMsgBox.showWait();
 
-		new AsyncTask<Void, Integer, Void>() {
-			int errno = ErrorCode.OK;
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
+            int errno = ErrorCode.OK;
             ArrayList<Buddy> results = new ArrayList<Buddy>();
 
             @Override
@@ -193,14 +191,14 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
                     searchedBuddyList.clear();
             }
 
-			@Override
-			protected Void doInBackground(Void... arg0) {
-				errno = mWebif.fSearchBuddy_uid(username,Buddy.ACCOUNT_TYPE_STUDENT, results);
-				return null;
-			}
-			
-			@Override
-			protected void onPostExecute(Void v) {
+            @Override
+            protected Void doInBackground(Void... arg0) {
+                errno = mWebif.fSearchBuddy_uid(username, Buddy.ACCOUNT_TYPE_STUDENT, results);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void v) {
                 mMsgBox.dismissWait();
 
                 if (buddyAdapter != null) {
@@ -210,12 +208,12 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
                     searchedBuddyList.addAll(results);
                     fShowBuddyResult();
                 }
-				if (errno == ErrorCode.USER_NOT_EXISTS) {
+                if (errno == ErrorCode.USER_NOT_EXISTS) {
                     mMsgBox.toast(R.string.login_user_not_exists);
-				}
-			}
-			
-		}.execute((Void)null);
+                }
+            }
+
+        });
 	}
 	//通过 username 搜索
 	private void searchBuddy() {
@@ -223,8 +221,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
         mMsgBox.showWait();
 
-		new AsyncTask<Void, Integer, Void>() {
-			int errno = ErrorCode.OK;
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
+            int errno = ErrorCode.OK;
             ArrayList<Buddy> results = new ArrayList<Buddy>();
 
             @Override
@@ -235,14 +233,14 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
                     searchedBuddyList.clear();
             }
 
-			@Override
-			protected Void doInBackground(Void... arg0) {
-				errno = mWebif.fSearchBuddy(username,Buddy.ACCOUNT_TYPE_STUDENT, results);
-				return null;
-			}
-			
-			@Override
-			protected void onPostExecute(Void v) {
+            @Override
+            protected Void doInBackground(Void... arg0) {
+                errno = mWebif.fSearchBuddy(username, Buddy.ACCOUNT_TYPE_STUDENT, results);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void v) {
                 mMsgBox.dismissWait();
 
                 if (buddyAdapter != null) {
@@ -252,18 +250,18 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
                     searchedBuddyList.addAll(results);
                     fShowBuddyResult();
                 }
-				if (errno == ErrorCode.USER_NOT_EXISTS) {
+                if (errno == ErrorCode.USER_NOT_EXISTS) {
                     mMsgBox.toast(R.string.login_user_not_exists);
-				}
-			}
-			
-		}.execute((Void)null);
+                }
+            }
+
+        });
 	}
 
 //    private void searchPublicAccount() {
 //        final String username = edtSearchContent.getText().toString();
 //
-//        new AsyncTask<Void, Integer, Void>() {
+//        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
 //            int errno = ErrorCode.OK;
 //
 //            @Override
@@ -288,7 +286,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //                    msgBox.toast("user not exists!");
 //                }
 //            }
-//        }.execute((Void)null);
+//        });
 //    }
 
 //	private void fShowGroupResult() {
@@ -501,7 +499,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
                 mMsgBox.showWait();
                 final String groupID = searchedGroupRoomList.get(position).groupID;
                 final String memberId = mPrefUtil.getUid();
-                new AsyncTask<Void, Void, Boolean>() {
+                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Boolean>() {
 
                     @Override
                     protected Boolean doInBackground(Void... params) {
@@ -515,7 +513,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
                         final BottomButtonBoard bottomBtnBoard = new BottomButtonBoard(ContactSearchActivity.this, findViewById(R.id.layout));
                         String menuItem = null;
                         OnClickListener listener = null;
-                        if (isBelongsToGroup){
+                        if (isBelongsToGroup) {
                             menuItem = getString(R.string.group_chat);
                             listener = new OnClickListener() {
                                 @Override
@@ -537,8 +535,10 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
                         bottomBtnBoard.add(menuItem, BottomButtonBoard.BUTTON_BLUE, listener);
                         bottomBtnBoard.addCancelBtn(getString(R.string.cancel));
                         bottomBtnBoard.show();
-                    };
-                }.execute((Void)null);
+                    }
+
+                    ;
+                });
             }
         });
 
@@ -590,7 +590,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mMsgBox.showWait();
-                        new AsyncTask<GroupChatRoom, Integer, Void>(){
+                        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<GroupChatRoom, Integer, Void>() {
                             int errno = ErrorCode.OK;
                             PendingRequest pr;
 
@@ -615,14 +615,14 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
                             @Override
                             protected void onPostExecute(Void v) {
                                 mMsgBox.dismissWait();
-                                if(errno == ErrorCode.OK) {
+                                if (errno == ErrorCode.OK) {
                                     mMsgBox.toast(R.string.done);
                                     mDbHelper.storePendingRequest(pr);
                                 } else {
                                     mMsgBox.show(null, getString(R.string.operation_failed));
                                 }
                             }
-                        }.execute(g);
+                        }, g);
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -691,7 +691,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //        } else {
 //            mMsgBox.showWait();
 //
-//            new AsyncTask<Void, Void, Integer>() {
+//            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 //                @Override
 //                protected Integer doInBackground(Void... params) {
 //                    int errno = WowTalkWebServerIF.getInstance(ContactSearchActivity.this).fAddBuddy(buddy.userID);
@@ -715,7 +715,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //                        mMsgBox.show(null, getString(R.string.operation_failed));
 //                    }
 //                }
-//            }.execute((Void)null);
+//            });
 //        }
 //    }
 

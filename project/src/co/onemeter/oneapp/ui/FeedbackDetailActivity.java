@@ -15,12 +15,11 @@ import android.view.View.OnLongClickListener;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.MyUrlSpanHelper;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
-import org.wowtalk.ui.msg.Stamp;
 import org.wowtalk.ui.msg.TimerTextView;
 
 import java.io.File;
@@ -121,8 +120,9 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
         final String path = PhotoDisplayHelper.makeLocalFilePath(file.fileid, file.getExt());
         btnPlay.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        new AsyncTask<Void, Integer, Void>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
             boolean ok;
+
             @Override
             protected Void doInBackground(Void... voids) {
                 WowTalkWebServerIF.getInstance(FeedbackDetailActivity.this).fGetFileFromServer(file.fileid,
@@ -142,7 +142,7 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
                             public void setProgress(int i, int i2) {
                                 publishProgress(i2);
                             }
-                        }, 0, path,null);
+                        }, 0, path, null);
                 return null;
             }
 
@@ -151,7 +151,7 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
                 btnPlay.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
                 setViewForVoice(file);
-                startPlayingVoice(path,file);
+                startPlayingVoice(path, file);
             }
 
             @Override
@@ -160,7 +160,7 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
                     progressBar.setProgress(params[0]);
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     private void setViewForVoice(final WFile file) {
@@ -248,7 +248,7 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
     private void doDeleteMoment() {
         mMsgBox.showWait();
 
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return mMomentWeb.fDeleteMoment(moment.id);
@@ -265,7 +265,7 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
                     mMsgBox.dismissWait();
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     @Override

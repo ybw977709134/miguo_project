@@ -2,6 +2,7 @@ package org.wowtalk.api;
 
 import android.content.Context;
 import android.text.TextUtils;
+import co.onemeter.utils.AsyncTaskExecutor;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.wowtalk.Log;
@@ -75,7 +76,7 @@ public class RemoteFileService {
 
                 UploadFile uploadFile = new UploadFile();
                 uploadFile.setup(callback, callbackTag, inFilename);
-                uploadFile.execute(postData);
+                AsyncTaskExecutor.executeLongNetworkTask(uploadFile, postData);
             }
         } catch (Exception e) {
             Log.e(TAG, " upload failed.");
@@ -146,7 +147,7 @@ public class RemoteFileService {
 
                 DownloadFile downloadFile = new DownloadFile();
                 downloadFile.setup(callback, callbackTag, null);
-                downloadFile.execute(postData);
+                AsyncTaskExecutor.executeLongNetworkTask(downloadFile, postData);
             }
 
         } catch (Exception e) {

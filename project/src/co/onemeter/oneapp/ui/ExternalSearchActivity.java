@@ -5,14 +5,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
-import com.umeng.analytics.MobclickAgent;
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.Utils;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
+import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.MessageBox;
 
 /**
  * Created with IntelliJ IDEA.
@@ -78,7 +75,7 @@ public class ExternalSearchActivity extends Activity {
             mMsgBox.show(null, getString(R.string.you_are_already_friends));
         } else {
             mMsgBox.showWait();
-            new AsyncTask<Void, Void, Integer>() {
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
                 @Override
                 protected Integer doInBackground(Void... params) {
                     return WowTalkWebServerIF.getInstance(ExternalSearchActivity.this)
@@ -96,13 +93,13 @@ public class ExternalSearchActivity extends Activity {
                             mMsgBox.show(null, getString(R.string.contacts_add_buddy_pending_out));
                         }
                         btnAdd.setVisibility(View.GONE);
-                    } else if (result == ErrorCode.ERR_OPERATION_DENIED){
+                    } else if (result == ErrorCode.ERR_OPERATION_DENIED) {
                         mMsgBox.show(null, getString(R.string.contactinfo_add_friend_denied));
                     } else {
                         mMsgBox.show(null, getString(R.string.operation_failed));
                     }
                 }
-            }.execute((Void)null);
+            });
         }
     }
 
@@ -117,7 +114,7 @@ public class ExternalSearchActivity extends Activity {
             return;
         }
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return WowTalkWebServerIF.getInstance(ExternalSearchActivity.this)
@@ -145,7 +142,7 @@ public class ExternalSearchActivity extends Activity {
                 }
 
             }
-        }.execute((Void)null);
+        });
     }
 
     @Override

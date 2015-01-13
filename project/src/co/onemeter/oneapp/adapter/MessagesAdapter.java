@@ -11,11 +11,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
-import org.wowtalk.api.*;
-import co.onemeter.oneapp.ui.PhotoDisplayHelper;
-import org.wowtalk.ui.bitmapfun.util.ImageCache;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.Log;
+import co.onemeter.oneapp.ui.PhotoDisplayHelper;
+import co.onemeter.utils.AsyncTaskExecutor;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.bitmapfun.util.ImageCache;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -119,7 +120,7 @@ public class MessagesAdapter extends BaseAdapter {
         } else {
             if (!mDownloadingTargets.contains(msg.chatUserName)) {
                 mDownloadingTargets.add(msg.chatUserName);
-                new AsyncTask<Void, Void, Integer> () {
+                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
                     @Override
                     protected Integer doInBackground(Void... params) {
                         return WowTalkWebServerIF.getInstance(mContext)
@@ -146,8 +147,10 @@ public class MessagesAdapter extends BaseAdapter {
                             }
                         }
                         mDownloadingTargets.remove(msg.chatUserName);
-                    };
-                }.execute((Void)null);
+                    }
+
+                    ;
+                });
             }
         }
     }
@@ -162,7 +165,7 @@ public class MessagesAdapter extends BaseAdapter {
             if(groupMembers.isEmpty()) {
                 if (!mDownloadingTargets.contains(g.groupID)) {
                     mDownloadingTargets.add(g.groupID);
-                    new AsyncTask<Void, Void, Integer> () {
+                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer> () {
                         @Override
                         protected Integer doInBackground(Void... params) {
                             Map<String, Object> resultMap = WowTalkWebServerIF.getInstance(mContext)
@@ -177,7 +180,7 @@ public class MessagesAdapter extends BaseAdapter {
                             }
                             mDownloadingTargets.remove(g.groupID);
                         }
-                    }.execute((Void)null);
+                    });
                 }
             }
         }
@@ -197,7 +200,7 @@ public class MessagesAdapter extends BaseAdapter {
                 }
                 if (!mDownloadingTargets.contains(g.groupID)) {
                     mDownloadingTargets.add(g.groupID);
-                    new AsyncTask<Void, Void, String> () {
+                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, String> () {
                         @Override
                         protected String doInBackground(Void... params) {
                             Map<String, Object> resultMap = WowTalkWebServerIF.getInstance(mContext)
@@ -227,7 +230,7 @@ public class MessagesAdapter extends BaseAdapter {
                             mDownloadingTargets.remove(g.groupID);
                             mPhotoDisplayHelper.loadImage(g, photoImageView);
                         }
-                    }.execute((Void)null);
+                    });
                 }
             } else {
                 StringBuffer bufferName = new StringBuffer();
@@ -279,7 +282,7 @@ public class MessagesAdapter extends BaseAdapter {
         } else {
             if (!mDownloadingTargets.contains(msg.chatUserName)) {
                 mDownloadingTargets.add(msg.chatUserName);
-                new AsyncTask<Void, Void, Integer>() {
+                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
                     @Override
                     protected Integer doInBackground(Void... params) {
                         return WowTalkWebServerIF.getInstance(mContext)
@@ -301,7 +304,7 @@ public class MessagesAdapter extends BaseAdapter {
                         }
                         mDownloadingTargets.remove(msg.chatUserName);
                     };
-                }.execute((Void)null);
+                });
             }
         }
     }
@@ -354,7 +357,7 @@ public class MessagesAdapter extends BaseAdapter {
                 // 此群组在本地不存在，需要下载
                 if (!mDownloadingTargets.contains(message.chatUserName)) {
                     mDownloadingTargets.add(message.chatUserName);
-                    new AsyncTask<Void, Void, Integer>() {
+                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
                         @Override
                         protected Integer doInBackground(Void... params) {
                             return WowTalkWebServerIF.getInstance(mContext)
@@ -368,7 +371,7 @@ public class MessagesAdapter extends BaseAdapter {
                                 showGroupChatMessages(photoImageView, txtContact, message, groupChatRoom);
                             }
                         };
-                    }.execute((Void)null);
+                    });
                 }
             }
 

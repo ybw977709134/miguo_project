@@ -5,10 +5,11 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.widget.TextView;
+import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
+import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.api.Database;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.TimerTextView;
-import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -86,10 +87,10 @@ public class MediaPlayerWraper {
         mediaPath=path;
 //        mMsgBox.showWait();
 
-        new AsyncTask<String, Void, MediaPlayer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Void, MediaPlayer>() {
             @Override
             protected MediaPlayer doInBackground(String... params) {
-                MediaPlayer player= new MediaPlayer();
+                MediaPlayer player = new MediaPlayer();
 
                 try {
                     player.setDataSource(params[0]);
@@ -100,12 +101,13 @@ public class MediaPlayerWraper {
                             stop();
                         }
                     });
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     e.printStackTrace();
 
-                    if(null != player) {
+                    if (null != player) {
                         player.release();
-                        player=null;
+                        player = null;
                     }
 
                     Database.deleteAFile(params[0]);
@@ -118,23 +120,23 @@ public class MediaPlayerWraper {
             protected void onPostExecute(MediaPlayer player) {
 //                mMsgBox.dismissWait();
 
-                if(null != player) {
-                    if(TextUtils.isEmpty(mediaPath)) {
+                if (null != player) {
+                    if (TextUtils.isEmpty(mediaPath)) {
                         player.release();
                     } else {
-                        mediaPlayerInstance=player;
+                        mediaPlayerInstance = player;
 
-                        duration=mediaPlayerInstance.getDuration();
+                        duration = mediaPlayerInstance.getDuration();
 
                         //start thread to set time accordingly
-                        playingVoiceRunnable=new TimeElapseReportRunnable();
+                        playingVoiceRunnable = new TimeElapseReportRunnable();
                         playingVoiceRunnable.setElapseReportListener(new TimeElapseReportRunnable.TimeElapseReportListener() {
                             @Override
                             public void reportElapse(final long elapsed) {
                                 activityRef.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if(null != mediaPlayerInstance) {
+                                        if (null != mediaPlayerInstance) {
                                             setTime();
                                         }
                                     }
@@ -144,7 +146,7 @@ public class MediaPlayerWraper {
                         new Thread(playingVoiceRunnable).start();
 
                         //notify begin
-                        if(null != wraperListener) {
+                        if (null != wraperListener) {
                             wraperListener.onPlayBegin(mediaPath);
                         }
 
@@ -153,13 +155,13 @@ public class MediaPlayerWraper {
                         setTime();
                     }
                 } else {
-                    if(null != wraperListener) {
+                    if (null != wraperListener) {
                         wraperListener.onPlayFail(mediaPath);
                     }
                     stop();
                 }
             }
-        }.execute(mediaPath);
+        }, mediaPath);
     }
 
     private long savedLastMediaPosition=0;

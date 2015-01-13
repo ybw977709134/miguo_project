@@ -24,24 +24,15 @@ import co.onemeter.oneapp.contacts.adapter.ContactListAdapter;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
 import co.onemeter.oneapp.utils.ThemeHelper;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
-
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.IDBTableChangeListener;
-import org.wowtalk.api.LatestChatTarget;
-import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.RoundedImageView;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 public class MultiSelectActivity extends Activity implements OnClickListener {
 
@@ -385,7 +376,7 @@ public class MultiSelectActivity extends Activity implements OnClickListener {
         } else {
             mMsgBox.showWait();
 
-            new AsyncTask<Parcelable, Integer, String>() {
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Parcelable, Integer, String>() {
                 @Override
                 protected String doInBackground(Parcelable... params) {
                     String gid = null;
@@ -409,15 +400,15 @@ public class MultiSelectActivity extends Activity implements OnClickListener {
                 @Override
                 protected void onPostExecute(String gid) {
                     mMsgBox.dismissWait();
-                    if(gid == null || TextUtils.isEmpty(gid)) {
+                    if (gid == null || TextUtils.isEmpty(gid)) {
                         mMsgBox.toast(R.string.operation_failed);
                         setResult(Activity.RESULT_CANCELED);
                     } else {
-                    	SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");   
-                    	formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-                    	Date curDate = new Date(System.currentTimeMillis());    
-                    	String str = formatter.format(curDate);   
-                        
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+                        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+                        Date curDate = new Date(System.currentTimeMillis());
+                        String str = formatter.format(curDate);
+
                         LatestChatTarget latest = new LatestChatTarget(gid, str, true);
                         latestContacts.add(latest);
                         mDbHelper.storeLatestChatTargets(latestContacts, true);
@@ -429,7 +420,7 @@ public class MultiSelectActivity extends Activity implements OnClickListener {
                     }
                     finish();
                 }
-            }.execute(persons);
+            }, persons);
         }
     }
 	

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
@@ -339,7 +340,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
             return;
         }
 
-        new AsyncTask<Void, Void, Integer> () {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 int resultCode = WowTalkWebServerIF.getInstance(ContactInfoActivity.this)
@@ -368,8 +369,10 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                     }
                     resetViewsForBiz();
                 }
-            };
-        }.execute((Void)null);
+            }
+
+            ;
+        });
     }
 
     public static void fSendSmsToInvite(Context context,Person person) {
@@ -464,7 +467,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     private void addBuddy() {
         final Context context = this;
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return WowTalkWebServerIF.getInstance(context)
@@ -475,28 +478,28 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
             protected void onPostExecute(Integer result) {
                 mMsgBox.dismissWait();
                 buddy = new Database(context).buddyWithUserID(buddy.userID); // refresh buddy data
-                if(result == ErrorCode.OK) {
+                if (result == ErrorCode.OK) {
                     if (0 != (Buddy.RELATIONSHIP_FRIEND_HERE & buddy.getFriendShipWithMe())) {
                         mMsgBox.toast(R.string.contacts_add_buddy_succeed_without_pending);
                     } else if (0 != (Buddy.RELATIONSHIP_PENDING_OUT & buddy.getFriendShipWithMe())) {
 //                        mMsgBox.show(null, getString(R.string.contacts_add_buddy_pending_out));
-                    	Toast.makeText(ContactInfoActivity.this, 
-                    			getString(R.string.contacts_add_buddy_pending_out), 
-                    			Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ContactInfoActivity.this,
+                                getString(R.string.contacts_add_buddy_pending_out),
+                                Toast.LENGTH_SHORT).show();
                     }
-                } else if (result == ErrorCode.ERR_OPERATION_DENIED){
+                } else if (result == ErrorCode.ERR_OPERATION_DENIED) {
                     mMsgBox.show(null, getString(R.string.contactinfo_add_friend_denied));
                 } else {
                     mMsgBox.show(null, getString(R.string.operation_failed));
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     private void removeBuddy() {
         final Context context = this;
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return WowTalkWebServerIF.getInstance(context)
@@ -510,7 +513,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                     finish();
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     private void handleBackEvent() {
@@ -631,12 +634,13 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         } else {
             final MessageBox m = new MessageBox(context);
             m.showWait();
-            new AsyncTask<Void, Void, Integer>() {
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
                 @Override
                 protected Integer doInBackground(Void... params) {
                     WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(context);
                     return web.fGetBuddyWithUID(buddyUid);
                 }
+
                 @Override
                 protected void onPostExecute(Integer errno) {
                     m.dismissWait();
@@ -648,7 +652,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                         }
                     }
                 }
-            }.execute((Void)null);
+            });
         }
 	}
 

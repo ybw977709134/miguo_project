@@ -1,8 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,15 +7,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.Utils;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.api.Account;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class SettingPasswordActivity extends Activity {
 	private ImageButton btnTitleBack;
@@ -31,7 +31,7 @@ public class SettingPasswordActivity extends Activity {
     private void setPassword(final String password, final String oldPassword) {
         mMsgBox.showWait();
 
-        new AsyncTask<Void, Integer, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... params) {
@@ -43,7 +43,7 @@ public class SettingPasswordActivity extends Activity {
                     ArrayList<Account> accounts = prefUtil.getAccountList();
                     Account tempAccount = null;
                     for (Iterator<Account> iterator = accounts.iterator();
-                            iterator.hasNext();) {
+                         iterator.hasNext(); ) {
                         tempAccount = iterator.next();
                         if (prefUtil.getUid().equals(tempAccount.uid)) {
                             tempAccount.password = prefUtil.getPassword();
@@ -54,23 +54,24 @@ public class SettingPasswordActivity extends Activity {
                 }
                 return resultCode;
             }
+
             @Override
             protected void onPostExecute(Integer result) {
                 mMsgBox.dismissWait();
                 switch (result) {
-                case ErrorCode.OK:
-                    setResult(Activity.RESULT_OK);
-                    finish();
-                    break;
-                case ErrorCode.ERR_OPERATION_DENIED:
-                    mMsgBox.show(null, getString(R.string.settingpassword_old_pwd_error));
-                    break;
-                default:
-                    mMsgBox.show(null, getString(R.string.settingpassword_failure));
-                    break;
+                    case ErrorCode.OK:
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                        break;
+                    case ErrorCode.ERR_OPERATION_DENIED:
+                        mMsgBox.show(null, getString(R.string.settingpassword_old_pwd_error));
+                        break;
+                    default:
+                        mMsgBox.show(null, getString(R.string.settingpassword_failure));
+                        break;
                 }
-			}
-		}.execute((Void)null);
+            }
+        });
 	}
 	
 	private void initView() {

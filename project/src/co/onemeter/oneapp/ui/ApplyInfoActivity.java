@@ -9,11 +9,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.RoundedImageView;
-import co.onemeter.oneapp.R;
 
 import java.util.ArrayList;
 
@@ -76,7 +77,7 @@ public class ApplyInfoActivity extends Activity implements View.OnClickListener 
         Buddy buddy = new Buddy(mPendingRequest.uid);
         buddyList = new ArrayList<Buddy>();
         buddyList.add(buddy);
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return WowTalkWebServerIF.getInstance(ApplyInfoActivity.this)
@@ -106,12 +107,12 @@ public class ApplyInfoActivity extends Activity implements View.OnClickListener 
                     finish();
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     private void rejectBuddy() {
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return WowTalkWebServerIF.getInstance(ApplyInfoActivity.this)
@@ -138,7 +139,7 @@ public class ApplyInfoActivity extends Activity implements View.OnClickListener 
                     finish();
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     public static void launch(Activity activity, PendingRequest p, int requestCode) {

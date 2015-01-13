@@ -16,7 +16,7 @@ import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
 import co.onemeter.oneapp.utils.MyUrlSpanHelper;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
@@ -259,7 +259,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         r.read = true;
 
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return mMomentWeb.fReviewMoment(momentId, Review.TYPE_LIKE, null, null, r);
@@ -275,7 +275,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 
                     // clear inputted text
                     if (mInputMgr != null) {
-                        mInputMgr.setLayoutForTimelineMoment(moment,getLikeBtnClickListener(momentId));
+                        mInputMgr.setLayoutForTimelineMoment(moment, getLikeBtnClickListener(momentId));
                         mInputMgr.setInputText("");
                     }
 
@@ -286,7 +286,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                     mMsgBox.toast(R.string.msg_operation_failed);
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     private void doReviewMoment_async(final Moment moment,
@@ -304,13 +304,14 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         r.read = true;
 
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 try {
                     return mMomentWeb.fReviewMoment(moment_id, Review.TYPE_TEXT,
                             strComment, replyToReviewId, r);
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                     return ErrorCode.BAD_RESPONSE;
                 }
@@ -332,7 +333,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                     setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, moment.id));
                 }
             }
-        }.execute((Void) null);
+        });
     }
 
     private void addReviewToList(Review r) {
@@ -353,8 +354,9 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         final String path = PhotoDisplayHelper.makeLocalFilePath(file.fileid, file.getExt());
         btnPlay.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        new AsyncTask<Void, Integer, Void>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
             boolean ok;
+
             @Override
             protected Void doInBackground(Void... voids) {
                 WowTalkWebServerIF.getInstance(MomentDetailActivity.this).fGetFileFromServer(file.fileid,
@@ -374,7 +376,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                             public void setProgress(int i, int i2) {
                                 publishProgress(i2);
                             }
-                        }, 0, path,null);
+                        }, 0, path, null);
                 return null;
             }
 
@@ -383,7 +385,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                 btnPlay.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
                 setViewForVoice(file);
-                startPlayingVoice(path,file);
+                startPlayingVoice(path, file);
             }
 
             @Override
@@ -392,7 +394,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                     progressBar.setProgress(params[0]);
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     private void setViewForVoice(final WFile file) {
@@ -467,7 +469,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 //        } else {
 //            mPlayer = new MediaPlayer();
 //            btnPlay.setImageResource(R.drawable.timeline_player_stop);
-//            new AsyncTask<String, Void, Void>() {
+//            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Void, Void>() {
 //                @Override
 //                protected Void doInBackground(String... params) {
 //                    try {
@@ -508,7 +510,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 //                        btnPlay.setImageResource(R.drawable.timeline_player_play);
 //                    }
 //                }
-//            }.execute(localPath);
+//            }, localPath);
 //
 ////            try {
 ////                mPlayer.setDataSource(localPath);
@@ -575,7 +577,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     private void doDeleteMoment() {
         mMsgBox.showWait();
 
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return mMomentWeb.fDeleteMoment(moment.id);
@@ -592,7 +594,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                     mMsgBox.dismissWait();
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     private void showMomentOpBottomDialog() {

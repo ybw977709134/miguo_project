@@ -17,15 +17,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.FriendValidateActivity;
-
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.PendingRequest;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.ui.PhotoDisplayHelper;
+import co.onemeter.utils.AsyncTaskExecutor;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,28 +149,30 @@ public class BuddySearchItemAdapter extends BaseAdapter {
     	Intent intent = new Intent(contextRef, FriendValidateActivity.class);
     	contextRef.startActivity(intent);
 
-        new AsyncTask<Buddy, Integer, Void>() {
-        	int errno = ErrorCode.OK;
-        	PendingRequest pr;
-        	@Override
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Buddy, Integer, Void>() {
+            int errno = ErrorCode.OK;
+            PendingRequest pr;
+
+            @Override
             protected Void doInBackground(Buddy... params) {
-            	Buddy b =  params[0];
-                errno = WowTalkWebServerIF.getInstance(contextRef).faddBuddy_askforRequest(b.userID,message);
+                Buddy b = params[0];
+                errno = WowTalkWebServerIF.getInstance(contextRef).faddBuddy_askforRequest(b.userID, message);
                 if (ErrorCode.OK == errno) {
                     pr = new PendingRequest();
                     pr.uid = b.getGUID();
                     pr.nickname = b.nickName;
                     pr.buddy_photo_timestamp = b.getPhotoUploadedTimestamp();
                     pr.type = PendingRequest.BUDDY_OUT;
-                   
+
                 }
                 return null;
 
             }
+
             @Override
             protected void onPostExecute(Void v) {
                 mMsgBox.dismissWait();
-                if(errno == ErrorCode.OK) {
+                if (errno == ErrorCode.OK) {
                     btn.setVisibility(View.GONE); // update UI
                     mDbHelper.storePendingRequest(pr);
                     if (0 != (Buddy.RELATIONSHIP_FRIEND_HERE & buddy.getFriendShipWithMe())) {
@@ -183,14 +180,14 @@ public class BuddySearchItemAdapter extends BaseAdapter {
                     } else if (0 != (Buddy.RELATIONSHIP_PENDING_OUT & buddy.getFriendShipWithMe())) {
                         mMsgBox.show(null, contextRef.getString(R.string.contacts_add_buddy_pending_out));
                     }
-                } else if (errno == ErrorCode.ERR_OPERATION_DENIED){
+                } else if (errno == ErrorCode.ERR_OPERATION_DENIED) {
                     mMsgBox.show(null, contextRef.getString(R.string.contactinfo_add_friend_denied));
                 } else {
                     mMsgBox.show(null, contextRef.getString(R.string.operation_failed));
                 }
             }
 
-        }.execute(buddy);
+        }, buddy);
     }
     
 

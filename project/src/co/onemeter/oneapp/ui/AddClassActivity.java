@@ -8,9 +8,8 @@ import android.view.View;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ThemeHelper;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
-
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
@@ -54,7 +53,7 @@ public class AddClassActivity extends Activity implements View.OnClickListener {
 
         msgbox.showWait();
 
-        new AsyncTask<String, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Void, Integer>() {
             @Override
             protected Integer doInBackground(String... strings) {
                 int errno = WowTalkWebServerIF.getInstance(AddClassActivity.this)
@@ -73,18 +72,18 @@ public class AddClassActivity extends Activity implements View.OnClickListener {
 //                    msgbox.toast(getString(R.string.operation_failed_with_errcode_msg,
 //                            errno,
 //                            ErrorCode.getErrorName(AddClassActivity.this, errno)));
-                	if(errno == ErrorCode.ERR_EXPIRED_INVITATION_CODE){
-                		msgbox.toast(R.string.invite_code_out_time, Toast.LENGTH_SHORT);               		
-                	}else if(errno == ErrorCode.ERR_SCHOOL_USER_HAD_BOUND){
-                		msgbox.toast(R.string.invite_code_used, Toast.LENGTH_SHORT);
-                	}else if(errno == ErrorCode.ERR_BOUND_SAME_SCHOOL_USER){
-                		msgbox.toast(R.string.invite_code_school, Toast.LENGTH_SHORT);
-                	}else if(errno == ErrorCode.ERR_SCHOOL_USER_TYPE_NOT_MATCH){
-                		msgbox.toast(R.string.invite_code_type_not_match, Toast.LENGTH_SHORT);
-                	}
+                    if (errno == ErrorCode.ERR_EXPIRED_INVITATION_CODE) {
+                        msgbox.toast(R.string.invite_code_out_time, Toast.LENGTH_SHORT);
+                    } else if (errno == ErrorCode.ERR_SCHOOL_USER_HAD_BOUND) {
+                        msgbox.toast(R.string.invite_code_used, Toast.LENGTH_SHORT);
+                    } else if (errno == ErrorCode.ERR_BOUND_SAME_SCHOOL_USER) {
+                        msgbox.toast(R.string.invite_code_school, Toast.LENGTH_SHORT);
+                    } else if (errno == ErrorCode.ERR_SCHOOL_USER_TYPE_NOT_MATCH) {
+                        msgbox.toast(R.string.invite_code_type_not_match, Toast.LENGTH_SHORT);
+                    }
                 }
             }
-        }.execute(invitationCode);
+        }, invitationCode);
 
     }
 }

@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import org.wowtalk.api.*;
@@ -129,7 +130,7 @@ public abstract class TimelineFragment extends ListFragment
     }
 
     public void checkNewMoments() {
-        new RefreshMomentsTask().execute(Long.valueOf(0));
+        AsyncTaskExecutor.executeShortNetworkTask(new RefreshMomentsTask(), Long.valueOf(0));
     }
 
     @Override
@@ -193,12 +194,12 @@ public abstract class TimelineFragment extends ListFragment
 
             if (!handled) {
                 // refresh list
-                new RefreshMomentsTask(){
+                AsyncTaskExecutor.executeShortNetworkTask(new RefreshMomentsTask(){
                     @Override
                     protected void onPostExecute(Integer errno) {
                         super.onPostExecute(errno);
                     }
-                }.execute(Long.valueOf(0));
+                }, Long.valueOf(0));
             }
         }
     }
@@ -209,23 +210,24 @@ public abstract class TimelineFragment extends ListFragment
     @Override
     public void replyToMoment(int position, final Moment moment, Review replyTo, boolean like) {
         if (like) {
-            new AsyncTask<String, Void, Integer>() {
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Void, Integer>() {
                 Review r = new Review(); // 添加或删除的赞
+
                 @Override
                 protected Integer doInBackground(String... params) {
                     MomentWebServerIF web = MomentWebServerIF.getInstance(getActivity());
                     if (!moment.likedByMe) { // 点赞
                         return web.fReviewMoment(params[0], Review.TYPE_LIKE, null, null, r);
                     } else { // 撤销赞
-                        Review likeReview=null;
+                        Review likeReview = null;
                         String mMyUid = PrefUtil.getInstance(getActivity()).getUid();
-                        for(Review aReview : moment.reviews) {
-                            if(Review.TYPE_LIKE == aReview.type && aReview.uid.equals(mMyUid)) {
-                                likeReview=aReview;
+                        for (Review aReview : moment.reviews) {
+                            if (Review.TYPE_LIKE == aReview.type && aReview.uid.equals(mMyUid)) {
+                                likeReview = aReview;
                                 break;
                             }
                         }
-                        if(null != likeReview) {
+                        if (null != likeReview) {
                             r = likeReview;
                             return web.fDeleteMomentReview(moment.id, likeReview);
                         } else {
@@ -247,7 +249,7 @@ public abstract class TimelineFragment extends ListFragment
                         adapter.notifyDataSetChanged();
                     }
                 }
-            }.execute(moment.id);
+            }, moment.id);
         } else {
         	
             //评论按钮进入详情页刷新
@@ -412,24 +414,24 @@ public abstract class TimelineFragment extends ListFragment
 
     @Override
     public void onRefresh(final PullToRefreshBase refreshView) {
-        new RefreshMomentsTask(){
+        AsyncTaskExecutor.executeShortNetworkTask(new RefreshMomentsTask(){
             @Override
             protected void onPostExecute(Integer errno) {
                 super.onPostExecute(errno);
                 refreshView.onRefreshComplete();
             }
-        }.execute(Long.valueOf(0));
+        }, Long.valueOf(0));
     }
 
     @Override
     public boolean onLoadMore() {
-        new RefreshMomentsTask(){
+        AsyncTaskExecutor.executeShortNetworkTask(new RefreshMomentsTask(){
             @Override
             protected void onPostExecute(Integer errno) {
                 super.onPostExecute(errno);
                 adapter.notifyLoadingCompleted();
             }
-        }.execute(maxTimestamp);
+        }, maxTimestamp);
         return true;
     }
 

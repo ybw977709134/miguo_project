@@ -1,10 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -16,8 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
+import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.ui.MessageBox;
 
 public class UnBindActivity extends Activity implements OnClickListener {
 
@@ -71,38 +70,38 @@ public class UnBindActivity extends Activity implements OnClickListener {
 
         mMsgBox.showWait();
 
-		new AsyncTask<Void, Integer, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-			    int resultCode = -1;
-			    switch (mUnbindType) {
-                case UNBIND_TYPE_PHONE:
-                    resultCode = WowTalkWebServerIF.getInstance(UnBindActivity.this).fUnBindMobile(strPassword);
-                    break;
-                case UNBIND_TYPE_EMAIL:
-                    resultCode = WowTalkWebServerIF.getInstance(UnBindActivity.this).fUnBindEmail(strPassword);
-                    break;
-                default:
-                    break;
-                }
+				int resultCode = -1;
+				switch (mUnbindType) {
+					case UNBIND_TYPE_PHONE:
+						resultCode = WowTalkWebServerIF.getInstance(UnBindActivity.this).fUnBindMobile(strPassword);
+						break;
+					case UNBIND_TYPE_EMAIL:
+						resultCode = WowTalkWebServerIF.getInstance(UnBindActivity.this).fUnBindEmail(strPassword);
+						break;
+					default:
+						break;
+				}
 				return resultCode;
 			}
-			
+
 			@Override
 			protected void onPostExecute(Integer result) {
-                mMsgBox.dismissWait();
+				mMsgBox.dismissWait();
 
 				if (result == ErrorCode.OK) {
 					finish();
 				} else if (result == ErrorCode.AUTH) {
-				    mMsgBox.toast(getString(R.string.unbind_pwd_error));
-                } else {
-                    mMsgBox.toast(getString(R.string.unbind_failure));
-                }
+					mMsgBox.toast(getString(R.string.unbind_pwd_error));
+				} else {
+					mMsgBox.toast(getString(R.string.unbind_failure));
+				}
 			}
-			
-		}.execute((Void)null);
+
+		});
 	}
 
 

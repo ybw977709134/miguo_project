@@ -8,12 +8,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.LocationHelper;
+import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.utils.LocationHelper;
 
 import java.util.ArrayList;
 
@@ -204,16 +204,16 @@ public class EmergencyContactActivity extends Activity implements View.OnClickLi
         EditText emergencyDesc=(EditText) findViewById(R.id.emergency_detail_msg);
         final String detailMsg=emergencyDesc.getText().toString();
 
-        new AsyncTask<Void, Integer, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
-                Log.w("emergency send with level "+emergencyLevel+" ,msg "+detailMsg);
+                Log.w("emergency send with level " + emergencyLevel + " ,msg " + detailMsg);
                 String companyId = PrefUtil.getInstance(EmergencyContactActivity.this).getCompanyId();
                 int ret;
-                if(null == myLocation) {
-                    ret=mWeb.sendEmergencyMsg(companyId,emergencyLevel,detailMsg,0,0);
+                if (null == myLocation) {
+                    ret = mWeb.sendEmergencyMsg(companyId, emergencyLevel, detailMsg, 0, 0);
                 } else {
-                    ret=mWeb.sendEmergencyMsg(companyId,emergencyLevel,detailMsg,myLocation.getLatitude(),myLocation.getLongitude());
+                    ret = mWeb.sendEmergencyMsg(companyId, emergencyLevel, detailMsg, myLocation.getLatitude(), myLocation.getLongitude());
                 }
 
                 return ret;
@@ -222,16 +222,16 @@ public class EmergencyContactActivity extends Activity implements View.OnClickLi
             @Override
             protected void onPostExecute(Integer errno) {
                 mMsgBox.dismissWait();
-                if(0 != errno) {
+                if (0 != errno) {
                     mMsgBox.toast(R.string.emergency_send_fail);
                 } else {
-                    if((emergencyLevel & EMERGENCY_STATUS_LEVEL_NEED_HELP) != 0) {
+                    if ((emergencyLevel & EMERGENCY_STATUS_LEVEL_NEED_HELP) != 0) {
                         mMsgBox.toast(R.string.emergency_send_success_with_help);
                     } else {
                         mMsgBox.toast(R.string.emergency_send_success_with_no_help);
                     }
                 }
             }
-        }.execute((Void)null);
+        });
     }
 }

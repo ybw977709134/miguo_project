@@ -17,17 +17,14 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import com.umeng.analytics.MobclickAgent;
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
 import co.onemeter.oneapp.ui.SideBar.OnTouchingLetterChangedListener;
+import co.onemeter.utils.AsyncTaskExecutor;
+import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.MessageBox;
 
 import java.util.*;
 
@@ -147,28 +144,29 @@ public class LocalContactsActivity extends Activity implements OnClickListener, 
 
         final Buddy buddy=person.toBuddy();
 
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 int errno = WowTalkWebServerIF.getInstance(LocalContactsActivity.this).fAddBuddy(buddy.userID);
                 return errno;
             }
+
             @Override
             protected void onPostExecute(Integer s) {
                 mMsgBox.dismissWait();
-                if(s == ErrorCode.OK) {
-                    person.buddyType=ContactInfoActivity.BUDDY_TYPE_IS_FRIEND;
+                if (s == ErrorCode.OK) {
+                    person.buddyType = ContactInfoActivity.BUDDY_TYPE_IS_FRIEND;
 
                     new Database(LocalContactsActivity.this).storeNewBuddyWithUpdate(buddy);
 
                     personAdapter.notifyDataSetChanged();
                 } else if (s == ErrorCode.ERR_OPERATION_DENIED) {
                     mMsgBox.show(null, getString(R.string.contactinfo_add_friend_denied));
-                }else {
+                } else {
                     mMsgBox.show(null, getString(R.string.operation_failed));
                 }
             }
-        }.execute((Void)null);
+        });
     }
 	
 	TextWatcher textWatcher = new TextWatcher() {
@@ -275,7 +273,7 @@ public class LocalContactsActivity extends Activity implements OnClickListener, 
 		});
 
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 ContactUtil.fFetchAllLocalPerson(LocalContactsActivity.this);
@@ -288,13 +286,13 @@ public class LocalContactsActivity extends Activity implements OnClickListener, 
                 lvLocalContacts.setAdapter(personAdapter);
                 ListHeightUtil.setListHeight(lvLocalContacts);
 
-                if(mIsInitForMultiSelect = getIntent().getBooleanExtra(EXTRA_MULTI_SELECT_MODE, false)) {
+                if (mIsInitForMultiSelect = getIntent().getBooleanExtra(EXTRA_MULTI_SELECT_MODE, false)) {
                     toggleSelectMode();
                 }
 
                 updatePersonBuddyType();
             }
-        }.execute((Void)null);
+        });
 
 	}
 
@@ -308,7 +306,7 @@ public class LocalContactsActivity extends Activity implements OnClickListener, 
 //            mMsgBox = new MessageBox(LocalContactsActivity.this);
 //        }
 //        mMsgBox.showWait();
-//        new AsyncTask<Void, Void, Integer>() {
+//        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 //            private List<Buddy> buddies = new ArrayList<Buddy>();
 //            private String phoneNumber;
 //            @Override
@@ -340,7 +338,7 @@ public class LocalContactsActivity extends Activity implements OnClickListener, 
 //                    ContactInfoActivity.launch(LocalContactsActivity.this, targetPerson, buddyType);
 //                }
 //            }
-//        }.execute((Void)null);
+//        });
     }
 
     private final static int MSG_ID_REFRESH_LOCAL_CONTACT_LIST=1;
@@ -379,23 +377,24 @@ public class LocalContactsActivity extends Activity implements OnClickListener, 
         numOfPersonUpdated=0;
         for(Person aPerson : ContactUtil.localPersons) {
 
-            new AsyncTask<Person, Integer, Integer>() {
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Person, Integer, Integer>() {
                 private Person originalPerson;
-                private Buddy  resultBuddy=null;
+                private Buddy resultBuddy = null;
+
                 @Override
                 protected Integer doInBackground(Person... params) {
-                    originalPerson=params[0];
+                    originalPerson = params[0];
 
-                    int result=-1;
+                    int result = -1;
                     String phoneNumber = originalPerson.getGlobalPhoneNumber();
                     if (!TextUtils.isEmpty(phoneNumber)) {
                         List<Buddy> buddies = new ArrayList<Buddy>();
                         phoneNumber = phoneNumber.replace("-", "").replace(" ", "");
                         result = WowTalkWebServerIF.getInstance(LocalContactsActivity.this).fGetBuddyWithPhoneNumber(phoneNumber, buddies);
-                        if(0 == result) {
+                        if (0 == result) {
                             Log.i("There are " + buddies.size() + " persons associated with the phoneNumber " + phoneNumber);
                             if (!buddies.isEmpty()) {
-                                resultBuddy=buddies.get(0);
+                                resultBuddy = buddies.get(0);
                             }
                         }
                     }
@@ -404,32 +403,32 @@ public class LocalContactsActivity extends Activity implements OnClickListener, 
 
                 @Override
                 protected void onPostExecute(Integer result) {
-                    if(0 == result) {
-                        if(null == resultBuddy) {
-                            originalPerson.buddyType=ContactInfoActivity.BUDDY_TYPE_NOT_USER;
+                    if (0 == result) {
+                        if (null == resultBuddy) {
+                            originalPerson.buddyType = ContactInfoActivity.BUDDY_TYPE_NOT_USER;
                         } else {
                             boolean isFriend = (0 != (resultBuddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE))
                                     || (0 != (resultBuddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_PENDING_OUT))
                                     || resultBuddy.userID.equals(PrefUtil.getInstance(LocalContactsActivity.this).getUid());
-                            if(isFriend) {
-                                originalPerson.buddyType=ContactInfoActivity.BUDDY_TYPE_IS_FRIEND;
+                            if (isFriend) {
+                                originalPerson.buddyType = ContactInfoActivity.BUDDY_TYPE_IS_FRIEND;
                             } else {
-                                originalPerson.buddyType=ContactInfoActivity.BUDDY_TYPE_NOT_FRIEND;
+                                originalPerson.buddyType = ContactInfoActivity.BUDDY_TYPE_NOT_FRIEND;
                             }
 
                             originalPerson.setWithBuddy(resultBuddy);
                         }
 
                         msgHandler.removeMessages(MSG_ID_REFRESH_LOCAL_CONTACT_LIST);
-                        msgHandler.sendEmptyMessageDelayed(MSG_ID_REFRESH_LOCAL_CONTACT_LIST,LOCAL_CONTACT_LIST_REFRESH_INTERVAL);
+                        msgHandler.sendEmptyMessageDelayed(MSG_ID_REFRESH_LOCAL_CONTACT_LIST, LOCAL_CONTACT_LIST_REFRESH_INTERVAL);
                     }
 
                     ++numOfPersonUpdated;
-                    if(numOfPersonUpdated >= ContactUtil.localPersons.size()) {
+                    if (numOfPersonUpdated >= ContactUtil.localPersons.size()) {
                         mMsgBox.dismissWait();
                     }
                 }
-            }.execute(aPerson);
+            }, aPerson);
         }
     }
 

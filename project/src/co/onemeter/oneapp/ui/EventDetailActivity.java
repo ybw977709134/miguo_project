@@ -11,18 +11,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.ApplicationInfoItemAdapter;
 import co.onemeter.oneapp.utils.ListViewUtils;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
@@ -47,22 +42,24 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
     private void downloadImage(final WFile aFile, final boolean thumbnail, final ImageView imageView) {
 
-        new AsyncTask<Void, Integer, Void> () {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
             boolean ok = true;
 
             @Override
             protected Void doInBackground(Void... arg0) {
                 WowTalkWebServerIF.getInstance(EventDetailActivity.this)
                         .fGetFileFromServer(thumbnail ? aFile.thumb_fileid : aFile.fileid,
-                                WEvent.MEDIA_FILE_REMOTE_DIR, new NetworkIFDelegate(){
+                                WEvent.MEDIA_FILE_REMOTE_DIR, new NetworkIFDelegate() {
                                     @Override
                                     public void didFailNetworkIFCommunication(int arg0, byte[] arg1) {
                                         ok = false;
                                     }
+
                                     @Override
                                     public void didFinishNetworkIFCommunication(int arg0, byte[] arg1) {
                                         ok = true;
                                     }
+
                                     @Override
                                     public void setProgress(int arg0, int arg1) {
                                     }
@@ -76,12 +73,12 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
             @Override
             protected void onPostExecute(Void v) {
-                if(ok) {
+                if (ok) {
                     displayImage(thumbnail ? aFile.localThumbnailPath : aFile.localPath, imageView);
                 }
             }
 
-        }.execute((Void)null);
+        });
     }
 
     private boolean isFileAPhoto(String fileName) {
@@ -299,17 +296,19 @@ public class EventDetailActivity extends Activity implements OnClickListener {
     }
     
     private void loadApplicantsInfo(){
-    	new AsyncTask<Void, Void, Integer>(){
-    		int errno = ErrorCode.OK;
+    	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+            int errno = ErrorCode.OK;
             private ArrayList<Buddy> members = new ArrayList<>();
-			@Override
-			protected Integer doInBackground(Void... arg0) {
-				EventWebServerIF web = EventWebServerIF.getInstance(EventDetailActivity.this);
-				errno = web.fGetApplicantsInfo(members, eventDetail.id);
-				return errno;
-			}
-			@Override
-			protected void onPostExecute(Integer errno) {
+
+            @Override
+            protected Integer doInBackground(Void... arg0) {
+                EventWebServerIF web = EventWebServerIF.getInstance(EventDetailActivity.this);
+                errno = web.fGetApplicantsInfo(members, eventDetail.id);
+                return errno;
+            }
+
+            @Override
+            protected void onPostExecute(Integer errno) {
                 if (errno == ErrorCode.OK) {
                     BuddyList.clear();
                     BuddyList.addAll(members);
@@ -318,8 +317,8 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 }
                 showApplicants(BuddyList.isEmpty());
             }
-    		
-    	}.execute((Void)null);
+
+        });
     }
 
     private void hideApplicants() {
@@ -335,13 +334,13 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
     private void joinEvent() {
         msgbox.showWait();
-        new AsyncTask<Void, Void, Integer>(){
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... voids) {
                 EventWebServerIF web = EventWebServerIF.getInstance(EventDetailActivity.this);
                 return web.fJoinEvent(eventDetail.id);
-               
+
             }
 
             @Override
@@ -351,16 +350,16 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                     msgbox.toast(R.string.require_join_event_success);
                     btn_right_up.setVisibility(View.GONE);
                     btn_right_down.setVisibility(View.VISIBLE);
-                    refresh(false,false);
+                    refresh(false, false);
                 } else {
                     msgbox.toast(R.string.require_join_event_joined);
                 }
             }
-        }.execute((Void)null);
+        });
     }
     
     private void joinEventWithDetail(final String name,final String phone_number){
-    	new AsyncTask<Void, Void, Integer>(){
+    	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... voids) {
@@ -370,17 +369,17 @@ public class EventDetailActivity extends Activity implements OnClickListener {
 
             @Override
             public void onPostExecute(Integer errno) {
-     //           msgbox.dismissWait();
+                //           msgbox.dismissWait();
                 if (errno == ErrorCode.OK) {
                     msgbox.toast(R.string.require_join_event_success);
                     btn_right_up.setVisibility(View.GONE);
                     btn_right_down.setVisibility(View.VISIBLE);
-                    refresh(false,false);
+                    refresh(false, false);
                 } else {
                     msgbox.toast(R.string.require_join_event_joined);
                 }
             }
-        }.execute((Void) null);
+        });
     }
     
     /**
@@ -388,25 +387,25 @@ public class EventDetailActivity extends Activity implements OnClickListener {
      */
     private void cancel_join_event(){
  //  	 msgbox.showWait();
-    	 new AsyncTask<Void, Void, Integer>(){
+    	 AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
-            @Override
-            protected Integer doInBackground(Void... voids) {
+             @Override
+             protected Integer doInBackground(Void... voids) {
                  EventWebServerIF web = EventWebServerIF.getInstance(EventDetailActivity.this);
-                return web.fDeleteEvent(eventDetail.id);                
+                 return web.fDeleteEvent(eventDetail.id);
              }
 
              @Override
              public void onPostExecute(Integer errno) {
-      //           msgbox.dismissWait();
+                 //           msgbox.dismissWait();
                  if (errno == ErrorCode.OK) {
-     //                msgbox.toast(R.string.require_cancel_event_joined);
-                     refresh(false,false);
+                     //                msgbox.toast(R.string.require_cancel_event_joined);
+                     refresh(false, false);
                  } else {
-     //               msgbox.toast(R.string.require_cancel_event_fail);
+                     //               msgbox.toast(R.string.require_cancel_event_fail);
                  }
              }
-         }.execute((Void)null);
+         });
     	
     }
 
@@ -414,7 +413,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         if (showProgressBar)
             msgbox.showWait();
 
-        new AsyncTask<Void, Void, Integer>(){
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... voids) {
@@ -436,10 +435,10 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 }
 
                 // refresh applicants
-                if(isApplicantsVisible())
+                if (isApplicantsVisible())
                     loadApplicantsInfo();
             }
-        }.execute((Void)null);
+        });
     }
 
     private void updateUI(boolean needUpdateGallery) {

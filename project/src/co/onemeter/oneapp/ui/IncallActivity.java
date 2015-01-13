@@ -18,12 +18,13 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.component.*;
 import org.wowtalk.video.Version;
-import co.onemeter.oneapp.R;
 
 import java.io.IOException;
 import java.util.Date;
@@ -746,26 +747,26 @@ public class IncallActivity extends Activity implements OnClickListener,
         if (username == null || username.equals("") || username.equals("0")) {
             Buddy b = dbHelper.buddyWithUserID(uid);
             if (b == null || b.nickName.equals("")) {
-                new AsyncTask<Void, Void, Integer>() {
-                    @Override
-                    protected Integer doInBackground(Void... params) {
-                        return WowTalkWebServerIF.getInstance(IncallActivity.this)
-                                .fGetBuddyWithUID(uid);
-                    }
+                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+					@Override
+					protected Integer doInBackground(Void... params) {
+						return WowTalkWebServerIF.getInstance(IncallActivity.this)
+								.fGetBuddyWithUID(uid);
+					}
 
-                    @Override
-                    protected void onPostExecute(Integer result) {
-                        if (result == ErrorCode.OK) {
-                            Buddy buddy = dbHelper.buddyWithUserID(uid);
-                            if (buddy != null && !buddy.nickName.equals("")) {
-                                mStrContactDisplayName = TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias;
-                                txtContact.setText(mStrContactDisplayName);
-                            } else {
-                                txtContact.setText("unknown");
-                            }
-                        }
-                    }
-                }.execute((Void)null);
+					@Override
+					protected void onPostExecute(Integer result) {
+						if (result == ErrorCode.OK) {
+							Buddy buddy = dbHelper.buddyWithUserID(uid);
+							if (buddy != null && !buddy.nickName.equals("")) {
+								mStrContactDisplayName = TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias;
+								txtContact.setText(mStrContactDisplayName);
+							} else {
+								txtContact.setText("unknown");
+							}
+						}
+					}
+				});
             } else {
                 mStrContactDisplayName = TextUtils.isEmpty(b.alias) ? b.nickName : b.alias;
                 txtContact.setText(mStrContactDisplayName);
@@ -872,23 +873,24 @@ public class IncallActivity extends Activity implements OnClickListener,
             PhotoDisplayHelper.displayPhoto(IncallActivity.this, imageView, R.drawable.default_avatar_90, buddy, false);
             txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
         }
-        new AsyncTask<Void, Void, Void>() {
-            int errno = ErrorCode.OK;
-            @Override
-            protected Void doInBackground(Void... params) {
-                errno = WowTalkWebServerIF.getInstance(IncallActivity.this).fGetBuddyWithUID(userId);
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
-            }
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
+			int errno = ErrorCode.OK;
 
-            @Override
-            protected  void onPostExecute(Void result) {
-                if (errno == ErrorCode.OK) {
-                    Buddy buddy = dbHelper.buddyWithUserID(userId);
-                    PhotoDisplayHelper.displayPhoto(IncallActivity.this, imageView, R.drawable.default_avatar_90, buddy, false);
-                    txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
-                }
-            }
-        }.execute((Void) null);
+			@Override
+			protected Void doInBackground(Void... params) {
+				errno = WowTalkWebServerIF.getInstance(IncallActivity.this).fGetBuddyWithUID(userId);
+				return null;  //To change body of implemented methods use File | Settings | File Templates.
+			}
+
+			@Override
+			protected void onPostExecute(Void result) {
+				if (errno == ErrorCode.OK) {
+					Buddy buddy = dbHelper.buddyWithUserID(userId);
+					PhotoDisplayHelper.displayPhoto(IncallActivity.this, imageView, R.drawable.default_avatar_90, buddy, false);
+					txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
+				}
+			}
+		});
 
     }
 

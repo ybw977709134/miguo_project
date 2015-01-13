@@ -13,11 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -65,77 +66,79 @@ public class BindCodeActivity extends Activity {
 	private void bindPhone(final String code) {
         mMsgBox.showWait();
 
-		new AsyncTask<Void, Integer, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
 				return WowTalkWebServerIF.getInstance(BindCodeActivity.this).fVerifyMobile(mPhoneEmailValue, code);
 			}
+
 			@Override
 			protected void onPostExecute(Integer result) {
-                mMsgBox.dismissWait();
+				mMsgBox.dismissWait();
 
-                Log.i(TAG, ", Verify phone, the result code is " + result + ", the phoneNumber is " + mPhoneEmailValue);
+				Log.i(TAG, ", Verify phone, the result code is " + result + ", the phoneNumber is " + mPhoneEmailValue);
 				if (result == ErrorCode.OK) {
 					final MessageBox box = new MessageBox(BindCodeActivity.this);
 					box.toast(R.string.bind_done);
 					new Handler().postDelayed(new Runnable() {
 						@Override
 						public void run() {
-						    box.dismissToast();
-						    BindPhoneActivity.instance().finish();
-                            finish();
+							box.dismissToast();
+							BindPhoneActivity.instance().finish();
+							finish();
 						}
 					}, 1000);
-                } else if (result == ErrorCode.PHONE_VERIFICATION_CODE_ERROR) {
-                    mMsgBox.show(getString(R.string.operation_failed),
-                            getString(R.string.settings_account_verification_code_wrong));
+				} else if (result == ErrorCode.PHONE_VERIFICATION_CODE_ERROR) {
+					mMsgBox.show(getString(R.string.operation_failed),
+							getString(R.string.settings_account_verification_code_wrong));
 				} else if (result == ErrorCode.PHONE_USED_BY_OTHERS) {
-                    mMsgBox.show(getString(R.string.operation_failed),
-                            getString(R.string.settings_account_phone_used_by_others));
-                } else {
-                    mMsgBox.show(null, getString(R.string.bind_failed));
-                }
+					mMsgBox.show(getString(R.string.operation_failed),
+							getString(R.string.settings_account_phone_used_by_others));
+				} else {
+					mMsgBox.show(null, getString(R.string.bind_failed));
+				}
 			}
-		}.execute((Void)null);
+		});
 	}
 	
 	private void bindEmail(final String code) {
         mMsgBox.showWait();
 
-        new AsyncTask<Void, Integer, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
 				return WowTalkWebServerIF.getInstance(BindCodeActivity.this).fVerifyEmail(mPhoneEmailValue, code);
 			}
+
 			@Override
 			protected void onPostExecute(Integer result) {
-                mMsgBox.dismissWait();
+				mMsgBox.dismissWait();
 
-                Log.i(TAG, ", Verify email, the result code is " + result + ", the email is " + mPhoneEmailValue);
+				Log.i(TAG, ", Verify email, the result code is " + result + ", the email is " + mPhoneEmailValue);
 				if (result == ErrorCode.OK) {
-                    final MessageBox box = new MessageBox(BindCodeActivity.this);
-                    box.toast(R.string.bind_done);
+					final MessageBox box = new MessageBox(BindCodeActivity.this);
+					box.toast(R.string.bind_done);
 					new Handler().postDelayed(new Runnable() {
 						@Override
 						public void run() {
-						    box.dismissToast();
-						    BindEmailActivity.instance().finish();
-			                finish();
+							box.dismissToast();
+							BindEmailActivity.instance().finish();
+							finish();
 						}
 					}, 1000);
-                } else if (result == ErrorCode.EMAIL_VERIFICATION_CODE_ERROR) {
-                    mMsgBox.show(getString(R.string.operation_failed),
-                            getString(R.string.settings_account_verification_code_wrong));
-                } else if (result == ErrorCode.EMAIL_USED_BY_OTHERS) {
-                    mMsgBox.show(getString(R.string.operation_failed),
-                            getString(R.string.settings_account_email_used_by_others));
-                } else {
-                    mMsgBox.show(null, getString(R.string.bind_failed));
-                }
+				} else if (result == ErrorCode.EMAIL_VERIFICATION_CODE_ERROR) {
+					mMsgBox.show(getString(R.string.operation_failed),
+							getString(R.string.settings_account_verification_code_wrong));
+				} else if (result == ErrorCode.EMAIL_USED_BY_OTHERS) {
+					mMsgBox.show(getString(R.string.operation_failed),
+							getString(R.string.settings_account_email_used_by_others));
+				} else {
+					mMsgBox.show(null, getString(R.string.bind_failed));
+				}
 			}
-		}.execute((Void)null);
+		});
 	}
 	
 	private void initView() {

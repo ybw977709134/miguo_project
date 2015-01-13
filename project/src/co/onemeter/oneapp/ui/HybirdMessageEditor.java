@@ -19,6 +19,7 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.LocationHelper;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
+import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
@@ -876,8 +877,8 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
                     listPhoto = photo2add;
 
                     mMsgBox.showWait();
-                    new AsyncTask<ArrayList<String>, Void, Void>() {
-//                        boolean firstAdd=true;
+                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<ArrayList<String>, Void, Void>() {
+                        //                        boolean firstAdd=true;
                         @Override
                         protected Void doInBackground(ArrayList<String>... params) {
                             for (String path : params[0]) {
@@ -896,11 +897,12 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
                                     photo.galleryPath = path;
                                     photo.isFromGallery = true;
                                     listPhoto.add(photo);
-                                } catch (Exception e) {
+                                }
+                                catch (Exception e) {
                                     e.printStackTrace();
                                 }
 
-                                publishProgress((Void)null);
+                                publishProgress((Void) null);
                             }
                             return null;
                         }
@@ -915,21 +917,21 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
                             mMsgBox.dismissWait();
                             instance.notifyFileChanged(false);
                         }
-                    }.execute(listPath);
+                    }, listPath);
                 }
                 break;
             case ACTIVITY_REQ_ID_PICK_PHOTO_FROM_CAMERA:
                 if (resultCode == RESULT_OK) {
-                    new AsyncTask<Intent, Void, Void>() {
+                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Intent, Void, Void>() {
                         @Override
                         protected Void doInBackground(Intent... params) {
                             String[] path = new String[2];
-                            boolean handleImageRet=mediaHelper.handleImageResult(HybirdMessageEditor.this, params[0],
+                            boolean handleImageRet = mediaHelper.handleImageResult(HybirdMessageEditor.this, params[0],
                                     CreateMomentActivity.PHOTO_SEND_WIDTH, CreateMomentActivity.PHOTO_SEND_HEIGHT,
                                     0, 0,
                                     path);
-                            if(handleImageRet) {
-                                Log.i("handle result ok,path[0]="+path[0]);
+                            if (handleImageRet) {
+                                Log.i("handle result ok,path[0]=" + path[0]);
                             } else {
                                 Log.e("handle image error");
                             }
@@ -944,7 +946,7 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
                         protected void onPostExecute(Void errno) {
                             instance.notifyFileChanged(true);
                         }
-                    }.execute(data);
+                    }, data);
                 }
                 break;
         }

@@ -1,12 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.util.ArrayList;
-
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.PendingRequest;
-import org.wowtalk.api.WowTalkWebServerIF;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -14,12 +7,12 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
+import org.wowtalk.api.*;
+
+import java.util.ArrayList;
 
 public class FriendValidateActivity extends Activity implements OnClickListener{
 	private TextView textView_validate_cancel;
@@ -92,41 +85,43 @@ public class FriendValidateActivity extends Activity implements OnClickListener{
     private void onAddFriendPressed(final Buddy buddy) {
     	final String messageContent = editText_validate_message.getText().toString();
 //        mMsgBox.showWait();
-        new AsyncTask<Buddy, Integer, Void>() {
-        	int errno = ErrorCode.OK;
-        	PendingRequest pr;
-        	@Override
-            protected Void doInBackground(Buddy... params) {
-            	Buddy b =  params[0];
-                errno = mwebserver.faddBuddy_askforRequest(b.userID,messageContent);
-                if (ErrorCode.OK == errno) {
-                    pr = new PendingRequest();
-                    pr.uid = b.userID;
-                    pr.nickname = b.nickName;
-                    pr.buddy_photo_timestamp = b.photoUploadedTimeStamp;
-                    pr.type = PendingRequest.BUDDY_OUT;
-                   
-                }
-                return null;
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Buddy, Integer, Void>() {
+			int errno = ErrorCode.OK;
+			PendingRequest pr;
 
-            }
-            @Override
-            protected void onPostExecute(Void v) {
+			@Override
+			protected Void doInBackground(Buddy... params) {
+				Buddy b = params[0];
+				errno = mwebserver.faddBuddy_askforRequest(b.userID, messageContent);
+				if (ErrorCode.OK == errno) {
+					pr = new PendingRequest();
+					pr.uid = b.userID;
+					pr.nickname = b.nickName;
+					pr.buddy_photo_timestamp = b.photoUploadedTimeStamp;
+					pr.type = PendingRequest.BUDDY_OUT;
+
+				}
+				return null;
+
+			}
+
+			@Override
+			protected void onPostExecute(Void v) {
 //                mMsgBox.dismissWait();
-                if(errno == ErrorCode.OK) {
-                    mDbHelper.storePendingRequest(pr);
-                    if (0 != (Buddy.RELATIONSHIP_FRIEND_HERE & buddy.getFriendShipWithMe())) {
+				if (errno == ErrorCode.OK) {
+					mDbHelper.storePendingRequest(pr);
+					if (0 != (Buddy.RELATIONSHIP_FRIEND_HERE & buddy.getFriendShipWithMe())) {
 //                        mMsgBox.toast(R.string.contacts_add_buddy_succeed_without_pending);
-                    } else if (0 != (Buddy.RELATIONSHIP_PENDING_OUT & buddy.getFriendShipWithMe())) {
+					} else if (0 != (Buddy.RELATIONSHIP_PENDING_OUT & buddy.getFriendShipWithMe())) {
 //                        mMsgBox.show(null, getResources().getString(R.string.contacts_add_buddy_pending_out));
-                    }
-                } else if (errno == ErrorCode.ERR_OPERATION_DENIED){
+					}
+				} else if (errno == ErrorCode.ERR_OPERATION_DENIED) {
 //                    mMsgBox.show(null, getResources().getString(R.string.contactinfo_add_friend_denied));
-                } else {
+				} else {
 //                    mMsgBox.show(null, getResources().getString(R.string.operation_failed));
-                }
-            }
+				}
+			}
 
-        }.execute(buddy);
+		}, buddy);
     }
 }

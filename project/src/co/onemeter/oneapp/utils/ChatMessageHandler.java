@@ -3,15 +3,15 @@ package co.onemeter.oneapp.utils;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.wowtalk.api.*;
 import co.onemeter.oneapp.BuildConfig;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.ui.Log;
 import co.onemeter.oneapp.ui.StartActivity;
+import co.onemeter.utils.AsyncTaskExecutor;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.wowtalk.api.*;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -355,15 +355,16 @@ public class ChatMessageHandler {
             if(uid != null) {
                 if(mWeb == null)
                     mWeb = WowTalkWebServerIF.getInstance(context);
-                new AsyncTask<String, Integer, Void>() {
+                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Integer, Void>() {
                     @Override
                     protected Void doInBackground(String... params) {
-                        if(ErrorCode.OK == mWeb.fGetBuddyWithUID(params[0])) {
+                        if (ErrorCode.OK == mWeb.fGetBuddyWithUID(params[0])) {
                             mPrefUtil.setLocalContactListLastModified();
-                        };
+                        }
+                        ;
                         return null;
                     }
-                }.execute(uid);
+                }, uid);
                 mDb.deleteChatMessage(msg);
             }
         } else if (NOTI_ACTION_GROUP_PROFILE.equals(action)) {
@@ -371,7 +372,7 @@ public class ChatMessageHandler {
             if(gid != null) {
                 if(mWeb == null)
                     mWeb = WowTalkWebServerIF.getInstance(context);
-                new AsyncTask<String, Integer, Void>() {
+                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Integer, Void>() {
                     @Override
                     protected Void doInBackground(String... params) {
                         if(ErrorCode.OK == mWeb.fGroupChat_GetGroupDetail(params[0])) {
@@ -379,7 +380,7 @@ public class ChatMessageHandler {
                         };
                         return null;
                     }
-                }.execute(gid);
+                }, gid);
                 mDb.deleteChatMessage(msg);
             }
         }
@@ -408,7 +409,7 @@ public class ChatMessageHandler {
                 // add buddy to buddies table
                 Buddy b = new Buddy(msg.chatUserName);
                 if (null == mDb.fetchBuddyDetail(b)) {
-                    new AsyncTask<String, Void, Void>() {
+                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Void, Void>() {
                         @Override
                         protected Void doInBackground(String... params) {
                             String uid = params[0];
@@ -423,7 +424,7 @@ public class ChatMessageHandler {
                             }
                             return null;
                         }
-                    }.execute(b.userID);
+                    }, b.userID);
                 } else {
                     b.setFriendshipWithMe(Buddy.RELATIONSHIP_FRIEND_BOTH);
                     mDb.storeNewBuddyWithUpdate(b);

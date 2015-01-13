@@ -1,17 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.LessonPerformance;
-import org.wowtalk.api.LessonWebServerIF;
-import org.wowtalk.ui.MessageBox;
-
-
-import co.onemeter.oneapp.Constants;
-import co.onemeter.oneapp.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -20,12 +8,18 @@ import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
+import android.widget.*;
+import co.onemeter.oneapp.Constants;
+import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
+import org.wowtalk.api.Database;
+import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.LessonPerformance;
+import org.wowtalk.api.LessonWebServerIF;
+import org.wowtalk.ui.MessageBox;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 上课状态页面。
@@ -134,28 +128,32 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 	}
 	
 	private void submitStuPerformance(){
-		new AsyncTask<Void, Void, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			protected void onPreExecute() {
 				mMsgBox.showWait();
-			};
-			
+			}
+
+			;
+
 			@Override
 			protected Integer doInBackground(Void... params) {
 				return lessonServer.addOrModifyLessonPerformance(lesPersToPost);
 			}
-			
+
 			protected void onPostExecute(Integer result) {
 				mMsgBox.dismissWait();
-				if(ErrorCode.OK == result){
+				if (ErrorCode.OK == result) {
 					mMsgBox.toast(R.string.class_submit_success);
 					finish();
-				}else {
+				} else {
 					mMsgBox.toast(R.string.class_submit_failed);
 				}
-			};
-			
-		}.execute((Void)null);
+			}
+
+			;
+
+		});
 	}
 	
 	class LessonStatusAdapter extends BaseAdapter{

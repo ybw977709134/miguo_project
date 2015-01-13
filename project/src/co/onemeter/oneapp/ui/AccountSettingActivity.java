@@ -15,17 +15,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
+import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkVoipIF;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
-
-import co.onemeter.oneapp.R;
 
 public class AccountSettingActivity extends Activity implements OnClickListener{
     private static final String TAG = "AccountSettingActivity";
@@ -102,7 +99,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
         mBindPhone.setEnabled(false);
         mBindEmail.setEnabled(false);
         final long startTime = System.currentTimeMillis();
-		new AsyncTask<Void, Integer, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
@@ -123,23 +120,23 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 						txtPhonenumber.setText(getResources().getString(R.string.not_binded));
 					}
 				}
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mBindPhone.setEnabled(true);
-                        mBindEmail.setEnabled(true);
-                        long endTime = System.currentTimeMillis();
-                        Log.d(TAG, ", onResume, the time of invoking queryBinds() is " + (endTime - startTime) + " milliseconds.");
-                    }
-                });
+				new Handler().post(new Runnable() {
+					@Override
+					public void run() {
+						mBindPhone.setEnabled(true);
+						mBindEmail.setEnabled(true);
+						long endTime = System.currentTimeMillis();
+						Log.d(TAG, ", onResume, the time of invoking queryBinds() is " + (endTime - startTime) + " milliseconds.");
+					}
+				});
 			}
 
-		}.execute((Void)null);
+		});
 	}
 	
 	private void logout() {
         mMsgBox.showWait();
-		new AsyncTask<Void, Integer ,Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
@@ -149,24 +146,24 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 
 			@Override
 			protected void onPostExecute(Integer result) {
-                PrefUtil.getInstance(AccountSettingActivity.this).clear();
+				PrefUtil.getInstance(AccountSettingActivity.this).clear();
 
-                WowTalkVoipIF.getInstance(AccountSettingActivity.this).fStopWowTalkService();
+				WowTalkVoipIF.getInstance(AccountSettingActivity.this).fStopWowTalkService();
 
-                // If the network is not available, the MsgBox will show the toast,
-                // so we should dismiss it before finish the activity.
-                mMsgBox.dismissWait();
-                mMsgBox.dismissToast();
+				// If the network is not available, the MsgBox will show the toast,
+				// so we should dismiss it before finish the activity.
+				mMsgBox.dismissWait();
+				mMsgBox.dismissToast();
 
-                if (StartActivity.isInstanciated()) {
-                    StartActivity.instance().finish();
-                }
-                Intent intent = new Intent(AccountSettingActivity.this, LoginActivity.class);
-                startActivity(intent);
+				if (StartActivity.isInstanciated()) {
+					StartActivity.instance().finish();
+				}
+				Intent intent = new Intent(AccountSettingActivity.this, LoginActivity.class);
+				startActivity(intent);
 
-                finish();
+				finish();
 			}
-		}.execute((Void)null);
+		});
 	}
 
 	@Override

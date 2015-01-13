@@ -1,26 +1,22 @@
 package co.onemeter.oneapp.ui;
 
-import android.text.*;
-import com.umeng.analytics.MobclickAgent;
-
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
+import co.onemeter.utils.AsyncTaskExecutor;
+import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.MessageBox;
 
 public class InputSimpleTextActivity extends Activity implements OnClickListener{
 
@@ -143,34 +139,34 @@ public class InputSimpleTextActivity extends Activity implements OnClickListener
         mMsgBox.showWait();
         final Database dbHelper = new Database(InputSimpleTextActivity.this);
         final Buddy me = dbHelper.fetchBuddyDetail(new Buddy(PrefUtil.getInstance(InputSimpleTextActivity.this).getUid()));
-        new AsyncTask<Void, Integer, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... params) {
                 int whichField = Buddy.FIELD_FLAG_NONE;
                 switch (mCategory) {
-                case CATEGORY_PRONUNCIATION:
-                    whichField = Buddy.FIELD_FLAG_PRONUNCIATION;
-                    me.pronunciation = newValue;
-                    break;
-                case CATEGORY_PHONE:
-                    whichField = Buddy.FIELD_FLAG_PHONE;
-                    me.phoneNumber = newValue;
-                    break;
-                case CATEGORY_MOBILE:
-                    whichField = Buddy.FIELD_FLAG_MOBILE;
-                    me.mobile = newValue;
-                    break;
-                case CATEGORY_EMAIL:
-                    whichField = Buddy.FIELD_FLAG_EMAIL;
-                    me.setEmail(newValue);
-                    break;
-                case CATEGORY_BRANCH_STORE:
-                    whichField = Buddy.FIELD_FLAG_AREA;
-                    me.area = newValue;
-                    break;
-                default:
-                    break;
+                    case CATEGORY_PRONUNCIATION:
+                        whichField = Buddy.FIELD_FLAG_PRONUNCIATION;
+                        me.pronunciation = newValue;
+                        break;
+                    case CATEGORY_PHONE:
+                        whichField = Buddy.FIELD_FLAG_PHONE;
+                        me.phoneNumber = newValue;
+                        break;
+                    case CATEGORY_MOBILE:
+                        whichField = Buddy.FIELD_FLAG_MOBILE;
+                        me.mobile = newValue;
+                        break;
+                    case CATEGORY_EMAIL:
+                        whichField = Buddy.FIELD_FLAG_EMAIL;
+                        me.setEmail(newValue);
+                        break;
+                    case CATEGORY_BRANCH_STORE:
+                        whichField = Buddy.FIELD_FLAG_AREA;
+                        me.area = newValue;
+                        break;
+                    default:
+                        break;
                 }
 
                 // 此情况不会发生，发生则异常
@@ -190,7 +186,7 @@ public class InputSimpleTextActivity extends Activity implements OnClickListener
             protected void onPostExecute(Integer result) {
                 Log.i("InputSimpleTextActivity#confirmChanged, fUpdateMyProfile result code is " + result);
                 mMsgBox.dismissWait();
-                if(result == ErrorCode.OK) {
+                if (result == ErrorCode.OK) {
                     Intent intent = new Intent();
                     intent.putExtra(RESULT_VALUE_KEY, newValue);
                     setResult(RESULT_OK, intent);
@@ -200,7 +196,7 @@ public class InputSimpleTextActivity extends Activity implements OnClickListener
                 }
             }
 
-        }.execute((Void)null);
+        });
     }
 
     @Override

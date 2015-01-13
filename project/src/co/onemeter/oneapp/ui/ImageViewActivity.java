@@ -21,13 +21,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.ui.scale_viewpager.PhotoView;
+import co.onemeter.oneapp.ui.scale_viewpager.PhotoViewPager;
+import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.scale_viewpager.PhotoView;
-import co.onemeter.oneapp.ui.scale_viewpager.PhotoViewPager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -244,16 +245,16 @@ public class ImageViewActivity extends Activity implements View.OnClickListener 
     }
 
     private void freeABitmapDrawable(final BitmapDrawable bmpDrawable) {
-        new AsyncTask<Void, Void, Void>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                if(null != bmpDrawable && null != bmpDrawable.getBitmap()) {
+                if (null != bmpDrawable && null != bmpDrawable.getBitmap()) {
                     BmpUtils.recycleABitmap(bmpDrawable.getBitmap());
                 }
 
                 return null;
             }
-        }.execute((Void)null);
+        });
 
     }
 
@@ -285,15 +286,16 @@ public class ImageViewActivity extends Activity implements View.OnClickListener 
         downloadingFiles.add(mCurPhotoIdx);
 
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
             private WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(ImageViewActivity.this);
-            private int downloadFileIndex=mCurPhotoIdx;
+            private int downloadFileIndex = mCurPhotoIdx;
+
             @Override
             protected Integer doInBackground(Void... voids) {
 
                 // check current photo first
-                if(UPDATE_WITH_MOMENT_MEDIA == updateType) {
+                if (UPDATE_WITH_MOMENT_MEDIA == updateType) {
                     downloadFileFromMomentMedia(downloadFileIndex);
                 } else {
                     downloadFile(downloadFileIndex);
@@ -311,7 +313,7 @@ public class ImageViewActivity extends Activity implements View.OnClickListener 
             private void downloadFileFromMomentMedia(final int position) {
                 WFile file = files.get(position);
                 if (!new File(file.localPath).exists()) {
-                    web.fGetFileFromServer(file.fileid,GlobalSetting.S3_MOMENT_FILE_DIR,
+                    web.fGetFileFromServer(file.fileid, GlobalSetting.S3_MOMENT_FILE_DIR,
                             new NetworkIFDelegate() {
                                 @Override
                                 public void didFinishNetworkIFCommunication(int i, byte[] bytes) {
@@ -357,7 +359,7 @@ public class ImageViewActivity extends Activity implements View.OnClickListener 
                 downloadingFiles.remove(Integer.valueOf(downloadFileIndex));
                 mMsgBox.dismissWait();
             }
-        }.execute((Void) null);
+        });
     }
 
     private BitmapDrawable getDrawableFromWFile(WFile aFile) {

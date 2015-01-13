@@ -1,16 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.util.ArrayList;
-
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.R;
-
-import com.wowtech.dslv.DragSortListView;
-
 import android.app.ListActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +11,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
+import com.wowtech.dslv.DragSortListView;
+import org.wowtalk.api.Database;
+import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.GroupChatRoom;
+import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.ui.MessageBox;
+
+import java.util.ArrayList;
 
 public class FavoriteGroupsSortActivity extends ListActivity implements OnClickListener{
 
@@ -112,7 +111,7 @@ public class FavoriteGroupsSortActivity extends ListActivity implements OnClickL
         }
 
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return WowTalkWebServerIF.getInstance(FavoriteGroupsSortActivity.this).sortFavoriteGroups(favoriteGroupIds);
@@ -129,7 +128,7 @@ public class FavoriteGroupsSortActivity extends ListActivity implements OnClickL
                     mMsgBox.toast(R.string.favoriteGroupsSort_failure);
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     @Override

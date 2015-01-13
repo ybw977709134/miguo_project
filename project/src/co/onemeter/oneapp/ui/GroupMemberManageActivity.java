@@ -11,12 +11,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
-
+import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.RoundedImageView;
-import co.onemeter.oneapp.R;
 
 import java.util.ArrayList;
 
@@ -138,7 +138,7 @@ public class GroupMemberManageActivity extends Activity implements View.OnClickL
 
             final MessageBox msgBox = new MessageBox(mContext);
             msgBox.showWait();
-            new AsyncTask<Void, Integer, Integer>(){
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
                 @Override
                 protected Integer doInBackground(Void... params) {
@@ -153,34 +153,36 @@ public class GroupMemberManageActivity extends Activity implements View.OnClickL
                         mDBHelper.updateGroupMemberLevel(groupID, userID, targetLevel);
 
                         switch (targetLevel) {
-                        case GroupMember.LEVEL_ADMIN:
-                            // Change the text and background to admin.
-                            btnSet.setBackgroundResource(R.drawable.btn_blue_medium);
-                            btnSet.setText(getString(R.string.groupmembermanage_cancel_admin));
+                            case GroupMember.LEVEL_ADMIN:
+                                // Change the text and background to admin.
+                                btnSet.setBackgroundResource(R.drawable.btn_blue_medium);
+                                btnSet.setText(getString(R.string.groupmembermanage_cancel_admin));
 
-                            // change the buddy_level of it.
-                            person.setLevel(GroupMember.LEVEL_ADMIN);
-                            // Set the managerMembers
-                            managePersons.add(person);
-                            break;
-                        case GroupMember.LEVEL_DEFAULT:
-                            // Change the text and background to default_level.
-                            btnSet.setBackgroundResource(R.drawable.btn_gray_medium_selector);
-                            btnSet.setText(getString(R.string.group_set_as_admin));
+                                // change the buddy_level of it.
+                                person.setLevel(GroupMember.LEVEL_ADMIN);
+                                // Set the managerMembers
+                                managePersons.add(person);
+                                break;
+                            case GroupMember.LEVEL_DEFAULT:
+                                // Change the text and background to default_level.
+                                btnSet.setBackgroundResource(R.drawable.btn_gray_medium_selector);
+                                btnSet.setText(getString(R.string.group_set_as_admin));
 
-                            // change the buddy_level of it.
-                            person.setLevel(GroupMember.LEVEL_DEFAULT);
-                            // Remove it from the managerMembers
-                            managePersons.remove(person);
-                            break;
-                        default:
-                            break;
+                                // change the buddy_level of it.
+                                person.setLevel(GroupMember.LEVEL_DEFAULT);
+                                // Remove it from the managerMembers
+                                managePersons.remove(person);
+                                break;
+                            default:
+                                break;
                         }
                     } else {
                         msgBox.toast(R.string.operation_failed);
                     }
-                };
-            }.execute((Void)null);
+                }
+
+                ;
+            });
         }
     }
 

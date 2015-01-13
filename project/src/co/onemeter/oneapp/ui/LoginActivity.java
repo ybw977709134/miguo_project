@@ -22,10 +22,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
@@ -85,13 +84,13 @@ public class LoginActivity extends Activity implements OnClickListener {
         }
         final Account oldAccount = tempAccount;
 
-        new AsyncTask<Void, Integer, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... params) {
-                int ret= WowTalkWebServerIF.getInstance(LoginActivity.this).fGetMyProfile();
+                int ret = WowTalkWebServerIF.getInstance(LoginActivity.this).fGetMyProfile();
 
-                if(ErrorCode.OK == ret) {
+                if (ErrorCode.OK == ret) {
                     WowTalkWebServerIF webIF = WowTalkWebServerIF.getInstance(LoginActivity.this);
                     // login 成功后再 logout
                     if (mIsAddAccount) {
@@ -103,7 +102,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     // 这里硬编码一个 dummy company ID.
                     String company = "onemeter";
                     mPrefUtil.setAutoLogin(isAutoLogin);
-                    if(!isAutoLogin) {
+                    if (!isAutoLogin) {
                         mPrefUtil.setCompanyId(company);
                     }
 
@@ -123,9 +122,10 @@ public class LoginActivity extends Activity implements OnClickListener {
                 }
                 return ret;
             }
+
             @Override
             protected void onPostExecute(Integer result) {
-                if(ErrorCode.OK == result) {
+                if (ErrorCode.OK == result) {
                     GlobalValue.IS_BOOT_FROM_LOGIN = true;
                     if (!mIsAddAccount) {
                         Intent newIntent = new Intent(LoginActivity.this, StartActivity.class);
@@ -142,7 +142,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 }
                 mMsgBox.dismissWait();
             }
-        }.execute((Void)null);
+        });
     }
 
     @SuppressLint("HandlerLeak")

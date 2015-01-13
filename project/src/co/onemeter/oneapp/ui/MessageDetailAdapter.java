@@ -26,12 +26,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.MyUrlSpanHelper;
+import co.onemeter.utils.AsyncTaskExecutor;
 import junit.framework.Assert;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
 import org.wowtalk.api.*;
-import org.wowtalk.ui.*;
+import org.wowtalk.ui.MediaInputHelper;
+import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.*;
 import org.wowtalk.ui.msg.Utils;
 
@@ -900,18 +902,18 @@ public class MessageDetailAdapter extends BaseAdapter{
                 final String pathOfThumbNail = MediaInputHelper.makeOutputMediaFile(
                         MediaInputHelper.MEDIA_TYPE_THUMNAIL, null).getAbsolutePath();
 
-                new AsyncTask<Void, Integer, Void>() {
+                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {
                         WowTalkWebServerIF.getInstance(mContext).fGetFileFromServer(
-                                pathofthumbnailincloud, 
-                                new NetworkIFDelegate(){
+                                pathofthumbnailincloud,
+                                new NetworkIFDelegate() {
 
                                     @Override
                                     public void didFailNetworkIFCommunication(
                                             int arg0, byte[] arg1) {
                                         cm.extraData.putBoolean("isTransferring", false);
-                                        mHandler.post(new Runnable(){
+                                        mHandler.post(new Runnable() {
                                             @Override
                                             public void run() {
 //                                                mMsgBox.show(null,
@@ -940,7 +942,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                         return null;
                     }
 
-                }.execute((Void)null);
+                });
             }
         }
     }
@@ -1041,18 +1043,18 @@ public class MessageDetailAdapter extends BaseAdapter{
                     cm.pathOfMultimedia = MediaInputHelper.makeOutputMediaFile(
                             msgtype2mediatype.get(cm.msgType), ext).getAbsolutePath();
 
-                    new AsyncTask<Void, Integer, Void>() {
+                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
                         @Override
                         protected Void doInBackground(
                                 Void... params) {
                             WowTalkWebServerIF.getInstance(mContext).fGetFileFromServer(
-                                    pathoffileincloud, 
-                                    new NetworkIFDelegate(){
+                                    pathoffileincloud,
+                                    new NetworkIFDelegate() {
 
                                         @Override
                                         public void didFailNetworkIFCommunication(
                                                 int arg0, byte[] arg1) {
-                                            cm.pathOfMultimedia=null;
+                                            cm.pathOfMultimedia = null;
                                         }
 
                                         @Override
@@ -1063,7 +1065,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                                             } else {
                                                 mDbHelper.updateChatMessage(cm, false);
                                             }
-                                            mContext.runOnUiThread(new Runnable(){
+                                            mContext.runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     startPlayingVoice(cm);
@@ -1081,18 +1083,18 @@ public class MessageDetailAdapter extends BaseAdapter{
                         }
 
                         @Override
-                        protected void onProgressUpdate (Integer... values) {
-                            if(progressBar != null)
+                        protected void onProgressUpdate(Integer... values) {
+                            if (progressBar != null)
                                 progressBar.setProgress(values[0]);
                         }
 
                         @Override
                         protected void onPostExecute(Void v) {
                             cm.extraData.putBoolean("isTransferring", false);
-                            if(progressBar != null)
+                            if (progressBar != null)
                                 progressBar.setVisibility(View.GONE);
                         }
-                    }.execute((Void)null);
+                    });
                 }
             }
         } else {
@@ -1239,7 +1241,7 @@ public class MessageDetailAdapter extends BaseAdapter{
         final ProgressBar progressBar = msg.extraObjects == null ? null : (ProgressBar)msg.extraObjects.get("progressBar");
         showProgressbarOnUiThread(progressBar);
 
-        new AsyncTask<Void, Integer, Void>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
             boolean status = false;
             CancelFlag f;
 
@@ -1269,7 +1271,7 @@ public class MessageDetailAdapter extends BaseAdapter{
 
                                 @Override
                                 public void setProgress(int arg0, int arg1) {
-                                    publishProgress((int)(arg1 * (float)(1 + finalFileIdx) / fileNum));
+                                    publishProgress((int) (arg1 * (float) (1 + finalFileIdx) / fileNum));
                                 }
 
                             }, 0, pathOfMultimedia[fileIdx], f);
@@ -1282,19 +1284,19 @@ public class MessageDetailAdapter extends BaseAdapter{
             }
 
             @Override
-            protected void onProgressUpdate (Integer... values) {
-                if(progressBar != null)
+            protected void onProgressUpdate(Integer... values) {
+                if (progressBar != null)
                     progressBar.setProgress(values[0]);
             }
 
             @Override
             protected void onPostExecute(Void param) {
                 msg.extraData.putBoolean("isTransferring", false);
-                if(progressBar != null) {
+                if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
 
-                if(status) {
+                if (status) {
                     msg.pathOfMultimedia = pathOfMultimedia[0];
                     msg.pathOfMultimedia2 = pathOfMultimedia[1];
                     if (mIsShowHistory) {
@@ -1306,7 +1308,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                     //if msg content is photo,use our own photo viewer
                     Assert.assertFalse(msg.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO));
 
-                    if(msg.msgType.equals(ChatMessage.MSGTYPE_PIC_VOICE)) {
+                    if (msg.msgType.equals(ChatMessage.MSGTYPE_PIC_VOICE)) {
                         mContext.startActivity(new Intent(mContext, HybirdImageVoiceTextPreview.class)
                                         .putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_TEXT, msg.getText())
                                         .putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_IMAGE_FILENAME, pathOfMultimedia[0])
@@ -1321,25 +1323,26 @@ public class MessageDetailAdapter extends BaseAdapter{
                         mContext.startActivity(intent);
                     }
                 } else {
-                    if(!f.cancelled) {
+                    if (!f.cancelled) {
                         mMsgBox.show(null, mContext.getString(R.string.msg_operation_failed));
                     }
 
                     //delete tmp transferred file
 
                     try {
-                        File tmpFile=new File(msg.pathOfMultimedia);
-                        if(tmpFile.exists()) {
+                        File tmpFile = new File(msg.pathOfMultimedia);
+                        if (tmpFile.exists()) {
                             tmpFile.delete();
                         }
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                    msg.pathOfMultimedia=null;
+                    msg.pathOfMultimedia = null;
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     public void releaseRes() {

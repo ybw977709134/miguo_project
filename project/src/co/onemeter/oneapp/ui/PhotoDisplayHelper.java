@@ -1,11 +1,7 @@
 package co.onemeter.oneapp.ui;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
+import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -13,12 +9,13 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.Log;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.bitmapfun.util.ImageWorker;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
-import co.onemeter.oneapp.R;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -387,64 +384,64 @@ public class PhotoDisplayHelper extends ImageWorker {
         view.setImageResource(defaultResid);
         view.setTag(fileid);
 
-		new AsyncTask<ImageView, Integer, Void> () {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<ImageView, Integer, Void>() {
 
-			ImageView view = null;
-			boolean ok = true;
-			
-			@Override
-			protected Void doInBackground(ImageView... arg0) {
-				
-				view = arg0[0];
-				
-				WowTalkWebServerIF.getInstance(context).fGetFileFromServer(fileid,
+            ImageView view = null;
+            boolean ok = true;
+
+            @Override
+            protected Void doInBackground(ImageView... arg0) {
+
+                view = arg0[0];
+
+                WowTalkWebServerIF.getInstance(context).fGetFileFromServer(fileid,
                         fileDir,
-						new NetworkIFDelegate(){
+                        new NetworkIFDelegate() {
 
-					@Override
-					public void didFailNetworkIFCommunication(int arg0, byte[] arg1) {
-						ok = false;
-						Log.e("AvatarUtils.displayPhoto() failed to download: "
-								+ new String(arg1).toString());
-					}
+                            @Override
+                            public void didFailNetworkIFCommunication(int arg0, byte[] arg1) {
+                                ok = false;
+                                Log.e("AvatarUtils.displayPhoto() failed to download: "
+                                        + new String(arg1).toString());
+                            }
 
-					@Override
-					public void didFinishNetworkIFCommunication(int arg0, byte[] arg1) {
-						ok = true;
-						Log.e("AvatarUtils.displayPhoto() succeed");
-					}
+                            @Override
+                            public void didFinishNetworkIFCommunication(int arg0, byte[] arg1) {
+                                ok = true;
+                                Log.e("AvatarUtils.displayPhoto() succeed");
+                            }
 
-					@Override
-					public void setProgress(int arg0, int arg1) {
-					}
+                            @Override
+                            public void setProgress(int arg0, int arg1) {
+                            }
 
-				}, 0, path, null);
-				return null;
-			}
-			
-			@Override
-			protected void onPostExecute(Void v) {
-				if(ok) {
-					Log.e("i'm here");
-					if(fileid.equals((String)view.getTag())) {
+                        }, 0, path, null);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void v) {
+                if (ok) {
+                    Log.e("i'm here");
+                    if (fileid.equals((String) view.getTag())) {
                         BitmapDrawable drawable = new BitmapDrawable(context.getResources(), path);
                         if (drawable.getBitmap() != null) {
                             view.setImageDrawable(drawable);
                         } else {
                             view.setImageResource(defaultResid);
                         }
-					} else {
-						Log.e("skip set image drawable for fileid " + fileid);
-					}
-					
-					if(onFileDownloadedListener != null) {
-						onFileDownloadedListener.onFileDownloaded(path);
-					}
-				}
-				downloadingLock.remove(fileid);
-			}
+                    } else {
+                        Log.e("skip set image drawable for fileid " + fileid);
+                    }
 
-		}.execute(view);
+                    if (onFileDownloadedListener != null) {
+                        onFileDownloadedListener.onFileDownloaded(path);
+                    }
+                }
+                downloadingLock.remove(fileid);
+            }
+
+        }, view);
 	}
 
     /**
@@ -486,59 +483,59 @@ public class PhotoDisplayHelper extends ImageWorker {
 		}
 		downloadingLock.put(buddy.getGUID(), view);
 		
-		new AsyncTask<Void, Integer, Void> () {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
 
-			boolean ok = true;
-			
-			@Override
-			protected Void doInBackground(Void... arg0) {
-				NetworkIFDelegate nd = new NetworkIFDelegate(){
+            boolean ok = true;
 
-					@Override
-					public void didFailNetworkIFCommunication(int arg0, byte[] arg1) {
-						ok = false;
-						Log.e("AvatarUtils.displayPhoto() failed to download: "
-								+ new String(arg1).toString());
-					}
+            @Override
+            protected Void doInBackground(Void... arg0) {
+                NetworkIFDelegate nd = new NetworkIFDelegate() {
 
-					@Override
-					public void didFinishNetworkIFCommunication(int arg0, byte[] arg1) {
-						ok = true;
-						Log.e("AvatarUtils.displayPhoto() succeed");
-					}
+                    @Override
+                    public void didFailNetworkIFCommunication(int arg0, byte[] arg1) {
+                        ok = false;
+                        Log.e("AvatarUtils.displayPhoto() failed to download: "
+                                + new String(arg1).toString());
+                    }
 
-					@Override
-					public void setProgress(int arg0, int arg1) {
-					}
+                    @Override
+                    public void didFinishNetworkIFCommunication(int arg0, byte[] arg1) {
+                        ok = true;
+                        Log.e("AvatarUtils.displayPhoto() succeed");
+                    }
 
-				};
-				if(thumbnail)
-					WowTalkWebServerIF.getInstance(context).fGetThumbnailForUserID(
-							buddy.getGUID(), nd, 0, path);
-				else
-					WowTalkWebServerIF.getInstance(context).fGetPhotoForUserID(
-							buddy.getGUID(), nd, 0, path);
-				return null;
-			}
-			
-			@Override
-			protected void onPostExecute(Void v) {
-				if(ok) {
-					if(buddy.getGUID().equals((String)view.getTag())) {
+                    @Override
+                    public void setProgress(int arg0, int arg1) {
+                    }
+
+                };
+                if (thumbnail)
+                    WowTalkWebServerIF.getInstance(context).fGetThumbnailForUserID(
+                            buddy.getGUID(), nd, 0, path);
+                else
+                    WowTalkWebServerIF.getInstance(context).fGetPhotoForUserID(
+                            buddy.getGUID(), nd, 0, path);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void v) {
+                if (ok) {
+                    if (buddy.getGUID().equals((String) view.getTag())) {
                         BitmapDrawable drawable = new BitmapDrawable(context.getResources(), path);
                         if (drawable.getBitmap() != null) {
                             view.setImageDrawable(drawable);
                         }
-					}
+                    }
 //					if(thumbnail) 
 //						buddy.pathOfThumbNail = path;
 //					else
 //						buddy.pathOfPhoto = path;
-				}
-				downloadingLock.remove(buddy.getGUID());
-			}
+                }
+                downloadingLock.remove(buddy.getGUID());
+            }
 
-		}.execute((Void)null);
+        });
 	}
 
 	public static String makeLocalPhotoPath(Context context, String uid) {

@@ -11,14 +11,10 @@ import android.text.TextUtils;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.ChatMessage;
-import org.wowtalk.api.Connect2;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.Utils;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ChatMessageHandler;
+import co.onemeter.utils.AsyncTaskExecutor;
+import org.wowtalk.api.*;
 
 import java.util.List;
 import java.util.Timer;
@@ -62,17 +58,17 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
             // 修正一些属性以便展示，比如把通知消息的JSON翻译为可读文字。
             // 为了避免覆盖其它线程对数据库的修改，这里不把 handle 结果保存到数据库中。
 
-            new AsyncTask<Void, Integer, String>(){
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, String>() {
                 @Override
                 protected String doInBackground(Void... params) {
                     ChatMessageHandler h = new ChatMessageHandler(context);
                     h.handle(msg, true, null);
 
-                    String name2show=msg.displayName;
-                    if(msg.isGroupChatMessage) {
+                    String name2show = msg.displayName;
+                    if (msg.isGroupChatMessage) {
                         Buddy b = database.buddyWithUserID(msg.groupChatSenderID);
                         if (null != b) {
-                            name2show=TextUtils.isEmpty(b.nickName) ? b.username : b.nickName;
+                            name2show = TextUtils.isEmpty(b.nickName) ? b.username : b.nickName;
                         }
                     }
                     return name2show;
@@ -86,12 +82,12 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
                     }
                     database.triggerChatMessageObserver();
                     PrefUtil mPrefUtil = PrefUtil.getInstance(context);
-                    if(mPrefUtil.isSysNoticeEnabled() && mPrefUtil.isSysNoticeNewMessageOn()) {
-                        if(mPrefUtil.isSysNoticeMusicOn()) {
-                            SoundPoolManager.playSoundFromRaw(context,R.raw.new_msg_incoming);
+                    if (mPrefUtil.isSysNoticeEnabled() && mPrefUtil.isSysNoticeNewMessageOn()) {
+                        if (mPrefUtil.isSysNoticeMusicOn()) {
+                            SoundPoolManager.playSoundFromRaw(context, R.raw.new_msg_incoming);
                         }
-                        if(mPrefUtil.isSysNoticeVibrateOn()) {
-                            long[] vibrates = new long[] {
+                        if (mPrefUtil.isSysNoticeVibrateOn()) {
+                            long[] vibrates = new long[]{
                                     Utils.VIRBRATE_TIME_DELAY,
                                     Utils.VIRBRATE_TIME_FIRST,
                                     Utils.VIRBRATE_TIME_INTERVAL,
@@ -99,11 +95,11 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
                             Utils.triggerVibrate(context, vibrates, Utils.VIRBRATE_REPEAT_NO);
                         }
 
-                        showNotification(context, msg,name2show);
+                        showNotification(context, msg, name2show);
                     }
                 }
 
-            }.execute((Void)null);
+            });
 
 
 //            showNotification(context, msg);

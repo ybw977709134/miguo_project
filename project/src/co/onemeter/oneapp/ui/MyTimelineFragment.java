@@ -18,10 +18,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
@@ -194,13 +193,13 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
                         @Override
                         public void onClick(View v) {
                             bottomBoard.dismiss();
-                            new AsyncTask<Void, Void, Void>() {
+                            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
                                 @Override
                                 protected Void doInBackground(Void... params) {
                                     removeCoverImage();
                                     return null;
                                 }
-                            }.execute((Void)null);
+                            });
                         }
                     });
         }
@@ -442,7 +441,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
      * <p>每次检查album cover的时间戳，判断是否需要下载cover
      */
     private void checkoutAlbumCover() {
-        new AsyncTask<Void, Integer, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
             AlbumCover ac = new AlbumCover();
 
@@ -451,7 +450,8 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
                 try {
                     WowTalkWebServerIF mWeb = WowTalkWebServerIF.getInstance(getActivity());
                     return mWeb.fGetAlbumCover(uid(), ac);
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                     return ErrorCode.BAD_RESPONSE;
                 }
@@ -473,7 +473,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
                     }
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     @Override

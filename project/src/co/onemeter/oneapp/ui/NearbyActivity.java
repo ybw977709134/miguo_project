@@ -10,12 +10,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.umeng.analytics.MobclickAgent;
-import org.wowtalk.api.*;
-import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.LocationHelper;
+import co.onemeter.utils.AsyncTaskExecutor;
+import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.MessageBox;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -444,12 +445,13 @@ public class NearbyActivity extends Activity implements OnClickListener {
     }
 	
 	private void fetchNearbyPerson(final double latitude, final double longitude) {
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 buddies = new ArrayList<Buddy>();
                 return WowTalkWebServerIF.getInstance(NearbyActivity.this).fGetBuddiesNearby(false, latitude, longitude, buddies);
             }
+
             @Override
             protected void onPostExecute(Integer result) {
                 if (result == ErrorCode.OK) {
@@ -470,13 +472,13 @@ public class NearbyActivity extends Activity implements OnClickListener {
                 }
 
             }
-        }.execute((Void)null);
+        });
 
 	}
 
     private void updateMyLocation() {
         mMsgBox.showWait();
-       new AsyncTask<Void, Void, Integer>() {
+       AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
            @Override
            protected Integer doInBackground(Void... params) {
@@ -486,32 +488,34 @@ public class NearbyActivity extends Activity implements OnClickListener {
                buddy.lastLocation.longitude = mLocation.getLongitude();
                return WowTalkWebServerIF.getInstance(NearbyActivity.this).fUpdateMyProfile(buddy, Buddy.FIELD_FLAG_SPOT);
            }
+
            @Override
            protected void onPostExecute(Integer result) {
                if (result == ErrorCode.OK) {
                    fetchNearbyGroup(mLocation.getLatitude(), mLocation.getLongitude());
                    fetchNearbyPerson(mLocation.getLatitude(), mLocation.getLongitude());
-                } else {
+               } else {
                    mMsgBox.dismissWait();
                }
            }
-       }.execute((Void)null);
+       });
     }
 
     private void fetchNearbyGroup(final double latitude, final double longitude) {
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 groups = new ArrayList<GroupChatRoom>();
                 return WowTalkWebServerIF.getInstance(NearbyActivity.this).fGroupChat_GetNearBy(false, latitude, longitude, groups);
             }
+
             @Override
             protected void onPostExecute(Integer result) {
                 if (result == ErrorCode.OK) {
                     groupRoomAdapter = new GroupRoomAdapter(NearbyActivity.this);
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     @Override

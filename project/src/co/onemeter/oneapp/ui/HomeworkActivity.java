@@ -1,29 +1,24 @@
 package co.onemeter.oneapp.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.LessonHomework;
-import org.wowtalk.api.LessonWebServerIF;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
+import org.wowtalk.api.Database;
+import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.LessonHomework;
+import org.wowtalk.api.LessonWebServerIF;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 家庭作业作业页面。 Created by pzy on 11/10/14. Modified by yl on 23/12/2014
@@ -56,14 +51,15 @@ public class HomeworkActivity extends Activity implements View.OnClickListener {
 	}
 
 	private void getLessonHomework(final int lessonId) {
-		new AsyncTask<Void, Void, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
 				try {
 					return LessonWebServerIF.getInstance(
 							HomeworkActivity.this).getLessonHomework(lessonId);
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					return ErrorCode.BAD_RESPONSE;
 				}
 			}
@@ -81,9 +77,11 @@ public class HomeworkActivity extends Activity implements View.OnClickListener {
 					lvHomework.addFooterView(footerView());
 				}
 				lvHomework.setAdapter(adapter);
-				
-			};
-		}.execute((Void) null);
+
+			}
+
+			;
+		});
 	}
 
 	@Override
@@ -128,7 +126,7 @@ public class HomeworkActivity extends Activity implements View.OnClickListener {
 	}
 
 	private void addPostHomework(final LessonHomework homework) {
-		new AsyncTask<Void, Void, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
@@ -142,13 +140,15 @@ public class HomeworkActivity extends Activity implements View.OnClickListener {
 					lessonHomeworkz.clear();
 					lessonHomeworkz.addAll(Database.getInstance(HomeworkActivity.this).fetchLessonHomework(lessonId));
 					for (int i = 0; i < lessonHomeworkz.size(); i++) {
-						homeworktitles.add(i + 1 + "."+ lessonHomeworkz.get(i).title);
+						homeworktitles.add(i + 1 + "." + lessonHomeworkz.get(i).title);
 					}
 					adapter.notifyDataSetChanged();
 				}
-			};
+			}
 
-		}.execute((Void) null);
+			;
+
+		});
 	}
 
 	private View footerView() {

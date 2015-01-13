@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
@@ -293,7 +294,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
 
     private void addFriend_async(final PendingRequest p) {
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return mWeb.fAddBuddy(p.uid);
@@ -320,7 +321,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
                     mMsgBox.toast(R.string.msg_operation_failed);
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
 //    private Buddy makeBuddyFromPendingRequest(PendingRequest p) {
@@ -349,12 +350,13 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
 
     private void rejectBuddyToJoinGroup_async(final PendingRequest p) {
         mMsgBox.showWait();
-        new AsyncTask<PendingRequest, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<PendingRequest, Void, Integer>() {
             @Override
             protected Integer doInBackground(PendingRequest... params) {
                 PendingRequest p = params[0];
                 return mWeb.fGroupChat_Reject(p.group_id, p.uid);
             }
+
             @Override
             protected void onPostExecute(Integer errno) {
                 mMsgBox.dismissWait();
@@ -371,7 +373,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
                     mMsgBox.toast(R.string.msg_operation_failed);
                 }
             }
-        }.execute(p);
+        }, p);
     }
 
     private void acceptBuddyToJoinGroup_async(final PendingRequest p) {
@@ -381,7 +383,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
         list.add(b);
         final List<Buddy> finalList = list;
         mMsgBox.showWait();
-        new AsyncTask<PendingRequest, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<PendingRequest, Void, Integer>() {
             @Override
             protected Integer doInBackground(PendingRequest... params) {
                 return mWeb.fGroupChat_AddMembers(p.group_id, finalList, true);
@@ -406,17 +408,18 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
                     mMsgBox.toast(R.string.msg_operation_failed);
                 }
             }
-        }.execute(p);
+        }, p);
     }
 
     private void ignoreBuddyRequest_async(final PendingRequest p) {
 
         mMsgBox.showWait();
-        new AsyncTask<PendingRequest, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<PendingRequest, Void, Integer>() {
             @Override
             protected Integer doInBackground(PendingRequest... buddies) {
                 return mWeb.fIgnoreBuddyRequest(p.uid);
             }
+
             @Override
             protected void onPostExecute(Integer errno) {
                 mMsgBox.dismissWait();
@@ -428,7 +431,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
                     mMsgBox.toast(R.string.msg_operation_failed);
                 }
             }
-        }.execute(p);
+        }, p);
     }
 
     /**
@@ -506,7 +509,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
     private void pullPendingRequests_async() {
         mMsgBox.showWait();
 
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return WowTalkWebServerIF.getInstance(NewFriendsActivity.this)
@@ -519,7 +522,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
 
                 loadLocalPendingRequests();
             }
-        }.execute((Void)null);
+        });
     }
 
 }

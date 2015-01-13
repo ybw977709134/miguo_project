@@ -11,12 +11,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-
+import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
-import co.onemeter.oneapp.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,7 +84,7 @@ public class PickTempGroupActivity extends Activity {
                 if (null == groupMembers || groupMembers.isEmpty()) {
                     if (!mDownloadingGroups.contains(group.groupID)) {
                         mDownloadingGroups.add(group.groupID);
-                        new AsyncTask<Void, Void, Map<String, Object>>() {
+                        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Map<String, Object>>() {
                             @Override
                             protected Map<String, Object> doInBackground(Void... params) {
                                 Map<String, Object> resultMap = WowTalkWebServerIF.getInstance(mContext)
@@ -93,7 +93,7 @@ public class PickTempGroupActivity extends Activity {
                             }
 
                             protected void onPostExecute(Map<String, Object> resultMap) {
-                                int resultCode = (Integer)resultMap.get("code");
+                                int resultCode = (Integer) resultMap.get("code");
                                 Log.d("PickTempGroupActivity#download members of temp group "
                                         + group.groupID + ", resultCode is " + resultCode);
                                 if (ErrorCode.OK == resultCode) {
@@ -104,7 +104,7 @@ public class PickTempGroupActivity extends Activity {
                                             String myUid = PrefUtil.getInstance(mContext).getUid();
                                             String myNickname = PrefUtil.getInstance(mContext).getMyNickName();
                                             StringBuffer displayName = new StringBuffer();
-                                            for(GroupMember member : members) {
+                                            for (GroupMember member : members) {
                                                 if (!TextUtils.isEmpty(myUid) && myUid.equals(member.userID)) {
                                                     continue;
                                                 }
@@ -120,8 +120,10 @@ public class PickTempGroupActivity extends Activity {
                                     }
                                 }
                                 mDownloadingGroups.remove(group.groupID);
-                            };
-                        }.execute((Void)null);
+                            }
+
+                            ;
+                        });
                     }
                 } else {
                     if (!group.isGroupNameChanged) {
@@ -234,27 +236,28 @@ public class PickTempGroupActivity extends Activity {
 	 * 是否需要每次进入此页面都要从服务器下载所有群组，暂时先不这么做
 	 */
 	private void getTemporaryGroupFromServer() {
-		new AsyncTask<Void, Integer, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
-			@Override
-			protected Integer doInBackground(Void... params) {
-				int errno = mWeb.fGroupChat_GetMyGroups();
-				PrefUtil.getInstance(PickTempGroupActivity.this).setLocalGroupListLastModified();
-				return errno;
-			}
-			@Override
-			protected void onPostExecute(Integer result) {
-				if (result == ErrorCode.OK) {
-					getTemporaryGroupFromLocal();
-					groupAdapter = new GroupAdapter(PickTempGroupActivity.this);
-					lvGroupChat.setAdapter(groupAdapter);
-					// whether there are groups.
-			        if (groupChats.isEmpty()){
-			            mNoneTempGroupText.setVisibility(View.VISIBLE);
-			        }
-				}
-			}
-		}.execute((Void)null);
+            @Override
+            protected Integer doInBackground(Void... params) {
+                int errno = mWeb.fGroupChat_GetMyGroups();
+                PrefUtil.getInstance(PickTempGroupActivity.this).setLocalGroupListLastModified();
+                return errno;
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                if (result == ErrorCode.OK) {
+                    getTemporaryGroupFromLocal();
+                    groupAdapter = new GroupAdapter(PickTempGroupActivity.this);
+                    lvGroupChat.setAdapter(groupAdapter);
+                    // whether there are groups.
+                    if (groupChats.isEmpty()) {
+                        mNoneTempGroupText.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
 	}
 	
 	@Override

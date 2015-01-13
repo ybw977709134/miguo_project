@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
@@ -59,7 +60,7 @@ public class LoginInvitedActivity extends Activity implements View.OnClickListen
     public static void login(final Context context, String invitationCode, final MessageBox msgbox) {
 
         msgbox.showWait();
-        new AsyncTask<String, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Void, Integer>() {
             Buddy result = new Buddy();
 
             @Override
@@ -85,6 +86,6 @@ public class LoginInvitedActivity extends Activity implements View.OnClickListen
                             ErrorCode.getErrorName(context, errno)));
                 }
             }
-        }.execute(invitationCode);
+        }, invitationCode);
     }
 }

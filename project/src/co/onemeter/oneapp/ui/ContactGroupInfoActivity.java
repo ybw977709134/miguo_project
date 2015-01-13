@@ -15,12 +15,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.GroupMembersGridAdapter;
+import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
 import co.onemeter.oneapp.utils.ThemeHelper;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
-import org.wowtalk.ui.*;
-import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
+import org.wowtalk.ui.MediaInputHelper;
+import org.wowtalk.ui.MessageBox;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -170,8 +172,9 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
     }
 
     private void quitGroup() {
-        new AsyncTask<Void, Integer, Void>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
             int ok;
+
             @Override
             protected Void doInBackground(Void... arg0) {
                 ok = mWebif.fGroupChat_LeaveGroup(groupRoom.groupID);
@@ -187,12 +190,13 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
                     finish();
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     private void disbandGroup() {
-        new AsyncTask<Void, Integer, Void>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
             int ok;
+
             @Override
             protected Void doInBackground(Void... arg0) {
                 ok = mWebif.fGroupChat_Disband(groupRoom.groupID);
@@ -210,7 +214,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
                     finish();
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     private void editGroupInfo() {
@@ -511,13 +515,13 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
     protected void onStop() {
         super.onStop();
         if(mProfileUpdated) {
-            new AsyncTask<Void, Integer, Void> () {
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
                     ServerHelper.notifyGroupProfileChanged(ContactGroupInfoActivity.this, groupRoom.groupID);
                     return null;
                 }
-            }.execute((Void) null);
+            });
             mProfileUpdated = false;
         }
     }
@@ -542,82 +546,82 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 
                 mMsgBox.showWait();
 
-				new AsyncTask<String, Integer, Void> (){
+				AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Integer, Void>() {
 
-					boolean ok = true;
-					String filePath, thumbPath;
+                    boolean ok = true;
+                    String filePath, thumbPath;
 
-					@Override
-					protected Void doInBackground(String... arg0) {
-						filePath = arg0[0];
-						thumbPath = arg0[1];
+                    @Override
+                    protected Void doInBackground(String... arg0) {
+                        filePath = arg0[0];
+                        thumbPath = arg0[1];
 
-						mWebif.fPostGroupPhoto(groupRoom.groupID, filePath,
-								new NetworkIFDelegate(){
+                        mWebif.fPostGroupPhoto(groupRoom.groupID, filePath,
+                                new NetworkIFDelegate() {
 
-							@Override
-							public void didFailNetworkIFCommunication(int arg0,
-									byte[] arg1) {
-								ok = false;
-							}
+                                    @Override
+                                    public void didFailNetworkIFCommunication(int arg0,
+                                                                              byte[] arg1) {
+                                        ok = false;
+                                    }
 
-							@Override
-							public void didFinishNetworkIFCommunication(int arg0,
-									byte[] arg1) {
-							}
+                                    @Override
+                                    public void didFinishNetworkIFCommunication(int arg0,
+                                                                                byte[] arg1) {
+                                    }
 
-							@Override
-							public void setProgress(int arg0, int arg1) {
-							}
+                                    @Override
+                                    public void setProgress(int arg0, int arg1) {
+                                    }
 
-						}, false, 0);
+                                }, false, 0);
 
-						mWebif.fPostGroupPhoto(groupRoom.groupID, thumbPath,
-								new NetworkIFDelegate(){
+                        mWebif.fPostGroupPhoto(groupRoom.groupID, thumbPath,
+                                new NetworkIFDelegate() {
 
-							@Override
-							public void didFailNetworkIFCommunication(int arg0,
-									byte[] arg1) {
-								ok = false;
-							}
+                                    @Override
+                                    public void didFailNetworkIFCommunication(int arg0,
+                                                                              byte[] arg1) {
+                                        ok = false;
+                                    }
 
-							@Override
-							public void didFinishNetworkIFCommunication(int arg0,
-									byte[] arg1) {
-							}
+                                    @Override
+                                    public void didFinishNetworkIFCommunication(int arg0,
+                                                                                byte[] arg1) {
+                                    }
 
-							@Override
-							public void setProgress(int arg0, int arg1) {
-							}
+                                    @Override
+                                    public void setProgress(int arg0, int arg1) {
+                                    }
 
-						}, true, 0);
+                                }, true, 0);
 
-						return null;
-					}
+                        return null;
+                    }
 
-					@Override
-					protected void onPostExecute(Void v) {
+                    @Override
+                    protected void onPostExecute(Void v) {
                         mMsgBox.dismissWait();
-						mMsgBox.toast(ok ? R.string.done : R.string.operation_failed);
-						if(ok) {
-							groupRoom.setPhotoUploadedTimestamp(new Date().getTime() / 1000);
-							mDbHelper.updateGroupChatRoom(groupRoom);
+                        mMsgBox.toast(ok ? R.string.done : R.string.operation_failed);
+                        if (ok) {
+                            groupRoom.setPhotoUploadedTimestamp(new Date().getTime() / 1000);
+                            mDbHelper.updateGroupChatRoom(groupRoom);
 
                             PhotoDisplayHelper.locallyCopy(ContactGroupInfoActivity.this,
                                     groupRoom.groupID, filePath, false);
                             PhotoDisplayHelper.locallyCopy(ContactGroupInfoActivity.this,
                                     groupRoom.groupID, thumbPath, true);
 
-							PhotoDisplayHelper.displayPhoto(ContactGroupInfoActivity.this,
+                            PhotoDisplayHelper.displayPhoto(ContactGroupInfoActivity.this,
                                     imgPhoto, R.drawable.default_avatar_90, groupRoom, true);
 
-							mActivityResult.putExtra(EXTRA_PHOTO_CHANGED, true);
-							ContactGroupInfoActivity.this.setResult(RESULT_OK, mActivityResult);
+                            mActivityResult.putExtra(EXTRA_PHOTO_CHANGED, true);
+                            ContactGroupInfoActivity.this.setResult(RESULT_OK, mActivityResult);
                             mProfileUpdated = true;
-						}
-					}
+                        }
+                    }
 
-				}.execute(path);
+                }, path);
 			}
 		} else if (requestCode == REQ_EDIT_INFO) {
             if (resultCode == RESULT_OK) {
@@ -630,7 +634,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 	}
 
     private void refreshGroupInfo() {
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return mWebif.fGroupChat_GetGroupDetail(groupRoom.groupID);
@@ -643,7 +647,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
                     setDisplayOfGroup();
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     @Override
@@ -702,7 +706,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
     // download & show pending members
 //    private void downloadAndDisplayPendingMembers_async() {
 //        mPendingMembers = new ArrayList<GroupMember>();
-//        new AsyncTask<Void, Void, Integer>() {
+//        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 //            ArrayList<GroupMember> lst = new ArrayList<GroupMember>();
 //
 //            @Override
@@ -727,7 +731,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 //                    vgPendingMembers.setVisibility(View.GONE);
 //                }
 //            }
-//        }.execute((Void)null);
+//        });
 //    }
 
     private void displayPhoto(String path) {
@@ -885,7 +889,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 
     protected void changeBuddyLevel(final String groupID, final String userID, final int levelAdmin) {
         mMsgBox.showWait();
-        new AsyncTask<Void, Integer, Integer>(){
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... params) {
@@ -902,14 +906,16 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
                 } else {
                     mMsgBox.toast(R.string.operation_failed);
                 }
-            };
-        }.execute((Void)null);
+            }
+
+            ;
+        });
     }
 
     private void acceptMember_asyc(final Buddy buddy) {
         mMsgBox.showWait();
 
-        new AsyncTask<Buddy, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Buddy, Void, Integer>() {
             @Override
             protected Integer doInBackground(Buddy... buddies) {
                 if (buddies[0] == null || Utils.isNullOrEmpty(buddies[0].userID))
@@ -918,7 +924,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
                 b.add(buddies[0]);
                 int errno = mWebif.fGroupChat_AddMembers(groupRoom.groupID, b, true);
                 if (errno == ErrorCode.OK) {
-                    for(Buddy buddy : b) {
+                    for (Buddy buddy : b) {
                         mDbHelper.addNewBuddyToGroupChatRoomByID(
                                 new GroupMember(buddy.userID, groupRoom.groupID), false);
                     }
@@ -934,13 +940,13 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 //                    refreshMemberGrid();
 //                }
             }
-        }.execute(buddy);
+        }, buddy);
     }
 
     private void kickoutMember_asyc(final Buddy buddy) {
         mMsgBox.showWait();
 
-        new AsyncTask<Buddy, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Buddy, Void, Integer>() {
             @Override
             protected Integer doInBackground(Buddy... buddies) {
                 if (buddies[0] == null || Utils.isNullOrEmpty(buddies[0].userID))
@@ -962,6 +968,6 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 //                }
                 mShowDummyBuddy = true;
             }
-        }.execute(buddy);
+        }, buddy);
     }
 }

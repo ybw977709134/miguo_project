@@ -3,6 +3,7 @@ package co.onemeter.oneapp.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -12,18 +13,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.contacts.model.Person;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.bitmapfun.util.AsyncTask;
 import org.wowtalk.ui.msg.RoundedImageView;
-
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.contacts.model.Person;
 
 import java.util.ArrayList;
 
@@ -165,12 +163,14 @@ public class PublicSearchActivity extends Activity {
         
 //        buddy = new Buddy();
         publicBuddies = new ArrayList<Buddy>();
-        new AsyncTask<Void, Void, Integer>() {
-        	
-        	protected void onPreExecute() {
-        		mMsgBox.showWait();
-        	};
-        	
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+
+            protected void onPreExecute() {
+                mMsgBox.showWait();
+            }
+
+            ;
+
             @Override
             protected Integer doInBackground(Void... params) {
                 return WowTalkWebServerIF.getInstance(PublicSearchActivity.this)
@@ -182,7 +182,7 @@ public class PublicSearchActivity extends Activity {
                 mMsgBox.dismissWait();
 
                 if (result == ErrorCode.OK) {
-                    if(0 == publicBuddies.size()) {
+                    if (0 == publicBuddies.size()) {
                         mMsgBox.toast(getString(R.string.alert_no_such_public_account));
                         return;
                     }
@@ -191,7 +191,7 @@ public class PublicSearchActivity extends Activity {
                     lvPublic.setAdapter(publicAdapter);
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     @Override

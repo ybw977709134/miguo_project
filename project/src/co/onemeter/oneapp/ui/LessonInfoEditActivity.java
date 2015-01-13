@@ -1,28 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.lang.reflect.Field;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.api.Lesson;
-import org.wowtalk.api.LessonWebServerIF;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.MessageBox;
-
-import com.androidquery.AQuery;
-
-import co.onemeter.oneapp.Constants;
-import co.onemeter.oneapp.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -30,22 +7,22 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.ContextMenu;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.TimePicker;
+import co.onemeter.oneapp.Constants;
+import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
+import com.androidquery.AQuery;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.MessageBox;
+
+import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 课表修改以及班级信息修改页面。
@@ -376,40 +353,44 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	}
 	
 	private void addOrDeletePostLesson(final List<Lesson> alessons,final List<String> dlessons){
-		new AsyncTask<Void, Void, Integer>(){
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			protected void onPreExecute() {
-				if(dlessons.isEmpty() && alessons.isEmpty()){
+				if (dlessons.isEmpty() && alessons.isEmpty()) {
 					return;
 				}
 				mMsgBox.showWait();
-			};
-			
+			}
+
+			;
+
 			@Override
 			protected Integer doInBackground(Void... params) {
 				LessonWebServerIF lesWeb = LessonWebServerIF.getInstance(LessonInfoEditActivity.this);
-				if(!dlessons.isEmpty()){
-					for(String lesson_id:dlessons){
+				if (!dlessons.isEmpty()) {
+					for (String lesson_id : dlessons) {
 						lesWeb.deleteLesson(lesson_id);
 					}
 				}
 				int errno = ErrorCode.BAD_RESPONSE;
-				if(!alessons.isEmpty()){
-					for(Lesson lesson: alessons){
+				if (!alessons.isEmpty()) {
+					for (Lesson lesson : alessons) {
 						errno = lesWeb.addOrModifyLesson(lesson);
 					}
 				}
 				return errno;
 			}
-			
+
 			protected void onPostExecute(Integer result) {
 				mMsgBox.dismissWait();
-				if(ErrorCode.OK == result){
+				if (ErrorCode.OK == result) {
 					mMsgBox.toast(R.string.class_submit_success);
 				}
 				finish();
-			};
-		}.execute((Void)null);
+			}
+
+			;
+		});
 	}
 	
 	private void updateClassInfo() {
@@ -434,7 +415,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 				+ (minite < 10 ? ("0"+ String.valueOf(minite)) : String.valueOf(minite))
 				+ Constants.COMMA + dtPlace.getText().toString();
 		mMsgBox.showWait();
-		new AsyncTask<Void, Void, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 			@Override
 			protected Integer doInBackground(Void... params) {
 				mDBHelper.updateGroupChatRoom(classroom);
@@ -452,16 +433,16 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 					data.putExtra(GRADE, dtGrade.getText().toString());
 					data.putExtra(SUBJECT, dtSubject.getText().toString());
 					data.putExtra(DATE, new SimpleDateFormat("yyyy-MM-dd").format(resultTime.getTimeInMillis()));
-					data.putExtra(TIME, (hour < 10 ? ("0"+ String.valueOf(hour)) : String.valueOf(hour)) + ":" 
-							+ (minite < 10 ? ("0"+ String.valueOf(minite)) : String.valueOf(minite)));
+					data.putExtra(TIME, (hour < 10 ? ("0" + String.valueOf(hour)) : String.valueOf(hour)) + ":"
+							+ (minite < 10 ? ("0" + String.valueOf(minite)) : String.valueOf(minite)));
 					data.putExtra(PLACE, dtPlace.getText().toString());
 					setResult(RESULT_OK, data);
 					finish();
-				}else if(result == ErrorCode.ERR_OPERATION_DENIED){
+				} else if (result == ErrorCode.ERR_OPERATION_DENIED) {
 					mMsgBox.toast(R.string.class_err_denied, 500);
 				}
 			}
-		}.execute((Void) null);
+		});
 	}
 	
 	@Override

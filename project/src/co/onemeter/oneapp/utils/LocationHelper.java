@@ -8,18 +8,16 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.TextView;
-
+import co.onemeter.oneapp.ui.TimePiece;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
-
-import co.onemeter.oneapp.ui.TimePiece;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -150,8 +148,9 @@ public class LocationHelper {
                     String addressStr = "";
                     try {
                         myFileUrl = new URL("http://maps.google.com/maps/api/geocode/json?latlng=" +
-                                mLocation.getLatitude() + "," + mLocation.getLongitude() + "&sensor=true&language="+ Locale.getDefault().getLanguage());
-                    } catch (MalformedURLException e) {
+                                mLocation.getLatitude() + "," + mLocation.getLongitude() + "&sensor=true&language=" + Locale.getDefault().getLanguage());
+                    }
+                    catch (MalformedURLException e) {
                         e.printStackTrace();
                         return null;
                     }
@@ -171,19 +170,20 @@ public class LocationHelper {
                             out.append(new String(bytes, 0, n));
                             jsonStr = out.toString();
                         }
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e) {
                         e.printStackTrace();
                         return null;
                     }
-                    finally
-                    {
-                    	if(in != null)
-    						try {
-    							in.close();
-    						} catch (IOException e) {
-    						}
-                    	if(httpURLConnection !=null)
-                    		httpURLConnection.disconnect();
+                    finally {
+                        if (in != null)
+                            try {
+                                in.close();
+                            }
+                            catch (IOException e) {
+                            }
+                        if (httpURLConnection != null)
+                            httpURLConnection.disconnect();
                     }
                     try {
                         JSONObject json = new JSONObject(jsonStr);
@@ -192,7 +192,8 @@ public class LocationHelper {
                         if (addressObject != null && addressObject.has("formatted_address")) {
                             addressStr = addressObject.getString("formatted_address");
                         }
-                    } catch (JSONException e) {
+                    }
+                    catch (JSONException e) {
                         e.printStackTrace();
                         return null;
                     }
@@ -205,12 +206,12 @@ public class LocationHelper {
                     notifyMyLocation();
                     getAddressTask = null;
                 }
-            }.execute((Void)null);
+            };
     	}
     }
 
     public static String getAddressFromLatitudeAndLongitude(final double latitude,final double longitude,final TextView textView){
-    	new AsyncTask<Void, Void, String>() {
+    	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 URL myFileUrl = null;
@@ -271,7 +272,7 @@ public class LocationHelper {
             protected void onPostExecute(String result) {
             	textView.setText(result);
             }
-        }.execute((Void)null);
+        });
     	return null;
     }
     

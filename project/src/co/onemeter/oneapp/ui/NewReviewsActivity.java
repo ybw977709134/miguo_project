@@ -6,10 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
-import org.wowtalk.api.*;
-import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.NewReviewAdapter;
+import co.onemeter.utils.AsyncTaskExecutor;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.MessageBox;
 
 import java.util.List;
 
@@ -171,7 +172,7 @@ public class NewReviewsActivity extends ListActivity implements View.OnClickList
             Log.w("set moment reviews readed,moment null,set specific review readed");
             mDb.setSpecificReviewReaded(reviewId);
 
-            new AsyncTask<Moment, Void, Void>() {
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Moment, Void, Void>() {
                 @Override
                 protected Void doInBackground(Moment... moments) {
 //                MomentActivity.requestCheckNewReviews();
@@ -182,16 +183,16 @@ public class NewReviewsActivity extends ListActivity implements View.OnClickList
                 @Override
                 protected void onPostExecute(Void v) {
                     --reviewConfirmReadCount;
-                    if(reviewConfirmReadCount <= 0) {
+                    if (reviewConfirmReadCount <= 0) {
                         mMsgBox.dismissWait();
                     }
                 }
-            }.execute(m);
+            }, m);
         } else {
             Log.i("set all moment reviews readed");
             mDb.setReviewsRead(m);
 
-            new AsyncTask<Moment, Void, Void>() {
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Moment, Void, Void>() {
                 @Override
                 protected Void doInBackground(Moment... moments) {
 //                MomentActivity.requestCheckNewReviews();
@@ -202,11 +203,11 @@ public class NewReviewsActivity extends ListActivity implements View.OnClickList
                 @Override
                 protected void onPostExecute(Void v) {
                     --reviewConfirmReadCount;
-                    if(reviewConfirmReadCount <= 0) {
+                    if (reviewConfirmReadCount <= 0) {
                         mMsgBox.dismissWait();
                     }
                 }
-            }.execute(m);
+            }, m);
         }
     }
 

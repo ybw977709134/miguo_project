@@ -16,6 +16,7 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.adapter.GroupTreeAdapter;
 import co.onemeter.oneapp.contacts.model.ContactTreeNode;
 import co.onemeter.oneapp.utils.ThemeHelper;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
@@ -66,7 +67,7 @@ public class SchoolMatesFragment extends Fragment
     public void refresh() {
         msgbox.showWait();
 
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... voids) {
                 schools = WowTalkWebServerIF.getInstance(getActivity()).getMySchools(true);
@@ -79,13 +80,13 @@ public class SchoolMatesFragment extends Fragment
 
                 if (errno == ErrorCode.OK) {
                     new Database(getActivity()).storeSchools(schools);
-                }else{
-                	msgbox.toast(R.string.timeout_message);
+                } else {
+                    msgbox.toast(R.string.timeout_message);
                 }
 
                 updateUi();
             }
-        }.execute((Void)null);
+        });
     }
 
     private void updateUi() {

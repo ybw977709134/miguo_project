@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.Buddy;
@@ -107,7 +108,7 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
     }
 
     private void changeAcceptionOfMsg() {
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return WowTalkWebServerIF.getInstance(PublicAccountDetailActivity.this)
@@ -120,7 +121,7 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
 
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     @Override
@@ -176,7 +177,7 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
 
     private void cancelFollow() {
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return WowTalkWebServerIF.getInstance(PublicAccountDetailActivity.this)
@@ -190,12 +191,12 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
                     finish();
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     private void followBuddy() {
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return WowTalkWebServerIF.getInstance(PublicAccountDetailActivity.this)
@@ -214,7 +215,7 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
                     });
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     @Override

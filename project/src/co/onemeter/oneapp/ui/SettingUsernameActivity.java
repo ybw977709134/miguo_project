@@ -12,12 +12,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.Utils;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.utils.Utils;
 
 public class SettingUsernameActivity extends Activity {
     public static final String EXTRA_WOWID = "wowid";
@@ -35,13 +36,14 @@ public class SettingUsernameActivity extends Activity {
     private void resetUsername(final String username) {
         mMsgBox.showWait();
 
-        new AsyncTask<Void, Integer, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... params) {
                 return WowTalkWebServerIF.getInstance(SettingUsernameActivity.this)
                         .fChangeUsername(username);
             }
+
             @Override
             protected void onPostExecute(Integer result) {
                 mMsgBox.dismissWait();
@@ -49,7 +51,7 @@ public class SettingUsernameActivity extends Activity {
                 if (result == ErrorCode.OK) {
                     finish();
                 } else {
-                    if(mMsgBox == null)
+                    if (mMsgBox == null)
                         mMsgBox = new MessageBox(SettingUsernameActivity.this);
 
                     if (result == ErrorCode.USER_ALREADY_EXISTS) {
@@ -63,7 +65,7 @@ public class SettingUsernameActivity extends Activity {
                     }
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     private void initView() {

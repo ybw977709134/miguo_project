@@ -26,7 +26,7 @@ import co.onemeter.oneapp.adapter.CreateSurveyOptionsRightContentAdapter;
 import co.onemeter.oneapp.utils.LocationHelper;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
@@ -835,7 +835,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
             findViewById(R.id.ready_captured_voice_delete).performClick();
         }
 //        final MediaPlayer parparedPlayer = new MediaPlayer();
-//        new AsyncTask<Void, Void, Boolean>() {
+//        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Boolean>() {
 //            @Override
 //            protected Boolean doInBackground(Void... params) {
 //                boolean success=false;
@@ -863,7 +863,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 //                    tvReadyCaptureVoiceTimeLength.setText("00:00");
 //                }
 //            }
-//        }.execute((Void) null);
+//        });
     }
 
     private void tryPlayOrStopVoice() {
@@ -902,7 +902,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 //
 //        ivReadyCaptureVoicePlay.setImageResource(R.drawable.timeline_player_stop);
 //
-//        new AsyncTask<Void, Void, Boolean>() {
+//        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Boolean>() {
 //            @Override
 //            protected Boolean doInBackground(Void... params) {
 //                boolean success=false;
@@ -946,7 +946,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 //                    mMsgBox.toast(R.string.operation_failed);
 //                }
 //            }
-//        }.execute((Void) null);
+//        });
     }
 
     private void stopRecording() {
@@ -1269,7 +1269,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 
             //store local moment
             mMsgBox.showWait();
-            new AsyncTask<Void, Integer, Integer>() {
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
                 @Override
                 protected Integer doInBackground(Void... params) {
                     String uid = PrefUtil.getInstance(CreateNormalMomentWithTagActivity.this).getUid();
@@ -1278,8 +1278,8 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                         moment.owner = new Buddy();
                     moment.owner.userID = uid;
                     moment.likedByMe = false;
-                    mDb.storeMoment(moment,null);
-                    Log.e("moment media count "+moment.multimedias.size());
+                    mDb.storeMoment(moment, null);
+                    Log.e("moment media count " + moment.multimedias.size());
                     for (WFile f : moment.multimedias) {
                         mDb.storeMultimedia(moment, f);
                     }
@@ -1291,11 +1291,11 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            int errno=ErrorCode.UNKNOWN;
-                            if(TimelineActivity.TAG_SURVEY_IDX == tagType) {
+                            int errno = ErrorCode.UNKNOWN;
+                            if (TimelineActivity.TAG_SURVEY_IDX == tagType) {
                                 errno = MomentWebServerIF.getInstance(CreateNormalMomentWithTagActivity.this).fAddMomentForSurvey(moment);
                             } else {
-                            	//android.util.Log.i("-->>>", moment.place);
+                                //android.util.Log.i("-->>>", moment.place);
                                 errno = MomentWebServerIF.getInstance(CreateNormalMomentWithTagActivity.this).fAddMoment(moment);
                             }
                             if (errno == ErrorCode.OK) {
@@ -1316,10 +1316,10 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                     mMsgBox.dismissWait();
                     Toast.makeText(CreateNormalMomentWithTagActivity.this, "新建日记成功", Toast.LENGTH_SHORT).show();
                     finish();
-                   
-                    
+
+
                 }
-            }.execute((Void)null);
+            });
         }
     }
 
@@ -1606,8 +1606,8 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                     listPhoto = photo2add;
 
                     mMsgBox.showWait();
-                    new AsyncTask<ArrayList<String>, Void, Void>() {
-//                        boolean firstAdd=true;
+                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<ArrayList<String>, Void, Void>() {
+                        //                        boolean firstAdd=true;
                         @Override
                         protected Void doInBackground(ArrayList<String>... params) {
                             for (String path : params[0]) {
@@ -1626,11 +1626,12 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                                     photo.galleryPath = path;
                                     photo.isFromGallery = true;
                                     listPhoto.add(photo);
-                                } catch (Exception e) {
+                                }
+                                catch (Exception e) {
                                     e.printStackTrace();
                                 }
 
-                                publishProgress((Void)null);
+                                publishProgress((Void) null);
                             }
                             return null;
                         }
@@ -1645,21 +1646,21 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                             mMsgBox.dismissWait();
                             instance.notifyFileChanged(false);
                         }
-                    }.execute(listPath);
+                    }, listPath);
                 }
                 break;
             case ACTIVITY_REQ_ID_PICK_PHOTO_FROM_CAMERA:
                 if (resultCode == RESULT_OK) {
-                    new AsyncTask<Intent, Void, Void>() {
+                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Intent, Void, Void>() {
                         @Override
                         protected Void doInBackground(Intent... params) {
                             String[] path = new String[2];
-                            boolean handleImageRet=mediaHelper.handleImageResult(CreateNormalMomentWithTagActivity.this, params[0],
+                            boolean handleImageRet = mediaHelper.handleImageResult(CreateNormalMomentWithTagActivity.this, params[0],
                                     CreateMomentActivity.PHOTO_SEND_WIDTH, CreateMomentActivity.PHOTO_SEND_HEIGHT,
                                     0, 0,
                                     path);
-                            if(handleImageRet) {
-                                Log.i("handle result ok,path[0]="+path[0]);
+                            if (handleImageRet) {
+                                Log.i("handle result ok,path[0]=" + path[0]);
                             } else {
                                 Log.e("handle image error");
                             }
@@ -1674,7 +1675,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                         protected void onPostExecute(Void errno) {
                             instance.notifyFileChanged(true);
                         }
-                    }.execute(data);
+                    }, data);
                 }
                 break;
             case ACTIVITY_REQ_ID_INPUT_VIDEO:

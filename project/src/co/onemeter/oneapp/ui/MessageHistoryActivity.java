@@ -11,12 +11,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
+import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.HeightAwareRelativeLayout;
 import org.wowtalk.ui.msg.HeightAwareRelativeLayout.IKeyboardStateChangedListener;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -175,7 +176,7 @@ public class MessageHistoryActivity extends Activity implements OnClickListener,
     }
 
     private void showMessageHistory() {
-        new AsyncTask<Void, Void, Void>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 // the mCurrentPage is the new one
@@ -203,7 +204,7 @@ public class MessageHistoryActivity extends Activity implements OnClickListener,
                 mCurrentPageView.setText(String.valueOf(mCurrentPage));
                 mTotalPageView.setText(String.format("/%d", mTotalPages));
             }
-        }.execute((Void)null);
+        });
     }
 
     /**
@@ -214,7 +215,7 @@ public class MessageHistoryActivity extends Activity implements OnClickListener,
         if (!mMsgBox.isWaitShowing()) {
             mMsgBox.showWait();
         }
-        new AsyncTask<Void, Void, HashMap<String, Object>>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, HashMap<String, Object>>() {
             @Override
             protected HashMap<String, Object> doInBackground(Void... params) {
                 int offset = 0;
@@ -247,7 +248,7 @@ public class MessageHistoryActivity extends Activity implements OnClickListener,
                     showMessageHistory();
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     /**
@@ -255,7 +256,7 @@ public class MessageHistoryActivity extends Activity implements OnClickListener,
      */
     private void getMessageHistoryCounts() {
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, HashMap<String, Integer>>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, HashMap<String, Integer>>() {
             @Override
             protected HashMap<String, Integer> doInBackground(Void... params) {
                 // 每次进入时，先删除本地的数据
@@ -285,7 +286,7 @@ public class MessageHistoryActivity extends Activity implements OnClickListener,
                     mMsgBox.dismissWait();
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     @Override

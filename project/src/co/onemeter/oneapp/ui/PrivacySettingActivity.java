@@ -1,13 +1,7 @@
 package co.onemeter.oneapp.ui;
 
-import android.graphics.PixelFormat;
-
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.R;
-
 import android.app.Activity;
+import android.graphics.PixelFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +9,11 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
+import org.wowtalk.api.PrefUtil;
+import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.ui.MessageBox;
 
 public class PrivacySettingActivity extends Activity implements OnClickListener{
 
@@ -106,7 +105,7 @@ public class PrivacySettingActivity extends Activity implements OnClickListener{
 
     private void getSettingsFromServer() {
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... params) {
@@ -140,8 +139,10 @@ public class PrivacySettingActivity extends Activity implements OnClickListener{
                     changeAuthIsNeeded(mIsAuthNeeded);
                     changeNearbyCanFindMe(mIsNearbyCanFindMe);
                 }
-            };
-        }.execute((Void)null);
+            }
+
+            ;
+        });
     }
 
     private void changeOthersCanAddMe(boolean isOthersCanAddMe) {
@@ -171,7 +172,7 @@ public class PrivacySettingActivity extends Activity implements OnClickListener{
 
     private void confirmModify() {
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... params) {
@@ -194,7 +195,9 @@ public class PrivacySettingActivity extends Activity implements OnClickListener{
                 } else {
                     mMsgBox.show(null, getResources().getString(R.string.privacysetting_failure));
                 }
-            };
-        }.execute((Void)null);
+            }
+
+            ;
+        });
     }
 }

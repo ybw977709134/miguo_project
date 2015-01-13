@@ -15,6 +15,7 @@ import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.oneapp.utils.Utils;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.zxing.encoding.EncodingHandler;
 import org.json.JSONObject;
 import org.wowtalk.api.Buddy;
@@ -130,15 +131,16 @@ public class MyQRCodeActivity extends Activity implements View.OnClickListener{
     private void saveQRCodePhoto() {
         mMsgbBox.showWait();
 
-        new AsyncTask<Void, Integer, File>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, File>() {
             @Override
             protected File doInBackground(Void... params) {
-                File file=getNewSystemPhotoStoreLocation();
+                File file = getNewSystemPhotoStoreLocation();
                 try {
                     OutputStream os = new FileOutputStream(file);
                     QRCodeBitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
                     os.close();
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -149,63 +151,65 @@ public class MyQRCodeActivity extends Activity implements View.OnClickListener{
             protected void onPostExecute(File file) {
                 mMsgbBox.dismissWait();
 
-                if(TextUtils.isEmpty(file.getAbsolutePath())) {
+                if (TextUtils.isEmpty(file.getAbsolutePath())) {
                     mMsgbBox.toast(R.string.msg_operation_failed);
                 } else {
-                    mMsgbBox.toast(String.format(getString(R.string.save_successed),file.getAbsolutePath()));
+                    mMsgbBox.toast(String.format(getString(R.string.save_successed), file.getAbsolutePath()));
 
                     //trigger media service scan new file,or you can not see this photo in gallery
-                    Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,Uri.fromFile(file));
+                    Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file));
                     MyQRCodeActivity.this.sendBroadcast(scanIntent);
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     private void encodeMyQRCodePhoto() {
-        new AsyncTask<Void, Integer, Bitmap>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Bitmap>() {
             @Override
             protected Bitmap doInBackground(Void... params) {
-                JSONObject strObj=new JSONObject();
+                JSONObject strObj = new JSONObject();
                 try {
-                    strObj.put(Utils.QR_CODE_KEY_LABEL,Utils.QR_CODE_KEY_DEF_VALUE_LABEL);
-                    strObj.put(Utils.QR_CODE_KEY_TYPE,Utils.QR_CODE_KEY_DEF_VALUE_TYPE_BUDDY);
+                    strObj.put(Utils.QR_CODE_KEY_LABEL, Utils.QR_CODE_KEY_DEF_VALUE_LABEL);
+                    strObj.put(Utils.QR_CODE_KEY_TYPE, Utils.QR_CODE_KEY_DEF_VALUE_TYPE_BUDDY);
 
-                    JSONObject contentObj=new JSONObject();
+                    JSONObject contentObj = new JSONObject();
 
                     String myid = mPrefUtil.getUid();
-                    if(TextUtils.isEmpty(myid)) {
+                    if (TextUtils.isEmpty(myid)) {
                         myid = mPrefUtil.getUid();
-                        if(TextUtils.isEmpty(myid)) {
+                        if (TextUtils.isEmpty(myid)) {
                             return null;
                         }
                     }
-                    contentObj.put(Utils.QR_CODE_KEY_UID,myid);
-                    contentObj.put(Utils.QR_CODE_KEY_TIMESTAMP,System.currentTimeMillis());
+                    contentObj.put(Utils.QR_CODE_KEY_UID, myid);
+                    contentObj.put(Utils.QR_CODE_KEY_TIMESTAMP, System.currentTimeMillis());
 
-                    strObj.put(Utils.QR_CODE_KEY_CONTENT,contentObj);
-                } catch (Exception e) {
+                    strObj.put(Utils.QR_CODE_KEY_CONTENT, contentObj);
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                String str2encode=strObj.toString();
+                String str2encode = strObj.toString();
 
-                Bitmap bmp2ret=null;
+                Bitmap bmp2ret = null;
 
                 Buddy me = new Buddy();
                 me.userID = mPrefUtil.getUid();
                 me.photoUploadedTimeStamp = mPrefUtil.getMyPhotoUploadedTimestamp();
                 String path = PhotoDisplayHelper.makeLocalThumbnailPath(MyQRCodeActivity.this, me.getGUID());
-                Bitmap bmpInside=null;
-                if(new File(path).exists()) {
-                    bmpInside= BitmapFactory.decodeFile(path);
+                Bitmap bmpInside = null;
+                if (new File(path).exists()) {
+                    bmpInside = BitmapFactory.decodeFile(path);
                 } else {
-                    bmpInside= BitmapFactory.decodeResource(MyQRCodeActivity.this.getResources(),R.drawable.icon);
+                    bmpInside = BitmapFactory.decodeResource(MyQRCodeActivity.this.getResources(), R.drawable.icon);
                 }
 
                 try {
-                    bmp2ret=EncodingHandler.createQRCode(str2encode,MY_QR_CODE_PHOTO_DEF_SIZE,bmpInside);
-                } catch (Exception e) {
+                    bmp2ret = EncodingHandler.createQRCode(str2encode, MY_QR_CODE_PHOTO_DEF_SIZE, bmpInside);
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -214,7 +218,7 @@ public class MyQRCodeActivity extends Activity implements View.OnClickListener{
 
             @Override
             protected void onPostExecute(Bitmap bmp) {
-                if(null == bmp) {
+                if (null == bmp) {
                     mMsgbBox.toast(R.string.encode_qrcode_failed);
                 } else {
                     QRCodeBitmap = bmp;
@@ -223,7 +227,7 @@ public class MyQRCodeActivity extends Activity implements View.OnClickListener{
                     ivMyQRCodePhoto.setImageBitmap(bmp);
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     @Override

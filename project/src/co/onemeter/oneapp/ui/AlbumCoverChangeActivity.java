@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GlobalSetting;
@@ -85,7 +86,7 @@ public class AlbumCoverChangeActivity extends Activity implements OnClickListene
     }
 
     private void uploadAlbumCoverAsync(String filepath) {
-        new AsyncTask<String, Integer, Void>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Integer, Void>() {
             private MessageBox msgbox = new MessageBox(AlbumCoverChangeActivity.this);
 
             @Override
@@ -118,7 +119,8 @@ public class AlbumCoverChangeActivity extends Activity implements OnClickListene
                                 }
                             },
                             TimelineActivity.NETWORK_TAG_UPLOADING_ALBUMCOVER);
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -135,7 +137,7 @@ public class AlbumCoverChangeActivity extends Activity implements OnClickListene
                 msgbox.dismissWait();
                 finish();
             }
-        }.execute(filepath);
+        }, filepath);
     }
 
     @Override

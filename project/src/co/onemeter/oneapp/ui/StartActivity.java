@@ -17,20 +17,18 @@ import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import co.onemeter.oneapp.Constants;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.ui.AppStatusService.AppStatusBinder;
 import co.onemeter.oneapp.utils.WebServerEventPoller;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
-
 import org.wowtalk.Log;
 import org.wowtalk.api.*;
 import org.wowtalk.core.RegistrationState;
 import org.wowtalk.core.WowTalkChatMessageState;
 import org.wowtalk.ui.MessageBox;
-
-import co.onemeter.oneapp.Constants;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.AppStatusService.AppStatusBinder;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -778,11 +776,11 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
     private void fRefreshTabBadge_unreadMsg() {
 //        int unreadMsgCount = new Database(StartActivity.this).open().countAllUnreadChatMessages();
         final long curLoadingId=++loadingId;
-        new AsyncTask<Void,Void,Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... contexts) {
-                int unreadMsgCount=0;
-                if(curLoadingId == loadingId) {
+                int unreadMsgCount = 0;
+                if (curLoadingId == loadingId) {
 //                    unreadMsgCount = new Database(StartActivity.this).countAllUnreadChatMessages();
                     unreadMsgCount = new Database(StartActivity.this).countUnreadMessagesByTargets(SmsActivity.getCurrentChatTargets());
                 }
@@ -791,7 +789,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 
             @Override
             protected void onPostExecute(Integer unreadCount) {
-                if(curLoadingId == loadingId) {
+                if (curLoadingId == loadingId) {
                     if (0 == unreadCount) {
                         txt_unreadMsg.setText("");
                         txt_unreadMsg.setVisibility(View.GONE);
@@ -801,7 +799,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
                     }
                 }
             }
-        }.execute((Void)null);
+        });
 //        int unreadMsgCount=0;
 //        ArrayList<ChatMessage> lst = mDb.fetchAllChatMessages(false);
 //        if(lst != null) {
@@ -967,7 +965,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
      * check whether the application needs to update.
      */
     private void checkAppUpdate() {
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             public UpdatesInfo updatesInfo = new UpdatesInfo();
 
             @Override
@@ -979,7 +977,8 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
                     if (0 == updatesInfo.versionCode)
                         return ErrorCode.BAD_RESPONSE;
                     return errno;
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     return ErrorCode.BAD_RESPONSE;
                 }
             }
@@ -996,12 +995,13 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
                         } else {
                             changeNewUpdateFlagView(View.GONE);
                         }
-                    } catch (PackageManager.NameNotFoundException e) {
+                    }
+                    catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
                     }
                 }
             }
-        }.execute((Void) null);
+        });
     }
 
     /**
@@ -1239,12 +1239,12 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
      * Get the pendingRequests from server and refresh the UI in async.
      */
     private void getPendingRequestsFromServerAsync() {
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return WowTalkWebServerIF.getInstance(StartActivity.this).fGetPendingRequests();
             }
-        }.execute((Void)null);
+        });
     }
 
     @Override

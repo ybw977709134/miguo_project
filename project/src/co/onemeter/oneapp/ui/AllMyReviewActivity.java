@@ -7,10 +7,11 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import org.wowtalk.api.*;
-import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.NewReviewAdapter;
+import co.onemeter.utils.AsyncTaskExecutor;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -93,24 +94,24 @@ public class AllMyReviewActivity extends Activity implements View.OnClickListene
 
         //load reviews
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, ArrayList< Moment >>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, ArrayList<Moment>>() {
             @Override
-            protected ArrayList < Moment > doInBackground(Void... params) {
+            protected ArrayList<Moment> doInBackground(Void... params) {
                 return mDb.fetchMomentsOfSingleBuddy(
                         PrefUtil.getInstance(AllMyReviewActivity.this).getUid(),
-                        -1, -1,-1);
+                        -1, -1, -1);
             }
 
             @Override
-            protected void onPostExecute(ArrayList < Moment > momentArrayList) {
+            protected void onPostExecute(ArrayList<Moment> momentArrayList) {
                 mMsgBox.dismissWait();
 
-                List<Review> allReviewList=new LinkedList<Review>();
-                for(Moment aMoment : momentArrayList) {
+                List<Review> allReviewList = new LinkedList<Review>();
+                for (Moment aMoment : momentArrayList) {
                     allReviewList.addAll(aMoment.reviews);
                 }
 
-                if(0 == allReviewList.size()) {
+                if (0 == allReviewList.size()) {
                     findViewById(R.id.no_reviews_indicator).setVisibility(View.VISIBLE);
                     lvReviewList.setVisibility(View.GONE);
                 } else {
@@ -124,7 +125,7 @@ public class AllMyReviewActivity extends Activity implements View.OnClickListene
                     lvReviewList.setSelectionFromTop(lastItemIndex, topOffset);
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     @Override

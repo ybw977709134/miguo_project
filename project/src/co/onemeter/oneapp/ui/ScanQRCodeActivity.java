@@ -21,22 +21,20 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.contacts.model.Person;
+import co.onemeter.oneapp.utils.StringToJason;
 import co.onemeter.oneapp.utils.ThemeHelper;
-
+import co.onemeter.oneapp.utils.Utils;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.zxing.activity.CaptureActivity;
 import com.zxing.decoding.CaptureActivityHandler;
-
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.BmpUtils;
-
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.contacts.model.Person;
-import co.onemeter.oneapp.utils.StringToJason;
-import co.onemeter.oneapp.utils.Utils;
 
 /**
  * Created with IntelliJ IDEA.
@@ -396,15 +394,15 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
             Log.i("public account not exist local,get from server");
             mMsgbBox.showWait();
 
-            new AsyncTask<String, Void, Buddy>() {
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Void, Buddy>() {
                 @Override
                 protected Buddy doInBackground(String... param) {
                     Buddy buddy = new Buddy();
                     int errno2ret = mWebif.fGetBuddyByUsername(param[0], buddy);
 
-                    if(ErrorCode.OK != errno2ret || TextUtils.isEmpty(buddy.userID)) {
+                    if (ErrorCode.OK != errno2ret || TextUtils.isEmpty(buddy.userID)) {
                         errno2ret = mWebif.fGetBuddyWithUID(param[0]);
-                        if(ErrorCode.OK != errno2ret) {
+                        if (ErrorCode.OK != errno2ret) {
                             return null;
                         } else {
                             Database dbHelper = new Database(ScanQRCodeActivity.this);
@@ -419,20 +417,20 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
                 protected void onPostExecute(Buddy buddy) {
                     mMsgbBox.dismissWait();
 
-                    if(null != buddy) {
-                        Log.i("added buddy type: "+buddy.getAccountType());
-                        Person person=Person.fromBuddy(buddy);
+                    if (null != buddy) {
+                        Log.i("added buddy type: " + buddy.getAccountType());
+                        Person person = Person.fromBuddy(buddy);
                         Intent intent = new Intent(ScanQRCodeActivity.this, PublicAccountDetailActivity.class);
                         intent.putExtra(PublicAccountDetailActivity.PERSON_DETAIL, person);
                         startActivity(intent);
 
                         finish();
                     } else {
-                        mMsgbBox.toast(String.format(getString(R.string.family_qr_content_not_valid),publicAccountId));
+                        mMsgbBox.toast(String.format(getString(R.string.family_qr_content_not_valid), publicAccountId));
                     }
                 }
 
-            }.execute(publicAccountId);
+            }, publicAccountId);
         }
     }
 
@@ -445,15 +443,15 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
 
         Log.i("handle_qr_code_uid="+uid);
 
-        new AsyncTask<String, Void, Buddy>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Void, Buddy>() {
             @Override
             protected Buddy doInBackground(String... param) {
                 Buddy buddy = new Buddy();
                 int errno2ret = mWebif.fGetBuddyByUsername(param[0], buddy);
 
-                if(ErrorCode.OK != errno2ret || TextUtils.isEmpty(buddy.userID)) {
+                if (ErrorCode.OK != errno2ret || TextUtils.isEmpty(buddy.userID)) {
                     errno2ret = mWebif.fGetBuddyWithUID(param[0]);
-                    if(ErrorCode.OK != errno2ret) {
+                    if (ErrorCode.OK != errno2ret) {
                         return null;
                     } else {
                         Database dbHelper = new Database(ScanQRCodeActivity.this);
@@ -468,14 +466,14 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
             protected void onPostExecute(Buddy buddy) {
                 mMsgbBox.dismissWait();
 
-                if(null != buddy) {
+                if (null != buddy) {
                     ContactInfoActivity.launch(ScanQRCodeActivity.this, buddy);
                 } else {
-                    mMsgbBox.toast(String.format(getString(R.string.family_qr_content_not_valid),uid));
+                    mMsgbBox.toast(String.format(getString(R.string.family_qr_content_not_valid), uid));
                 }
             }
 
-        }.execute(uid);
+        }, uid);
     }
 
     private Bitmap getScaledBmp(String bmpPath,int maxWidthOrHeight) {
@@ -517,13 +515,14 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
     }
 
     private void decodeBitmap(final Bitmap bmp) {
-        new AsyncTask<Void, Integer, String>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                String ret=null;
+                String ret = null;
                 try {
                     ret = CaptureActivityHandler.decodeFromBitmap(bmp);
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                 }
                 return ret;
@@ -531,25 +530,25 @@ public class ScanQRCodeActivity extends CaptureActivity implements View.OnClickL
 
             @Override
             protected void onPostExecute(String param) {
-                if(TextUtils.isEmpty(param)) {
-                    if(curBmp2RotateDegree >= 360) {
+                if (TextUtils.isEmpty(param)) {
+                    if (curBmp2RotateDegree >= 360) {
                         mMsgbBox.dismissWait();
                         mMsgbBox.toast(R.string.decode_qrcode_failed);
                     } else {
-                        Log.i("decode with rotate: "+curBmp2RotateDegree);
+                        Log.i("decode with rotate: " + curBmp2RotateDegree);
                         Matrix matrix = new Matrix();
                         matrix.postRotate(curBmp2RotateDegree);
                         curBmp2RotateDegree += 90;
-                        Bitmap bmpRotated=Bitmap.createBitmap(bmp2decode,0,0,bmp2decode.getWidth(),bmp2decode.getHeight(),matrix,false);
+                        Bitmap bmpRotated = Bitmap.createBitmap(bmp2decode, 0, 0, bmp2decode.getWidth(), bmp2decode.getHeight(), matrix, false);
                         decodeBitmap(bmpRotated);
                     }
                 } else {
                     mMsgbBox.dismissWait();
-                    Log.i("decode from local photo succeed: "+param);
+                    Log.i("decode from local photo succeed: " + param);
                     handleDecodedString(param);
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     @Override

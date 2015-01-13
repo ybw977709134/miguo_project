@@ -8,13 +8,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.*;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.adapter.ShareRangeLimitedDepAdapter;
+import co.onemeter.oneapp.contacts.adapter.ContactGroupIterationAdapter;
+import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.Moment;
 import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.adapter.ShareRangeLimitedDepAdapter;
-import co.onemeter.oneapp.contacts.adapter.ContactGroupIterationAdapter;
 
 import java.util.ArrayList;
 
@@ -196,10 +197,10 @@ public class ShareRangeSelectActivity extends Activity implements View.OnClickLi
     private void showDepartment() {
         if(null == departmentList) {
             mMsgBox.showWait();
-            new AsyncTask<Void, Void, Integer>() {
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
                 @Override
                 protected Integer doInBackground(Void... params) {
-                    departmentList=mDb.fetchNonTempGroupChatRooms(true);
+                    departmentList = mDb.fetchNonTempGroupChatRooms(true);
 
                     rootGroups = new ArrayList<GroupChatRoom>();
                     rootGroups.addAll(treeAllGroupRooms(ShareRangeSelectActivity.this, departmentList));
@@ -211,7 +212,7 @@ public class ShareRangeSelectActivity extends Activity implements View.OnClickLi
                     mMsgBox.dismissWait();
                     doShowDepartment();
                 }
-            }.execute((Void)null);
+            });
         } else {
             doShowDepartment();
         }

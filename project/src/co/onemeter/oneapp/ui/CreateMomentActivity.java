@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.LocationHelper;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
@@ -410,20 +411,20 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
         } else {
             //store local moment
             mMsgBox.showWait();
-            new AsyncTask<Void, Integer, Integer>() {
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
                 @Override
                 protected Integer doInBackground(Void... params) {
                     String uid = PrefUtil.getInstance(CreateMomentActivity.this).getUid();
                     //alias id and timestamp,timestamp should be the largest
                     //will be updated when returned by server
-                    moment.id = ALIAS_ID_PREFIX+System.currentTimeMillis();
-                    moment.timestamp = getIntent().getLongExtra(EXTRA_KEY_MOMENT_MAX_TIMESTAMP,0)+1;
-                    Log.w("local moment timestamp set to "+moment.timestamp);
+                    moment.id = ALIAS_ID_PREFIX + System.currentTimeMillis();
+                    moment.timestamp = getIntent().getLongExtra(EXTRA_KEY_MOMENT_MAX_TIMESTAMP, 0) + 1;
+                    Log.w("local moment timestamp set to " + moment.timestamp);
                     if (null == moment.owner)
                         moment.owner = new Buddy();
                     moment.owner.userID = uid;
                     moment.likedByMe = false;
-                    mDb.storeMoment(moment,null);
+                    mDb.storeMoment(moment, null);
                     for (WFile f : moment.multimedias) {
                         mDb.storeMultimedia(moment, f);
                     }
@@ -454,7 +455,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                     mMsgBox.dismissWait();
                     finish();
                 }
-            }.execute((Void)null);
+            });
 		}
 	}
 
@@ -574,7 +575,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
             return;
         }
         mPlayer = new MediaPlayer();
-        new AsyncTask<Void, Void, Void>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
@@ -586,7 +587,8 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                             stopMicVoice();
                         }
                     });
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -601,7 +603,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                         null, null, null);
                 mPlayer.start();
             }
-        }.execute((Void) null);
+        });
     }
 
     @Override

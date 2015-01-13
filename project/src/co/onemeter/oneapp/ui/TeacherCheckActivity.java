@@ -1,20 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.GroupMember;
-import org.wowtalk.api.LessonParentFeedback;
-import org.wowtalk.api.Moment;
-import org.wowtalk.api.LessonWebServerIF;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.MessageBox;
-
-import co.onemeter.oneapp.Constants;
-import co.onemeter.oneapp.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -23,12 +8,16 @@ import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.TextView;
+import co.onemeter.oneapp.Constants;
+import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.MessageBox;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 学生列表页面。
@@ -98,27 +87,29 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 		members = mdbHelper.fetchGroupMembers(classId);
 //		android.util.Log.i("-->>", members.toString());
 		if(members == null || members.isEmpty()){
-			new AsyncTask<Void, Void, Integer>(){
+			AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 				@Override
 				protected Integer doInBackground(Void... params) {
 					return (Integer) WowTalkWebServerIF.getInstance(TeacherCheckActivity.this).fGroupChat_GetMembers(classId).get("code");
 				}
-				
+
 				protected void onPostExecute(Integer result) {
-					if(ErrorCode.OK == result){
+					if (ErrorCode.OK == result) {
 						members = mdbHelper.fetchGroupMembers(classId);
-						for (GroupMember m: members) {
-							if(m.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
+						for (GroupMember m : members) {
+							if (m.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT) {
 								stus.add(m);
 							}
 						}
 						adapter = new StuAdapter(stus);
 						lvStu.setAdapter(adapter);
 					}
-				};
-				
-			}.execute((Void)null);
+				}
+
+				;
+
+			});
 		}else{
 			for (GroupMember m: members) {
 				if(m.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){

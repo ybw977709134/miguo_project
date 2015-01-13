@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.AppUpgradeTask;
 import co.onemeter.oneapp.utils.ThemeHelper;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
@@ -203,7 +204,7 @@ public class SettingActivity extends Activity implements OnClickListener {
 
     private void checkForUpdates() {
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             public UpdatesInfo updatesInfo = new UpdatesInfo();
 
             @Override
@@ -215,7 +216,8 @@ public class SettingActivity extends Activity implements OnClickListener {
                     if (0 == updatesInfo.versionCode)
                         return ErrorCode.BAD_RESPONSE;
                     return errno;
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     return ErrorCode.BAD_RESPONSE;
                 }
             }
@@ -264,7 +266,8 @@ public class SettingActivity extends Activity implements OnClickListener {
                                     .setNegativeButton(R.string.cancel, null)
                                     .create().show();
                         }
-                    } catch (PackageManager.NameNotFoundException e) {
+                    }
+                    catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
                     }
                 } else {
@@ -272,7 +275,7 @@ public class SettingActivity extends Activity implements OnClickListener {
                 }
             }
 
-        }.execute((Void) null);
+        });
     }
 
     @Override

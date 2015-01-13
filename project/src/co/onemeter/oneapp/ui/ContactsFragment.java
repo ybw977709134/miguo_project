@@ -24,6 +24,7 @@ import co.onemeter.oneapp.contacts.adapter.FunctionAdapter;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
 import co.onemeter.oneapp.utils.WebServerEventPoller;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
@@ -265,7 +266,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
     public void refresh() {
         mMsgBox.showWait();
 
-        new AsyncTask<Void, Void, Void>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 WowTalkWebServerIF.getInstance(getActivity())
@@ -281,7 +282,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
             protected void onPostExecute(Void v) {
                 mMsgBox.dismissWait();
             }
-        }.execute((Void)null);
+        });
     }
 
     //normal buddy

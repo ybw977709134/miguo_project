@@ -15,6 +15,7 @@ import android.widget.EditText;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.CreateMomentActivity.WMediaFile;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
@@ -321,34 +322,35 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
 	            return;
 	        }
 	        mPlayer = new MediaPlayer();
-	        new AsyncTask<Void, Void, Void>() {
-	            @Override
-	            protected Void doInBackground(Void... params) {
-	                try {
-	                    mPlayer.setDataSource(mLastVoiceFile.getAbsolutePath());
-	                    mPlayer.prepare();
-	                    mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-	                        @Override
-	                        public void onCompletion(MediaPlayer mediaPlayer) {
-	                            stopMicVoice();
-	                        }
-	                    });
-	                } catch (IOException e) {
-	                    e.printStackTrace();
-	                }
-	                return null;
-	            }
+	        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
+				@Override
+				protected Void doInBackground(Void... params) {
+					try {
+						mPlayer.setDataSource(mLastVoiceFile.getAbsolutePath());
+						mPlayer.prepare();
+						mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+							@Override
+							public void onCompletion(MediaPlayer mediaPlayer) {
+								stopMicVoice();
+							}
+						});
+					}
+					catch (IOException e) {
+						e.printStackTrace();
+					}
+					return null;
+				}
 
-	            @Override
-	            protected void onPostExecute(Void errno) {
-	                btnVoicePreview.reset();
-	                btnVoicePreview.start();
-	                btnVoicePreview.setCompoundDrawablesWithIntrinsicBounds(
-	                        getResources().getDrawable(R.drawable.timeline_stop),
-	                        null, null, null);
-	                mPlayer.start();
-	            }
-	        }.execute((Void) null);
+				@Override
+				protected void onPostExecute(Void errno) {
+					btnVoicePreview.reset();
+					btnVoicePreview.start();
+					btnVoicePreview.setCompoundDrawablesWithIntrinsicBounds(
+							getResources().getDrawable(R.drawable.timeline_stop),
+							null, null, null);
+					mPlayer.start();
+				}
+			});
 	    }
 
 	private void updateData() {
@@ -409,54 +411,54 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
         } else {
             //store local moment
             mMsgBox.showWait();
-            new AsyncTask<Void, Integer, Integer>() {
-                @Override
-                protected Integer doInBackground(Void... params) {
-                    //alias id and timestamp,timestamp should be the largest
-                    //will be updated when returned by server
-                    moment.id = ALIAS_ID_PREFIX+System.currentTimeMillis();
-                    moment.timestamp = getIntent().getLongExtra(EXTRA_KEY_MOMENT_MAX_TIMESTAMP,0)+1;
-                    Log.w("local moment timestamp set to "+moment.timestamp);
-                    if (null == moment.owner)
-                        moment.owner = new Buddy();
-                    moment.owner.userID = Moment.ANONYMOUS_UID;
-                    moment.likedByMe = false;
-                    mDb.storeMoment(moment,null);
-                    for (WFile f : moment.multimedias) {
-                        mDb.storeMultimedia(moment, f);
-                    }
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
+				@Override
+				protected Integer doInBackground(Void... params) {
+					//alias id and timestamp,timestamp should be the largest
+					//will be updated when returned by server
+					moment.id = ALIAS_ID_PREFIX + System.currentTimeMillis();
+					moment.timestamp = getIntent().getLongExtra(EXTRA_KEY_MOMENT_MAX_TIMESTAMP, 0) + 1;
+					Log.w("local moment timestamp set to " + moment.timestamp);
+					if (null == moment.owner)
+						moment.owner = new Buddy();
+					moment.owner.userID = Moment.ANONYMOUS_UID;
+					moment.likedByMe = false;
+					mDb.storeMoment(moment, null);
+					for (WFile f : moment.multimedias) {
+						mDb.storeMultimedia(moment, f);
+					}
 
-                    Intent data = new Intent();
-                    setResult(RESULT_OK, data);
+					Intent data = new Intent();
+					setResult(RESULT_OK, data);
 
-                    //upload to server
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            int errno = MomentWebServerIF.getInstance(LessonParentFeedbackActivity.this).fAddMoment(moment,true);
-                            LessonParentFeedback feedback = new LessonParentFeedback();
-                            feedback.lesson_id = lessonId;
-                            feedback.student_id = stuId;
-                            int errno2 = LessonWebServerIF.getInstance(LessonParentFeedbackActivity.this).addOrModifyLessonParentFeedback(feedback, moment);
-                            if (errno == ErrorCode.OK && errno2 == ErrorCode.OK) {
-                                Intent intent = new Intent(LessonParentFeedbackActivity.this, DownloadingAndUploadingService.class);
-                                intent.putExtra(DownloadingAndUploadingService.EXTRA_ACTION,
-                                        DownloadingAndUploadingService.ACTION_UPLOAD_MOMENT_FILE);
-                                intent.putExtra(DownloadingAndUploadingService.EXTRA_MOMENT_ID, moment.id);
-                                intent.putExtra(DownloadingAndUploadingService.EXTRA_WFILES, moment.multimedias);
-                                startService(intent);
-                            }
-                        }
-                    }).start();
-                    return 0;
-                }
+					//upload to server
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							int errno = MomentWebServerIF.getInstance(LessonParentFeedbackActivity.this).fAddMoment(moment, true);
+							LessonParentFeedback feedback = new LessonParentFeedback();
+							feedback.lesson_id = lessonId;
+							feedback.student_id = stuId;
+							int errno2 = LessonWebServerIF.getInstance(LessonParentFeedbackActivity.this).addOrModifyLessonParentFeedback(feedback, moment);
+							if (errno == ErrorCode.OK && errno2 == ErrorCode.OK) {
+								Intent intent = new Intent(LessonParentFeedbackActivity.this, DownloadingAndUploadingService.class);
+								intent.putExtra(DownloadingAndUploadingService.EXTRA_ACTION,
+										DownloadingAndUploadingService.ACTION_UPLOAD_MOMENT_FILE);
+								intent.putExtra(DownloadingAndUploadingService.EXTRA_MOMENT_ID, moment.id);
+								intent.putExtra(DownloadingAndUploadingService.EXTRA_WFILES, moment.multimedias);
+								startService(intent);
+							}
+						}
+					}).start();
+					return 0;
+				}
 
-                @Override
-                protected void onPostExecute(Integer errno) {
-                    mMsgBox.dismissWait();
-                    finish();
-                }
-            }.execute((Void)null);
+				@Override
+				protected void onPostExecute(Integer errno) {
+					mMsgBox.dismissWait();
+					finish();
+				}
+			});
 		}
 	}
 	

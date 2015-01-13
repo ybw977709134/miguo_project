@@ -8,11 +8,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.ui.DensityUtil;
+import co.onemeter.oneapp.ui.FavoriteGroupsSortActivity;
+import co.onemeter.oneapp.ui.Log;
+import co.onemeter.oneapp.ui.MessageComposerActivity;
+import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.WowTalkWebServerIF;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -237,7 +241,7 @@ public class ContactGroupIterationAdapter extends BaseAdapter {
                 }
 
                 // 上报服务器
-                new AsyncTask<Void, Void, Integer>() {
+                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
                     @Override
                     protected Integer doInBackground(Void... params) {
                         return WowTalkWebServerIF.getInstance(mContext).updateGroupFavorite(group.groupID, group.isFavorite);
@@ -250,9 +254,8 @@ public class ContactGroupIterationAdapter extends BaseAdapter {
                             group.isFavorite = !group.isFavorite;
                             holder.imgFavorite.setBackgroundResource(group.isFavorite ? R.drawable.group_bookmark_a : R.drawable.group_bookmark);
                         }
-                    };
-
-                }.execute((Void)null);
+                    }
+                });
             }
         });
 

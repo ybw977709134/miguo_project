@@ -169,7 +169,7 @@ public abstract class MessageComposerActivityBase extends Activity
 	}
 
 	private void fNotifyAllUnreadMsg() {
-        new AsyncTask<Void, Void, Void>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
 
@@ -204,7 +204,7 @@ public abstract class MessageComposerActivityBase extends Activity
 
                 return null;
             }
-        }.execute((Void)null);
+        });
 
 //		mHandler.post(new Runnable() {
 //			public void run() {
@@ -297,7 +297,7 @@ public abstract class MessageComposerActivityBase extends Activity
 //		msg.initExtra();
 //		msg.extraData.putBoolean("isTransferring", true);
 //
-//		new AsyncTask<Void, Integer, Void>() {
+//		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
 //
 //			@Override
 //			protected Void doInBackground(
@@ -340,7 +340,7 @@ public abstract class MessageComposerActivityBase extends Activity
 //				if(pb != null)
 //					pb.setVisibility(View.GONE);
 //			}
-//        }.execute((Void) null);
+//        });
 //	}
 
     //if message table changed too often,request loading may be not handled in time
@@ -349,72 +349,71 @@ public abstract class MessageComposerActivityBase extends Activity
     private long loadingId=0;
     private boolean isMsgFromDBLoaded=false;
 	private void fRefetchAndReloadTableData(final long curLoadingId) {
-        AsyncTaskExecutor.executeNonNetworkTask(
-                new AsyncTask<Void, Void, ArrayList<ChatMessage>>() {
-                    @Override
-                    protected ArrayList<ChatMessage> doInBackground(Void... params) {
-                        ArrayList<ChatMessage> msgInDb=null;
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, ArrayList<ChatMessage>>() {
+            @Override
+            protected ArrayList<ChatMessage> doInBackground(Void... params) {
+                ArrayList<ChatMessage> msgInDb=null;
 
-                        if(curLoadingId == loadingId) {
-                            if(isMsgFromDBLoaded && null != log_msg && log_msg.size()>=DEFAULT_SHOW_ITEMS) {
-                                String sentDate = log_msg.get(0).sentDate;
-                                msgInDb = mDbHelper.fetchChatMessagesAfterInclude(_targetUID, sentDate);
-                            } else {
-                                msgInDb = mDbHelper.fetchChatMessagesWithUser(_targetUID, DEFAULT_SHOW_ITEMS, 0);
-                            }
-
-                            isMsgFromDBLoaded=true;
-                        }
-                        return msgInDb;
+                if(curLoadingId == loadingId) {
+                    if(isMsgFromDBLoaded && null != log_msg && log_msg.size()>=DEFAULT_SHOW_ITEMS) {
+                        String sentDate = log_msg.get(0).sentDate;
+                        msgInDb = mDbHelper.fetchChatMessagesAfterInclude(_targetUID, sentDate);
+                    } else {
+                        msgInDb = mDbHelper.fetchChatMessagesWithUser(_targetUID, DEFAULT_SHOW_ITEMS, 0);
                     }
 
-                    @Override
-                    protected void onPostExecute(ArrayList <ChatMessage> chatMessageList) {
-                        if(curLoadingId == loadingId) {
+                    isMsgFromDBLoaded=true;
+                }
+                return msgInDb;
+            }
 
-                            // 如果当前页的最后一项不是整个adapter的最后一项，则不滑动到底部；否则滑到底部
-                            // 如果mIsFirstStartToScroll为true，说明是第一次进入，需要滑动到底部
-                            // **不能用lv_message.getLastVisiblePosition() == -1 判断是否是第一次进入，有时显示-1，有时显示第一屏的最后一个位置**
-                            // 此处必须在重新给 log_msg 赋值之前判断
-                            int lastVisiblePosition = lv_message.getLastVisiblePosition();
-                            boolean isScrollToBottom = mIsFirstStartToScroll || lastVisiblePosition == log_msg.size();
-                            co.onemeter.oneapp.ui.Log.d("the lastVisiblePosition is " + lv_message.getLastVisiblePosition()
-                                    + ", the size is " + log_msg.size() + ", mIsFirstStartToScroll is " + mIsFirstStartToScroll
-                                    + ", isScrollToBottom is " + isScrollToBottom);
-                            mIsFirstStartToScroll = false;
+            @Override
+            protected void onPostExecute(ArrayList <ChatMessage> chatMessageList) {
+                if(curLoadingId == loadingId) {
 
-                            if (null != log_msg) {
+                    // 如果当前页的最后一项不是整个adapter的最后一项，则不滑动到底部；否则滑到底部
+                    // 如果mIsFirstStartToScroll为true，说明是第一次进入，需要滑动到底部
+                    // **不能用lv_message.getLastVisiblePosition() == -1 判断是否是第一次进入，有时显示-1，有时显示第一屏的最后一个位置**
+                    // 此处必须在重新给 log_msg 赋值之前判断
+                    int lastVisiblePosition = lv_message.getLastVisiblePosition();
+                    boolean isScrollToBottom = mIsFirstStartToScroll || lastVisiblePosition == log_msg.size();
+                    co.onemeter.oneapp.ui.Log.d("the lastVisiblePosition is " + lv_message.getLastVisiblePosition()
+                            + ", the size is " + log_msg.size() + ", mIsFirstStartToScroll is " + mIsFirstStartToScroll
+                            + ", isScrollToBottom is " + isScrollToBottom);
+                    mIsFirstStartToScroll = false;
 
-                                // 保留内存中的 ChatMessage.extraObjects，否则就丢失了上传状态
-                                HashMap<String, ChatMessage> oldMsgs = new HashMap<>(log_msg.size());
-                                for (ChatMessage oldMsg : log_msg) {
-                                    if (!TextUtils.isEmpty(oldMsg.uniqueKey))
-                                        oldMsgs.put(oldMsg.uniqueKey, oldMsg);
-                                }
-                                for (ChatMessage newMsg : chatMessageList) {
-                                    if (!TextUtils.isEmpty(newMsg.uniqueKey)) {
-                                        ChatMessage oldMsg = oldMsgs.get(newMsg.uniqueKey);
-                                        if (oldMsg != null) {
-                                            newMsg.extraData = oldMsg.extraData;
-                                            newMsg.extraObjects = oldMsg.extraObjects;
-                                        }
-                                    }
-                                }
+                    if (null != log_msg) {
 
-                                log_msg.clear();
-                            }
-                            log_msg=chatMessageList;
-                            myAdapter.setDataSource(log_msg);
-
-                            refreshMsgListView(isScrollToBottom);
-                            fNotifyAllUnreadMsg();
+                        // 保留内存中的 ChatMessage.extraObjects，否则就丢失了上传状态
+                        HashMap<String, ChatMessage> oldMsgs = new HashMap<>(log_msg.size());
+                        for (ChatMessage oldMsg : log_msg) {
+                            if (!TextUtils.isEmpty(oldMsg.uniqueKey))
+                                oldMsgs.put(oldMsg.uniqueKey, oldMsg);
                         }
+                        for (ChatMessage newMsg : chatMessageList) {
+                            if (!TextUtils.isEmpty(newMsg.uniqueKey)) {
+                                ChatMessage oldMsg = oldMsgs.get(newMsg.uniqueKey);
+                                if (oldMsg != null) {
+                                    newMsg.extraData = oldMsg.extraData;
+                                    newMsg.extraObjects = oldMsg.extraObjects;
+                                }
+                            }
+                        }
+
+                        log_msg.clear();
                     }
-                }, (Void)null);
+                    log_msg=chatMessageList;
+                    myAdapter.setDataSource(log_msg);
+
+                    refreshMsgListView(isScrollToBottom);
+                    fNotifyAllUnreadMsg();
+                }
+            }
+        });
     }
 
     private void loadEarlierMsgs() {
-        new AsyncTask<Void, Void, ArrayList<ChatMessage>>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, ArrayList<ChatMessage>>() {
             @Override
             protected ArrayList<ChatMessage> doInBackground(Void... params) {
 
@@ -455,7 +454,7 @@ public abstract class MessageComposerActivityBase extends Activity
                     mMsgBox.toast(R.string.messagecomposerbase_local_msg_fully);
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
 	protected void fRefreshUserInfo() {
@@ -821,7 +820,7 @@ public abstract class MessageComposerActivityBase extends Activity
 		/*
 		 *  2, upload, asynchronously, so the UI can refresh immediately.
 		 */
-        new PostFileTask(this){
+        AsyncTaskExecutor.executeShortNetworkTask(new PostFileTask(this){
             @Override
             protected Boolean doInBackground(final String... pathes) {
                 boolean status = super.doInBackground(pathes);
@@ -856,7 +855,7 @@ public abstract class MessageComposerActivityBase extends Activity
                     progressBar.setProgress(param[0]);
                 }
             }
-        }.execute(imagePath, imageThumbPath, audioPath);
+        }, imagePath, imageThumbPath, audioPath);
 	}
 
     protected void resendMediaMsgAsync(ChatMessage chatMessage) {
@@ -891,7 +890,7 @@ public abstract class MessageComposerActivityBase extends Activity
             final ChatMessage msg) {
         msg.initExtra();
 
-        new AsyncTask<Void, Integer, Void>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
 
             String thumb_id = null;
             String media_id = null;
@@ -995,7 +994,7 @@ public abstract class MessageComposerActivityBase extends Activity
 //				showSentStatus(msg);
             }
 
-        }.execute((Void)null);
+        });
     }
 
 
@@ -1146,7 +1145,7 @@ public abstract class MessageComposerActivityBase extends Activity
     }
 
     private void recheckIfCanSendMsg() {
-        new AsyncTask<Void, Void, Boolean>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(Void... params) {
                 if (_targetIsNormalGroup || _targetIsTmpGroup) {
@@ -1170,11 +1169,11 @@ public abstract class MessageComposerActivityBase extends Activity
                     updateUiAboutCanSendMsg();
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     private void refreshGroupInfo(final String groupId) {
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 return mWebif.fGroupChat_GetGroupDetail(groupId);
@@ -1188,7 +1187,7 @@ public abstract class MessageComposerActivityBase extends Activity
                     txtTitle.setText(getTargetDisplayName());
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     protected void configInputBoardDrawable(InputBoardManager mgr) {
@@ -1304,7 +1303,7 @@ public abstract class MessageComposerActivityBase extends Activity
         @Override
         public void onDBTableChanged(String tableName) {
             fRefetchAndReloadTableData(++loadingId);
-            new AsyncTask<Void, Void, Void>() {
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
                     Database db = new Database(MessageComposerActivityBase.this);
@@ -1318,7 +1317,7 @@ public abstract class MessageComposerActivityBase extends Activity
                 protected void onPostExecute(Void result) {
                     txtTitle.setText(_targetGlobalPhoneNumber);
                 };
-            }.execute((Void)null);
+            });
         }
     };
 
@@ -1462,7 +1461,7 @@ public abstract class MessageComposerActivityBase extends Activity
 			final ChatMessage msg) {
 		msg.initExtra();
 
-		new AsyncTask<Void, Integer, Void>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
 			String media_id = null;
 			boolean isFileUploadSuccess = true;
 
@@ -1539,7 +1538,7 @@ public abstract class MessageComposerActivityBase extends Activity
                     progressBar.setVisibility(View.GONE);
 //                showSentStatus(msg);
 			}
-		}.execute((Void)null);
+		});
 	}
 
     public static void launchToChatWithBuddy(Context context, Class<?> subclassType, String uid) {
@@ -1655,7 +1654,7 @@ public abstract class MessageComposerActivityBase extends Activity
 //		 else
 //			 iv.setImageDrawable(null);//R.drawable.sms_default_pic);
 //
-//		 new AsyncTask<Void, Integer, Void> (){
+//		 AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void> (){
 //			 Bitmap bmp, bmp2;
 //
 //			@Override
@@ -1675,7 +1674,7 @@ public abstract class MessageComposerActivityBase extends Activity
 //				bmp.recycle();
 //				bmp2.recycle();
 //			}
-//		 }.execute((Void)null);
+//		 });
 //	 }
 
 	 private void showProgressbarOnUiThread(final ProgressBar progressBar) {

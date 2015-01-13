@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
@@ -134,19 +135,19 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
 		groupRoom.location = location;
 		
         mMsgBox.showWait();
-		new AsyncTask<Void, Integer, String>(){
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, String>() {
 
-			@Override
-			protected String doInBackground(Void... arg0) {
-				String[] groupids = WowTalkWebServerIF.getInstance(
+            @Override
+            protected String doInBackground(Void... arg0) {
+                String[] groupids = WowTalkWebServerIF.getInstance(
                         CreateGroupActivity.this).fGroupChat_Create(
-						strGroupName,
-						isTemporaryGroup,
-						groupRoom.place,
-						strCategory,
-						31.29f,
-						120.67f,
-						strIntroduce);
+                        strGroupName,
+                        isTemporaryGroup,
+                        groupRoom.place,
+                        strCategory,
+                        31.29f,
+                        120.67f,
+                        strIntroduce);
                 if (null != groupids && groupids.length > 0 && null != groupids[0]) {
 //                    // save the group in local db.
 //                    groupRoom.groupID = groupids[0];
@@ -154,11 +155,11 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
 //                    updateGroupThumbnail(groupRoom);
 //                    mDBHelper.storeGroupChatRoom(groupRoom);
 
-                    ArrayList<GroupChatRoom> groupList=new ArrayList<GroupChatRoom>();
-                    WowTalkWebServerIF.getInstance(CreateGroupActivity.this).fGroupChat_Search(groupids[1],groupList);
-                    if(groupList.size() > 0) {
+                    ArrayList<GroupChatRoom> groupList = new ArrayList<GroupChatRoom>();
+                    WowTalkWebServerIF.getInstance(CreateGroupActivity.this).fGroupChat_Search(groupids[1], groupList);
+                    if (groupList.size() > 0) {
                         updateGroupThumbnail(groupList.get(0));
-                        groupList.get(0).isMeBelongs=true;
+                        groupList.get(0).isMeBelongs = true;
                         mDBHelper.storeGroupChatRoom(groupList.get(0));
                         WowTalkWebServerIF.getInstance(CreateGroupActivity.this).fGroupChat_GetMembers(groupList.get(0).groupID);
                     }
@@ -167,20 +168,20 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
                 }
 
                 return null;
-			}
-			
-			@Override
-			protected void onPostExecute(String gid) {
+            }
+
+            @Override
+            protected void onPostExecute(String gid) {
                 mMsgBox.dismissWait();
-				if(gid != null) {
-					finish();
+                if (gid != null) {
+                    finish();
                     // Go to details Activity of group after creating or updating it.
                     ContactGroupInfoActivity.launchForResult(CreateGroupActivity.this, gid, 0);
-				} else {
-					mMsgBox.toast(R.string.create_group_failed);
-				}
-			}
-		}.execute((Void)null);
+                } else {
+                    mMsgBox.toast(R.string.create_group_failed);
+                }
+            }
+        });
 	}
 
     private void updateGroup() {
@@ -189,7 +190,7 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
         groupRoom.category = (mCategoryWhich != CATEGORY_NOT_SELECT) ? mCategoryServers[mCategoryWhich] : "";
         groupRoom.groupStatus = edtIntroduce.getText().toString();
         mMsgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 if (isThumbnailChanged) {
@@ -212,7 +213,7 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
                     finish();
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     private void chooseCategory() {

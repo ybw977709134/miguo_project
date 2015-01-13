@@ -19,11 +19,9 @@ import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.*;
 import co.onemeter.oneapp.utils.LocationHelper;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.api.*;
-import co.onemeter.oneapp.ui.ImageViewActivity;
 import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.ui.PhotoDisplayHelper;
 import org.wowtalk.ui.bitmapfun.ui.RecyclingImageView;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 import org.wowtalk.ui.msg.TimerTextView;
@@ -578,11 +576,11 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                                      final LinearLayout voteSurveyLayout,final LinearLayoutAsListView lvSurveyOptions,final ArrayList<String> choosed,final Button btnSurvey) {
         final MessageBox msgBox=new MessageBox(context);
         msgBox.showWait();
-        new AsyncTask<Void, Void, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
                 int resultCode = MomentWebServerIF.getInstance(context)
-                        .voteMomentSurvey(moment,selectedOptionList);
+                        .voteMomentSurvey(moment, selectedOptionList);
                 // 投票过期，但界面显示未过期，则是本地时间有误差导致，需要重新获取服务器时间offset
                 if (ErrorCode.MOMENT_SURVEY_OUTOFDATE == resultCode) {
                     WowTalkWebServerIF.getInstance(context).fAdjustUTCTimeWithServer();
@@ -594,32 +592,32 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             protected void onPostExecute(Integer errno) {
                 msgBox.dismissWait();
                 switch (errno) {
-                case ErrorCode.OK:
-                	btnSurvey.setVisibility(View.GONE);
+                    case ErrorCode.OK:
+                        btnSurvey.setVisibility(View.GONE);
 
-                    // 保存我的投票结果到 Moment 对象
-                    Moment updatedMoment = new Database(context).fetchMoment(moment.id);
-                    if (updatedMoment != null) {
-                        moment.surveyOptions = updatedMoment.surveyOptions;
-                    }
+                        // 保存我的投票结果到 Moment 对象
+                        Moment updatedMoment = new Database(context).fetchMoment(moment.id);
+                        if (updatedMoment != null) {
+                            moment.surveyOptions = updatedMoment.surveyOptions;
+                        }
 
-                	setSurveyInfo(context,moment,voteSurveyLayout,lvSurveyOptions,choosed,btnSurvey);              
-                    break;
-                case ErrorCode.MOMENT_SURVEY_OUTOFDATE:
-                    choosed.clear();
-                    setSurveyInfo(context,moment,voteSurveyLayout,lvSurveyOptions,choosed,btnSurvey);
-                    break;
-                case ErrorCode.MOMENT_SURVEY_HAS_VOTED:
-                    msgBox.toast(R.string.moment_survey_has_voted);
-                    choosed.clear();
-                    setSurveyInfo(context,moment,voteSurveyLayout,lvSurveyOptions,choosed,btnSurvey);
-                    break;
-                default:
-                    msgBox.toast(R.string.operation_failed);
-                    break;
+                        setSurveyInfo(context, moment, voteSurveyLayout, lvSurveyOptions, choosed, btnSurvey);
+                        break;
+                    case ErrorCode.MOMENT_SURVEY_OUTOFDATE:
+                        choosed.clear();
+                        setSurveyInfo(context, moment, voteSurveyLayout, lvSurveyOptions, choosed, btnSurvey);
+                        break;
+                    case ErrorCode.MOMENT_SURVEY_HAS_VOTED:
+                        msgBox.toast(R.string.moment_survey_has_voted);
+                        choosed.clear();
+                        setSurveyInfo(context, moment, voteSurveyLayout, lvSurveyOptions, choosed, btnSurvey);
+                        break;
+                    default:
+                        msgBox.toast(R.string.operation_failed);
+                        break;
                 }
             }
-        }.execute((Void)null);
+        });
     }
 
     private void setTagDescInfo(final ViewHolder holder,final Moment moment) {
@@ -1096,7 +1094,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     }
     private static void getMomentMultimedia(final GetFileFromServerContext aContext) {
         loadingFromServerContextArrayList.add(aContext);
-        new AsyncTask<Void, Void, Void>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
             boolean ok;
             final String path = PhotoDisplayHelper.makeLocalFilePath(aContext.fileId, aContext.fileType);
             @Override
@@ -1133,7 +1131,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 --curLoadingFileFromServerCount;
                 triggerLoadingFileFromServer();
             }
-        }.execute((Void)null);
+        });
     }
 
     public static void setImageLayout(
@@ -1211,7 +1209,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     private static void viewVideo(final WFile file, final Context context) {
         if (!new File(file.localPath).exists()) {
             // need download
-            new AsyncTask<Void, Void, Integer>() {
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
                 private WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(context);
                 private boolean status;
@@ -1251,7 +1249,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                     else
                         msgbox.toast(R.string.download_failed);
                 }
-            }.execute((Void)null);
+            });
         } else {
             viewVideoDirectly(file, context);
         }
@@ -1358,7 +1356,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 					}
 				}
 			});
-			taskDlVoiceFile.execute((Void) null);
+			AsyncTaskExecutor.executeShortNetworkTask(taskDlVoiceFile);
 		}
     }
 

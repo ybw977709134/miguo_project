@@ -18,14 +18,13 @@ import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView.ScaleType;
 import co.onemeter.oneapp.R;
-
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.Log;
 import org.wowtalk.api.*;
 
@@ -160,55 +159,55 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 							mDownloadingLocks.add(f.thumb_fileid);
 							
 //							f.localPath = PhotoDisplayHelper.makeLocalFilePath(f.fileid, f.getExt());
-							new AsyncTask<WFile, Integer, Void> () {
+							AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<WFile, Integer, Void>() {
 
-								WFile f = null;
-								boolean ok = false;
-								
-								@Override
-								protected Void doInBackground(WFile... arg0) {
-									
-									f = arg0[0];
-									
-									WowTalkWebServerIF.getInstance(EventActivity.this)
-									.fGetFileFromServer(
-                                            f.thumb_fileid,
-                                            WEvent.MEDIA_FILE_REMOTE_DIR,
-											new NetworkIFDelegate(){
+                                WFile f = null;
+                                boolean ok = false;
 
-										@Override
-										public void didFailNetworkIFCommunication(int arg0, byte[] arg1) {
-											ok = false;
-											Log.e("AvatarUtils.displayPhoto() failed to download: "
-													+ new String(arg1).toString());
-										}
+                                @Override
+                                protected Void doInBackground(WFile... arg0) {
 
-										@Override
-										public void didFinishNetworkIFCommunication(int arg0, byte[] arg1) {
-											ok = true;
-											Log.i("AvatarUtils.displayPhoto() succeed");
-										}
+                                    f = arg0[0];
 
-										@Override
-										public void setProgress(int arg0, int arg1) {
-										}
+                                    WowTalkWebServerIF.getInstance(EventActivity.this)
+                                            .fGetFileFromServer(
+                                                    f.thumb_fileid,
+                                                    WEvent.MEDIA_FILE_REMOTE_DIR,
+                                                    new NetworkIFDelegate() {
 
-									}, 0, f.localThumbnailPath, null);
-									return null;
-								}
-								
-								@Override
-								protected void onPostExecute(Void v) {
-									mDownloadingLocks.remove(f.thumb_fileid);
-									Log.i("download complete, fileid=" + f.thumb_fileid + ", result=" + ok);
-									if(ok) {
-										// 调用 imgPhoto.setImageDrawable() 貌似不管用，可能是因为
-										// 现在显示的已经不是原来的View了。
-										refresh();
-									}
-								}
+                                                        @Override
+                                                        public void didFailNetworkIFCommunication(int arg0, byte[] arg1) {
+                                                            ok = false;
+                                                            Log.e("AvatarUtils.displayPhoto() failed to download: "
+                                                                    + new String(arg1).toString());
+                                                        }
 
-							}.execute(f);
+                                                        @Override
+                                                        public void didFinishNetworkIFCommunication(int arg0, byte[] arg1) {
+                                                            ok = true;
+                                                            Log.i("AvatarUtils.displayPhoto() succeed");
+                                                        }
+
+                                                        @Override
+                                                        public void setProgress(int arg0, int arg1) {
+                                                        }
+
+                                                    }, 0, f.localThumbnailPath, null);
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Void v) {
+                                    mDownloadingLocks.remove(f.thumb_fileid);
+                                    Log.i("download complete, fileid=" + f.thumb_fileid + ", result=" + ok);
+                                    if (ok) {
+                                        // 调用 imgPhoto.setImageDrawable() 貌似不管用，可能是因为
+                                        // 现在显示的已经不是原来的View了。
+                                        refresh();
+                                    }
+                                }
+
+                            }, f);
 						}
                         break;
 					}
@@ -319,7 +318,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         ibRight.setVisibility(View.GONE);
         if(Buddy.ACCOUNT_TYPE_TEACHER == PrefUtil.getInstance(this).getMyAccountType()){
             // 检查是否有学校
-            new AsyncTask<Void, Void, Boolean>() {
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Boolean>() {
                 @Override
                 protected Boolean doInBackground(Void... voids) {
                     return !WowTalkWebServerIF.getInstance(EventActivity.this).getMySchools(false).isEmpty();
@@ -329,7 +328,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
                 protected void onPostExecute(Boolean hasSchools) {
                     ibRight.setVisibility(hasSchools ? View.VISIBLE : View.GONE);
                 }
-            }.execute((Void) null);
+            });
         }
 
         ibRight.setOnClickListener(this);

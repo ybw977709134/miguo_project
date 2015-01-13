@@ -11,21 +11,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import android.widget.ImageView.ScaleType;
-
-import com.umeng.analytics.MobclickAgent;
-
-import org.wowtalk.api.Account;
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.*;
-import org.wowtalk.ui.msg.Utils;
-import org.wowtalk.ui.msg.InputBoardManager;
-
 import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
+import com.umeng.analytics.MobclickAgent;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.MediaInputHelper;
+import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.msg.InputBoardManager;
+import org.wowtalk.ui.msg.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -145,21 +138,21 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 	 * fetch and display.
 	 */
 	private void fetchPersonalInfo() {
-		new AsyncTask<Void, Integer, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
-			@Override
-			protected Integer doInBackground(Void... params) {
-				return wif.fGetMyProfile();
-			}
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return wif.fGetMyProfile();
+            }
 
-			@Override
-			protected void onPostExecute(Integer result) {
-				if (result == ErrorCode.OK){
-					displayPeronalInfo();
-				}
-			}
+            @Override
+            protected void onPostExecute(Integer result) {
+                if (result == ErrorCode.OK) {
+                    displayPeronalInfo();
+                }
+            }
 
-		}.execute((Void)null);
+        });
 	}
 	
 	protected String getSexLiteral(int fGetMySexFromLocal) {
@@ -398,7 +391,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
     }
 
 //    private void notifyProfileUpdating() {
-//        new AsyncTask<Void, Integer, Void> () {
+//        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void> () {
 //            @Override
 //            protected Void doInBackground(Void... params) {
 //                Database db = new Database(MyInfoActivity.this);
@@ -422,7 +415,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 //                }
 //                return null;
 //            }
-//        }.execute((Void)null);
+//        });
 //    }
 
     @Override
@@ -480,19 +473,19 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 		if(nick == null)
 			return;
 		
-		new AsyncTask<Void, Integer, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
-			@Override
-			protected Integer doInBackground(Void... params) {
-				Buddy data = new Buddy();
-				data.nickName = nick;
-				return wif.fUpdateMyProfile(data, Buddy.FIELD_FLAG_NICK);
-			}
+            @Override
+            protected Integer doInBackground(Void... params) {
+                Buddy data = new Buddy();
+                data.nickName = nick;
+                return wif.fUpdateMyProfile(data, Buddy.FIELD_FLAG_NICK);
+            }
 
-			@Override
-			protected void onPostExecute(Integer result) {
-				displayPeronalInfo();
-                if(result == ErrorCode.OK) {
+            @Override
+            protected void onPostExecute(Integer result) {
+                displayPeronalInfo();
+                if (result == ErrorCode.OK) {
                     Database dbHelper = new Database(MyInfoActivity.this);
                     String myUid = mPrefUtil.getUid();
                     Buddy me = new Buddy(myUid);
@@ -500,30 +493,30 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
                     dbHelper.storeNewBuddyWithUpdate(me);
                     mProfileUpdated = true;
                 }
-			}
+            }
 
-		}.execute((Void)null);
+        });
 	}
 
 	private void updateMySex(final int sex) {
-		new AsyncTask<Void, Integer, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
-			@Override
-			protected Integer doInBackground(Void... params) {
-				Buddy data = new Buddy();
-				data.setSexFlag(sex);
-				return wif.fUpdateMyProfile(data, Buddy.FIELD_FLAG_SEX);
-			}
+            @Override
+            protected Integer doInBackground(Void... params) {
+                Buddy data = new Buddy();
+                data.setSexFlag(sex);
+                return wif.fUpdateMyProfile(data, Buddy.FIELD_FLAG_SEX);
+            }
 
-			@Override
-			protected void onPostExecute(Integer result) {
-				displayPeronalInfo();
-                if(result == ErrorCode.OK) {
+            @Override
+            protected void onPostExecute(Integer result) {
+                displayPeronalInfo();
+                if (result == ErrorCode.OK) {
                     mProfileUpdated = true;
                 }
-			}
+            }
 
-		}.execute((Void)null);
+        });
 	}
 
 	private void updateMyBirthday(final Date day) {
@@ -531,49 +524,49 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
             mMsgBox.toast(R.string.input_birthday_error);
             return;
         }
-		new AsyncTask<Void, Integer, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
-			@Override
-			protected Integer doInBackground(Void... params) {
-				Buddy data = new Buddy();
-				data.setBirthday(day);
-				return wif.fUpdateMyProfile(data, Buddy.FIELD_FLAG_BIRTHDAY);
-			}
+            @Override
+            protected Integer doInBackground(Void... params) {
+                Buddy data = new Buddy();
+                data.setBirthday(day);
+                return wif.fUpdateMyProfile(data, Buddy.FIELD_FLAG_BIRTHDAY);
+            }
 
-			@Override
-			protected void onPostExecute(Integer result) {
-				displayPeronalInfo();
-                if(result == ErrorCode.OK) {
+            @Override
+            protected void onPostExecute(Integer result) {
+                displayPeronalInfo();
+                if (result == ErrorCode.OK) {
                     mProfileUpdated = true;
                 }
-			}
+            }
 
-		}.execute((Void)null);
+        });
 	}
 
 	private void updateMyArea(final String area) {
-		new AsyncTask<Void, Integer, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
-			@Override
-			protected Integer doInBackground(Void... params) {
-				Buddy data = new Buddy();
-				data.area = area;
-				return wif.fUpdateMyProfile(data, Buddy.FIELD_FLAG_AREA);
-			}
+            @Override
+            protected Integer doInBackground(Void... params) {
+                Buddy data = new Buddy();
+                data.area = area;
+                return wif.fUpdateMyProfile(data, Buddy.FIELD_FLAG_AREA);
+            }
 
-			@Override
-			protected void onPostExecute(Integer result) {
-				displayPeronalInfo();
-                if(result == ErrorCode.OK) {
+            @Override
+            protected void onPostExecute(Integer result) {
+                displayPeronalInfo();
+                if (result == ErrorCode.OK) {
                     mProfileUpdated = true;
                 }
-			}
+            }
 
-		}.execute((Void)null);
+        });
 	}
 
     private void updateMyStatus(final String status) {
-        new AsyncTask<Void, Integer, Integer>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... params) {
@@ -590,31 +583,31 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
             @Override
             protected void onPostExecute(Integer result) {
                 displayPeronalInfo();
-                if(result == ErrorCode.OK) {
+                if (result == ErrorCode.OK) {
                     mProfileUpdated = true;
                 }
             }
 
-        }.execute((Void)null);
+        });
     }
 
 	private void updateMyAvatar(final String filePath, final String thumbnailPath) {
 		progressBar.setVisibility(View.VISIBLE);
-		new AsyncTask<Void, Integer, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
-			@Override
-			protected Integer doInBackground(Void... params) {
-				Buddy data = new Buddy();
-				data.pathOfPhoto = filePath;
-				data.pathOfThumbNail = thumbnailPath;
-				mPrefUtil.setIsUploadingMyAvatar(true);
-				return wif.fUpdateMyProfile(data, Buddy.FIELD_FLAG_PHOTO);
-			}
+            @Override
+            protected Integer doInBackground(Void... params) {
+                Buddy data = new Buddy();
+                data.pathOfPhoto = filePath;
+                data.pathOfThumbNail = thumbnailPath;
+                mPrefUtil.setIsUploadingMyAvatar(true);
+                return wif.fUpdateMyProfile(data, Buddy.FIELD_FLAG_PHOTO);
+            }
 
-			@Override
-			protected void onPostExecute(Integer result) {
+            @Override
+            protected void onPostExecute(Integer result) {
                 showProgressBar(false);
-                if(result == ErrorCode.OK) {
+                if (result == ErrorCode.OK) {
                     mProfileUpdated = true;
                     displayPhoto(filePath);
 
@@ -632,7 +625,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
                             long photoTimeStamp = mPrefUtil.getMyPhotoUploadedTimestamp();
                             ArrayList<Account> accounts = mPrefUtil.getAccountList();
                             Account tempAccount = null;
-                            for (Iterator<Account> iterator = accounts.iterator(); iterator .hasNext();) {
+                            for (Iterator<Account> iterator = accounts.iterator(); iterator.hasNext(); ) {
                                 tempAccount = iterator.next();
                                 if (mPrefUtil.getUid().equals(tempAccount.uid)) {
                                     tempAccount.photoUploadTimeStamp = photoTimeStamp;
@@ -643,9 +636,9 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
                         }
                     }).start();
                 }
-			}
+            }
 
-		}.execute((Void)null);
+        });
 	}
 
 	private void displayPhoto(String path) {

@@ -16,13 +16,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.Utils;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.utils.Utils;
 
 public class BindPhoneActivity extends Activity implements OnClickListener {
     private static final String TAG = "BindPhoneActivity";
@@ -104,39 +104,39 @@ public class BindPhoneActivity extends Activity implements OnClickListener {
 
         mMsgBox.showWait();
 
-		new AsyncTask<Void, Integer, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
-			@Override
-			protected Integer doInBackground(Void... params) {
-				return WowTalkWebServerIF.getInstance(BindPhoneActivity.this).fBindMobile(strNum, strPassword, mIsForceBound);
-			}
-			
-			@Override
-			protected void onPostExecute(Integer result) {
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return WowTalkWebServerIF.getInstance(BindPhoneActivity.this).fBindMobile(strNum, strPassword, mIsForceBound);
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
                 mMsgBox.dismissWait();
                 Log.i(TAG, ", bind phone, the result code is " + result + "(is_force:" + mIsForceBound + ")");
-				switch (result) {
-                case ErrorCode.OK:
-                    Intent intent = new Intent(BindPhoneActivity.this, BindCodeActivity.class);
-                    intent.putExtra(BindCodeActivity.REQ_INTENT, BindCodeActivity.INTENT_PHONE);
-                    intent.putExtra(BindCodeActivity.PHONE_EMAIL_VALUE, strNum);
-                    startActivity(intent);
-                    break;
-                case ErrorCode.AUTH:
-                    mMsgBox.show(null, getString(R.string.bind_phone_pwd_err));
-                    break;
-                case ErrorCode.PHONE_USED_BY_OTHERS:
-                    mIsForceBound = true;
-                    changeBindStyle();
-                    mMsgBox.show(null, getString(R.string.settings_account_phone_used_by_others));
-                    break;
-                default:
-                    mMsgBox.show(null, getString(R.string.bind_phone_failed));
-                    break;
+                switch (result) {
+                    case ErrorCode.OK:
+                        Intent intent = new Intent(BindPhoneActivity.this, BindCodeActivity.class);
+                        intent.putExtra(BindCodeActivity.REQ_INTENT, BindCodeActivity.INTENT_PHONE);
+                        intent.putExtra(BindCodeActivity.PHONE_EMAIL_VALUE, strNum);
+                        startActivity(intent);
+                        break;
+                    case ErrorCode.AUTH:
+                        mMsgBox.show(null, getString(R.string.bind_phone_pwd_err));
+                        break;
+                    case ErrorCode.PHONE_USED_BY_OTHERS:
+                        mIsForceBound = true;
+                        changeBindStyle();
+                        mMsgBox.show(null, getString(R.string.settings_account_phone_used_by_others));
+                        break;
+                    default:
+                        mMsgBox.show(null, getString(R.string.bind_phone_failed));
+                        break;
                 }
-			}
-			
-		}.execute((Void)null);
+            }
+
+        });
 	}
 
 	/**

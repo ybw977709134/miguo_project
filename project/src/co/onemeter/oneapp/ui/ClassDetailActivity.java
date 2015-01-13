@@ -1,30 +1,7 @@
 package co.onemeter.oneapp.ui;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.api.GroupMember;
-import org.wowtalk.api.IDBTableChangeListener;
-import org.wowtalk.api.Lesson;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.LessonWebServerIF;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.HorizontalListView;
-import org.wowtalk.ui.MessageBox;
-
-import com.androidquery.AQuery;
-
-import co.onemeter.oneapp.Constants;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.contacts.model.Person;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,14 +9,19 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.app.Activity;
-import android.content.Intent;
+import co.onemeter.oneapp.Constants;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.contacts.model.Person;
+import co.onemeter.utils.AsyncTaskExecutor;
+import com.androidquery.AQuery;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.HorizontalListView;
+import org.wowtalk.ui.MessageBox;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 课堂详情页面。
@@ -105,15 +87,15 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		
 //		members = mdb.fetchGroupMembers(classId);
 		if(members == null || members.isEmpty()){
-			new AsyncTask<Void, Void, Integer>(){
+			AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 				@Override
 				protected Integer doInBackground(Void... params) {
-					return (Integer)mWTWebSer.fGroupChat_GetMembers(classId).get("code");
+					return (Integer) mWTWebSer.fGroupChat_GetMembers(classId).get("code");
 				}
-				
+
 				protected void onPostExecute(Integer result) {
-					if(ErrorCode.OK == result){
+					if (ErrorCode.OK == result) {
 						Database mdb = Database.getInstance(ClassDetailActivity.this);
 						members = mdb.fetchGroupMembers(classId);
 						mdb.close();
@@ -121,9 +103,11 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 						teaAdapter = new TeachersAdapter(members);
 						lvTeachers.setAdapter(teaAdapter);
 					}
-				};
-				
-			}.execute((Void)null);
+				}
+
+				;
+
+			});
 		}else{
 			teaAdapter = new TeachersAdapter(members);
 			lvTeachers.setAdapter(teaAdapter);
@@ -157,20 +141,22 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	}
 	
 	private void getLessonInfo(){
-			new AsyncTask<Void, Void, Integer>() {
-	
+			AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+
 				@Override
 				protected Integer doInBackground(Void... params) {
 					return lesWebSer.getLesson(classId);
 				}
-				
+
 				protected void onPostExecute(Integer result) {
-					if(ErrorCode.OK == result){
+					if (ErrorCode.OK == result) {
 						refreshLessonInfo();
 					}
-				};
-				
-			}.execute((Void)null);
+				}
+
+				;
+
+			});
 	}
 	
 	private void refreshLessonInfo(){

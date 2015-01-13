@@ -20,6 +20,7 @@ import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.*;
 import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
+import co.onemeter.oneapp.utils.AsyncTaskExecutor;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
 import com.handmark.pulltorefresh.widget.PullToRefreshListView;
 import com.handmark.pulltorefresh.widget.PullToRefreshListView.OnRefreshListener;
@@ -34,6 +35,7 @@ import org.wowtalk.ui.msg.Stamp;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Do SMS chat here.
@@ -347,50 +349,68 @@ public abstract class MessageComposerActivityBase extends Activity
     private long loadingId=0;
     private boolean isMsgFromDBLoaded=false;
 	private void fRefetchAndReloadTableData(final long curLoadingId) {
-        new AsyncTask<Void, Void, ArrayList<ChatMessage>>() {
-            @Override
-            protected ArrayList<ChatMessage> doInBackground(Void... params) {
-                ArrayList<ChatMessage> msgInDb=null;
+        AsyncTaskExecutor.executeNonNetworkTask(
+                new AsyncTask<Void, Void, ArrayList<ChatMessage>>() {
+                    @Override
+                    protected ArrayList<ChatMessage> doInBackground(Void... params) {
+                        ArrayList<ChatMessage> msgInDb=null;
 
-                if(curLoadingId == loadingId) {
-                    if(isMsgFromDBLoaded && null != log_msg && log_msg.size()>=DEFAULT_SHOW_ITEMS) {
-                        String sentDate = log_msg.get(0).sentDate;
-                        msgInDb = mDbHelper.fetchChatMessagesAfterInclude(_targetUID, sentDate);
-                    } else {
-                        msgInDb = mDbHelper.fetchChatMessagesWithUser(_targetUID, DEFAULT_SHOW_ITEMS, 0);
+                        if(curLoadingId == loadingId) {
+                            if(isMsgFromDBLoaded && null != log_msg && log_msg.size()>=DEFAULT_SHOW_ITEMS) {
+                                String sentDate = log_msg.get(0).sentDate;
+                                msgInDb = mDbHelper.fetchChatMessagesAfterInclude(_targetUID, sentDate);
+                            } else {
+                                msgInDb = mDbHelper.fetchChatMessagesWithUser(_targetUID, DEFAULT_SHOW_ITEMS, 0);
+                            }
+
+                            isMsgFromDBLoaded=true;
+                        }
+                        return msgInDb;
                     }
 
-                    isMsgFromDBLoaded=true;
-                }
-                return msgInDb;
-            }
+                    @Override
+                    protected void onPostExecute(ArrayList <ChatMessage> chatMessageList) {
+                        if(curLoadingId == loadingId) {
 
-            @Override
-            protected void onPostExecute(ArrayList <ChatMessage> chatMessageList) {
-                if(curLoadingId == loadingId) {
+                            // 如果当前页的最后一项不是整个adapter的最后一项，则不滑动到底部；否则滑到底部
+                            // 如果mIsFirstStartToScroll为true，说明是第一次进入，需要滑动到底部
+                            // **不能用lv_message.getLastVisiblePosition() == -1 判断是否是第一次进入，有时显示-1，有时显示第一屏的最后一个位置**
+                            // 此处必须在重新给 log_msg 赋值之前判断
+                            int lastVisiblePosition = lv_message.getLastVisiblePosition();
+                            boolean isScrollToBottom = mIsFirstStartToScroll || lastVisiblePosition == log_msg.size();
+                            co.onemeter.oneapp.ui.Log.d("the lastVisiblePosition is " + lv_message.getLastVisiblePosition()
+                                    + ", the size is " + log_msg.size() + ", mIsFirstStartToScroll is " + mIsFirstStartToScroll
+                                    + ", isScrollToBottom is " + isScrollToBottom);
+                            mIsFirstStartToScroll = false;
 
-                    // 如果当前页的最后一项不是整个adapter的最后一项，则不滑动到底部；否则滑到底部
-                    // 如果mIsFirstStartToScroll为true，说明是第一次进入，需要滑动到底部
-                    // **不能用lv_message.getLastVisiblePosition() == -1 判断是否是第一次进入，有时显示-1，有时显示第一屏的最后一个位置**
-                    // 此处必须在重新给 log_msg 赋值之前判断
-                    int lastVisiblePosition = lv_message.getLastVisiblePosition();
-                    boolean isScrollToBottom = mIsFirstStartToScroll || lastVisiblePosition == log_msg.size();
-                    co.onemeter.oneapp.ui.Log.d("the lastVisiblePosition is " + lv_message.getLastVisiblePosition()
-                            + ", the size is " + log_msg.size() + ", mIsFirstStartToScroll is " + mIsFirstStartToScroll
-                            + ", isScrollToBottom is " + isScrollToBottom);
-                    mIsFirstStartToScroll = false;
+                            if (null != log_msg) {
 
-                    if (null != log_msg) {
-                        log_msg.clear();
+                                // 保留内存中的 ChatMessage.extraObjects，否则就丢失了上传状态
+                                HashMap<String, ChatMessage> oldMsgs = new HashMap<>(log_msg.size());
+                                for (ChatMessage oldMsg : log_msg) {
+                                    if (!TextUtils.isEmpty(oldMsg.uniqueKey))
+                                        oldMsgs.put(oldMsg.uniqueKey, oldMsg);
+                                }
+                                for (ChatMessage newMsg : chatMessageList) {
+                                    if (!TextUtils.isEmpty(newMsg.uniqueKey)) {
+                                        ChatMessage oldMsg = oldMsgs.get(newMsg.uniqueKey);
+                                        if (oldMsg != null) {
+                                            newMsg.extraData = oldMsg.extraData;
+                                            newMsg.extraObjects = oldMsg.extraObjects;
+                                        }
+                                    }
+                                }
+
+                                log_msg.clear();
+                            }
+                            log_msg=chatMessageList;
+                            myAdapter.setDataSource(log_msg);
+
+                            refreshMsgListView(isScrollToBottom);
+                            fNotifyAllUnreadMsg();
+                        }
                     }
-                    log_msg=chatMessageList;
-                    myAdapter.setDataSource(log_msg);
-
-                    refreshMsgListView(isScrollToBottom);
-                    fNotifyAllUnreadMsg();
-                }
-            }
-        }.execute((Void)null);
+                }, (Void)null);
     }
 
     private void loadEarlierMsgs() {

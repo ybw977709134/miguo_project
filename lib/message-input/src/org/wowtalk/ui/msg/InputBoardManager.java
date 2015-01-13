@@ -154,7 +154,7 @@ public class InputBoardManager implements Parcelable,
     private View layoutTextInnerWrapper;
     private View layoutMediaWrapper;
     private View layoutStampWrapper;
-    public EditText mTxtContent;
+    private EditText mTxtContent;
     private View mBtnSend;
     private View mBtnMedia;
     private Button mBtnEmotion; 

@@ -1,16 +1,13 @@
 package co.onemeter.oneapp.ui;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
 import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
-
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Database;
@@ -25,11 +22,6 @@ public class MessageComposerActivity extends MessageComposerActivityBase {
     private static final int REQ_LAUNCH_TEMP_GROUP = 0;
     private static final int REQ_LAUNCH_GROUP = 1;
     private static final int REQ_CHANGE_TO_MULTI_CHAT = 2;
-    
-    private final static String NAME = "my_sp";  
-    private final static String EDIT_KEY = "edit"; 
-    
-    private SharedPreferences sp; 
 
     public static MessageComposerActivity instance() {
         if (instance == null)
@@ -106,12 +98,6 @@ public class MessageComposerActivity extends MessageComposerActivityBase {
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
-        
-        sp = getSharedPreferences(NAME, 0);  
-        String str = sp.getString(EDIT_KEY, null);  
-        if(str != null){  
-            mInputMgr.mTxtContent.setText(str);  
-        } 
 	}
 
     @Override
@@ -147,14 +133,6 @@ public class MessageComposerActivity extends MessageComposerActivityBase {
         MobclickAgent.onPause(this);
     }
 
-    @Override
-    public void onStop() {
-    	// TODO Auto-generated method stub
-    	super.onStop();
-    	SharedPreferences.Editor editor = sp.edit();  
-        editor.putString(EDIT_KEY, String.valueOf(mInputMgr.mTxtContent.getText()));  
-        editor.commit();  
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

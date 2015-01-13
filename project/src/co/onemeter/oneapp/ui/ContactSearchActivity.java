@@ -67,6 +67,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
     private ListView lvBuddy;
 	private ListView lvGroups;
 //	private TextView search_cancel;
+	private TextView btn_search;
 
     private BuddySearchItemAdapter buddyAdapter;
 	private GroupSearchAdapter groupAdapter;
@@ -433,6 +434,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //		btnSearch = (Button) findViewById(R.id.btn_search);
 		edtSearchContent = (EditText) findViewById(R.id.edt_search);
 //		search_cancel = (TextView) findViewById(R.id.search_cancel);
+		btn_search = (TextView) findViewById(R.id.btn_search);
         fieldClear = (ImageButton) findViewById(R.id.field_clear);
         search_empty = (TextView) findViewById(R.id.search_empty);
 //		txtPersonName = (TextView) findViewById(R.id.person_name_text);
@@ -483,6 +485,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
         search_uid.setOnClickListener(this);
 //        search_cancel.setOnClickListener(this);
         search_title_back.setOnClickListener(this);
+        btn_search.setOnClickListener(this);
 		lvGroups.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -560,16 +563,16 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
             }
         });
     }
-	private void searchAuto(){
-		edtSearchContent.setOnEditorActionListener(new OnEditorActionListener() {
-			
-			@Override
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				fStartSearch();
-				return true;
-			}
-		});
-	}
+//	private void searchAuto(){
+//		edtSearchContent.setOnEditorActionListener(new OnEditorActionListener() {
+//			
+//			@Override
+//			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//				fStartSearch();
+//				return true;
+//			}
+//		});
+//	}
 	private void setCheckStatus(){
 		searchedBuddyList.clear();
 		if(buddyAdapter!=null){
@@ -674,7 +677,9 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 			setTitleMode();
 			setCheckStatus();
 			break;
-
+		case R.id.btn_search:
+			fStartSearch();
+			break;
 		default:
 			break;
 		}
@@ -724,7 +729,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
 //        searchType = getIntent().getIntExtra(EXTRA_SEARCH, REQ_NORMAL_ACCOUNT);
 		initView();
-		searchAuto();
+//		searchAuto();
 		setTitleMode();
 
         mMsgBox = new MessageBox(this);

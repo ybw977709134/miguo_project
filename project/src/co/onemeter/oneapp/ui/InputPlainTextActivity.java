@@ -4,18 +4,23 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.ui.MessageBox;
 
 /**
@@ -74,7 +79,21 @@ public class InputPlainTextActivity extends Activity {
         btnTitleConfirm = (ImageButton) findViewById(R.id.title_confirm);
         edtValue = (EditText) findViewById(R.id.edt_value);
 
+        edtValue.setFocusable(true);
+        edtValue.setFocusableInTouchMode(true);
         edtValue.setText(defaultValue);
+        edtValue.requestFocus();
+        
+        Handler hanlder = new Handler();
+        hanlder.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				InputMethodManager imm = (InputMethodManager)edtValue.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);  
+		        imm.showSoftInput(edtValue, 0);
+			}
+		}, 200);
+        
         if (inputType != -1)
             edtValue.setInputType(inputType);
 

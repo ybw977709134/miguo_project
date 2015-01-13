@@ -3,7 +3,6 @@ package co.onemeter.oneapp.ui.msg;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
-import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,8 +19,8 @@ import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.*;
 import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
-import co.onemeter.utils.AsyncTaskExecutor;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
+import co.onemeter.utils.AsyncTaskExecutor;
 import com.handmark.pulltorefresh.widget.PullToRefreshListView;
 import com.handmark.pulltorefresh.widget.PullToRefreshListView.OnRefreshListener;
 import org.json.JSONException;
@@ -49,7 +48,6 @@ public abstract class MessageComposerActivityBase extends Activity
 
     private MessageBox mMsgBox;
     private TimeElapseReportRunnable timeElapseReportForCaptureVoiceRunnable;
-//    private int voiceTimer;
 
     /**
      * Override me.
@@ -96,12 +94,6 @@ public abstract class MessageComposerActivityBase extends Activity
 	 */
 	private static final int CAN_SEND_MSG_NO_GROUP_MEMBER = 2;
 
-//	public final static int PHOTO_THUMBNAIL_WIDTH = 180;
-//	public final static int PHOTO_THUMBNAIL_HEIGHT = 120;
-//	// resize photo to VGA size before sending
-//	public final static int PHOTO_SEND_WIDTH = 640;
-//	public final static int PHOTO_SEND_HEIGHT = 480;
-
 	LayoutInflater mInflater;
 
 	private PullToRefreshListView lv_message;
@@ -113,9 +105,7 @@ public abstract class MessageComposerActivityBase extends Activity
 	protected boolean _targetIsTmpGroup = false;
 	protected String _targetDisplayName = null;
 
-	private Bitmap _targetThumbnail;
-
-	protected Database mDbHelper;
+    protected Database mDbHelper;
     protected WowTalkWebServerIF mWebif;
     protected PrefUtil mPref;
 
@@ -206,142 +196,7 @@ public abstract class MessageComposerActivityBase extends Activity
             }
         });
 
-//		mHandler.post(new Runnable() {
-//			public void run() {
-////                for(ChatMessage aMessage : log_msg) {
-////                    if(ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST != aMessage.msgType &&
-////                            ChatMessage.IOTYPE_INPUT_UNREAD == aMessage.ioType) {
-////                        Log.i("msg "+aMessage.primaryKey+" unread");
-////                        WowTalkVoipIF.getInstance(MessageComposerActivityBase.this)
-////                                .fNotifyMessageRead(_targetUID,
-////                                        String.valueOf(aMessage.remoteKey));
-////                        mDbHelper.setChatMessageReaded(aMessage);
-////                    }
-////                }
-//				ArrayList<ChatMessage> list_unread_msgs = mDbHelper
-//                        .fetchUnreadChatMessagesWithUser(_targetUID);
-//
-//                for (int i = 0; i < list_unread_msgs.size(); i++) {
-//                    ChatMessage msgTmp = list_unread_msgs.get(i);
-//                    WowTalkVoipIF.getInstance(MessageComposerActivityBase.this)
-//                            .fNotifyMessageRead(_targetUID,
-//                                    String.valueOf(msgTmp.remoteKey));
-//                    mDbHelper.setChatMessageReaded(msgTmp);
-//                }
-//			}
-//		});
 	}
-
-//	public void fProcessMsgReachedReceipt(int msgID) {
-//		if (log_msg == null) {
-//			return;
-//		}
-//
-//		for (int i = 0; i < log_msg.size(); i++) {
-//
-//            ChatMessage msgTmp = log_msg.get(i);
-//			if (msgTmp.primaryKey == msgID) {
-//				msgTmp.sentStatus = ChatMessage.SENTSTATUS_REACHED_CONTACT;
-//				refreshMsgListView(false);
-//				break;
-//			}
-//
-//		}
-//	}
-//
-//	public void fProcessMsgReadedReceipt(int msgID) {
-//		if (log_msg == null) {
-//			return;
-//		}
-//
-//		for (int i = 0; i < log_msg.size(); i++) {
-//
-//            ChatMessage msgTmp = log_msg.get(i);
-//			if (msgTmp.primaryKey == msgID) {
-//				msgTmp.sentStatus = ChatMessage.SENTSTATUS_READED_BY_CONTACT;
-//				refreshMsgListView(false);
-//				break;
-//			}
-//
-//		}
-//	}
-
-//	public void fProcessNewIncomeMsg(final ChatMessage msg) {
-//		Log.i("fProcessNewIncomeMsg called");
-//
-//		if (WowTalkVoipIF.getInstance(this).fNotifyMessageRead(_targetUID,
-//				String.valueOf(msg.remoteKey))) {
-//			mDbHelper.setChatMessageReaded(msg);
-//			msg.ioType = ChatMessage.IOTYPE_INPUT_READED;
-//		}
-//
-//		// auto download voice
-//		if(msg.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_VOICE_NOTE)) {
-//			downloadVoiceWithProgressBar(msg);
-//		}
-//
-//		mHandler.post(new Runnable() {
-//			public void run() {
-//				log_msg.add(msg);
-//				myAdapter.notifyDataSetChanged();
-//				scrollMsgListToBotomDelay();
-//			}
-//		});
-//	}
-
-//	private void downloadVoiceWithProgressBar(final ChatMessage msg) {
-//        final String pathoffileincloud = msg.getMediaFileID();
-//		String ext = msg.getFilenameExt();
-//		msg.pathOfMultimedia = MediaInputHelper.makeOutputMediaFile(
-//                msgtype2mediatype.get(msg.msgType), ext).getAbsolutePath();
-//		msg.initExtra();
-//		msg.extraData.putBoolean("isTransferring", true);
-//
-//		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
-//
-//			@Override
-//			protected Void doInBackground(
-//					Void... params) {
-//				WowTalkWebServerIF.getInstance(MessageComposerActivityBase.this).fGetFileFromServer(
-//						pathoffileincloud,
-//						new NetworkIFDelegate(){
-//
-//							@Override
-//							public void didFailNetworkIFCommunication(
-//									int arg0, byte[] arg1) {
-//							}
-//
-//							@Override
-//							public void didFinishNetworkIFCommunication(
-//									int arg0, byte[] arg1) {
-//								new Database(MessageComposerActivityBase.this).updateChatMessage(msg);
-//							}
-//
-//							@Override
-//							public void setProgress(int arg0, int arg1) {
-//								publishProgress(arg1);
-//							}
-//
-//						}, 0, msg.pathOfMultimedia);
-//				return null;
-//			}
-//
-//			@Override
-//			protected void onProgressUpdate (Integer... values) {
-//				ProgressBar pb = (ProgressBar)msg.extraObjects.get("progressBar");
-//				if(pb != null)
-//					pb.setProgress(values[0]);
-//			}
-//
-//			@Override
-//			protected void onPostExecute(Void v) {
-//				msg.extraData.putBoolean("isTransferring", false);
-//				ProgressBar pb = (ProgressBar)msg.extraObjects.get("progressBar");
-//				if(pb != null)
-//					pb.setVisibility(View.GONE);
-//			}
-//        });
-//	}
 
     //if message table changed too often,request loading may be not handled in time
     //the last request will reflect states of messages
@@ -1647,95 +1502,7 @@ public abstract class MessageComposerActivityBase extends Activity
         context.startActivity(intent);
     }
 
-//	 @SuppressWarnings("unused")
-//	 private void setupThumbnail_async(final ChatMessage message,
-//			final ImageView iv, final boolean background) {
-//		 if(background)
-//			 iv.setBackgroundDrawable(null);//R.drawable.sms_default_pic);
-//		 else
-//			 iv.setImageDrawable(null);//R.drawable.sms_default_pic);
-//
-//		 AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void> (){
-//			 Bitmap bmp, bmp2;
-//
-//			@Override
-//			protected Void doInBackground(Void... arg0) {
-//				bmp = BitmapFactory.decodeFile(message.pathOfThumbNail);
-//				bmp2 = BmpUtils.roundCorner(bmp,
-//						(int)MessageComposerActivityBase.this.getResources().getDimension(R.dimen.multimedia_thumbnail_round_radius));
-//				return null;
-//			}
-//
-//			@Override
-//			protected void onPostExecute(Void v) {
-//				if(background)
-//					iv.setBackgroundDrawable(new PngDrawable(bmp2, mThumbnailDensity));
-//				else
-//					iv.setImageDrawable(new PngDrawable(bmp2, mThumbnailDensity));
-//				bmp.recycle();
-//				bmp2.recycle();
-//			}
-//		 });
-//	 }
-
-	 private void showProgressbarOnUiThread(final ProgressBar progressBar) {
-		 if(progressBar != null) {
-			 progressBar.post(new Runnable(){
-				 @Override
-				 public void run() {
-					 progressBar.setProgress(0);
-					 progressBar.setVisibility(View.VISIBLE);
-				 }
-			 });
-		 }
-	 }
-
-//    public void updateSentStatus(int messageID, String fromUsername) {
-//        for (ChatMessage msg : log_msg) {
-//            final ChatMessage message = msg;
-//            if (msg.primaryKey == messageID && msg.chatUserName.equals(fromUsername)) {
-//                ChatMessage mMsg = mDbHelper.fetchChatMessageByPrimaryKey(messageID);
-//                if (mMsg != null) {
-//                    message.sentStatus = mMsg.sentStatus;
-//                }
-//                this.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        showSentStatus(message);
-//                    }
-//                });
-//                return;
-//            }
-//        }
-//    }
-
-//    private void showSentStatus(final ChatMessage message) {
-//        if(message.extraObjects == null) return;
-//        TextView tv = (TextView)message.extraObjects.get("txtSentStatus");
-//        if(tv == null) {
-//            return;
-//        }
-//        tv.setVisibility(View.VISIBLE);
-//        ImageView failedImageView = (ImageView) message.extraObjects.get("imgMarkFailed");
-//        if (null != failedImageView) {
-//            failedImageView.setVisibility(View.GONE);
-//        }
-//        if (message.sentStatus.equals(ChatMessage.SENTSTATUS_SENT)) {
-//            tv.setText(R.string.msg_sent);
-//        } else if (message.sentStatus.equals(ChatMessage.SENTSTATUS_REACHED_CONTACT)) {
-////            tv.setText(R.string.msg_reached);
-//            tv.setText(R.string.msg_sent);
-//        } else if (message.sentStatus.equals(ChatMessage.SENTSTATUS_READED_BY_CONTACT)) {
-//            tv.setText(R.string.msg_readed);
-//        } else if (message.sentStatus.equals(ChatMessage.SENTSTATUS_NOTSENT)) {
-//            tv.setVisibility(View.GONE);
-//            if (null != failedImageView) {
-//                failedImageView.setVisibility(View.VISIBLE);
-//            }
-//        }
-//    }
-
-	 protected void messageClicked() {
+    protected void messageClicked() {
 	     //txt_content.clearFocus(); // cause a flicker on keyboard
 	     mInputMgr.setSoftKeyboardVisibility(false);
 	     mInputMgr.setInputMode(InputBoardManager.FLAG_SHOW_TEXT, false); // close multimedia/emotion panel

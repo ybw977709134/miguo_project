@@ -978,6 +978,7 @@ public abstract class MessageComposerActivityBase extends Activity
                 if(progressBar != null) {
                     progressBar.setProgress(param[0]);
                 }
+                msg.extraData.putInt(ChatMessage.EXTRA_DATA_PROGRESS, param[0]);
             }
 
             @Override

@@ -554,7 +554,7 @@ public class MessageDetailAdapter extends BaseAdapter{
             message.extraObjects.put("progressBar", holder.progressbar);
             if(message.extraData.getBoolean("isTransferring", false)) {
                 holder.progressbar.setVisibility(View.VISIBLE);
-                holder.progressbar.setProgress(0);
+                holder.progressbar.setProgress(message.extraData.getInt(ChatMessage.EXTRA_DATA_PROGRESS, 0));
             } else {
                 holder.progressbar.setVisibility(View.GONE);
             }

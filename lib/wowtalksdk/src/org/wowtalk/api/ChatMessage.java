@@ -141,6 +141,13 @@ s:hybird(image+voice+text) msg content:
 */
 public class ChatMessage {
 
+	/** {@link #extraData} 的 key：是否正在上传或下载附件？ */
+	public static final String EXTRA_DATA_IS_TRANSFERRING = "isTransferring";
+	/** {@link #extraData} 的 key：上传或下载附件的进度（百分比）？ */
+	public static final String EXTRA_DATA_PROGRESS = "progress";
+	/** {@link #extraObjects} 的 key：UI视图中的进度条 */
+	public static final String EXTRA_OBJ_PROGRESSBAR = "progressBar";
+
 	private static final String PREFIX = "org.wowtalk.chatmessage.";
 	private static final String EXTRAS_PRIMARY_ID = PREFIX
 			+ "EXTRAS_PRIMARY_ID";
@@ -172,6 +179,7 @@ public class ChatMessage {
             + "EXTRAS_PATH_THUMB";
     private static final String EXTRAS_PATH_MEDIA = PREFIX
             + "EXTRAS_PATH_MEDIA";
+
 	/**Internal User Only!*/
 	public static String MSGTYPE_SENT_MSG_RECEIPT = "1";
 	/**Internal User Only!*/
@@ -326,10 +334,14 @@ public class ChatMessage {
 	/**
 	 * hold temp non-persistent data for client, e.g., a flag indicating downloading or 
 	 * uploading is in progress.
+	 *
+	 * <p>See also EXTRA_DATA_* constants.</p>
 	 */
 	public Bundle extraData = null;
 	/**
 	 * anything can't put into extraData goes here.
+	 *
+	 * <p>See also EXTRA_OBJ_* constants.</p>
 	 */
 	public Map<String, Object> extraObjects = null;
 

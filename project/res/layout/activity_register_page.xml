@@ -136,13 +136,13 @@
 				<LinearLayout
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
-					android:padding="@dimen/padding_medium"
-					>
+					android:padding="@dimen/padding_medium" >
 					<TextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						style="@style/standard_text_gray"
 						android:textColor="@color/text_hint"
+						android:layout_gravity="center_vertical"
 						android:text="@string/register_user_type"/>
 					<RadioGroup
 						android:layout_width="match_parent"
@@ -170,11 +170,17 @@
 							android:text="@string/register_user_type_student"/>
 					</RadioGroup>
 				</LinearLayout>
+				<TextView 
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginLeft="@dimen/padding_medium"
+			    android:text="@string/register_user_type_tip"/>
 
 				<ImageView
 					style="@style/standard_list_divider"/>
 
 			</LinearLayout>
+			
 
 			<LinearLayout
 				android:layout_width="fill_parent"

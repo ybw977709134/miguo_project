@@ -9,16 +9,14 @@
 		android:id="@+id/title_bar"
 		android:layout_width="fill_parent"
 		android:layout_height="@dimen/title_bar_height"
-		android:layout_alignParentTop="true"
-		android:visibility="gone"
-		android:background="@drawable/navbar_bg">
+		android:layout_alignParentTop="true" >
 		<ImageButton
 			android:id="@+id/title_back"
 			android:layout_height="50dp"
 			android:layout_width="50dp"
-			android:layout_alignParentRight="true"
+			android:layout_alignParentLeft="true"
 			android:background="@null"
-			android:src="@drawable/nav_close_selector"/>
+			android:src="@drawable/nav_back_green"/>
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -32,12 +30,13 @@
 		android:id="@+id/bodyLayout"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
+		android:layout_marginBottom="70dp"
 		android:layout_below="@id/title_bar" >
 
 		<LinearLayout
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="@dimen/login_logo_margin_top"
+			android:layout_marginTop="20dp"
 			android:orientation="vertical" >
 
 			<ImageView
@@ -56,7 +55,7 @@
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_horizontal"
 				android:gravity="center"
-				android:layout_marginBottom="@dimen/login_logo_margin_bottom"
+				android:layout_marginBottom="30dp"
 				android:textSize="25sp"
 				android:textColor="@color/green"
 				android:text="@string/logo_name"/>
@@ -64,7 +63,6 @@
 			<LinearLayout
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginBottom="15dp"
 				android:orientation="vertical" >
 
 				<ImageView
@@ -136,13 +134,13 @@
 				<LinearLayout
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
-					android:padding="@dimen/padding_medium"
-					>
+					android:padding="@dimen/padding_medium" >
 					<TextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						style="@style/standard_text_gray"
 						android:textColor="@color/text_hint"
+						android:layout_gravity="center_vertical"
 						android:text="@string/register_user_type"/>
 					<RadioGroup
 						android:layout_width="match_parent"
@@ -170,28 +168,38 @@
 							android:text="@string/register_user_type_student"/>
 					</RadioGroup>
 				</LinearLayout>
+				<TextView 
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginLeft="@dimen/padding_medium"
+			    android:text="@string/register_user_type_tip"/>
 
 				<ImageView
 					style="@style/standard_list_divider"/>
 
 			</LinearLayout>
+			
 
-			<LinearLayout
+			
+		</LinearLayout>
+	</RelativeLayout>
+	
+	<LinearLayout
 				android:layout_width="fill_parent"
 				android:layout_height="45dp"
 				android:gravity="center_horizontal"
 				android:paddingLeft="14dp"
-				android:paddingRight="14dp" >
+				android:paddingRight="14dp"
+				android:layout_alignParentBottom="true"
+				android:layout_marginBottom="20dp" >
 
-				<Button
-					android:id="@+id/create_button"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content"
-					style="@style/button_green"
-					android:text="@string/register_do" />
+		<Button
+		    android:id="@+id/create_button"
+		    style="@style/button_green"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:text="@string/register_do" />
+
 			</LinearLayout>
-		</LinearLayout>
-	</RelativeLayout>
-
 </RelativeLayout>
 

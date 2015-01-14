@@ -195,7 +195,10 @@ public class Moment implements Parcelable, IHasMultimedia, IHasReview {
         dest.writeDouble(latitude);
         dest.writeInt(likedByMe ? 1 : 0);
         dest.writeDouble(longitude);
-        dest.writeTypedList(multimedias == null ? new ArrayList<WFile>() : multimedias);
+        // 由于 multimedias 中实际保存的对象可能是 WFile 的派生类，
+        // 这里不能用 Parcel.writeTypedList() 保存 multimedias。
+        dest.writeParcelableArray(multimedias == null ?
+                new WFile[0] : multimedias.toArray(new WFile[multimedias.size()]), flags);
         dest.writeParcelable(owner, flags);
         dest.writeInt(privacyLevel);
         dest.writeTypedList(reviews == null ? new ArrayList<Review>() : reviews);
@@ -219,7 +222,12 @@ public class Moment implements Parcelable, IHasMultimedia, IHasReview {
             m.likedByMe = 1 == s.readInt();
             m.longitude = s.readDouble();
             m.multimedias = new ArrayList<WFile>();
-            s.readTypedList(m.multimedias, WFile.CREATOR);
+            Parcelable[] wfiles = s.readParcelableArray(WFile.class.getClassLoader());
+            if (wfiles != null) {
+                for (Parcelable p : wfiles) {
+                    m.multimedias.add((WFile) p);
+                }
+            }
             m.owner = s.readParcelable(Buddy.class.getClassLoader());
             m.privacyLevel = s.readInt();
             m.reviews = new ArrayList<Review>();

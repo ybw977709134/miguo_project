@@ -1151,9 +1151,17 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         final String[] thumbnailPathList = new String[photoNum];
         int i = 0;
         for (WFile file : files) {
-            thumbnailPathList[i] = file.localThumbnailPath
-                    = PhotoDisplayHelper.makeLocalFilePath(file.thumb_fileid, file.getExt());
-            file.localPath = PhotoDisplayHelper.makeLocalFilePath(file.fileid, file.getExt());
+            // 如果是本地创建的动态，那么 localThumbnailPath 和 localPath 应该已经指向本地文件了，
+            // 这种情况下应该保留。
+            if (TextUtils.isEmpty(file.localThumbnailPath) || !new File(file.localThumbnailPath).exists()) {
+                thumbnailPathList[i] = file.localThumbnailPath
+                        = PhotoDisplayHelper.makeLocalFilePath(file.thumb_fileid, file.getExt());
+            } else {
+                thumbnailPathList[i] = file.localThumbnailPath;
+            }
+            if (TextUtils.isEmpty(file.localPath) || !new File(file.localPath).exists()) {
+                file.localPath = PhotoDisplayHelper.makeLocalFilePath(file.fileid, file.getExt());
+            }
             if (++i >= photoNum)
                 break;
         }

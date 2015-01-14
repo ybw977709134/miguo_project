@@ -7,14 +7,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
@@ -34,6 +38,8 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	private Button btnCreate;
 
     private MessageBox mMsgBox;
+    
+    private InputMethodManager mInputMethodManager;
 	
 	private Buddy buddy = new Buddy();
 	private Handler mHandler = new Handler() {
@@ -170,10 +176,26 @@ public class RegisterActivity extends Activity implements OnClickListener{
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
+        //获得系统的服务点击屏幕的其他的地方可以收起键盘
+        mInputMethodManager = (InputMethodManager) this.getSystemService(this.INPUT_METHOD_SERVICE);
 
         mMsgBox = new MessageBox(this);
 		initView();
 	}
+	
+	/**
+	 * 重写onTouchEvent方法，获得向下点击事件，隐藏输入法
+	 */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+    	// TODO Auto-generated method stub
+    	  if(event.getAction() == MotionEvent.ACTION_DOWN){  
+    		  if(getCurrentFocus()!=null && getCurrentFocus().getWindowToken()!=null){  
+    			  mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);  
+    			  }  
+    		  }
+    	return super.onTouchEvent(event);
+    }
 
     @Override
     protected void onResume() {

@@ -55,8 +55,9 @@ public class FriendValidateActivity extends Activity implements OnClickListener{
 		imageOK.setImageResource(R.drawable.icon_contact_add_success);
 		toastView.addView(imageOK, 0);
 		toast.show();
-		Intent intent = new Intent(this, StartActivity.class);
-		startActivity(intent);
+//		Intent intent = new Intent(this, StartActivity.class);
+//		startActivity(intent);
+//		finish();
 	}
 
 	@Override
@@ -115,6 +116,8 @@ public class FriendValidateActivity extends Activity implements OnClickListener{
 					} else if (0 != (Buddy.RELATIONSHIP_PENDING_OUT & buddy.getFriendShipWithMe())) {
 //                        mMsgBox.show(null, getResources().getString(R.string.contacts_add_buddy_pending_out));
 					}
+					setResult(RESULT_OK);
+					finish();
 				} else if (errno == ErrorCode.ERR_OPERATION_DENIED) {
 //                    mMsgBox.show(null, getResources().getString(R.string.contactinfo_add_friend_denied));
 				} else {

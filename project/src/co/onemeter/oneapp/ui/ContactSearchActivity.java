@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,7 +23,9 @@ import co.onemeter.oneapp.adapter.GroupSearchAdapter;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.ListViewUtils;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
@@ -91,6 +94,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
     private Button search_uid;
     
     private ImageButton search_title_back;
+
 
 //	private int searchType;
 
@@ -633,6 +637,14 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	// TODO Auto-generated method stub
+    	super.onActivityResult(requestCode, resultCode, data);
+    	 if (resultCode == Activity.RESULT_OK) {
+    		 fStartSearch();
+         }
+    }
 	
 	@Override
 	public void onClick(View v) {

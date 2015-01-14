@@ -178,7 +178,6 @@ public class Connect2 {
 	        HttpPost httpPost = new HttpPost( url );
 	        
 	        DefaultHttpClient client = getNewHttpClient();
-	        client.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 10000);
 	        
 	        // POST データの設定
 	        Log.i("postStr= ",params);

@@ -78,7 +78,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
 
     @Override
     protected ArrayList<Moment> loadLocalMoments(long maxTimestamp, String tag,int countType) {
-        return dbHelper.fetchMomentsOfSingleBuddy(uid(), maxTimestamp, PAGE_SIZE, tag,countType);
+        return new Database(getActivity()).fetchMomentsOfSingleBuddy(uid(), maxTimestamp, PAGE_SIZE, tag,countType);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         if (headerView_tagbar == null || getListView().getHeaderViewsCount() == originalHeaderViewsCount) {
             originalHeaderViewsCount = getListView().getHeaderViewsCount();
             setupListHeaderView_albumCover();
-            int flag = dbHelper.getBuddyCountType(uid());
+            int flag = new Database(getActivity()).getBuddyCountType(uid());
             setupListHeaderView_tagbar(flag);
         }
     }
@@ -131,6 +131,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         View headerBottomBg = headerView_albumCover.findViewById(R.id.box_info_bg);
 
         // retrieve data
+        Database dbHelper = new Database(getActivity());
         Buddy buddy = dbHelper.buddyWithUserID(uid());
         mAlbumCover = dbHelper.getAlbumCover(uid());
 
@@ -238,6 +239,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         if (ErrorCode.OK == mWeb.removeAlbumCover()) {
             mAlbumCover = new AlbumCover();
             mAlbumCover.timestamp = -1;
+            Database dbHelper = new Database(getActivity());
             dbHelper.storeAlbumCover(uid(), mAlbumCover);
             saveAlbumCover2SP(mAlbumCover);
             getActivity().runOnUiThread(new Runnable() {
@@ -460,6 +462,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
             @Override
             protected void onPostExecute(Integer errno) {
                 if (ErrorCode.OK == errno) {
+                    Database dbHelper = new Database(getActivity());
                     dbHelper.storeAlbumCover(uid(), ac);
 
                     if (mAlbumCover == null

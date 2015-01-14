@@ -273,10 +273,13 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
         if (isCreatedByMe()) {
             btnQuit.setVisibility(View.GONE);
             btnView.setVisibility(View.VISIBLE);
+            mGroupNameLayout.setVisibility(View.VISIBLE);
         } else {
             btnQuit.setVisibility(View.VISIBLE);
             btnView.setVisibility(View.GONE);
+            mGroupNameLayout.setVisibility(View.GONE);
         }
+        
 	}
 
     private String[] getCurrentMemberIds() {

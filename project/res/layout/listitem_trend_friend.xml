@@ -172,7 +172,13 @@
                             
                 </LinearLayout>
             </RelativeLayout>
-
+            
+			<ImageView
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_marginTop="@dimen/padding_medium" 
+                    android:background="@drawable/timeline_card_bg_line" />
+			
             <include layout="@layout/piece_moment_content"/>
 
             <LinearLayout
@@ -207,15 +213,14 @@
             <include layout="@layout/piece_moment_operations"
                 android:visibility="visible" />
 
-			
+			-->
 
             <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
-                    android:layout_marginTop="@dimen/padding_medium"
-                    android:visibility="gone"
-                    android:src="@drawable/divider_320"/>
-                    -->
+                    android:layout_marginTop="@dimen/padding_medium" 
+                    android:background="@drawable/timeline_card_bg_line" />
+                    
             <include layout="@layout/piece_moment_operations"/>
         </LinearLayout>
         

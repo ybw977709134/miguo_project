@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:layout_below="@+id/title_bar"
-            android:paddingBottom="@dimen/dimen_50">
+        android:paddingBottom="@dimen/dimen_50">
         <LinearLayout
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
@@ -162,7 +162,15 @@
                             android:layout_marginRight="20dp" />
                     
                 </LinearLayout>
+
             </RelativeLayout>
+            
+            <ImageView
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_marginTop="@dimen/padding_medium" 
+                    android:background="@drawable/timeline_card_bg_line" />
+            
             <include layout="@layout/piece_moment_content"/>
             <include layout="@layout/piece_moment_operations"/>
             <ImageView

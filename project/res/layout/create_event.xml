@@ -106,6 +106,34 @@
                         android:layout_gravity="center_vertical"
                         android:drawableRight="@drawable/table_arrow"/>
                 </LinearLayout>
+                <ImageView
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:background="@drawable/divider"/>
+                <LinearLayout
+                    android:id="@+id/layout_telephone"
+                    android:layout_height="@dimen/table_cell_white_height"
+                    android:layout_width="fill_parent"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="@dimen/padding_medium"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:text="@string/event_telephone"/>
+                    <TextView
+                        android:id="@+id/txt_telephone"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_gravity="center_vertical"
+                        android:drawableRight="@drawable/table_arrow"/>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout

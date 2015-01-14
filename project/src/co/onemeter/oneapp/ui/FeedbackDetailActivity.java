@@ -1,21 +1,17 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.widget.*;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.utils.MyUrlSpanHelper;
+import co.onemeter.oneapp.adapter.MomentAdapter;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
@@ -27,25 +23,22 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
- * Created with IntelliJ IDEA.
- * User: jianxingdong
- * Date: 13-5-15
- * Time: PM3:55
- * To change this template use File | Settings | File Templates.
+ * Created with Eclipse.
+ * User: yl
+ * Date: 13-1-13
+ * To show parent's feedback
  */
 public class FeedbackDetailActivity extends Activity implements View.OnClickListener{
 
     private static final String IMAGE_CACHE_DIR = "image";
-    public static final String EXTRA_REPLY_TO_MOMENT_ID = "reply_to_moment_id";
-    public static final String EXTRA_REPLY_TO_REVIEW = "reply_to_review_id";
-    /** 输出状态发生了变化的 moment id */
-    public static final String EXTRA_CHANGED_MOMENT_ID = "changed_moment_id";
-    /** 输出被删除了的 moment id */
-    public static final String EXTRA_DELETED_MOMENT_ID = "deleted_moment_id";
+//    public static final String EXTRA_REPLY_TO_MOMENT_ID = "reply_to_moment_id";
+//    public static final String EXTRA_REPLY_TO_REVIEW = "reply_to_review_id";
+//    /** 输出状态发生了变化的 moment id */
+//    public static final String EXTRA_CHANGED_MOMENT_ID = "changed_moment_id";
+//    /** 输出被删除了的 moment id */
+//    public static final String EXTRA_DELETED_MOMENT_ID = "deleted_moment_id";
 
-    private ImageButton btnTitleBack;
-
-    private ImageView imgPhoto;
+//    private ImageView imgPhoto;
     private TextView txtName;
     private TextView txtTime;
     private TextView txtDate;
@@ -55,40 +48,22 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
     private ImageView btnPlay;
     private ProgressBar progressBar;
     private TimerTextView micTimer;
-    private TextView txtLoc; 
+    private TableLayout imageTable;
 
-    private SpannedTextView txtLikeName;
+//    private MomentWebServerIF mMomentWeb;
+//    private Database dbHelper;
+//    private MessageBox mMsgBox;
 
-    private MomentWebServerIF mMomentWeb;
-    private Database dbHelper;
     private ImageResizer mImageResizer;
-    private MessageBox mMsgBox;
-
+    
     private Moment moment;
     private WFile voiceFile;
     private ArrayList<WFile> photoFiles;
 
-    private final static int MSG_ID_MOMENT_DELETE_WITH_DELAY_FINISH=1;
-    private Handler mHandler=new Handler () {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_ID_MOMENT_DELETE_WITH_DELAY_FINISH:
-                    mMsgBox.dismissWait();
-                    finish();
-                    break;
-                default:
-                    break;
-            }
-        }
-    } ;
-
     private MediaPlayerWraper mediaPlayerWraper;
     
     private void initView() {
-        btnTitleBack = (ImageButton) findViewById(R.id.title_back);
-
-        imgPhoto = (ImageView) findViewById(R.id.img_photo);
+//        imgPhoto = (ImageView) findViewById(R.id.img_photo);
         txtContent = (TextView) findViewById(R.id.txt_content);
         txtName = (TextView) findViewById(R.id.txt_name);
         txtTime = (TextView) findViewById(R.id.txt_time);
@@ -97,13 +72,14 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
         btnPlay = (ImageView) findViewById(R.id.btn_play);
         progressBar = (ProgressBar) findViewById(R.id.progress);
         micTimer = (TimerTextView) findViewById(R.id.mic_timer);
-        txtLoc = (TextView) findViewById(R.id.txt_loc);
-        txtLikeName = (SpannedTextView) findViewById(R.id.txt_like_names);
+        findViewById(R.id.txt_loc).setVisibility(View.GONE);
+        findViewById(R.id.txt_like_names).setVisibility(View.GONE);
+        imageTable = (TableLayout) findViewById(R.id.imageTable);
         
         findViewById(R.id.reviewLayout).setVisibility(View.GONE);
         
+    	ImageButton btnTitleBack = (ImageButton) findViewById(R.id.title_back);
         btnTitleBack.setOnClickListener(this);
-
     }
 
 
@@ -229,45 +205,6 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
         }
     }
 
-    private void confirmDeleteMoment() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.contacts_local_delete)
-                .setMessage(R.string.delete_moment)
-                .setPositiveButton(R.string.msg_ok,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(
-                                    DialogInterface dialog,
-                                    int whichButton) {
-                                doDeleteMoment();
-                            }
-                        })
-                .setNegativeButton(R.string.msg_cancel, null)
-                .show();
-    }
-
-    private void doDeleteMoment() {
-        mMsgBox.showWait();
-
-        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
-            @Override
-            protected Integer doInBackground(Void... params) {
-                return mMomentWeb.fDeleteMoment(moment.id);
-            }
-
-            @Override
-            protected void onPostExecute(Integer errno) {
-                if (ErrorCode.OK == errno) {
-                    mHandler.sendEmptyMessageDelayed(MSG_ID_MOMENT_DELETE_WITH_DELAY_FINISH, 1000);
-                    dbHelper.deleteMoment(moment.id);
-                    setResult(RESULT_OK, new Intent().putExtra(EXTRA_DELETED_MOMENT_ID, moment.id));
-                } else {
-                    mMsgBox.toast(R.string.operation_failed);
-                    mMsgBox.dismissWait();
-                }
-            }
-        });
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -279,9 +216,9 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
 
         mediaPlayerWraper= new MediaPlayerWraper(this);
 
-        mMsgBox = new MessageBox(this);
-        dbHelper = Database.open(this);
-        mMomentWeb = MomentWebServerIF.getInstance(this);
+//        mMsgBox = new MessageBox(this);
+//        dbHelper = Database.open(this);
+//        mMomentWeb = MomentWebServerIF.getInstance(this);
 
         ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams(this, IMAGE_CACHE_DIR);
         mImageResizer = new ImageResizer(this, DensityUtil.dip2px(this, 100));
@@ -296,10 +233,10 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
         initView();
         setupContent(moment);
 
-        if (Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag)
-                || Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
-            setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, moment.id));
-        }
+//        if (Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag)
+//                || Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
+//            setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, moment.id));
+//        }
     }
 
     @Override
@@ -331,7 +268,11 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
         if(null == moment) {
             return;
         }
-        txtName.setText(TextUtils.isEmpty(moment.owner.alias) ? moment.owner.nickName : moment.owner.alias);
+        String name = getIntent().getStringExtra("name");
+        if(!TextUtils.isEmpty(name)){
+        	txtName.setText(name);
+        }
+        
         long time = Long.valueOf(moment.timestamp * 1000);
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         String strDate = format.format(time);
@@ -340,36 +281,23 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
         txtDate.setText(strDate);
         txtTime.setText(strTime); 
 
-        PhotoDisplayHelper.displayPhoto(this, imgPhoto, R.drawable.default_avatar_90, moment.owner, true);
-        if (moment.latitude == 0 && moment.longitude == 0) { // XXX compare double with int?!
-            txtLoc.setVisibility(View.GONE);
-            txtLoc.setOnClickListener(null);
-        } else {
-            txtLoc.setVisibility(View.VISIBLE);
-            txtLoc.setText(moment.place);
-            txtLoc.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View paramView) {
-					MessageDetailAdapter.viewLocationInfo(FeedbackDetailActivity.this,moment.latitude,moment.longitude,moment.place);					
-				}
-			});
-        }
+//        PhotoDisplayHelper.displayPhoto(this, imgPhoto, R.drawable.default_avatar_90, moment.owner, true);
 
         if (moment.text == null || moment.text.equals("")) {
             txtContent.setVisibility(View.GONE);
         } else {
             txtContent.setVisibility(View.VISIBLE);
             txtContent.setText(moment.text);
-            final MyUrlSpanHelper spanHelper = new MyUrlSpanHelper(txtContent);
-            txtContent.setOnLongClickListener(new OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    spanHelper.onLongClicked();
-                    if (moment != null && !Utils.isNullOrEmpty(moment.text)) {
-                    }
-                    return false;
-                }
-            });
+//            final MyUrlSpanHelper spanHelper = new MyUrlSpanHelper(txtContent);
+//            txtContent.setOnLongClickListener(new OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View v) {
+//                    spanHelper.onLongClicked();
+//                    if (moment != null && !Utils.isNullOrEmpty(moment.text)) {
+//                    }
+//                    return false;
+//                }
+//            });
         }
 
         photoFiles = new ArrayList<WFile>();
@@ -383,17 +311,18 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
             }
         }
 
-
+        MomentAdapter.setImageLayout(this, mImageResizer, photoFiles, imageTable);
         showVoiceFile(voiceFile);
     }
 
     /**
-     * 跳转到好友
+     * 跳转到此页面
      * @param context
      * @param moment
      */
-    public static void launch(Context context, Moment moment) {
+    public static void launch(Context context, Moment moment,String name) {
         Intent intent = new Intent(context, FeedbackDetailActivity.class);
+        intent.putExtra("name", name);
         intent.putExtra("moment", moment);
         context.startActivity(intent);
     }

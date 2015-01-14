@@ -19,6 +19,7 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
     /** 主办方 */
     public String host;
     public String title;
+    public String telephone;
     public String description;
     public int event_type;
     public int joinedMemberCount=0;
@@ -133,6 +134,7 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
         dest.writeLong(endTime == null ? 0 : endTime.getTime());
 		dest.writeInt(target_user_type);
 		dest.writeString(title);
+		dest.writeString(telephone);
         dest.writeString(contactEmail);
         dest.writeInt(joinedMemberCount);
         dest.writeInt(possibleJoinedMemberCount);
@@ -176,6 +178,7 @@ public class WEvent implements Parcelable, IHasMultimedia, IHasReview {
             a.endTime = new Date(source.readLong());
 			a.target_user_type = source.readInt();
 			a.title = source.readString();
+			a.telephone = source.readString();
             a.contactEmail=source.readString();
             a.joinedMemberCount=source.readInt();
             a.possibleJoinedMemberCount=source.readInt();

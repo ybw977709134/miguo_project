@@ -169,6 +169,7 @@
 	<string name="event_desc">详情</string>
 	<string name="event_capacity">人数限制</string>
 	<string name="event_loc">地点</string>
+	<string name="event_telephone">联系方式</string>
 	<string name="event_isinfo">是否需要报名者提供信息</string>
 	<string name="event_ispublic">是否公开</string>
 	<string name="event_latlon">经纬度</string>

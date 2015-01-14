@@ -14,8 +14,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.EventWebServerIF;
 import org.wowtalk.api.WEvent;
@@ -39,6 +41,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     private static final int REQ_INPUT_COINS = 128;
     private static final int REQ_INPUT_CAPACITY = 129;
     private static final int REQ_INPUT_IMAGE = 130;
+    private static final int REQ_INPUT_TELE = 131;
 
     private WEvent wevent = new WEvent();
 
@@ -57,6 +60,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     private TextView txtEndTime;
     private TextView txtCapacity;
     private TextView txtCoins;
+    private TextView txtTelephone;
     
     private ImageView imgAllDay;
     private ImageView imgAllowReview;
@@ -98,6 +102,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         edtContent = (EditText) findViewById(R.id.edt_content);
         txtCapacity = (TextView) findViewById(R.id.txt_capacity);
         txtCoins = (TextView) findViewById(R.id.txt_coins);
+        txtTelephone = (TextView) findViewById(R.id.txt_telephone);
 
         imgAllDay = (ImageView) findViewById(R.id.img_allday);
         imgAllowReview = (ImageView) findViewById(R.id.img_allowreview);
@@ -128,6 +133,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         findViewById(R.id.layout_capacity).setOnClickListener(this);
         findViewById(R.id.layout_coins).setOnClickListener(this);
         findViewById(R.id.layout_addaudio).setOnClickListener(this);
+        findViewById(R.id.layout_telephone).setOnClickListener(this);
 
         if (bundle != null) {
             setTitle(bundle.getString(EXTRA_PAGE_TITLE));
@@ -255,7 +261,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
             	boolean isContentTrue = !TextUtils.isEmpty(txtTitle.getText()) && !TextUtils.isEmpty(txtLoc.getText()) 
             				&& !TextUtils.isEmpty(txtStartTime.getText())&& !TextUtils.isEmpty(txtEndTime.getText())
             				&& !TextUtils.isEmpty(edtContent.getText().toString()) && !TextUtils.isEmpty(txtCapacity.getText()) 
-            				&& !TextUtils.isEmpty(txtCoins.getText()); 
+            				&& !TextUtils.isEmpty(txtCoins.getText()) && !TextUtils.isEmpty(txtTelephone.getText()); 
                 if(isContentTrue){
                 	createEvent();
                 	closeSoftKeyboard();
@@ -288,9 +294,17 @@ public class CreateEventActivity extends Activity implements OnClickListener {
             case R.id.layout_loc:
                 startActivityForResult(
                         new Intent(this, InputPlainTextActivity.class)
-                                .putExtra(InputPlainTextActivity.EXTRA_TITLE, getString(R.string.event_loc)),
+                                .putExtra(InputPlainTextActivity.EXTRA_TITLE, getString(R.string.event_loc))
+                                .putExtra(InputPlainTextActivity.EXTRA_VALUE,txtLoc.getText()),
                         REQ_INPUT_PLACE);
                 break;
+                
+            case R.id.layout_telephone:
+            	startActivityForResult(new Intent(this, InputPlainTextActivity.class)
+            			.putExtra(InputPlainTextActivity.EXTRA_TITLE, getString(R.string.event_telephone))
+            			.putExtra(InputPlainTextActivity.EXTRA_VALUE,txtTelephone.getText()), 
+            			REQ_INPUT_TELE);
+            	break;
             case R.id.layout_starttime:
             	lay_starttime.setEnabled(false);
             	hanlder.sendEmptyMessageDelayed(0, 1000);
@@ -402,6 +416,10 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                 wevent.address = data.getStringExtra(InputPlainTextActivity.EXTRA_VALUE);
                 updateUI();
                 break;
+            case REQ_INPUT_TELE:
+            	wevent.telephone = data.getStringExtra(InputPlainTextActivity.EXTRA_VALUE);
+            	txtTelephone.setText(wevent.telephone);
+            	break;
             case REQ_INPUT_CAPACITY : {
                 String s = data.getStringExtra(InputPlainTextActivity.EXTRA_VALUE);
                 wevent.capacity = 0;

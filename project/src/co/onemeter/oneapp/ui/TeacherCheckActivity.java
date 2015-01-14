@@ -105,9 +105,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 						adapter = new StuAdapter(stus);
 						lvStu.setAdapter(adapter);
 					}
-				}
-
-				;
+				};
 
 			});
 		}else{
@@ -155,7 +153,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 								//android.util.Log.i("-->>", feedback.toString());
 								Moment moment = db.fetchMoment(feedback.moment_id + "");
 								if(moment != null){
-									FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment);
+									FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment,stus.get(pos).nickName);
 									mHandler.sendEmptyMessage(errno);
 								}else{
 									mHandler.sendEmptyMessage(errno);
@@ -171,7 +169,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 			}else{
 				Moment moment = db.fetchMoment(feedback0.moment_id + "");
 				if(moment != null){
-					FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment);
+					FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment,stus.get(pos).nickName);
 					mHandler.sendEmptyMessage(ErrorCode.OK);
 				}else{
 					mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);

@@ -130,6 +130,13 @@ public abstract class TimelineFragment extends ListFragment
         AsyncTaskExecutor.executeShortNetworkTask(new RefreshMomentsTask(), Long.valueOf(0));
     }
 
+    public void insertMoment(Moment moment, int index) {
+        if (adapter != null) {
+            adapter.insert(moment, index);
+            adapter.notifyLoadingCompleted();
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();

@@ -100,6 +100,8 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     private Buddy buddy;
 
     private int buddyType;
+    
+    private boolean isFromSchool = false;
 
     private MessageBox mMsgBox = null;
 
@@ -297,7 +299,13 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
               q.find(R.id.btn_delete).visible();
               q.find(R.id.btn_add).gone();
     	  }if(buddyType == BUDDY_TYPE_NOT_FRIEND){
-              q.find(R.id.module_chat).invisible();
+    		  if(isFromSchool){
+    			  q.find(R.id.btn_msg).visible();
+    			  q.find(R.id.btn_call).invisible();
+    			  q.find(R.id.btn_video).invisible();
+    		  }else{
+    			  q.find(R.id.module_chat).invisible();
+    		  }
               q.find(R.id.btn_goto_moments).gone();
               q.find(R.id.btn_delete).gone();
               q.find(R.id.btn_add).visible();
@@ -547,6 +555,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 
 		buddyType = getIntent().getIntExtra(EXTRA_BUDDY_TYPE, BUDDY_TYPE_NOT_USER);
 		person = getIntent().getParcelableExtra(EXTRA_BUDDY_DETAIL);
+		isFromSchool = getIntent().getBooleanExtra("fromSchool", false);
 		Log.i("person signature : " + person.getPersonState()
 				+ " rigion : " + person.getRigion()
 				+ " photoUploadedTimestamp: " + person.photoUploadedTimestamp
@@ -690,6 +699,35 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 		context.startActivity(i);
 	}
 
+	public static void launch(Context context, Person person,
+			int buddyType,boolean isFromSchool) {
+		
+		Intent i = new Intent(context, ContactInfoActivity.class);
+		Database db = new Database(context);
+		Bundle bu = new Bundle();
+        if (buddyType == BUDDY_TYPE_UNKNOWN) {
+            Buddy b = db.buddyWithUserID(person.getID());
+            if (b != null) {
+            	i.putExtra("fromSchool", isFromSchool);
+                String myselfId = PrefUtil.getInstance(context).getUid();
+                if (!TextUtils.isEmpty(myselfId) && myselfId.equals(b.userID)) {
+                    bu.putInt(EXTRA_BUDDY_TYPE, BUDDY_TYPE_MYSELF);
+                } else if (0 != (b.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE)) {
+                    bu.putInt(EXTRA_BUDDY_TYPE, BUDDY_TYPE_IS_FRIEND);
+                } else {
+                    bu.putInt(EXTRA_BUDDY_TYPE, BUDDY_TYPE_NOT_FRIEND);
+                }
+            } else {
+                bu.putInt(EXTRA_BUDDY_TYPE, BUDDY_TYPE_NOT_FRIEND);
+            }
+        } else {
+            bu.putInt(EXTRA_BUDDY_TYPE, buddyType);
+        }
+		bu.putParcelable(EXTRA_BUDDY_DETAIL, person);
+		i.putExtras(bu);
+		context.startActivity(i);
+	}
+	
     public static void launchForResult(Activity activity, int requestCode,
             Person person, int buddyType) {
 

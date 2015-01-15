@@ -126,7 +126,9 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         // 发布动态成功后，刷新
         if (requestCode == REQ_CREATE_MOMENT && resultCode == Activity.RESULT_OK
                 && currTimelineFragment != null) {
-            currTimelineFragment.checkNewMoments();
+            Moment moment = data.getParcelableExtra(CreateNormalMomentWithTagActivity.EXTRA_MOMENT);
+            if (moment != null)
+                currTimelineFragment.insertMoment(moment, 0);
         }
     }
 

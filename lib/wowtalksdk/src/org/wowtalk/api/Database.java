@@ -6033,8 +6033,8 @@ public class Database {
         ContentValues values = new ContentValues();
         values.put("read", 1);
         database.update(hasReview.getReviewDataTableName(), values,
-                hasReview.getReviewDataTablePrimaryKeyName() + "=" + hasReview.getReviewDataTablePrimaryKeyValue(),
-                null);
+                hasReview.getReviewDataTablePrimaryKeyName() + "=?",
+                new String[] {hasReview.getReviewDataTablePrimaryKeyValue()});
         markDBTableModified(hasReview.getReviewDataTableName());
     }
 

@@ -52,6 +52,11 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 
     public static final int MOMENTS_WORDS_OVER = 600;
 
+    /**
+     * 发布成功后，在 Activity Result 中输出 Moment 对象。
+     */
+    public static final String EXTRA_MOMENT = "moment";
+
     private int tagType;
 
     private TextView tvShareRange;
@@ -1274,8 +1279,11 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 protected Integer doInBackground(Void... params) {
                     String uid = PrefUtil.getInstance(CreateNormalMomentWithTagActivity.this).getUid();
 
-                    if (null == moment.owner)
+                    if (null == moment.owner) {
                         moment.owner = new Buddy();
+                        moment.owner.nickName = PrefUtil.getInstance(
+                                CreateNormalMomentWithTagActivity.this).getMyNickName();
+                    }
                     moment.owner.userID = uid;
                     moment.likedByMe = false;
                     mDb.storeMoment(moment, null);
@@ -1284,7 +1292,19 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                         mDb.storeMultimedia(moment, f);
                     }
 
+                    // 把缩略图从临时路径复制到标准路径，以便展示
+                    for (WFile file : moment.multimedias) {
+                        if (!TextUtils.isEmpty(file.localThumbnailPath) &&
+                                new File(file.localThumbnailPath).exists()) {
+                            String dst = PhotoDisplayHelper.makeLocalFilePath(file.thumb_fileid, file.getExt());
+                            if (!TextUtils.equals(file.localThumbnailPath, dst)) {
+                                FileUtils.copyFile(file.localThumbnailPath, dst);
+                            }
+                        }
+                    }
+
                     Intent data = new Intent();
+                    data.putExtra(EXTRA_MOMENT, moment);
                     setResult(RESULT_OK, data);
 
                     //upload to server

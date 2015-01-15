@@ -365,7 +365,16 @@
     <string name="bind_email_failed">邮箱绑定失败</string>
     <string name="register_must_input_id">WowTalk ID不能为空</string>
     <string name="register_must_input_pwd">请输入密码</string>
-    <string name="register_pwd_must_fit">密码不一致，请重新输入</string>
+    
+    <string name="register_pwd_must_fit">两次输入的密码不一致</string>
+    <string name="register_cofrimPwd_must_fit">请输入确认密码</string>
+    <string name="register_username_empty">账户名不能为空，可以使用2-20个字母、数字、下划线和减号</string>
+    <string name="register_username_less">账户名不能低于2位，可以使用2-20个字母、数字、下划线和减号</string>
+    <string name="register_username_more">账户名最多20位，可以使用2-20个字母、数字、下划线和减号</string>
+    <string name="register_password_empty">密码不能为空，可以使用2-20个字母、数字、下划线和减号</string>
+    <string name="register_password_less">密码至少为6位，可以使用2-20个字母、数字、下划线和减号</string>
+    <string name="register_password_more">密码不能大于20位，可以使用2-20个字母、数字、下划线和减号</string>
+    
     <string name="register_failure">注册失败</string>
     <string name="place">地点</string>
     <string name="distance">距离</string>
@@ -517,7 +526,7 @@
     <string name="chatmessagehandler_reject_join_group_request">你的入群申请未被通过</string>
 
 	<string name="reg_sucess">注册成功</string>
-	<string name="reg_failed_username_was_taken">注册失败：用户名已被占用</string>
+	<string name="reg_failed_username_was_taken">用户名已经存在</string>
 	
 	<string name="sex_male">男</string>
 	<string name="sex_female">女</string>
@@ -816,6 +825,7 @@
 	<string name="register_user_type">帐号类型</string>
 	<string name="register_user_type_teacher">老师</string>
 	<string name="register_user_type_student">学生</string>
+	<string name="register_user_type_tip">帐号类型选择后不可更改，请慎重选择</string>
     <string name="title_hybird_message">图文音消息</string>
     <string name="hybird_message_editor_exceed_max_img_cnt">您最多可以添加 %d 张图片</string>
     <string name="hybird_message_editor_content_required">缺少内容</string>

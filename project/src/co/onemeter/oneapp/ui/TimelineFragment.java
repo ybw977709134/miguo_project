@@ -27,7 +27,6 @@ public abstract class TimelineFragment extends ListFragment
         PullToRefreshListView.OnRefreshListener, MomentAdapter.LoadDelegate  {
     protected static final int PAGE_SIZE = 10;
     private static final int REQ_COMMENT = 123;
-    protected Database dbHelper;
     private MomentAdapter adapter;
 
     
@@ -47,8 +46,6 @@ public abstract class TimelineFragment extends ListFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        dbHelper = new Database(getActivity());
 
         if (savedInstanceState != null) {
             selectedTag = savedInstanceState.getInt("selectedTag");
@@ -133,6 +130,13 @@ public abstract class TimelineFragment extends ListFragment
         AsyncTaskExecutor.executeShortNetworkTask(new RefreshMomentsTask(), Long.valueOf(0));
     }
 
+    public void insertMoment(Moment moment, int index) {
+        if (adapter != null) {
+            adapter.insert(moment, index);
+            adapter.notifyLoadingCompleted();
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -165,6 +169,7 @@ public abstract class TimelineFragment extends ListFragment
             if (data != null) {
                 String changedMomentId = data.getStringExtra(MomentDetailActivity.EXTRA_CHANGED_MOMENT_ID);
                 if (changedMomentId != null) {
+                    Database dbHelper = new Database(getActivity());
                     for (int i = 0; i < adapter.getCount(); ++i) {
                         Moment m = adapter.getItem(i);
                         if (TextUtils.equals(changedMomentId, m.id)) {
@@ -245,6 +250,7 @@ public abstract class TimelineFragment extends ListFragment
                         } else {
                             moment.reviews.remove(r);
                         }
+                        Database dbHelper = new Database(getActivity());
                         dbHelper.storeMoment(moment, moment.id);
                         adapter.notifyDataSetChanged();
                     }

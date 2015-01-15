@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import co.onemeter.oneapp.R;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import org.wowtalk.api.Database;
 import org.wowtalk.api.Moment;
 import org.wowtalk.api.MomentWebServerIF;
 
@@ -39,7 +40,7 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
 
     @Override
     protected ArrayList<Moment> loadLocalMoments(long maxTimestamp, String tag,int countType) {
-        return dbHelper.fetchMomentsOfAllBuddies(maxTimestamp, PAGE_SIZE, tag,countType);
+        return new Database(getActivity()).fetchMomentsOfAllBuddies(maxTimestamp, PAGE_SIZE, tag,countType);
     }
 
     @Override

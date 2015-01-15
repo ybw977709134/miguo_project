@@ -4477,6 +4477,7 @@ public class WowTalkWebServerIF {
 				+ "&password=" + Utils.urlencodeUtf8(strPwd);
 
 		Connect2 connect2 = new Connect2();
+		connect2.SetTimeout(5000, 5000);
 		Element root = connect2.Post(postStr);
 
 		if (root != null) {

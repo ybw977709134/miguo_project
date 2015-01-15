@@ -10,10 +10,20 @@ import android.os.Bundle;
 import android.widget.TextView;
 import co.onemeter.oneapp.ui.TimePiece;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.geocoder.GeocodeAddress;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch.OnGeocodeSearchListener;
+import com.amap.api.services.geocoder.RegeocodeAddress;
+import com.amap.api.services.geocoder.RegeocodeQuery;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -210,6 +220,41 @@ public class LocationHelper {
     	}
     }
 
+    /**
+     * 根据经纬度获取未知详情
+     * @param context
+     * @param latitude
+     * @param longtiude
+     * @param textView
+     */
+    public static void fetchAddressFromLatitudeAndLongitude(Context context,double latitude,double longtiude,final TextView textView){
+    	LatLonPoint point = new LatLonPoint(latitude, longtiude);
+    	RegeocodeQuery query = new RegeocodeQuery(point, 200,GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+    	GeocodeSearch geocoderSearch = new GeocodeSearch(context);
+		geocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
+		OnGeocodeSearchListener onGeocodeSearchListener = new OnGeocodeSearchListener() {
+			
+			@Override
+			public void onRegeocodeSearched(RegeocodeResult result, int rCode) {
+				//android.util.Log.i("AMap Code", rCode + "");
+				if (rCode == 0) {
+					if (result != null && result.getRegeocodeAddress() != null
+							&& result.getRegeocodeAddress().getFormatAddress() != null) {
+						String addressName = result.getRegeocodeAddress().getFormatAddress();
+						textView.setText(addressName);
+					}
+				} 
+			}
+			
+			@Override
+			public void onGeocodeSearched(GeocodeResult arg0, int arg1) {
+				
+			}
+		};
+		geocoderSearch.setOnGeocodeSearchListener(onGeocodeSearchListener);
+    }
+    
+    /*
     public static String getAddressFromLatitudeAndLongitude(final double latitude,final double longitude,final TextView textView){
     	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, String>() {
             @Override
@@ -275,6 +320,7 @@ public class LocationHelper {
         });
     	return null;
     }
+    */
     
     private void notifyMyLocation() {
         if (mOnLocationGotListener != null) {
@@ -310,12 +356,11 @@ public class LocationHelper {
         public void onLocationChanged(AMapLocation aMapLocation) {
             Log.i("ampa location changed: "+aMapLocation.toString());
             mLocation=aMapLocation;
+            mStrAddress = aMapLocation.getExtras().getString("desc");
             stop();
             if (null != mLocation && isWithAddress) {
-                getAddress();
-            } else {
-                notifyMyLocation();
-            }
+            	notifyMyLocation();
+            } 
         }
 
         @Override

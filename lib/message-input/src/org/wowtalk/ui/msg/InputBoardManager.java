@@ -572,19 +572,19 @@ public class InputBoardManager implements Parcelable,
     }
 
     private void inputLocation() {
-        boolean googleMapExist= (ConnectionResult.SUCCESS==GooglePlayServicesUtil.isGooglePlayServicesAvailable(mContext));
-
-        if(googleMapExist) {
-            org.wowtalk.Log.w("google map exist");
-            Intent mapIntent = new Intent(mContext, PickLocActivity.class);
-            mapIntent.putExtra("auto_loc", true);
-            mContext.startActivityForResult(mapIntent, REQ_INPUT_LOC);
-        } else {
-            org.wowtalk.Log.w("google map not exist");
+//        boolean googleMapExist= (ConnectionResult.SUCCESS==GooglePlayServicesUtil.isGooglePlayServicesAvailable(mContext));
+//
+//        if(googleMapExist) {
+//            org.wowtalk.Log.w("google map exist");
+//            Intent mapIntent = new Intent(mContext, PickLocActivity.class);
+//            mapIntent.putExtra("auto_loc", true);
+//            mContext.startActivityForResult(mapIntent, REQ_INPUT_LOC);
+//        } else {
+            //org.wowtalk.Log.w("google map not exist");
             Intent mapIntent = new Intent(mContext, PickLocActivityWithAMap.class);
             mapIntent.putExtra("auto_loc", true);
             mContext.startActivityForResult(mapIntent, REQ_INPUT_LOC);
-        }
+        //}
     }
 
     private void setMomentLikeStatus() {

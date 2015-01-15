@@ -13,7 +13,7 @@
     <string name="login_input_id_and_bind">用户 ID或者手机邮箱不能为空！</string>
 
     <string name="registration_logging">连接中...</string>
-    <string name="registration_failed">一米家校(连接解除)</string>
+    <string name="registration_failed">消息(连接解除)</string>
     <string name="registration_success"/>
     <string name="save">保存</string>
 
@@ -759,7 +759,7 @@
     <string name="video_request_rejected_by_peer">视频请求被拒绝</string>
     <string name="latitude">经度</string>
     <string name="Longitude">纬度</string>
-    <string name="registration_idle_state">一米家校(未连接)</string>
+    <string name="registration_idle_state">消息(未连接)</string>
     <string name="sys_notice_setting">通知提醒</string>
     <string name="sys_notice_enabled">已开启</string>
     <string name="sys_notice_disabled">已关闭</string>

@@ -275,6 +275,7 @@ public class SmsActivity extends Activity implements OnClickListener {
                     @Override
                     public void onClick(View v) {
                         mDb.deleteLatestChatTarget(msg.chatUserName);
+                        mDb.deleteChatMessageWithUser(msg.chatUserName);
                         board.dismiss();
                     }
                 };

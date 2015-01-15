@@ -270,6 +270,7 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 //				}
 //			}
 //		});
+        mMsgHistoryLayout.setVisibility(View.GONE);
         if (isCreatedByMe()) {
             btnQuit.setVisibility(View.GONE);
             btnView.setVisibility(View.VISIBLE);

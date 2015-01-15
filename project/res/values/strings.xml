@@ -533,7 +533,7 @@
 	<string name="sex_unknown">未设定</string>
 	
 	<string name="you_are_already_friends">你们已经是好友了</string>
-	
+	<string name="tip">提示</string>
 	<string name="login_require_user_pwd">请输入用户名和密码</string>
 	<string name="login_auth_error">用户名或密码错误</string>
 	<string name="login_user_not_exists">用户名不存在</string>

@@ -1416,6 +1416,19 @@ public abstract class MessageComposerActivityBase extends Activity
             return;
         }
 		mCanSendMsg = (0 != (b.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE)) ? CAN_SEND_MSG_OK : CAN_SEND_MSG_NO_FRIENDS;
+		if(0 == (b.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE)){
+			ArrayList<String> groupIds = db.getGroupIdsByMemberId(uid);
+			if(groupIds != null){
+				for(String groupId : groupIds){
+					GroupChatRoom group = db.fetchGroupChatRoom(groupId);
+					if(group != null){
+						if(group.category.equals(GroupChatRoom.CATEGORY_CLASSROOM)){
+							mCanSendMsg = CAN_SEND_MSG_OK;
+						}
+					}
+				}
+			}
+		}
 		sCanSendMsgInited = true;
 		String displayName = (b == null ?
 				context.getString(R.string.msg_session_unknown_buddy)

@@ -233,7 +233,7 @@
     <string name="settings_not_inputed">未填写</string>
 	<string name="settings_account_not_set">未设定</string>
 	<string name="settings_account_setted">已设定</string>
-	<string name="settings_account_wowid_already_changed">园区通ID只能修改一次</string>
+	<string name="settings_account_wowid_already_changed">一米家校ID只能修改一次</string>
 	<string name="settings_account_wowid_used_by_others">您所设置的用户 ID已经存在，请重新选择一个用户 ID</string>
 	<string name="settings_account_email_used_by_others">您要绑定的邮箱已经绑定到其它帐号</string>
 	<string name="settings_account_phone_used_by_others">您要绑定的手机号码已经绑定到其它帐号</string>
@@ -368,12 +368,12 @@
     
     <string name="register_pwd_must_fit">两次输入的密码不一致</string>
     <string name="register_cofrimPwd_must_fit">请输入确认密码</string>
-    <string name="register_username_empty">账户名不能为空，可以使用2-20个字母、数字、下划线和减号</string>
-    <string name="register_username_less">账户名不能低于2位，可以使用2-20个字母、数字、下划线和减号</string>
-    <string name="register_username_more">账户名最多20位，可以使用2-20个字母、数字、下划线和减号</string>
-    <string name="register_password_empty">密码不能为空，可以使用2-20个字母、数字、下划线和减号</string>
-    <string name="register_password_less">密码至少为6位，可以使用2-20个字母、数字、下划线和减号</string>
-    <string name="register_password_more">密码不能大于20位，可以使用2-20个字母、数字、下划线和减号</string>
+    <string name="register_username_empty">帐号名不能为空，可以使用2-20个字母、数字、下划线和减号</string>
+    <string name="register_username_less">帐号名不能低于2位，可以使用2-20个字母、数字、下划线和减号</string>
+    <string name="register_username_more">帐号名最多20位，可以使用2-20个字母、数字、下划线和减号</string>
+    <string name="register_password_empty">密码不能为空，可以使用6-20个字母、数字、下划线和减号</string>
+    <string name="register_password_less">密码至少为6位，可以使用6-20个字母、数字、下划线和减号</string>
+    <string name="register_password_more">密码不能大于20位，可以使用6-20个字母、数字、下划线和减号</string>
     
     <string name="register_failure">注册失败</string>
     <string name="place">地点</string>
@@ -533,7 +533,7 @@
 	<string name="sex_unknown">未设定</string>
 	
 	<string name="you_are_already_friends">你们已经是好友了</string>
-	
+	<string name="tip">提示</string>
 	<string name="login_require_user_pwd">请输入用户名和密码</string>
 	<string name="login_auth_error">用户名或密码错误</string>
 	<string name="login_user_not_exists">用户名不存在</string>

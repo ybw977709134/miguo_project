@@ -1539,24 +1539,24 @@ public abstract class MessageComposerActivityBase extends Activity
     protected void confirmOutgoingCall(final String uid,final String displayName,final boolean initWithVideo) {
         Buddy buddy=mDbHelper.buddyWithUserID(uid);
         String userName=TextUtils.isEmpty(buddy.alias)?buddy.nickName:buddy.alias;
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.call);
-        builder.setMessage(userName);
-
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-                CallMainActivity.startNewOutGoingCall(MessageComposerActivityBase.this, uid, displayName, initWithVideo);
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        CallMainActivity.startNewOutGoingCall(MessageComposerActivityBase.this, uid, displayName, initWithVideo);
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle(R.string.call);
+//        builder.setMessage(userName);
+//
+//        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog, int id) {
+//                dialog.dismiss();
+//                CallMainActivity.startNewOutGoingCall(MessageComposerActivityBase.this, uid, displayName, initWithVideo);
+//            }
+//        });
+//        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog, int id) {
+//                dialog.dismiss();
+//            }
+//        });
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
     }
 
     @Override

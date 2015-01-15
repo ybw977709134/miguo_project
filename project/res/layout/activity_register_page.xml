@@ -23,6 +23,7 @@
 			android:layout_centerInParent="true"
 			android:textStyle="bold"
 			android:text="@string/create_account"
+			android:visibility="gone"
 			style="@style/page_title"/>
 	</RelativeLayout>
 
@@ -168,14 +169,15 @@
 							android:text="@string/register_user_type_student"/>
 					</RadioGroup>
 				</LinearLayout>
+				
+
+				<ImageView
+					style="@style/standard_list_divider"/>
 				<TextView 
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    android:layout_marginLeft="@dimen/padding_medium"
 			    android:text="@string/register_user_type_tip"/>
-
-				<ImageView
-					style="@style/standard_list_divider"/>
 
 			</LinearLayout>
 			
@@ -191,7 +193,7 @@
 				android:paddingLeft="14dp"
 				android:paddingRight="14dp"
 				android:layout_alignParentBottom="true"
-				android:layout_marginBottom="20dp" >
+				android:layout_marginBottom="30dp" >
 
 		<Button
 		    android:id="@+id/create_button"

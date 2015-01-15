@@ -83,19 +83,21 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
                     database.triggerChatMessageObserver();
                     PrefUtil mPrefUtil = PrefUtil.getInstance(context);
                     if (mPrefUtil.isSysNoticeEnabled() && mPrefUtil.isSysNoticeNewMessageOn()) {
-                        if (mPrefUtil.isSysNoticeMusicOn()) {
-                            SoundPoolManager.playSoundFromRaw(context, R.raw.new_msg_incoming);
-                        }
-                        if (mPrefUtil.isSysNoticeVibrateOn()) {
-                            long[] vibrates = new long[]{
-                                    Utils.VIRBRATE_TIME_DELAY,
-                                    Utils.VIRBRATE_TIME_FIRST,
-                                    Utils.VIRBRATE_TIME_INTERVAL,
-                                    Utils.VIRBRATE_TIME_SECOND};
-                            Utils.triggerVibrate(context, vibrates, Utils.VIRBRATE_REPEAT_NO);
-                        }
+                        // 先尝试发通知，如果此消息不需发通知，也就不需要铃声和震动了1
+                        if (showNotification(context, msg, name2show)) {
+                            if (mPrefUtil.isSysNoticeMusicOn()) {
+                                SoundPoolManager.playSoundFromRaw(context, R.raw.new_msg_incoming);
+                            }
+                            if (mPrefUtil.isSysNoticeVibrateOn()) {
+                                long[] vibrates = new long[]{
+                                        Utils.VIRBRATE_TIME_DELAY,
+                                        Utils.VIRBRATE_TIME_FIRST,
+                                        Utils.VIRBRATE_TIME_INTERVAL,
+                                        Utils.VIRBRATE_TIME_SECOND};
+                                Utils.triggerVibrate(context, vibrates, Utils.VIRBRATE_REPEAT_NO);
+                            }
 
-                        showNotification(context, msg, name2show);
+                        }
                     }
                 }
 
@@ -109,17 +111,24 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
     public final static String INCOME_MSG_NOTIFICATION_PARA_ID="income_msg_notification_para_id";
     public final static String INCOME_MSG_NOTIFICATION_PARA_IS_GROUP_MSG="income_msg_notification_para_is_group_msg";
 
+    /**
+     *
+     * @param context
+     * @param msg
+     * @param name2show
+     * @return 如果消息不符合发通知的条件，则返回 false.
+     */
     @SuppressWarnings("deprecation")
-    public static void showNotification(final Context context, final ChatMessage msg,String name2show) {
+    public static boolean showNotification(final Context context, final ChatMessage msg,String name2show) {
 		if (msg == null || msg.displayName == null || msg.messageContent == null)
-			return;
+			return false;
 
 		String strCompositeName = msg.displayName;
         if(!TextUtils.isEmpty(name2show)) {
             strCompositeName=name2show;
         }
-		String strMessage = "";
-		String strTickerMsg = "";
+		String strMessage;
+		String strTickerMsg = null;
 
         Intent startIntent=new Intent(context, StartActivity.class);
         startIntent.putExtra(INCOME_MSG_NOTIFICATION_PARA_ID,msg.chatUserName);
@@ -161,11 +170,13 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
 			strTickerMsg = strTickerMsg == null ? null : (strCompositeName + " " + strMessage);
 		}
 
+        boolean notified = false;
+
         if (null != strTickerMsg) {
             // 请求被拒绝的消息，不会保存数据库中，只能通过通知形式告知用户
             if (!msg.msgType.equals(ChatMessage.MSGTYPE_REQUEST_REJECT)
                     && (StartActivity.isOnStackTop || MessageComposerActivity.isOnStackTop)) {
-                return;
+                return false;
             } else {
                 if (null != intent) {
                     // notification
@@ -175,6 +186,7 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
                             System.currentTimeMillis());
                     note.setLatestEventInfo(context, strCompositeName, strMessage, intent);
                     notiManager.notify(GlobalValue.NOTIFICATION_FOR_CHATMESSAGE, note);
+                    notified = true;
                 }
             }
 
@@ -227,6 +239,8 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
                 }, 2500);
             }
         }
+
+        return notified;
 	}
 
     private static void fillToastView(View toastView, String buddyName, String message) {

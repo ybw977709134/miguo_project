@@ -15,9 +15,12 @@ import android.widget.AdapterView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.adapter.GroupTreeAdapter;
 import co.onemeter.oneapp.contacts.model.ContactTreeNode;
+import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.androidquery.AQuery;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
@@ -156,8 +159,8 @@ public class SchoolMatesFragment extends Fragment
                     String myUid = PrefUtil.getInstance(context).getUid();
                     if (!TextUtils.equals(uid, myUid)) {
                         Buddy buddy = new Database(context).buddyWithUserID(uid);
-                        ContactInfoActivity.launch(context, uid,
-                                buddy == null ? 0 : buddy.getFriendShipWithMe());
+                        ContactInfoActivity.launch(context, Person.fromBuddy(buddy),
+                                buddy == null ? 0 : buddy.getFriendShipWithMe(),true);
                     } else {
                         startActivity(new Intent(context, MyInfoActivity.class));
                     }

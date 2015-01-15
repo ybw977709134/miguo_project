@@ -3808,11 +3808,9 @@ public class Database {
         }
 
         Cursor cursor = database.rawQuery(
-                "SELECT room.group_id"
-                    + " FROM group_chatroom as room"
-                    + " join group_member as member"
-                    + " on room.group_id=member.group_id"
-                    + " where room.temp_group_flag=0 and member.member_id=?",
+                "SELECT group_id"
+                    + " FROM group_member"
+                    + " where member_id=?",
                 new String[] {memberId});
 
         if (cursor != null && cursor.moveToFirst()) {

@@ -355,7 +355,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.txtLoc.setVisibility(View.GONE);
         } else {
             holder.txtLoc.setVisibility(View.VISIBLE);
-            LocationHelper.getAddressFromLatitudeAndLongitude((int)moment.latitude, (int)moment.longitude, holder.txtLoc);
+            LocationHelper.fetchAddressFromLatitudeAndLongitude(context,moment.latitude, moment.longitude, holder.txtLoc);
             holder.txtLoc.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

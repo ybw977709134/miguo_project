@@ -15,8 +15,10 @@ import android.view.View.OnLongClickListener;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
+import co.onemeter.oneapp.utils.LocationHelper;
 import co.onemeter.oneapp.utils.MyUrlSpanHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
@@ -783,7 +785,8 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             txtLoc.setOnClickListener(null);
         } else {
             txtLoc.setVisibility(View.VISIBLE);
-            txtLoc.setText(moment.place);
+            //txtLoc.setText(moment.place);
+            LocationHelper.fetchAddressFromLatitudeAndLongitude(this, moment.latitude, moment.longitude, txtLoc);
             txtLoc.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View paramView) {

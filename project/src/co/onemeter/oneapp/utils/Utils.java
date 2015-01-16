@@ -1,9 +1,11 @@
 package co.onemeter.oneapp.utils;
 
 import android.content.Context;
+
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.PrefUtil;
 
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -135,5 +137,17 @@ public class Utils {
     		return true;
     	}
     	return false;
+    }
+    
+    /*
+     * 获取当天即0点的时间戳
+     */
+    public static long getDayStampMoveMillis(){
+    	Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTimeInMillis() / 1000;
     }
 }

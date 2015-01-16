@@ -417,8 +417,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
     		search_nickname.setTextColor(getResources().getColor(R.color.blue));
     		search_uid.setTextColor(getResources().getColor(R.color.white));
     	}else if(searchKind == GET_BUDDY_BY_UID){
-    		search_uid.setBackgroundResource(R.drawable.tab_button_left_white_a);
-    		search_nickname.setBackgroundResource(R.drawable.tab_button_right_white);
+    		search_uid.setBackgroundResource(R.drawable.tab_button_right_white_a);
+    		search_nickname.setBackgroundResource(R.drawable.tab_button_left_white);
     		search_uid.setTextColor(getResources().getColor(R.color.blue));
     		search_nickname.setTextColor(getResources().getColor(R.color.white));
     	}

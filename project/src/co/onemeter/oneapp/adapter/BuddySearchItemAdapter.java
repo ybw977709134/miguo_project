@@ -89,7 +89,7 @@ public class BuddySearchItemAdapter extends BaseAdapter {
         TextView alias=(TextView) convertView.findViewById(R.id.alias);
 
         final Buddy buddy=buddyList.get(position);
-        setNameWithColor(username,contextRef.getString(R.string.settings_account_wowid)+NAME_SPLIT+" "+buddy.username);
+        setNameWithColor(username,contextRef.getString(R.string.settings_account)+NAME_SPLIT+" "+buddy.username);
         setNameWithColor(nickName,contextRef.getString(R.string.settings_name)+NAME_SPLIT+" "+buddy.nickName);
 
         if(TextUtils.isEmpty(buddy.alias)) {

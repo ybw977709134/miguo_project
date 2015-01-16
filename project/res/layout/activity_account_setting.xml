@@ -48,7 +48,7 @@
 						android:layout_weight="1"
 						style="@style/standard_text_gray"
 						android:gravity="center_vertical"
-						android:text="@string/settings_account_wowid"/>
+						android:text="@string/settings_account"/>
 					<TextView
 						android:id="@+id/yuanqu_id_text"
 						android:layout_height="fill_parent"

@@ -79,8 +79,8 @@
 		
     <!-- required by amaps
          api key:
-         "4ad433266047f830a8815639b89d3852" (dev) />
-         "23453ff346be0404d47331f0d841ae98" (production) />
+         "4ad433266047f830a8815639b89d3852" (debug) />
+         "23453ff346be0404d47331f0d841ae98" (release) />
          -->
 		<meta-data
             android:name="com.amap.api.v2.apikey"

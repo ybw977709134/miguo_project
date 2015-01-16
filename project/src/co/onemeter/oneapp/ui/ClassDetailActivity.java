@@ -2,6 +2,7 @@ package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,8 +15,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
+import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.androidquery.AQuery;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.HorizontalListView;
 import org.wowtalk.ui.MessageBox;
@@ -29,7 +33,6 @@ import java.util.*;
  */
 public class ClassDetailActivity extends Activity implements OnClickListener, OnItemClickListener {
 	private AQuery query;
-	private LessonWebServerIF lesWebSer;
 	private WowTalkWebServerIF mWTWebSer;
 	private MessageBox msgBox;
 	
@@ -71,7 +74,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		tvPlace = (TextView) findViewById(R.id.class_place);
 		lvTeachers = (HorizontalListView) findViewById(R.id.hor_lv_teachers);
 		
-		lesWebSer = LessonWebServerIF.getInstance(this);
 		mWTWebSer = WowTalkWebServerIF.getInstance(this);
 		
 		msgBox = new MessageBox(this);
@@ -145,16 +147,14 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 
 				@Override
 				protected Integer doInBackground(Void... params) {
-					return lesWebSer.getLesson(classId);
+					return LessonWebServerIF.getInstance(ClassDetailActivity.this).getLesson(classId);
 				}
 
 				protected void onPostExecute(Integer result) {
 					if (ErrorCode.OK == result) {
 						refreshLessonInfo();
 					}
-				}
-
-				;
+				};
 
 			});
 	}
@@ -400,7 +400,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	
 	class CourseTableAdapter extends BaseAdapter{
 		private List<Lesson> alessons;
-		private long now = System.currentTimeMillis();
 		
 		public CourseTableAdapter(List<Lesson> lessons){
 			this.alessons = lessons;
@@ -437,11 +436,20 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			Lesson lesson = alessons.get(position);
 			holder.item_name.setText(lesson.title);
 			holder.item_name.setTextColor(getResources().getColor(R.color.gray));
-			if(lesson.end_date * 1000 < now){
+			long startdata = lesson.start_date;
+			
+			long now = Utils.getDayStampMoveMillis();
+
+//			Log.i("---startdata---" +startdata);
+//			Log.i("---now---" +now);
+			if(startdata < now){
 				holder.item_name.setTextColor(0xff8eb4e6);
 			}
+			if(startdata == now){
+				holder.item_name.setTextColor(Color.RED);
+			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			holder.item_time.setText(sdf.format(new Date(lesson.start_date * 1000)));
+			holder.item_time.setText(sdf.format(new Date(startdata * 1000)));
 			holder.item_msg.setText("");
 			return convertView;
 		}

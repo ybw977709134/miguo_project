@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,8 +15,11 @@ import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.androidquery.AQuery;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
@@ -232,6 +236,19 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		return view;
 	}
 	
+	//只获取年月日所对应的时间戳
+	private long getTimeStamp(int year,int month,int day){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String resultdate = year + "-" + month + "-" + day;
+		long resultTime = 0;
+		try {
+			resultTime = sdf.parse(resultdate).getTime();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return resultTime;
+	}
+	
 	private void showAddOrModifyLessonDialog(final boolean isAdd,final View item,final int position){
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		View view = getLayoutInflater().inflate(R.layout.lay_add_lesson, null);
@@ -251,9 +268,9 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			public void onClick(DialogInterface dialog, int which) {
 				Calendar result = Calendar.getInstance();
 				//result.setTimeZone(TimeZone.getTimeZone("GMT"));
-				result.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth());
+				result.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(),0,0,0);
 				long resultTime = result.getTimeInMillis();
-				
+				Log.i("---resultTime---" + resultTime);
 				if(isAdd){
 					String content = edName.getText().toString();
 					if(TextUtils.isEmpty(content)){
@@ -262,11 +279,12 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 						return;
 					}
 					
-					if(resultTime < System.currentTimeMillis()){
-						mMsgBox.toast(R.string.class_time_ealier);
-						notdismissDialog(dialog);
-						return;
-					}
+//					long now = System.currentTimeMillis();
+//					if(resultTime < now){
+//						mMsgBox.toast(R.string.class_time_ealier);
+//						notdismissDialog(dialog);
+//						return;
+//					}
 					
 					if(resultTime < time_openclass){
 						mMsgBox.toast(R.string.class_les_not_before_start);
@@ -473,7 +491,6 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	
 	class CourseTableAdapter extends BaseAdapter{
 		private List<Lesson> alessons;
-		private long now = System.currentTimeMillis();
 		
 		public CourseTableAdapter(List<Lesson> lessons){
 			this.alessons = lessons;
@@ -508,12 +525,19 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			}else{
 				holder = (ViewHodler) convertView.getTag();
 			}
-			holder.item_name.setText(alessons.get(position).title);
+			Lesson lesson = alessons.get(position);
+			holder.item_name.setText(lesson.title);
 			holder.item_name.setTextColor(getResources().getColor(R.color.gray));
-			if(alessons.get(position).end_date * 1000 < now){
+			
+			long now = Utils.getDayStampMoveMillis();
+			long startdate = lesson.start_date;
+			if(startdate < now){
 				holder.item_name.setTextColor(0xff8eb4e6);
 			}
-			holder.item_time.setText(sdf.format(new Date(alessons.get(position).start_date * 1000)));
+			if(startdate == now){
+				holder.item_name.setTextColor(Color.RED);
+			}
+			holder.item_time.setText(sdf.format(new Date(startdate * 1000)));
 			holder.item_msg.setText("");
 			return convertView;
 		}

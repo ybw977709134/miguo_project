@@ -233,7 +233,8 @@ public class ChatMessage {
     public static String MSGTYPE_OFFICIAL_ACCOUNT_MSG = "n";
 
 	public static String MSGTYPE_LOGIN_PLACE_CHANGED = "o"; // NOT USED
-	public static String MSGTYPE_BUDDY_INFO_UPDATED = "p";
+	/**Message Type : notification */
+	public static String MSGTYPE_NOTIFICATION = "p";
     public static String MSGTYPE_GROUP_INFO_UPDATED = "q";
     /** added in 2014/8 **/
     public static String MSGTYPE_MOMENT = "r";

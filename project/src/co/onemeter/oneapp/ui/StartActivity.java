@@ -643,7 +643,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         } else if (state.equals(RegistrationState.RegistrationIdle.toString())) {
             SmsActivity.setNavTitle(getResources().getString(R.string.registration_idle_state));
         } else if (state.equals(RegistrationState.RegistrationSuccess.toString())) {
-            SmsActivity.setNavTitle(getResources().getString(R.string.app_name));
+            SmsActivity.setNavTitle(getResources().getString(R.string.tab_sms));
         } else if (state.equals(RegistrationState.RegistrationCleared.toString())) {
 
         } else if (state.equals(RegistrationState.RegistrationFailed.toString())) {

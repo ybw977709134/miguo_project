@@ -9,6 +9,7 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
 import co.onemeter.oneapp.ui.PhotoDisplayHelper;
+
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.IHasPhoto;
@@ -113,6 +114,7 @@ public class ContactListAdapter extends BaseAdapter implements Filterable {
 			holder.imgSelected = (ImageView) convertView.findViewById(R.id.img_selected);
 			holder.txtContactName = (TextView) convertView.findViewById(R.id.contact_name);
 			holder.txtContactState = (TextView) convertView.findViewById(R.id.contact_state);
+			holder.isStuTea = (ImageView) convertView.findViewById(R.id.imageView_tag_stu_tea);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -150,6 +152,11 @@ public class ContactListAdapter extends BaseAdapter implements Filterable {
                     R.drawable.default_avatar_90, entity, true);
         }
 
+        if(person.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER){
+        	holder.isStuTea.setVisibility(View.VISIBLE);
+        }else {
+        	holder.isStuTea.setVisibility(View.GONE);
+        }
 		if (_defaultSelected) {
 			holder.imgSelected.setVisibility(View.VISIBLE);
 			holder.imgSelected.setBackgroundResource(person.isSelected() ? R.drawable.list_selected : R.drawable.list_unselected);
@@ -158,6 +165,8 @@ public class ContactListAdapter extends BaseAdapter implements Filterable {
 		}
 		holder.txtContactName.setText(person.getName());
 		holder.txtContactState.setText(person.getPersonState());
+		
+		
 		return convertView;
 	}
 
@@ -229,6 +238,7 @@ public class ContactListAdapter extends BaseAdapter implements Filterable {
 		ImageView imgPhoto;
 		TextView txtContactName;
 		TextView txtContactState;
+		ImageView isStuTea;
 	}
 
 }

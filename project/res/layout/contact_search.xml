@@ -35,7 +35,7 @@
                 android:background="@drawable/tab_button_right_white"
 				android:textColor="@color/white"
 				android:textSize="14sp"
-				android:text="ID搜索"/>
+				android:text="帐号搜索"/>
 		</LinearLayout>
 
         <ImageButton

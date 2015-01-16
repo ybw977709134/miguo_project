@@ -10,6 +10,7 @@ import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -88,15 +89,45 @@ public class RegisterActivity extends Activity implements OnClickListener{
 		
 		btnBack.setOnClickListener(this);
 		btnCreate.setOnClickListener(this);
+		
+		//每次密码框重新获得焦点时，清空密码框
+		edtPwd.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					edtPwd.setText("");
+				}
+				
+			}
+		});
+		
+		//每次确认密码框重新获得焦点时，清空密码框
+		edtPwdConfirm.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					edtPwdConfirm.setText("");
+				}
+				
+			}
+		});
+		
 	}
 
 	private void fRegister() {
 		
 		final String strUserName = edtAccount.getText().toString();
 		final String strPassword = edtPwd.getText().toString();
+		final String strPwdConfirm = edtPwdConfirm.getText().toString();
+		
         final int userType = new AQuery(this).find(R.id.rad_teacher).isChecked() ?
                 Buddy.ACCOUNT_TYPE_TEACHER : Buddy.ACCOUNT_TYPE_STUDENT;
         
+        /**
+         * 帐号验证
+         */
         if (strUserName.length() <= 0) {//用户名不能为空
         	alert(getResources().getString(R.string.register_username_empty));
         	return;
@@ -112,6 +143,9 @@ public class RegisterActivity extends Activity implements OnClickListener{
         	return;
         }
         
+        /**
+         * 密码验证
+         */
         if (strPassword.length() <= 0) {//密码不能为空
         	alert(getResources().getString(R.string.register_password_empty));
         	return;
@@ -127,15 +161,31 @@ public class RegisterActivity extends Activity implements OnClickListener{
         	return;
         }
         
+        /**
+         * 确认密码验证
+         */
+        if (strPwdConfirm.length() <= 0) {//确认密码不能为空
+        	alert(getResources().getString(R.string.register_pwdConfrim_empty));
+        	return;
+        }
+        
+        if (strPwdConfirm.length() < 6) {//确认密码不能小于6个字符
+        	alert(getResources().getString(R.string.register_pwdConfrim_less));
+        	return;
+        }
+        
+        if (strPwdConfirm.length() > 20) {//确认密码不能大于20个字符
+        	alert(getResources().getString(R.string.register_pwdConfrim_more));
+        	return;
+        }
+        
         
         if (!Utils.verifyUsername(strUserName)) {//注册用户名的帐号错误
-//            mMsgBox.toast(R.string.setting_username_format_error);
             alert(getResources().getString(R.string.setting_username_format_error));
             return;
         }
 
         if (!Utils.verifyWowTalkPwd(strPassword)) {//密码格式错误
-//            mMsgBox.toast(R.string.settings_account_passwd_format_error);
             alert(getResources().getString(R.string.settings_account_passwd_format_error));
             return;
         }
@@ -174,15 +224,15 @@ public class RegisterActivity extends Activity implements OnClickListener{
 		}
 	}
 	
+	/**
+	 * 验证两次输入的密码是否一致
+	 * @return
+	 */
 	private boolean fIsPasswordFit() {
 		if (edtPwd.getText().toString().equals(edtPwdConfirm.getText().toString())) {
 			return true;
-		} else {
-			if (edtPwdConfirm.getText().toString().length() <= 0) {
-				alert(getResources().getString(R.string.register_cofrimPwd_must_fit));
-			} else {
+		} else {		
 				alert(getResources().getString(R.string.register_pwd_must_fit));
-			}
 			return false;
 		}
 	}

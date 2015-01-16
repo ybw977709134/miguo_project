@@ -19,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
@@ -28,7 +29,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
 
@@ -198,17 +198,17 @@ public class LoginActivity extends Activity implements OnClickListener {
 				break;
 			case MSG_AUTH:
                 mMsgBox.dismissWait();
-				alert(LoginActivity.this,getResources().getString(R.string.tip),getResources().getString(R.string.login_auth_error));
+				alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_auth_error));
 				break;
 			case MSG_USER_NOT_EXISTS:
                 mMsgBox.dismissWait();
 //				alert(R.string.login_user_not_exists);
-				alert(LoginActivity.this,getResources().getString(R.string.tip),getResources().getString(R.string.login_user_not_exists));
+				alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_user_not_exists));
 				break;
 			case MSG_LOGIN_FAILED:
                 mMsgBox.dismissWait();
 //				alert(R.string.login_unknown_error);
-				alert(LoginActivity.this,getResources().getString(R.string.tip),getResources().getString(R.string.login_unknown_error));
+				alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_auth_error));
 				break;
 			default:
 				break;
@@ -261,6 +261,18 @@ public class LoginActivity extends Activity implements OnClickListener {
                 return false;
             }
         });
+        
+        //每次密码框重新获得焦点时，清空密码框
+        edtPassword.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					edtPassword.setText("");
+				}
+				
+			}
+		});
 	}
 
     public void onClick(View v) {
@@ -301,12 +313,12 @@ public class LoginActivity extends Activity implements OnClickListener {
         final String pwdStr = edtPassword.getText().toString().trim();
         if (username.equals("")) {
 //            alert(R.string.login_user_cannot_be_null);
-            alert(LoginActivity.this,getResources().getString(R.string.tip),getResources().getString(R.string.login_user_cannot_be_null));
+            alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_user_cannot_be_null));
             return;
         }
         if (pwdStr.equals("")) {
 //            alert(R.string.login_pwd_cannot_be_null);
-            alert(LoginActivity.this,getResources().getString(R.string.tip),getResources().getString(R.string.login_pwd_cannot_be_null));
+            alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_pwd_cannot_be_null));
             return;
         }
         login(username, pwdStr);
@@ -322,7 +334,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             for (Account account : accounts) {
                 if (tempUsername.equalsIgnoreCase(account.username)) {
 //                    alert(R.string.manage_account_add_user_exists);
-                    alert(LoginActivity.this,getResources().getString(R.string.tip),getResources().getString(R.string.manage_account_add_user_exists));
+                    alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.manage_account_add_user_exists));
                     return;
                 }
             }
@@ -419,6 +431,9 @@ public class LoginActivity extends Activity implements OnClickListener {
         // 处理自动登录
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+        	//从注册成功后自动跳转到登录页，隐藏登录界面，显示正在登录中...
+        	findViewById(R.id.bodyLayout).setVisibility(View.INVISIBLE);
+        	findViewById(R.id.textView_logining).setVisibility(View.VISIBLE);
             String username = extras.getString(EXTRA_USERNAME);
             if (username != null) {
                 edtAccount.setText(username);
@@ -462,51 +477,48 @@ public class LoginActivity extends Activity implements OnClickListener {
             return;
         }
 
-//		AlertDialog.Builder dialog = new AlertDialog.Builder(LoginActivity.this);
-//		dialog.setTitle(null).setMessage(str);
-//		dialog.setPositiveButton(R.string.ok, 
-//				new DialogInterface.OnClickListener() {
-//					
-//					@Override
-//					public void onClick(DialogInterface dialog, int which) {
-//						
-//					}
-//				});
-//		dialog.create().show();
+		AlertDialog.Builder dialog = new AlertDialog.Builder(LoginActivity.this);
+		dialog.setTitle(title).setMessage(message);
+		dialog.setPositiveButton(R.string.ok, 
+				new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						
+					}
+				});
+		dialog.create().show();
         
-        View view;
-		view = LayoutInflater.from(context).inflate(R.layout.custom_dialog, null);
-		TextView button_ok = (TextView) view.findViewById(R.id.textView_ok);
-		TextView button_cancel = (TextView) view.findViewById(R.id.textView_cancel);
-		ImageView imageView_dialogLine2 = (ImageView) view.findViewById(R.id.imageView_dialogLine2);
-		button_cancel.setVisibility(View.GONE);
-		imageView_dialogLine2.setVisibility(View.GONE);
-		
-		
-		((TextView) view.findViewById(R.id.textView_title)).setText(title);//标题
-		((TextView) view.findViewById(R.id.textView_message)).setText(message);//消息内容
-		
-		final Dialog dialog = new Dialog(context);
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		
-		WindowManager.LayoutParams params = dialog.getWindow().getAttributes(); // 得到AlertDialog属性
-        params.gravity = Gravity.CENTER; // 显示其显示在中间
-        params.width = (int) (((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth() * 0.5); // 设置对话框的宽度为手机屏幕的0.8，MyTool.getWidth()自己写的一个方法，获取手机屏幕的宽度
-        params.height = (int) (((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getHeight() * 0.2);// 设置对话框的高度为手机屏幕的0.25
-//        params.alpha=100;
-//        params.width = 300;
-//        params.height = 240;
-        dialog.getWindow().setAttributes(params); //设置属性
-		dialog.getWindow().setContentView(view);// 把自定义view加上去
-		
-		button_ok.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				dialog.dismiss();
-			}
-		});
-		
+//        View view;
+//		view = LayoutInflater.from(context).inflate(R.layout.custom_dialog, null);
+//		TextView button_ok = (TextView) view.findViewById(R.id.textView_ok);
+//		TextView button_cancel = (TextView) view.findViewById(R.id.textView_cancel);
+//		ImageView imageView_dialogLine2 = (ImageView) view.findViewById(R.id.imageView_dialogLine2);
+//		button_cancel.setVisibility(View.GONE);
+//		imageView_dialogLine2.setVisibility(View.GONE);
+//		
+//		
+//		((TextView) view.findViewById(R.id.textView_title)).setText(title);//标题
+//		((TextView) view.findViewById(R.id.textView_message)).setText(message);//消息内容
+//		
+//		final Dialog dialog = new Dialog(context);
+//		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		
+//		WindowManager.LayoutParams params = dialog.getWindow().getAttributes(); // 得到AlertDialog属性
+//        params.gravity = Gravity.CENTER; // 显示其显示在中间
+//        params.width = (int) (((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth() * 0.5); // 设置对话框的宽度为手机屏幕的0.8，MyTool.getWidth()自己写的一个方法，获取手机屏幕的宽度
+//        params.height = (int) (((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getHeight() * 0.2);// 设置对话框的高度为手机屏幕的0.25
+//        dialog.getWindow().setAttributes(params); //设置属性
+//		dialog.getWindow().setContentView(view);// 把自定义view加上去
+//		
+//		button_ok.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View arg0) {
+//				dialog.dismiss();
+//			}
+//		});
+//		
 //		button_cancel.setOnClickListener(new OnClickListener() {
 //			
 //			@Override
@@ -514,7 +526,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 //				dialog.dismiss();
 //			}
 //		});
-		dialog.show();
+//		dialog.show();
 	}
 
 }

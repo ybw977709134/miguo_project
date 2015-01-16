@@ -10,6 +10,7 @@ import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -88,6 +89,31 @@ public class RegisterActivity extends Activity implements OnClickListener{
 		
 		btnBack.setOnClickListener(this);
 		btnCreate.setOnClickListener(this);
+		
+		//每次密码框重新获得焦点时，清空密码框
+		edtPwd.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					edtPwd.setText("");
+				}
+				
+			}
+		});
+		
+		//每次确认密码框重新获得焦点时，清空密码框
+		edtPwdConfirm.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					edtPwdConfirm.setText("");
+				}
+				
+			}
+		});
+		
 	}
 
 	private void fRegister() {

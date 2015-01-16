@@ -19,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
@@ -261,6 +262,18 @@ public class LoginActivity extends Activity implements OnClickListener {
                 return false;
             }
         });
+        
+        //每次密码框重新获得焦点时，清空密码框
+        edtPassword.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					edtPassword.setText("");
+				}
+				
+			}
+		});
 	}
 
     public void onClick(View v) {

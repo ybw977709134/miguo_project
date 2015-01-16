@@ -1248,8 +1248,16 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
     }
 
     @Override
-    public void getBuddyInfoChangedNotification(String arg0, String arg1) {
-        // TODO Auto-generated method stub
+    public void getBuddyInfoChangedNotification(String uid, String msgLiteralWithoutType) {
+        Log.i("getBuddyInfoChangedNotification ", uid, " ", msgLiteralWithoutType);
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Integer, Void>() {
+            @Override
+            protected Void doInBackground(String... params) {
+                String uid = params[0];
+                WowTalkWebServerIF.getInstance(StartActivity.this).fGetBuddyWithUID(uid);
+                return null;
+            }
+        }, uid);
     }
 
     @Override

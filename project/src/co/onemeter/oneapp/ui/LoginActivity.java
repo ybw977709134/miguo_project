@@ -251,7 +251,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 				
 			}
 		});
-		
         edtPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -432,6 +431,9 @@ public class LoginActivity extends Activity implements OnClickListener {
         // 处理自动登录
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+        	//从注册成功后自动跳转到登录页，隐藏登录界面，显示正在登录中...
+        	findViewById(R.id.bodyLayout).setVisibility(View.INVISIBLE);
+        	findViewById(R.id.textView_logining).setVisibility(View.VISIBLE);
             String username = extras.getString(EXTRA_USERNAME);
             if (username != null) {
                 edtAccount.setText(username);

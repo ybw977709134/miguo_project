@@ -382,6 +382,7 @@
     <string name="register_pwdConfrim_more">确认密码不能大于20位，可以使用6-20个字母、数字、下划线和减号</string>
     
     <string name="register_failure">注册失败</string>
+    <string name="register_success">注册成功，正在进入主界面...</string>
     <string name="place">地点</string>
     <string name="distance">距离</string>
     <string name="search_result_count">搜索到%s个结果</string>

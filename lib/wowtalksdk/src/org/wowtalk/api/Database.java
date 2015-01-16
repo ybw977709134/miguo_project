@@ -1,5 +1,6 @@
 package org.wowtalk.api;
 
+import android.R.integer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -69,6 +70,13 @@ public class Database {
     public static final String TBL_EVENT = "event";
     public static final String TBL_FAVORITE = "favorite";
     public static final String TBL_SURVEY = "survey";
+    
+    /**
+     * 文字草稿箱
+     */
+    public static final String TBL_SAVE_MESSAGE = "save_message";
+    
+    
     /**
      * 不是真实存在的表，只是起到监听用户切换的作用
      */
@@ -6009,6 +6017,69 @@ public class Database {
           markDBTableModified(TBL_GROUP_MEMBER);
       }
   }
+    
+    public void saveLastMessage(String messageContent, String _targetUID) {
+    	if (isDBUnavailable()) {
+            return;
+        }
+        ContentValues values = new ContentValues();
+
+        values.put("_targetUID_id", _targetUID);
+        values.put("messageContent", messageContent);
+        database.insert(TBL_SAVE_MESSAGE, null, values);
+
+        markDBTableModified(TBL_SAVE_MESSAGE);
+    }
+    
+    public void updateLastMessage(String messageContent, String _targetUID) {
+    	if (isDBUnavailable()) {
+            return;
+        }
+    	ContentValues values = new ContentValues();
+
+        values.put("messageContent", messageContent);
+        
+        database.update(TBL_SAVE_MESSAGE, values,
+                "_targetUID_id = ?",
+                new String[] {_targetUID});
+    	
+
+        markDBTableModified(TBL_SAVE_MESSAGE);
+    }
+    
+    public String getLastMessage(String _targetUID){
+        if (isDBUnavailable()) {
+            return null;
+        }
+        Cursor cursor = database.rawQuery(
+                "SELECT messageContent FROM save_message WHERE _targetUID_id = ?", new String[]{_targetUID});
+        String content = null;
+        if(cursor != null && cursor.moveToFirst()){
+        	content = cursor.getString(0);
+        }      
+        
+        if (null != cursor && !cursor.isClosed()) {
+        	cursor.close();
+        }
+
+		return content;
+        
+    }
+    
+    public int getTargetUIDCount(String _targetUID){
+        Cursor cursor = database.rawQuery(
+                "SELECT  * FROM save_message WHERE _targetUID_id = ?", new String[]{_targetUID});
+        int count = 0;
+        if(cursor != null && cursor.moveToFirst()){
+        	count = 1;
+        }            
+        if (null != cursor && !cursor.isClosed()) {
+        	cursor.close();
+        }
+
+		return count;
+        
+    }
 
     /**
      * Create and open.
@@ -6452,7 +6523,7 @@ public class Database {
 
 class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME_PRE = GlobalSetting.DATABASE_NAME;
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
     public int flagIndex;
     private Context mContext;
 
@@ -6768,6 +6839,13 @@ class DatabaseHelper extends SQLiteOpenHelper {
                     + "student_id TEXT NOT NULL,"
                     + "alias TEXT NOT NULL"
                     + ");";
+    
+    private static final String DATABASE_CREATE_TBL_SAVE_LAST_MESSAGE =
+            "CREATE TABLE IF NOT EXISTS " + Database.TBL_SAVE_MESSAGE + " ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "_targetUID_id TEXT NOT NULL,"
+                    + "messageContent TEXT "
+                    + ");";
 
     private static final String DATABASE_CREATE_INDEX_0="CREATE INDEX IF NOT EXISTS " + " idx_moment_ownUid "
             + " ON " + Database.TBL_MOMENT + " ( " + " owner_uid " + " );";
@@ -6785,6 +6863,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
             + " ON " + Database.TBL_LESSON_PARENT_FEEDBACK + " ( lesson_id, student_id );";
     private static final String DATABASE_CREATE_INDEX_7="CREATE UNIQUE INDEX IF NOT EXISTS " + " idx_school_student "
             + " ON " + Database.TBL_STUDENT_ALIAS + " ( school_id, student_id );";
+    private static final String DATABASE_CREATE_INDEX_8="CREATE UNIQUE INDEX IF NOT EXISTS " + " idx_target_uid_id "
+            + " ON " + Database.TBL_SAVE_MESSAGE + " ( _targetUID_id );";
 
     public DatabaseHelper(Context context, String uid, int flagIndex) {
         super(context, DATABASE_NAME_PRE + "_" + uid, null, DATABASE_VERSION);
@@ -6823,6 +6903,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(DATABASE_CREATE_TBL_LESSON_HOMEWORK);
         database.execSQL(DATABASE_CREATE_TBL_LESSON_PARENT_FEEDBACK);
         database.execSQL(DATABASE_CREATE_TBL_STUDENT_ALIAS);
+        database.execSQL(DATABASE_CREATE_TBL_SAVE_LAST_MESSAGE);
 
         database.execSQL(DATABASE_CREATE_INDEX_0);
         database.execSQL(DATABASE_CREATE_INDEX_1);
@@ -6832,6 +6913,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(DATABASE_CREATE_INDEX_5);
         database.execSQL(DATABASE_CREATE_INDEX_6);
         database.execSQL(DATABASE_CREATE_INDEX_7);
+        database.execSQL(DATABASE_CREATE_INDEX_8);
+
     }
 
     // Method is called during an upgrade of the database, e.g. if you increase
@@ -6916,6 +6999,12 @@ class DatabaseHelper extends SQLiteOpenHelper {
             database.execSQL(DATABASE_CREATE_INDEX_7);
             ++oldVersion;
         }
+        if(oldVersion == 8){
+        	database.execSQL(DATABASE_CREATE_TBL_SAVE_LAST_MESSAGE);
+            database.execSQL(DATABASE_CREATE_INDEX_8);
+        	++oldVersion;
+        }
+        
     }
 }
 

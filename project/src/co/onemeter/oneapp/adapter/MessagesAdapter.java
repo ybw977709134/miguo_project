@@ -101,7 +101,12 @@ public class MessagesAdapter extends BaseAdapter {
             return;
         }
         chatMessageDisplayNameBuf.put(key, value);
-        textView.setText(value);
+        if(value.contains(",")){
+        	textView.setText(R.string.group_chat_title_default);
+        }else{
+        	textView.setText(value);
+        }
+        
     }
 
     private void fixBuddyDisplay(final ChatMessage msg, final TextView textView, final ImageView photoImageView) {

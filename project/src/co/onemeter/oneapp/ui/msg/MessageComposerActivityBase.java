@@ -908,6 +908,12 @@ public abstract class MessageComposerActivityBase extends Activity
             // 由于群组资料的更新没有推送通知，这里应该自动刷新
             refreshGroupInfo(_targetUID);
         }
+        
+        String lastMessage = mDbHelper.getLastMessage(_targetUID);
+        if(lastMessage != null){
+        	mInputMgr.mTxtContent.setText(lastMessage);
+        }
+        
     }
 
     @Override
@@ -1284,6 +1290,12 @@ public abstract class MessageComposerActivityBase extends Activity
 
         myAdapter.stopPlayingVoice();
         stopHeightRelativeRunnable();
+        
+        if(mDbHelper.getTargetUIDCount(_targetUID) == 1){
+        	mDbHelper.updateLastMessage(mInputMgr.mTxtContent.getText().toString(), _targetUID);
+        }else if(mDbHelper.getTargetUIDCount(_targetUID) == 0){
+        	mDbHelper.saveLastMessage(mInputMgr.mTxtContent.getText().toString(), _targetUID);
+        }
 	}
 
     @Override

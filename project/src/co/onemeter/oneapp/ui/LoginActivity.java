@@ -198,17 +198,17 @@ public class LoginActivity extends Activity implements OnClickListener {
 				break;
 			case MSG_AUTH:
                 mMsgBox.dismissWait();
-				alert(LoginActivity.this,getResources().getString(R.string.tip),getResources().getString(R.string.login_auth_error));
+				alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_auth_error));
 				break;
 			case MSG_USER_NOT_EXISTS:
                 mMsgBox.dismissWait();
 //				alert(R.string.login_user_not_exists);
-				alert(LoginActivity.this,getResources().getString(R.string.tip),getResources().getString(R.string.login_user_not_exists));
+				alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_user_not_exists));
 				break;
 			case MSG_LOGIN_FAILED:
                 mMsgBox.dismissWait();
 //				alert(R.string.login_unknown_error);
-				alert(LoginActivity.this,getResources().getString(R.string.tip),getResources().getString(R.string.login_unknown_error));
+				alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_auth_error));
 				break;
 			default:
 				break;
@@ -301,12 +301,12 @@ public class LoginActivity extends Activity implements OnClickListener {
         final String pwdStr = edtPassword.getText().toString().trim();
         if (username.equals("")) {
 //            alert(R.string.login_user_cannot_be_null);
-            alert(LoginActivity.this,getResources().getString(R.string.tip),getResources().getString(R.string.login_user_cannot_be_null));
+            alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_user_cannot_be_null));
             return;
         }
         if (pwdStr.equals("")) {
 //            alert(R.string.login_pwd_cannot_be_null);
-            alert(LoginActivity.this,getResources().getString(R.string.tip),getResources().getString(R.string.login_pwd_cannot_be_null));
+            alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_pwd_cannot_be_null));
             return;
         }
         login(username, pwdStr);
@@ -322,7 +322,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             for (Account account : accounts) {
                 if (tempUsername.equalsIgnoreCase(account.username)) {
 //                    alert(R.string.manage_account_add_user_exists);
-                    alert(LoginActivity.this,getResources().getString(R.string.tip),getResources().getString(R.string.manage_account_add_user_exists));
+                    alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.manage_account_add_user_exists));
                     return;
                 }
             }

@@ -420,8 +420,8 @@
     <string name="account_hint">帐号</string>
     <string name="passWord_hint">密码</string>
     <string name="login_failed">登陆失败</string>
-    <string name="login_user_cannot_be_null">用户名不能为空，请输入用户名</string>
-    <string name="login_pwd_cannot_be_null">密码不能为空，请输入密码</string>
+    <string name="login_user_cannot_be_null">用户名不能为空</string>
+    <string name="login_pwd_cannot_be_null">密码不能为空</string>
     <string name="login_otherwise">或者</string>
     <string name="login_input_email">邮箱</string>
     <string name="login_others">使用其它方式登录</string>
@@ -485,8 +485,8 @@
     <string name="setting_wowtalkid_msg">您的好友可以通过用户 ID找到你。\n用户 ID只能修改一次。可以使用2-20个字母，数字，下划线和减号</string>
     <string name="confirm">确认</string>
     <string name="setting_username_dialog_title">温馨提示</string>
-    <string name="setting_username_dialog_msg">用户ID只能修改一次。您确定要将其修改为%s？</string>
-    <string name="setting_username_format_error">用户ID格式错误，可以使用2-20个字母，数字，下划线和减号</string>
+    <string name="setting_username_dialog_msg">帐号名只能修改一次。您确定要将其修改为%s？</string>
+    <string name="setting_username_format_error">帐号名格式错误，可以使用2-20个字母，数字，下划线和减号</string>
     <string name="bind_phone">绑定手机</string>
     <string name="bind_phone_msg">点击下一步，我们将会向该号码发送验证码</string>
     <string name="bind_email_msg">点击下一步，我们将会向该地址发送验证码</string>

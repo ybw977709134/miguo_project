@@ -77,10 +77,14 @@
 			android:name="com.google.android.maps.v2.API_KEY"
 			android:value="AIzaSyCFNTi3hn1MOfB8ZMEYQFz48BL_Xsdqy7Y" />
 		
-		<!-- required by amaps -->
+    <!-- required by amaps
+         api key:
+         "4ad433266047f830a8815639b89d3852" (dev) />
+         "23453ff346be0404d47331f0d841ae98" (production) />
+         -->
 		<meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="4ad433266047f830a8815639b89d3852" />
+            android:value="23453ff346be0404d47331f0d841ae98" />
 		
         <meta-data
             android:value="5281ab3456240b5632024ab8"

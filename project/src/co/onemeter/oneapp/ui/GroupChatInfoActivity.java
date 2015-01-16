@@ -427,6 +427,8 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
                     String myUid = PrefUtil.getInstance(GroupChatInfoActivity.this).getUid();
                     dbHelper.deleteBuddyFromGroupChatRoom(groupId, myUid);
                     dbHelper.deleteMyselfFlagFromGroupChatRoom(groupId);
+                    dbHelper.deleteChatMessageWithUser(groupId);
+                    dbHelper.deleteLatestChatTarget(groupId);
                     PickTempGroupActivity.instance().finish();
                     MultiSelectActivity.instance().finish();
                     MessageComposerActivity.instance().finish();

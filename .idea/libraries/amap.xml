@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Android_Map_V2.0.4">
+  <library name="amap">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/message-input/libs/MapApiSearch.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/message-input/libs/Android_2DMapApi_V2.4.0.jar!/" />

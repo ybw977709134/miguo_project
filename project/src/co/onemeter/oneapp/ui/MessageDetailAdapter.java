@@ -742,8 +742,8 @@ public class MessageDetailAdapter extends BaseAdapter{
                 JSONObject json=new JSONObject(message.messageContent);
                 if (json.has("address")){
                     addr = json.getString("address");
-                    //txtContent.setText(Utils.abbr(addr, 10));
-                    holder.txtContent.setText(addr);
+                    holder.txtContent.setText(Utils.abbr(addr, 10));
+                    //holder.txtContent.setText(addr);
                 }
                 if (json.has("longitude")){
                     lon= Utils.tryParseDouble(json.getString("longitude"), 0.0);

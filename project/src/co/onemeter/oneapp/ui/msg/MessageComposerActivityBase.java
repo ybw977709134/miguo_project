@@ -460,27 +460,28 @@ public abstract class MessageComposerActivityBase extends Activity
      */
     private void sendLocMsgInThread(final ChatMessage chatMessage, final double lat, final double lon) {
         // request addr first, then send location message
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String addr = PickLocActivity.getAddr(lat, lon);
-                JSONObject json=new JSONObject();
-                try {
-                    json.put("longitude", lon);
-                    json.put("latitude", lat);
-                    json.put("address", addr);
-                } catch (JSONException e) {
-                }
-                chatMessage.messageContent = json.toString();
-
-                new Database(MessageComposerActivityBase.this).updateChatMessage(chatMessage, true);
-                if(chatMessage.isGroupChatMessage) {
-                    mWebif.fGroupChat_SendMessage(chatMessage.chatUserName, chatMessage);
-                } else {
-                    WowTalkVoipIF.getInstance(MessageComposerActivityBase.this).fSendChatMessage(chatMessage);
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                String addr = PickLocActivity.getAddr(lat, lon);
+//                JSONObject json=new JSONObject();
+//                try {
+//                    json.put("longitude", lon);
+//                    json.put("latitude", lat);
+//                    json.put("address", addr);
+//                } catch (JSONException e) {
+//                }
+//                chatMessage.messageContent = json.toString();
+//
+//                new Database(MessageComposerActivityBase.this).updateChatMessage(chatMessage, true);
+//                if(chatMessage.isGroupChatMessage) {
+//                    mWebif.fGroupChat_SendMessage(chatMessage.chatUserName, chatMessage);
+//                } else {
+//                    WowTalkVoipIF.getInstance(MessageComposerActivityBase.this).fSendChatMessage(chatMessage);
+//                }
+//            }
+//        }).start();
+    	co.onemeter.oneapp.utils.LocationHelper.addressForMessageComposer(this, chatMessage, lat, lon);
     }
 
     /**

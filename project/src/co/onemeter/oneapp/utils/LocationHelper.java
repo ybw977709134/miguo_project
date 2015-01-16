@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.TextView;
 import co.onemeter.oneapp.ui.TimePiece;
+import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.amap.api.location.AMapLocation;
@@ -28,6 +29,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
+import org.wowtalk.api.ChatMessage;
+import org.wowtalk.api.Database;
+import org.wowtalk.api.WowTalkVoipIF;
+import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.ui.msg.PickLocActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -242,6 +248,56 @@ public class LocationHelper {
 							&& result.getRegeocodeAddress().getFormatAddress() != null) {
 						String addressName = result.getRegeocodeAddress().getFormatAddress();
 						textView.setText(addressName);
+					}
+				} 
+			}
+			
+			@Override
+			public void onGeocodeSearched(GeocodeResult arg0, int arg1) {
+				
+			}
+		};
+		geocoderSearch.setOnGeocodeSearchListener(onGeocodeSearchListener);
+    }
+    
+    
+    public static void addressForMessageComposer(final Context context,final ChatMessage chatMessage,final double latitude,final double longtiude){
+    	LatLonPoint point = new LatLonPoint(latitude, longtiude);
+    	RegeocodeQuery query = new RegeocodeQuery(point, 200,GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+    	GeocodeSearch geocoderSearch = new GeocodeSearch(context);
+		geocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
+		OnGeocodeSearchListener onGeocodeSearchListener = new OnGeocodeSearchListener() {
+			
+			@Override
+			public void onRegeocodeSearched(RegeocodeResult result, int rCode) {
+				//android.util.Log.i("AMap Code", rCode + "");
+				if (rCode == 0) {
+					if (result != null && result.getRegeocodeAddress() != null
+							&& result.getRegeocodeAddress().getFormatAddress() != null) {
+						String addr = result.getRegeocodeAddress().getFormatAddress();
+		                JSONObject json=new JSONObject();
+		                try {
+		                    json.put("longitude", latitude);
+		                    json.put("latitude", longtiude);
+		                    json.put("address", addr);
+		                } catch (JSONException e) {
+		                }
+		                chatMessage.messageContent = json.toString();
+
+		                new Database(context).updateChatMessage(chatMessage, true);
+		                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>(){
+
+							@Override
+							protected Void doInBackground(Void... params) {
+								if(chatMessage.isGroupChatMessage) {
+									WowTalkWebServerIF.getInstance(context).fGroupChat_SendMessage(chatMessage.chatUserName, chatMessage);
+				                } else {
+				                    WowTalkVoipIF.getInstance(context).fSendChatMessage(chatMessage);
+				                }
+								return null;
+							}
+		                	
+		                });
 					}
 				} 
 			}

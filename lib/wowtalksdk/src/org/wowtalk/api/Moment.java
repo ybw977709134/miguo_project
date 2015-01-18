@@ -29,6 +29,9 @@ public class Moment implements Parcelable, IHasMultimedia, IHasReview {
     /** 匿名动态的 owner uid. */
     public final static String ANONYMOUS_UID ="(anonymous)";
 
+    /** 本地创建、尚未发布的动态，其 ID 以此开头。 */
+    public final static String ID_PLACEHOLDER_PREFIX ="id_placeholder_";
+
     public final static String SERVER_MOMENT_TAG_FOR_NOTICE ="0";
     public final static String SERVER_MOMENT_TAG_FOR_QA ="1";
     public final static String SERVER_MOMENT_TAG_FOR_STUDY ="2";

@@ -1111,7 +1111,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         } else {
             //alias id and timestamp,timestamp should be the largest
             //will be updated when returned by server
-            moment.id = CreateMomentActivity.ALIAS_ID_PREFIX+System.currentTimeMillis()+(++MOMENT_ALIAS_ID_INC);
+            moment.id = Moment.ID_PLACEHOLDER_PREFIX + System.currentTimeMillis()+(++MOMENT_ALIAS_ID_INC);
             moment.timestamp = getIntent().getLongExtra(CreateMomentActivity.EXTRA_KEY_MOMENT_MAX_TIMESTAMP,0)+1;
             Log.w("local moment timestamp set to "+moment.timestamp);
             if(TimelineActivity.TAG_SURVEY_IDX==tagType) {
@@ -1199,36 +1199,17 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                     setResult(RESULT_OK, data);
 
                     //upload to server
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            int errno = ErrorCode.UNKNOWN;
-                            if (TimelineActivity.TAG_SURVEY_IDX == tagType) {
-                                errno = MomentWebServerIF.getInstance(CreateNormalMomentWithTagActivity.this).fAddMomentForSurvey(moment);
-                            } else {
-                                //android.util.Log.i("-->>>", moment.place);
-                                errno = MomentWebServerIF.getInstance(CreateNormalMomentWithTagActivity.this).fAddMoment(moment);
-                            }
-                            if (errno == ErrorCode.OK) {
-                                Intent intent = new Intent(CreateNormalMomentWithTagActivity.this, PublishMomentService.class);
-                                intent.putExtra(PublishMomentService.EXTRA_ACTION,
-                                        PublishMomentService.ACTION_UPLOAD_MOMENT_FILE);
-                                intent.putExtra(PublishMomentService.EXTRA_MOMENT_ID, moment.id);
-                                intent.putExtra(PublishMomentService.EXTRA_WFILES, moment.multimedias);
-                                startService(intent);
-                            }
-                        }
-                    }).start();
+                    Intent intent = new Intent(CreateNormalMomentWithTagActivity.this, PublishMomentService.class);
+                    intent.putExtra(PublishMomentService.EXTRA_MOMENT, moment);
+                    intent.putExtra(PublishMomentService.EXTRA_IS_SURVEY, TimelineActivity.TAG_SURVEY_IDX == tagType);
+                    startService(intent);
                     return 0;
                 }
 
                 @Override
                 protected void onPostExecute(Integer errno) {
                     mMsgBox.dismissWait();
-                    Toast.makeText(CreateNormalMomentWithTagActivity.this, "新建日记成功", Toast.LENGTH_SHORT).show();
                     finish();
-
-
                 }
             });
         }

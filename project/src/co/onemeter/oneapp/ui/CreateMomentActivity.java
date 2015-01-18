@@ -438,11 +438,11 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                         public void run() {
                             int errno = MomentWebServerIF.getInstance(CreateMomentActivity.this).fAddMoment(moment);
                             if (errno == ErrorCode.OK) {
-                                Intent intent = new Intent(CreateMomentActivity.this, DownloadingAndUploadingService.class);
-                                intent.putExtra(DownloadingAndUploadingService.EXTRA_ACTION,
-                                        DownloadingAndUploadingService.ACTION_UPLOAD_MOMENT_FILE);
-                                intent.putExtra(DownloadingAndUploadingService.EXTRA_MOMENT_ID, moment.id);
-                                intent.putExtra(DownloadingAndUploadingService.EXTRA_WFILES, moment.multimedias);
+                                Intent intent = new Intent(CreateMomentActivity.this, PublishMomentService.class);
+                                intent.putExtra(PublishMomentService.EXTRA_ACTION,
+                                        PublishMomentService.ACTION_UPLOAD_MOMENT_FILE);
+                                intent.putExtra(PublishMomentService.EXTRA_MOMENT_ID, moment.id);
+                                intent.putExtra(PublishMomentService.EXTRA_WFILES, moment.multimedias);
                                 startService(intent);
                             }
                         }

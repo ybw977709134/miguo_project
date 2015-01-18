@@ -441,11 +441,11 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
 							feedback.student_id = stuId;
 							int errno2 = LessonWebServerIF.getInstance(LessonParentFeedbackActivity.this).addOrModifyLessonParentFeedback(feedback, moment);
 							if (errno == ErrorCode.OK && errno2 == ErrorCode.OK) {
-								Intent intent = new Intent(LessonParentFeedbackActivity.this, DownloadingAndUploadingService.class);
-								intent.putExtra(DownloadingAndUploadingService.EXTRA_ACTION,
-										DownloadingAndUploadingService.ACTION_UPLOAD_MOMENT_FILE);
-								intent.putExtra(DownloadingAndUploadingService.EXTRA_MOMENT_ID, moment.id);
-								intent.putExtra(DownloadingAndUploadingService.EXTRA_WFILES, moment.multimedias);
+								Intent intent = new Intent(LessonParentFeedbackActivity.this, PublishMomentService.class);
+								intent.putExtra(PublishMomentService.EXTRA_ACTION,
+										PublishMomentService.ACTION_UPLOAD_MOMENT_FILE);
+								intent.putExtra(PublishMomentService.EXTRA_MOMENT_ID, moment.id);
+								intent.putExtra(PublishMomentService.EXTRA_WFILES, moment.multimedias);
 								startService(intent);
 							}
 						}

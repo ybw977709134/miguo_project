@@ -8,13 +8,12 @@ import org.wowtalk.ui.msg.FileUtils;
 import java.util.ArrayList;
 
 /**
- * Created with IntelliJ IDEA.
+ * 发布动态。
  * User: pan
  * Date: 13-5-21
  * Time: PM4:34
- * To change this template use File | Settings | File Templates.
  */
-public class DownloadingAndUploadingService extends android.app.Service {
+public class PublishMomentService extends android.app.Service {
 
     public static final String EXTRA_ACTION = "action";
     public static final String EXTRA_MOMENT_ID = "moment_id";
@@ -23,7 +22,7 @@ public class DownloadingAndUploadingService extends android.app.Service {
     public static final String EXTRA_WFILE_CLASS = "wfile_class";
 
     public static final int ACTION_UPLOAD_MOMENT_FILE = 0;
-    private static final String LOG_TAG = "DUService";
+    private static final String LOG_TAG = "PublishMomentService";
 
     private WowTalkWebServerIF mWeb;
     private MomentWebServerIF mMomentWeb;

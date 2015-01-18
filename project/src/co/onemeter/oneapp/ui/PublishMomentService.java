@@ -1,7 +1,11 @@
 package co.onemeter.oneapp.ui;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import co.onemeter.oneapp.R;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.msg.FileUtils;
 
@@ -80,6 +84,13 @@ public class PublishMomentService extends android.app.Service {
 
         boolean hasMediaFiles = null != moment.multimedias && !moment.multimedias.isEmpty();
 
+        final int notiId = 1;
+        final NotificationManager mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+        mBuilder.setContentTitle(getString(R.string.moment_publishing_noti_title))
+                .setContentText(moment.text)
+                .setSmallIcon(R.drawable.icon);
+
         // upload multi media files
         if (hasMediaFiles) {
             for (WFile aMomentFile : moment.multimedias) {
@@ -110,7 +121,11 @@ public class PublishMomentService extends android.app.Service {
                                 }
 
                                 @Override
-                                public void setProgress(int i, int i2) {
+                                public void setProgress(int tag, int progress) {
+                                    // 假设缩略图占上传工作量的5%
+                                    progress *= (0.05f / (moment.multimedias.size()));
+                                    mBuilder.setProgress(100, progress, false);
+                                    mNotifyManager.notify(notiId, mBuilder.build());
                                 }
                             }, 0);
                 }
@@ -140,7 +155,11 @@ public class PublishMomentService extends android.app.Service {
                             }
 
                             @Override
-                            public void setProgress(int i, int i2) {
+                            public void setProgress(int tag, int progress) {
+                                // 假设占上传工作量的95%
+                                progress *= (0.95f / (moment.multimedias.size()));
+                                mBuilder.setProgress(100, progress, false);
+                                mNotifyManager.notify(notiId, mBuilder.build());
                             }
                         }, 0);
             }
@@ -162,8 +181,12 @@ public class PublishMomentService extends android.app.Service {
             }
         }
 
-        if (errno != ErrorCode.OK) {
-            // TODO 通知用户
+        if (errno == ErrorCode.OK) {
+            mNotifyManager.cancel(notiId);
+        } else {
+            mBuilder.setContentTitle(getString(R.string.moment_publishing_failed));
+            mNotifyManager.notify(notiId, mBuilder.build());
+            // TODO 允许重试，草稿箱
         }
     }
 }

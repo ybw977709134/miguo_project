@@ -493,7 +493,26 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
     			builder.create().show();
                 break;
             case R.id.btn_view:
-                disbandTempGroup();
+    			Builder builder_btn_view = new AlertDialog.Builder(GroupChatInfoActivity.this);
+    			builder_btn_view.setTitle("提示");
+    			builder_btn_view.setMessage("你确定要退出吗?");
+    			builder_btn_view.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+    				
+    				@Override
+    				public void onClick(DialogInterface arg0, int arg1) {
+                        dbHelper.deleteChatMessageWithUser(groupId);
+                        dbHelper.deleteLatestChatTarget(groupId);
+                        disbandTempGroup();
+    				}
+    			});
+    			builder_btn_view.setNegativeButton("取消", new DialogInterface.OnClickListener() {			
+    				@Override
+    				public void onClick(DialogInterface arg0, int arg1) {
+    					
+    				}
+    			});
+    			
+    			builder_btn_view.create().show();
                 break;
             default:
                 break;

@@ -53,6 +53,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
     public static final int MOMENTS_WORDS_OVER = 600;
 
     /**
+     * 输入 Moment 对象（可选），或在
      * 发布成功后，在 Activity Result 中输出 Moment 对象。
      */
     public static final String EXTRA_MOMENT = "moment";
@@ -73,13 +74,13 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
     public final static int PHOTO_THUMBNAIL_WIDTH = 180;
     public final static int PHOTO_THUMBNAIL_HEIGHT = 120;
 
-    private ArrayList<CreateMomentActivity.WMediaFile> listPhoto;
+    private ArrayList<CreateMomentActivity.WMediaFile> listPhotoOrVideo;
 
     private static CreateNormalMomentWithTagActivity instance;
 
     private LinearLayout addedImgLayout;
 
-    private Moment moment = new Moment();
+    private Moment moment;
     private File mLastVoiceFile;
 
     private HorizontalScrollView hsvImgList;
@@ -133,6 +134,15 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
+
+        // 初始化 Moment 对象
+        moment = getIntent().getParcelableExtra(EXTRA_MOMENT);
+        if (moment == null && savedInstanceState != null) {
+            moment = savedInstanceState.getParcelable(EXTRA_MOMENT);
+        }
+        if (moment == null) {
+            moment = new Moment();
+        }
 
         initView(savedInstanceState);
 
@@ -204,7 +214,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 
     private boolean isContentValid() {
         if ((Utils.isNullOrEmpty(etMomentMsgContent.getText().toString())
-                && (listPhoto == null || listPhoto.isEmpty())
+                && (listPhotoOrVideo == null || listPhotoOrVideo.isEmpty())
                 && (mLastVoiceFile == null || !mLastVoiceFile.exists())
                 && (0==moment.latitude && 0 == moment.longitude)) ||
              (null != mMediaRecorder && voiceDuration<MOMENT_VOICE_MIN_LEN_IN_MS)) {
@@ -362,7 +372,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 
 
         mediaHelper = new MediaInputHelper(this);
-        listPhoto = new ArrayList<CreateMomentActivity.WMediaFile>();
+        listPhotoOrVideo = new ArrayList<CreateMomentActivity.WMediaFile>();
 
         surveyOptions=new ArrayList<String>();
         isSuveyMultiSelectable=false;
@@ -378,7 +388,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                     tvShareRange.setText(savedRange);
                 }
                 mediaHelper=savedInstanceState.getParcelable("media_helper");
-                listPhoto=savedInstanceState.getParcelableArrayList("list_photo");
+                listPhotoOrVideo =savedInstanceState.getParcelableArrayList("list_photo");
                 surveyOptions=savedInstanceState.getStringArrayList("survey_options");
                 isSuveyMultiSelectable=savedInstanceState.getBoolean("survey_multi_selectable");
 
@@ -409,6 +419,53 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 if(!TextUtils.isEmpty(strAddress)) {
                     moment.place = strAddress;
                     updateLocation(moment.latitude,moment.longitude,strAddress);
+                }
+
+                notifyFileChanged(false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if(null != moment) {
+            try {
+                if(!TextUtils.isEmpty(moment.text)) {
+                    etMomentMsgContent.setText(moment.text);
+                }
+                if(!TextUtils.isEmpty(moment.shareRange)) {
+                    tvShareRange.setText(moment.shareRange);
+                }
+
+                if (moment.multimedias != null && !moment.multimedias.isEmpty()) {
+                    listPhotoOrVideo = new ArrayList<>(moment.multimedias.size());
+                    for (WFile f : moment.multimedias) {
+                        if (f.isImageByExt() || f.isVideoByExt()) {
+                            listPhotoOrVideo.add(new CreateMomentActivity.WMediaFile(f));
+                        }
+                    }
+                } else {
+                    listPhotoOrVideo = new ArrayList<>();
+                }
+
+                if (moment.surveyOptions != null && !moment.surveyOptions.isEmpty()) {
+                    surveyOptions = new ArrayList<>(moment.surveyOptions.size());
+                    for (Moment.SurveyOption surveyOption : moment.surveyOptions) {
+                        surveyOptions.add(surveyOption.optionDesc);
+                    }
+                } else {
+                    surveyOptions = new ArrayList<>();
+                }
+
+                isSuveyMultiSelectable = moment.isSurveyAllowMultiSelect;
+
+                long surveyEndTimeInM = 0;//moment.surveyDeadLine; TODO str -> long
+
+                if(0 != surveyEndTimeInM) {
+                    deadLineCalendar=new GregorianCalendar();
+                    deadLineCalendar.setTimeInMillis(surveyEndTimeInM);
+                    updateSurveyDeadLine();
+                }
+
+                if(!TextUtils.isEmpty(moment.place)) {
+                    updateLocation(moment.latitude, moment.longitude, moment.place);
                 }
 
                 notifyFileChanged(false);
@@ -738,7 +795,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 //            		if (TextUtils.isEmpty(etMomentMsgContent.getText().toString())) {
 //            			Toast.makeText(CreateNormalMomentWithTagActivity.this, "内容不能为空", Toast.LENGTH_LONG).show();
 //            		}
-////            		else if (listPhoto == null || listPhoto.isEmpty()) {
+////            		else if (listPhotoOrVideo == null || listPhotoOrVideo.isEmpty()) {
 ////            			Toast.makeText(CreateNormalMomentWithTagActivity.this, "请添加图片", Toast.LENGTH_LONG).show();
 ////            			
 ////            		} else if (mLastVoiceFile == null || !mLastVoiceFile.exists()) {
@@ -746,7 +803,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 ////            		} 
 //            		else {
 //            			
-//            			if (listPhoto == null || listPhoto.isEmpty()) {
+//            			if (listPhotoOrVideo == null || listPhotoOrVideo.isEmpty()) {
 //                			builder.setTitle("你还没有添加图片");
 //                			
 //                		} else if (mLastVoiceFile == null || !mLastVoiceFile.exists()) {
@@ -776,7 +833,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 //            		}
             		
             		if (tagType == 6) {//如果选择发布视频，那么就必须要添加视频才能发布
-            			if (listPhoto == null || listPhoto.isEmpty()) {
+            			if (listPhotoOrVideo == null || listPhotoOrVideo.isEmpty()) {
             				Toast.makeText(CreateNormalMomentWithTagActivity.this, "请添加视频", Toast.LENGTH_LONG).show();
             			} else {
             				createMoment();
@@ -1030,8 +1087,8 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if(null != listPhoto) {
-                    for(CreateMomentActivity.WMediaFile aWPhoto : listPhoto) {
+                if(null != listPhotoOrVideo) {
+                    for(CreateMomentActivity.WMediaFile aWPhoto : listPhotoOrVideo) {
                         deleteWPhotoFile(aWPhoto);
                     }
                 }
@@ -1057,7 +1114,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                     @Override
                     public void onClick(View v) {
                         bottomBoard.dismiss();
-                        if (listPhoto.size() >= CreateMomentActivity.TOTAL_PHOTO_ALLOWED) {
+                        if (listPhotoOrVideo.size() >= CreateMomentActivity.TOTAL_PHOTO_ALLOWED) {
                             mMsgBox.toast(String.format(CreateNormalMomentWithTagActivity.this.getString(R.string.settings_account_moment_take_photos_oom), CreateMomentActivity.TOTAL_PHOTO_ALLOWED));
                             return;
                         }
@@ -1069,12 +1126,12 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                     @Override
                     public void onClick(View v) {
                         bottomBoard.dismiss();
-                        if (listPhoto.size() >= CreateMomentActivity.TOTAL_PHOTO_ALLOWED) {
+                        if (listPhotoOrVideo.size() >= CreateMomentActivity.TOTAL_PHOTO_ALLOWED) {
                             mMsgBox.toast(String.format(CreateNormalMomentWithTagActivity.this.getString(R.string.settings_account_moment_take_photos_oom), CreateMomentActivity.TOTAL_PHOTO_ALLOWED));
                             return;
                         }
                         int i = 0;
-                        for (CreateMomentActivity.WMediaFile photo : listPhoto) {
+                        for (CreateMomentActivity.WMediaFile photo : listPhotoOrVideo) {
                             if (!photo.isFromGallery) {
                                 i++;
                             }
@@ -1083,7 +1140,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                         intent.putExtra("num", CreateMomentActivity.TOTAL_PHOTO_ALLOWED - i);
                         ThemeHelper.putExtraCurrThemeResId(intent, CreateNormalMomentWithTagActivity.this);
                         ArrayList<String> listPath = new ArrayList<String>();
-                        for (CreateMomentActivity.WMediaFile photo : listPhoto) {
+                        for (CreateMomentActivity.WMediaFile photo : listPhotoOrVideo) {
                             if (photo.isFromGallery) {
                                 listPath.add(photo.galleryPath);
                             }
@@ -1364,15 +1421,15 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         updateTriggerAddImgDescTxtStatus();
 
         if (isAdded) {
-            addMedia2moment(listPhoto.get(listPhoto.size() - 1));
+            addMedia2moment(listPhotoOrVideo.get(listPhotoOrVideo.size() - 1));
 
             final View view = LayoutInflater.from(this).inflate(R.layout.listitem_moment_image, addedImgLayout, false);
             final ImageView imgPhoto = (ImageView) view.findViewById(R.id.img_photo);
             imgPhoto.setImageDrawable(new BitmapDrawable(getResources(),
-                    listPhoto.get(listPhoto.size() - 1).localThumbnailPath));
+                    listPhotoOrVideo.get(listPhotoOrVideo.size() - 1).localThumbnailPath));
             bmpDrawableList.add((BitmapDrawable)imgPhoto.getDrawable());
 
-            listPhoto.get(listPhoto.size() - 1).relativeView=view;
+            listPhotoOrVideo.get(listPhotoOrVideo.size() - 1).relativeView=view;
 
             View imgDelete = view.findViewById(R.id.btn_delete);
             imgDelete.setOnClickListener(new View.OnClickListener() {
@@ -1383,7 +1440,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
             });
 //            LinearLayout.LayoutParams viewLayoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
 //            viewLayoutParams.setMargins(0,0,DensityUtil.dip2px(CreateNormalMomentWithTagActivity.this, 10), 0);
-            view.setTag(listPhoto.get(listPhoto.size() - 1));
+            view.setTag(listPhotoOrVideo.get(listPhotoOrVideo.size() - 1));
             addedImgLayout.addView(view, 0);
 //            ViewGroup.LayoutParams params = addedImgLayout.getLayoutParams();
 //            params.width += imgPhoto.getLayoutParams().width;
@@ -1391,22 +1448,22 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         } else {
             addedImgLayout.removeAllViews();
             recycleStoredBitmapDrawable();
-            for(CreateMomentActivity.WMediaFile aPhoto : listPhoto) {
+            for(CreateMomentActivity.WMediaFile aPhoto : listPhotoOrVideo) {
                 removePhotoFromMoment(aPhoto);
             }
 //            moment.multimedias.clear();
 
-            int fileNum = listPhoto.size();
+            int fileNum = listPhotoOrVideo.size();
             for (int i = 0; i < fileNum; i++) {
-                addMedia2moment(listPhoto.get(i));
+                addMedia2moment(listPhotoOrVideo.get(i));
 
                 final View view = LayoutInflater.from(this).inflate(R.layout.listitem_moment_image, addedImgLayout, false);
                 final ImageView imgPhoto = (ImageView) view.findViewById(R.id.img_photo);
                 imgPhoto.setImageDrawable(new BitmapDrawable(getResources(),
-                        listPhoto.get(i).localThumbnailPath));
-                bmpDrawableList.add((BitmapDrawable)imgPhoto.getDrawable());
+                        listPhotoOrVideo.get(i).localThumbnailPath));
+                bmpDrawableList.add((BitmapDrawable) imgPhoto.getDrawable());
 
-                listPhoto.get(i).relativeView=view;
+                listPhotoOrVideo.get(i).relativeView=view;
 
                 View imgDelete = view.findViewById(R.id.btn_delete);
                 imgDelete.setOnClickListener(new View.OnClickListener() {
@@ -1417,7 +1474,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 });
 //                LinearLayout.LayoutParams viewLayoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
 //                viewLayoutParams.setMargins(0, 0, DensityUtil.dip2px(CreateNormalMomentWithTagActivity.this, 10), 0);
-                view.setTag(listPhoto.get(i));
+                view.setTag(listPhotoOrVideo.get(i));
                 addedImgLayout.addView(view,0);
 //                ViewGroup.LayoutParams params = addedImgLayout.getLayoutParams();
 //                params.width += imgPhoto.getLayoutParams().width;
@@ -1428,7 +1485,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 
     private void deleteAImage(View view) {
         CreateMomentActivity.WMediaFile path = (CreateMomentActivity.WMediaFile) view.getTag();
-        listPhoto.remove(path);
+        listPhotoOrVideo.remove(path);
 
         removePhotoFromMoment(path);
 
@@ -1442,7 +1499,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 
     private void updateTriggerAddImgDescTxtStatus() {
         TextView tvDesc=(TextView) findViewById(R.id.trigger_add_img_txt_desc);
-        if(listPhoto.size() > 0) {
+        if(listPhotoOrVideo.size() > 0) {
             tvDesc.setVisibility(View.GONE);
             hsvImgList.setBackgroundResource(R.drawable.table_white);
         } else {
@@ -1473,29 +1530,29 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                     ArrayList<String> listPath = data.getStringArrayListExtra("list");
                     ArrayList<CreateMomentActivity.WMediaFile> photo2add = new ArrayList<CreateMomentActivity.WMediaFile>();
                     ArrayList<CreateMomentActivity.WMediaFile> photo2del = new ArrayList<CreateMomentActivity.WMediaFile>();
-                    for (int i = 0; i < listPhoto.size(); i++) {
+                    for (int i = 0; i < listPhotoOrVideo.size(); i++) {
                         boolean needAdd=false;
-                        if (!listPhoto.get(i).isFromGallery) {
+                        if (!listPhotoOrVideo.get(i).isFromGallery) {
                             needAdd=true;
                         } else {
-                            if(listPath.contains(listPhoto.get(i).galleryPath)) {
-                                listPath.remove(listPhoto.get(i).galleryPath);
+                            if(listPath.contains(listPhotoOrVideo.get(i).galleryPath)) {
+                                listPath.remove(listPhotoOrVideo.get(i).galleryPath);
                                 needAdd=true;
                             } else {
                                 //not contained,delete this
-                                photo2del.add(listPhoto.get(i));
+                                photo2del.add(listPhotoOrVideo.get(i));
                             }
                         }
 
                         if(needAdd) {
-                            photo2add.add(listPhoto.get(i));
+                            photo2add.add(listPhotoOrVideo.get(i));
                         }
                     }
 
                     for(CreateMomentActivity.WMediaFile aPhoto : photo2del) {
                         deleteAImage(aPhoto.relativeView);
                     }
-                    listPhoto = photo2add;
+                    listPhotoOrVideo = photo2add;
 
                     mMsgBox.showWait();
                     AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<ArrayList<String>, Void, Void>() {
@@ -1517,7 +1574,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                                     photo.localPath = file.getAbsolutePath();
                                     photo.galleryPath = path;
                                     photo.isFromGallery = true;
-                                    listPhoto.add(photo);
+                                    listPhotoOrVideo.add(photo);
                                 }
                                 catch (Exception e) {
                                     e.printStackTrace();
@@ -1559,7 +1616,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                             CreateMomentActivity.WMediaFile photo = new CreateMomentActivity.WMediaFile(true);
                             photo.localPath = path[0];
                             photo.isFromGallery = false;
-                            listPhoto.add(photo);
+                            listPhotoOrVideo.add(photo);
                             return null;
                         }
 
@@ -1582,7 +1639,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                         CreateMomentActivity.WMediaFile videoFile = new CreateMomentActivity.WMediaFile(false);
                         videoFile.localPath = videoPath[0];
                         videoFile.localThumbnailPath = videoPath[1];
-                        listPhoto.add(videoFile);
+                        listPhotoOrVideo.add(videoFile);
                         notifyFileChanged(true);
                     }
                 }
@@ -1599,7 +1656,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         outState.putStringArrayList("share_range_limited_dep_list",moment.limitedDepartmentList);
 
         outState.putParcelable("media_helper", mediaHelper);
-        outState.putParcelableArrayList("list_photo", listPhoto);
+        outState.putParcelableArrayList("list_photo", listPhotoOrVideo);
         outState.putStringArrayList("survey_options",surveyOptions);
         outState.putBoolean("survey_multi_selectable",isSuveyMultiSelectable);
         if(null != deadLineCalendar) {

@@ -773,6 +773,14 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
             super(ext, fileid, duration, localPath);
         }
 
+        public WMediaFile(WFile src) {
+            super(src.getExt(), src.fileid, src.thumb_fileid, src.localPath);
+            localThumbnailPath = src.localThumbnailPath;
+            duration = src.duration;
+            remoteDbId = src.remoteDbId;
+            localDbId = src.localDbId;
+        }
+
         @Override
         public int describeContents() {
             return 0;

@@ -160,4 +160,14 @@ public class WFile implements Parcelable {
         return !Utils.isNullOrEmpty(ext)
                 && ext.toLowerCase().matches(EXT_PATTERN);
     }
+
+    /** 根据扩展名判断该文件是图像。 */
+    public boolean isImageByExt() {
+        return ext != null && ext.matches("jpg|jpeg|bmp|png");
+    }
+
+    /** 根据扩展名判断该文件是视频。 */
+    public boolean isVideoByExt() {
+        return ext != null && ext.matches("avi|wmv|mp4|asf|mpg|mp2|mpeg|mpe|mpv|m2v|m4v|3gp");
+    }
 }

@@ -1,6 +1,7 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
@@ -84,7 +85,7 @@ public class PublishMomentService extends android.app.Service {
 
         boolean hasMediaFiles = null != moment.multimedias && !moment.multimedias.isEmpty();
 
-        final int notiId = 1;
+        final int notiId = (int) (System.currentTimeMillis() & 0xFFFFFFFF); // unique
         final NotificationManager mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setContentTitle(getString(R.string.moment_publishing_noti_title))
@@ -184,9 +185,21 @@ public class PublishMomentService extends android.app.Service {
         if (errno == ErrorCode.OK) {
             mNotifyManager.cancel(notiId);
         } else {
-            mBuilder.setContentTitle(getString(R.string.moment_publishing_failed));
+            mBuilder.setContentTitle(getString(R.string.moment_publishing_failed))
+                    .setContentText(getString(R.string.moment_publishing_click_to_retry) + " " + moment.text);
+
+            // 从本地数据库中移除该动态
+            new Database(this).deleteMoment(moment.id);
+
+            // 点击进入动态编辑页面，从而可以重新发布
+            // XXX old pending intent's intents/extras are replaced
+            Intent activityIntent = new Intent(this, CreateNormalMomentWithTagActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra(CreateNormalMomentWithTagActivity.EXTRA_MOMENT, moment);
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    this, 1, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mBuilder.setContentIntent(pendingIntent);
             mNotifyManager.notify(notiId, mBuilder.build());
-            // TODO 允许重试，草稿箱
         }
     }
 }

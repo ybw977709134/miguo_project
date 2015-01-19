@@ -317,7 +317,8 @@
     <string name="moments_view_type_grid">平铺视图</string>
     <string name="moments_view_type_list">列表视图</string>
     <string name="moment_publishing_noti_title">发布动态</string>
-    <string name="moment_publishing_failed">动态创建失败</string>
+    <string name="moment_publishing_failed">动态发布失败</string>
+    <string name="moment_publishing_click_to_retry">[触摸此处可以重新发布]</string>
 
 	<!-- input & save photo -->
 

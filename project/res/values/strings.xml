@@ -372,17 +372,17 @@
     <string name="register_pwd_must_fit">两次输入的密码不一致</string>
     <string name="register_cofrimPwd_must_fit">请输入确认密码</string>
     <string name="register_username_empty">帐号不能为空，可以使用2-20个字母、数字、下划线和减号</string>
-    <string name="register_username_less">帐号不能低于2位，可以使用2-20个字母、数字、下划线和减号</string>
+    <string name="register_username_less">帐号最少为2位，可以使用2-20个字母、数字、下划线和减号</string>
     <string name="register_username_more">帐号最多20位，可以使用2-20个字母、数字、下划线和减号</string>
     
     
     <string name="register_password_empty">密码不能为空，可以使用6-20个字母、数字、下划线和减号</string>
-    <string name="register_password_less">密码至少为6位，可以使用6-20个字母、数字、下划线和减号</string>
-    <string name="register_password_more">密码不能大于20位，可以使用6-20个字母、数字、下划线和减号</string>
+    <string name="register_password_less">密码最少为6位，可以使用6-20个字母、数字、下划线和减号</string>
+    <string name="register_password_more">密码最多为20位，可以使用6-20个字母、数字、下划线和减号</string>
     
     <string name="register_pwdConfrim_empty">确认密码不能为空，可以使用6-20个字母、数字、下划线和减号</string>
-    <string name="register_pwdConfrim_less">确认密码至少为6位，可以使用6-20个字母、数字、下划线和减号</string>
-    <string name="register_pwdConfrim_more">确认密码不能大于20位，可以使用6-20个字母、数字、下划线和减号</string>
+    <string name="register_pwdConfrim_less">确认密码最少为6位，可以使用6-20个字母、数字、下划线和减号</string>
+    <string name="register_pwdConfrim_more">确认密码最多为20位，可以使用6-20个字母、数字、下划线和减号</string>
     
     <string name="register_failure">注册失败</string>
     <string name="register_success">注册成功，正在进入主界面...</string>
@@ -546,6 +546,7 @@
 	<string name="tip">提示</string>
 	<string name="login_require_user_pwd">请输入用户名和密码</string>
 	<string name="login_auth_error">帐号或密码错误</string>
+	<string name="login_net_error">网络连接超时，请检查网络</string>
 	<string name="login_user_not_exists">帐号不存在</string>
     <!-- <string name="login_pwd_cannot_be_null">密码不能为空</string> -->
 	<string name="login_unknown_error">登录失败</string>
@@ -882,6 +883,6 @@
 	<string name="class_editinfo_first">请先编辑班级信息!</string>
 	<string name="class_lessontitle_not_null">课名不得为空！</string>
 	<string name="class_les_not_before_start">课程时间不得早于开班时间！</string>
-    <string name="no_more_to_load">没有更多</string>
+    <string name="no_more_to_load">没有更多分享了，自己创建一条吧</string>
 
 </resources>

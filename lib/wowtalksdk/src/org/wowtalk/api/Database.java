@@ -122,7 +122,7 @@ public class Database {
     private static final String LOG_TAG = "onemeter/Database";
 
     public static int sFlagIndex;
-    private int mFlagIndex;
+    private static int mFlagIndex;
 
     // Database fields
     private Context context;
@@ -141,7 +141,7 @@ public class Database {
         mPrefUtil = PrefUtil.getInstance(context);
         mFlagIndex = sFlagIndex;
         open();
-    }
+    }  
 
     /**
      * 这个方法是给 WowTalkVoipIF 调用的。

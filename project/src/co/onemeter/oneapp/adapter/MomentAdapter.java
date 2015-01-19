@@ -20,6 +20,7 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.*;
 import co.onemeter.oneapp.utils.LocationHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.ui.RecyclingImageView;
@@ -196,6 +197,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         } else {
             if(isMyMomentEntryAvaliable() && 0 == position) {
                 return getMyMomentEntryView();
+                
             }
         }
 
@@ -248,6 +250,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 			holder = new ViewHolder();
 		
 			holder.imgThumbnail = (ImageView) convertView.findViewById(R.id.img_thumbnail);
+			holder.imgTagTeacher = (ImageView) convertView.findViewById(R.id.imageView_tag_tea);
             holder.txtDate = (TextView) convertView.findViewById(R.id.txt_date);
 			holder.txtName = (TextView) convertView.findViewById(R.id.txt_name);
 			holder.txtTime = (TextView) convertView.findViewById(R.id.txt_time);
@@ -321,12 +324,13 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 public void onClick(View v) {
                 	String mMyUid = PrefUtil.getInstance(context).getUid();
                     if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
-                    	TimelineActivity.launchForOwner(context, moment.owner.userID, moment.owner.nickName);//跳转到自己成长日志//可进行发布操作
+                    	TimelineActivity.launchForOwner(context, moment.owner.userID, moment.owner.nickName);//跳转到自己的我的动态//可进行发布操作
                     } else {
-                    	TimelineActivity.launch(context, moment.owner.userID, moment.owner.nickName);//跳转到好友的成长日志//不可进行发布操作
+                    	TimelineActivity.launch(context, moment.owner.userID, moment.owner.nickName);//跳转到好友的我的动态//不可进行发布操作
                     }
                 }
             });
+            
         }
         if (moment.owner != null) {
             holder.txtName.setText(TextUtils.isEmpty(moment.owner.alias) ? moment.owner.nickName : moment.owner.alias);
@@ -425,28 +429,22 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     public static void setTagdesc(final Context context,final Moment moment,ImageView iv,TextView tv,
                                   LinearLayout voteSurveyLayout,final LinearLayoutAsListView lvSurveyOptions,final ArrayList<String> choosed,final Button btnSurvey) {
         if(TextUtils.isEmpty(moment.tag) || moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_LIFE)) {//生活
-//            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_life));
         	iv.setImageResource(R.drawable.share_point_life);
             tv.setText(R.string.moment_tag_life);
         } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_QA)) {//问答
-//            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_qa));
             iv.setImageResource(R.drawable.share_point_question);
             tv.setText(R.string.moment_tag_qa);
         } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_NOTICE)) {//通知
-//            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_notice));
         	iv.setImageResource(R.drawable.share_point_notice);
             tv.setText(R.string.moment_tag_notice);
         } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE) || moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI)) {
             //投票
-//        	iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_survey));
         	iv.setImageResource(R.drawable.share_point_vote);
             tv.setText(R.string.moment_tag_survey);
         } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_STUDY)) {//学习
-//            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_study));
         	iv.setImageResource(R.drawable.share_point_study);
             tv.setText(R.string.moment_tag_study);
         } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_VIDEO)) {//视频
-//            iv.setBackgroundColor(context.getResources().getColor(R.color.moment_tag_video));
         	iv.setImageResource(R.drawable.share_point_video);
             tv.setText(R.string.moment_tag_video);
         }
@@ -653,8 +651,18 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.tvMomentShareRange.setVisibility(View.GONE);
             holder.ivMomentShareRange.setVisibility(View.GONE);
         } else {
+        	
 //            holder.tvMomentShareRange.setVisibility(View.VISIBLE);
 //            holder.ivMomentShareRange.setVisibility(View.VISIBLE);
+        }
+        
+        Database dbHelper = new Database(context);
+        int ownerType = dbHelper.getBuddyCountType(moment.owner.userID);
+        
+        if (ownerType == 2) {//老师帐号显示老师标记
+        	holder.imgTagTeacher.setVisibility(View.VISIBLE);
+        } else {//非老师帐号无标记
+        	holder.imgTagTeacher.setVisibility(View.GONE);
         }
     }
 
@@ -987,6 +995,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //    	LinearLayout layout_friend_item;//item的整个布局
     	
 		ImageView imgThumbnail;
+		ImageView imgTagTeacher;
 		TextView txtName;
         TextView txtDate;
 		TextView txtTime;

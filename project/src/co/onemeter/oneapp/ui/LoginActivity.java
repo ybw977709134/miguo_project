@@ -208,7 +208,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 			case MSG_LOGIN_FAILED:
                 mMsgBox.dismissWait();
 //				alert(R.string.login_unknown_error);
-				alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_auth_error));
+				alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_net_error));
 				break;
 			default:
 				break;

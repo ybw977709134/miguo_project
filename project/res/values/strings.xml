@@ -15,6 +15,7 @@
     <string name="registration_logging">连接中...</string>
     <string name="registration_failed">消息(连接解除)</string>
     <string name="registration_success"/>
+    <string name="conn_time_out">连接超时，请检查网络连接</string>
     <string name="save">保存</string>
 
 	<string name="tab_sms">消息</string>

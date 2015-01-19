@@ -96,7 +96,8 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
                     });
                 } else {
                     msgBox.dismissWait();
-                    msgBox.toast(R.string.not_binded);
+                    Toast.makeText(MyClassesActivity.this,R.string.conn_time_out,Toast.LENGTH_LONG).show();
+                    finish();
                 }
             }
         });

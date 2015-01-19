@@ -114,7 +114,7 @@ public class Database {
     private static final String LOG_TAG = "onemeter/Database";
 
     public static int sFlagIndex;
-    private int mFlagIndex;
+    private static int mFlagIndex;
 
     // Database fields
     private Context context;

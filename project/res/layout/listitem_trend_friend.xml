@@ -29,8 +29,13 @@
                         android:layout_alignParentLeft="true"
                         android:layout_toLeftOf="@+id/moment_tag_layout"
                         android:orientation="horizontal">
-
-	                <co.onemeter.oneapp.ui.CircleImageView
+                        
+					<FrameLayout 
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:layout_gravity="center_vertical">
+					    
+					    <co.onemeter.oneapp.ui.CircleImageView
                             android:id="@+id/img_thumbnail"
                             android:layout_height="50dp"
                             android:layout_width="50dp"
@@ -39,6 +44,17 @@
                             wow:border_color="@color/avatar_border"
                             wow:click_dim="true"
                             android:src="@drawable/default_avatar_90"/>
+					    
+					    <ImageView
+	            			android:id="@+id/imageView_tag_tea"
+	            			android:layout_width="wrap_content"
+	            			android:layout_height="wrap_content"
+	            			android:layout_gravity="right"
+	            			android:src="@drawable/icon_avatar_teacher" 
+	            			android:visibility="gone" />
+					    
+					</FrameLayout>
+	                
 
                     <LinearLayout
                             android:layout_height="wrap_content"

@@ -879,6 +879,6 @@
 	<string name="class_editinfo_first">请先编辑班级信息!</string>
 	<string name="class_lessontitle_not_null">课名不得为空！</string>
 	<string name="class_les_not_before_start">课程时间不得早于开班时间！</string>
-    <string name="no_more_to_load">没有更多</string>
+    <string name="no_more_to_load">没有更多分享了，自己创建一条吧</string>
 
 </resources>

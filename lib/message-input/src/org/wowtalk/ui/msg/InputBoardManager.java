@@ -9,10 +9,12 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.PowerManager;
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.view.*;
@@ -142,6 +144,9 @@ public class InputBoardManager implements Parcelable,
      * Client Activity can change its value to avoid conflict.
      */
     public static final int REQ_INPUT_LOC = 80875;
+    
+    public static final int REQ_INPUT_CROP = 80876;
+    public static final int REQ_INPUT_PHOTO_FOR_DOODLE_CROP = 80877;
 
     private Activity mContext;
     private ViewGroup mContainer;
@@ -203,6 +208,12 @@ public class InputBoardManager implements Parcelable,
 
     private String doodleOutFilename;
     private String previewOutFilename;
+//    private Uri mImageCaptureUri;
+    private Uri outputUri = null;
+    
+    private Uri mImageCaptureUri2;
+    private Uri outputUri2 = null;
+    private Uri  mImageCaptureUri;
 
     /**
      * @param context need to be able to receive Activity result.
@@ -1155,6 +1166,36 @@ public class InputBoardManager implements Parcelable,
                 }
                 break;
             case REQ_INPUT_PHOTO:
+            	if(data != null){
+                	mImageCaptureUri = data.getData();
+                	doCrop(outputUri);	
+            	}else{
+            		
+//            		doCrop(outputUri);	
+                    if (null != mMediaInputHelper) {
+                        String[] photoPath = new String[2];
+                        if (mMediaInputHelper.handleImageResult(
+                                mContext,
+                                data,
+                                PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
+                                PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
+                                photoPath)) {
+                            doodleOutFilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
+                            mContext.startActivityForResult(
+                                    new Intent(mContext, BitmapPreviewActivity.class)
+                                            .putExtra(BitmapPreviewActivity.EXTRA_MAX_WIDTH, PHOTO_SEND_WIDTH)
+                                            .putExtra(BitmapPreviewActivity.EXTRA_MAX_HEIGHT, PHOTO_SEND_HEIGHT)
+                                            .putExtra(BitmapPreviewActivity.EXTRA_BACKGROUND_FILENAME, photoPath[0])
+                                            .putExtra(BitmapPreviewActivity.EXTRA_OUTPUT_FILENAME, doodleOutFilename),
+                                    REQ_INPUT_DOODLE
+                            );
+                        }
+                    }
+            	}
+
+                result = true; 
+                break;
+            case REQ_INPUT_CROP:
                 if (null != mMediaInputHelper) {
                     String[] photoPath = new String[2];
                     if (mMediaInputHelper.handleImageResult(
@@ -1200,6 +1241,34 @@ public class InputBoardManager implements Parcelable,
                 break;
             }
             case REQ_INPUT_PHOTO_FOR_DOODLE:
+            	if(data != null){
+            		mImageCaptureUri2 = data.getData();
+            		doCrop_doodle(mImageCaptureUri2,outputUri2);
+            	}else {
+                    if (null != mMediaInputHelper) {
+                        String[] photoPath = new String[2];
+                        if (mMediaInputHelper.handleImageResult(
+                                mContext,
+                                data,
+                                PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
+                                PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
+                                photoPath)) {
+                            doodleOutFilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
+                            mContext.startActivityForResult(
+                                    new Intent(mContext, DoodleActivity.class)
+                                            .putExtra(DoodleActivity.EXTRA_MAX_WIDTH, PHOTO_SEND_WIDTH)
+                                            .putExtra(DoodleActivity.EXTRA_MAX_HEIGHT, PHOTO_SEND_HEIGHT)
+                                            .putExtra(DoodleActivity.EXTRA_BACKGROUND_FILENAME, photoPath[0])
+                                            .putExtra(DoodleActivity.EXTRA_OUTPUT_FILENAME, doodleOutFilename),
+                                    REQ_INPUT_DOODLE
+                            );
+                        }
+                    }
+            	}
+            	
+                result = true;
+                break;
+            case REQ_INPUT_PHOTO_FOR_DOODLE_CROP:
                 if (null != mMediaInputHelper) {
                     String[] photoPath = new String[2];
                     if (mMediaInputHelper.handleImageResult(
@@ -1219,7 +1288,7 @@ public class InputBoardManager implements Parcelable,
                         );
                     }
                 }
-                result = true;
+            	result = true;
                 break;
             default:
                 break;
@@ -1306,5 +1375,28 @@ public class InputBoardManager implements Parcelable,
         drawableResId().voiceNormal = R.drawable.sms_voice_btn;
         drawableResId().voicePressed = R.drawable.sms_voice_btn_p;
     }
+    
+	private void doCrop(Uri outputUri) {
+		Intent intent = new Intent("com.android.camera.action.CROP");
+		intent.setDataAndType(mImageCaptureUri, "image/*");
+		intent.putExtra("scale", true);
+		intent.putExtra("aspectX", 1);
+		intent.putExtra("aspectY", 1);
+		intent.putExtra("scaleUpIfNeeded", true);
+		intent.putExtra("return-data", false);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT,outputUri);
+		mContext.startActivityForResult(intent, REQ_INPUT_CROP);			
+	}
 
+	private void doCrop_doodle(Uri picUri2, Uri outputUri2) {
+		Intent intent = new Intent("com.android.camera.action.CROP");
+		intent.setDataAndType(picUri2, "image/*");
+		intent.putExtra("scale", true);
+		intent.putExtra("aspectX", 1);
+		intent.putExtra("aspectY", 1);
+		intent.putExtra("scaleUpIfNeeded", true);
+		intent.putExtra("return-data", false);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT,outputUri2);
+		mContext.startActivityForResult(intent, REQ_INPUT_PHOTO_FOR_DOODLE_CROP);			
+	}
 }

@@ -368,7 +368,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             });
         }
         
-        
 		return convertView;	 
 	}
 	
@@ -652,16 +651,19 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.tvMomentShareRange.setVisibility(View.GONE);
             holder.ivMomentShareRange.setVisibility(View.GONE);
         } else {
+        	
 //            holder.tvMomentShareRange.setVisibility(View.VISIBLE);
 //            holder.ivMomentShareRange.setVisibility(View.VISIBLE);
         }
         
-
-//        int ownerType = PrefUtil.getInstance(context).getMyAccountType()
-//        
-//        if (PrefUtil.getInstance(context).getMyAccountType() == 2) {
-//        	holder.imgTagTeacher.setVisibility(View.VISIBLE);
-//        }
+        Database dbHelper = new Database(context);
+        int ownerType = dbHelper.getBuddyCountType(moment.owner.userID);
+        
+        if (ownerType == 2) {//老师帐号显示老师标记
+        	holder.imgTagTeacher.setVisibility(View.VISIBLE);
+        } else {//非老师帐号无标记
+        	holder.imgTagTeacher.setVisibility(View.GONE);
+        }
     }
 
     public static void triggerMomentFavorite(Context context,Moment moment,ImageView ivMomentFavorite) {

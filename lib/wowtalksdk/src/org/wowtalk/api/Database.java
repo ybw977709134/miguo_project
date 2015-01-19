@@ -141,7 +141,7 @@ public class Database {
         mPrefUtil = PrefUtil.getInstance(context);
         mFlagIndex = sFlagIndex;
         open();
-    }
+    }  
 
     /**
      * 这个方法是给 WowTalkVoipIF 调用的。

@@ -50,7 +50,7 @@
     </orderEntry>
     <orderEntry type="module" module-name="google-play-services_lib" exported="" />
     <orderEntry type="module" module-name="messagebox" exported="" />
-    <orderEntry type="library" scope="PROVIDED" name="Android_Map_V2.0.4" level="project" />
+    <orderEntry type="library" name="amap" level="project" />
     <orderEntry type="module" module-name="SimpleQRCodeLib" />
     <orderEntry type="module" module-name="DraggableListView" />
     <orderEntry type="module-library">

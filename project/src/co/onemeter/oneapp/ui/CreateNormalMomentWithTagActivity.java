@@ -1094,116 +1094,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 });
         bottomBoard.addCancelBtn(getString(R.string.cancel));
         bottomBoard.show();
-
-//        LayoutInflater lf = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View contentView= lf.inflate(R.layout.pick_img_selector_layout, null);
-//
-//        final PopupWindow pickImgOptionPopWindow = Utils.getFixedPopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
-//                ViewGroup.LayoutParams.MATCH_PARENT);
-//
-//        View pickFromGalleryView=contentView.findViewById(R.id.pick_img_from_gallery);
-//        View pickFromCameraView=contentView.findViewById(R.id.pick_img_from_camera);
-//
-//        contentView.findViewById(R.id.root_layout).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                pickImgOptionPopWindow.dismiss();
-//            }
-//        });
-//
-//        pickFromGalleryView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                pickImgOptionPopWindow.dismiss();
-//
-//                if (listPhoto.size() >= CreateMomentActivity.TOTAL_PHOTO_ALLOWED) {
-//                    mMsgBox.toast(String.format(CreateNormalMomentWithTagActivity.this.getString(R.string.settings_account_moment_take_photos_oom), CreateMomentActivity.TOTAL_PHOTO_ALLOWED));
-//                    return;
-//                }
-//                int i = 0;
-//                for (CreateMomentActivity.WPhoto photo : listPhoto) {
-//                    if (!photo.isFromGallery) {
-//                        i++;
-//                    }
-//                }
-//                Intent intent = new Intent(CreateNormalMomentWithTagActivity.this, SelectPhotoActivity.class);
-//                intent.putExtra("num", CreateMomentActivity.TOTAL_PHOTO_ALLOWED - i);
-//                ArrayList<String> listPath = new ArrayList<String>();
-//                for (CreateMomentActivity.WPhoto photo : listPhoto) {
-//                    if (photo.isFromGallery) {
-//                        listPath.add(photo.galleryPath);
-//                    }
-//                }
-//                intent.putStringArrayListExtra("list", listPath);
-//                startActivityForResult(intent, ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY);
-//            }
-//        });
-//
-//        pickFromCameraView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                pickImgOptionPopWindow.dismiss();
-//
-//                if (listPhoto.size() >= CreateMomentActivity.TOTAL_PHOTO_ALLOWED) {
-//                    mMsgBox.toast(String.format(CreateNormalMomentWithTagActivity.this.getString(R.string.settings_account_moment_take_photos_oom), CreateMomentActivity.TOTAL_PHOTO_ALLOWED));
-//                    return;
-//                }
-//                mediaHelper.takePhoto(CreateNormalMomentWithTagActivity.this, ACTIVITY_REQ_ID_PICK_PHOTO_FROM_CAMERA);
-//            }
-//        });
-//
-//        pickImgOptionPopWindow.setFocusable(true);
-//        pickImgOptionPopWindow.setTouchable(true);
-//        pickImgOptionPopWindow.setOutsideTouchable(true);
-//        pickImgOptionPopWindow.setBackgroundDrawable(new BitmapDrawable());
-//
-////        pickImgOptionPopWindow.setWidth((int)getResources().getDimension(R.dimen.create_moment_option_tags_width));
-//        pickImgOptionPopWindow.showAtLocation(findViewById(R.id.share_range_layout), Gravity.CENTER, 0, 0);
-//        pickImgOptionPopWindow.update();
     }
-
-//    private void showShareRangeSelector() {
-//        LayoutInflater lf = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View contentView= lf.inflate(R.layout.share_range_selector_layout, null);
-//
-//        final PopupWindow shareOptionPopWindow = Utils.getFixedPopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
-//                ViewGroup.LayoutParams.MATCH_PARENT);
-//
-//        View selectPublicView=contentView.findViewById(R.id.share_range_selector_public);
-//        View selectPrivateView=contentView.findViewById(R.id.share_range_selector_private);
-//
-//        contentView.findViewById(R.id.root_layout).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                shareOptionPopWindow.dismiss();
-//            }
-//        });
-//
-//        selectPublicView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                shareOptionPopWindow.dismiss();
-//                tvShareRange.setText(R.string.share_range_public);
-//            }
-//        });
-//
-//        selectPrivateView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                shareOptionPopWindow.dismiss();
-//                tvShareRange.setText(R.string.share_range_private);
-//            }
-//        });
-//
-//        shareOptionPopWindow.setFocusable(true);
-//        shareOptionPopWindow.setTouchable(true);
-//        shareOptionPopWindow.setOutsideTouchable(true);
-//        shareOptionPopWindow.setBackgroundDrawable(new BitmapDrawable());
-//
-////        shareOptionPopWindow.setWidth((int)getResources().getDimension(R.dimen.create_moment_option_tags_width));
-//        shareOptionPopWindow.showAtLocation(findViewById(R.id.share_range_layout), Gravity.CENTER, 0, 0);
-//        shareOptionPopWindow.update();
-//    }
 
     private static long MOMENT_ALIAS_ID_INC=0;
     private void createMoment() {
@@ -1220,7 +1111,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         } else {
             //alias id and timestamp,timestamp should be the largest
             //will be updated when returned by server
-            moment.id = CreateMomentActivity.ALIAS_ID_PREFIX+System.currentTimeMillis()+(++MOMENT_ALIAS_ID_INC);
+            moment.id = Moment.ID_PLACEHOLDER_PREFIX + System.currentTimeMillis()+(++MOMENT_ALIAS_ID_INC);
             moment.timestamp = getIntent().getLongExtra(CreateMomentActivity.EXTRA_KEY_MOMENT_MAX_TIMESTAMP,0)+1;
             Log.w("local moment timestamp set to "+moment.timestamp);
             if(TimelineActivity.TAG_SURVEY_IDX==tagType) {
@@ -1308,36 +1199,17 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                     setResult(RESULT_OK, data);
 
                     //upload to server
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            int errno = ErrorCode.UNKNOWN;
-                            if (TimelineActivity.TAG_SURVEY_IDX == tagType) {
-                                errno = MomentWebServerIF.getInstance(CreateNormalMomentWithTagActivity.this).fAddMomentForSurvey(moment);
-                            } else {
-                                //android.util.Log.i("-->>>", moment.place);
-                                errno = MomentWebServerIF.getInstance(CreateNormalMomentWithTagActivity.this).fAddMoment(moment);
-                            }
-                            if (errno == ErrorCode.OK) {
-                                Intent intent = new Intent(CreateNormalMomentWithTagActivity.this, DownloadingAndUploadingService.class);
-                                intent.putExtra(DownloadingAndUploadingService.EXTRA_ACTION,
-                                        DownloadingAndUploadingService.ACTION_UPLOAD_MOMENT_FILE);
-                                intent.putExtra(DownloadingAndUploadingService.EXTRA_MOMENT_ID, moment.id);
-                                intent.putExtra(DownloadingAndUploadingService.EXTRA_WFILES, moment.multimedias);
-                                startService(intent);
-                            }
-                        }
-                    }).start();
+                    Intent intent = new Intent(CreateNormalMomentWithTagActivity.this, PublishMomentService.class);
+                    intent.putExtra(PublishMomentService.EXTRA_MOMENT, moment);
+                    intent.putExtra(PublishMomentService.EXTRA_IS_SURVEY, TimelineActivity.TAG_SURVEY_IDX == tagType);
+                    startService(intent);
                     return 0;
                 }
 
                 @Override
                 protected void onPostExecute(Integer errno) {
                     mMsgBox.dismissWait();
-                    Toast.makeText(CreateNormalMomentWithTagActivity.this, "新建日记成功", Toast.LENGTH_SHORT).show();
                     finish();
-
-
                 }
             });
         }

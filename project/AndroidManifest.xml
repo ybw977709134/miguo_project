@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="co.onemeter.oneapp"
           android:versionCode="8"
-          android:versionName="2.1.0.0112" >
+          android:versionName="2.1.0.0116" >
 
 	<!-- 在 Android 2.3 上，PullToRefreshListView 产生 stack overflow 错误。 -->
 	<uses-sdk
@@ -39,6 +39,18 @@
         <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+    <!-- AMap permisson -->
+    <uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+	<uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
     <!-- 显示整个应用范围内Dialog -->
@@ -64,6 +76,16 @@
 		<meta-data
 			android:name="com.google.android.maps.v2.API_KEY"
 			android:value="AIzaSyCFNTi3hn1MOfB8ZMEYQFz48BL_Xsdqy7Y" />
+		
+    <!-- required by amaps
+         api key:
+         "4ad433266047f830a8815639b89d3852" (debug) />
+         "23453ff346be0404d47331f0d841ae98" (release) />
+         -->
+		<meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="23453ff346be0404d47331f0d841ae98" />
+		
         <meta-data
             android:value="5281ab3456240b5632024ab8"
             android:name="UMENG_APPKEY"/>
@@ -75,7 +97,7 @@
 			android:label="WowTalk Notification Center" />
 
 		<service
-			android:name=".ui.DownloadingAndUploadingService"
+			android:name=".ui.PublishMomentService"
 			android:label="WowTalk DownloadingAndUploading Worker" />
         <service
             android:name=".ui.AppStatusService"/>
@@ -475,10 +497,12 @@
 			android:screenOrientation="portrait">
 		</activity>
 
-        <!-- required by amap(gao de) maps -->
+        <!-- old required by amap(gao de) maps -->
+        <!--
         <meta-data
                 android:name="com.amap.api.v2.apikey"
                 android:value="a66a2f70162011400bef59c16db6c12d"/>
+                -->
         <activity
                 android:name="org.wowtalk.ui.msg.PickLocActivityWithAMap"
                 android:screenOrientation="portrait" >

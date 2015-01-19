@@ -1,6 +1,9 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,7 +19,9 @@ import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
@@ -427,6 +432,8 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
                     String myUid = PrefUtil.getInstance(GroupChatInfoActivity.this).getUid();
                     dbHelper.deleteBuddyFromGroupChatRoom(groupId, myUid);
                     dbHelper.deleteMyselfFlagFromGroupChatRoom(groupId);
+                    dbHelper.deleteChatMessageWithUser(groupId);
+                    dbHelper.deleteLatestChatTarget(groupId);
                     PickTempGroupActivity.instance().finish();
                     MultiSelectActivity.instance().finish();
                     MessageComposerActivity.instance().finish();
@@ -464,7 +471,26 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
                 deleteChatMsg();
                 break;
             case R.id.btn_quit:
-                quitTempGroup();
+    			Builder builder = new AlertDialog.Builder(GroupChatInfoActivity.this);
+    			builder.setTitle("提示");
+    			builder.setMessage("你确定要退出吗?");
+    			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+    				
+    				@Override
+    				public void onClick(DialogInterface arg0, int arg1) {
+                        dbHelper.deleteChatMessageWithUser(groupId);
+                        dbHelper.deleteLatestChatTarget(groupId);
+    	                quitTempGroup();
+    				}
+    			});
+    			builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {			
+    				@Override
+    				public void onClick(DialogInterface arg0, int arg1) {
+    					
+    				}
+    			});
+    			
+    			builder.create().show();
                 break;
             case R.id.btn_view:
                 disbandTempGroup();

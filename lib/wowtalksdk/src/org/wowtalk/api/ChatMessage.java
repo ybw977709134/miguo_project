@@ -232,7 +232,7 @@ public class ChatMessage {
     /**Message Type : communicate with public account. */
     public static String MSGTYPE_OFFICIAL_ACCOUNT_MSG = "n";
 
-	public static String MSGTYPE_LOGIN_PLACE_CHANGED = "o"; // NOT USED
+	public static String MSGTYPE_LOGIN_PLACE_CHANGED = "_"; // NOT USED
 	public static String MSGTYPE_BUDDY_INFO_UPDATED = "p";
     public static String MSGTYPE_GROUP_INFO_UPDATED = "q";
     /** added in 2014/8 **/

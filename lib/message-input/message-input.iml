@@ -46,35 +46,9 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/MapApiLocation.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/MapApiSearch.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/Android_Map_V2.0.4.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module" module-name="paint_android" />
+    <orderEntry type="module" module-name="paint_android" scope="PROVIDED" />
     <orderEntry type="library" scope="PROVIDED" name="wowtalk_service" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="android-query" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="amap" level="project" />
   </component>
 </module>

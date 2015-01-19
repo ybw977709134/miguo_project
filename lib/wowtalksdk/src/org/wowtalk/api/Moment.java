@@ -29,6 +29,9 @@ public class Moment implements Parcelable, IHasMultimedia, IHasReview {
     /** 匿名动态的 owner uid. */
     public final static String ANONYMOUS_UID ="(anonymous)";
 
+    /** 本地创建、尚未发布的动态，其 ID 以此开头。 */
+    public final static String ID_PLACEHOLDER_PREFIX ="id_placeholder_";
+
     public final static String SERVER_MOMENT_TAG_FOR_NOTICE ="0";
     public final static String SERVER_MOMENT_TAG_FOR_QA ="1";
     public final static String SERVER_MOMENT_TAG_FOR_STUDY ="2";
@@ -207,8 +210,9 @@ public class Moment implements Parcelable, IHasMultimedia, IHasReview {
         dest.writeString(place);
         dest.writeString(tag);
         dest.writeString(shareRange);
-        dest.writeInt(isSurveyAllowMultiSelect?1:0);
+        dest.writeInt(isSurveyAllowMultiSelect ? 1 : 0);
         dest.writeString(surveyDeadLine);
+        dest.writeTypedList(surveyOptions);
         dest.writeInt(isFavorite?1:0);
     }
 
@@ -239,6 +243,8 @@ public class Moment implements Parcelable, IHasMultimedia, IHasReview {
             m.shareRange=s.readString();
             m.isSurveyAllowMultiSelect=s.readInt()==1?true:false;
             m.surveyDeadLine=s.readString();
+            m.surveyOptions = new ArrayList<>();
+            s.readTypedList(m.surveyOptions, SurveyOption.CREATOR);
             m.isFavorite=s.readInt()==1?true:false;
             return m;
         }
@@ -330,11 +336,44 @@ public class Moment implements Parcelable, IHasMultimedia, IHasReview {
         return owner != null ? owner.userID : null;
     }
 
-    public static class SurveyOption {
+    public static class SurveyOption implements Parcelable {
         public String momentId;
         public String optionDesc;
         public int votedNum;
         public String optionId;
         public boolean isVoted;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeString(momentId);
+            parcel.writeString(optionDesc);
+            parcel.writeString(optionId);
+            parcel.writeInt(votedNum);
+            parcel.writeInt(isVoted ? 1 : 0);
+        }
+
+        public static final Creator<SurveyOption> CREATOR =
+                new Creator<SurveyOption>() {
+                    @Override
+                    public SurveyOption createFromParcel(Parcel parcel) {
+                        SurveyOption s = new SurveyOption();
+                        s.momentId = parcel.readString();
+                        s.optionDesc = parcel.readString();
+                        s.optionId = parcel.readString();
+                        s.votedNum = parcel.readInt();
+                        s.isVoted = parcel.readInt() == 1;
+                        return s;
+                    }
+
+                    @Override
+                    public SurveyOption[] newArray(int i) {
+                        return new SurveyOption[i];
+                    }
+                };
     }
 }

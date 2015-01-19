@@ -36,8 +36,7 @@ import java.util.List;
 public class LessonParentFeedbackActivity extends Activity implements OnClickListener {
 
 	public final String EXTRA_KEY_MOMENT_MAX_TIMESTAMP="moment_max_timestamp";
-	public final static String ALIAS_ID_PREFIX="moment_alias_id_";
-	
+
 	private final int REQ_IMAGE = 123;
 	
     private boolean mIsRecordingVoice = false;
@@ -416,7 +415,7 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
 				protected Integer doInBackground(Void... params) {
 					//alias id and timestamp,timestamp should be the largest
 					//will be updated when returned by server
-					moment.id = ALIAS_ID_PREFIX + System.currentTimeMillis();
+					moment.id = Moment.ID_PLACEHOLDER_PREFIX + System.currentTimeMillis();
 					moment.timestamp = getIntent().getLongExtra(EXTRA_KEY_MOMENT_MAX_TIMESTAMP, 0) + 1;
 					Log.w("local moment timestamp set to " + moment.timestamp);
 					if (null == moment.owner)
@@ -441,11 +440,9 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
 							feedback.student_id = stuId;
 							int errno2 = LessonWebServerIF.getInstance(LessonParentFeedbackActivity.this).addOrModifyLessonParentFeedback(feedback, moment);
 							if (errno == ErrorCode.OK && errno2 == ErrorCode.OK) {
-								Intent intent = new Intent(LessonParentFeedbackActivity.this, DownloadingAndUploadingService.class);
-								intent.putExtra(DownloadingAndUploadingService.EXTRA_ACTION,
-										DownloadingAndUploadingService.ACTION_UPLOAD_MOMENT_FILE);
-								intent.putExtra(DownloadingAndUploadingService.EXTRA_MOMENT_ID, moment.id);
-								intent.putExtra(DownloadingAndUploadingService.EXTRA_WFILES, moment.multimedias);
+								Intent intent = new Intent(LessonParentFeedbackActivity.this, PublishMomentService.class);
+								intent.putExtra(PublishMomentService.EXTRA_MOMENT, moment);
+								intent.putExtra(PublishMomentService.EXTRA_ANONYMOUS, true);
 								startService(intent);
 							}
 						}

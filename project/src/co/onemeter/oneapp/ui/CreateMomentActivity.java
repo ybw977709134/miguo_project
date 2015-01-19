@@ -60,7 +60,6 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
     /** 允许附带的媒体类型，值为 MEDIA_FLAG_* 常量的位组合。 */
     public final static String EXTRA_MEDIA_FLAGS = "media_type";
     public final static String EXTRA_KEY_MOMENT_TAG_ID="moment_tag_id";
-    public final static String ALIAS_ID_PREFIX="moment_alias_id_";
 
     /** 媒体类型。*/
     public final static int MEDIA_FLAG_PLAIN_TEXT = 1;
@@ -417,7 +416,7 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                     String uid = PrefUtil.getInstance(CreateMomentActivity.this).getUid();
                     //alias id and timestamp,timestamp should be the largest
                     //will be updated when returned by server
-                    moment.id = ALIAS_ID_PREFIX + System.currentTimeMillis();
+                    moment.id = Moment.ID_PLACEHOLDER_PREFIX + System.currentTimeMillis();
                     moment.timestamp = getIntent().getLongExtra(EXTRA_KEY_MOMENT_MAX_TIMESTAMP, 0) + 1;
                     Log.w("local moment timestamp set to " + moment.timestamp);
                     if (null == moment.owner)
@@ -433,20 +432,9 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
                     setResult(RESULT_OK, data);
 
                     //upload to server
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            int errno = MomentWebServerIF.getInstance(CreateMomentActivity.this).fAddMoment(moment);
-                            if (errno == ErrorCode.OK) {
-                                Intent intent = new Intent(CreateMomentActivity.this, DownloadingAndUploadingService.class);
-                                intent.putExtra(DownloadingAndUploadingService.EXTRA_ACTION,
-                                        DownloadingAndUploadingService.ACTION_UPLOAD_MOMENT_FILE);
-                                intent.putExtra(DownloadingAndUploadingService.EXTRA_MOMENT_ID, moment.id);
-                                intent.putExtra(DownloadingAndUploadingService.EXTRA_WFILES, moment.multimedias);
-                                startService(intent);
-                            }
-                        }
-                    }).start();
+                    Intent intent = new Intent(CreateMomentActivity.this, PublishMomentService.class);
+                    intent.putExtra(PublishMomentService.EXTRA_MOMENT, moment);
+                    startService(intent);
                     return 0;
                 }
 

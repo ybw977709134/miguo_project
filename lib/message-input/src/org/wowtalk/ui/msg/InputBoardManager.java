@@ -393,10 +393,11 @@ public class InputBoardManager implements Parcelable,
                             // failed to record voice
                         } else if(mVoiceTimer.getElapsed() < 2) {
                             // too short
-                            AlertDialog a = new AlertDialog.Builder(mContext)
-                                    .setMessage(R.string.msg_voice_too_short).create();
-                            a.setCanceledOnTouchOutside(true);
-                            a.show();
+//                            AlertDialog a = new AlertDialog.Builder(mContext)
+//                                    .setMessage(R.string.msg_voice_too_short).create();
+//                            a.setCanceledOnTouchOutside(true);
+//                            a.show();
+                        	Toast.makeText(mContext, R.string.msg_voice_too_short, Toast.LENGTH_SHORT).show();
                         } else {
                             if (mIsOnDeleteView) {
                                 if (mIsPlayingMedia && null != mPlayer && mPlayer.isPlaying()) {

@@ -81,11 +81,12 @@
          api key:
          "4ad433266047f830a8815639b89d3852" (debug) />
          "23453ff346be0404d47331f0d841ae98" (release) />
+         "91acec81e0aabe2421dc1bc7e45253f0" (debug@panzy)
          -->
 		<meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="23453ff346be0404d47331f0d841ae98" />
-		
+
         <meta-data
             android:value="5281ab3456240b5632024ab8"
             android:name="UMENG_APPKEY"/>
@@ -497,12 +498,6 @@
 			android:screenOrientation="portrait">
 		</activity>
 
-        <!-- old required by amap(gao de) maps -->
-        <!--
-        <meta-data
-                android:name="com.amap.api.v2.apikey"
-                android:value="a66a2f70162011400bef59c16db6c12d"/>
-                -->
         <activity
                 android:name="org.wowtalk.ui.msg.PickLocActivityWithAMap"
                 android:screenOrientation="portrait" >

@@ -4596,6 +4596,7 @@ public class Database {
 
 		ContentValues values = new ContentValues();
 		values.put("address", e.address);
+		values.put("telephone", e.telephone);
 		values.put("allowReview", e.allowReview ? 1 : 0);
 		values.put("capacity", e.capacity);
 		values.put("costGolds", e.costGolds);
@@ -4836,6 +4837,7 @@ public class Database {
         Cursor cur = database.query(true, tblEvent,
 				new String[] {
 				"address",
+				"telephone",
 				"allowReview",
 				"capacity",
 				"costGolds",
@@ -4880,6 +4882,7 @@ public class Database {
 			WEvent e = new WEvent();
 			int i = -1;
 			e.address = cur.getString(++i);
+			e.telephone = cur.getString(++i);
 			e.allowReview = cur.getInt(++i) == 1;
 			e.capacity = cur.getInt(++i);
 			e.costGolds = cur.getInt(++i);
@@ -6523,7 +6526,7 @@ public class Database {
 
 class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME_PRE = GlobalSetting.DATABASE_NAME;
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
     public int flagIndex;
     private Context mContext;
 
@@ -6641,6 +6644,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_CREATE_TBL_EVENT = "CREATE TABLE IF NOT EXISTS `event` "
 			+ "(`id` TEXT PRIMARY KEY,"
 			+ "`address` TEXT,"
+			+ "`telephone` TEXT,"
 			+ "`allowReview` INTEGER,"
 			+ "`capacity` INTEGER,"
 			+ "`costGolds` INTEGER,"
@@ -7004,7 +7008,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
             database.execSQL(DATABASE_CREATE_INDEX_8);
         	++oldVersion;
         }
-        
+        if(oldVersion == 9){
+        	database.execSQL("ALTER TABLE event ADD COLUMN telephone Text;");
+        	++oldVersion;
+        }
     }
 }
 

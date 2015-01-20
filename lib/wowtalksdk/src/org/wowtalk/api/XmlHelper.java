@@ -3,6 +3,7 @@ package org.wowtalk.api;
 import android.content.Context;
 import android.graphics.PointF;
 import android.text.TextUtils;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -150,6 +151,11 @@ public class XmlHelper {
         e = Utils.getFirstElementByTagName(eventNode, "area");
         if(e != null)
             a.address = e.getTextContent();
+        
+        e = Utils.getFirstElementByTagName(eventNode, "telephone");
+        if(e != null) {
+            a.telephone = e.getTextContent();
+        }
 
         e = Utils.getFirstElementByTagName(eventNode, "latitude");
         if(e != null)

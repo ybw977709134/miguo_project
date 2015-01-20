@@ -96,6 +96,7 @@ public class PublishMomentService extends android.app.Service {
 
         // upload multi media files
         if (hasMediaFiles) {
+            final int[] baseProgress = {0};
             for (WFile aMomentFile : moment.multimedias) {
 
                 final WFile file = aMomentFile;
@@ -127,7 +128,7 @@ public class PublishMomentService extends android.app.Service {
                                 @Override
                                 public void setProgress(int tag, int progress) {
                                     // 假设缩略图占上传工作量的5%
-                                    progress *= (0.05f / (moment.multimedias.size()));
+                                    progress = (int) (baseProgress[0] + progress * (0.05f / (moment.multimedias.size())));
                                     mBuilder.setProgress(100, progress, false);
                                     mNotifyManager.notify(notiId, mBuilder.build());
                                 }
@@ -166,11 +167,13 @@ public class PublishMomentService extends android.app.Service {
                             @Override
                             public void setProgress(int tag, int progress) {
                                 // 假设占上传工作量的95%
-                                progress *= (0.95f / (moment.multimedias.size()));
+                                progress = (int) (baseProgress[0] + progress * (0.95f / (moment.multimedias.size())));
                                 mBuilder.setProgress(100, progress, false);
                                 mNotifyManager.notify(notiId, mBuilder.build());
                             }
                         }, 0);
+
+                baseProgress[0] += 100f / moment.multimedias.size();
 
                 if (errno[0] != ErrorCode.OK) {
                     break;

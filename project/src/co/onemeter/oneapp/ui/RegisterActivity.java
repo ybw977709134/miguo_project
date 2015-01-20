@@ -73,7 +73,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			break;
 			default:
 //                mMsgBox.show(null, getString(R.string.register_failure));
-                alert(" ");
+                alert(getResources().getString(R.string.login_net_error));
                 break;
 			}
 		}
@@ -187,6 +187,11 @@ public class RegisterActivity extends Activity implements OnClickListener{
 
         if (!Utils.verifyWowTalkPwd(strPassword)) {//密码格式错误
             alert(getResources().getString(R.string.settings_account_passwd_format_error));
+            return;
+        }
+        
+        if (!Utils.verifyWowTalkPwd(strPwdConfirm)) {//确认密码格式错误
+            alert(getResources().getString(R.string.settings_account_pwdConfrim_format_error));
             return;
         }
 

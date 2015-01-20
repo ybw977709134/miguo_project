@@ -239,6 +239,8 @@
 	<string name="settings_account_email_used_by_others">您要绑定的邮箱已经绑定到其它帐号</string>
 	<string name="settings_account_phone_used_by_others">您要绑定的手机号码已经绑定到其它帐号</string>
 	<string name="settings_account_passwd_format_error">密码格式不正确，可以使用6-20个字母，数字，下划线和减号</string>
+	<string name="settings_account_pwdConfrim_format_error">密码格式不正确，可以使用6-20个字母，数字，下划线和减号</string>
+	
 	<string name="settings_account_passwd_retypo">两次输入的密码不一致</string>
 	<string name="settings_account_logout_without_set_id_pwd">为了能够再次登录，请您先设置用户 ID和登录密码后再退出</string>
 	<string name="settings_account_verification_code_empty">验证码不能为空</string>

@@ -52,11 +52,13 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     private ImageButton btnTitleBack;
 
     private ImageView imgPhoto;
+    private ImageView imageView_tag_tea;
     private TextView txtName;
     private TextView txtTime;
     private TextView txtDate;
     private TextView txtContent;
     private TableLayout imageTable;
+    private ImageButton momentOp;
 
     private LinearLayout micLayout;
     private ImageView btnPlay;
@@ -120,11 +122,19 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 
     private MediaPlayerWraper mediaPlayerWraper;
     
-    ImageButton momentOp;
+
     private void initView() {
         btnTitleBack = (ImageButton) findViewById(R.id.title_back);
 
         imgPhoto = (ImageView) findViewById(R.id.img_photo);
+        imageView_tag_tea = (ImageView) findViewById(R.id.imageView_tag_tea);
+        dbHelper = new Database(this);
+        if (dbHelper.getBuddyCountType(moment.owner.userID) == 2) {//老师
+        	imageView_tag_tea.setVisibility(View.VISIBLE);//显示标记
+        } else {
+        	imageView_tag_tea.setVisibility(View.GONE);
+        } 
+        
         txtContent = (TextView) findViewById(R.id.txt_content);
         txtName = (TextView) findViewById(R.id.txt_name);
         txtTime = (TextView) findViewById(R.id.txt_time);
@@ -154,6 +164,16 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         textView_commentdetail_comment = (TextView) findViewById(R.id.textView_momentdetail_comment);//评论
 
         findViewById(R.id.moment_op_btns_layout_whole).setVisibility(View.GONE);
+        
+        momentOp=(ImageButton) findViewById(R.id.moment_op);
+        
+        
+      if (getIntent().getIntExtra("isowner", 0) == 1) {//自己
+      	momentOp.setVisibility(View.VISIBLE);
+      } else {//好友
+      	momentOp.setVisibility(View.GONE);
+      }
+
 
 //        boolean isMineMoment=mWeb.fGetMyUserIDFromLocal().equals(moment.owner.userID);
 //        Log.i("moment detail mine? "+isMineMoment);
@@ -674,15 +694,13 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moment_detail);
-        momentOp=(ImageButton) findViewById(R.id.moment_op);
         
-        int isShow = getIntent().getIntExtra("isowner", 0);
         
-        if (isShow == 1) {//自己
-        	momentOp.setVisibility(View.VISIBLE);
-        } else {//好友
-        	momentOp.setVisibility(View.GONE);
-        }
+//        if (getIntent().getIntExtra("isowner", 0) == 1) {//自己
+//        	momentOp.setVisibility(View.VISIBLE);
+//        } else {//好友
+//        	momentOp.setVisibility(View.GONE);
+//        }
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);

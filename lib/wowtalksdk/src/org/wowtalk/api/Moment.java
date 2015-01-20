@@ -14,7 +14,8 @@ import java.util.Iterator;
  * Moment, status, mini-blog, or whatever.
  */
 public class Moment implements Parcelable, IHasMultimedia, IHasReview {
-	public String id;
+    public final static long SURVEY_DEADLINE_NO_LIMIT_VALUE = -1;
+    public String id;
     public String text;
     public double latitude, longitude;
     public String place;
@@ -42,9 +43,12 @@ public class Moment implements Parcelable, IHasMultimedia, IHasReview {
 
     public String tag="";
 
-    public final static String SERVER_SHARE_RANGE_PUBLIC="0";
-    public final static String SERVER_SHARE_RANGE_LIMITED="1";
-    public String shareRange;
+    /** 可见范围 - 公开 */
+    public final static int VISIBILITY_ALL = 0;
+    
+    /** 可见范围 - 受限 */
+    public final static int VISIBVILITY_LIMITED = 1;
+    
     public final static String LIMITED_DEPARTMENT_SEP="#";
     public ArrayList<String> limitedDepartmentList=new ArrayList<String>();
 
@@ -52,7 +56,8 @@ public class Moment implements Parcelable, IHasMultimedia, IHasReview {
     public boolean isSurveyAllowMultiSelect=false;
 //    public ArrayList<Integer> votedOption= new ArrayList<Integer>();
     public ArrayList<SurveyOption> surveyOptions=new  ArrayList < SurveyOption >();
-    public String surveyDeadLine="";
+    /** Unix timestamp in seconds. */
+    public long surveyDeadLine = SURVEY_DEADLINE_NO_LIMIT_VALUE;
 
     public boolean isFavorite=false;
 
@@ -209,11 +214,11 @@ public class Moment implements Parcelable, IHasMultimedia, IHasReview {
         dest.writeLong(timestamp);
         dest.writeString(place);
         dest.writeString(tag);
-        dest.writeString(shareRange);
         dest.writeInt(isSurveyAllowMultiSelect ? 1 : 0);
-        dest.writeString(surveyDeadLine);
+        dest.writeLong(surveyDeadLine);
         dest.writeTypedList(surveyOptions);
         dest.writeInt(isFavorite?1:0);
+        dest.writeStringList(limitedDepartmentList);
     }
 
     public static Creator<Moment> CREATOR = new Creator<Moment>() {
@@ -240,12 +245,12 @@ public class Moment implements Parcelable, IHasMultimedia, IHasReview {
             m.timestamp = s.readLong();
             m.place=s.readString();
             m.tag=s.readString();
-            m.shareRange=s.readString();
             m.isSurveyAllowMultiSelect=s.readInt()==1?true:false;
-            m.surveyDeadLine=s.readString();
+            m.surveyDeadLine = s.readLong();
             m.surveyOptions = new ArrayList<>();
             s.readTypedList(m.surveyOptions, SurveyOption.CREATOR);
             m.isFavorite=s.readInt()==1?true:false;
+            s.readStringList(m.limitedDepartmentList);
             return m;
         }
 
@@ -336,6 +341,12 @@ public class Moment implements Parcelable, IHasMultimedia, IHasReview {
         return owner != null ? owner.userID : null;
     }
 
+
+    /** 获取动态的可见范围。 */
+    public int visibility() {
+        return limitedDepartmentList.isEmpty() ? VISIBILITY_ALL : VISIBVILITY_LIMITED;
+    }
+    
     public static class SurveyOption implements Parcelable {
         public String momentId;
         public String optionDesc;

@@ -893,7 +893,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 
 //        TextView tvMomentShareRange=(TextView) findViewById(R.id.tv_share_rang_ind);
 //        ImageView ivMomentShareRange=(ImageView) findViewById(R.id.iv_share_rang_ind);
-//        if(TextUtils.isEmpty(moment.shareRange) || moment.shareRange.equals(Moment.SERVER_SHARE_RANGE_PUBLIC)) {
+//        if(TextUtils.isEmpty(moment.visibility) || moment.visibility.equals(Moment.VISIBILITY_ALL)) {
 //            tvMomentShareRange.setText(R.string.share_range_public_short);
 //            ivMomentShareRange.setImageResource(R.drawable.timeline_public);
 //        } else {

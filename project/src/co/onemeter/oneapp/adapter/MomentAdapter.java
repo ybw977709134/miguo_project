@@ -463,18 +463,18 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             boolean surveyOutOfDate=false;
 
             //survey deadline indicate
-            if(TextUtils.isEmpty(moment.surveyDeadLine)) {
+            if(Moment.SURVEY_DEADLINE_NO_LIMIT_VALUE == moment.surveyDeadLine) {
                 tvSurveyDeadLineIndicate.setVisibility(View.GONE);
             } else {
                 tvSurveyDeadLineIndicate.setVisibility(View.VISIBLE);
 
-                long deadlinetime=Utils.tryParseLong(moment.surveyDeadLine, -1);
+                long deadlinetime = moment.surveyDeadLine;
 
                 Calendar deadlineCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                 deadlineCalendar.setTimeInMillis(deadlinetime*1000);
                 Date dateDeadLine=deadlineCalendar.getTime();
 
-                if(deadlinetime == Long.parseLong(CreateNormalMomentWithTagActivity.SURVEY_DEADLINE_NO_LIMIT_VALUE)) {
+                if(deadlinetime == Moment.SURVEY_DEADLINE_NO_LIMIT_VALUE) {
                     surveyOutOfDate=false;
                 } else {
                     // 此处需要校准时间
@@ -494,7 +494,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                     } else {
                         String formattedTime="";
 
-                        if(moment.surveyDeadLine.equals(CreateNormalMomentWithTagActivity.SURVEY_DEADLINE_NO_LIMIT_VALUE)) {
+                        if(moment.surveyDeadLine == Moment.SURVEY_DEADLINE_NO_LIMIT_VALUE) {
                             formattedTime=context.getString(R.string.survey_dead_line_no_limit);
                         } else {
                             SimpleDateFormat dateFormat= new SimpleDateFormat(context.getString(R.string.msg_date_format_with_year));
@@ -626,7 +626,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         setTagdesc(context,moment,holder.ivMomentTagColor,holder.tvMomentTagDesc,
                 holder.voteSurveyLayout,holder.lvSurveyOptions,surveyMomentChoosedItemList.get(moment.id),holder.btnSurvey);
 
-//        if(TextUtils.isEmpty(moment.shareRange) || moment.shareRange.equals(Moment.SERVER_SHARE_RANGE_PUBLIC)) {
+//        if(TextUtils.isEmpty(moment.visibility) || moment.visibility.equals(Moment.VISIBILITY_ALL)) {
 //            holder.tvMomentShareRange.setText(R.string.share_range_public_short);
 //            holder.ivMomentShareRange.setImageResource(R.drawable.timeline_public);
 //        } else {

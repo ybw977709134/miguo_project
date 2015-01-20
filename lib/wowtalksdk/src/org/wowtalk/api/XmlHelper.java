@@ -325,8 +325,13 @@ public class XmlHelper {
             b.tag = e.getTextContent();
 
         e = Utils.getFirstElementByTagName(momentNode, "deadline");
-        if(e != null)
-            b.surveyDeadLine = e.getTextContent();
+        if(e != null) {
+            try {
+                b.surveyDeadLine = Long.parseLong(e.getTextContent());
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+            }
+        }
 
         Database db = new Database(context);
         b.isFavorite=db.isMomentFavoriteLocal(TextUtils.isEmpty(oldMomentId)?b.id:oldMomentId);
@@ -623,10 +628,7 @@ public class XmlHelper {
                     sb.append(Moment.LIMITED_DEPARTMENT_SEP);
                 }
             }
-            moment.shareRange=Moment.SERVER_SHARE_RANGE_LIMITED;
             moment.setLimitedDepartment(sb.toString());
-        } else {
-            moment.shareRange=Moment.SERVER_SHARE_RANGE_PUBLIC;
         }
     }
 

@@ -69,6 +69,8 @@ public class ErrorCode {
     public static final int NOT_LOGGED_IN = LOCAL_ERROR_BASE + 1;
     public static final int ILLEGAL_OPERATION = LOCAL_ERROR_BASE + 2;
     public static final int OPERATION_FAILED = LOCAL_ERROR_BASE + 3;
+	/** Local error: upload failed. */
+	public static final int LOCAL_UPLOAD_FAILED = LOCAL_ERROR_BASE + 4;
 
     public static final int FORGET_PWD_EMAIL_NOT_BOUND = 1101;
     public static final int FORGET_PWD_PHONE_NOT_BOUND = 1102;

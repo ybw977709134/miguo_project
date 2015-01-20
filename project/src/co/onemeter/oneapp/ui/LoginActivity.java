@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -312,7 +313,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         final String username = edtAccount.getText().toString().trim();
         final String pwdStr = edtPassword.getText().toString().trim();
         if (username.equals("")) {
-//            alert(R.string.login_user_cannot_be_null);
+//          alert(R.string.login_user_cannot_be_null);
             alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_user_cannot_be_null));
             return;
         }
@@ -334,7 +335,8 @@ public class LoginActivity extends Activity implements OnClickListener {
             for (Account account : accounts) {
                 if (tempUsername.equalsIgnoreCase(account.username)) {
 //                    alert(R.string.manage_account_add_user_exists);
-                    alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.manage_account_add_user_exists));
+                	findViewById(R.id.bodyLayout).setVisibility(View.INVISIBLE);
+                	
                     return;
                 }
             }
@@ -417,7 +419,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         String prompt = getIntent().getStringExtra(EXTRA_PROMPT);
         if (prompt != null) {
-            mMsgBox.show(null, prompt);
+            mMsgBox.show(null, prompt);   
         }
 
         mIsAddAccount = getIntent().getBooleanExtra(EXTRA_IS_ADD_ACCOUNT, false);
@@ -431,9 +433,14 @@ public class LoginActivity extends Activity implements OnClickListener {
         // 处理自动登录
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-        	//从注册成功后自动跳转到登录页，隐藏登录界面，显示正在登录中...
-        	findViewById(R.id.bodyLayout).setVisibility(View.INVISIBLE);
-        	findViewById(R.id.textView_logining).setVisibility(View.VISIBLE);
+        	if (prompt != null) {//如果帐号已存在，显示登陆界面
+        		findViewById(R.id.bodyLayout).setVisibility(View.VISIBLE);
+            		
+        	} else {//从注册成功后自动跳转到登录页，隐藏登录界面，显示正在登录中...
+            	findViewById(R.id.bodyLayout).setVisibility(View.INVISIBLE);
+            	findViewById(R.id.layout_login).setBackgroundColor(Color.TRANSPARENT);
+        	}
+
             String username = extras.getString(EXTRA_USERNAME);
             if (username != null) {
                 edtAccount.setText(username);
@@ -443,7 +450,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     login(username, password);
                 }
             }
-        }
+        }   
     }
     
     @Override

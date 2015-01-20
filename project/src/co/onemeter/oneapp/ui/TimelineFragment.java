@@ -259,11 +259,14 @@ public abstract class TimelineFragment extends ListFragment
         } else {
         	
             //评论按钮进入详情页刷新
-            startActivityForResult(
-                    new Intent(this.getActivity(), MomentDetailActivity.class)
-                            .putExtra("moment", moment),
-                    REQ_COMMENT
-            );
+        	Intent intent = new Intent(this.getActivity(), MomentDetailActivity.class).putExtra("moment", moment);
+        	String mMyUid = PrefUtil.getInstance(this.getActivity()).getUid();
+            if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
+                intent.putExtra("isowner", 1);//给自己多传一个标志值
+            }
+            
+            startActivityForResult(intent,REQ_COMMENT);
+            
         }
     }
     

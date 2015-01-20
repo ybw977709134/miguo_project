@@ -112,6 +112,9 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         
         lay_starttime = (LinearLayout) findViewById(R.id.layout_starttime);
         lay_endtime = (LinearLayout)findViewById(R.id.layout_endtime);
+        
+        ScrollView scrollView = (ScrollView) findViewById(R.id.scrollview_cre_eve);
+        scrollView.scrollTo(0, 0);
 
         btnTitleBack.setOnClickListener(this);
         btnTitleConfirm.setOnClickListener(this);

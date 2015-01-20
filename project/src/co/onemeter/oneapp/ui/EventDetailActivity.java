@@ -509,9 +509,17 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 eventDetail.host));
 
         // tel
-        q.find(R.id.event_tel).text(helper.formatField(
+        String tele = eventDetail.telephone;
+        if(!tele.equals("0")){
+        	q.find(R.id.event_tel).text(helper.formatField(
                 getString(R.string.event_tel_label),
-                eventDetail.contactEmail));
+                tele));
+        }else{
+        	q.find(R.id.event_tel).text(helper.formatField(
+                    getString(R.string.event_tel_label),
+                    ""));
+        }
+        
 
         q.find(R.id.detail_introduce).text(eventDetail.description);
     }

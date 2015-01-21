@@ -340,6 +340,8 @@ public class MessagesAdapter extends BaseAdapter {
 
 		final ImageView photoImageView = (ImageView) lView
 				.findViewById(R.id.contactPhoto);
+		ImageView imageView_tag_tea = (ImageView) lView
+				.findViewById(R.id.imageView_tag_tea);
 
 		final ChatMessage message = log_msg.get(position);
 
@@ -398,6 +400,12 @@ public class MessagesAdapter extends BaseAdapter {
             }
             else {
                 photoImageView.setImageResource(R.drawable.default_avatar_90);
+            } 
+            //判断消息列表的帐号头像是否为老师
+            if (buddy.getAccountType() == 2) {
+            	imageView_tag_tea.setVisibility(View.VISIBLE);
+            } else {
+            	imageView_tag_tea.setVisibility(View.GONE);
             }
         }
 

@@ -539,7 +539,7 @@
     <string name="chatmessagehandler_reject_join_group_request">你的入群申请未被通过</string>
 
 	<string name="reg_sucess">注册成功</string>
-	<string name="reg_failed_username_was_taken">用户名已经存在</string>
+	<string name="reg_failed_username_was_taken">用户已经存在</string>
 	
 	<string name="sex_male">男</string>
 	<string name="sex_female">女</string>

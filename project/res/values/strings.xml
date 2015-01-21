@@ -401,6 +401,7 @@
     <string name="group_events">正在进行的群活动(%s)</string>
     <string name="add">添加</string>
     <string name="timeout_message">当前网络状态异常，请稍候再试</string>
+    <string name="timeout_contacts_message">连接超时，请检查网络请求</string>
     <string name="decline">拒绝</string>
     <string name="ignore">忽略</string>
     <string name="contacts_local">手机通讯录</string>

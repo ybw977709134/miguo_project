@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import co.onemeter.oneapp.R;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.CallManager;
 import org.wowtalk.WowTalkManager;
@@ -26,7 +27,6 @@ import org.wowtalk.video.CameraConfiguration;
 import org.wowtalk.video.CameraConfiguration.AndroidCamera;
 import org.wowtalk.video.VideoListener;
 import org.wowtalk.video.VideoWindowImpl;
-import co.onemeter.oneapp.R;
 
 public class VideoCallActivity extends Activity implements WowTalkOnCallStateChangedListener {
 	private SurfaceView mVideoViewReady;
@@ -99,7 +99,7 @@ public class VideoCallActivity extends Activity implements WowTalkOnCallStateCha
 
         SurfaceView videoView = (SurfaceView) findViewById(R.id.video_surface);
 		txtCallStatus = (IncallTimer) findViewById(R.id.call_timer);
-		
+
 		btnEnd = (HangCallButton) findViewById(R.id.btn_end);
 		btnSwitch = (ImageButton) findViewById(R.id.btn_switch);
 		btnSwitch.setOnClickListener(new OnClickListener() {
@@ -184,6 +184,9 @@ public class VideoCallActivity extends Activity implements WowTalkOnCallStateCha
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, Log.TAG);
 		wakeLock.acquire();
+
+		// 缺省打开扬声器
+		WowTalkVoipIF.fRouteAudioToSpeaker();
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

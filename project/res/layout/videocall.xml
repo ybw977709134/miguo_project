@@ -110,21 +110,6 @@
                     android:background="@null"
                     android:alpha="50"
                     android:gravity="center">
-                <org.wowtalk.ui.component.SpeakerButton
-                        android:id="@+id/btn_speaker"
-                        android:layout_height="40dp"
-                        android:layout_width="40dp"
-                        checked="@drawable/videocall_speaker_a"
-                        unchecked="@drawable/videocall_speaker"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:alpha="50"
-                    android:gravity="center">
                 <org.wowtalk.ui.component.HangCallButton
                         android:id="@+id/btn_end"
                         android:layout_height="40dp"

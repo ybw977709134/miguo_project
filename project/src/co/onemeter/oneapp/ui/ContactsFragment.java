@@ -267,6 +267,9 @@ public class ContactsFragment extends Fragment implements OnClickListener,
     }
 
     public void refresh() {
+        if(mMsgBox == null)
+            mMsgBox = new MessageBox(getActivity());
+
         mMsgBox.showWait();
 
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {

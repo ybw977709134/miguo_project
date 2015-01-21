@@ -573,6 +573,9 @@ public class EventWebServerIF {
 		if(data.privacy_level != WEvent.PRIVACY_LEVEL_UNDEFINED)
 			postStr += "&privacy_level=" + data.privacy_level;
 
+		if(!TextUtils.isEmpty(data.telephone)){
+			postStr += "&telephone=" + data.telephone;
+		}
         // HTTP request
 
         int errno = ErrorCode.UNKNOWN;

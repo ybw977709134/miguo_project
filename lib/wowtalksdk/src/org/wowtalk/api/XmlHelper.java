@@ -3,6 +3,7 @@ package org.wowtalk.api;
 import android.content.Context;
 import android.graphics.PointF;
 import android.text.TextUtils;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -150,6 +151,11 @@ public class XmlHelper {
         e = Utils.getFirstElementByTagName(eventNode, "area");
         if(e != null)
             a.address = e.getTextContent();
+        
+        e = Utils.getFirstElementByTagName(eventNode, "telephone");
+        if(e != null) {
+            a.telephone = e.getTextContent();
+        }
 
         e = Utils.getFirstElementByTagName(eventNode, "latitude");
         if(e != null)
@@ -319,8 +325,13 @@ public class XmlHelper {
             b.tag = e.getTextContent();
 
         e = Utils.getFirstElementByTagName(momentNode, "deadline");
-        if(e != null)
-            b.surveyDeadLine = e.getTextContent();
+        if(e != null) {
+            try {
+                b.surveyDeadLine = Long.parseLong(e.getTextContent());
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+            }
+        }
 
         Database db = new Database(context);
         b.isFavorite=db.isMomentFavoriteLocal(TextUtils.isEmpty(oldMomentId)?b.id:oldMomentId);
@@ -617,10 +628,7 @@ public class XmlHelper {
                     sb.append(Moment.LIMITED_DEPARTMENT_SEP);
                 }
             }
-            moment.shareRange=Moment.SERVER_SHARE_RANGE_LIMITED;
             moment.setLimitedDepartment(sb.toString());
-        } else {
-            moment.shareRange=Moment.SERVER_SHARE_RANGE_PUBLIC;
         }
     }
 

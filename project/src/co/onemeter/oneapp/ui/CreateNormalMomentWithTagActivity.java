@@ -114,14 +114,11 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
     private CreateSurveyOptionsRightContentAdapter optionContentAdapter;
 
     private Button btnCreateSurveyOption;
-    private boolean isSuveyMultiSelectable;
     private ImageButton ibCanSurveyMultiSelect;
 
     private RelativeLayout rlSurveyVoteDeadLine;
     private TextView tvSurveyVoteDeadLine;
 //    private String surveyDeadLineTime;
-    private Calendar deadLineCalendar;
-    public final static String SURVEY_DEADLINE_NO_LIMIT_VALUE="-1";
 
     private MediaPlayerWraper mediaPlayerWraper;
 //    private TimeElapseReportRunnable rightBtnStatusRunnable;
@@ -135,14 +132,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
-        // 初始化 Moment 对象
-        moment = getIntent().getParcelableExtra(EXTRA_MOMENT);
-        if (moment == null && savedInstanceState != null) {
-            moment = savedInstanceState.getParcelable(EXTRA_MOMENT);
-        }
-        if (moment == null) {
-            moment = new Moment();
-        }
+        initData(savedInstanceState);
 
         initView(savedInstanceState);
 
@@ -160,6 +150,40 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 //            }
 //        });
 //        new Thread(rightBtnStatusRunnable).start();
+    }
+
+    // 初始化 Moment 对象
+    private void initData(Bundle savedInstanceState) {
+        // source #1, Activity argument
+        moment = getIntent().getParcelableExtra(EXTRA_MOMENT);
+
+        if (savedInstanceState != null) {
+            if (moment == null)
+                moment = savedInstanceState.getParcelable(EXTRA_MOMENT);
+            mediaHelper = savedInstanceState.getParcelable("media_helper");
+            listPhotoOrVideo = savedInstanceState.getParcelableArrayList("list_photo");
+            surveyOptions = savedInstanceState.getStringArrayList("survey_options");
+
+            String lastVoiceFilePath = savedInstanceState.getString("last_voice_file");
+            if (!TextUtils.isEmpty(lastVoiceFilePath)) {
+                File aFile = new File(lastVoiceFilePath);
+                if (null != aFile && aFile.exists()) {
+                    mLastVoiceFile = aFile;
+                }
+            }
+        }
+
+        if (moment == null)
+            moment = new Moment();
+
+        if (mediaHelper == null)
+            mediaHelper = new MediaInputHelper(this);
+
+        if (listPhotoOrVideo == null)
+            listPhotoOrVideo = new ArrayList<>();
+
+        if (surveyOptions == null)
+            surveyOptions = new ArrayList<>();
     }
 
     @Override
@@ -370,68 +394,18 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         findViewById(R.id.pick_location_layout).setOnClickListener(this);
         findViewById(R.id.pick_location_delete).setOnClickListener(this);
 
+        if (mLastVoiceFile != null)
+            updateGotVoice();
 
-        mediaHelper = new MediaInputHelper(this);
-        listPhotoOrVideo = new ArrayList<CreateMomentActivity.WMediaFile>();
-
-        surveyOptions=new ArrayList<String>();
-        isSuveyMultiSelectable=false;
-
-        if(null != savedInstanceState) {
-            try {
-                String savedMsg=savedInstanceState.getString("moment_msg_content");
-                String savedRange=savedInstanceState.getString("share_range");
-                if(!TextUtils.isEmpty(savedMsg)) {
-                    etMomentMsgContent.setText(savedMsg);
-                }
-                if(!TextUtils.isEmpty(savedRange)) {
-                    tvShareRange.setText(savedRange);
-                }
-                mediaHelper=savedInstanceState.getParcelable("media_helper");
-                listPhotoOrVideo =savedInstanceState.getParcelableArrayList("list_photo");
-                surveyOptions=savedInstanceState.getStringArrayList("survey_options");
-                isSuveyMultiSelectable=savedInstanceState.getBoolean("survey_multi_selectable");
-
-                long surveyEndTimeInM=savedInstanceState.getLong("survey_end_time");
-                if(0 != surveyEndTimeInM) {
-                    deadLineCalendar=new GregorianCalendar();
-                    deadLineCalendar.setTimeInMillis(surveyEndTimeInM);
-                    updateSurveyDeadLine();
-                }
-
-                moment.limitedDepartmentList = savedInstanceState.getStringArrayList("share_range_limited_dep_list");
-                if(null == moment.limitedDepartmentList) {
-                    moment.limitedDepartmentList=new ArrayList<String>();
-                }
-                String lastVoiceFilePath=savedInstanceState.getString("last_voice_file");
-                if(!TextUtils.isEmpty(lastVoiceFilePath)) {
-                    File aFile=new File(lastVoiceFilePath);
-                    if(null != aFile && aFile.exists()) {
-                        mLastVoiceFile=aFile;
-                        updateGotVoice();
-                    }
-                }
-
-                moment.latitude = savedInstanceState.getDouble("location_latitude");
-                moment.longitude = savedInstanceState.getDouble("location_longitude");
-
-                String strAddress=savedInstanceState.getString("location_address");
-                if(!TextUtils.isEmpty(strAddress)) {
-                    moment.place = strAddress;
-                    updateLocation(moment.latitude,moment.longitude,strAddress);
-                }
-
-                notifyFileChanged(false);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if(null != moment) {
+        if(null != moment) {
             try {
                 if(!TextUtils.isEmpty(moment.text)) {
                     etMomentMsgContent.setText(moment.text);
                 }
-                if(!TextUtils.isEmpty(moment.shareRange)) {
-                    tvShareRange.setText(moment.shareRange);
+                if(moment.visibility() == Moment.VISIBVILITY_LIMITED) {
+                    tvShareRange.setText(R.string.share_range_private);
+                } else {
+                    tvShareRange.setText(R.string.share_range_public);
                 }
 
                 if (moment.multimedias != null && !moment.multimedias.isEmpty()) {
@@ -452,16 +426,6 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                     }
                 } else {
                     surveyOptions = new ArrayList<>();
-                }
-
-                isSuveyMultiSelectable = moment.isSurveyAllowMultiSelect;
-
-                long surveyEndTimeInM = 0;//moment.surveyDeadLine; TODO str -> long
-
-                if(0 != surveyEndTimeInM) {
-                    deadLineCalendar=new GregorianCalendar();
-                    deadLineCalendar.setTimeInMillis(surveyEndTimeInM);
-                    updateSurveyDeadLine();
                 }
 
                 if(!TextUtils.isEmpty(moment.place)) {
@@ -511,7 +475,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
     }
 
     private void updateSurveyMultiSelectState() {
-        ibCanSurveyMultiSelect.setBackgroundResource(isSuveyMultiSelectable ? R.drawable.switch_on_little : R.drawable.switch_off_little);
+        ibCanSurveyMultiSelect.setBackgroundResource(moment.isSurveyAllowMultiSelect ? R.drawable.switch_on_little : R.drawable.switch_off_little);
     }
 
     private void updateSurveyOptionsState() {
@@ -609,8 +573,8 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 //    }
 
     private void updateSurveyDeadLine() {
-        if(null != deadLineCalendar) {
-            Date date = deadLineCalendar.getTime();
+        if(moment.surveyDeadLine == Moment.SURVEY_DEADLINE_NO_LIMIT_VALUE) {
+            Date date = new Date(moment.surveyDeadLine);
 
             SimpleDateFormat dateFormat= new SimpleDateFormat(getResources().getString(R.string.msg_date_format_with_year));
             tvSurveyVoteDeadLine.setText(dateFormat.format(date));
@@ -634,19 +598,19 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                         if(curCalendar.after(endCalendar)) {
                             mMsgBox.toast(R.string.survey_dead_line_should_after_today);
                         } else {
-//                            surveyDeadLineTime=Database.chatMessage_dateToUTCString(endCalendar.getTime());
-                            deadLineCalendar=endCalendar;
+                            endCalendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+                            moment.surveyDeadLine = endCalendar.getTimeInMillis() / 1000;
                             updateSurveyDeadLine();
                         }
                         rlSurveyVoteDeadLine.setEnabled(true);
                     }
                 };
 
-        Calendar calendar=Calendar.getInstance();
-        if (null == deadLineCalendar) {
-            calendar.add(Calendar.DAY_OF_MONTH,1);
+        Calendar calendar = Calendar.getInstance();
+        if (moment.surveyDeadLine == Moment.SURVEY_DEADLINE_NO_LIMIT_VALUE) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
         } else {
-            calendar.setTime(deadLineCalendar.getTime());
+            calendar.setTimeInMillis(moment.surveyDeadLine * 1000);
         }
         DatePickerDialog dialog = new DatePickerDialog(this,
                 dateListener,
@@ -685,7 +649,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 addASurveyOption();
                 break;
             case R.id.survey_can_multi_select:
-                isSuveyMultiSelectable=!isSuveyMultiSelectable;
+                moment.isSurveyAllowMultiSelect = !moment.isSurveyAllowMultiSelect;
                 updateSurveyMultiSelectState();
                 break;
             case R.id.pick_location_delete:
@@ -1177,7 +1141,6 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                     mMsgBox.toast(String.format(getString(R.string.survey_option_at_least_2),MIN_OPTIONS_NUM_FOR_SURVEY));
                     return;
                 } else {
-                    moment.isSurveyAllowMultiSelect=isSuveyMultiSelectable;
                     // 判断投票内容是否为空
                     // 判断投票的选项是否有一样的
                     Set<String> tempOptions = new HashSet<String>();
@@ -1202,23 +1165,11 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                         aOption.isVoted=false;
                         moment.surveyOptions.add(aOption);
                     }
-                    if(null == deadLineCalendar) {
-                        moment.surveyDeadLine=SURVEY_DEADLINE_NO_LIMIT_VALUE;
-                    } else {
-                        deadLineCalendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-                        moment.surveyDeadLine=Long.toString(deadLineCalendar.getTimeInMillis()/1000);
-                    }
                 }
             }
 
-            moment.tag=TimelineActivity.getSelectedTagServerDesc(CreateNormalMomentWithTagActivity.this,tagType,isSuveyMultiSelectable);
-
-            //share range is used local now
-            if(getString(R.string.share_range_public).equals(tvShareRange.getText())) {
-                moment.shareRange=Moment.SERVER_SHARE_RANGE_PUBLIC;
-            } else {
-                moment.shareRange=Moment.SERVER_SHARE_RANGE_LIMITED;
-            }
+            moment.tag=TimelineActivity.getSelectedTagServerDesc(
+                    CreateNormalMomentWithTagActivity.this, tagType, moment.isSurveyAllowMultiSelect);
 
             //store local moment
             mMsgBox.showWait();
@@ -1513,8 +1464,10 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         switch(requestCode) {
             case ACTIVITY_REQ_ID_SHARE_RANGE_SELECT:
                 if (resultCode == RESULT_OK) {
-                    String shareRangeTag=data.getStringExtra(ShareRangeSelectActivity.SHARE_RANGE_TAG);
-                    if(Moment.SERVER_SHARE_RANGE_PUBLIC.equals(shareRangeTag)) {
+                    int shareRangeTag = data.getIntExtra(
+                            ShareRangeSelectActivity.SHARE_RANGE_TAG,
+                            Moment.VISIBILITY_ALL);
+                    if(Moment.VISIBILITY_ALL == shareRangeTag) {
                         tvShareRange.setText(R.string.share_range_public);
                         moment.limitedDepartmentList.clear();
                     } else {
@@ -1651,34 +1604,15 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putString("moment_msg_content", etMomentMsgContent.getText().toString());
-        outState.putString("share_range", tvShareRange.getText().toString());
-        outState.putStringArrayList("share_range_limited_dep_list",moment.limitedDepartmentList);
+        moment.text = etMomentMsgContent.getText().toString();
 
+        outState.putParcelable(EXTRA_MOMENT, moment);
         outState.putParcelable("media_helper", mediaHelper);
         outState.putParcelableArrayList("list_photo", listPhotoOrVideo);
-        outState.putStringArrayList("survey_options",surveyOptions);
-        outState.putBoolean("survey_multi_selectable",isSuveyMultiSelectable);
-        if(null != deadLineCalendar) {
-            outState.putLong("survey_end_time",deadLineCalendar.getTimeInMillis());
-        } else {
-            outState.putLong("survey_end_time",0);
-        }
+        outState.putStringArrayList("survey_options", surveyOptions);
 
         if(null != mLastVoiceFile && mLastVoiceFile.exists()) {
             outState.putString("last_voice_file",mLastVoiceFile.getAbsolutePath());
-        }
-
-        if(!TextUtils.isEmpty(moment.place)) {
-            outState.putString("location_address",moment.place);
-            if(0 != moment.latitude || 0 != moment.longitude) {
-                outState.putDouble("location_latitude",moment.latitude);
-                outState.putDouble("location_longitude",moment.longitude);
-            }
-        } else {
-            outState.putString("location_address","");
-            outState.putDouble("location_latitude",0);
-            outState.putDouble("location_longitude",0);
         }
     }
 

@@ -92,8 +92,11 @@ public class PublishMomentService extends android.app.Service {
                 .setContentText(moment.text)
                 .setSmallIcon(R.drawable.icon);
 
+        final int[] errno = {ErrorCode.OK};
+
         // upload multi media files
         if (hasMediaFiles) {
+            final int[] baseProgress = {0};
             for (WFile aMomentFile : moment.multimedias) {
 
                 final WFile file = aMomentFile;
@@ -117,6 +120,7 @@ public class PublishMomentService extends android.app.Service {
 
                                 @Override
                                 public void didFailNetworkIFCommunication(int i, byte[] bytes) {
+                                    errno[0] = ErrorCode.LOCAL_UPLOAD_FAILED;
                                     String err = new String(bytes);
                                     android.util.Log.e(LOG_TAG, "failed to upload moment file: " + err);
                                 }
@@ -124,11 +128,15 @@ public class PublishMomentService extends android.app.Service {
                                 @Override
                                 public void setProgress(int tag, int progress) {
                                     // 假设缩略图占上传工作量的5%
-                                    progress *= (0.05f / (moment.multimedias.size()));
+                                    progress = (int) (baseProgress[0] + progress * (0.05f / (moment.multimedias.size())));
                                     mBuilder.setProgress(100, progress, false);
                                     mNotifyManager.notify(notiId, mBuilder.build());
                                 }
                             }, 0);
+                }
+
+                if (errno[0] != ErrorCode.OK) {
+                    break;
                 }
 
                 //
@@ -151,6 +159,7 @@ public class PublishMomentService extends android.app.Service {
 
                             @Override
                             public void didFailNetworkIFCommunication(int i, byte[] bytes) {
+                                errno[0] = ErrorCode.LOCAL_UPLOAD_FAILED;
                                 String err = new String(bytes);
                                 android.util.Log.e(LOG_TAG, "failed to upload moment file: " + err);
                             }
@@ -158,47 +167,56 @@ public class PublishMomentService extends android.app.Service {
                             @Override
                             public void setProgress(int tag, int progress) {
                                 // 假设占上传工作量的95%
-                                progress *= (0.95f / (moment.multimedias.size()));
+                                progress = (int) (baseProgress[0] + progress * (0.95f / (moment.multimedias.size())));
                                 mBuilder.setProgress(100, progress, false);
                                 mNotifyManager.notify(notiId, mBuilder.build());
                             }
                         }, 0);
+
+                baseProgress[0] += 100f / moment.multimedias.size();
+
+                if (errno[0] != ErrorCode.OK) {
+                    break;
+                }
             }
         }
 
-        int errno = ErrorCode.OK;
-
-        if (moment.id == null || moment.id.startsWith(Moment.ID_PLACEHOLDER_PREFIX)) {
+        if (errno[0] == ErrorCode.OK &&
+                (moment.id == null || moment.id.startsWith(Moment.ID_PLACEHOLDER_PREFIX))) {
             if (isSurvey) {
-                errno = MomentWebServerIF.getInstance(this).fAddMomentForSurvey(moment);
+                errno[0] = MomentWebServerIF.getInstance(this).fAddMomentForSurvey(moment);
             } else {
-                errno = MomentWebServerIF.getInstance(this).fAddMoment(moment, anonymous);
+                errno[0] = MomentWebServerIF.getInstance(this).fAddMoment(moment, anonymous);
             }
         }
 
-        if (errno == ErrorCode.OK && hasMediaFiles) {
+        if (errno[0] == ErrorCode.OK && hasMediaFiles) {
             for (WFile file : moment.multimedias) {
-                errno = mMomentWeb.fUploadMomentMultimedia(moment.id, file);
+                errno[0] = mMomentWeb.fUploadMomentMultimedia(moment.id, file);
             }
         }
 
-        if (errno == ErrorCode.OK) {
+        if (errno[0] == ErrorCode.OK) {
             mNotifyManager.cancel(notiId);
         } else {
-            mBuilder.setContentTitle(getString(R.string.moment_publishing_failed))
-                    .setContentText(getString(R.string.moment_publishing_click_to_retry) + " " + moment.text);
-
             // 从本地数据库中移除该动态
-            new Database(this).deleteMoment(moment.id);
+            new Database(this).deleteMoment(moment.id, false);
 
             // 点击进入动态编辑页面，从而可以重新发布
-            // XXX old pending intent's intents/extras are replaced
+            // hack: dummy random action to avoid extra data being overrode
             Intent activityIntent = new Intent(this, CreateNormalMomentWithTagActivity.class)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra(CreateNormalMomentWithTagActivity.EXTRA_MOMENT, moment);
+                    .putExtra(CreateNormalMomentWithTagActivity.EXTRA_MOMENT, moment)
+                    .setAction(Long.toString(System.currentTimeMillis()));
+
             PendingIntent pendingIntent = PendingIntent.getActivity(
                     this, 1, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            mBuilder.setContentIntent(pendingIntent);
+
+            mBuilder.setContentTitle(getString(R.string.moment_publishing_failed))
+                    .setContentText(getString(R.string.moment_publishing_click_to_retry) + " " + moment.text)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true);
+
             mNotifyManager.notify(notiId, mBuilder.build());
         }
     }

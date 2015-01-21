@@ -161,6 +161,11 @@ public class WFile implements Parcelable {
                 && ext.toLowerCase().matches(EXT_PATTERN);
     }
 
+    /** 根据扩展名判断该文件是音频。 */
+    public boolean isAudioByExt() {
+        return ext != null && ext.matches("aac|m4a|3gpp");
+    }
+
     /** 根据扩展名判断该文件是图像。 */
     public boolean isImageByExt() {
         return ext != null && ext.matches("jpg|jpeg|bmp|png");

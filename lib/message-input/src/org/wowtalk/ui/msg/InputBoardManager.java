@@ -11,6 +11,7 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.PowerManager;
@@ -214,6 +215,13 @@ public class InputBoardManager implements Parcelable,
     private Uri mImageCaptureUri2;
     private Uri outputUri2 = null;
     private Uri  mImageCaptureUri;
+    private Handler hanlder = new Handler(){
+    	public void handleMessage(android.os.Message msg) {
+    		if(msg.what == 0){
+    			btnSpeak.setEnabled(true);
+    		}
+    	};
+    };
 
     /**
      * @param context need to be able to receive Activity result.
@@ -385,13 +393,15 @@ public class InputBoardManager implements Parcelable,
                         break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
+                    	btnSpeak.setEnabled(false);
+                    	hanlder.sendEmptyMessageDelayed(0, 1000);
                         mContext.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                         btnSpeak.setText(R.string.msg_hold_to_speak);
                         btnSpeak.setBackgroundResource(mDrawableResId.voiceNormal);
                         stopRecording();
                         if(mLastVoiceFile == null) {
                             // failed to record voice
-                        } else if(mVoiceTimer.getElapsed() < 2) {
+                        } else if(mVoiceTimer.getElapsed() < 2 ) {
                             // too short
 //                            AlertDialog a = new AlertDialog.Builder(mContext)
 //                                    .setMessage(R.string.msg_voice_too_short).create();
@@ -408,9 +418,9 @@ public class InputBoardManager implements Parcelable,
                                 if (mResultHandler != null) {
                                     mResultHandler.onVoiceInputted(mLastVoiceFile.getAbsolutePath(), mVoiceTimer.getElapsed());
                                 }
-                            }
+                            }                  	
 //                            showVoicePreviewDialog();
-                        }
+                        }                     
                         break;
                     case MotionEvent.ACTION_MOVE:
                         if (arg1.getY() < -height) {

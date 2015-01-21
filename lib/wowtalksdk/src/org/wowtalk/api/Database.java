@@ -1,6 +1,5 @@
 package org.wowtalk.api;
 
-import android.R.integer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -13,7 +12,6 @@ import android.media.MediaPlayer;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Pair;
-
 import org.wowtalk.Log;
 
 import java.io.File;
@@ -4596,6 +4594,7 @@ public class Database {
 
 		ContentValues values = new ContentValues();
 		values.put("address", e.address);
+		values.put("telephone", e.telephone);
 		values.put("allowReview", e.allowReview ? 1 : 0);
 		values.put("capacity", e.capacity);
 		values.put("costGolds", e.costGolds);
@@ -4836,6 +4835,7 @@ public class Database {
         Cursor cur = database.query(true, tblEvent,
 				new String[] {
 				"address",
+				"telephone",
 				"allowReview",
 				"capacity",
 				"costGolds",
@@ -4880,6 +4880,7 @@ public class Database {
 			WEvent e = new WEvent();
 			int i = -1;
 			e.address = cur.getString(++i);
+			e.telephone = cur.getString(++i);
 			e.allowReview = cur.getInt(++i) == 1;
 			e.capacity = cur.getInt(++i);
 			e.costGolds = cur.getInt(++i);
@@ -5101,7 +5102,6 @@ public class Database {
 		values.put("timestamp", e.timestamp);
         values.put("text", e.text);
         values.put("tag", e.tag);
-        values.put("share_range", e.shareRange);
         values.put("survey_allow_multi_select", e.isSurveyAllowMultiSelect);
 //        values.put("survey_voted_option", e.getVotedOption());
         values.put("survey_dead_line", e.surveyDeadLine);
@@ -5327,7 +5327,6 @@ public class Database {
                         "a.timestamp," +
                         "a.text," +
                         "a.tag," +
-                        "a.share_range," +
                         "a.survey_allow_multi_select," +
                         "a.survey_dead_line," +
                         "a.limited_departments," +
@@ -5390,9 +5389,8 @@ public class Database {
             e.timestamp = cur.getLong(++i);
             e.text = cur.getString(++i);
             e.tag=cur.getString(++i);
-            e.shareRange=cur.getString(++i);
             e.isSurveyAllowMultiSelect=(cur.getInt(++i)==1);
-            e.surveyDeadLine=cur.getString(++i);
+            e.surveyDeadLine = cur.getLong(++i);
             e.setLimitedDepartment(cur.getString(++i));
             e.isFavorite=cur.getInt(++i)==1?true:false; 
 //            if (accountType == -1 || accountType == mPrefUtil.getMyAccountType()) {
@@ -5650,6 +5648,10 @@ public class Database {
     }
 
     public boolean deleteMoment(String moment_id) {
+        return deleteMoment(moment_id, true);
+    }
+
+    public boolean deleteMoment(String moment_id, boolean alsoDeleteMediaFiles) {
         if (isDBUnavailable()) {
             return false;
         }
@@ -5667,9 +5669,9 @@ public class Database {
         markDBTableModified("moment_review");
 
         //clear media files
-        if(null != moment2del) {
+        if(null != moment2del && alsoDeleteMediaFiles) {
             for (WFile file : moment2del.multimedias) {
-                if (file.getExt().equals("aac") || file.getExt().equals("m4a") || file.getExt().equals("3gpp")) {
+                if (file.isAudioByExt()) {
                     //audio,video
                     String localPath = makeLocalFilePath(file.fileid, file.getExt());
                     deleteAFile(localPath);
@@ -6523,9 +6525,8 @@ public class Database {
 
 class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME_PRE = GlobalSetting.DATABASE_NAME;
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 11;
     public int flagIndex;
-    private Context mContext;
 
 	private static final String DATABASE_CREATE_TBL_CHATMESSAGES = "CREATE TABLE IF NOT EXISTS `chatmessages` "
 			+ "(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -6641,6 +6642,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_CREATE_TBL_EVENT = "CREATE TABLE IF NOT EXISTS `event` "
 			+ "(`id` TEXT PRIMARY KEY,"
 			+ "`address` TEXT,"
+			+ "`telephone` TEXT,"
 			+ "`allowReview` INTEGER,"
 			+ "`capacity` INTEGER,"
 			+ "`costGolds` INTEGER,"
@@ -6707,10 +6709,9 @@ class DatabaseHelper extends SQLiteOpenHelper {
             + "`privacy_level` INTEGER,"
             + "`timestamp` INTEGER,"
             + "`tag` TEXT,"
-            + "`share_range` TEXT,"
             + "`survey_allow_multi_select` INTEGER DEFAULT 0,"
             + "`survey_voted_option` TEXT,"
-            + "`survey_dead_line` TEXT,"
+            + "`survey_dead_line` INT," // unix time stamp
             + "`limited_departments` TEXT,"
             + "`is_favorite` INTEGER,"
             + "`liked_by_me` INTEGER);";
@@ -6868,7 +6869,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(Context context, String uid, int flagIndex) {
         super(context, DATABASE_NAME_PRE + "_" + uid, null, DATABASE_VERSION);
-        mContext = context;
         this.flagIndex = flagIndex;
     }
 
@@ -7004,7 +7004,20 @@ class DatabaseHelper extends SQLiteOpenHelper {
             database.execSQL(DATABASE_CREATE_INDEX_8);
         	++oldVersion;
         }
-        
+        if(oldVersion == 9){
+        	database.execSQL("ALTER TABLE event ADD COLUMN telephone Text;");
+        	++oldVersion;
+        }
+
+        if (oldVersion == 10) {
+            // moment table:
+            //  1, drop share_range col
+            //  2, survey_dead_line TEXT -> INT
+            // Sqlite ALTER TABLE 语句不支持 DROP COLUMN 和 MODIFY COLUMN，
+            // 所以干脆 DROP & CREATE TABLE，反正 moment 表的数据清除也没关系。
+            database.execSQL("DROP TABLE moment;");
+            database.execSQL(DATABASE_CREATE_TBL_MOMENT);
+        }
     }
 }
 

@@ -34,7 +34,7 @@ public class ShareRangeSelectActivity extends Activity implements View.OnClickLi
     private MessageBox mMsgBox;
     private Database mDb;
 
-    private String shareRangeTag;
+    private int shareRangeTag;
     private ArrayList<String> limitedDepsList;
 
     private RelativeLayout rlSharePublicLayout;
@@ -145,12 +145,12 @@ public class ShareRangeSelectActivity extends Activity implements View.OnClickLi
             ivSharePublicInd.setVisibility(View.VISIBLE);
             ivShareLimitedInd.setVisibility(View.INVISIBLE);
 
-            shareRangeTag= Moment.SERVER_SHARE_RANGE_PUBLIC;
+            shareRangeTag = Moment.VISIBILITY_ALL;
         } else {
             ivSharePublicInd.setVisibility(View.INVISIBLE);
             ivShareLimitedInd.setVisibility(View.VISIBLE);
 
-            shareRangeTag= Moment.SERVER_SHARE_RANGE_LIMITED;
+            shareRangeTag = Moment.VISIBVILITY_LIMITED;
         }
     }
 
@@ -252,7 +252,7 @@ public class ShareRangeSelectActivity extends Activity implements View.OnClickLi
                 }
                 break;
             case R.id.title_share_range_confirm:
-                if(shareRangeTag.equals(Moment.SERVER_SHARE_RANGE_LIMITED) &&
+                if(shareRangeTag == Moment.VISIBVILITY_LIMITED &&
                         limitedDepsList.size() <= 0) {
                     mMsgBox.toast(R.string.limited_deps_can_not_empty);
                     return;

@@ -3,7 +3,9 @@ package co.onemeter.oneapp.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -89,8 +91,16 @@ public class BuddySearchItemAdapter extends BaseAdapter {
         TextView alias=(TextView) convertView.findViewById(R.id.alias);
 
         final Buddy buddy=buddyList.get(position);
-        setNameWithColor(username,contextRef.getString(R.string.settings_account)+NAME_SPLIT+" "+buddy.username);
-        setNameWithColor(nickName,contextRef.getString(R.string.settings_name)+NAME_SPLIT+" "+buddy.nickName);
+        if(buddy.nickName.length() >=  strContent.length() && buddy.username.length() >= strContent.length()){
+        	setNameWithColor(nickName,contextRef.getString(R.string.settings_name)+NAME_SPLIT+" "+buddy.nickName);
+        	setNameWithColor(username,contextRef.getString(R.string.settings_account)+NAME_SPLIT+" "+buddy.username);
+        }else{
+        	nickName.setText(contextRef.getString(R.string.settings_name)+NAME_SPLIT+" "+buddy.nickName);
+        	username.setText(contextRef.getString(R.string.settings_account)+NAME_SPLIT+" "+buddy.username);
+        }
+        
+        
+        
 
         if(TextUtils.isEmpty(buddy.alias)) {
             alias.setVisibility(View.GONE);
@@ -133,13 +143,16 @@ public class BuddySearchItemAdapter extends BaseAdapter {
         SpannableStringBuilder ssb = new SpannableStringBuilder(fullName);
         int start = 0;
         int end = 0;
-        for (int i = contents[0].length(); i < fullName.length(); i++) {
-            if (String.valueOf(fullName.charAt(i)).equalsIgnoreCase(String.valueOf(strContent.charAt(0)))) {
-                start = i;
-                end = i + strContent.length();
-                break;
-            }
-        }
+//        for (int i = contents[0].length(); i < fullName.length(); i++) {
+//            if (String.valueOf(fullName.charAt(i)).equalsIgnoreCase(String.valueOf(strContent.charAt(0)))) {
+//                start = i;
+//                end = i + strContent.length();
+//                break;
+//            }
+//        }
+        int contentLength = contents[0].length();
+        start = contentLength+1;
+        end = start + strContent.length()+1;
         ssb.setSpan(new ForegroundColorSpan(
                 contextRef.getResources().getColor(R.color.blue)),
                 start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);

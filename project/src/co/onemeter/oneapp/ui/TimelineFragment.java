@@ -134,6 +134,7 @@ public abstract class TimelineFragment extends ListFragment
         if (adapter != null) {
             adapter.insert(moment, index);
             adapter.notifyLoadingCompleted();
+            
         }
     }
 
@@ -195,6 +196,7 @@ public abstract class TimelineFragment extends ListFragment
                         }
                     }
                 }
+
             }
 
             if (!handled) {

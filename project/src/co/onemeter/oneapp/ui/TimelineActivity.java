@@ -131,6 +131,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                 currTimelineFragment.insertMoment(moment, 0);
         }
     }
+    
 
     public static TimelineActivity instance() {
         return instance;

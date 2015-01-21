@@ -13,7 +13,9 @@ import android.widget.*;
 import android.widget.ImageView.ScaleType;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
@@ -21,6 +23,7 @@ import org.wowtalk.ui.msg.InputBoardManager;
 import org.wowtalk.ui.msg.Utils;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -80,6 +83,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 	private int mDay = calendar.get(Calendar.DAY_OF_MONTH);
 	private Date birthdayDate;
 	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+		@SuppressWarnings("deprecation")
 		@Override
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
 				int dayOfMonth) {
@@ -295,12 +299,12 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 		switch(id) {
 		case 1:
 			//得到当前的生日
-			String bs = mPrefUtil.getMyBirthday();
-			if(!Utils.isNullOrEmpty(bs)) {//"0000-00-00"
-				mYear = Integer.valueOf(bs.substring(0, 4));
-				mMonth = Integer.valueOf(bs.substring(5, 7))-1;
-				mDay = Integer.valueOf(bs.substring(8));
-			}                   
+//			String bs = mPrefUtil.getMyBirthday();
+//			if(!Utils.isNullOrEmpty(bs)) {//"0000-00-00"
+//				mYear = Integer.valueOf(bs.substring(0, 4));
+//				mMonth = Integer.valueOf(bs.substring(5, 7))-1;
+//				mDay = Integer.valueOf(bs.substring(8));
+//			}                  
 			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay);//弹框时显示的是原先设置的生日
 		default:
 			break;
@@ -312,6 +316,28 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 	protected void onPrepareDialog(int id, Dialog dialog) {
 		switch(id) {
 		case 1:
+			//得到当前的生日
+			String bs = mPrefUtil.getMyBirthday();
+			if(!Utils.isNullOrEmpty(bs)) {//"0000-00-00"
+				if (bs.equals("0000-00-00")) {//如果未设定生日日期显示系统的默认时间
+					SimpleDateFormat   formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd");     
+//					 Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间     
+//					String   str   =   formatter.format(curDate); 
+//					mYear = Integer.valueOf(str.substring(0, 4));
+//					mMonth = Integer.valueOf(str.substring(5, 7))-1;
+//					mDay = Integer.valueOf(str.substring(8));
+					//不实用当前系统时间，设为2000，一米家校面对的主要是中小学生
+					mYear = 2000;
+					mMonth = 00;
+					mDay = 01;
+//					
+				} else {//显示设定后的生日日期
+					mYear = Integer.valueOf(bs.substring(0, 4));
+					mMonth = Integer.valueOf(bs.substring(5, 7))-1;
+					mDay = Integer.valueOf(bs.substring(8));
+				}
+				
+			}  
 			((DatePickerDialog) dialog).updateDate(mYear, mMonth, mDay);
 			break;
 		}

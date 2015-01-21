@@ -2462,6 +2462,7 @@ public class WowTalkWebServerIF {
 				+ fGetEncriptedPhoneNumber(sPrefUtil.getMyPhoneNumber());
 
 		Connect2 connect2 = new Connect2();
+		connect2.SetTimeout(2500, 0);
 		Element root = connect2.Post(postStr);
 		int errno = 0;
 		if (root != null) {

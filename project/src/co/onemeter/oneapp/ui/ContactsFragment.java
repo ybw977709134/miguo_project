@@ -25,7 +25,9 @@ import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
 import co.onemeter.oneapp.utils.WebServerEventPoller;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
@@ -82,6 +84,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
 	 * time stamp, the time we read group list from local db.
 	 */
 	private static long mLastReadLocalGroupList = 0;
+	private int errno = 0;
 
 	private TextWatcher searchWacher = new TextWatcher() {
 		
@@ -266,21 +269,26 @@ public class ContactsFragment extends Fragment implements OnClickListener,
     public void refresh() {
         mMsgBox.showWait();
 
-        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
-            protected Void doInBackground(Void... params) {
-                WowTalkWebServerIF.getInstance(getActivity())
+            protected Integer doInBackground(Void... params) {
+            	WowTalkWebServerIF.getInstance(getActivity())
                         .fGroupChat_GetMyGroups();
-                WowTalkWebServerIF.getInstance(getActivity())
+            	errno = WowTalkWebServerIF.getInstance(getActivity())
                         .fGetBuddyList();
                 WowTalkWebServerIF.getInstance(getActivity())
                         .fGetPendingRequests();
-                return null;
+                return errno;
             }
 
             @Override
-            protected void onPostExecute(Void v) {
+            protected void onPostExecute(Integer errno) {
                 mMsgBox.dismissWait();
+                if (errno == ErrorCode.OK) {
+
+                } else {
+                	mMsgBox.toast(R.string.timeout_contacts_message);
+                }
             }
         });
     }

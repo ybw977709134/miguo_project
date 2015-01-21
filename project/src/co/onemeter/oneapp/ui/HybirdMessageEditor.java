@@ -20,6 +20,7 @@ import co.onemeter.oneapp.utils.LocationHelper;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
@@ -537,6 +538,11 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
                             if (isCapturingVoice) {
                                 String myFormatTime = MediaPlayerWraper.makeMyTimeDisplayFromMS(elapsed);
                                 tvCaptureInnerInd.setText(String.format(getString(R.string.capture_voice_click_stop), myFormatTime));
+                                if (elapsed >= 120000 ) {
+                                	stopRecording();
+                                    updateGotVoice();
+                                    Toast.makeText(getApplicationContext(), "录音时间已经超过了120秒", Toast.LENGTH_SHORT).show();
+                                } 
                             }
                         }
                     });

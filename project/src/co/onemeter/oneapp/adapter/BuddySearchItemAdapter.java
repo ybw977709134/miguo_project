@@ -3,9 +3,7 @@ package co.onemeter.oneapp.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -91,13 +89,8 @@ public class BuddySearchItemAdapter extends BaseAdapter {
         TextView alias=(TextView) convertView.findViewById(R.id.alias);
 
         final Buddy buddy=buddyList.get(position);
-        if(buddy.nickName.length() >= strContent.length()){
-        	setNameWithColor(nickName,contextRef.getString(R.string.settings_name)+NAME_SPLIT+" "+buddy.nickName);
-        }else{
-        	nickName.setText(contextRef.getString(R.string.settings_name)+NAME_SPLIT+" "+buddy.nickName);
-        }
         setNameWithColor(username,contextRef.getString(R.string.settings_account)+NAME_SPLIT+" "+buddy.username);
-        
+        setNameWithColor(nickName,contextRef.getString(R.string.settings_name)+NAME_SPLIT+" "+buddy.nickName);
 
         if(TextUtils.isEmpty(buddy.alias)) {
             alias.setVisibility(View.GONE);

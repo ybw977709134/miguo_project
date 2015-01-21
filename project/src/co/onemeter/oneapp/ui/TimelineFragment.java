@@ -133,7 +133,11 @@ public abstract class TimelineFragment extends ListFragment
     public void insertMoment(Moment moment, int index) {
         if (adapter != null) {
             adapter.insert(moment, index);
-            adapter.notifyLoadingCompleted();
+//            adapter.notifyLoadingCompleted();
+            //把下面两句放在此，主要是为了达到真正的新建动态刷新，不影响局部刷新和位置
+            //还可以解决新建动态后头像标记不刷新问题
+            setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag),-1));
+            checkNewMoments();
             
         }
     }
@@ -141,9 +145,9 @@ public abstract class TimelineFragment extends ListFragment
     @Override
     public void onResume() {
         super.onResume();
-
+        
         setupListHeaderView();
-
+        
         PullToRefreshListView listView = getPullToRefreshListView();
         if (listView != null) {
             listView.setOnRefreshListener(this);

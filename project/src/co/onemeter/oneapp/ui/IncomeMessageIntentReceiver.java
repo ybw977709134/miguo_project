@@ -166,8 +166,11 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
             } else {
                 strMessage = null;
             }
-
-			strTickerMsg = strTickerMsg == null ? null : (strCompositeName + " " + strMessage);
+			
+			if(strMessage != null){
+				strTickerMsg = strCompositeName + ":" + strMessage;
+			}
+//			strTickerMsg = strTickerMsg == null ? null : (strCompositeName + " " + strMessage);
 		}
 
         boolean notified = false;

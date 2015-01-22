@@ -66,7 +66,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
     private LinearLayout searchResultLayout;
 //	private TextView txtResultCount;
     private ListView lvBuddy;
-	private ListView lvGroups;
+//	private ListView lvGroups;
 //	private TextView search_cancel;
 	private TextView btn_search;
 
@@ -322,7 +322,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //        }
 
         lvBuddy.setAdapter(buddyAdapter = new BuddySearchItemAdapter(this,searchedBuddyList,edtSearchContent.getText().toString().trim(),mMsgBox));
-	    ListViewUtils.setListViewHeightBasedOnChildren(lvBuddy);
+//	    ListViewUtils.setListViewHeightBasedOnChildren(lvBuddy);
         setSearchResultStatus();
 	}
 	
@@ -445,7 +445,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //		imgThumbNail = (ImageView) findViewById(R.id.person_photo);
         searchResultLayout=(LinearLayout) findViewById(R.id.search_result_layout);
         lvBuddy=(ListView) findViewById(R.id.list_buddy_find);
-		lvGroups = (ListView) findViewById(R.id.list_group_find);
+//		lvGroups = (ListView) findViewById(R.id.list_group_find);
 		
 		search_title_back = (ImageButton) findViewById(R.id. search_title_back);
 		
@@ -488,63 +488,63 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //        search_cancel.setOnClickListener(this);
         search_title_back.setOnClickListener(this);
         btn_search.setOnClickListener(this);
-		lvGroups.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View v, final int position,
-					long id) {
-				if(searchedGroupRoomList == null || position < 0 || position >= searchedGroupRoomList.size())
-					return;
-				final GroupChatRoom g = searchedGroupRoomList.get(position);
-				if(g == null)
-					return;
-
-                // judge whether the owner belongs to the group.
-                mMsgBox.showWait();
-                final String groupID = searchedGroupRoomList.get(position).groupID;
-                final String memberId = mPrefUtil.getUid();
-                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Boolean>() {
-
-                    @Override
-                    protected Boolean doInBackground(Void... params) {
-                        boolean isBelongsToGroup = mWebif.fIsBelongsToGroup(memberId, groupID);
-                        Log.d("search acitivity, the member " + memberId + " belongs to the group " + groupID + "(" + isBelongsToGroup + ")");
-                        return isBelongsToGroup;
-                    }
-
-                    protected void onPostExecute(Boolean isBelongsToGroup) {
-                        mMsgBox.dismissWait();
-                        final BottomButtonBoard bottomBtnBoard = new BottomButtonBoard(ContactSearchActivity.this, findViewById(R.id.layout));
-                        String menuItem = null;
-                        OnClickListener listener = null;
-                        if (isBelongsToGroup) {
-                            menuItem = getString(R.string.group_chat);
-                            listener = new OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    MessageComposerActivity.launchToChatWithGroup(ContactSearchActivity.this, MessageComposerActivity.class, groupID);
-                                }
-                            };
-                        } else {
-                            menuItem = getString(R.string.group_sure_to_join);
-                            listener = new OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    bottomBtnBoard.dismiss();
-                                    showInputMessageDlg(g);
-                                }
-                            };
-                        }
-
-                        bottomBtnBoard.add(menuItem, BottomButtonBoard.BUTTON_BLUE, listener);
-                        bottomBtnBoard.addCancelBtn(getString(R.string.cancel));
-                        bottomBtnBoard.show();
-                    }
-
-                    ;
-                });
-            }
-        });
+//		lvGroups.setOnItemClickListener(new OnItemClickListener() {
+//
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, View v, final int position,
+//					long id) {
+//				if(searchedGroupRoomList == null || position < 0 || position >= searchedGroupRoomList.size())
+//					return;
+//				final GroupChatRoom g = searchedGroupRoomList.get(position);
+//				if(g == null)
+//					return;
+//
+//                // judge whether the owner belongs to the group.
+//                mMsgBox.showWait();
+//                final String groupID = searchedGroupRoomList.get(position).groupID;
+//                final String memberId = mPrefUtil.getUid();
+//                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Boolean>() {
+//
+//                    @Override
+//                    protected Boolean doInBackground(Void... params) {
+//                        boolean isBelongsToGroup = mWebif.fIsBelongsToGroup(memberId, groupID);
+//                        Log.d("search acitivity, the member " + memberId + " belongs to the group " + groupID + "(" + isBelongsToGroup + ")");
+//                        return isBelongsToGroup;
+//                    }
+//
+//                    protected void onPostExecute(Boolean isBelongsToGroup) {
+//                        mMsgBox.dismissWait();
+//                        final BottomButtonBoard bottomBtnBoard = new BottomButtonBoard(ContactSearchActivity.this, findViewById(R.id.layout));
+//                        String menuItem = null;
+//                        OnClickListener listener = null;
+//                        if (isBelongsToGroup) {
+//                            menuItem = getString(R.string.group_chat);
+//                            listener = new OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    MessageComposerActivity.launchToChatWithGroup(ContactSearchActivity.this, MessageComposerActivity.class, groupID);
+//                                }
+//                            };
+//                        } else {
+//                            menuItem = getString(R.string.group_sure_to_join);
+//                            listener = new OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    bottomBtnBoard.dismiss();
+//                                    showInputMessageDlg(g);
+//                                }
+//                            };
+//                        }
+//
+//                        bottomBtnBoard.add(menuItem, BottomButtonBoard.BUTTON_BLUE, listener);
+//                        bottomBtnBoard.addCancelBtn(getString(R.string.cancel));
+//                        bottomBtnBoard.show();
+//                    }
+//
+//                    ;
+//                });
+//            }
+//        });
 
         lvBuddy.setOnItemClickListener(new OnItemClickListener() {
             @Override

@@ -129,11 +129,11 @@ s:hybird(image+voice+text) msg content:
     // image (field names are compliant with MSGTYPE_MULTIMEDIA_PHOTO)
     "pathoffileincloud":"8f623afb-e841-4178-b538-ff7813867b55",
     "pathofthumbnailincloud":"be298ccb-42a3-4d79-825f-bf1bc01a77bf",
-    "ext":".jpg"
+    "ext":"jpg"
 
     // audio
     "audio_pathoffileincloud":"8f623afb-e841-4178-b538-ff7813867b55",
-    "audio_ext":".m4a"
+    "audio_ext":"m4a"
     "duration":"9",
 }
 
@@ -487,8 +487,8 @@ public class ChatMessage {
                 ext = "mp4";
             }
         }
-        messageContent = String.format("{\"pathoffileincloud\":\"%s\",\"pathofthumbnailincloud\":\"%s\",\"ext\":\".%s\"}",
-                mediaFileID, thumbnailFileID,ext);
+        messageContent = String.format("{\"pathoffileincloud\":\"%s\",\"pathofthumbnailincloud\":\"%s\",\"ext\":\"%s\"}",
+                mediaFileID, thumbnailFileID, trimFileExtension(ext));
     }
 
     /**
@@ -499,7 +499,7 @@ public class ChatMessage {
     public void formatContentAsVoiceMessage(
             String mediaFileID, int duration) {
         messageContent = String.format(
-                "{\"pathoffileincloud\":\"%s\",\"duration\":\"%d\",\"ext\":\".m4a\"}",
+                "{\"pathoffileincloud\":\"%s\",\"duration\":\"%d\",\"ext\":\"m4a\"}",
                 mediaFileID, duration);
     }
 
@@ -530,18 +530,26 @@ public class ChatMessage {
 		messageContent = String.format(
 				"{\"text\":\"%s\"," +
 						"\"pathoffileincloud\":\"%s\"," +
-						"\"ext\":\".%s\"," +
+						"\"ext\":\"%s\"," +
 						"\"pathofthumbnailincloud\":\"%s\"," +
 						"\"audio_pathoffileincloud\":\"%s\"," +
 						"\"audio_ext\":\"%s\"," +
 						"\"duration\":\"%d\"" +
 						"}",
 				text,
-				imageFileId, imageExt, thumbnailFileId,
-				audioFileId, audioExt, duration);
+				imageFileId, trimFileExtension(imageExt), thumbnailFileId,
+				audioFileId, trimFileExtension(audioExt), duration);
 	}
 
-    public void formatContentAsGroupProfileUpdated(String group_id) {
+	/** 移除文件扩展名的点号。 */
+	private static String trimFileExtension(String ext) {
+		if (ext != null && ext.length() > 1 && ext.charAt(0) == '.') {
+			ext = ext.substring(1);
+		}
+		return ext;
+	}
+
+	public void formatContentAsGroupProfileUpdated(String group_id) {
         messageContent = String.format(Locale.getDefault(),
                 "{\"reason\":\"group_profile_updated\",\"id\":\"%s\"}", group_id);
     }

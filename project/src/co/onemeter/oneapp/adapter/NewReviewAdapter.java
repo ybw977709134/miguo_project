@@ -94,7 +94,7 @@ public class NewReviewAdapter extends ArrayAdapter<Review> {
                 photoExist=false;
             } else {
                 for (WFile file : moment.multimedias) {
-                    if (!(file.getExt().equals("aac") || file.getExt().equals("m4a") || file.getExt().equals("3gpp"))) {
+                    if (!(file.isAudioByExt())) {
                         firstPhotoFile=file;
                         photoExist=true;
                         break;

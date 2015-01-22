@@ -835,7 +835,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         photoFiles = new ArrayList<WFile>();
         if (moment != null && moment.multimedias != null && !moment.multimedias.isEmpty()) {
             for (WFile file : moment.multimedias) {
-                if (file.getExt().equals("aac") || file.getExt().equals("m4a") || file.getExt().equals("3gpp")) {
+                if (file.isAudioByExt()) {
                     voiceFile = file;
                 } else {
                     photoFiles.add(file);

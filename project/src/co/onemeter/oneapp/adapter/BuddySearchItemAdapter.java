@@ -91,11 +91,16 @@ public class BuddySearchItemAdapter extends BaseAdapter {
         TextView alias=(TextView) convertView.findViewById(R.id.alias);
 
         final Buddy buddy=buddyList.get(position);
-        if(buddy.nickName.length() >=  strContent.length() && buddy.username.length() >= strContent.length()){
-        	setNameWithColor(nickName,contextRef.getString(R.string.settings_name)+NAME_SPLIT+" "+buddy.nickName);
-        	setNameWithColor(username,contextRef.getString(R.string.settings_account)+NAME_SPLIT+" "+buddy.username);
+        
+        if(buddy.nickName.length() >=  strContent.length() && buddy.nickName.contains(strContent)){
+        	setNameWithColor(nickName,contextRef.getString(R.string.settings_name)+NAME_SPLIT+" "+buddy.nickName,strContent.length());
         }else{
         	nickName.setText(contextRef.getString(R.string.settings_name)+NAME_SPLIT+" "+buddy.nickName);
+        }
+        
+        if(buddy.username.length() >= strContent.length() && buddy.username.contains(strContent)){
+        	setNameWithColor(username,contextRef.getString(R.string.settings_account)+NAME_SPLIT+" "+buddy.username,strContent.length());
+        }else{
         	username.setText(contextRef.getString(R.string.settings_account)+NAME_SPLIT+" "+buddy.username);
         }
         
@@ -106,7 +111,7 @@ public class BuddySearchItemAdapter extends BaseAdapter {
             alias.setVisibility(View.GONE);
         } else {
             alias.setVisibility(View.VISIBLE);
-            setNameWithColor(alias, String.format(contextRef.getString(R.string.contact_info_remarkname),buddy.alias));
+            setNameWithColor(alias, String.format(contextRef.getString(R.string.contact_info_remarkname),buddy.alias),strContent.length());
         }
 
         final Button btnAdd = (Button) convertView.findViewById(R.id.btn_add);
@@ -133,11 +138,10 @@ public class BuddySearchItemAdapter extends BaseAdapter {
         } else {
             btnAdd.setVisibility(View.GONE);
         }
-
         return convertView;
     }
 
-    private void setNameWithColor(TextView tvName,String fullName) {
+    private void setNameWithColor(TextView tvName,String fullName,int length) {
         String[] contents=fullName.split(NAME_SPLIT);
 
         SpannableStringBuilder ssb = new SpannableStringBuilder(fullName);
@@ -152,7 +156,8 @@ public class BuddySearchItemAdapter extends BaseAdapter {
 //        }
         int contentLength = contents[0].length();
         start = contentLength+1;
-        end = start + strContent.length()+1;
+//        end = start + strContent.length()+1;
+        end = start + length +1;
         ssb.setSpan(new ForegroundColorSpan(
                 contextRef.getResources().getColor(R.color.blue)),
                 start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);

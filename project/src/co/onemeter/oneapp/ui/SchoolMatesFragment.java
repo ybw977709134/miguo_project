@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,10 +81,12 @@ public class SchoolMatesFragment extends Fragment
             @Override
             public void onPostExecute(Integer errno) {
                 msgbox.dismissWait();
-
                 if (errno == ErrorCode.OK) {
                     new Database(getActivity()).storeSchools(schools);
-                } else {
+                }
+                else if(errno == ErrorCode.OPERATION_FAILED){
+            		
+            	}else {
                     msgbox.toast(R.string.timeout_message);
                 }
 

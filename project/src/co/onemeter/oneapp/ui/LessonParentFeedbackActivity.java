@@ -199,7 +199,8 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
 	            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 	            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
 	            mRecorder.setAudioSamplingRate(16000);
-	            mLastVoiceFile = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_VOICE, ".m4a");
+	            mLastVoiceFile = MediaInputHelper.makeOutputMediaFile(
+						MediaInputHelper.MEDIA_TYPE_VOICE, "." + ChatMessage.SEND_AUDIO_EXT);
 	            mRecorder.setOutputFile(mLastVoiceFile.getAbsolutePath());
 	            mRecorder.prepare();
 	            mRecorder.start();

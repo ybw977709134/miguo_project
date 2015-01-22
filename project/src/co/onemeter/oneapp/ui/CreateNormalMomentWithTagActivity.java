@@ -1005,7 +1005,8 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
             mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
             mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
             mMediaRecorder.setAudioSamplingRate(16000);
-            mLastVoiceFile = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_VOICE, ".m4a");
+            mLastVoiceFile = MediaInputHelper.makeOutputMediaFile(
+                    MediaInputHelper.MEDIA_TYPE_VOICE, "." + ChatMessage.SEND_AUDIO_EXT);
             mMediaRecorder.setOutputFile(mLastVoiceFile.getAbsolutePath());
             mMediaRecorder.prepare();
             mMediaRecorder.start();

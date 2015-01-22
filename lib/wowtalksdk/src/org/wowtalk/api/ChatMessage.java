@@ -133,7 +133,7 @@ s:hybird(image+voice+text) msg content:
 
     // audio
     "audio_pathoffileincloud":"8f623afb-e841-4178-b538-ff7813867b55",
-    "audio_ext":"m4a"
+    "audio_ext":"aac"
     "duration":"9",
 }
 
@@ -266,6 +266,9 @@ public class ChatMessage {
 
 	public static final int HYBIRD_COMPONENT_IMAGE = 0;
 	public static final int HYBIRD_COMPONENT_AUDIO = 1;
+
+	/** 发出的语音文件的扩展名。*/
+	public static final String SEND_AUDIO_EXT = "aac";
 
 	/************************Data should be saved in db*****************************/
 	/** insert key of this message in db **/
@@ -499,8 +502,8 @@ public class ChatMessage {
     public void formatContentAsVoiceMessage(
             String mediaFileID, int duration) {
         messageContent = String.format(
-                "{\"pathoffileincloud\":\"%s\",\"duration\":\"%d\",\"ext\":\"m4a\"}",
-                mediaFileID, duration);
+                "{\"pathoffileincloud\":\"%s\",\"duration\":\"%d\",\"ext\":\"%s\"}",
+                mediaFileID, duration, SEND_AUDIO_EXT);
     }
 
 	/**

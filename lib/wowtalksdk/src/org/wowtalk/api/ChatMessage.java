@@ -519,6 +519,9 @@ public class ChatMessage {
 			String audioFileId, String audioExt, int duration) {
 		try {
 			text = Base64.encodeToString(text.getBytes("UTF-8"), 0);
+			// RFC 2045 编码会分行，但是换行符可能导致其它终端解析失败，因此过滤掉。
+			text = text.replaceAll("\r\n", "");
+			text = text.replaceAll("\n", "");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			text = "";

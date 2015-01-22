@@ -491,7 +491,7 @@ public class ChatMessage {
             }
         }
         messageContent = String.format("{\"pathoffileincloud\":\"%s\",\"pathofthumbnailincloud\":\"%s\",\"ext\":\"%s\"}",
-                mediaFileID, thumbnailFileID, trimFileExtension(ext));
+                mediaFileID, thumbnailFileID, WFile.trimExt(ext));
     }
 
     /**
@@ -540,16 +540,8 @@ public class ChatMessage {
 						"\"duration\":\"%d\"" +
 						"}",
 				text,
-				imageFileId, trimFileExtension(imageExt), thumbnailFileId,
-				audioFileId, trimFileExtension(audioExt), duration);
-	}
-
-	/** 移除文件扩展名的点号。 */
-	private static String trimFileExtension(String ext) {
-		if (ext != null && ext.length() > 1 && ext.charAt(0) == '.') {
-			ext = ext.substring(1);
-		}
-		return ext;
+				imageFileId, WFile.trimExt(imageExt), thumbnailFileId,
+				audioFileId, WFile.trimExt(audioExt), duration);
 	}
 
 	public void formatContentAsGroupProfileUpdated(String group_id) {

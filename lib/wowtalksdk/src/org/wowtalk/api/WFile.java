@@ -85,6 +85,14 @@ public class WFile implements Parcelable {
         this.localDbId = 0;
 	}
 
+    /** 移除文件扩展名的点号。 */
+    static String trimExt(String ext) {
+        if (ext != null && ext.length() > 1 && ext.charAt(0) == '.') {
+            ext = ext.substring(1);
+        }
+        return ext;
+    }
+
     @Override
 	public int describeContents() {
 		return 0;

@@ -128,12 +128,18 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 
         imgPhoto = (ImageView) findViewById(R.id.img_photo);
         imageView_tag_tea = (ImageView) findViewById(R.id.imageView_tag_tea);
-        dbHelper = new Database(this);
-        if (dbHelper.getBuddyCountType(moment.owner.userID) == 2) {//老师
+//        dbHelper = new Database(this);
+//        if (dbHelper.getBuddyCountType(moment.owner.userID) == 2) {//老师
+//        	imageView_tag_tea.setVisibility(View.VISIBLE);//显示标记
+//        } else {
+//        	imageView_tag_tea.setVisibility(View.GONE);
+//        } 
+        //根据moment获得帐号的类型
+        if (moment.owner.getAccountType() == 2) {//此时的moment不为空//老师
         	imageView_tag_tea.setVisibility(View.VISIBLE);//显示标记
         } else {
         	imageView_tag_tea.setVisibility(View.GONE);
-        } 
+        }
         
         txtContent = (TextView) findViewById(R.id.txt_content);
         txtName = (TextView) findViewById(R.id.txt_name);

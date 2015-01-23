@@ -5,12 +5,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
-<<<<<<< HEAD
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,10 +16,6 @@ import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.PowerManager;
-import android.provider.DocumentsContract;
-=======
-import android.os.*;
->>>>>>> origin/dev
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.DisplayMetrics;

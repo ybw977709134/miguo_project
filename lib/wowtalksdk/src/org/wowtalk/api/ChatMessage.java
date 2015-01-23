@@ -129,11 +129,11 @@ s:hybird(image+voice+text) msg content:
     // image (field names are compliant with MSGTYPE_MULTIMEDIA_PHOTO)
     "pathoffileincloud":"8f623afb-e841-4178-b538-ff7813867b55",
     "pathofthumbnailincloud":"be298ccb-42a3-4d79-825f-bf1bc01a77bf",
-    "ext":".jpg"
+    "ext":"jpg"
 
     // audio
     "audio_pathoffileincloud":"8f623afb-e841-4178-b538-ff7813867b55",
-    "audio_ext":".m4a"
+    "audio_ext":"aac"
     "duration":"9",
 }
 
@@ -266,6 +266,9 @@ public class ChatMessage {
 
 	public static final int HYBIRD_COMPONENT_IMAGE = 0;
 	public static final int HYBIRD_COMPONENT_AUDIO = 1;
+
+	/** 发出的语音文件的扩展名。*/
+	public static final String SEND_AUDIO_EXT = "aac";
 
 	/************************Data should be saved in db*****************************/
 	/** insert key of this message in db **/
@@ -487,8 +490,8 @@ public class ChatMessage {
                 ext = "mp4";
             }
         }
-        messageContent = String.format("{\"pathoffileincloud\":\"%s\",\"pathofthumbnailincloud\":\"%s\",\"ext\":\".%s\"}",
-                mediaFileID, thumbnailFileID,ext);
+        messageContent = String.format("{\"pathoffileincloud\":\"%s\",\"pathofthumbnailincloud\":\"%s\",\"ext\":\"%s\"}",
+                mediaFileID, thumbnailFileID, WFile.trimExt(ext));
     }
 
     /**
@@ -499,8 +502,8 @@ public class ChatMessage {
     public void formatContentAsVoiceMessage(
             String mediaFileID, int duration) {
         messageContent = String.format(
-                "{\"pathoffileincloud\":\"%s\",\"duration\":\"%d\",\"ext\":\".m4a\"}",
-                mediaFileID, duration);
+                "{\"pathoffileincloud\":\"%s\",\"duration\":\"%d\",\"ext\":\"%s\"}",
+                mediaFileID, duration, SEND_AUDIO_EXT);
     }
 
 	/**
@@ -519,6 +522,9 @@ public class ChatMessage {
 			String audioFileId, String audioExt, int duration) {
 		try {
 			text = Base64.encodeToString(text.getBytes("UTF-8"), 0);
+			// RFC 2045 编码会分行，但是换行符可能导致其它终端解析失败，因此过滤掉。
+			text = text.replaceAll("\r\n", "");
+			text = text.replaceAll("\n", "");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			text = "";
@@ -527,18 +533,18 @@ public class ChatMessage {
 		messageContent = String.format(
 				"{\"text\":\"%s\"," +
 						"\"pathoffileincloud\":\"%s\"," +
-						"\"ext\":\".%s\"," +
+						"\"ext\":\"%s\"," +
 						"\"pathofthumbnailincloud\":\"%s\"," +
 						"\"audio_pathoffileincloud\":\"%s\"," +
 						"\"audio_ext\":\"%s\"," +
 						"\"duration\":\"%d\"" +
 						"}",
 				text,
-				imageFileId, imageExt, thumbnailFileId,
-				audioFileId, audioExt, duration);
+				imageFileId, WFile.trimExt(imageExt), thumbnailFileId,
+				audioFileId, WFile.trimExt(audioExt), duration);
 	}
 
-    public void formatContentAsGroupProfileUpdated(String group_id) {
+	public void formatContentAsGroupProfileUpdated(String group_id) {
         messageContent = String.format(Locale.getDefault(),
                 "{\"reason\":\"group_profile_updated\",\"id\":\"%s\"}", group_id);
     }

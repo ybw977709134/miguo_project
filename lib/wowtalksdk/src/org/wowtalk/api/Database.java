@@ -5154,7 +5154,7 @@ public class Database {
         MediaPlayer player=new MediaPlayer();
 
         for (WFile file : moment.multimedias) {
-            if ((file.getExt().equals("aac") || file.getExt().equals("m4a") || file.getExt().equals("3gpp"))
+            if ((file.isAudioByExt())
                     && file.duration <= 0) {
                 String filePath=makeLocalFilePath(file.fileid, file.getExt());
                 if (new File(filePath).exists()) {
@@ -5713,7 +5713,7 @@ public class Database {
         for (Moment moment2del : moments) {
             if(null != moment2del) {
                 for (WFile file : moment2del.multimedias) {
-                    if (file.getExt().equals("aac") || file.getExt().equals("m4a") || file.getExt().equals("3gpp")) {
+                    if (file.isAudioByExt()) {
                         //audio,video
                         String localPath = makeLocalFilePath(file.fileid, file.getExt());
                         deleteAFile(localPath);

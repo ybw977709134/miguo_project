@@ -20,6 +20,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 
 import org.wowtalk.Log;
+import org.wowtalk.api.ChatMessage;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.InputBoardManager.ChangeToOtherAppsListener;
 
@@ -666,7 +667,7 @@ public class MediaInputHelper implements Parcelable {
 			mediaFile = new File(mediaStorageDir.getPath() + File.separator +
 					"VID_"+ timeStamp + rand + ext);
 		} else if(type == MEDIA_TYPE_VOICE) {
-			if(ext == null) ext = ".m4a";
+			if(ext == null) ext = "." + ChatMessage.SEND_AUDIO_EXT;
 			mediaFile = new File(mediaStorageDir.getPath() + File.separator +
 					"AUD_"+ timeStamp + rand + ext);
 		} else if(type == MEDIA_TYPE_THUMNAIL) {

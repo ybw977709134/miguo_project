@@ -181,7 +181,7 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
             return false;
         if (requireVoice && (mLastVoiceFile == null || !mLastVoiceFile.exists()))
             return false;
-        if (requireVoice && (null != mMediaRecorder && voiceDuration < MOMENT_VOICE_MIN_LEN_IN_MS))
+        if (requireVoice && (null != mMediaRecorder && voiceDurationMs < MOMENT_VOICE_MIN_LEN_IN_MS))
             return false;
         if (requireLoc && !isLocGot)
             return false;
@@ -404,6 +404,10 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
                 finish();
                 break;
             case R.id.btn_commit:
+                if (isCapturingVoice) {
+                    stopRecording();
+                    updateGotVoice();
+                }
                 commit();
                 break;
             case R.id.trigger_add_img_layout:
@@ -421,8 +425,6 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
 
     private void commit() {
 
-        stopRecording();
-
         if (!isContentValid()) {
             mMsgBox.show(getString(R.string.app_name),
                     getString(R.string.hybird_message_editor_content_required));
@@ -439,8 +441,10 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
             }
             data.putStringArray(EXTRA_OUT_IMAGE_FILENAME, path);
         }
-        if (mLastVoiceFile != null)
+        if (mLastVoiceFile != null) {
             data.putString(EXTRA_OUT_VOICE_FILENAME, mLastVoiceFile.getAbsolutePath());
+            data.putInt(EXTRA_OUT_VOICE_DURATION, voiceDurationMs / 1000);
+        }
         if (isLocGot) {
             data.putDouble(EXTRA_OUT_LOC_LATITUDE, moment.latitude);
             data.putDouble(EXTRA_OUT_LOC_LONGITUDE, moment.longitude);
@@ -457,8 +461,8 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
     private int MOMENT_VOICE_MIN_LEN_IN_MS = 1000;
 
     private void setVoiceDuration() {
-        if (voiceDuration > MOMENT_VOICE_MIN_LEN_IN_MS) {
-            tvReadyCaptureVoiceTimeLength.setText(MediaPlayerWraper.makeMyTimeDisplayFromMS(voiceDuration));
+        if (voiceDurationMs > MOMENT_VOICE_MIN_LEN_IN_MS) {
+            tvReadyCaptureVoiceTimeLength.setText(MediaPlayerWraper.makeMyTimeDisplayFromMS(voiceDurationMs));
         } else {
             mMsgBox.toast(R.string.msg_voice_too_short);
             findViewById(R.id.ready_captured_voice_delete).performClick();
@@ -485,10 +489,10 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
                     ivReadyCaptureVoicePlay.setImageResource(R.drawable.timeline_play);
                 }
             });
-            mediaPlayerWraper.triggerPlayer(mLastVoiceFile.getAbsolutePath(), voiceDuration);
+            mediaPlayerWraper.triggerPlayer(mLastVoiceFile.getAbsolutePath(), voiceDurationMs);
         } else {
             //second trigger,stop
-            mediaPlayerWraper.triggerPlayer(mLastVoiceFile.getAbsolutePath(), voiceDuration);
+            mediaPlayerWraper.triggerPlayer(mLastVoiceFile.getAbsolutePath(), voiceDurationMs);
         }
 
     }
@@ -523,7 +527,8 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
             mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
             mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
             mMediaRecorder.setAudioSamplingRate(16000);
-            mLastVoiceFile = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_VOICE, ".m4a");
+            mLastVoiceFile = MediaInputHelper.makeOutputMediaFile(
+                    MediaInputHelper.MEDIA_TYPE_VOICE, "." + ChatMessage.SEND_AUDIO_EXT);
             mMediaRecorder.setOutputFile(mLastVoiceFile.getAbsolutePath());
             mMediaRecorder.prepare();
             mMediaRecorder.start();
@@ -697,7 +702,7 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
         }
     }
 
-    private int voiceDuration;
+    private int voiceDurationMs;
     private void addVoice2moment() {
         if (mLastVoiceFile != null && mLastVoiceFile.exists()) {
             String localFilename = mLastVoiceFile.getAbsolutePath();
@@ -707,15 +712,15 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
             try {
                 mPlayer.setDataSource(mLastVoiceFile.getAbsolutePath());
                 mPlayer.prepare();
-                voiceDuration = mPlayer.getDuration();
+                voiceDurationMs = mPlayer.getDuration();
             } catch (IOException e) {
-                voiceDuration = 0;
+                voiceDurationMs = 0;
                 e.printStackTrace();
             } finally {
                 mPlayer.release();
                 mPlayer = null;
             }
-            WFile f = new WFile(ext, fakeFileId, voiceDuration/1000, localFilename);
+            WFile f = new WFile(ext, fakeFileId, voiceDurationMs /1000, localFilename);
             f.remoteDir = GlobalSetting.S3_MOMENT_FILE_DIR;
             moment.multimedias.add(f);
 
@@ -736,7 +741,7 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
         if(null != file2remove) {
             moment.multimedias.remove(file2remove);
         }
-        voiceDuration=0;
+        voiceDurationMs =0;
 
         mLastVoiceFile.delete();
         mLastVoiceFile=null;

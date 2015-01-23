@@ -24,10 +24,11 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
 
     private static Dialog sDialog;
     private static int sCounter;
+    private static Context context;
 
 	@Override
 	public void onReceive(final Context context, Intent intent) {
-
+		this.context = context;
         Connect2.setContext(context);
 
         /* @Deprecated
@@ -166,9 +167,13 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
             } else {
                 strMessage = null;
             }
-
-			strTickerMsg = strTickerMsg == null ? null : (strCompositeName + " " + strMessage);
+			
+			if(strMessage != null){
+				strTickerMsg = strCompositeName + ":" + strMessage;
+			}
+//			strTickerMsg = strTickerMsg == null ? null : (strCompositeName + " " + strMessage);
 		}
+        
 
         boolean notified = false;
 
@@ -242,7 +247,20 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
 
         return notified;
 	}
-
+    
+    /**
+     * 该方法主要是为了在退出帐号时，取消发给这个帐号的通知，如果不取消，点击通知栏将直接进入全为空的启动页
+     * @author by hutianfeng
+     * @date 2015/1/22
+     */
+    public static void closeNoticeMessage() {
+    	if (context != null) {
+    		NotificationManager manager = (NotificationManager)
+    				context.getSystemService(Context.NOTIFICATION_SERVICE);
+    		manager.cancel(GlobalValue.NOTIFICATION_FOR_CHATMESSAGE);
+    	}
+    }
+    
     private static void fillToastView(View toastView, String buddyName, String message) {
         TextView buddyView = (TextView) toastView.findViewById(R.id.buddy_name);
         TextView msgView = (TextView) toastView.findViewById(R.id.message_content);

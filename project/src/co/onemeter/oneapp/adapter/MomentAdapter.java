@@ -62,7 +62,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     public interface OnMediaPlayFinishListener {
         public void onMediaPlayFinished();
     }
-    
+
     private static Database dbHelper;
 
     private static final String TAG_IS_PLAYING = "isplaying";
@@ -100,7 +100,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
     private boolean isWithFavorite;
     public int countType = -1;//-1全部，0公众账号，1学生账号，2老师账号
-    
+
     //默认的全部adapter
 	public MomentAdapter(Context context, Activity activity, ArrayList<Moment> moments, boolean isSingle,boolean favorite,
                          ImageResizer mImageResizer,
@@ -117,8 +117,8 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
         mediaPlayerWraper=new MediaPlayerWraper(activity, true);
 	}
-	
-	
+
+
 	//0公众账号，1学生账号，2老师账号,账号对应的adapter
 	public MomentAdapter(Context context, Activity activity, ArrayList<Moment> moments, boolean isSingle,boolean favorite,
             ImageResizer mImageResizer,
@@ -135,7 +135,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 		this.countType = countType;
 		mediaPlayerWraper=new MediaPlayerWraper(activity, true);
 }
-	
+
 
     public void setNewReviewCount(int count) {
         newReviewCount=count;
@@ -181,10 +181,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             return VIEW_TYPE_LOADMORE;
         return VIEW_TYPE_DEFAULT;
     }
-    
+
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-    
+
         if(isNewReviewViewAvaliable()) {
             if(0 == position) {
                 //new reivew layout
@@ -197,7 +197,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         } else {
             if(isMyMomentEntryAvaliable() && 0 == position) {
                 return getMyMomentEntryView();
-                
+
             }
         }
 
@@ -231,7 +231,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         ArrayList<WFile> photoFiles = new ArrayList<WFile>();
         WFile voiceFile = null;
         for (WFile file : moment.multimedias) {
-            if (file.getExt().equals("aac") || file.getExt().equals("m4a") || file.getExt().equals("3gpp")) {
+            if (file.isAudioByExt()) {
                 voiceFile = file;
             } else {
                 photoFiles.add(file);
@@ -248,7 +248,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 		if (null == convertView || null == convertView.getTag()) {
             convertView = LayoutInflater.from(context).inflate(R.layout.listitem_trend_friend, null);
 			holder = new ViewHolder();
-		
+
 			holder.imgThumbnail = (ImageView) convertView.findViewById(R.id.img_thumbnail);
 			holder.imgTagTeacher = (ImageView) convertView.findViewById(R.id.imageView_tag_tea);
             holder.txtDate = (TextView) convertView.findViewById(R.id.txt_date);
@@ -293,7 +293,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		
+
 		final WFile file = voiceFile;
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -302,7 +302,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             		mediaPlayerWraper.stop();
             		holder.micButton.setImageResource(R.drawable.timeline_player_play);
                     holder.micTime.setText(String.format(TimerTextView.VOICE_LEN_DEF_FORMAT, file.duration / 60, file.duration % 60));
-                    
+
             	}
                 if (mReplyDelegate != null) {
                     mReplyDelegate.onMomentClicked(position, moment);
@@ -313,7 +313,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
         setTagDescInfo(holder,moment);
         setupOpButtons(holder,moment,momentPos,likeReview,commentReview);
-        
+
 
         setTimeForAll(holder.txtTime, Long.valueOf(moment.timestamp * 1000));
         if (moment.owner != null && !Utils.isNullOrEmpty(moment.owner.userID)) {
@@ -330,7 +330,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                     }
                 }
             });
-            
+
         }
         if (moment.owner != null) {
             holder.txtName.setText(TextUtils.isEmpty(moment.owner.alias) ? moment.owner.nickName : moment.owner.alias);
@@ -367,12 +367,12 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 }
             });
         }
-        
-		return convertView;	 
-	}
-	
 
-	
+		return convertView;
+	}
+
+
+
     public static void setStringAsURLIfAvaliable(TextView tv2set,String str,boolean withClick) {
         CharSequence result=str;
         boolean isValidURLExist=false;
@@ -453,10 +453,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     }
 
     private static void setSurveyInfo(final Context context,final Moment moment,final LinearLayout voteSurveyLayout,final LinearLayoutAsListView lvSurveyOptions,final ArrayList<String> choosed,final Button btnSurvey) {
-        if(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag) || Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {   
-        	
+        if(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag) || Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
+
         	moment.showVoteInfo();
-        	
+
             voteSurveyLayout.setVisibility(View.VISIBLE);
 
             TextView tvSurveyDeadLineIndicate=(TextView) voteSurveyLayout.findViewById(R.id.survey_dead_line_indicate);
@@ -520,10 +520,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 //voted,show vote factor
                 btnSurvey.setVisibility(View.GONE);
                 lvSurveyOptions.setListAdapter(new SurveyVotedDisplayAdapter(context,moment.surveyOptions));
-                
+
                 //投票刷新成功，取消观察者的监听
-        //        Database.removeDBTableChangeListener(momentObserver);             
-                
+        //        Database.removeDBTableChangeListener(momentObserver);
+
 //                ListHeightUtil.setListHeight(lvSurveyOptions);
             } else {
                 //not vote yet,show to vote
@@ -539,7 +539,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //                        }
 //                    }
 //                });
-                
+
                 lvSurveyOptions.setListAdapter(adapter);
 //                ListHeightUtil.setListHeight(lvSurveyOptions);
 
@@ -552,10 +552,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                         doVoteSurvey(context,moment,choosed,voteSurveyLayout,lvSurveyOptions,choosed,btnSurvey);
                     }
                 });
-                
 
-             
-                
+
+
+
                 //现在投票刷新后就不需要进行显示按钮了
 //                if(0 == choosed.size()) {
 //                    btnSurvey.setBackgroundResource(R.drawable.btn_gray_selector);
@@ -566,10 +566,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         } else {
             voteSurveyLayout.setVisibility(View.GONE);
         }
-        
+
     }
 
-    
+
     private static void doVoteSurvey(final Context context,final Moment moment,final ArrayList<String> selectedOptionList,
                                      final LinearLayout voteSurveyLayout,final LinearLayoutAsListView lvSurveyOptions,final ArrayList<String> choosed,final Button btnSurvey) {
         final MessageBox msgBox=new MessageBox(context);
@@ -651,14 +651,14 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.tvMomentShareRange.setVisibility(View.GONE);
             holder.ivMomentShareRange.setVisibility(View.GONE);
         } else {
-        	
+
 //            holder.tvMomentShareRange.setVisibility(View.VISIBLE);
 //            holder.ivMomentShareRange.setVisibility(View.VISIBLE);
         }
-        
+
         Database dbHelper = new Database(context);
         int ownerType = dbHelper.getBuddyCountType(moment.owner.userID);
-        
+
         if (ownerType == 2) {//老师帐号显示老师标记
         	holder.imgTagTeacher.setVisibility(View.VISIBLE);
         } else {//非老师帐号无标记
@@ -750,7 +750,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //            holder.layoutLike.setEnabled(true);
             holder.btnLike.setBackgroundResource(R.drawable.timeline_like);
         }
-        
+
 //        if (moment.allowReview) {
 //        	holder.btnComment.setBackgroundResource(R.drawable.share_icon_comment);
 //        } else {
@@ -777,7 +777,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //        } else {
 //        	holder.btnAnswer.setBackgroundResource(R.drawable.profile_btn_message_p);
 //        }
-        
+
         holder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -796,7 +796,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 if (mReplyDelegate != null) {
                     mReplyDelegate.replyToMoment(position, moment, null, true);
                 }
-                
+
             }
         });
         holder.btnComment.setOnClickListener(new View.OnClickListener() {
@@ -844,7 +844,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //                e.printStackTrace();
 //            }
 //        }
-    	
+
         try {
             newReviewView=LayoutInflater.from(context).inflate(R.layout.new_review_layout, null);
             TextView tvDesc=(TextView) newReviewView.findViewById(R.id.txt_desc);
@@ -991,9 +991,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
 
     static class ViewHolder {
-    	
+
 //    	LinearLayout layout_friend_item;//item的整个布局
-    	
+
 		ImageView imgThumbnail;
 		ImageView imgTagTeacher;
 		TextView txtName;
@@ -1023,7 +1023,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //        RelativeLayout rlMomentFavoriteLayout;
 //        ImageView ivMomentFavorite;
 //        ImageView ivMomentOpEllipse;
-		
+
 		LinearLayout layoutReview;
 
         LinearLayout micLayout;
@@ -1381,7 +1381,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     {
     	public void onTaskPost(boolean isSuccess);
     }
-    
+
     private class DlVoiceFileTask extends AsyncTask<Void, Integer, Void>
     {
 		public IOnDlVoiceFileTaskPostListener listener;
@@ -1394,12 +1394,12 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 			return null;
 		}
     }
-    
+
     //切换tag时候调用
     public void removeMediaPlayListener()
     {
     	mediaPlayerWraper.setWraperListener(null);
-    	
+
     	//切换tag时，正在下载的item 引用更新
     	Iterator<Entry<String, DlVoiceFileTask>> iter = mDlVoiceFileTaskMap.entrySet().iterator();
     	while (iter.hasNext()) {
@@ -1408,7 +1408,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     		val.setOnDlVoiceFileTaskPostListener(null);
     	}
     }
-    
+
     private String mCurrentPlayingVoicePath;
     private void setViewForVoice(final LinearLayout voiceLayout, final ImageView micButton,
                                  final ProgressBar progress, final TimerTextView micTime, final WFile file) {
@@ -1447,13 +1447,13 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             micButton.setImageResource(R.drawable.timeline_player_play);
             micTime.setText(String.format(TimerTextView.VOICE_LEN_DEF_FORMAT, file.duration / 60, file.duration % 60));
         }
-        
+
         //当前item是否正在下载音频文件
         if(mDlVoiceFileTaskMap.containsKey(localPath))
         {
         	 micButton.setVisibility(View.GONE);
              progress.setVisibility(View.VISIBLE);
-             
+
              //更新控件的引用，原因同 micTime 一样，不同tag的不同item可能持有相同控件的引用
              DlVoiceFileTask task = mDlVoiceFileTaskMap.get(localPath);
              if(task != null)
@@ -1545,20 +1545,20 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         for (int i = 0; i < reviews.size(); i++) {
             final Review review = reviews.get(i);
             if (review == null || review.type != Review.TYPE_LIKE)
-                continue;																																																																								
+                continue;
 
             if (cnt > 0) {
                 textView.append(context.getResources().getString(R.string.symbol_comma), null,
                         0, 0, 0, null);
             }
             ++cnt;
-            
+
             if (!TextUtils.isEmpty(review.nickname)) {
                 textView.append(review.nickname, null,
-                        context.getResources().getColor(R.color.blue),																																																																																																																																																																																																																																																																																																					
+                        context.getResources().getColor(R.color.blue),
                         0,
-                        context.getResources().getColor(R.color.text_gray3),																																																																																																																																																																																																		
-                        new View.OnClickListener() {																																																																																					
+                        context.getResources().getColor(R.color.text_gray3),
+                        new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         TimelineActivity.launch(context, review.uid, review.nickname);

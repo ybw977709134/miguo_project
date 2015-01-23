@@ -1,7 +1,6 @@
 package org.wowtalk.ui.msg;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +10,7 @@ import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
+<<<<<<< HEAD
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,19 +19,19 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.PowerManager;
 import android.provider.DocumentsContract;
+=======
+import android.os.*;
+>>>>>>> origin/dev
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.pzy.paint.BitmapPreviewActivity;
 import com.pzy.paint.DoodleActivity;
-
 import org.wowtalk.Log;
+import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.Moment;
 import org.wowtalk.ui.MediaInputHelper;
@@ -1086,7 +1086,7 @@ public class InputBoardManager implements Parcelable,
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
             mRecorder.setAudioSamplingRate(16000);
             mLastVoiceFile = MediaInputHelper.makeOutputMediaFile(
-                    MediaInputHelper.MEDIA_TYPE_VOICE, ".m4a");
+                    MediaInputHelper.MEDIA_TYPE_VOICE, "." + ChatMessage.SEND_AUDIO_EXT);
             mRecorder.setOutputFile(mLastVoiceFile.getAbsolutePath());
             mRecorder.prepare();
             mRecorder.start();

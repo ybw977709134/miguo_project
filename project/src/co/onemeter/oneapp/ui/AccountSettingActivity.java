@@ -158,6 +158,9 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 				if (StartActivity.isInstanciated()) {
 					StartActivity.instance().finish();
 				}
+				//帐号登出前，清除消息通知
+				IncomeMessageIntentReceiver.closeNoticeMessage();
+				
 				Intent intent = new Intent(AccountSettingActivity.this, LoginActivity.class);
 				startActivity(intent);
 

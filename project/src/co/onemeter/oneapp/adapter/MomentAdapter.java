@@ -656,12 +656,18 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //            holder.ivMomentShareRange.setVisibility(View.VISIBLE);
         }
 
-        Database dbHelper = new Database(context);
-        int ownerType = dbHelper.getBuddyCountType(moment.owner.userID);
-
-        if (ownerType == 2) {//老师帐号显示老师标记
+//        Database dbHelper = new Database(context);
+//        int ownerType = dbHelper.getBuddyCountType(moment.owner.userID);
+//
+//        if (ownerType == 2) {//老师帐号显示老师标记
+//        	holder.imgTagTeacher.setVisibility(View.VISIBLE);
+//        } else {//非老师帐号无标记
+//        	holder.imgTagTeacher.setVisibility(View.GONE);
+//        }
+        //无需查询数据库，可获得当前动态的帐号类型
+        if (null != moment.owner && moment.owner.getAccountType() == 2) {
         	holder.imgTagTeacher.setVisibility(View.VISIBLE);
-        } else {//非老师帐号无标记
+        } else {
         	holder.imgTagTeacher.setVisibility(View.GONE);
         }
     }

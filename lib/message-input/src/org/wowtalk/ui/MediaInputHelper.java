@@ -52,7 +52,6 @@ public class MediaInputHelper implements Parcelable {
 
 	/* MediaStore.ACTION_IMAGE_CAPTURE will not return the Uri passed as EXTRA_OUTPUT. */
 	private Uri mLastImageUri = null;
-	private Uri mLastVideoUri;
 	private ChangeToOtherAppsListener mChangeAppsListener;
 
     public MediaInputHelper() {
@@ -282,8 +281,6 @@ public class MediaInputHelper implements Parcelable {
         PackageManager pm = activity.getPackageManager();
         if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             Intent recoderIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-            mLastVideoUri = Uri.fromFile(makeOutputMediaFile(MEDIA_TYPE_VIDEO, null)); // create a file to save the image
-            recoderIntent.putExtra(MediaStore.EXTRA_OUTPUT, mLastVideoUri); // set the image file name
             recoderIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0); // low resolution
             recoderIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 1200);
 
@@ -319,8 +316,6 @@ public class MediaInputHelper implements Parcelable {
         PackageManager pm = activity.getPackageManager();
         if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             Intent recoderIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-            mLastVideoUri = Uri.fromFile(makeOutputMediaFile(MEDIA_TYPE_VIDEO, null)); // create a file to save the image
-            recoderIntent.putExtra(MediaStore.EXTRA_OUTPUT, mLastVideoUri); // set the image file name
             recoderIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0); // low resolution
             recoderIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 1200);
             activity.startActivityForResult(recoderIntent, requestCode);
@@ -577,12 +572,14 @@ public class MediaInputHelper implements Parcelable {
 
         Uri uri = null;
         if(data == null || data.getData() == null) {
-            // got a new photo via camera
-            uri = mLastVideoUri;
+            // impossible
         } else {
             // picked a existed picture
             uri = data.getData();
         }
+
+        if (uri == null)
+            return false;
 
         final Uri furi = uri;
 
@@ -810,7 +807,6 @@ public class MediaInputHelper implements Parcelable {
 	@Override
 	public void writeToParcel(Parcel arg0, int arg1) {
 		arg0.writeParcelable(mLastImageUri, 0);
-		arg0.writeParcelable(mLastVideoUri, 0);
 	}
 
 	public static final Parcelable.Creator<MediaInputHelper> CREATOR =
@@ -820,7 +816,6 @@ public class MediaInputHelper implements Parcelable {
 				public MediaInputHelper createFromParcel(Parcel souParcel) {
 					MediaInputHelper m = new MediaInputHelper(null);
 					m.mLastImageUri = souParcel.readParcelable(Uri.class.getClassLoader());
-					m.mLastVideoUri = souParcel.readParcelable(Uri.class.getClassLoader());
 					return m;
 				}
 

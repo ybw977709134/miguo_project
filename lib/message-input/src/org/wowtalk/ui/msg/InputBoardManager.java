@@ -6,15 +6,19 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.PowerManager;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.DisplayMetrics;
@@ -1179,6 +1183,11 @@ public class InputBoardManager implements Parcelable,
             case REQ_INPUT_PHOTO:
             	if(data != null){
                 	mImageCaptureUri = data.getData();
+                	if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                		File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_IMAGE, ".jpg");
+                		outputUri = Uri.fromFile(f);
+                	}
+                	Log.i("--mImageCaptureUri--" + mImageCaptureUri);
                 	doCrop(outputUri);	
             	}else{
             		
@@ -1208,13 +1217,21 @@ public class InputBoardManager implements Parcelable,
                 break;
             case REQ_INPUT_CROP:
                 if (null != mMediaInputHelper) {
+                	//Log.i("--after crop data --" + data.getData());
+                	//针对部分4.4机型返回的intent(data)为空，重新传进之前的Uri
+                	if(data.getData() == null){
+                		data = new Intent();
+                		data.setData( outputUri);
+                	}
                     String[] photoPath = new String[2];
-                    if (mMediaInputHelper.handleImageResult(
+                    boolean istrue =mMediaInputHelper.handleImageResult(
                             mContext,
                             data,
                             PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
                             PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
-                            photoPath)) {
+                            photoPath);
+                    Log.i("--istrue--" + istrue);
+                    if (istrue) {
                         doodleOutFilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
                         mContext.startActivityForResult(
                                 new Intent(mContext, BitmapPreviewActivity.class)
@@ -1396,6 +1413,7 @@ public class InputBoardManager implements Parcelable,
 		intent.putExtra("scaleUpIfNeeded", true);
 		intent.putExtra("return-data", false);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT,outputUri);
+		Log.i("--outputUri--" + outputUri);
 		mContext.startActivityForResult(intent, REQ_INPUT_CROP);			
 	}
 
@@ -1407,6 +1425,7 @@ public class InputBoardManager implements Parcelable,
 		intent.putExtra("aspectY", 1);
 		intent.putExtra("scaleUpIfNeeded", true);
 		intent.putExtra("return-data", false);
+		intent.putExtra("noFaceDetection", true);  //取消人脸识别功能
 		intent.putExtra(MediaStore.EXTRA_OUTPUT,outputUri2);
 		mContext.startActivityForResult(intent, REQ_INPUT_PHOTO_FOR_DOODLE_CROP);			
 	}

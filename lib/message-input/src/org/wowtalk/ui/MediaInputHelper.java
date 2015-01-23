@@ -378,6 +378,8 @@ public class MediaInputHelper implements Parcelable {
             return false;
         }
         Log.i("MediaInputHelper#handleImageResult, uri is " + uri.toString());
+        Log.i("--mLastImageUri--" + mLastImageUri);
+        Log.i("--inputUri--" + uri);
 
 		boolean operationFailed = false;
 		File thumbnailFile = null;
@@ -411,6 +413,7 @@ public class MediaInputHelper implements Parcelable {
                 }
             } else {
                 String inputImgPath = resolveMediaPath(activity, uri, MEDIA_TYPE_IMAGE);
+        		Log.i("--inputImgPath--" + inputImgPath);
                 if(inputImgPath != null && new File(inputImgPath).exists()) {
                     Bitmap littleBmp = BmpUtils.decodeFile(
                             inputImgPath,
@@ -689,6 +692,9 @@ public class MediaInputHelper implements Parcelable {
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
         // DocumentProvider
+        //Log.i("-- DocumentsContract--" +  DocumentsContract.isDocumentUri(activity, uri)); //actually always return false
+        //Log.i("-- getScheme--" + uri.getScheme()); //when choose pic  alwasys return "file"
+
         if (isKitKat && DocumentsContract.isDocumentUri(activity, uri)) {
             // ExternalStorageProvider
             if (isExternalStorageDocument(uri)) {

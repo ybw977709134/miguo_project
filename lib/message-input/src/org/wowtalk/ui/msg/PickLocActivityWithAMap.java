@@ -63,8 +63,13 @@ public class PickLocActivityWithAMap extends FragmentActivity implements AMapLoc
             double lon = data.getDouble("target_lon");
 
             if(Math.abs(lat) > Double.MIN_NORMAL && Math.abs(lon) > Double.MIN_NORMAL) {
+            	Log.i("-->>" + lat + "/" + lon);
+            	findViewById(R.id.btn_done).setVisibility(View.GONE);
+            	findViewById(R.id.txt_title).setVisibility(View.GONE);
                 changeCamera(lat, lon, null);
             } else {
+                aMap.setOnCameraChangeListener(this);
+
                 //move to last known position
                 LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
                 Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -72,7 +77,7 @@ public class PickLocActivityWithAMap extends FragmentActivity implements AMapLoc
                     location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 }
                 if(null != location) {
-                    Log.d("last location known");
+                    Log.i("last location known");
                     changeCamera(location.getLatitude(), location.getLongitude(), null);
                 } else {
                     double latitude=getLastSavedLatitude();
@@ -107,7 +112,6 @@ public class PickLocActivityWithAMap extends FragmentActivity implements AMapLoc
 
         //require update
         mAMapLocationManager = LocationManagerProxy.getInstance(this);
-        aMap.setOnCameraChangeListener(this);
 
         setLocationIndicator(aMap.getCameraPosition().target.latitude,aMap.getCameraPosition().target.longitude);
     }
@@ -133,8 +137,8 @@ public class PickLocActivityWithAMap extends FragmentActivity implements AMapLoc
     }
 
     private void changeCamera(double latitude,double longitude, AMap.CancelableCallback callback) {
-        CameraUpdate cameraUpdate= CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                .target(new LatLng(latitude, longitude)).zoom(18).bearing(0).build());
+        CameraUpdate cameraUpdate= CameraUpdateFactory.newCameraPosition(new CameraPosition(
+				new LatLng(latitude, longitude), 18, 0, 30));
         if (cameraMoveWithAnim) {
             aMap.animateCamera(cameraUpdate, cameraMoveAnimInterval, callback);
         } else {
@@ -157,10 +161,10 @@ public class PickLocActivityWithAMap extends FragmentActivity implements AMapLoc
         if(setNewMark) {
             aMap.clear();
             aMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(latitude, longitude))
+                    .position(new LatLng(latitude, longitude)).anchor(0.5f, 0.5f)
                     .title("Current Position")
                     .icon(BitmapDescriptorFactory
-                            .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                            .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).draggable(false));
         }
         setLocationIndicator(latitude,longitude);
     }

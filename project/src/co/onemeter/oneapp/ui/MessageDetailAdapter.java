@@ -788,23 +788,23 @@ public class MessageDetailAdapter extends BaseAdapter{
     }
 
     public static void viewLocationInfo(Context context,double flat,double flon,String faddr) {
-        String uriStr = String.format("geo:%f,%f?z=17&q=%f,%f",
-                flat, flon, flat, flon);
-        if (!Utils.isNullOrEmpty(faddr))
-            uriStr += "(" + faddr + ")";
-        Intent geoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uriStr));
-        PackageManager pm = context.getPackageManager();
-        List<ResolveInfo> activities = pm.queryIntentActivities(geoIntent, 0);
-        if(activities.isEmpty()) {
-            Intent i = new Intent(context, PickLocActivity.class);
+//        String uriStr = String.format("geo:%f,%f?z=17&q=%f,%f",
+//                flat, flon, flat, flon);
+//        if (!Utils.isNullOrEmpty(faddr))
+//            uriStr += "(" + faddr + ")";
+//        Intent geoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uriStr));
+//        PackageManager pm = context.getPackageManager();
+//        List<ResolveInfo> activities = pm.queryIntentActivities(geoIntent, 0);
+//        if(activities.isEmpty()) {
+            Intent i = new Intent(context, PickLocActivityWithAMap.class);
             i.putExtra("target_lat", flat);
             i.putExtra("target_lon", flon);
             i.putExtra("no_pick", true);
             context.startActivity(i);
-        } else {
-            AppStatusService.setIsMonitoring(false);
-            context.startActivity(geoIntent);
-        }
+//        } else {
+//            AppStatusService.setIsMonitoring(false);
+//            context.startActivity(geoIntent);
+//        }
     }
 
     private void setViewForVoice(View rootView, final ChatMessage message) {

@@ -586,7 +586,7 @@ public class ChatMessage {
      * </ul>
      */
 	public String getMediaFileID() {
-		Pattern p = Pattern.compile("pathoffileincloud\" *: *\"([0-9a-zA-Z-_]+)");
+		Pattern p = Pattern.compile("[^_]pathoffileincloud\" *: *\"([0-9a-zA-Z-_]+)");
 		Matcher m = p.matcher(messageContent);
 		if(m.find())
 			return m.group(1);

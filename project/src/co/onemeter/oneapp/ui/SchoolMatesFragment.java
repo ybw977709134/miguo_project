@@ -84,11 +84,14 @@ public class SchoolMatesFragment extends Fragment
                 if (errno == ErrorCode.OK) {
                     new Database(getActivity()).storeSchools(schools);
                 }
-                else if(errno == ErrorCode.OPERATION_FAILED){
-            		
-            	}else {
-                    msgbox.toast(R.string.timeout_message);
-                }
+                else{
+                	schools = new Database(getActivity()).fetchSchools();
+                	if(schools != null && !schools.isEmpty()){
+                    	msgbox.toast(R.string.timeout_message); 
+                	}else if(schools == null && schools.isEmpty()) {
+                		msgbox.toast(R.string.no_school_class); 
+                	}          	
+            	}
 
                 updateUi();
             }

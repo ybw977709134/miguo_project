@@ -402,6 +402,7 @@
     <string name="add">添加</string>
     <string name="timeout_message">当前网络状态异常，请稍候再试</string>
     <string name="timeout_contacts_message">连接超时，请检查网络连接</string>
+    <string name="no_school_class">没有班级组织结构</string>
     <string name="decline">拒绝</string>
     <string name="ignore">忽略</string>
     <string name="contacts_local">手机通讯录</string>

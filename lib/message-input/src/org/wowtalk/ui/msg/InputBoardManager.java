@@ -9,7 +9,13 @@ import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
-import android.os.*;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.DisplayMetrics;
@@ -201,12 +207,10 @@ public class InputBoardManager implements Parcelable,
 
     private String doodleOutFilename;
     private String previewOutFilename;
-//    private Uri mImageCaptureUri;
-    private Uri outputUri = null;
     
-    private Uri mImageCaptureUri2;
+    private Uri outputUri = null;
     private Uri outputUri2 = null;
-    private Uri  mImageCaptureUri;
+    
     private Handler hanlder = new Handler(){
     	public void handleMessage(android.os.Message msg) {
     		if(msg.what == 0){
@@ -1170,8 +1174,13 @@ public class InputBoardManager implements Parcelable,
                 break;
             case REQ_INPUT_PHOTO:
             	if(data != null){
-                	mImageCaptureUri = data.getData();
-                	doCrop(outputUri);	
+                	Uri  mImageCaptureUri = data.getData();
+                	if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                		File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_IMAGE, ".jpg");
+                		outputUri = Uri.fromFile(f);
+                	}
+                	Log.i("--mImageCaptureUri--" + mImageCaptureUri);
+                	doCrop(mImageCaptureUri,outputUri);	
             	}else{
             		
 //            		doCrop(outputUri);	
@@ -1200,13 +1209,21 @@ public class InputBoardManager implements Parcelable,
                 break;
             case REQ_INPUT_CROP:
                 if (null != mMediaInputHelper) {
+                	//Log.i("--after crop data --" + data.getData());
+                	//针对部分4.4机型返回的intent(data)为空，重新传进之前的Uri
+                	if(data.getData() == null){
+                		data = new Intent();
+                		data.setData( outputUri);
+                	}
                     String[] photoPath = new String[2];
-                    if (mMediaInputHelper.handleImageResult(
+                    boolean istrue =mMediaInputHelper.handleImageResult(
                             mContext,
                             data,
                             PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
                             PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
-                            photoPath)) {
+                            photoPath);
+                    Log.i("--istrue--" + istrue);
+                    if (istrue) {
                         doodleOutFilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
                         mContext.startActivityForResult(
                                 new Intent(mContext, BitmapPreviewActivity.class)
@@ -1245,7 +1262,11 @@ public class InputBoardManager implements Parcelable,
             }
             case REQ_INPUT_PHOTO_FOR_DOODLE:
             	if(data != null){
-            		mImageCaptureUri2 = data.getData();
+            		Uri mImageCaptureUri2 = data.getData();
+            		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                		File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_IMAGE, ".jpg");
+                		outputUri2 = Uri.fromFile(f);
+                	}
             		doCrop_doodle(mImageCaptureUri2,outputUri2);
             	}else {
                     if (null != mMediaInputHelper) {
@@ -1273,6 +1294,12 @@ public class InputBoardManager implements Parcelable,
                 break;
             case REQ_INPUT_PHOTO_FOR_DOODLE_CROP:
                 if (null != mMediaInputHelper) {
+                	//Log.i("--after crop data --" + data.getData());
+                	//针对部分4.4机型返回的intent(data)为空，重新传进之前的Uri
+                	if(data.getData() == null){
+                		data = new Intent();
+                		data.setData( outputUri2);
+                	}
                     String[] photoPath = new String[2];
                     if (mMediaInputHelper.handleImageResult(
                             mContext,
@@ -1379,21 +1406,22 @@ public class InputBoardManager implements Parcelable,
         drawableResId().voicePressed = R.drawable.sms_voice_btn_p;
     }
     
-	private void doCrop(Uri outputUri) {
+	private void doCrop(Uri imageUri,Uri outputUri) {
 		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setDataAndType(mImageCaptureUri, "image/*");
+		intent.setDataAndType(imageUri, "image/*");
 		intent.putExtra("scale", true);
 		intent.putExtra("aspectX", 1);
 		intent.putExtra("aspectY", 1);
 		intent.putExtra("scaleUpIfNeeded", true);
 		intent.putExtra("return-data", false);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT,outputUri);
+		//Log.i("--outputUri--" + outputUri);
 		mContext.startActivityForResult(intent, REQ_INPUT_CROP);			
 	}
 
-	private void doCrop_doodle(Uri picUri2, Uri outputUri2) {
+	private void doCrop_doodle(Uri imageUri, Uri outputUri2) {
 		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setDataAndType(picUri2, "image/*");
+		intent.setDataAndType(imageUri, "image/*");
 		intent.putExtra("scale", true);
 		intent.putExtra("aspectX", 1);
 		intent.putExtra("aspectY", 1);

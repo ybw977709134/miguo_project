@@ -207,7 +207,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
                 if (buddyAdapter != null) {
                     buddyAdapter.addAll(results);
-                    setSearchResultStatus();
+//                    setSearchResultStatus();
+                    fShowBuddyResult();
                 } else {
                     searchedBuddyList.addAll(results);
                     fShowBuddyResult();
@@ -249,7 +250,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 
                 if (buddyAdapter != null) {
                     buddyAdapter.addAll(results);
-                    setSearchResultStatus();
+//                    setSearchResultStatus();
+                    fShowBuddyResult();
                 } else {
                     searchedBuddyList.addAll(results);
                     fShowBuddyResult();

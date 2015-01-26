@@ -50,5 +50,6 @@
     <orderEntry type="library" scope="PROVIDED" name="wowtalk_service" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="android-query" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="amap" level="project" />
+    <orderEntry type="module" module-name="recording" />
   </component>
 </module>

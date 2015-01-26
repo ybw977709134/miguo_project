@@ -625,6 +625,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Green" >
         </activity>
+		<activity
+			android:name="com.skd.androidrecording.ui.VideoRecordingActivity"
+			android:screenOrientation="portrait" >
+		</activity>
+		<activity
+			android:name="com.skd.androidrecording.ui.VideoPlaybackActivity"
+			android:screenOrientation="portrait" >
+		</activity>
 	</application>
 
 </manifest>

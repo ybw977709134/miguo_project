@@ -4,9 +4,13 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.IHasPhoto;
 import org.wowtalk.api.Utils;
+
+import com.baidu.cyberplayer.utils.bu;
+
 import co.onemeter.oneapp.ui.ContactInfoActivity;
 import co.onemeter.oneapp.ui.StartActivity;
 
@@ -72,7 +76,9 @@ public class Person implements IHasPhoto, Parcelable{
 
     private static void fetchPersonInfoFromBuddy(Person person,Buddy buddy) {
         person.ID = buddy.userID;
-        if (!TextUtils.isEmpty(buddy.nickName)) {
+        if (!TextUtils.isEmpty(buddy.alias)) {//如果备注名部位空，优先显示备注名
+        	person.name = buddy.alias;
+        } else if (TextUtils.isEmpty(buddy.alias) && !TextUtils.isEmpty(buddy.nickName)) {
 //            person.sortKey = buddy.nickName.substring(0, 1);
             person.name = buddy.nickName;
         } else {

@@ -1,603 +1,603 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="co.onemeter.oneapp"
-          android:versionCode="8"
-          android:versionName="2.1.0.0116" >
+    package="co.onemeter.oneapp"
+    android:versionCode="8"
+    android:versionName="2.1.0.0116" >
 
-	<!-- 在 Android 2.3 上，PullToRefreshListView 产生 stack overflow 错误。 -->
-	<uses-sdk
-		android:minSdkVersion="11"
-		android:targetSdkVersion="17" />
+    <!-- 在 Android 2.3 上，PullToRefreshListView 产生 stack overflow 错误。 -->
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="17" />
 
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.READ_CONTACTS" />
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.RECORD_AUDIO" />
-	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.WAKE_LOCK" />
-	<!-- <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" /> -->
-	<uses-permission android:name="android.permission.CALL_PHONE" />
-	<uses-permission android:name="android.permission.BOOT_COMPLETED" />
-	<uses-permission android:name="android.permission.VIBRATE" />
-	<uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-	<uses-permission android:name="android.permission.CAMERA" />
-	<uses-permission android:name="android.permission.READ_CONTACTS" />
-	<uses-permission android:name="android.permission.WRITE_CONTACTS" />
-	<uses-permission android:name="android.permission.SEND_SMS" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.RECORD_AUDIO" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" /> -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-        <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <!-- AMap permisson -->
     <uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
-	<uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
     <!-- 显示整个应用范围内Dialog -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
-	<!-- required by google maps -->
-	<uses-feature
-		android:glEsVersion="0x00020000"
-		android:required="true" />
-	<!-- required by google maps -->
-	<permission
-		android:name="org.wowtalk.permission.MAPS_RECEIVE"
-		android:protectionLevel="signature" />
-	<!-- required by google maps -->
-	<uses-permission android:name="org.wowtalk.permission.MAPS_RECEIVE" />
-	<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <!-- required by google maps -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+    <!-- required by google maps -->
+    <permission
+        android:name="org.wowtalk.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+    <!-- required by google maps -->
+    <uses-permission android:name="org.wowtalk.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
-	<application
-		android:icon="@drawable/icon"
-		android:label="@string/app_name"
-		android:theme="@android:style/Theme.NoTitleBar" >
-		<!-- required by google maps -->
-		<meta-data
-			android:name="com.google.android.maps.v2.API_KEY"
-			android:value="AIzaSyCFNTi3hn1MOfB8ZMEYQFz48BL_Xsdqy7Y" />
-		
-    <!-- required by amaps
+    <application
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.NoTitleBar" >
+
+        <!-- required by google maps -->
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyCFNTi3hn1MOfB8ZMEYQFz48BL_Xsdqy7Y" />
+
+        <!--
+         required by amaps
          api key:
          "4ad433266047f830a8815639b89d3852" (debug) />
          "23453ff346be0404d47331f0d841ae98" (release) />
-         "91acec81e0aabe2421dc1bc7e45253f0" (debug@panzy)
-         -->
-		<meta-data
+         "91acec81e0aabe2421dc1bc7e45253f0" (debug@panzy)
+        -->
+        <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="23453ff346be0404d47331f0d841ae98" />
-
         <meta-data
-            android:value="5281ab3456240b5632024ab8"
-            android:name="UMENG_APPKEY"/>
+            android:name="UMENG_APPKEY"
+            android:value="5281ab3456240b5632024ab8" />
 
-		<!-- WowTalkService 在 x86 上不能运行。
-		 -->
-		<service
-			android:name="org.wowtalk.WowTalkService"
-			android:label="WowTalk Notification Center" />
-
-		<service
-			android:name=".ui.PublishMomentService"
-			android:label="WowTalk DownloadingAndUploading Worker" />
+        <!-- WowTalkService 在 x86 上不能运行。 -->
         <service
-            android:name=".ui.AppStatusService"/>
+            android:name="org.wowtalk.WowTalkService"
+            android:label="WowTalk Notification Center" />
+        <service
+            android:name="co.onemeter.oneapp.ui.PublishMomentService"
+            android:label="WowTalk DownloadingAndUploading Worker" />
+        <service android:name="co.onemeter.oneapp.ui.AppStatusService" />
 
-		<receiver android:name=".ui.PhoneStateChangedReceiver" >
-			<intent-filter>
-				<action android:name="android.intent.action.PHONE_STATE" />
-			</intent-filter>
-		</receiver>
-        <receiver android:name=".ui.NetworkStateChangeReceiver" >
+        <receiver android:name="co.onemeter.oneapp.ui.PhoneStateChangedReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="co.onemeter.oneapp.ui.NetworkStateChangeReceiver" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-		<receiver android:name=".ui.BootReceiver" >
-			<intent-filter>
-				<action android:name="android.intent.action.RECEIVE_BOOT_COMPLETED" >
-				</action>
-			</intent-filter>
-		</receiver>
-		<receiver android:name=".ui.IncomeCallIntentReceiver" >
-			<intent-filter>
-				<action android:name="org.wowtalkbiz.intent.incomecall" >
-				</action>
-			</intent-filter>
-		</receiver>
-		<receiver android:name=".ui.IncomeMessageIntentReceiver" >
-			<intent-filter>
-				<action android:name="org.wowtalkbiz.intent.incomemessage" >
-				</action>
-			</intent-filter>
-		</receiver>
-		<receiver android:name=".ui.IncomeMissedCallIntentReceiver" >
-			<intent-filter>
-				<action android:name="org.wowtalkbiz.intent.missedcall" >
-				</action>
-			</intent-filter>
-		</receiver>
-		<receiver android:name=".ui.NetworkExceptionReceiver" >
+        <receiver android:name="co.onemeter.oneapp.ui.BootReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.RECEIVE_BOOT_COMPLETED" >
+                </action>
+            </intent-filter>
+        </receiver>
+        <receiver android:name="co.onemeter.oneapp.ui.IncomeCallIntentReceiver" >
+            <intent-filter>
+                <action android:name="org.wowtalkbiz.intent.incomecall" >
+                </action>
+            </intent-filter>
+        </receiver>
+        <receiver android:name="co.onemeter.oneapp.ui.IncomeMessageIntentReceiver" >
+            <intent-filter>
+                <action android:name="org.wowtalkbiz.intent.incomemessage" >
+                </action>
+            </intent-filter>
+        </receiver>
+        <receiver android:name="co.onemeter.oneapp.ui.IncomeMissedCallIntentReceiver" >
+            <intent-filter>
+                <action android:name="org.wowtalkbiz.intent.missedcall" >
+                </action>
+            </intent-filter>
+        </receiver>
+        <receiver android:name="co.onemeter.oneapp.ui.NetworkExceptionReceiver" >
             <intent-filter>
                 <action android:name="org.wowtalk.api.network_exception" >
                 </action>
             </intent-filter>
         </receiver>
-		<receiver android:name=".ui.AuthFailureReceiver">
-			<intent-filter>
-				<action android:name="org.wowtalk.api.auth_failure" >
-				</action>
-			</intent-filter>
-		</receiver>
-        <receiver android:name=".ui.LocaleChangedReceiver" >
+        <receiver android:name="co.onemeter.oneapp.ui.AuthFailureReceiver" >
             <intent-filter>
-                <action android:name="android.intent.action.LOCALE_CHANGED"/>
-                <action android:name="co.onemeter.oneapp.LOCALE_CHANGED"/>
+                <action android:name="org.wowtalk.api.auth_failure" >
+                </action>
+            </intent-filter>
+        </receiver>
+        <receiver android:name="co.onemeter.oneapp.ui.LocaleChangedReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+                <action android:name="co.onemeter.oneapp.LOCALE_CHANGED" />
             </intent-filter>
         </receiver>
 
-		<activity
-			android:name=".YuanquActivity"
-			android:label="@string/app_name"
-			android:noHistory="true"
-			android:screenOrientation="portrait" >
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
+        <activity
+            android:name="co.onemeter.oneapp.YuanquActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
-		<activity
-			android:name=".ui.StartActivity"
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.StartActivity"
             android:launchMode="singleTask"
-			android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
-		</activity>
-		<activity
-			android:name=".ui.ContactsActivity"
-			android:theme="@style/Theme.Blue"
-			android:screenOrientation="portrait"
-			android:windowSoftInputMode="adjustResize" >
-		</activity>
-		<activity
-            android:name=".ui.FavoriteGroupsSortActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.ContactsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.FavoriteGroupsSortActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" >
         </activity>
-		<activity
-			android:name=".ui.LocalContactsActivity"
-			android:theme="@style/Theme.Blue"
-			android:screenOrientation="portrait"
-			android:windowSoftInputMode="adjustPan">
-		</activity>
-		<activity
-			android:name=".ui.ContactInfoActivity"
-			android:theme="@style/Theme.Blue"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.ContactGroupInfoActivity"
-			android:theme="@style/Theme.Blue"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.ModifyTempGroupChatNameActivity"
-			android:theme="@style/Theme.Red"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.MessageComposerActivity"
-			android:theme="@style/Theme.Red"
-			android:screenOrientation="portrait"
-			android:windowSoftInputMode="adjustResize" >
-		</activity>
-		<activity
-			android:name=".ui.SmsActivity"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.ContactSearchActivity"
-			android:theme="@style/Theme.Blue"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.ContactAddActivity"
-			android:theme="@style/Theme.Blue"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.ContactImportActivity"
-			android:theme="@style/Theme.Blue"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.CreateGroupActivity"
-			android:theme="@style/Theme.Blue"
-			android:screenOrientation="portrait"
-			android:windowSoftInputMode="stateHidden" >
-		</activity>
-		<activity
-			android:name=".ui.CreateEventActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait"
-			android:windowSoftInputMode="stateHidden" >
-		</activity>
-		<activity
-			android:name=".ui.EventActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.EventDetailActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.EventApplyActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.LoginActivity"
-			android:theme="@style/Theme.White"
-            android:launchMode="singleTop"
-			android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
-		</activity>
-        <!--android:noHistory="true"-->
-		<activity
-			android:name=".ui.RegisterActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.CallMainActivity"
-			android:theme="@style/Theme.Green"
-			android:label="@string/app_name"
-			android:launchMode="singleTop"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.IncallActivity"
-			android:launchMode="singleTop"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.VideoCallActivity"
-			android:launchMode="singleTop"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.GroupChatInfoActivity"
-			android:theme="@style/Theme.Red"
-			android:screenOrientation="portrait" >
-		</activity>
         <activity
-            android:name=".ui.SingleContactChatDetailActivity"
-            android:theme="@style/Theme.Red"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".ui.MessageHistoryActivity"
-            android:theme="@style/Theme.Red"
+            android:name="co.onemeter.oneapp.ui.LocalContactsActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|stateAlwaysHidden|adjustResize">
+            android:theme="@style/Theme.Blue"
+            android:windowSoftInputMode="adjustPan" >
         </activity>
-		<activity
-			android:name=".ui.SettingActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait" >
-		</activity>
         <activity
-            android:name=".ui.ManageAccountsActivity"
+            android:name="co.onemeter.oneapp.ui.ContactInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.ContactGroupInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.ModifyTempGroupChatNameActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Red" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.MessageComposerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Red"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.SmsActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.ContactSearchActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.ContactAddActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.ContactImportActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.CreateGroupActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.CreateEventActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Green"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.EventActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.EventDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.EventApplyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.LoginActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.White"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <!-- android:noHistory="true" -->
+        <activity
+            android:name="co.onemeter.oneapp.ui.RegisterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.CallMainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.IncallActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
-		<activity
-			android:name=".ui.AccountSettingActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-            android:name=".ui.PrivacySettingActivity"
-            android:theme="@style/Theme.Green"
-            android:screenOrientation="portrait" >
-        </activity>
-		<activity
-			android:name=".ui.MyInfoActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.InputTextActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-            android:name=".ui.InputSimpleTextActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-		<activity
-            android:name=".ui.AlbumCoverChangeActivity"
-            android:theme="@style/Theme.Blue"
+        <activity
+            android:name="co.onemeter.oneapp.ui.VideoCallActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".ui.ProviderAlbumCoverActivity"
-            android:theme="@style/Theme.Blue"
+            android:name="co.onemeter.oneapp.ui.GroupChatInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Red" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.SingleContactChatDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Red" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.MessageHistoryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Red"
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden|adjustResize" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.SettingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.ManageAccountsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.AccountSettingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.PrivacySettingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.MyInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.InputTextActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.InputSimpleTextActivity"
             android:screenOrientation="portrait" >
         </activity>
-		<activity
-			android:name=".ui.CreateMomentActivity"
-			android:theme="@style/Theme.Blue"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.AboutPage"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.MultiSelectActivity"
-			android:theme="@style/Theme.Red"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.BindPhoneActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.BindEmailActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.BindCodeActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-            android:name=".ui.UnBindActivity"
-            android:theme="@style/Theme.Green"
+        <activity
+            android:name="co.onemeter.oneapp.ui.AlbumCoverChangeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.ProviderAlbumCoverActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.CreateMomentActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.AboutPage"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.MultiSelectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Red" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.BindPhoneActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.BindEmailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.BindCodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.UnBindActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.SettingUsernameActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.SettingPasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.PickTempGroupActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="org.wowtalk.ui.msg.PickLocActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Red" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.HybirdMessageEditor"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Red" >
+        </activity>
+        <activity
+            android:name="org.wowtalk.ui.msg.HybirdImageVoiceTextPreview"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Red" >
+        </activity>
+        <activity
+            android:name="com.pzy.paint.DoodleActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Red" >
+        </activity>
+        <activity
+            android:name="com.pzy.paint.BitmapPreviewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Red" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.NearbyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.ImageViewActivity"
+            android:theme="@style/Theme.Green" />
+        <activity
+            android:name="co.onemeter.oneapp.ui.SelectPhotoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.PublicAccountDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.PublicAccountActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.InputPlainTextActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>            
+        <activity
+            android:name="co.onemeter.oneapp.ui.ApplyInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.GroupMemberManageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.GroupJoinRequestActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.ChooseAreaActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.NewFriendsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.ContactDiscussionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.PublicSearchActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.MomentDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
+        </activity>
+        <activity
+            android:name="co.onemeter.oneapp.ui.NewReviewsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" />
+        <activity
+            android:name="co.onemeter.oneapp.ui.AllMyReviewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="co.onemeter.oneapp.ui.ExternalSearchActivity"
             android:screenOrientation="portrait" >
         </activity>
-		<activity
-			android:name=".ui.SettingUsernameActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.SettingPasswordActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.PickTempGroupActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="org.wowtalk.ui.msg.PickLocActivity"
-			android:theme="@style/Theme.Red"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity android:name=".ui.HybirdMessageEditor"
-		          android:theme="@style/Theme.Red"
-		          android:screenOrientation="portrait" >
-		</activity>
-		<activity android:name="org.wowtalk.ui.msg.HybirdImageVoiceTextPreview"
-		          android:theme="@style/Theme.Red"
-		          android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="com.pzy.paint.DoodleActivity"
-			android:theme="@style/Theme.Red"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="com.pzy.paint.BitmapPreviewActivity"
-			android:theme="@style/Theme.Red"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name=".ui.NearbyActivity"
-			android:theme="@style/Theme.Blue"
-			android:screenOrientation="portrait">
-		</activity>
-		<activity android:name=".ui.ImageViewActivity"
-		          android:theme="@style/Theme.Green"
-			/>
-		<activity
-			android:name=".ui.SelectPhotoActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait">
-		</activity>
-		<activity
-			android:name=".ui.PublicAccountDetailActivity"
-			android:theme="@style/Theme.Blue"
-			android:screenOrientation="portrait">
-		</activity>
-		<activity
-			android:name=".ui.PublicAccountActivity"
-			android:theme="@style/Theme.Blue"
-			android:screenOrientation="portrait">
-		</activity>
-		<activity
-			android:name=".ui.InputPlainTextActivity"
-			android:theme="@style/Theme.Green"
-			android:screenOrientation="portrait">
-		</activity>
         <activity
-            android:name=".ui.ApplyInfoActivity"
-            android:theme="@style/Theme.Blue"
-            android:screenOrientation="portrait">
+            android:name="org.wowtalk.ui.msg.PickLocActivityWithAMap"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".ui.GroupMemberManageActivity"
-            android:theme="@style/Theme.Blue"
-            android:screenOrientation="portrait">
+            android:name="co.onemeter.oneapp.ui.EmergencyContactActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
         </activity>
         <activity
-            android:name=".ui.GroupJoinRequestActivity"
-            android:theme="@style/Theme.Blue"
-            android:screenOrientation="portrait">
+            android:name="co.onemeter.oneapp.ui.ScanQRCodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
         </activity>
         <activity
-            android:name=".ui.ChooseAreaActivity"
-            android:theme="@style/Theme.Blue"
-            android:screenOrientation="portrait">
+            android:name="com.zxing.activity.BarcodeScannerTestActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".ui.NewFriendsActivity"
-            android:theme="@style/Theme.Blue"
-            android:screenOrientation="portrait">
+            android:name="com.zxing.activity.CaptureActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".ui.ContactDiscussionActivity"
-            android:theme="@style/Theme.Blue"
-            android:screenOrientation="portrait">
+            android:name="co.onemeter.oneapp.ui.MyQRCodeActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".ui.PublicSearchActivity"
-            android:theme="@style/Theme.Blue"
-            android:screenOrientation="portrait">
+            android:name="co.onemeter.oneapp.ui.CreateNormalMomentWithTagActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
         </activity>
         <activity
-            android:name=".ui.MomentDetailActivity"
-            android:theme="@style/Theme.Blue"
-            android:screenOrientation="portrait">
-        </activity>
-		<activity android:name=".ui.NewReviewsActivity"
-		          android:theme="@style/Theme.Blue"
-		          android:screenOrientation="portrait"/>
-        <activity android:name=".ui.AllMyReviewActivity"
-                  android:screenOrientation="portrait"/>
-		<activity
-			android:name=".ui.ExternalSearchActivity"
-			android:screenOrientation="portrait">
-		</activity>
-
-        <activity
-                android:name="org.wowtalk.ui.msg.PickLocActivityWithAMap"
-                android:screenOrientation="portrait" >
-        </activity>
-
-        <activity
-                android:name=".ui.EmergencyContactActivity"
-                android:theme="@style/Theme.Blue"
-                android:screenOrientation="portrait">
-        </activity>
-
-        <activity
-                android:name=".ui.ScanQRCodeActivity"
-                android:theme="@style/Theme.Green"
-                android:screenOrientation="portrait">
-        </activity>
-
-        <activity
-                android:name="com.zxing.activity.BarcodeScannerTestActivity"
-                android:screenOrientation="portrait">
+            android:name="co.onemeter.oneapp.ui.ShareRangeSelectActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-                android:name="com.zxing.activity.CaptureActivity"
-                android:screenOrientation="portrait">
+            android:name="co.onemeter.oneapp.ui.SysNoticeSetting"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-                android:name=".ui.MyQRCodeActivity"
-                android:screenOrientation="portrait">
+            android:name="co.onemeter.oneapp.ui.SysNoticeForOthersSetting"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-                android:name=".ui.CreateNormalMomentWithTagActivity"
-                android:theme="@style/Theme.Blue"
-                android:screenOrientation="portrait">
+            android:name="co.onemeter.oneapp.ui.HomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" />
+        <activity
+            android:name="co.onemeter.oneapp.ui.TimelineActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" />
+        <activity
+            android:name="co.onemeter.oneapp.ui.AddClassActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" />
+        <activity
+            android:name="co.onemeter.oneapp.ui.HomeworkActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" />
+        <activity
+            android:name="co.onemeter.oneapp.ui.MyClassesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" />
+        <activity
+            android:name="co.onemeter.oneapp.ui.LoginInvitedActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="co.onemeter.oneapp.ui.ForgetPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="co.onemeter.oneapp.ui.SubmitInformationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
         </activity>
         <activity
-                android:name=".ui.ShareRangeSelectActivity"
-                android:screenOrientation="portrait">
+            android:name="co.onemeter.oneapp.ui.FriendValidateActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue" >
         </activity>
         <activity
-                android:name=".ui.SysNoticeSetting"
-                android:screenOrientation="portrait">
-        </activity>
-        <activity
-                android:name=".ui.SysNoticeForOthersSetting"
-                android:screenOrientation="portrait">
-        </activity>
-		<activity android:name=".ui.HomeActivity"
-		          android:theme="@style/Theme.Green"
-		          android:screenOrientation="portrait"
-			/>
-		<activity android:name=".ui.TimelineActivity"
-		          android:theme="@style/Theme.Blue"
-		          android:screenOrientation="portrait"
-			/>
-		<activity android:name=".ui.AddClassActivity"
-		          android:theme="@style/Theme.Green"
-		          android:screenOrientation="portrait"
-			/>
-		<activity android:name=".ui.HomeworkActivity"
-		          android:theme="@style/Theme.Green"
-		          android:screenOrientation="portrait"
-			/>
-		<activity android:name=".ui.MyClassesActivity"
-		          android:theme="@style/Theme.Green"
-		          android:screenOrientation="portrait"
-			/>
-		<activity android:name=".ui.LoginInvitedActivity"
-		          android:launchMode="singleTask"
-		          android:screenOrientation="portrait"
-			/>
-		<activity android:name=".ui.ForgetPasswordActivity"
-		          android:screenOrientation="portrait"
-			/>
-		<activity android:name=".ui.SubmitInformationActivity"
-		          android:theme="@style/Theme.Green"
-			      android:screenOrientation="portrait" >
-		</activity>
-		<activity android:name=".ui.FriendValidateActivity"
-			      android:theme="@style/Theme.Blue"
-			      android:screenOrientation="portrait" >
-		</activity>
-		<activity
-            android:name=".liveplayer.VideoPlayingActivity"
+            android:name="co.onemeter.oneapp.liveplayer.VideoPlayingActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="landscape" />
-		
-		<activity
+        <activity
             android:name="co.onemeter.oneapp.ui.ClassDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Green" >
         </activity>
-        
-		<activity
+        <activity
             android:name="co.onemeter.oneapp.ui.LessonDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Green" >
         </activity>
-        
-		<activity
+        <activity
             android:name="co.onemeter.oneapp.ui.LessonStatusActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Green" >
@@ -607,24 +607,21 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Green" >
         </activity>
-		
         <activity
             android:name="co.onemeter.oneapp.ui.LessonInfoEditActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Green" >
         </activity>
-        
         <activity
             android:name="co.onemeter.oneapp.ui.TeacherCheckActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Green" >
         </activity>
-        
         <activity
             android:name="co.onemeter.oneapp.ui.FeedbackDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Green" >
         </activity>
-	</application>
+    </application>
 
 </manifest>

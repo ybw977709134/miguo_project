@@ -19,8 +19,10 @@ import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
@@ -37,7 +39,9 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 	public static final int BUDDY_TYPE_NOT_USER = 1003;
     public static final int BUDDY_TYPE_UNKNOWN = 0;
     public static final int BUDDY_TYPE_MYSELF = 1;
-
+    
+    public static final int REQ_INPUT_ALIAS=1;//修改备注名请求码
+    
 //	private static final int MSG_FETCH_MOMENT_SUCCESS = 100;
 
     private static final String[] IMAGE_TYPES = new String[] {
@@ -135,8 +139,10 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 
     private void setFriendInfoForBiz() {
         // 默认男性
-        mFriendNameBiz.setText(buddy.nickName);
-        mPronunciation.setText(buddy.pronunciation);
+//        mFriendNameBiz.setText(buddy.nickName);
+    	mFriendNameBiz.setText(!TextUtils.isEmpty(buddy.alias)?buddy.alias:buddy.nickName);
+        
+        mPronunciation.setText(buddy.pronunciation);//发音
     }
 
     private void initView_status() {
@@ -298,6 +304,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
               q.find(R.id.btn_goto_moments).visible();
               q.find(R.id.btn_delete).visible();
               q.find(R.id.btn_add).gone();
+              q.find(R.id.btn_edit_remarkname).visible();//如果是好友显示修改好友备注名的功能
     	  }if(buddyType == BUDDY_TYPE_NOT_FRIEND){
     		  if(isFromSchool){
     			  q.find(R.id.btn_msg).visible();
@@ -309,11 +316,13 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
               q.find(R.id.btn_goto_moments).gone();
               q.find(R.id.btn_delete).gone();
               q.find(R.id.btn_add).visible();
+              q.find(R.id.btn_edit_remarkname).invisible();//不是好友隐藏修改好友备注名的功能
     	  }if(buddyType == BUDDY_TYPE_MYSELF){
               q.find(R.id.module_chat).visible();
               q.find(R.id.btn_goto_moments).visible();
               q.find(R.id.btn_delete).gone();
               q.find(R.id.btn_add).gone();
+              q.find(R.id.btn_edit_remarkname).invisible();//不是好友隐藏修改好友备注名的功能
     	  }
     }
 
@@ -338,6 +347,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         q.find(R.id.btn_goto_moments).clicked(this);
         q.find(R.id.btn_add).clicked(this);
         q.find(R.id.btn_delete).clicked(this);
+        q.find(R.id.btn_edit_remarkname).clicked(this);//修改备注名添加监听事件
     }
 
     /**
@@ -442,6 +452,15 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
             	startActivity(intent);
 //                addBuddy();
                 break;
+                
+            case R.id.btn_edit_remarkname://跳转到修改好友备注名事件
+            	Intent i = new Intent(ContactInfoActivity.this, InputPlainTextActivity.class)
+                .putExtra(InputPlainTextActivity.EXTRA_VALUE, buddy.alias)
+                .putExtra(InputPlainTextActivity.EXTRA_TITLE, getString(R.string.change_alias))
+                .putExtra(InputPlainTextActivity.EXTRA_DESCRIPTION, getString(R.string.change_alias_info));
+            	startActivityForResult(i, REQ_INPUT_ALIAS);
+            	break;
+            	
             case R.id.btn_delete:
             	Builder builder = new AlertDialog.Builder(this);
             	builder.setTitle("提示");
@@ -471,6 +490,60 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                 break;
         }
     }
+	
+	/**
+	 * 修改备注名后返回详情页刷新好友名
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+			case REQ_INPUT_ALIAS://备注名修改后的处理
+				
+				updateBuddyAlias(data.getExtras().getString(InputPlainTextActivity.EXTRA_VALUE));
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * 修改备注名的方法
+	 * @param alias
+	 * @author hutianfeng
+	 * @date 2015/1/16
+	 */
+	private void updateBuddyAlias(final String alias) {
+		if(alias == null)
+			return;
+		
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
+
+            @Override
+            protected Integer doInBackground(Void... params) {
+//                Buddy data = new Buddy();
+                buddy.alias = alias;
+                return WowTalkWebServerIF.getInstance(ContactInfoActivity.this).fOperateBuddy(buddy);
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+            	getBuddyInfoFromServer();
+                if (result == ErrorCode.OK) {
+                	Toast.makeText(ContactInfoActivity.this, getString(R.string.fix_alias_success), Toast.LENGTH_SHORT).show();
+                    Database dbHelper = new Database(ContactInfoActivity.this);
+                    String buddyUid = buddy.userID;
+                    Buddy newBuddy = new Buddy(buddyUid);
+                    newBuddy.alias = alias;
+                    dbHelper.storeNewBuddyWithUpdate(newBuddy);
+                }
+            }
+
+        });
+	}
 
     private void addBuddy() {
         final Context context = this;
@@ -531,6 +604,8 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                     || (!TextUtils.isEmpty(mInitBuddy.pronunciation) && mInitBuddy.pronunciation.equals(buddy.pronunciation)))
                 && ((TextUtils.isEmpty(mInitBuddy.status) && TextUtils.isEmpty(buddy.status))
                     || (!TextUtils.isEmpty(mInitBuddy.status) && mInitBuddy.status.equals(buddy.status)))
+                    && ((TextUtils.isEmpty(mInitBuddy.alias) && TextUtils.isEmpty(buddy.alias))
+                    		||(!TextUtils.isEmpty(mInitBuddy.alias) && mInitBuddy.alias.equals(buddy.alias)))
                 && mInitBuddy.photoUploadedTimeStamp == buddy.photoUploadedTimeStamp) {
             isChanged = false;
         }
@@ -552,7 +627,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
-
+        
 		buddyType = getIntent().getIntExtra(EXTRA_BUDDY_TYPE, BUDDY_TYPE_NOT_USER);
 		person = getIntent().getParcelableExtra(EXTRA_BUDDY_DETAIL);
 		isFromSchool = getIntent().getBooleanExtra("fromSchool", false);
@@ -580,6 +655,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         mInitBuddy.pronunciation = buddy.pronunciation;
         mInitBuddy.photoUploadedTimeStamp = buddy.photoUploadedTimeStamp;
         mInitBuddy.status = buddy.status;
+        mInitBuddy.alias = buddy.alias;
 
         mMsgBox = new MessageBox(this);
 

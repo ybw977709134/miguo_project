@@ -359,8 +359,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/contact_info_goto_moments"
                 android:id="@+id/btn_goto_moments"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
                 android:layout_margin="@dimen/padding_medium"/>
 
             <Button
@@ -369,9 +367,15 @@
                 android:layout_height="wrap_content"
                 android:text="@string/contact_info_add_as_friend"
                 android:id="@+id/btn_add"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
                 android:layout_margin="@dimen/padding_medium"/>
+            
+            <Button
+                style="@style/button_blue"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/contact_info_edit_remarkname"
+                android:id="@+id/btn_edit_remarkname"
+                android:layout_margin="@dimen/padding_medium" />
 
             <Button
                 style="@style/button_red"
@@ -379,8 +383,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/contact_info_delete_friend"
                 android:id="@+id/btn_delete"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
                 android:layout_margin="@dimen/padding_medium"/>
         </LinearLayout>
     </ScrollView>

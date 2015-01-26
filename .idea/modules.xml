@@ -12,6 +12,7 @@
       <module fileurl="file://$PROJECT_DIR$/lib/paint_android/paint_android.iml" filepath="$PROJECT_DIR$/lib/paint_android/paint_android.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/pulltorefresh/pulltorefresh.iml" filepath="$PROJECT_DIR$/lib/pulltorefresh/pulltorefresh.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/AndroidRecording/lib/recording.iml" filepath="$PROJECT_DIR$/lib/AndroidRecording/lib/recording.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib/AndroidRecording/demo/recording-demo.iml" filepath="$PROJECT_DIR$/lib/AndroidRecording/demo/recording-demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/wowtalksdk/wowtalksdk.iml" filepath="$PROJECT_DIR$/lib/wowtalksdk/wowtalksdk.iml" />
     </modules>
   </component>

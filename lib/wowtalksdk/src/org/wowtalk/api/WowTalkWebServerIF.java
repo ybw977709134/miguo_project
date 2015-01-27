@@ -61,6 +61,7 @@ public class WowTalkWebServerIF {
 		int errno = ErrorCode.UNKNOWN; 
 		
 		Connect2 connect2 = new Connect2();
+		fSetNetworkTimeout(5000, 5000);
 		Element root = connect2.Post(postStr);
 
 		if (root != null) {

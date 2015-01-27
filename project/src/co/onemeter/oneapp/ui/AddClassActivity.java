@@ -97,6 +97,10 @@ public class AddClassActivity extends Activity implements View.OnClickListener {
                         msgbox.toast(R.string.invite_code_school, Toast.LENGTH_SHORT);
                     } else if (errno == ErrorCode.ERR_SCHOOL_USER_TYPE_NOT_MATCH) {
                         msgbox.toast(R.string.invite_code_type_not_match, Toast.LENGTH_SHORT);
+                    } else if (errno == ErrorCode.ERR_INVITATION_CODE_NOT_EXIST) {
+                        msgbox.toast(R.string.invite_code_type_not_exist, Toast.LENGTH_SHORT);
+                    } else{
+                    	msgbox.toast(R.string.invite_code_type_time_out, Toast.LENGTH_SHORT);
                     }
                 }
             }

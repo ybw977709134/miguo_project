@@ -213,7 +213,9 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 					}
 				}
 			}
-			
+			if(!hasPhoto){
+				imgPhoto.setImageResource(R.drawable.events_default_pic);
+			}
  			return lView;
 		}
 
@@ -283,7 +285,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 	private Database mDb = null;
 
     private FilterBar tf;
-    private int tag = 0;
+    private int eventStateTag = 0;
     private String outletEventId;
 
 
@@ -353,7 +355,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         pullListView.setOnRefreshListener(this);
         pullListView.setOnLastItemVisibleListener(this);
         
-        fSetShownEvents();
+        downloadLatestEvents(GET_FINISHED_EVENT0,null);
         hideNewEventPanel();
 
         AQuery q = new AQuery(this);
@@ -537,9 +539,9 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 		super.onResume();
         MobclickAgent.onResume(this);
 
-        if(System.currentTimeMillis()-lastRefreshEventTime >= REFRESH_EVENT_INTERVAL) {
-            downloadLatestEvents(GET_FINISHED_EVENT0,null);
-        }
+//        if(System.currentTimeMillis()-lastRefreshEventTime >= REFRESH_EVENT_INTERVAL) {
+//            downloadLatestEvents(GET_FINISHED_EVENT0,null);
+//        }
 
         // 活动对象的状态可能已经发生了变化（比如报名人数），
         // 因此从数据库中读取最新状态。
@@ -608,13 +610,13 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
             return;
         } else if (subMenuResId == R.id.btn_filter2) {
             if (itemIdx == 0) {
-            	tag = 0;
+            	eventStateTag = 0;
             	downloadLatestEvents(GET_FINISHED_EVENT0,null);
             } else if (itemIdx == 1) { // on going
-            	tag = 1;
+            	eventStateTag = 1;
             	downloadLatestEvents(null,null);
             } else if (itemIdx == 2) { // expired
-            	tag = 2;
+            	eventStateTag = 2;
                 downloadLatestEvents(GET_FINISHED_EVENT1,null);
             }
             return;
@@ -648,7 +650,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 
 	@Override
 	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-		switch (tag) {
+		switch (eventStateTag) {
 		//即将进行
 		case 0:
 			downloadLatestEvents(GET_FINISHED_EVENT0,null);
@@ -678,25 +680,25 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 						@Override
 						public void run() {
 							switch (curEventGroupToShow) {
-				            case 0:
-				                acts.addAll(mDb.fetchAllEvents());
-				                break;
-				            case 1:
-				                acts.addAll(mDb.fetchJoinedEvents());
-				                break;
-				            case 2:
-				                acts.addAll(mDb.fetchNotJoinedEvents());
-				                break;
-				            default:
-				                acts.addAll(mDb.fetchAllEvents());
-				                break;
+					            case 0:
+					                acts = mDb.fetchAllEvents();
+					                break;
+					            case 1:
+					                acts = mDb.fetchJoinedEvents();
+					                break;
+					            case 2:
+					                acts = mDb.fetchNotJoinedEvents();
+					                break;
+					            default:
+					                acts = mDb.fetchAllEvents();
+					                break;
 				        }
 
 				        fixEventLocalPath();
-				        eventAdapter = new EventAdapter(EventActivity.this, acts);
-				        lvEvent.setAdapter(eventAdapter);
-				        lvEvent.setSelection(position);
-						eventAdapter.notifyDataSetChanged();
+				        eventAdapter.addAll(acts);
+//				        lvEvent.setAdapter(eventAdapter);
+//				        lvEvent.setSelection(position);
+//						eventAdapter.notifyDataSetChanged();
 						}
 					});
 				}
@@ -708,7 +710,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 	@Override
 	public void onLastItemVisible() {
 		String time = null;
-		switch (tag) {
+		switch (eventStateTag) {
 		//即将进行
 		case 0:
 			time = acts.get(acts.size()-1).startTime.getTime() + "";
@@ -723,7 +725,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 			
 		//已过期
 		case 2:
-			time = acts.get(0).startTime.getTime() + "";
+			time = acts.get(acts.size() -1).startTime.getTime() + "";
 			uploadmore(GET_FINISHED_EVENT1,time.substring(0, time.length()-3),acts.size());
 			break;
 		default: break;

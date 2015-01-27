@@ -305,7 +305,8 @@ public class CreateEventActivity extends Activity implements OnClickListener {
             case R.id.layout_telephone:
             	startActivityForResult(new Intent(this, InputPlainTextActivity.class)
             			.putExtra(InputPlainTextActivity.EXTRA_TITLE, getString(R.string.event_telephone))
-            			.putExtra(InputPlainTextActivity.EXTRA_VALUE,txtTelephone.getText()), 
+            			.putExtra(InputPlainTextActivity.EXTRA_VALUE,txtTelephone.getText())
+            			 .putExtra(InputPlainTextActivity.EXTRA_INPUTTYPE, InputType.TYPE_CLASS_NUMBER), 
             			REQ_INPUT_TELE);
             	break;
             case R.id.layout_starttime:

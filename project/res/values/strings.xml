@@ -739,6 +739,7 @@
 	<string name="moment_tag_videoStudy">视频教程</string>
     <string name="moment_survey_has_voted">您已经投过票了</string>
     <string name="new_moment_title">新建-%s</string>
+    <string name="new_moment_preview">预览</string>
     <string name="share_range">可见范围</string>
     <string name="share_range_public_short">公开</string>
     <string name="share_range_public">全员可见</string>
@@ -831,6 +832,8 @@
 	<string name="invite_code_used">该邀请码已绑定</string>
 	<string name="invite_code_school">你已经绑定过该学校</string>
 	<string name="invite_code_type_not_match">邀请码对应的用户和自身用户的类型不匹配</string>
+	<string name="invite_code_type_not_exist">邀请码不正确</string>
+	<string name="invite_code_type_time_out">网络请求超时，请检查网络连接</string>
 	<string name="moment_add_touch_to_record">按下录音（最大120秒）</string>
 	<string name="moment_add_touch_to_loc">加入当前位置信息</string>
 	<string name="moment_add_touch_to_stop_record">点击停止录音</string>

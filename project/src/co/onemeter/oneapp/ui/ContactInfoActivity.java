@@ -65,6 +65,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     };
 
     private ImageView mGenderImg;
+    private ImageView imageView_tag_tea;
     private TextView mFriendNameBiz;
     private TextView mPronunciation;
     private LinearLayout mStatusLayout;
@@ -335,7 +336,14 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         mGenderImg.setBackgroundResource(buddy.getSexFlag() == Buddy.SEX_FEMALE
                 ? R.drawable.avatar_female : R.drawable.avatar_male);
         PhotoDisplayHelper.displayPhoto(this, imgPhoto, R.drawable.default_avatar_90, buddy, true);
-
+        imageView_tag_tea = (ImageView) findViewById(R.id.imageView_tag_tea);
+        
+        if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+        	imageView_tag_tea.setVisibility(View.VISIBLE);
+        } else {
+        	imageView_tag_tea.setVisibility(View.GONE);
+        }
+        
         initView_visibilities();
         initView_friendInfoForBiz();
         initView_status();
@@ -539,6 +547,11 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                     Buddy newBuddy = new Buddy(buddyUid);
                     newBuddy.alias = alias;
                     dbHelper.storeNewBuddyWithUpdate(newBuddy);
+                }
+                if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+                	findViewById(R.id.imageView_tag_tea).setVisibility(View.VISIBLE);
+                } else {
+                	findViewById(R.id.imageView_tag_tea).setVisibility(View.INVISIBLE);
                 }
             }
 

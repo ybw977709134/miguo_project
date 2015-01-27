@@ -384,6 +384,7 @@ public class MessagesAdapter extends BaseAdapter {
                     });
                 }
             }
+            imageView_tag_tea.setVisibility(View.GONE);
 
         } else {
             fixBuddyDisplay(message, txtContact, photoImageView);

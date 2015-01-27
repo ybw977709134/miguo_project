@@ -8,9 +8,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.GroupMember;
+
 import co.onemeter.oneapp.ui.PhotoDisplayHelper;
 import co.onemeter.oneapp.R;
 
@@ -80,20 +83,28 @@ public class GroupMembersGridAdapter extends BaseAdapter {
         TextView adminView = (TextView) lView.findViewById(R.id.admin_view);
         TextView txtName = (TextView) lView.findViewById(R.id.txt_name);
         ImageView imgDel = (ImageView) lView.findViewById(R.id.img_del);
+        
+        
+//        txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
+//        if (!TextUtils.isEmpty(buddy.alias)) {
+//        	Toast.makeText(mContext, buddy.alias, Toast.LENGTH_SHORT).show();
+//        }
+        
+        
         if ((myLevel == GroupMember.LEVEL_CREATOR || myLevel == GroupMember.LEVEL_ADMIN)) {
             if (showDummyItems) {
                 if (position == groupMembers.size() - 1) {
                     adminView.setVisibility(View.GONE);
                     imgThumbnail.setImageResource(R.drawable.remove_member);
-                    txtName.setText(mContext.getResources().getString(R.string.contacts_local_delete));
+//                    txtName.setText(mContext.getResources().getString(R.string.contacts_local_delete));
                 } else if (position == groupMembers.size() - 2) {
                     adminView.setVisibility(View.GONE);
                     imgThumbnail.setImageResource(R.drawable.add_member);
-                    txtName.setText(mContext.getResources().getString(R.string.invite));
+//                    txtName.setText(mContext.getResources().getString(R.string.invite));
                 } else {
                     if (buddy.getLevel() == GroupMember.LEVEL_CREATOR) {
                         adminView.setVisibility(View.VISIBLE);
-                        adminView.setText(mContext.getResources().getString(R.string.group_creator));
+                        adminView.setText(mContext.getResources().getString(R.string.group_creator));           
                         adminView.setBackgroundResource(R.drawable.group_admin_bg1);
                     } else if(buddy.getLevel() == GroupMember.LEVEL_ADMIN) {
                         adminView.setVisibility(View.VISIBLE);
@@ -107,8 +118,11 @@ public class GroupMembersGridAdapter extends BaseAdapter {
                     imgThumbnail.setBackgroundDrawable(null);
                     PhotoDisplayHelper.displayPhoto(mContext, imgThumbnail, R.drawable.default_avatar_90, buddy, true);
 
-                    txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
+//                    txtName.setText(TextUtils.isEmpty(b2.alias) ? b2.nickName : b2.alias);
                 }
+                
+//                txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
+                
             } else {
                 imgDel.setVisibility(View.VISIBLE);
                 if (buddy.getLevel() == GroupMember.LEVEL_CREATOR) {
@@ -131,16 +145,19 @@ public class GroupMembersGridAdapter extends BaseAdapter {
                 imgThumbnail.setBackgroundDrawable(null);
                 PhotoDisplayHelper.displayPhoto(mContext, imgThumbnail, R.drawable.default_avatar_90, buddy, true);
 
-                txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
+//                txtName.setText(TextUtils.isEmpty(b2.alias) ? b2.nickName : b2.alias);
 
             }
+            
+//            txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
+            
         } else {
             imgDel.setVisibility(View.GONE);
             if (showDummyItems) {
                 if (position == groupMembers.size() - 1) {
                     adminView.setVisibility(View.GONE);
                     imgThumbnail.setImageResource(R.drawable.add_member);
-                    txtName.setText(mContext.getResources().getString(R.string.invite));
+//                    txtName.setText(mContext.getResources().getString(R.string.invite));
                 } else {
                     if (buddy.getLevel() == GroupMember.LEVEL_CREATOR) {
                         adminView.setVisibility(View.VISIBLE);
@@ -158,8 +175,9 @@ public class GroupMembersGridAdapter extends BaseAdapter {
                     imgThumbnail.setBackgroundDrawable(null);
                     PhotoDisplayHelper.displayPhoto(mContext, imgThumbnail, R.drawable.default_avatar_90, buddy, true);
 
-                    txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
+//                    txtName.setText(TextUtils.isEmpty(b2.alias) ? b2.nickName : b2.alias);
                 }
+//                txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
 
             } else {
                 if (buddy.getLevel() == GroupMember.LEVEL_CREATOR) {
@@ -178,8 +196,14 @@ public class GroupMembersGridAdapter extends BaseAdapter {
                 imgThumbnail.setBackgroundDrawable(null);
                 PhotoDisplayHelper.displayPhoto(mContext, imgThumbnail, R.drawable.default_avatar_90, buddy, true);
 
-                txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
+//                txtName.setText(TextUtils.isEmpty(b2.alias) ? b2.nickName : b2.alias);
             }
+            
+        }
+        
+        Buddy newBuddy = mDbHelper.buddyWithUserID(buddy.userID);
+        if (newBuddy != null) {
+        	txtName.setText(TextUtils.isEmpty(newBuddy.alias) ? newBuddy.nickName : newBuddy.alias);
         }
 
         imgThumbnail.setOnClickListener(new View.OnClickListener() {

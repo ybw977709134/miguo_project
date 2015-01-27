@@ -35,6 +35,20 @@
             android:textColor="@color/libmsg_black"
             android:textSize="50sp"
             android:text="00:13"/>
+
+        <TextView
+            android:id="@+id/textView_spare_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/txt_timer"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:textSize="25sp"
+            android:text="TextView"
+            android:gravity="center"
+            android:visibility="invisible"
+            android:textColor="@color/libmsg_wowtalk_gray" />
+
     </RelativeLayout>
 
 </LinearLayout>

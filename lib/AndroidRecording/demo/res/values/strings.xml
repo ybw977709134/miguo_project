@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Android Recording</string>
+    <string name="audioActivity">Audio Recording</string>
+    <string name="videoActivity">Video Recording</string>
+    <string name="playActivity">Playback</string>
+
+    <string-array name="activities">
+        <item name="audio">@string/audioActivity</item>
+        <item name="video">@string/videoActivity</item>
+    </string-array>
+
+
+</resources>

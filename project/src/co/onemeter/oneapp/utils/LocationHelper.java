@@ -277,8 +277,8 @@ public class LocationHelper {
 						String addr = result.getRegeocodeAddress().getFormatAddress();
 		                JSONObject json=new JSONObject();
 		                try {
-		                    json.put("longitude", latitude);
-		                    json.put("latitude", longtiude);
+		                    json.put("longitude", longtiude);
+		                    json.put("latitude", latitude);
 		                    json.put("address", addr);
 		                } catch (JSONException e) {
 		                }

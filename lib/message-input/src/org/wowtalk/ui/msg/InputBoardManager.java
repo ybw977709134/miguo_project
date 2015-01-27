@@ -1,5 +1,6 @@
 package org.wowtalk.ui.msg;
 
+import android.R.integer;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Parcel;
@@ -22,8 +24,10 @@ import android.util.DisplayMetrics;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+
 import com.pzy.paint.BitmapPreviewActivity;
 import com.pzy.paint.DoodleActivity;
+
 import org.wowtalk.Log;
 import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Database;
@@ -211,10 +215,21 @@ public class InputBoardManager implements Parcelable,
     private Uri outputUri = null;
     private Uri outputUri2 = null;
     
+    private TextView textView_spare_time;
+    
     private Handler hanlder = new Handler(){
     	public void handleMessage(android.os.Message msg) {
     		if(msg.what == 0){
     			btnSpeak.setEnabled(true);
+    			textView_spare_time.setVisibility(View.GONE);
+    		}else if(msg.what == 1){
+            	stopRecording();
+            	mResultHandler.onVoiceInputted(mLastVoiceFile.getAbsolutePath(), mVoiceTimer.getElapsed());
+    		}else if(msg.what == 2){
+    			textView_spare_time.setVisibility(View.VISIBLE);
+    			textView_spare_time.setText("还可以说  10  秒");
+    		}else if(msg.what == 3){
+    			
     		}
     	};
     };
@@ -318,6 +333,7 @@ public class InputBoardManager implements Parcelable,
         mIndicatorBg = (FrameLayout) layoutVoiceWrapper.findViewById(R.id.indicatorBg);
         mIndicatorText = (TextView) layoutVoiceWrapper.findViewById(R.id.txt_indicator);
         voiceTimer = (TimerTextView) layoutVoiceWrapper.findViewById(R.id.txt_timer);
+        textView_spare_time = (TextView) layoutVoiceWrapper.findViewById(R.id.textView_spare_time);
         layoutVoiceWrapper.setVisibility(View.GONE);
 
         layoutStampWrapper = mRootView.findViewById(R.id.layoutStamp);
@@ -386,9 +402,19 @@ public class InputBoardManager implements Parcelable,
                         btnSpeak.setBackgroundResource(mDrawableResId.voicePressed);
                         mContext.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                         startRecording();
+                        hanlder.sendEmptyMessageDelayed(1, 60000);
+                        hanlder.sendEmptyMessageDelayed(2, 50000);
                         break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
+                    	if(mVoiceTimer.getElapsed() >= 60){
+                    		btnSpeak.setEnabled(false);
+                        	hanlder.sendEmptyMessageDelayed(0, 1000);
+                            mContext.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                            btnSpeak.setText(R.string.msg_hold_to_speak);
+                            btnSpeak.setBackgroundResource(mDrawableResId.voiceNormal);
+                    		break;
+                    	}else{
                     	btnSpeak.setEnabled(false);
                     	hanlder.sendEmptyMessageDelayed(0, 1000);
                         mContext.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -416,8 +442,11 @@ public class InputBoardManager implements Parcelable,
                                 }
                             }                  	
 //                            showVoicePreviewDialog();
-                        }                     
+                        }              
+       
                         break;
+                    	}
+
                     case MotionEvent.ACTION_MOVE:
                         if (arg1.getY() < -height) {
                             mIsOnDeleteView = true;
@@ -1159,6 +1188,7 @@ public class InputBoardManager implements Parcelable,
                 result = true;
                 break;
             case REQ_INPUT_VIDEO:
+            	hanlder.sendEmptyMessageDelayed(3, 10000);
                 if (null != mMediaInputHelper) {
                     String[] videoPath = new String[2];
                     if(mMediaInputHelper.handleVideoResult(

@@ -64,5 +64,6 @@
     </orderEntry>
     <orderEntry type="module" module-name="paint_android" />
     <orderEntry type="library" scope="PROVIDED" name="wowtalk_service" level="project" />
+    <orderEntry type="module" module-name="recording" scope="PROVIDED" />
   </component>
 </module>

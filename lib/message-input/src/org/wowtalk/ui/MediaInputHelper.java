@@ -19,6 +19,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
+import com.skd.androidrecording.ui.VideoRecordingActivity;
 import org.wowtalk.Log;
 import org.wowtalk.api.ChatMessage;
 import org.wowtalk.ui.msg.BmpUtils;
@@ -50,7 +51,12 @@ public class MediaInputHelper implements Parcelable {
 	public static final int MEDIA_TYPE_VOICE = 3;
 	public static final int MEDIA_TYPE_THUMNAIL = 4;
 
-	/* MediaStore.ACTION_IMAGE_CAPTURE will not return the Uri passed as EXTRA_OUTPUT. */
+    private static final int VIDEO_FILE_LIMIT = 1024 * 1024 * 5;
+    private static final int VIDEO_DURATION_LIMIT = 90; // 90秒 x VGA x 3gp ~= 5MB
+    private static final int VIDEO_PREFERRED_WIDTH = 640; // VGA
+    private static final int VIDEO_PREFERRED_HEIGHT = 480; // VGA
+
+    /* MediaStore.ACTION_IMAGE_CAPTURE will not return the Uri passed as EXTRA_OUTPUT. */
 	private Uri mLastImageUri = null;
 	private ChangeToOtherAppsListener mChangeAppsListener;
 
@@ -280,9 +286,12 @@ public class MediaInputHelper implements Parcelable {
 
         PackageManager pm = activity.getPackageManager();
         if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            Intent recoderIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-            recoderIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0); // low resolution
-            recoderIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 1200);
+            Intent recoderIntent = new Intent(activity, VideoRecordingActivity.class)
+                    .putExtra(VideoRecordingActivity.EXTRA_HIDE_VIDEOSIZE_PICKER, true)
+                    .putExtra(VideoRecordingActivity.EXTRA_FILE_LIMIT, VIDEO_FILE_LIMIT)
+                    .putExtra(VideoRecordingActivity.EXTRA_DURATION_LIMIT, VIDEO_DURATION_LIMIT)
+                    .putExtra(VideoRecordingActivity.EXTRA_PREFERRED_WIDTH, VIDEO_PREFERRED_WIDTH)
+                    .putExtra(VideoRecordingActivity.EXTRA_PREFERRED_HEIGHT, VIDEO_PREFERRED_HEIGHT);
 
             String pickTitle = "Select or take a new video"; // Or get from strings.xml
             Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
@@ -315,9 +324,12 @@ public class MediaInputHelper implements Parcelable {
 
         PackageManager pm = activity.getPackageManager();
         if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            Intent recoderIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-            recoderIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0); // low resolution
-            recoderIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 1200);
+            Intent recoderIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+                    .putExtra(VideoRecordingActivity.EXTRA_HIDE_VIDEOSIZE_PICKER, true)
+                    .putExtra(VideoRecordingActivity.EXTRA_FILE_LIMIT, VIDEO_FILE_LIMIT)
+                    .putExtra(VideoRecordingActivity.EXTRA_DURATION_LIMIT, VIDEO_DURATION_LIMIT)
+                    .putExtra(VideoRecordingActivity.EXTRA_PREFERRED_WIDTH, VIDEO_PREFERRED_WIDTH)
+                    .putExtra(VideoRecordingActivity.EXTRA_PREFERRED_HEIGHT, VIDEO_PREFERRED_HEIGHT);
             activity.startActivityForResult(recoderIntent, requestCode);
         }
     }

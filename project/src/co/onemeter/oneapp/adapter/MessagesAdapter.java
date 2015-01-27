@@ -120,8 +120,10 @@ public class MessagesAdapter extends BaseAdapter {
         }
         final Database db = new Database(mContext);
         Buddy buddy = db.buddyWithUserID(msg.chatUserName);
-        if (buddy != null && !TextUtils.isEmpty(buddy.nickName)) {
-            saveNameBuff(msg.chatUserName, buddy.nickName, textView);
+        if (buddy != null && !TextUtils.isEmpty(buddy.alias)) {
+            saveNameBuff(msg.chatUserName, buddy.alias, textView);
+        } else if (buddy != null && TextUtils.isEmpty(buddy.alias) && !TextUtils.isEmpty(buddy.nickName)) {
+        	saveNameBuff(msg.chatUserName, buddy.nickName, textView);
         } else {
             if (!mDownloadingTargets.contains(msg.chatUserName)) {
                 mDownloadingTargets.add(msg.chatUserName);
@@ -136,7 +138,8 @@ public class MessagesAdapter extends BaseAdapter {
                         if (result == ErrorCode.OK) {
                             Buddy buddy = db.buddyWithUserID(msg.chatUserName);
                             if (null != buddy) {
-                                saveNameBuff(msg.chatUserName, buddy.nickName, textView);
+                            
+                                saveNameBuff(msg.chatUserName, TextUtils.isEmpty(buddy.alias)?buddy.nickName:buddy.alias, textView);
                                 // 重新加载头像
                                 IHasPhoto entity = buddy;
                                 // 公司发通知时，发起人采用的是buddy，此buddy的 username 格式为"公司id_公司id"

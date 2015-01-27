@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.PowerManager;
@@ -38,8 +37,6 @@ import org.wowtalk.ui.MediaInputHelper;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 
 /**
@@ -219,53 +216,23 @@ public class InputBoardManager implements Parcelable,
     private Uri outputUri2 = null;
     
     private TextView textView_spare_time;
-    private int recLen = 11;
-    Timer timer = new Timer();
     
-    final  Handler handler = new Handler(){
+    private Handler hanlder = new Handler(){
     	public void handleMessage(android.os.Message msg) {
-    		switch (msg.what){
-    		case 0:
+    		if(msg.what == 0){
     			btnSpeak.setEnabled(true);
     			textView_spare_time.setVisibility(View.GONE);
-    			break;
-    		case 1:
+    		}else if(msg.what == 1){
             	stopRecording();
             	mResultHandler.onVoiceInputted(mLastVoiceFile.getAbsolutePath(), mVoiceTimer.getElapsed());
-            	break;
-    		case 2:
+    		}else if(msg.what == 2){
     			textView_spare_time.setVisibility(View.VISIBLE);
-//    			textView_spare_time.setText("还可以说  10  秒");
-    			recLen--;
-    			textView_spare_time.setText("还可以说 " + recLen + " 秒");
-    			if(recLen > 0){ 
-    				Message message = handler.obtainMessage(2);
-                    handler.sendMessageDelayed(message, 1000);
-    			}
-    			break;
+    			textView_spare_time.setText("还可以说  10  秒");
+    		}else if(msg.what == 3){
+    			
     		}
-    		
-    		
-    		
-    		
-//    		if(msg.what == 0){
-//    			btnSpeak.setEnabled(true);
-//    			textView_spare_time.setVisibility(View.GONE);
-//    		}else if(msg.what == 1){
-//            	stopRecording();
-//            	mResultHandler.onVoiceInputted(mLastVoiceFile.getAbsolutePath(), mVoiceTimer.getElapsed());
-//    		}else if(msg.what == 2){
-//    			textView_spare_time.setVisibility(View.VISIBLE);
-////    			textView_spare_time.setText("还可以说  10  秒");
-//    			recLen--;
-//    			textView_spare_time.setText("还可以说 " + recLen + " 秒");
-//    			if(){
-//    				
-//    			}
-//    		}
     	};
     };
-    
 
     /**
      * @param context need to be able to receive Activity result.
@@ -368,7 +335,6 @@ public class InputBoardManager implements Parcelable,
         voiceTimer = (TimerTextView) layoutVoiceWrapper.findViewById(R.id.txt_timer);
         textView_spare_time = (TextView) layoutVoiceWrapper.findViewById(R.id.textView_spare_time);
         layoutVoiceWrapper.setVisibility(View.GONE);
-        
 
         layoutStampWrapper = mRootView.findViewById(R.id.layoutStamp);
         layoutMediaWrapper = mRootView.findViewById(R.id.layoutMedia);
@@ -436,51 +402,50 @@ public class InputBoardManager implements Parcelable,
                         btnSpeak.setBackgroundResource(mDrawableResId.voicePressed);
                         mContext.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                         startRecording();
-                        handler.sendEmptyMessageDelayed(1, 60000);
-                        
-                        Message message = handler.obtainMessage(2);
-                        handler.sendMessageDelayed(message, 50000);
+                        hanlder.sendEmptyMessageDelayed(1, 60000);
+                        hanlder.sendEmptyMessageDelayed(2, 50000);
                         break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
                     	if(mVoiceTimer.getElapsed() >= 60){
                     		btnSpeak.setEnabled(false);
-                    		handler.sendEmptyMessageDelayed(0, 1000);
+                        	hanlder.sendEmptyMessageDelayed(0, 1000);
                             mContext.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                             btnSpeak.setText(R.string.msg_hold_to_speak);
                             btnSpeak.setBackgroundResource(mDrawableResId.voiceNormal);
                     		break;
                     	}else{
-                    		btnSpeak.setEnabled(false);
-                    		handler.sendEmptyMessageDelayed(0, 1000);
-                    		mContext.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                            btnSpeak.setText(R.string.msg_hold_to_speak);
-                            btnSpeak.setBackgroundResource(mDrawableResId.voiceNormal);
-                            stopRecording();
-                            if(mLastVoiceFile == null) {
-                            	// failed to record voice
-                            	} else if(mVoiceTimer.getElapsed() < 2 ) {
-                            		// too short
+                    	btnSpeak.setEnabled(false);
+                    	hanlder.sendEmptyMessageDelayed(0, 1000);
+                        mContext.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                        btnSpeak.setText(R.string.msg_hold_to_speak);
+                        btnSpeak.setBackgroundResource(mDrawableResId.voiceNormal);
+                        stopRecording();
+                        if(mLastVoiceFile == null) {
+                            // failed to record voice
+                        } else if(mVoiceTimer.getElapsed() < 2 ) {
+                            // too short
 //                            AlertDialog a = new AlertDialog.Builder(mContext)
 //                                    .setMessage(R.string.msg_voice_too_short).create();
 //                            a.setCanceledOnTouchOutside(true);
 //                            a.show();
-                            		Toast.makeText(mContext, R.string.msg_voice_too_short, Toast.LENGTH_SHORT).show();
-                            		} else {
-                            			if (mIsOnDeleteView) {
-                            				if (mIsPlayingMedia && null != mPlayer && mPlayer.isPlaying()) {
-                            					mPlayer.stop();
-                            					mPlayer.release();
-                            					}
-                            				} else {
-                            					if (mResultHandler != null) {
-                            						mResultHandler.onVoiceInputted(mLastVoiceFile.getAbsolutePath(), mVoiceTimer.getElapsed());
-                            						}
-                            					}                  	
+                        	Toast.makeText(mContext, R.string.msg_voice_too_short, Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (mIsOnDeleteView) {
+                                if (mIsPlayingMedia && null != mPlayer && mPlayer.isPlaying()) {
+                                    mPlayer.stop();
+                                    mPlayer.release();
+                                }
+                            } else {
+                                if (mResultHandler != null) {
+                                    mResultHandler.onVoiceInputted(mLastVoiceFile.getAbsolutePath(), mVoiceTimer.getElapsed());
+                                }
+                            }                  	
 //                            showVoicePreviewDialog();
-                            			}              
-                            break;
-                            }
+                        }              
+       
+                        break;
+                    	}
 
                     case MotionEvent.ACTION_MOVE:
                         if (arg1.getY() < -height) {
@@ -1223,6 +1188,7 @@ public class InputBoardManager implements Parcelable,
                 result = true;
                 break;
             case REQ_INPUT_VIDEO:
+            	hanlder.sendEmptyMessageDelayed(3, 10000);
                 if (null != mMediaInputHelper) {
                     String[] videoPath = new String[2];
                     if(mMediaInputHelper.handleVideoResult(

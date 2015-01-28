@@ -832,6 +832,8 @@
 	<string name="invite_code_used">该邀请码已绑定</string>
 	<string name="invite_code_school">你已经绑定过该学校</string>
 	<string name="invite_code_type_not_match">邀请码对应的用户和自身用户的类型不匹配</string>
+	<string name="invite_code_type_not_match_teacher">老师账号不能绑定学生类型邀请码</string>
+	<string name="invite_code_type_not_match_student">学生账号不能绑定老师类型邀请码</string>
 	<string name="invite_code_type_not_exist">邀请码不正确</string>
 	<string name="invite_code_type_time_out">网络请求超时，请检查网络连接</string>
 	<string name="moment_add_touch_to_record">按下录音（最大120秒）</string>

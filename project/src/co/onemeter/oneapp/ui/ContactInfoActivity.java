@@ -480,6 +480,9 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 					public void onClick(DialogInterface arg0, int arg1) {
 
 						removeBuddy();
+						dbHelper.deleteLatestChatTarget(buddy.userID);
+						dbHelper.deleteChatMessageWithUser(buddy.userID);
+						startActivity(new Intent(ContactInfoActivity.this, StartActivity.class));
 						Toast.makeText(ContactInfoActivity.this, "删除好友成功", Toast.LENGTH_SHORT).show();
 					}
 				});

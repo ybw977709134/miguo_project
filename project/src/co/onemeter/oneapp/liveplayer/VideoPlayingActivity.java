@@ -538,10 +538,10 @@ public class VideoPlayingActivity extends Activity {
 	
 	private String getLink(){
 //		String strLink = "c2lIUmV4MHpUS0Y2bnkwTG85OWwxS2Q5dzdnblFzeTE2WHA4VlRZZWMzaVhMcURUMDY0dkRqelBOUUVmRUVVV2dKdjg3YTVFeUdmN2FHdDZyODNkWWJXNjBNVVhDc0VyZjQ0UDNUMVZqUkN1SnMvditJeG4vNzBSWXJkOWd0L1dTOFUvNnNhL3k3aFRmKzdUajRYVHFSSC95NE5YeFJPSw==";
-		String strLink = "c2lIUmV4MHpUS0Y2bnkwTG85OWwxS2Q5dzdnblFzeTE2WHA4VlRZZWMzaVhMcURUMDY0dkRqelBOUUVmRUVVV2VuL0srMXVaT3R0c0FmUld5THBEUUNJeTMzNjQxWHBBdENIdnRFNW44RnpxekQrSVpjcldsYjBSWXJkOWd0L1dqWGNlNVJFS2tuV1NoZEZDSXI3RWdoSC95NE5YeFJPSw==";
-		
+//		String strLink = "c2lIUmV4MHpUS0Y2bnkwTG85OWwxS2Q5dzdnblFzeTE2WHA4VlRZZWMzaVhMcURUMDY0dkRqelBOUUVmRUVVV2VuL0srMXVaT3R0c0FmUld5THBEUUNJeTMzNjQxWHBBdENIdnRFNW44RnpxekQrSVpjcldsYjBSWXJkOWd0L1dqWGNlNVJFS2tuV1NoZEZDSXI3RWdoSC95NE5YeFJPSw==";
+		String strLink = "http://www.onemeter.co/ODM1YzI0N2ZjNDgxMmY1ZTU1ZTFmYjIyODBlNTU5YjMmdWs9MTQxNTMxNTYwMw==ShMetowEr";
 		DES des = new DES();
-		String decodeLink = des.authcode(strLink, "ENCODE", "JCLX-OneMeter789");
+		String decodeLink = des.authcode(strLink, "ENCODE");
 		Log.d("------------------", decodeLink);
 		return decodeLink;
 	}

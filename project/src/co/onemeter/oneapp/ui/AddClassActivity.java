@@ -16,7 +16,9 @@ import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.androidquery.AQuery;
 
+import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 
@@ -96,7 +98,12 @@ public class AddClassActivity extends Activity implements View.OnClickListener {
                     } else if (errno == ErrorCode.ERR_BOUND_SAME_SCHOOL_USER) {
                         msgbox.toast(R.string.invite_code_school, Toast.LENGTH_SHORT);
                     } else if (errno == ErrorCode.ERR_SCHOOL_USER_TYPE_NOT_MATCH) {
-                        msgbox.toast(R.string.invite_code_type_not_match, Toast.LENGTH_SHORT);
+                    	if(Buddy.ACCOUNT_TYPE_TEACHER == PrefUtil.getInstance(getApplicationContext()).getMyAccountType()){
+                    		msgbox.toast(R.string.invite_code_type_not_match_teacher, Toast.LENGTH_SHORT);
+                    	}else if(Buddy.ACCOUNT_TYPE_STUDENT == PrefUtil.getInstance(getApplicationContext()).getMyAccountType()){
+                    		msgbox.toast(R.string.invite_code_type_not_match_student, Toast.LENGTH_SHORT);
+                    	}
+                        
                     } else if (errno == ErrorCode.ERR_INVITATION_CODE_NOT_EXIST) {
                         msgbox.toast(R.string.invite_code_type_not_exist, Toast.LENGTH_SHORT);
                     } else{

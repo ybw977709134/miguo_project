@@ -16,6 +16,17 @@
             android:layout_margin="5dp"
             corner_radius="@dimen/rounded_img_view_cornor_radius"
             android:src="@drawable/default_avatar_90"/>
+	    
+	    <ImageView
+	       	android:id="@+id/imageView_tag_tea"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="right"
+	        android:layout_marginTop="4dp"
+	        android:layout_marginRight="5dp"
+	        android:src="@drawable/icon_avatar_teacher"
+	        android:visibility="gone" />
+	    
         <TextView
             android:id="@+id/admin_view"
             android:layout_height="wrap_content"

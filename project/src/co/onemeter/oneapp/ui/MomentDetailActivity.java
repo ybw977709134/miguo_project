@@ -576,7 +576,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 //                confirmDeleteMoment();
                 break;
             case R.id.img_photo:
-                TimelineActivity.launch(this, moment.owner.userID, moment.owner.nickName);
+                TimelineActivity.launch(this, moment.owner.userID, TextUtils.isEmpty(moment.owner.alias)?moment.owner.nickName:moment.owner.alias);
                 break;
 //            case R.id.moment_favorite_layout:
 //                MomentAdapter.triggerMomentFavorite(this,moment,ivMomentFavorite);

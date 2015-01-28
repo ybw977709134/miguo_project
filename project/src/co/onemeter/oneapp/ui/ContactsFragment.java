@@ -124,7 +124,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case HANDLER_LOCAL_GROUPS_LOADED:
+                case HANDLER_LOCAL_GROUPS_LOADED://群组关系
 
                     if (getActivity() == null)
                         break;
@@ -155,7 +155,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
                         }
                     });
                     break;
-                case HANDLER_LOCAL_BUDDIES_LOADED:
+                case HANDLER_LOCAL_BUDDIES_LOADED://小伙伴，好友
                     try {
                         // java.lang.IllegalStateException:
                         // Observer android.widget.AdapterView$AdapterDataSetObserver@406e50e0 was not registered.
@@ -171,12 +171,12 @@ public class ContactsFragment extends Fragment implements OnClickListener,
                                 ArrayList<Person> persons = contactAdapter.getPersonSource();
                                 if (persons == null || persons.size() <= position)
                                     return;
-                                if (persons.get(position).getAccountType() == Buddy.ACCOUNT_TYPE_PUBLIC) {
+                                if (persons.get(position).getAccountType() == Buddy.ACCOUNT_TYPE_PUBLIC) {//跳转到公共账号
                                     Intent intent = new Intent(getActivity(), PublicAccountDetailActivity.class);
                                     intent.putExtra(PublicAccountDetailActivity.PERSON_DETAIL, ContactUtil.allPersons.get(position));
                                     startActivity(intent);
                                 } else {
-                                    ContactInfoActivity.launch(
+                                    ContactInfoActivity.launch(//跳转到好友的详情页
                                             getActivity(),
                                             persons.get(position),
                                             ContactInfoActivity.BUDDY_TYPE_IS_FRIEND);
@@ -468,7 +468,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
         Database.removeDBTableChangeListener(contactBuddyObserver);
         Database.removeDBTableChangeListener(contactGroupObserver);
         Database.removeDBTableChangeListener(pendingRequestObserver);
-    }
+    } 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

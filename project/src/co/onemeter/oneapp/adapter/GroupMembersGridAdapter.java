@@ -80,10 +80,19 @@ public class GroupMembersGridAdapter extends BaseAdapter {
             lView = inflater.inflate(R.layout.listitem_group_member, null);
         }
         ImageView imgThumbnail = (ImageView) lView.findViewById(R.id.img_thumbnail);
+        
+        ImageView imageView_tag_tea = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
+        
         TextView adminView = (TextView) lView.findViewById(R.id.admin_view);
         TextView txtName = (TextView) lView.findViewById(R.id.txt_name);
         ImageView imgDel = (ImageView) lView.findViewById(R.id.img_del);
         
+        //判断群组中各个成员的账号类型的判断
+        if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+        	imageView_tag_tea.setVisibility(View.VISIBLE);
+        } else {
+        	imageView_tag_tea.setVisibility(View.GONE);
+        }
         
 //        txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
 //        if (!TextUtils.isEmpty(buddy.alias)) {

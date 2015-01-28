@@ -416,13 +416,14 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                 handleBackEvent();
                 break;
             case R.id.btn_msg:
-                chatWith(buddy.userID, buddy.nickName);
+            	
+                chatWith(buddy.userID, TextUtils.isEmpty(buddy.alias)?buddy.nickName:buddy.alias);
                 break;
             case R.id.btn_call:
-                CallMainActivity.startNewOutGoingCall(ContactInfoActivity.this, buddy.userID, buddy.nickName, false);
+                CallMainActivity.startNewOutGoingCall(ContactInfoActivity.this, buddy.userID, TextUtils.isEmpty(buddy.alias)?buddy.nickName:buddy.alias, false);
                 break;
             case R.id.btn_video:
-                CallMainActivity.startNewOutGoingCall(ContactInfoActivity.this, buddy.userID, buddy.nickName, true);
+                CallMainActivity.startNewOutGoingCall(ContactInfoActivity.this, buddy.userID, TextUtils.isEmpty(buddy.alias)?buddy.nickName:buddy.alias, true);
                 break;
             case R.id.img_thumbnail:
                 ImageViewActivity.launch(this, buddy);
@@ -449,7 +450,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                 }
                 break;
             case R.id.btn_goto_moments:
-                TimelineActivity.launch(this, buddy.userID, buddy.nickName);
+                TimelineActivity.launch(this, buddy.userID, TextUtils.isEmpty(buddy.alias)?buddy.nickName:buddy.alias);
                 break;
             case R.id.btn_add:
                 android.util.Log.d("---------------------", buddy+"");
@@ -477,7 +478,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 					
 					@Override
 					public void onClick(DialogInterface arg0, int arg1) {
-						// TODO Auto-generated method stub
+
 						removeBuddy();
 						Toast.makeText(ContactInfoActivity.this, "删除好友成功", Toast.LENGTH_SHORT).show();
 					}

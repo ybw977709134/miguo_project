@@ -324,9 +324,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 public void onClick(View v) {
                 	String mMyUid = PrefUtil.getInstance(context).getUid();
                     if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
-                    	TimelineActivity.launchForOwner(context, moment.owner.userID, moment.owner.nickName);//跳转到自己的我的动态//可进行发布操作
+                    	TimelineActivity.launchForOwner(context, moment.owner.userID, moment.owner.nickName);//跳转到自己的我的动态//可进行发布操作//自己操作只有昵称
                     } else {
-                    	TimelineActivity.launch(context, moment.owner.userID, moment.owner.nickName);//跳转到好友的我的动态//不可进行发布操作
+                    	//跳转到好友的我的动态//不可进行发布操作//查看好友的动态可能有别名
+                    	TimelineActivity.launch(context, moment.owner.userID, TextUtils.isEmpty(moment.owner.alias)?moment.owner.nickName:moment.owner.alias);
                     }
                 }
             });

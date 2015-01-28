@@ -126,6 +126,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
         albumCoverImageView = (ImageView) headerView_albumCover.findViewById(R.id.imgAlbumBg);
         ImageView imgPtrRefreshIcon = (ImageView) headerView_albumCover.findViewById(R.id.imgRefreshRotate);
         ImageView imgThumbnail = (ImageView) headerView_albumCover.findViewById(R.id.img_thumbnail);
+        ImageView imageView_tag_tea = (ImageView) headerView_albumCover.findViewById(R.id.imageView_tag_tea);
         TextView txtName = (TextView) headerView_albumCover.findViewById(R.id.txt_name);
         TextView txtSignature = (TextView) headerView_albumCover.findViewById(R.id.txt_signature);
         View headerBottomBg = headerView_albumCover.findViewById(R.id.box_info_bg);
@@ -148,6 +149,13 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
 
             PhotoDisplayHelper.displayPhoto(getActivity(),
                     imgThumbnail, R.drawable.default_avatar_90, buddy, true);
+            //头像类型判断
+            if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+            	imageView_tag_tea.setVisibility(View.VISIBLE);
+            } else {
+            	imageView_tag_tea.setVisibility(View.GONE);
+            }
+            
             if (mAlbumCover != null)
                 displayAlbumCover(albumCoverImageView);
         }

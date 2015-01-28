@@ -1,6 +1,9 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
@@ -18,8 +21,10 @@ import co.onemeter.oneapp.adapter.GroupMembersGridAdapter;
 import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
@@ -84,6 +89,8 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 	private Intent mActivityResult = new Intent();
 	
 	private ImageButton navbar_btn_right;
+	
+	private String groupID;
 
 	// show a dummy buddy at the end of group members list
 	private boolean mShowDummyBuddy = true;
@@ -261,7 +268,28 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
                 @Override
                 public void onClick(View v) {
                     bottomBoard.dismiss();
-                    disbandGroup();
+        			Builder builder = new AlertDialog.Builder(ContactGroupInfoActivity.this);
+        			builder.setTitle("提示");
+        			builder.setMessage("你确定要解散群组吗?");
+        			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        				
+        				@Override
+        				public void onClick(DialogInterface arg0, int arg1) {
+        					mDbHelper.deleteChatMessageWithUser(groupID);
+        					mDbHelper.deleteLatestChatTarget(groupID);
+                            disbandGroup();
+                            Intent intent = new Intent(ContactGroupInfoActivity.this, StartActivity.class);
+                            startActivity(intent);
+        				}
+        			});
+        			builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {			
+        				@Override
+        				public void onClick(DialogInterface arg0, int arg1) {
+        					
+        				}
+        			});
+        			
+        			builder.create().show();
                 }
             });
             bottomBoard.add(getString(R.string.group_edit_info), BottomButtonBoard.BUTTON_BLUE, new OnClickListener() {
@@ -323,7 +351,28 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
                 @Override
                 public void onClick(View v) {
                     bottomBoard.dismiss();
-                    quitGroup();
+        			Builder builder = new AlertDialog.Builder(ContactGroupInfoActivity.this);
+        			builder.setTitle("提示");
+        			builder.setMessage("你确定要退出吗?");
+        			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        				
+        				@Override
+        				public void onClick(DialogInterface arg0, int arg1) {
+        					mDbHelper.deleteChatMessageWithUser(groupID);
+        					mDbHelper.deleteLatestChatTarget(groupID);
+                            quitGroup();
+                            Intent intent = new Intent(ContactGroupInfoActivity.this, StartActivity.class);
+                            startActivity(intent);
+        				}
+        			});
+        			builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {			
+        				@Override
+        				public void onClick(DialogInterface arg0, int arg1) {
+        					
+        				}
+        			});
+        			
+        			builder.create().show();
                 }
             });
         }
@@ -358,7 +407,7 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
-        String groupID = getIntent().getStringExtra(GROUP_ID);
+        groupID = getIntent().getStringExtra(GROUP_ID);
 
 		if(savedInstanceState != null) {
 			mActivityResult = savedInstanceState.getParcelable(EXTRA_ACTIVITY_RESULT);

@@ -61,9 +61,9 @@ public class WowTalkWebServerIF {
 		int errno = ErrorCode.UNKNOWN; 
 		
 		Connect2 connect2 = new Connect2();
-		fSetNetworkTimeout(5000, 5000);
+		Connect2.SetTimeout(5000, 0);
 		Element root = connect2.Post(postStr);
-
+		
 		if (root != null) {
 			NodeList errorList = root.getElementsByTagName("err_no");
 			Element errorElement = (Element) errorList.item(0);
@@ -676,7 +676,7 @@ public class WowTalkWebServerIF {
         if(isAuthEmpty(uid, password))
             return ErrorCode.INVALID_ARGUMENT;
 
-        final String action = "set_group_member_level";
+        final String action = "set_group_user_level";
         String postStr = "action=" + action
                 + "&uid=" + Utils.urlencodeUtf8(uid)
                 + "&password=" + Utils.urlencodeUtf8(password)

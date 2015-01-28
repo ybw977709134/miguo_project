@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -285,7 +286,16 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 	private Database mDb = null;
 
     private FilterBar tf;
+    
+    /*
+     * 用于标记活动状态
+     */
     private int eventStateTag = 0;
+    /*
+     * 用于标记报名状态
+     */
+    private int curSignUpTag = 0;
+
     private String outletEventId;
 
 
@@ -294,15 +304,6 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 //				return null;
 //		return instance;
 //	}
-
-	protected void refresh() {
-		this.runOnUiThread(new Runnable(){
-			@Override
-			public void run() {
-                fSetShownEvents();
-			}
-		});
-	}
 
 //	public static boolean isInstancated() {
 //		return instance != null;
@@ -384,6 +385,15 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 		}).start();
 	}
 
+	protected void refresh() {
+		this.runOnUiThread(new Runnable(){
+			@Override
+			public void run() {
+                fSetShownEvents();
+			}
+		});
+	}
+	
     private void downloadPreviousEvents(final String timestamp) {
         new Thread(new Runnable() {
 
@@ -405,7 +415,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
     }
 	
 	private void fSetShownEvents() {
-		switch (curEventGroupToShow) {
+		switch (curSignUpTag) {
             case 0:
                 acts = mDb.fetchAllEvents();
                 break;
@@ -432,9 +442,32 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 
         fixEventLocalPath();
 
-        eventAdapter = new EventAdapter(EventActivity.this, acts);
-        lvEvent.setAdapter(eventAdapter);
-		eventAdapter.notifyDataSetChanged();
+        if(eventAdapter != null){
+	        if (curSignUpTag == 0) {
+	            eventAdapter.setDataSource(acts);
+	        } else if (curSignUpTag == 1) { // joined
+	            ArrayList<WEvent> filtered = new ArrayList<WEvent>();
+	            for (WEvent e : acts) {
+	                if (e.membership == WEvent.MEMBER_SHIP_JOINED) {
+	                    filtered.add(e);
+	                }
+	            }
+	            eventAdapter.setDataSource(filtered);
+	        } else if (curSignUpTag == 2) { // my
+	            ArrayList<WEvent> filtered = new ArrayList<WEvent>();
+	            String myUid = PrefUtil.getInstance(this).getUid();
+	            for (WEvent e : acts) {
+	                if (TextUtils.equals(myUid, e.owner_uid)) {
+	                    filtered.add(e);
+	                }
+	            }
+	            eventAdapter.setDataSource(filtered);
+	        }
+        }else{
+        	eventAdapter = new EventAdapter(EventActivity.this, acts);
+	        lvEvent.setAdapter(eventAdapter);
+			eventAdapter.notifyDataSetChanged();
+        }
 		pullListView.onRefreshComplete();
 	}
 	
@@ -448,8 +481,6 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 		intent.putExtras(b);
 		startActivity(intent);
 	}
-
-    private int curEventGroupToShow=0;
 
     @Override
     public void onClick(View v) {
@@ -587,36 +618,42 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
     @Override
     public void onDropdownMenuItemClick(int subMenuResId, int itemIdx) {
         if (subMenuResId == R.id.btn_filter1) {
-            if (itemIdx == 0) {
-                eventAdapter.setDataSource(acts);
-            } else if (itemIdx == 1) { // joined
-                ArrayList<WEvent> filtered = new ArrayList<WEvent>();
-                for (WEvent e : acts) {
-                    if (e.membership == WEvent.MEMBER_SHIP_JOINED) {
-                        filtered.add(e);
-                    }
-                }
-                eventAdapter.setDataSource(filtered);
-            } else if (itemIdx == 2) { // my
-                ArrayList<WEvent> filtered = new ArrayList<WEvent>();
-                String myUid = PrefUtil.getInstance(this).getUid();
-                for (WEvent e : acts) {
-                    if (TextUtils.equals(myUid, e.owner_uid)) {
-                        filtered.add(e);
-                    }
-                }
-                eventAdapter.setDataSource(filtered);
+        	curSignUpTag = itemIdx;
+//            if (itemIdx == 0) {
+//                eventAdapter.setDataSource(acts);
+//            } else if (itemIdx == 1) { // joined
+//                ArrayList<WEvent> filtered = new ArrayList<WEvent>();
+//                for (WEvent e : acts) {
+//                    if (e.membership == WEvent.MEMBER_SHIP_JOINED) {
+//                        filtered.add(e);
+//                    }
+//                }
+//                eventAdapter.setDataSource(filtered);
+//            } else if (itemIdx == 2) { // my
+//                ArrayList<WEvent> filtered = new ArrayList<WEvent>();
+//                String myUid = PrefUtil.getInstance(this).getUid();
+//                for (WEvent e : acts) {
+//                    if (TextUtils.equals(myUid, e.owner_uid)) {
+//                        filtered.add(e);
+//                    }
+//                }
+//                eventAdapter.setDataSource(filtered);
+//            }
+            if (eventStateTag == 0) {
+            	downloadLatestEvents(GET_FINISHED_EVENT0,null);
+            } else if (eventStateTag == 1) { // on going
+            	downloadLatestEvents(null,null);
+            } else if (eventStateTag == 2) { // expired
+                downloadLatestEvents(GET_FINISHED_EVENT1,null);
             }
             return;
         } else if (subMenuResId == R.id.btn_filter2) {
+        	eventStateTag = itemIdx;
             if (itemIdx == 0) {
-            	eventStateTag = 0;
             	downloadLatestEvents(GET_FINISHED_EVENT0,null);
             } else if (itemIdx == 1) { // on going
-            	eventStateTag = 1;
             	downloadLatestEvents(null,null);
             } else if (itemIdx == 2) { // expired
-            	eventStateTag = 2;
                 downloadLatestEvents(GET_FINISHED_EVENT1,null);
             }
             return;
@@ -650,6 +687,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 
 	@Override
 	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+		if(curSignUpTag == 0){
 		switch (eventStateTag) {
 		//即将进行
 		case 0:
@@ -666,6 +704,15 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 			break;
 		default: break;
 		}
+		}else{
+			new Handler().post(new Runnable() {
+				
+				@Override
+				public void run() {
+					pullListView.onRefreshComplete();					
+				}
+			});
+		}
 	}
 
 	//上啦加载更多
@@ -679,7 +726,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 					runOnUiThread(new Runnable(){
 						@Override
 						public void run() {
-							switch (curEventGroupToShow) {
+							switch (curSignUpTag) {
 					            case 0:
 					                acts = mDb.fetchAllEvents();
 					                break;
@@ -710,7 +757,8 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 	@Override
 	public void onLastItemVisible() {
 		String time = null;
-		switch (eventStateTag) {
+		if(acts.size() > 0){
+			switch (eventStateTag) {
 		//即将进行
 		case 0:
 			time = acts.get(acts.size()-1).startTime.getTime() + "";
@@ -730,5 +778,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 			break;
 		default: break;
 		}
+		}
+		
 	}
 }

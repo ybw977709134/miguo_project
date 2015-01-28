@@ -30,10 +30,11 @@
             android:visibility="gone"/>
     </RelativeLayout>
 
-    <ScrollView
+    <co.onemeter.oneapp.ui.widget.DampScollView
         android:id="@+id/sv_main"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:fadingEdge="none"
         android:layout_below="@+id/title_bar" >
 
         <LinearLayout
@@ -220,5 +221,5 @@
                 android:textAppearance="@android:style/TextAppearance.Medium"
                 android:textColor="@color/text_gray2" />
         </LinearLayout>
-    </ScrollView>
+    </co.onemeter.oneapp.ui.widget.DampScollView>
 </RelativeLayout>

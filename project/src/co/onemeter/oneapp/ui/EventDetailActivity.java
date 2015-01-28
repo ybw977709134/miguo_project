@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.ApplicationInfoItemAdapter;
+import co.onemeter.oneapp.ui.widget.DampScollView;
 import co.onemeter.oneapp.utils.ListViewUtils;
 import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
@@ -267,6 +268,9 @@ public class EventDetailActivity extends Activity implements OnClickListener {
             hideApplicants();
 		}
 		
+		DampScollView dampScrollView = (DampScollView) findViewById(R.id.sv_main);
+		ImageView imgView = (ImageView) findViewById(R.id.image_cover);
+		dampScrollView.setImageView(imgView);
 	}
 
     private boolean isApplicantsVisible() {

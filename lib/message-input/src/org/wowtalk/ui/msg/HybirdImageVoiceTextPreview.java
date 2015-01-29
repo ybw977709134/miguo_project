@@ -26,6 +26,8 @@ public class HybirdImageVoiceTextPreview extends Activity implements View.OnClic
     public static final String EXTRA_IN_VOICE_DURATION = "in_voice_duration";
     /** 输入消息文本。*/
     public static final String EXTRA_IN_TEXT = "in_text";
+    /** 区分是否是发布是预览**/
+    public final static String EXTRA_COMMIT = "commit";
 
     String audioFilename;
     MediaPlayer mediaPlayer;
@@ -57,6 +59,12 @@ public class HybirdImageVoiceTextPreview extends Activity implements View.OnClic
             q.find(R.id.btn_msg_audio).invisible();
         }
 
+        if(getIntent().getBooleanExtra(EXTRA_COMMIT, false)){
+        	q.find(R.id.btn_commit).visibility(View.VISIBLE);
+        }
+        
+        q.find(R.id.title_back).clicked(this);
+        q.find(R.id.btn_commit).clicked(this);
         startAudioPositionMonitorThread();
     }
 
@@ -75,6 +83,19 @@ public class HybirdImageVoiceTextPreview extends Activity implements View.OnClic
             } else {
                 replayAudio();
             }
+            return;
+        }else if(viewId == R.id.title_back){
+        	if(mediaPlayer != null){
+//            	mediaPlayer.stop();
+//            	mediaPlayer.release();
+           	 	stopAudioPositionMonitorThread();
+        	}
+        	finish();
+        	return;
+        }else if(viewId == R.id.btn_commit){
+        	setResult(RESULT_OK);
+        	finish();
+        	return;
         }
     }
 
@@ -89,6 +110,17 @@ public class HybirdImageVoiceTextPreview extends Activity implements View.OnClic
         stopAudioPositionMonitorThread();
     }
 
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	 if (mediaPlayer != null) {
+             mediaPlayer.stop();
+             mediaPlayer.release();
+         }
+
+         stopAudioPositionMonitorThread();
+    }
+    
     /**
      * Init and play.
      */

@@ -27,6 +27,13 @@
         	android:layout_width="fill_parent"
         	android:layout_height="fill_parent"
         	android:src="@drawable/default_avatar_90" />
+       	<ImageView
+	        android:id="@+id/imageView_tag_tea"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="right|top"
+	        android:src="@drawable/icon_avatar_teacher"
+	        android:visibility="gone" />
        	<ImageView 
        	    android:layout_height="fill_parent"
        	    android:layout_width="fill_parent"

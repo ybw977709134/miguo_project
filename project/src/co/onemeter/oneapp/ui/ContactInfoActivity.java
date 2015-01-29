@@ -141,9 +141,9 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     private void setFriendInfoForBiz() {
         // 默认男性
 //        mFriendNameBiz.setText(buddy.nickName);
-    	mFriendNameBiz.setText(!TextUtils.isEmpty(buddy.alias)?buddy.alias:buddy.nickName);
+    	mFriendNameBiz.setText("名字：" + (!TextUtils.isEmpty(buddy.alias)?buddy.alias:buddy.nickName));
         
-        mPronunciation.setText(buddy.pronunciation);//发音
+        mPronunciation.setText("账号：" + buddy.username);//发音
     }
 
     private void initView_status() {

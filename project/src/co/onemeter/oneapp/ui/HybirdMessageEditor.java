@@ -26,6 +26,7 @@ import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
+import org.wowtalk.ui.msg.HybirdImageVoiceTextPreview;
 import org.wowtalk.ui.msg.InputBoardManager;
 
 import java.io.File;
@@ -83,6 +84,7 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
 
     private final static int ACTIVITY_REQ_ID_PICK_PHOTO_FROM_CAMERA = 1;
     private final static int ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY = 2;
+    private final static int ACTIVITY_REQ_GO_PREVIEW = 3;
 
     // save text & location
     private Moment moment = new Moment();
@@ -408,7 +410,7 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
                     stopRecording();
                     updateGotVoice();
                 }
-                commit();
+                gotoPreview();
                 break;
             case R.id.trigger_add_img_layout:
                 if (listPhoto == null || listPhoto.size() < imageMaxCnt) {
@@ -423,6 +425,28 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
         }
     }
 
+    private void gotoPreview(){
+    	 if (!isContentValid()) {
+             mMsgBox.show(getString(R.string.app_name),
+                     getString(R.string.hybird_message_editor_content_required));
+             return;
+         }
+    	 
+    	Intent intent = new Intent(this, HybirdImageVoiceTextPreview.class);
+        intent.putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_TEXT, etMomentMsgContent.getText().toString());
+    	 if (!listPhoto.isEmpty()) {
+             intent.putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_IMAGE_FILENAME, listPhoto.get(0).localPath);
+         }
+    	 if (mLastVoiceFile != null) {
+             intent.putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_VOICE_FILENAME, mLastVoiceFile.getAbsolutePath());
+             intent.putExtra(HybirdImageVoiceTextPreview.EXTRA_IN_VOICE_DURATION, voiceDurationMs / 1000);
+         }
+    	 intent.putExtra(HybirdImageVoiceTextPreview.EXTRA_COMMIT, true);
+    	startActivityForResult(intent,
+		        ACTIVITY_REQ_GO_PREVIEW
+    		);
+    }
+    
     private void commit() {
 
         if (!isContentValid()) {
@@ -960,6 +984,11 @@ public class HybirdMessageEditor extends Activity implements View.OnClickListene
                     }, data);
                 }
                 break;
+            case ACTIVITY_REQ_GO_PREVIEW:
+            	if (resultCode == RESULT_OK) {
+            		commit();
+            	}
+            	break;
         }
     }
 

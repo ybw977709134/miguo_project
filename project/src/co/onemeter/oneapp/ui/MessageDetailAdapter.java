@@ -240,6 +240,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = null;
+                holder.imgContactType = null;
                 holder.imgMsgThumbnail = (ImageView)lView.findViewById(R.id.img_thumbnail);
                 holder.imgMarkFailed = (ImageView)lView.findViewById(R.id.imgMarkFailed);
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -257,6 +258,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = null;
+                holder.imgContactType = null;
                 holder.imgMsgThumbnail = (ImageView)lView.findViewById(R.id.img_thumbnail);
                 holder.imgMarkFailed = (ImageView)lView.findViewById(R.id.imgMarkFailed);
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -274,6 +276,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = null;
                 holder.imgStampAnim = (AnimImage)lView.findViewById(R.id.img_thumbnail);
                 holder.imgContactPhoto = null;
+                holder.imgContactType = null;
                 holder.imgMsgThumbnail = null;
                 holder.imgMarkFailed = (ImageView)lView.findViewById(R.id.imgMarkFailed);
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -291,6 +294,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = null;
+                holder.imgContactType = null;
                 holder.imgMsgThumbnail = (ImageView)lView.findViewById(R.id.img_thumbnail);
                 holder.imgMarkFailed = (ImageView)lView.findViewById(R.id.imgMarkFailed);
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -308,6 +312,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = null;
+                holder.imgContactType = null;
                 holder.imgMsgThumbnail = (ImageView)lView.findViewById(R.id.img_thumbnail);
                 holder.imgMarkFailed = (ImageView)lView.findViewById(R.id.imgMarkFailed);
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -325,6 +330,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = (TextView)lView.findViewById(R.id.txt_time);
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = null;
+                holder.imgContactType = null;
                 holder.imgMsgThumbnail = (ImageView)lView.findViewById(R.id.img_thumbnail);
                 holder.imgMarkFailed = (ImageView)lView.findViewById(R.id.imgMarkFailed);
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -341,6 +347,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtContactName = (TextView)lView.findViewById(R.id.txt_contact_name);
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
+                holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
                 holder.imgMsgThumbnail = (ImageView)lView.findViewById(R.id.img_thumbnail);
                 holder.imgMarkFailed = null;
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -358,6 +365,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = null;
                 holder.imgStampAnim = (AnimImage)lView.findViewById(R.id.img_thumbnail);
                 holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
+                holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
                 holder.imgMsgThumbnail = null;
                 holder.imgMarkFailed = null;
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -375,6 +383,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
+                holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
                 holder.imgMsgThumbnail = (ImageView)lView.findViewById(R.id.img_thumbnail);
                 holder.imgMarkFailed = null;
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -392,6 +401,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = (TextView)lView.findViewById(R.id.txt_time);
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
+                holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
                 holder.imgMsgThumbnail = (ImageView)lView.findViewById(R.id.img_thumbnail);
                 holder.imgMarkFailed = null;
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -409,6 +419,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
+                holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
                 holder.imgMsgThumbnail = (ImageView)lView.findViewById(R.id.img_thumbnail);
                 holder.imgMarkFailed = null;
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -426,6 +437,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = null;
+                holder.imgContactType = null;
                 holder.imgMsgThumbnail = null;
                 holder.imgMarkFailed = null;
                 holder.progressbar = null;
@@ -443,6 +455,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
+                holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
                 holder.imgMsgThumbnail = (ImageView)lView.findViewById(R.id.img_thumbnail);
                 holder.imgMarkFailed = null;
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -634,6 +647,15 @@ public class MessageDetailAdapter extends BaseAdapter{
                             R.drawable.default_avatar_90, sender, true);
                 }
             }
+            
+            //display accoutType flags
+            if (holder.imgContactType != null) {
+            	if (sender.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+            		holder.imgContactType.setVisibility(View.VISIBLE);
+            	} else {
+            		holder.imgContactType.setVisibility(View.GONE);
+            	}
+            } 
 
             // display name
             if (message.isGroupChatMessage && !message.ioType.equals(ChatMessage.IOTYPE_OUTPUT)) {
@@ -1357,6 +1379,7 @@ public class MessageDetailAdapter extends BaseAdapter{
         TextView txtSentStatus;
         TextView txtDuration;
         ImageView imgContactPhoto;
+        ImageView imgContactType;
         ImageView imgMsgThumbnail;
         AnimImage imgStampAnim;
         ImageView imgMarkFailed;

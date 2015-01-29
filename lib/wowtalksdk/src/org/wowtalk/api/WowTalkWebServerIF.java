@@ -74,8 +74,6 @@ public class WowTalkWebServerIF {
 			} else {
 				errno = Integer.parseInt(errorStr);
 			}
-		}else{
-			errno = -1 ; 
 		}
 		return errno;
 	}
@@ -4506,28 +4504,6 @@ public class WowTalkWebServerIF {
 			}
 		}
 		return result;
-	}
-	
-	/**
-	 * 获取校园里班级组织结构返回码
-	 * @return 
-	 */
-	public int getMySchoolListErrno(){
-		List<Pair<String, String>> result = new LinkedList<>();
-
-		String strUID = sPrefUtil.getUid();
-		String strPwd = sPrefUtil.getPassword();
-
-		if (isAuthEmpty(strUID, strPwd)) {
-			return ErrorCode.INVALID_ARGUMENT;
-		}
-
-		String action = "get_school_user_in";
-		String postStr = "action=" + action
-				+ "&uid=" + Utils.urlencodeUtf8(strUID)
-				+ "&password=" + Utils.urlencodeUtf8(strPwd);
-
-		return _doRequestWithoutResponse(postStr);
 	}
 
 	/**

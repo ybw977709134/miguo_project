@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.adapter.GroupTreeAdapter;
 import co.onemeter.oneapp.contacts.model.ContactTreeNode;
@@ -41,7 +40,6 @@ public class SchoolMatesFragment extends Fragment
     AQuery aQuery;
     MessageBox msgbox;
     List<GroupChatRoom> schools;
-    int errno;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,9 +75,7 @@ public class SchoolMatesFragment extends Fragment
             @Override
             protected Integer doInBackground(Void... voids) {
                 schools = WowTalkWebServerIF.getInstance(getActivity()).getMySchools(true);
-                errno = WowTalkWebServerIF.getInstance(getActivity()).getMySchoolListErrno();
-//                return schools != null && !schools.isEmpty() ? ErrorCode.OK : ErrorCode.OPERATION_FAILED;
-                return errno;
+                return schools != null && !schools.isEmpty() ? ErrorCode.OK : ErrorCode.OPERATION_FAILED;
             }
 
             @Override
@@ -89,14 +85,12 @@ public class SchoolMatesFragment extends Fragment
                     new Database(getActivity()).storeSchools(schools);
                 }
                 else{
-//                	schools = new Database(getActivity()).fetchSchools();
-//                	if(schools != null && !schools.isEmpty()){
-//                    	msgbox.toast(R.string.timeout_message); 
-//                	}else if(schools == null && schools.isEmpty()) {
-//                		msgbox.toast(R.string.no_school_class); 
-//                	}     
-                	msgbox.toast(R.string.timeout_contacts_message, Toast.LENGTH_SHORT);	
-                                	
+                	schools = new Database(getActivity()).fetchSchools();
+                	if(schools != null && !schools.isEmpty()){
+                    	msgbox.toast(R.string.timeout_message); 
+                	}else if(schools == null && schools.isEmpty()) {
+                		msgbox.toast(R.string.no_school_class); 
+                	}          	
             	}
 
                 updateUi();

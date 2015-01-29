@@ -15,7 +15,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
@@ -411,6 +413,7 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
         if (groupRoom == null) {
             isCreatingNew = true;
         } else {
+        	groupRoom = new Database(this).fetchGroupChatRoom(groupRoom.groupID);
             isCreatingNew = false;
         }
 

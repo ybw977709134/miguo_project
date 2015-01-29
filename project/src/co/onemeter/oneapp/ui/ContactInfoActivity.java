@@ -141,9 +141,9 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     private void setFriendInfoForBiz() {
         // 默认男性
 //        mFriendNameBiz.setText(buddy.nickName);
-    	mFriendNameBiz.setText(!TextUtils.isEmpty(buddy.alias)?buddy.alias:buddy.nickName);
+    	mFriendNameBiz.setText("名字：" + (!TextUtils.isEmpty(buddy.alias)?buddy.alias:buddy.nickName));
         
-        mPronunciation.setText(buddy.pronunciation);//发音
+        mPronunciation.setText("账号：" + buddy.username);//发音
     }
 
     private void initView_status() {
@@ -454,12 +454,17 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                 break;
             case R.id.btn_add:
                 android.util.Log.d("---------------------", buddy+"");
-            	Intent intent = new Intent(this, FriendValidateActivity.class);
-            	ArrayList<Buddy> buddyList = new ArrayList<Buddy>();
-            	buddyList.add(buddy);
-            	intent.putExtra("buddyList2", buddyList);
-            	startActivity(intent);
+                if(buddy.userID.equals(PrefUtil.getInstance(this).getUid())){
+                	mMsgBox.toast("您不能加自己为好友哦", Toast.LENGTH_SHORT);
+                }else{
+                	Intent intent = new Intent(this, FriendValidateActivity.class);
+            	    ArrayList<Buddy> buddyList = new ArrayList<Buddy>();
+            	    buddyList.add(buddy);
+            	    intent.putExtra("buddyList2", buddyList);
+            	    startActivity(intent);
 //                addBuddy();
+                }
+
                 break;
                 
             case R.id.btn_edit_remarkname://跳转到修改好友备注名事件
@@ -480,8 +485,8 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 					public void onClick(DialogInterface arg0, int arg1) {
 
 						removeBuddy();
-						dbHelper.deleteLatestChatTarget(buddy.userID);
-						dbHelper.deleteChatMessageWithUser(buddy.userID);
+//						dbHelper.deleteLatestChatTarget(buddy.userID);
+//						dbHelper.deleteChatMessageWithUser(buddy.userID);
 						startActivity(new Intent(ContactInfoActivity.this, StartActivity.class));
 						Toast.makeText(ContactInfoActivity.this, "删除好友成功", Toast.LENGTH_SHORT).show();
 					}

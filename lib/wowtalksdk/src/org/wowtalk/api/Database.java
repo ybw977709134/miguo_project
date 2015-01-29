@@ -6188,7 +6188,19 @@ public class Database {
                     storeStudentAlias(schoolId, student.userID, student.alias);
             }
             storeGroupMemberIds(classroom.groupID, studentIds);
-            storeBuddies(classroom.memberList); // TODO, avoid overwrite buddy alias
+
+            // store buddies
+            // NOTE: buddy info in classroom member list is not complete,
+            // so we only save a buddy into db if that buddy is not already in db,
+            // to avoid override valid fields with empty fields.
+            ArrayList<Buddy> buddiesToStore = new ArrayList<>(classroom.memberList.size());
+            for (Buddy member : classroom.memberList) {
+                if (null == fetchBuddyDetail(member)) {
+                    buddiesToStore.add(member);
+                }
+            }
+            if (!buddiesToStore.isEmpty())
+                storeBuddies(buddiesToStore);
         }
 
         // recursive

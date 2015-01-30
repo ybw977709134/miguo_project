@@ -563,9 +563,14 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
                                 : ContactInfoActivity.BUDDY_TYPE_NOT_FRIEND;
                     }
                 }
-                ContactInfoActivity.launch(ContactSearchActivity.this,
-                        Person.fromBuddy(buddy),
-                        mFriendType);
+                if(buddy.userID.equals(PrefUtil.getInstance(getApplicationContext()).getUid())){
+                	mMsgBox.toast("你不能加自己为好友", Toast.LENGTH_SHORT);
+                }else{
+                	ContactInfoActivity.launch(ContactSearchActivity.this,
+                    Person.fromBuddy(buddy),
+                    mFriendType);
+                }
+
             }
         });
     }

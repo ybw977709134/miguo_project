@@ -320,7 +320,29 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
                 @Override
                 public void onClick(View v) {
                     bottomBoard.dismiss();
-                    quitGroup();
+                    Builder builder = new AlertDialog.Builder(ContactGroupInfoActivity.this);
+        			builder.setTitle("提示");
+        			builder.setMessage("你确定要退出吗?");
+        			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        				
+        				@Override
+        				public void onClick(DialogInterface arg0, int arg1) {
+        					mDbHelper.deleteChatMessageWithUser(groupID);
+        					mDbHelper.deleteLatestChatTarget(groupID);
+        					quitGroup();
+                            Intent intent = new Intent(ContactGroupInfoActivity.this, StartActivity.class);
+                            startActivity(intent);
+        				}
+        			});
+        			builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {			
+        				@Override
+        				public void onClick(DialogInterface arg0, int arg1) {
+        					
+        				}
+        			});
+        			
+        			builder.create().show();
+                    
                 }
             });
             bottomBoard.add(getString(R.string.group_edit_info), BottomButtonBoard.BUTTON_BLUE, new OnClickListener() {

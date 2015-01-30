@@ -123,7 +123,7 @@ public class BuddySearchItemAdapter extends BaseAdapter {
         final Button btnAdd = (Button) convertView.findViewById(R.id.btn_add);
         boolean mAllowAdd = !TextUtils.isEmpty(buddy.userID)
                 && 0 == (buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE)
-                && 0 == (buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_PENDING_OUT)
+         //       && 0 == (buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_PENDING_OUT)
                 && !buddy.userID.equals(myLocalUid);
         if(mAllowAdd) {
             btnAdd.setVisibility(View.VISIBLE);

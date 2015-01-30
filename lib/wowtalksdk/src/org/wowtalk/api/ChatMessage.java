@@ -268,7 +268,7 @@ public class ChatMessage {
 	public static final int HYBIRD_COMPONENT_AUDIO = 1;
 
 	/** 发出的语音文件的扩展名。*/
-	public static final String SEND_AUDIO_EXT = "aac";
+	public static final String SEND_AUDIO_EXT = "m4a";
 
 	/************************Data should be saved in db*****************************/
 	/** insert key of this message in db **/

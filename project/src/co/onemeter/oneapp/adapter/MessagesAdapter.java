@@ -406,7 +406,7 @@ public class MessagesAdapter extends BaseAdapter {
                 photoImageView.setImageResource(R.drawable.default_avatar_90);
             } 
             //判断消息列表的帐号头像是否为老师
-            if (buddy.getAccountType() == 2) {
+            if (buddy != null && buddy.getAccountType() == 2) {
             	imageView_tag_tea.setVisibility(View.VISIBLE);
             } else {
             	imageView_tag_tea.setVisibility(View.GONE);

@@ -92,6 +92,12 @@ public class BuddySearchItemAdapter extends BaseAdapter {
 
         final Buddy buddy=buddyList.get(position);
         
+        if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+        	convertView.findViewById(R.id.imageView_tag_tea).setVisibility(View.VISIBLE);
+        } else {
+        	convertView.findViewById(R.id.imageView_tag_tea).setVisibility(View.GONE );
+        }
+        
         if(buddy.nickName.length() >=  strContent.length() && buddy.nickName.contains(strContent)){
         	setNameWithColor(nickName,contextRef.getString(R.string.settings_name)+NAME_SPLIT+" "+buddy.nickName);
         }else{

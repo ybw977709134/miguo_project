@@ -110,6 +110,12 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 		txtStatus=(TextView)findViewById(R.id.person_signature);
 		change_avatar=(RelativeLayout)findViewById(R.id.change_avatar);
 		imgPhoto=(ImageView)findViewById(R.id.thumbnail);
+		
+		if (mPrefUtil.getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+			findViewById(R.id.imageView_tag_tea).setVisibility(View.VISIBLE);
+		} else {
+			findViewById(R.id.imageView_tag_tea).setVisibility(View.GONE);
+		}
 
 		mDeptText = (TextView)findViewById(R.id.txt_dept);
 		mJobTitleText = (TextView)findViewById(R.id.txt_job_title);

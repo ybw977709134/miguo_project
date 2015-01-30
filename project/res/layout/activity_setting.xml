@@ -44,15 +44,28 @@
 					android:id="@+id/settings_myinfo"
 					android:text="@string/settings_myinfo"
 					style="@style/standard_list_item_with_arrow"/>
-
+				<FrameLayout 
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_centerVertical="true"
+					android:layout_alignParentRight="true"
+					android:layout_marginRight="40dp"
+				     >
 				<co.onemeter.oneapp.ui.CircleImageView
 					android:id="@+id/img_thumbnail"
 					android:layout_width="40dp"
-					android:layout_height="40dp"
-					android:layout_centerVertical="true"
-					android:layout_alignParentRight="true"
-					android:layout_marginRight="40dp"
+					android:layout_height="40dp"					
 					android:src="@drawable/default_avatar_90" />
+				
+				<ImageView
+	            	android:id="@+id/imageView_tag_tea"
+	            	android:layout_width="wrap_content"
+	            	android:layout_height="wrap_content"
+	            	android:layout_gravity="right"
+	            	android:src="@drawable/icon_avatar_teacher" 
+	            	android:visibility="gone" />
+				
+				</FrameLayout>
 			</RelativeLayout>
 
 			<ImageView

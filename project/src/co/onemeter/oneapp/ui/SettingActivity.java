@@ -289,6 +289,13 @@ public class SettingActivity extends Activity implements OnClickListener {
         mMsgBox = new MessageBox(this);
         mWeb = WowTalkWebServerIF.getInstance(SettingActivity.this);
         mPrefUtil = PrefUtil.getInstance(this);
+        
+        if (mPrefUtil.getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+        	findViewById(R.id.imageView_tag_tea).setVisibility(View.VISIBLE);
+        } else {
+        	findViewById(R.id.imageView_tag_tea).setVisibility(View.GONE);
+        }
+        
         initView();
     }
 

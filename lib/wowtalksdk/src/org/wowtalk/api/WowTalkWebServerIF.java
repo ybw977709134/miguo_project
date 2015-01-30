@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Pair;
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -4313,6 +4314,19 @@ public class WowTalkWebServerIF {
 
 		return result;
 	}
+	
+	/**
+	 * 获取我的校园组织架构。
+	 * @return 学校列表，包含班级和同学。
+	 * @param withClassRooms
+	 */
+	public int getMySchoolsErrno(boolean withClassRooms,List<GroupChatRoom> result) {
+//		List<GroupChatRoom> result = new LinkedList<>();
+		int errno ;
+		errno = getMySchoolListErrno(withClassRooms,result);
+
+		return errno;
+	}
 
 	/** 递归地 level+1 */
 	private void increaseLevel(GroupChatRoom g) {
@@ -4504,6 +4518,79 @@ public class WowTalkWebServerIF {
 			}
 		}
 		return result;
+	}
+	
+	private int getMySchoolListErrno(boolean withClassRooms,List<GroupChatRoom> schoolResult) {		
+		List<Pair<String, String>> schools = new ArrayList<>();
+		String strUID = sPrefUtil.getUid();
+		String strPwd = sPrefUtil.getPassword();
+
+		if (isAuthEmpty(strUID, strPwd)) {
+			return ErrorCode.INVALID_ARGUMENT;
+		}
+
+		String action = "get_school_user_in";
+		String postStr = "action=" + action
+				+ "&uid=" + Utils.urlencodeUtf8(strUID)
+				+ "&password=" + Utils.urlencodeUtf8(strPwd);
+
+		Connect2 connect2 = new Connect2();
+		connect2.SetTimeout(5000, 5000);
+		Element root = connect2.Post(postStr);
+		int errno = ErrorCode.BAD_RESPONSE;
+		if (root != null) {
+
+			// err_no要素のリストを取得
+			NodeList errorList = root.getElementsByTagName("err_no");
+			// error要素を取得
+			Element errorElement = (Element) errorList.item(0);
+			// error要素の最初の子ノード（テキストノード）の値を取得
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				errno = 0;
+				Database dbHelper = new Database(mContext);
+
+				NodeList schoolNodes = root.getElementsByTagName("school");
+				for (int i = 0; i < schoolNodes.getLength(); i++) {
+					Element schoolNode = (Element) schoolNodes.item(i);
+					String schoolId = schoolNode.getElementsByTagName("corp_id").item(0).getTextContent();
+					String schoolName = schoolNode.getElementsByTagName("corp_name").item(0).getTextContent();
+					schools.add(new Pair<>(schoolId, schoolName));
+				}
+			}else {
+				errno = Integer.parseInt(errorStr);
+			}
+		}
+		
+		for (Pair<String, String> school : schools) {
+			GroupChatRoom schoolNode = new GroupChatRoom(school.first, school.second, school.second,
+					null, 0, 0, false);
+			schoolResult.add(schoolNode);
+			
+			if (!withClassRooms)
+				continue;
+
+			List<GroupChatRoom> classRooms = getSchoolClassRooms(school.first);
+			schoolNode.childGroups = new ArrayList<>(classRooms);
+			for (GroupChatRoom c : classRooms) {
+				increaseLevel(c);
+				c.parentGroupId = schoolNode.groupID;
+			}
+
+			Map<String, List<Buddy>> schoolMembers = getSchoolMembers(school.first);
+			for (GroupChatRoom classroom : classRooms) {
+				List<Buddy> classMembers = schoolMembers.get(classroom.groupID);
+				if (classMembers != null && !classMembers.isEmpty()) {
+					for (Buddy member : classMembers) {
+						classroom.addMember(member);
+					}
+				}
+			}
+		}
+		
+		
+		return errno;
 	}
 
 	/**

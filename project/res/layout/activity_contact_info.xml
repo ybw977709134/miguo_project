@@ -18,6 +18,10 @@
         <TextView
             style="?attr/navbar_title"
             android:text="@string/contact_info_buddy_pageinfo"/>
+        <ImageButton
+                android:id="@+id/navbar_btn_right"
+                style="?attr/navbar_btn_right"
+                android:src="@drawable/nav_more_selector"/>
     </RelativeLayout>
 
     <ScrollView
@@ -386,7 +390,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/change_alias"
                 android:id="@+id/btn_edit_remarkname"
-                android:layout_margin="@dimen/padding_medium" />
+                android:layout_margin="@dimen/padding_medium"
+                android:visibility="gone" />
 
             <Button
                 style="@style/button_red"

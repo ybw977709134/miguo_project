@@ -303,9 +303,9 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     	  if(buddyType == BUDDY_TYPE_IS_FRIEND){
               q.find(R.id.module_chat).visible();
               q.find(R.id.btn_goto_moments).visible();
-              q.find(R.id.btn_delete).visible();
+              q.find(R.id.btn_delete).gone();
               q.find(R.id.btn_add).gone();
-              q.find(R.id.btn_edit_remarkname).visible();//如果是好友显示修改好友备注名的功能
+              q.find(R.id.btn_edit_remarkname).gone();//如果是好友显示修改好友备注名的功能
     	  }if(buddyType == BUDDY_TYPE_NOT_FRIEND){
     		  if(isFromSchool){
     			  q.find(R.id.btn_msg).visible();
@@ -317,13 +317,13 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
               q.find(R.id.btn_goto_moments).gone();
               q.find(R.id.btn_delete).gone();
               q.find(R.id.btn_add).visible();
-              q.find(R.id.btn_edit_remarkname).invisible();//不是好友隐藏修改好友备注名的功能
+              q.find(R.id.btn_edit_remarkname).gone();//不是好友隐藏修改好友备注名的功能
     	  }if(buddyType == BUDDY_TYPE_MYSELF){
               q.find(R.id.module_chat).visible();
               q.find(R.id.btn_goto_moments).visible();
               q.find(R.id.btn_delete).gone();
               q.find(R.id.btn_add).gone();
-              q.find(R.id.btn_edit_remarkname).invisible();//不是好友隐藏修改好友备注名的功能
+              q.find(R.id.btn_edit_remarkname).gone();//不是好友隐藏修改好友备注名的功能
     	  }
     }
 
@@ -352,6 +352,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 
         q.find(R.id.img_thumbnail).clicked(this);
         q.find(R.id.navbar_btn_left).clicked(this);
+        q.find(R.id.navbar_btn_right).clicked(this);
         q.find(R.id.btn_goto_moments).clicked(this);
         q.find(R.id.btn_add).clicked(this);
         q.find(R.id.btn_delete).clicked(this);
@@ -415,6 +416,9 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
             case R.id.navbar_btn_left:
                 handleBackEvent();
                 break;
+            case R.id.navbar_btn_right:
+            	showPopupMenu();
+            	break;
             case R.id.btn_msg:
             	
                 chatWith(buddy.userID, TextUtils.isEmpty(buddy.alias)?buddy.nickName:buddy.alias);
@@ -852,5 +856,55 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         bundle.putParcelable(EXTRA_BUDDY_DETAIL, person);
         intent.putExtras(bundle);
         activity.startActivityForResult(intent, requestCode);
+    }
+    
+    /**
+     * 点击好友信息的详情页，弹出对好友的备注名和删除操作
+     * @date 2015/1/30
+     */
+    private void showPopupMenu() {
+        final BottomButtonBoard bottomBoard = new BottomButtonBoard(this, findViewById(R.id.info_main));
+
+        //修改备注名
+        bottomBoard.add(getString(R.string.change_alias), BottomButtonBoard.BUTTON_BLUE, new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomBoard.dismiss();
+                
+            	Intent i = new Intent(ContactInfoActivity.this, InputPlainTextActivity.class)
+                .putExtra(InputPlainTextActivity.EXTRA_VALUE, buddy.alias)
+                .putExtra(InputPlainTextActivity.EXTRA_TITLE, getString(R.string.change_alias))
+                .putExtra(InputPlainTextActivity.EXTRA_DESCRIPTION, getString(R.string.change_alias_info));
+            	startActivityForResult(i, REQ_INPUT_ALIAS);
+            }
+        });
+        
+        //删除好友
+        bottomBoard.add(getString(R.string.contact_info_delete_friend), BottomButtonBoard.BUTTON_RED, new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bottomBoard.dismiss();
+        			Builder builder = new AlertDialog.Builder(ContactInfoActivity.this);
+        			builder.setTitle("提示");
+        			builder.setMessage("你确定要删除好友吗?");
+        			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        				
+        				@Override
+        				public void onClick(DialogInterface arg0, int arg1) {
+    						removeBuddy();
+    						startActivity(new Intent(ContactInfoActivity.this, StartActivity.class));
+    						Toast.makeText(ContactInfoActivity.this, "删除好友成功", Toast.LENGTH_SHORT).show();
+
+        				}
+        			});
+        			builder.setNegativeButton("取消", null);
+        			
+        			builder.create().show();
+                }
+            });
+        
+        //close popupMenu
+        bottomBoard.addCancelBtn(getString(R.string.close));
+        bottomBoard.show();
     }
 }

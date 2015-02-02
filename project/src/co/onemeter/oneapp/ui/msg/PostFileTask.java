@@ -26,7 +26,7 @@ class PostFileTask extends AsyncTask<String, Integer, Boolean> {
 		for (int i = 0; i < pathes.length; ++i) {
 			final int fileIdx = i;
 			WowTalkWebServerIF.getInstance(context).fPostFileToServer(
-					pathes[i],
+					pathes[i], true,
 					new NetworkIFDelegate() {
 
 						@Override

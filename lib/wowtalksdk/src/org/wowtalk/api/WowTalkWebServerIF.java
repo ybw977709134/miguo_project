@@ -3508,24 +3508,24 @@ public class WowTalkWebServerIF {
 
     /**
      * Upload a file to server.
-     *
-     * @param filepath
-     * @param delegate
-     * @param tag
-     */
-    public void fPostFileToServer(String filepath, NetworkIFDelegate delegate, int tag) {
-        fPostFileToServer(filepath, GlobalSetting.S3_UPLOAD_FILE_DIR, delegate, tag);
+	 * @param filepath
+     * @param keepExt keep ext in remote file server.
+	 * @param delegate
+	 * @param tag
+	 */
+    public void fPostFileToServer(String filepath, boolean keepExt, NetworkIFDelegate delegate, int tag) {
+        fPostFileToServer(filepath, GlobalSetting.S3_UPLOAD_FILE_DIR, keepExt, delegate, tag);
     }
 
     /**
      * Upload a file to server.
-     *
-     * @param filepath
+     *  @param filepath
      * @param targetDir e.g., GlobalSetting.S3_UPLOAD_FILE_DIR
-     * @param delegate
-     * @param tag
-     */
-	public void fPostFileToServer(String filepath, String targetDir, NetworkIFDelegate delegate, int tag) {
+	 * @param keepExt keep ext in remote file server.
+	 * @param delegate
+	 * @param tag
+	 */
+	public void fPostFileToServer(String filepath, String targetDir, boolean keepExt, NetworkIFDelegate delegate, int tag) {
 
         String strUID = sPrefUtil.getUid();
         String strPwd = sPrefUtil.getPassword();
@@ -3540,7 +3540,22 @@ public class WowTalkWebServerIF {
 			return;
 		}
 
-		String fileId = UUID.randomUUID().toString();
+		// extract ext name
+		String ext = "";
+		if (keepExt) {
+			int posDot = filepath.lastIndexOf('.');
+			if (posDot != -1) {
+				int posSlash = filepath.lastIndexOf('/');
+				int posSlash2 = filepath.lastIndexOf('\\');
+				if ((posSlash == -1 || posSlash < posDot)
+						&& (posSlash2 == -1 || posSlash2 < posDot)) {
+					ext = filepath.substring(posDot);
+				}
+			}
+		}
+
+		String fileId = strUID + "_" + UUID.randomUUID().toString() + ext;
+
 		RemoteFileService.upload(mContext,
 				filepath,
 				targetDir,

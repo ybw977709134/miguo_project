@@ -1,7 +1,6 @@
 package co.onemeter.oneapp.ui.msg;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.*;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
@@ -29,7 +28,6 @@ import org.wowtalk.Log;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.InputBoardManager;
-import org.wowtalk.ui.msg.PickLocActivity;
 import org.wowtalk.ui.msg.Stamp;
 
 import java.util.ArrayList;
@@ -755,7 +753,7 @@ public abstract class MessageComposerActivityBase extends Activity
             @Override
             protected Void doInBackground(Void... arg0) {
                 WowTalkWebServerIF.getInstance(MessageComposerActivityBase.this).fPostFileToServer(
-                        pathOfThumbNail,
+                        pathOfThumbNail, true,
                         new NetworkIFDelegate(){
 
                             @Override
@@ -785,7 +783,7 @@ public abstract class MessageComposerActivityBase extends Activity
                 }
 
                 WowTalkWebServerIF.getInstance(MessageComposerActivityBase.this).fPostFileToServer(
-                        pathOfMultimedia,
+                        pathOfMultimedia, true,
                         new NetworkIFDelegate(){
 
                             @Override
@@ -1337,8 +1335,8 @@ public abstract class MessageComposerActivityBase extends Activity
 			@Override
 			protected Void doInBackground(Void... params) {
 				WowTalkWebServerIF.getInstance(MessageComposerActivityBase.this).fPostFileToServer(
-						pathOfMultimedia, 
-						new NetworkIFDelegate(){
+						pathOfMultimedia, true,
+                        new NetworkIFDelegate(){
                             @Override
                             public void didFailNetworkIFCommunication(int arg0, byte[] arg1) {
                                 isFileUploadSuccess = false;

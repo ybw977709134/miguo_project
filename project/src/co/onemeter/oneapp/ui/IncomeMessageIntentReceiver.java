@@ -14,6 +14,7 @@ import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ChatMessageHandler;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import org.wowtalk.api.*;
 
 import java.util.List;
@@ -163,6 +164,12 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
             } else if (msg.msgType.equals(ChatMessage.MSGTYPE_THIRDPARTY_MSG)) {
                 // TODO 处理推送通知
                 Log.i("receive MSGTYPE_THIRDPARTY_MSG: ", msg.messageContent);
+                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+                    @Override
+                    protected Integer doInBackground(Void... params) {
+                        return WowTalkWebServerIF.getInstance(context).fGetBuddyList();
+                    }
+                });
                 strMessage = null;
             } else {
                 strMessage = null;

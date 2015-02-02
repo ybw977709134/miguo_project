@@ -73,7 +73,6 @@
                         android:layout_above="@+id/group_chat_button"
                         android:singleLine="true"
                         style="@style/standard_text_gray"
-                        android:visibility="gone"
                         android:text="@string/contact_info_group_short_id"/>
                     <ImageButton
                         android:id="@+id/group_chat_button"

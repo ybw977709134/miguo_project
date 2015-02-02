@@ -98,7 +98,7 @@ public class SchoolMatesFragment extends Fragment
 //                	}      
                 	msgbox.toast(R.string.timeout_contacts_message, Toast.LENGTH_SHORT);              	
             	}
-
+                schools = new Database(getActivity()).fetchSchools();
                 updateUi();
             }
         });

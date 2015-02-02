@@ -52,7 +52,7 @@ public class MediaInputHelper implements Parcelable {
 	public static final int MEDIA_TYPE_THUMNAIL = 4;
 
     private static final int VIDEO_FILE_LIMIT = 1024 * 1024 * 5;
-    private static final int VIDEO_DURATION_LIMIT = 90; // 90秒 x VGA x 3gp ~= 5MB
+    private static final int VIDEO_DURATION_LIMIT = 10; // 90秒 x VGA x 3gp ~= 5MB
     private static final int VIDEO_PREFERRED_WIDTH = 640; // VGA
     private static final int VIDEO_PREFERRED_HEIGHT = 480; // VGA
 

@@ -7,8 +7,10 @@ import co.onemeter.oneapp.BuildConfig;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.ui.Log;
+import co.onemeter.oneapp.ui.MessageComposerActivity;
 import co.onemeter.oneapp.ui.StartActivity;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.api.*;
@@ -170,6 +172,8 @@ public class ChatMessageHandler {
             android.util.Log.d(LOG_TAG, "ChatMessage.MSGTYPE_GROUPCHAT_SOMEONE_QUIT_ROOM: gid:"
                     + msg.chatUserName + ", uid: " + msg.groupChatSenderID);
 
+        android.util.Log.i("abc",msg.messageContent);
+
         String action = null;
         String group_id = null;
         String groupName = null;
@@ -196,10 +200,30 @@ public class ChatMessageHandler {
             mDb.deleteChatMessage(msg);
             return true;
         }
+        
+        if("disband_group".equals(action)){
+        	 if (!TextUtils.isEmpty(groupName)) {
+                 msg.displayName = groupName;
+             }
+             msg.messageContent = buddy_nickname + " " + context.getString(R.string.msg_someone_leave_group);
+             msg.msgType = ChatMessage.MSGTYPE_SYSTEM_PROMPT;
+             if (mSaveDb) {
+//             mDb.deleteGroupChatRoomWithID(msg.chatUserName);
+                 mDb.deletePendingRequest(msg.chatUserName, myUid);
+//                 mDb.deleteChatMessage(msg);
+                 mDb.updateChatMessage(msg, true);
+                 mDb.deleteBuddyFromGroupChatRoom(msg.chatUserName, buddy_id);
+                 mDb.deleteMyselfFlagFromGroupChatRoom(msg.chatUserName);
+//             mDb.deleteChatMessageWithUser(group_id);
+             }
+             return true;
+         } 
 
         // action = "remove_from_group"
         if (group_id == null || buddy_id == null || buddy_nickname == null)
             return false;
+        
+	    android.util.Log.i("abc", buddy_id.equals(myUid) +"");    
         if (buddy_id.equals(myUid)) {
             // I was kicked out, or reject from the group,
             // or the group has been disbanded
@@ -271,6 +295,9 @@ public class ChatMessageHandler {
 		} else if(ChatMessage.MSGTYPE_GROUPCHAT_SOMEONE_QUIT_ROOM.equals(msg.msgType)) {
             humanReadable = false;
             handleGroupQuit(msg);
+            if(!MessageComposerActivity.activityIsNull()){
+            	MessageComposerActivity.instance().finish();
+            }
 		} else if(ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST.equals(msg.msgType)) {
             humanReadable = false;
             handleGroupRequest(msg);

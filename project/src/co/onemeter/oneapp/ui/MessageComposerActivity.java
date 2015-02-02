@@ -100,6 +100,13 @@ public class MessageComposerActivity extends MessageComposerActivityBase {
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 	}
 
+	public static  boolean activityIsNull(){
+		if(instance != null){
+			return false;
+		}
+		return true;
+	}
+	
     @Override
     public void onResume() {
         super.onResume();

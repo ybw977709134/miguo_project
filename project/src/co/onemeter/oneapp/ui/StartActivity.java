@@ -683,6 +683,10 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         Database.open(this).deleteBuddyByUID(uid);
 
         mPrefUtil.setLocalContactListLastModified();
+        if(MessageComposerActivity.instance() != null){
+        	MessageComposerActivity.instance().finish();
+        }
+        
 	}
 
     /**
@@ -714,8 +718,11 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
                 intent);
 
         getPendingRequestsFromServerAsync();
+        startActivity(new Intent(this, StartActivity.class));
 	}
 
+	
+	
 	@Override
 	public void getChatMessage(ChatMessage msg) {
 
@@ -1246,6 +1253,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
             }
         });
     }
+    
 
     @Override
     public void getBuddyInfoChangedNotification(String uid, String msgLiteralWithoutType) {

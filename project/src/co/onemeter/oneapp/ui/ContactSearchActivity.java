@@ -44,7 +44,8 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //	private static final int GET_GROUP_BY_NAME = 1001;
 //	private static final int GET_GROUP_BY_GID = 1003;
 	private int searchKind = GET_BUDDY_BY_USERNAME;
-	
+	private static int SEARCH_DEFAULT = 0;
+	private static int SEARCH_RECOVER = 1;
 	
 //	private ImageButton btnTitleBack;
 //    private LinearLayout mLayoutButton;
@@ -649,6 +650,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
     	// TODO Auto-generated method stub
     	super.onActivityResult(requestCode, resultCode, data);
     	 if (resultCode == Activity.RESULT_OK) {
+    		 BuddySearchItemAdapter.IS_RESEARCH = SEARCH_RECOVER;
     		 fStartSearch();
          }
     }
@@ -697,6 +699,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 			setCheckStatus();
 			break;
 		case R.id.btn_search:
+			BuddySearchItemAdapter.IS_RESEARCH = SEARCH_DEFAULT;
 			fStartSearch();
 			break;
 		default:

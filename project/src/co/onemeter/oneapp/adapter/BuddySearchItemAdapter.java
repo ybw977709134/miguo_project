@@ -45,6 +45,7 @@ public class BuddySearchItemAdapter extends BaseAdapter {
     private MessageBox mMsgBox;
 
     public final static String NAME_SPLIT=":";
+    public static int IS_RESEARCH = 0;
     private WowTalkWebServerIF mWebif = null;
     private Database mDbHelper = null;
     public BuddySearchItemAdapter(Context context, ArrayList<Buddy> buddy, String str,MessageBox box) {
@@ -120,30 +121,56 @@ public class BuddySearchItemAdapter extends BaseAdapter {
             setNameWithColor(alias, String.format(contextRef.getString(R.string.contact_info_remarkname),buddy.alias));
         }
 
-        final Button btnAdd = (Button) convertView.findViewById(R.id.btn_add);
-        boolean mAllowAdd = !TextUtils.isEmpty(buddy.userID)
-                && 0 == (buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE)
-         //       && 0 == (buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_PENDING_OUT)
-                && !buddy.userID.equals(myLocalUid);
-        if(mAllowAdd) {
-            btnAdd.setVisibility(View.VISIBLE);
-            btnAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                	Log.d("--------------------", buddy+"");
-                	Intent intent = new Intent(contextRef, FriendValidateActivity.class);
-                	intent.putExtra("buddyList", buddyList);
-                	intent.putExtra("position", position);
-                	Activity ac = (Activity) contextRef;
-                	ac.startActivityForResult(intent,0);
-//                	btnAdd.setVisibility(View.GONE);
-
-//                    onAddFriendPressed(buddy,btnAdd);
-                }
-            });
-        } else {
-            btnAdd.setVisibility(View.GONE);
-        }
+//        final Button btnAdd = (Button) convertView.findViewById(R.id.btn_add);
+        Button btnAdd = (Button) convertView.findViewById(R.id.btn_add);
+//        boolean mAllowAdd = !TextUtils.isEmpty(buddy.userID)
+//                && 0 == (buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE)
+//                && 0 == (buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_PENDING_OUT)
+//                && !buddy.userID.equals(myLocalUid);
+//        if(mAllowAdd) {
+//            btnAdd.setVisibility(View.VISIBLE);
+//            btnAdd.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                	Log.d("--------------------", buddy+"");
+//                	Intent intent = new Intent(contextRef, FriendValidateActivity.class);
+//                	intent.putExtra("buddyList", buddyList);
+//                	intent.putExtra("position", position);
+//                	Activity ac = (Activity) contextRef;
+//                	ac.startActivityForResult(intent,0);
+//
+//                }
+//            });        	
+//        } else {
+//        		btnAdd.setVisibility(View.GONE);
+//        }
+        
+        if (!TextUtils.isEmpty(buddy.userID)) {
+        	if (buddy.userID.equals(myLocalUid)) {//自己
+        		btnAdd.setVisibility(View.GONE);
+        	} else {
+        		if ((buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE) == 0) {//不是好友
+        			btnAdd.setVisibility(View.VISIBLE);
+        			if (IS_RESEARCH == 1 && buddy.getFriendShipWithMe() == Buddy.RELATIONSHIP_PENDING_OUT) {//点击添加好友
+            			btnAdd.setVisibility(View.GONE);
+            		}
+        		} else {//好友
+        			btnAdd.setVisibility(View.GONE);
+        		}
+        	}
+        } 
+        
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            	Log.d("--------------------", buddy+"");
+            	Intent intent = new Intent(contextRef, FriendValidateActivity.class);
+            	intent.putExtra("buddyList", buddyList);
+            	intent.putExtra("position", position);
+            	Activity ac = (Activity) contextRef;
+            	ac.startActivityForResult(intent,0);
+            }
+        });
         return convertView;
     }
 

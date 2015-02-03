@@ -683,7 +683,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         Database.open(this).deleteBuddyByUID(uid);
 
         mPrefUtil.setLocalContactListLastModified();
-        if(MessageComposerActivity.instance() != null){
+        if(!MessageComposerActivity.activityIsNull()){
         	MessageComposerActivity.instance().finish();
         }
         

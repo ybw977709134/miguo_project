@@ -1106,4 +1106,9 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     public void changeToOtherApps() {
         AppStatusService.setIsMonitoring(false);
     }
+
+	@Override
+	public void willRecordAudio() {
+		
+	}
 }

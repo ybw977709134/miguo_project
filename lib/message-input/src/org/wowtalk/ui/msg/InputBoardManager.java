@@ -77,6 +77,9 @@ public class InputBoardManager implements Parcelable,
         /** 用户想发送图文音消息。 */
         public void onHybirdRequested();
         public void onVideoInputted(String path, String thumbPath);
+        
+        /** 开始录制语音 */
+        public void willRecordAudio();
 
         /**
          *
@@ -162,7 +165,7 @@ public class InputBoardManager implements Parcelable,
      * should be the height of layoutMediaWrapper or layoutStampWrapper.
      */
     private View layoutTextWrapper;
-    private View layoutTextInnerWrapper;
+    public View layoutTextInnerWrapper;
     private View layoutMediaWrapper;
     private View layoutStampWrapper;
     public EditText mTxtContent;
@@ -229,8 +232,8 @@ public class InputBoardManager implements Parcelable,
     			textView_spare_time.setVisibility(View.GONE);
     			break;
     		case 1:
-            	stopRecording();
-            	mResultHandler.onVoiceInputted(mLastVoiceFile.getAbsolutePath(), mVoiceTimer.getElapsed());
+//            	stopRecording();
+//            	mResultHandler.onVoiceInputted(mLastVoiceFile.getAbsolutePath(), mVoiceTimer.getElapsed());
             	break;
     		case 2:
     			textView_spare_time.setVisibility(View.VISIBLE);
@@ -436,6 +439,7 @@ public class InputBoardManager implements Parcelable,
                         btnSpeak.setText(R.string.msg_release_to_send);
                         btnSpeak.setBackgroundResource(mDrawableResId.voicePressed);
                         mContext.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                        mResultHandler.willRecordAudio();
                         startRecording();                  
                         Message message = handler.obtainMessage(2);
                         handler.sendMessageDelayed(message, 50000);

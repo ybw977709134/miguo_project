@@ -20,8 +20,10 @@ import co.onemeter.oneapp.ui.*;
 import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.handmark.pulltorefresh.widget.PullToRefreshListView;
 import com.handmark.pulltorefresh.widget.PullToRefreshListView.OnRefreshListener;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
@@ -108,7 +110,7 @@ public abstract class MessageComposerActivityBase extends Activity
     protected PrefUtil mPref;
 
 	protected ArrayList<ChatMessage> log_msg;
-	private MessageDetailAdapter myAdapter;
+	protected MessageDetailAdapter myAdapter;
 
 	private static MessageComposerActivityBase instance;
 

@@ -7,7 +7,9 @@ import android.text.TextUtils;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
 import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
+
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Database;
@@ -195,4 +197,9 @@ public class MessageComposerActivity extends MessageComposerActivityBase {
 
         mMenu.show();
     }
+
+	@Override
+	public void willRecordAudio() {
+		myAdapter.stopPlayingVoice();
+	}
 }

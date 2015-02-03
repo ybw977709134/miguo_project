@@ -22,4 +22,5 @@
     <dimen name="dimen_40">40dp</dimen>
     <dimen name="msg_composer_media_txt_ind_size">12sp</dimen>
     <dimen name="tablelayout_height">240dp</dimen>
+    <dimen name="crop__bar_height">56dp</dimen>
 </resources>

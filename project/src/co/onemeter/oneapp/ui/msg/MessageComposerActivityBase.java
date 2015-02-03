@@ -110,7 +110,7 @@ public abstract class MessageComposerActivityBase extends Activity
     protected PrefUtil mPref;
 
 	protected ArrayList<ChatMessage> log_msg;
-	protected MessageDetailAdapter myAdapter;
+	private MessageDetailAdapter myAdapter;
 
 	private static MessageComposerActivityBase instance;
 
@@ -1655,6 +1655,11 @@ public abstract class MessageComposerActivityBase extends Activity
     @Override
     public void changeToOtherApps() {
         AppStatusService.setIsMonitoring(false);
+    }
+
+    @Override
+    public void willRecordAudio() {
+        myAdapter.stopPlayingVoice();
     }
 }
 

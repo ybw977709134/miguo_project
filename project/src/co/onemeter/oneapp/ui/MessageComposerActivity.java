@@ -197,9 +197,4 @@ public class MessageComposerActivity extends MessageComposerActivityBase {
 
         mMenu.show();
     }
-
-	@Override
-	public void willRecordAudio() {
-		myAdapter.stopPlayingVoice();
-	}
 }

@@ -186,6 +186,35 @@
                     android:focusableInTouchMode="true"
                     android:scrollHorizontally="true"/>
             </LinearLayout>
+            
+            <!-- 对方请求加为好友的信息 -->
+            <LinearLayout
+                android:id="@+id/request_layout"
+                android:layout_height="@dimen/request_info_height"
+                android:layout_width="fill_parent"
+                android:layout_margin="@dimen/padding_medium"
+                android:background="@drawable/table_white"
+                android:orientation="vertical"
+                android:visibility="gone" >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="left"
+                    android:textStyle="bold"
+                    android:textColor="@color/gray"
+                    android:textSize="20sp"
+                    android:text="@string/contacts_newfriend_extra_info"/>
+            	<TextView
+                    android:id="@+id/txt_extra_info"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="top|left"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+      
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layout_dept_job"
@@ -368,6 +397,7 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <!-- 查看动态 -->
             <Button
                 style="@style/button_blue"
                 android:layout_width="fill_parent"
@@ -376,6 +406,7 @@
                 android:id="@+id/btn_goto_moments"
                 android:layout_margin="@dimen/padding_medium"/>
 
+            <!-- 添加好友 -->
             <Button
                 style="@style/button_blue"
                 android:layout_width="fill_parent"
@@ -383,7 +414,7 @@
                 android:text="@string/contact_info_add_as_friend"
                 android:id="@+id/btn_add"
                 android:layout_margin="@dimen/padding_medium"/>
-            
+            <!-- 修改备注名 -->
             <Button
                 style="@style/button_blue"
                 android:layout_width="fill_parent"
@@ -392,14 +423,32 @@
                 android:id="@+id/btn_edit_remarkname"
                 android:layout_margin="@dimen/padding_medium"
                 android:visibility="gone" />
-
+            <!-- 忽略 -->
+            <Button
+                style="@style/button_blue"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/contact_info_add_ingore_request"
+                android:id="@+id/btn_ignore_request"
+                android:layout_margin="@dimen/padding_medium"
+                android:visibility="gone" />
+            <!-- 同意 -->
+            <Button
+                style="@style/button_blue"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/contact_info_add_agree_request"
+                android:id="@+id/btn_agree_request"
+                android:layout_margin="@dimen/padding_medium"
+                android:visibility="gone" />
+			<!-- 删除好友 -->
             <Button
                 style="@style/button_red"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/contact_info_delete_friend"
                 android:id="@+id/btn_delete"
-                android:layout_margin="@dimen/padding_medium"/>
+                android:layout_margin="@dimen/padding_medium" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

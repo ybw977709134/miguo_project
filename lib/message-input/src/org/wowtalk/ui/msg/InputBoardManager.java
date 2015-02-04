@@ -34,6 +34,7 @@ import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.Moment;
 import org.wowtalk.ui.MediaInputHelper;
+import org.wowtalk.ui.crop.ImagePreviewActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -1243,34 +1244,35 @@ public class InputBoardManager implements Parcelable,
             case REQ_INPUT_PHOTO:
             	if(data != null){
                 	Uri  mImageCaptureUri = data.getData();
-                	if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
-                		File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_IMAGE, ".jpg");
-                		outputUri = Uri.fromFile(f);
-                	}
-                	Log.i("--mImageCaptureUri--" + mImageCaptureUri);
-                	doCrop(mImageCaptureUri,outputUri);	
-            	}else{
-            		
-//            		doCrop(outputUri);	
-                    if (null != mMediaInputHelper) {
-                        String[] photoPath = new String[2];
-                        if (mMediaInputHelper.handleImageResult(
-                                mContext,
-                                data,
-                                PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
-                                PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
-                                photoPath)) {
-                            doodleOutFilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
-                            mContext.startActivityForResult(
-                                    new Intent(mContext, BitmapPreviewActivity.class)
-                                            .putExtra(BitmapPreviewActivity.EXTRA_MAX_WIDTH, PHOTO_SEND_WIDTH)
-                                            .putExtra(BitmapPreviewActivity.EXTRA_MAX_HEIGHT, PHOTO_SEND_HEIGHT)
-                                            .putExtra(BitmapPreviewActivity.EXTRA_BACKGROUND_FILENAME, photoPath[0])
-                                            .putExtra(BitmapPreviewActivity.EXTRA_OUTPUT_FILENAME, doodleOutFilename),
-                                    REQ_INPUT_DOODLE
-                            );
-                        }
-                    }
+//                	if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+//                		File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_IMAGE, ".jpg");
+//                		outputUri = Uri.fromFile(f);
+//                	}
+//                	Log.i("--mImageCaptureUri--" + mImageCaptureUri);
+//                	doCrop(mImageCaptureUri,outputUri);	
+//            	}else{
+//            		
+////            		doCrop(outputUri);	
+//                    if (null != mMediaInputHelper) {
+//                        String[] photoPath = new String[2];
+//                        if (mMediaInputHelper.handleImageResult(
+//                                mContext,
+//                                data,
+//                                PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
+//                                PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
+//                                photoPath)) {
+//                            doodleOutFilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
+//                            mContext.startActivityForResult(
+//                                    new Intent(mContext, BitmapPreviewActivity.class)
+//                                            .putExtra(BitmapPreviewActivity.EXTRA_MAX_WIDTH, PHOTO_SEND_WIDTH)
+//                                            .putExtra(BitmapPreviewActivity.EXTRA_MAX_HEIGHT, PHOTO_SEND_HEIGHT)
+//                                            .putExtra(BitmapPreviewActivity.EXTRA_BACKGROUND_FILENAME, mImageCaptureUri.toString())
+//                                            .putExtra(BitmapPreviewActivity.EXTRA_OUTPUT_FILENAME, doodleOutFilename),
+//                                    REQ_INPUT_DOODLE
+//                            );
+//                        }
+//                    }
+                	mContext.startActivityForResult(new Intent().setData(mImageCaptureUri).setClass(mContext, ImagePreviewActivity.class), REQ_INPUT_DOODLE);
             	}
 
                 result = true; 

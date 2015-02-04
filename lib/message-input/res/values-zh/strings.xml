@@ -22,4 +22,11 @@
 	<string name="input_doodle">图文写</string>
 	<string name="input_pictext">图文</string>
 	<string name="input_picvoice">图文音</string>
+	<string name="crop">裁剪</string>
+	<string name="crop__saving">保存图片中…</string>
+    <string name="crop__wait">请稍等…</string>
+    <string name="crop__pick_error">出现错误！</string>
+
+    <string name="crop__done">完成</string>
+    <string name="crop__cancel" >取消</string>
 </resources>

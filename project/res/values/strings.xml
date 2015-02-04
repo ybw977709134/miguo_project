@@ -128,6 +128,7 @@
 	<string name="firends_add_pagetitle">添加联系人</string>
 	<string name="friends_moments">朋友动态</string>
 	<string name="friends_add">添加朋友</string>
+	<string name="friends_request_send">请求已发送</string>
     <string name="friends_official_search">公共帐号搜索</string>
     <string name="friends_recommended_official">推荐的公共帐号</string>
 	<string name="friends_add_search">搜索</string>

@@ -42,6 +42,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     public static final int BUDDY_TYPE_MYSELF = 1;
     
     public static final int REQ_INPUT_ALIAS=1;//修改备注名请求码
+    public static final int REQ_BUDDY_ADD=2;//请求对方加自己为好友的请求码
     
 //	private static final int MSG_FETCH_MOMENT_SUCCESS = 100;
 
@@ -128,6 +129,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         	initView_request();
         	((TextView)findViewById(R.id.txt_extra_info)).setText(getIntent().getStringExtra(EXTRA_REQUEST_INFO));//显示验证请求信息
         }
+        
     }
 
     /**
@@ -390,6 +392,10 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 //        	initView_request();
 //        	((TextView)findViewById(R.id.txt_extra_info)).setText(getIntent().getStringExtra(EXTRA_REQUEST_INFO));//显示验证请求信息
 //        }
+        
+        if ((buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE) == 0) {
+        	((ImageView)findViewById(R.id.navbar_btn_right)).setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -498,7 +504,8 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
             	    ArrayList<Buddy> buddyList = new ArrayList<Buddy>();
             	    buddyList.add(buddy);
             	    intent.putExtra("buddyList2", buddyList);
-            	    startActivity(intent);
+//            	    startActivity(intent);
+            	    startActivityForResult(intent, REQ_BUDDY_ADD);
 //                addBuddy();
                 }
 
@@ -565,6 +572,12 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 			case REQ_INPUT_ALIAS://备注名修改后的处理
 				
 				updateBuddyAlias(data.getExtras().getString(InputPlainTextActivity.EXTRA_VALUE));
+				break;
+			case REQ_BUDDY_ADD://从详情页中请求添加好友，返回后的处理方法
+//				Toast.makeText(ContactInfoActivity.this, "添加了请求", Toast.LENGTH_LONG).show();
+				findViewById(R.id.btn_add).setEnabled(false);
+//				findViewById(R.id.btn_add).setBackgroundColor(getResources().getColor(R.color.gray));
+				((TextView)findViewById(R.id.btn_add)).setText(getString(R.string.friends_request_send));
 				break;
 
 			default:

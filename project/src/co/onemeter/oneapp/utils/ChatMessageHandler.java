@@ -47,8 +47,6 @@ public class ChatMessageHandler {
      */
     private static final String SYSTEM_NOTIFICATION_SENDER = "10000";
     private static final String NOTI_ACTION_REVIEW = "review";
-    private static final String NOTI_ACTION_BUDDY_PROFILE = "buddy_profile_updated";
-    private static final String NOTI_ACTION_GROUP_PROFILE = "group_profile_updated";
 
     private Context context;
     private Database mDb;
@@ -377,39 +375,6 @@ public class ChatMessageHandler {
 
         if (NOTI_ACTION_REVIEW.equals(action)) {
             mPrefUtil.setLatestReviewTimestamp();
-        } else if (NOTI_ACTION_BUDDY_PROFILE.equals(action)) {
-            String uid = msg.getEntityIdAsBuddyProfileUpdated();
-            if(uid != null) {
-                if(mWeb == null)
-                    mWeb = WowTalkWebServerIF.getInstance(context);
-                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Integer, Void>() {
-                    @Override
-                    protected Void doInBackground(String... params) {
-                        if (ErrorCode.OK == mWeb.fGetBuddyWithUID(params[0])) {
-                            mPrefUtil.setLocalContactListLastModified();
-                        }
-                        ;
-                        return null;
-                    }
-                }, uid);
-                mDb.deleteChatMessage(msg);
-            }
-        } else if (NOTI_ACTION_GROUP_PROFILE.equals(action)) {
-            String gid = msg.getEntityIdAsGroupProfileUpdated();
-            if(gid != null) {
-                if(mWeb == null)
-                    mWeb = WowTalkWebServerIF.getInstance(context);
-                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Integer, Void>() {
-                    @Override
-                    protected Void doInBackground(String... params) {
-                        if(ErrorCode.OK == mWeb.fGroupChat_GetGroupDetail(params[0])) {
-                            mPrefUtil.setLocalGroupListLastModified();
-                        };
-                        return null;
-                    }
-                }, gid);
-                mDb.deleteChatMessage(msg);
-            }
         }
     }
 

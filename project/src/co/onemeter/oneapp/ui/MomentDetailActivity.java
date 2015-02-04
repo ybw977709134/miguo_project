@@ -689,7 +689,11 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                         finish();
                     } else {
                         moment=dbHelper.fetchMoment(moment.id);
+                        dbHelper.setReviewsRead(moment);
                         setupContent(moment);
+
+                        // 以便动态列表页面重新刷新评论数
+                        setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, moment.id));
                     }
                 }
             });

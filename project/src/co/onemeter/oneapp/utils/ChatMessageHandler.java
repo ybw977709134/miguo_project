@@ -46,7 +46,7 @@ public class ChatMessageHandler {
      * 系统消息来自这个 uid.
      */
     private static final String SYSTEM_NOTIFICATION_SENDER = "10000";
-    private static final String NOTI_ACTION_REVIEW = "review";
+    private static final String NOTI_ACTION_REVIEW = "NOTIFICATION/MOMENT_REVIEW";
 
     private Context context;
     private Database mDb;
@@ -365,9 +365,10 @@ public class ChatMessageHandler {
     }
 
     private void handleX(ChatMessage msg) {
+        JSONObject json = null;
         String action = null;
         try {
-            JSONObject json = new JSONObject(msg.messageContent);
+            json = new JSONObject(msg.messageContent);
             action = json.getString("action");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -375,6 +376,21 @@ public class ChatMessageHandler {
 
         if (NOTI_ACTION_REVIEW.equals(action)) {
             mPrefUtil.setLatestReviewTimestamp();
+
+            try {
+                final String moment_id = json.getString("moment_id");
+                final String review_id = json.getString("review_id");
+                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+                        MomentWebServerIF.getInstance(context).fGetReviewById(moment_id, review_id, null);
+                        return null;
+                    }
+                });
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 

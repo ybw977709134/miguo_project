@@ -64,6 +64,8 @@ public class ContactsFragment extends Fragment implements OnClickListener,
     private ListView lvFunction;
 	private ListView lvContacts;
 	private ListView lvContactGroup;
+	
+	private TextView group_indicator;
 
     private ScrollView mMainScrollView;
     private LinearLayout mMainLinearLayout;
@@ -108,9 +110,15 @@ public class ContactsFragment extends Fragment implements OnClickListener,
                 contactAdapter.setPersonSource(ContactUtil.allPersons);
                 contactAdapter.notifyDataSetChanged();
                 ListHeightUtil.setListHeight(lvContacts);
+                lvContactGroup.setVisibility(View.VISIBLE);
+                lvFunction.setVisibility(View.VISIBLE);
+                group_indicator.setVisibility(View.VISIBLE);
             } else {
                 fieldClear.setVisibility(View.VISIBLE);
                 mSideBar.setVisibility(View.GONE);
+                lvContactGroup.setVisibility(View.GONE);
+                lvFunction.setVisibility(View.GONE);
+                group_indicator.setVisibility(View.GONE);
                 contactAdapter.getFilter().filter(s.toString(), new Filter.FilterListener() {
                     @Override
                     public void onFilterComplete(int i) {
@@ -130,10 +138,10 @@ public class ContactsFragment extends Fragment implements OnClickListener,
                         break;
 
                     if (groupRooms == null || groupRooms.size() == 0) {
-                        contentView.findViewById(R.id.group_indicator).setVisibility(View.GONE);
+                    	group_indicator.setVisibility(View.GONE);
                         lvContactGroup.setVisibility(View.GONE);
                     } else {
-                        contentView.findViewById(R.id.group_indicator).setVisibility(View.VISIBLE);
+                    	group_indicator.setVisibility(View.VISIBLE);
                         lvContactGroup.setVisibility(View.VISIBLE);
                     }
 
@@ -204,6 +212,8 @@ public class ContactsFragment extends Fragment implements OnClickListener,
         lvFunction = (ListView) contentView.findViewById(R.id.function_list);
 		lvContacts = (ListView) contentView.findViewById(R.id.contact_detail);
 		lvContactGroup = (ListView) contentView.findViewById(R.id.group_list);
+		
+		group_indicator = (TextView) contentView.findViewById(R.id.group_indicator);
 
 		mSideBar.setOnTouchingLetterChangedListener(this);
 		etSearch.addTextChangedListener(searchWacher);

@@ -223,7 +223,7 @@ public class InputBoardManager implements Parcelable,
     private Uri outputUri2 = null;
     
     private TextView textView_spare_time;
-    private int recLen = 11;
+//    private int recLen = 11;
     
     private Handler handler = new Handler(){
     	public void handleMessage(android.os.Message msg) {
@@ -233,20 +233,21 @@ public class InputBoardManager implements Parcelable,
     			textView_spare_time.setVisibility(View.GONE);
     			break;
     		case 1:
-//            	stopRecording();
-//            	mResultHandler.onVoiceInputted(mLastVoiceFile.getAbsolutePath(), mVoiceTimer.getElapsed());
+            	stopRecording();
+            	mResultHandler.onVoiceInputted(mLastVoiceFile.getAbsolutePath(), mVoiceTimer.getElapsed());
             	break;
     		case 2:
     			textView_spare_time.setVisibility(View.VISIBLE);
-//    			textView_spare_time.setText("还可以说  10  秒");
-    			recLen--;
-    			textView_spare_time.setText("还可以说 " + recLen + " 秒");
-    			if(recLen > 0){ 
-    				Message message = handler.obtainMessage(2);
-                    handler.sendMessageDelayed(message, 1000);
-    			}else{
-    				textView_spare_time.setVisibility(View.GONE);
-    			}
+    			textView_spare_time.setText("还可以说  10  秒");
+    			handler.removeMessages(2);
+//    			recLen--;
+//    			textView_spare_time.setText("还可以说 " + recLen + " 秒");
+//    			if(recLen > 0){ 
+//    				Message message = handler.obtainMessage(2);
+//                    handler.sendMessageDelayed(message, 1000);
+//    			}else{
+//    				textView_spare_time.setVisibility(View.GONE);
+//    			}
     			break;
     		}   		
     		
@@ -442,8 +443,8 @@ public class InputBoardManager implements Parcelable,
                         mContext.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                         mResultHandler.willRecordAudio();
                         startRecording();                  
-                        Message message = handler.obtainMessage(2);
-                        handler.sendMessageDelayed(message, 50000);
+
+                        handler.sendEmptyMessageDelayed(2, 50000);
                         handler.sendEmptyMessageDelayed(1, 60000);
                         break;
                     case MotionEvent.ACTION_UP:
@@ -483,7 +484,14 @@ public class InputBoardManager implements Parcelable,
                             						}
                             					}                  	
 //                            showVoicePreviewDialog();
-                            			}              
+                            			}  
+                            
+                            handler.removeMessages(1);
+                    		if(mVoiceTimer.getElapsed() < 50){
+                    			handler.removeMessages(2);
+                    		}else if(mVoiceTimer.getElapsed() >= 50){
+                    			
+                    		}
                             break;
                             }
 

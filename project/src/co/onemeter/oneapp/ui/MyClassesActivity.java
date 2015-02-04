@@ -10,10 +10,13 @@ import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.androidquery.AQuery;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,6 +37,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
     private ListView lvMyClass;
     private MessageBox msgBox;
     private WowTalkWebServerIF talkwebserver;
+    private int errno;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,8 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
         lvMyClass.setOnItemClickListener(this);
         
         talkwebserver =  WowTalkWebServerIF.getInstance(MyClassesActivity.this);
+        
+        schoolrooms = new ArrayList<GroupChatRoom>();
         //这里用两层异步任务，先取到学校的信息，在取班级信息
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
 
@@ -66,13 +72,14 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 
             @Override
             protected Void doInBackground(Void... params) {
-                schoolrooms = talkwebserver.getMySchools(true);
+//                schoolrooms = talkwebserver.getMySchools(true);
+                errno = talkwebserver.getMySchoolsErrno(true, schoolrooms);
                 return null;
             }
 
             @Override
             protected void onPostExecute(Void result) {
-                if (!isEmpty()) {
+                if (errno == ErrorCode.OK) {
                     AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
 
                         @Override

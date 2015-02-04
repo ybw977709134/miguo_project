@@ -112,7 +112,7 @@ public class SchoolMatesFragment extends Fragment
         } else {
             aQuery.find(R.id.schoolmate_emptyview).visibility(View.VISIBLE);
             schools.clear();
-            adapter.notifyDataSetChanged();
+//            adapter.notifyDataSetChanged();
             adapter = new GroupTreeAdapter(getActivity(), schools);
             aQuery.find(R.id.listview).adapter(adapter);
            

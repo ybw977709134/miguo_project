@@ -55,6 +55,8 @@
     <string name="contact_info_delete_friend">删除好友</string>
 	<string name="contact_info_official_pagetitle">公众帐号</string>
 	<string name="contact_info_add_as_friend">加为好友</string>
+	<string name="contact_info_add_agree_request">同意</string>
+	<string name="contact_info_add_ingore_request">忽略</string>
 	<string name="contact_info_remarkname">备注名: %s</string>
 	<string name="contact_info_wowid">用户 ID：%s</string>
 	<string name="contact_info_group_short_id">群组号：%s</string>

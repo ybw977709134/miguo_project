@@ -33,6 +33,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 
 	private static final String EXTRA_BUDDY_TYPE = "buddy_type";
 	private static final String EXTRA_BUDDY_DETAIL = "buddy_detail";
+	private static final String EXTRA_REQUEST_INFO = "request_info";
 
 	public static final int BUDDY_TYPE_IS_FRIEND = 1001;
 	public static final int BUDDY_TYPE_NOT_FRIEND = 1002;
@@ -98,6 +99,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     private Database dbHelper;
 
     private Person person; // access Person only if Buddy is unavailable.
+    private static PendingRequest mPendingRequest;//定义请求对象，可以对同意和忽略好友进行操作
     /**
      * 用于记录初始的buddy的部分信息，比较其是否发生变化，变化则通知联系人了列表界面刷新
      */
@@ -120,6 +122,12 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         setDeptJobTitle();
         setContactWay();
         PhotoDisplayHelper.displayPhoto(this, imgPhoto, R.drawable.default_avatar_90, buddy, true);
+        
+      //如果有值，显示“忽略”和“同意”选项
+        if (getIntent().getStringExtra(EXTRA_REQUEST_INFO) != null) {
+        	initView_request();
+        	((TextView)findViewById(R.id.txt_extra_info)).setText(getIntent().getStringExtra(EXTRA_REQUEST_INFO));//显示验证请求信息
+        }
     }
 
     /**
@@ -143,7 +151,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 //        mFriendNameBiz.setText(buddy.nickName);
     	mFriendNameBiz.setText("名字：" + (!TextUtils.isEmpty(buddy.alias)?buddy.alias:buddy.nickName));
         
-        mPronunciation.setText("账号：" + buddy.username);//发音
+        mPronunciation.setText("账号：" + buddy.username);//账号信息
     }
 
     private void initView_status() {
@@ -326,6 +334,25 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
               q.find(R.id.btn_edit_remarkname).gone();//不是好友隐藏修改好友备注名的功能
     	  }
     }
+    
+    
+    /**
+     * 点击请求好友的item进入详情页中的布局变化
+     * @date 2015/2/3
+     */
+    private void initView_request(){
+    	AQuery q = new AQuery(this);
+    	q.find(R.id.navbar_btn_right).gone();
+    	q.find(R.id.request_layout).visible();
+    	q.find(R.id.btn_add).gone();
+    	q.find(R.id.btn_agree_request).visible();
+    	q.find(R.id.btn_ignore_request).visible();
+    	
+    	q.find(R.id.btn_agree_request).clicked(this);
+    	q.find(R.id.btn_ignore_request).clicked(this);
+    	
+    	
+    }
 
 
     private void initView() {
@@ -357,6 +384,12 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         q.find(R.id.btn_add).clicked(this);
         q.find(R.id.btn_delete).clicked(this);
         q.find(R.id.btn_edit_remarkname).clicked(this);//修改备注名添加监听事件
+        
+        //如果有值，显示“忽略”和“同意”选项
+//        if (getIntent().getStringExtra(EXTRA_REQUEST_INFO) != null) {
+//        	initView_request();
+//        	((TextView)findViewById(R.id.txt_extra_info)).setText(getIntent().getStringExtra(EXTRA_REQUEST_INFO));//显示验证请求信息
+//        }
     }
 
     /**
@@ -507,6 +540,15 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
             	builder.create().show();
                 
                 break;
+            case R.id.btn_agree_request://同意添加好友
+            	addFriend_async(mPendingRequest);
+            	
+            	break;
+            	
+            case R.id.btn_ignore_request://忽略好友
+            	ignoreBuddyRequest_async(mPendingRequest);
+            	break;
+            	
             default:
                 break;
         }
@@ -662,6 +704,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 				+ " photoUploadedTimestamp: " + person.photoUploadedTimestamp
 				+ " username : " + person.getUsername());
         dbHelper = new Database(this);
+        
 		buddy = dbHelper.buddyWithUserID(person.getID());
 		if(buddy == null) {
             buddy=person.toBuddy();
@@ -734,7 +777,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 	 * @param buddyUid
 	 * @param buddyType BUDDY_TYPE_*
 	 */
-	public static void launch(final Context context, final String buddyUid, final int buddyType) {
+	public static void launch(final Context context, final String buddyUid , final int buddyType) {
 		Database db = new Database(context);
 		Buddy b = db.buddyWithUserID(buddyUid);
         if (b != null) {
@@ -760,6 +803,48 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                         Buddy b = db.buddyWithUserID(buddyUid);
                         if (b != null) {
                             launch(context, Person.fromBuddy(b), buddyType);
+                        }
+                    }
+                }
+            });
+        }
+	}
+	
+	/**
+	 * 对跳转方法进行重载
+	 * @param context
+	 * @param PendingRequest p
+	 * @param buddyType BUDDY_TYPE_*
+	 * @author by hutianfeng
+	 * @date 2015/2/3
+	 */
+	public static void launch(final Context context, final PendingRequest p , final int buddyType) {
+		Database db = new Database(context);
+		mPendingRequest = p;
+		Buddy b = db.buddyWithUserID(p.uid);
+        if (b != null) {
+            if (b.getAccountType() == Buddy.ACCOUNT_TYPE_NOTICE_MAN) {
+                return;
+            }
+            launch(context, p.msg, Person.fromBuddy(b), buddyType);//携带额外的请求信息
+        } else {
+            final MessageBox m = new MessageBox(context);
+            m.showWait();
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+                @Override
+                protected Integer doInBackground(Void... params) {
+                    WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(context);
+                    return web.fGetBuddyWithUID(p.uid);
+                }
+
+                @Override
+                protected void onPostExecute(Integer errno) {
+                    m.dismissWait();
+                    if (ErrorCode.OK == errno) {
+                        Database db = new Database(context);
+                        Buddy b = db.buddyWithUserID(p.uid);
+                        if (b != null) {
+                            launch(context, p.msg, Person.fromBuddy(b), buddyType);
                         }
                     }
                 }
@@ -798,6 +883,44 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         }
 		bu.putParcelable(EXTRA_BUDDY_DETAIL, person);
 		i.putExtras(bu);
+		context.startActivity(i);
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param String requestString //对方请求加你为好友要添加的的验证信息
+	 * @param person
+	 * @param buddyType BUDDY_TYPE_*
+	 * @author by hutianfeng
+	 * @date 2015/2/3
+	 */
+	public static void launch(Context context, String requestString,Person person,
+			int buddyType) {
+		
+		Intent i = new Intent(context, ContactInfoActivity.class);
+		Database db = new Database(context);
+		Bundle bu = new Bundle();
+        if (buddyType == BUDDY_TYPE_UNKNOWN) {
+            Buddy b = db.buddyWithUserID(person.getID());
+            if (b != null) {
+                String myselfId = PrefUtil.getInstance(context).getUid();
+                if (!TextUtils.isEmpty(myselfId) && myselfId.equals(b.userID)) {
+                    bu.putInt(EXTRA_BUDDY_TYPE, BUDDY_TYPE_MYSELF);
+                } else if (0 != (b.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE)) {
+                    bu.putInt(EXTRA_BUDDY_TYPE, BUDDY_TYPE_IS_FRIEND);
+                } else {
+                    bu.putInt(EXTRA_BUDDY_TYPE, BUDDY_TYPE_NOT_FRIEND);
+                }
+            } else {
+                bu.putInt(EXTRA_BUDDY_TYPE, BUDDY_TYPE_NOT_FRIEND);
+            }
+        } else {
+            bu.putInt(EXTRA_BUDDY_TYPE, buddyType);
+        }
+		bu.putParcelable(EXTRA_BUDDY_DETAIL, person);
+		i.putExtras(bu);
+		i.putExtra(EXTRA_REQUEST_INFO, requestString);
 		context.startActivity(i);
 	}
 
@@ -856,6 +979,67 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         bundle.putParcelable(EXTRA_BUDDY_DETAIL, person);
         intent.putExtras(bundle);
         activity.startActivityForResult(intent, requestCode);
+    }
+    
+    /**
+     * 同意添加好友
+     * @param p
+     * @author by hutianfeng
+     * @date 2015/2/4
+     */
+    public void addFriend_async(final PendingRequest p) {
+        mMsgBox.showWait();
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return WowTalkWebServerIF.getInstance(ContactInfoActivity.this).fAddBuddy(p.uid);
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                mMsgBox.dismissWait();
+                if (result == ErrorCode.OK) {
+                    dbHelper.deletePendingRequest(p.id);
+                    PrefUtil.getInstance(ContactInfoActivity.this).setLocalContactListLastModified();
+
+                    MessageComposerActivity.launchToChatWithBuddy(
+                            ContactInfoActivity.this,
+                            MessageComposerActivity.class,
+                            p.uid,
+                            getString(R.string.msg_friend_request_is_passed));
+
+                } else {
+                    mMsgBox.toast(R.string.msg_operation_failed);
+                }
+            }
+        });
+    }
+    
+    /**
+     * 忽略添加好友的请求
+     * @param p
+     * @author by hutianfeng
+     * @date 2015//2/4
+     */
+    public void ignoreBuddyRequest_async(final PendingRequest p) {
+
+        mMsgBox.showWait();
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<PendingRequest, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(PendingRequest... buddies) {
+                return WowTalkWebServerIF.getInstance(ContactInfoActivity.this).fIgnoreBuddyRequest(p.uid);
+            }
+
+            @Override
+            protected void onPostExecute(Integer errno) {
+                mMsgBox.dismissWait();
+                if (ErrorCode.OK == errno) {
+                    dbHelper.deletePendingRequest(p.id);
+                } else {
+                    mMsgBox.toast(R.string.msg_operation_failed);
+                }
+            }
+        }, p);
     }
     
     /**

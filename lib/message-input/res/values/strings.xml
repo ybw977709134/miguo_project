@@ -22,6 +22,7 @@
 	<string name="input_doodle">Doodle</string>
 	<string name="input_pictext">Pic + Text</string>
 	<string name="input_picvoice">Pic + text + Voice </string>
+	<string name="crop">Crop</string>
     <string name="msg_audio_pause">Pause</string>
     <string name="msg_audio_resume">Resume</string>
     <string name="msg_audio_restart">Restart</string>

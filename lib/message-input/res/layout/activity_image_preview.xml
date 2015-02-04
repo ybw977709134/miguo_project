@@ -3,7 +3,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+
+    <LinearLayout style="@style/Crop.DoneCancelBar" >
+
+        <FrameLayout
+            android:id="@+id/btn_cancel"
+            style="@style/Crop.ActionButton" >
+
+            <TextView style="@style/Crop.ActionButtonText.Cancel" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/btn_crop"
+            style="@style/Crop.ActionButton" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/crop__button_text"
+                android:textStyle="bold"
+                android:textSize="13sp"
+                 android:text="@string/crop" />
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/btn_send"
+            style="@style/Crop.ActionButton" >
+
+            <TextView style="@style/Crop.ActionButtonText" 
+                android:drawableLeft="@drawable/crop__ic_done"
+                android:text="@string/send"/>
+        </FrameLayout>
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/result_image"
         android:layout_width="match_parent"

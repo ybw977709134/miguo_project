@@ -92,13 +92,7 @@ public class GroupMembersGridAdapter extends BaseAdapter {
         	imageView_tag_tea.setVisibility(View.VISIBLE);
         } else {
         	imageView_tag_tea.setVisibility(View.GONE);
-        }
-        
-//        txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
-//        if (!TextUtils.isEmpty(buddy.alias)) {
-//        	Toast.makeText(mContext, buddy.alias, Toast.LENGTH_SHORT).show();
-//        }
-        
+        }        
         
         if ((myLevel == GroupMember.LEVEL_CREATOR || myLevel == GroupMember.LEVEL_ADMIN)) {
             if (showDummyItems) {
@@ -127,10 +121,9 @@ public class GroupMembersGridAdapter extends BaseAdapter {
                     imgThumbnail.setBackgroundDrawable(null);
                     PhotoDisplayHelper.displayPhoto(mContext, imgThumbnail, R.drawable.default_avatar_90, buddy, true);
 
-//                    txtName.setText(TextUtils.isEmpty(b2.alias) ? b2.nickName : b2.alias);
+
                 }
                 
-//                txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
                 
             } else {
                 imgDel.setVisibility(View.VISIBLE);
@@ -154,11 +147,9 @@ public class GroupMembersGridAdapter extends BaseAdapter {
                 imgThumbnail.setBackgroundDrawable(null);
                 PhotoDisplayHelper.displayPhoto(mContext, imgThumbnail, R.drawable.default_avatar_90, buddy, true);
 
-//                txtName.setText(TextUtils.isEmpty(b2.alias) ? b2.nickName : b2.alias);
 
             }
             
-//            txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
             
         } else {
             imgDel.setVisibility(View.GONE);
@@ -184,9 +175,7 @@ public class GroupMembersGridAdapter extends BaseAdapter {
                     imgThumbnail.setBackgroundDrawable(null);
                     PhotoDisplayHelper.displayPhoto(mContext, imgThumbnail, R.drawable.default_avatar_90, buddy, true);
 
-//                    txtName.setText(TextUtils.isEmpty(b2.alias) ? b2.nickName : b2.alias);
                 }
-//                txtName.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
 
             } else {
                 if (buddy.getLevel() == GroupMember.LEVEL_CREATOR) {
@@ -205,7 +194,6 @@ public class GroupMembersGridAdapter extends BaseAdapter {
                 imgThumbnail.setBackgroundDrawable(null);
                 PhotoDisplayHelper.displayPhoto(mContext, imgThumbnail, R.drawable.default_avatar_90, buddy, true);
 
-//                txtName.setText(TextUtils.isEmpty(b2.alias) ? b2.nickName : b2.alias);
             }
             
         }

@@ -107,7 +107,7 @@
 				android:layout_marginRight="@dimen/padding_large"
 				android:layout_marginBottom="@dimen/padding_large"
 				android:textColor="@color/text_gray3"
-				android:visibility="gone"/>
+				/>
 
 			<Button
 				android:id="@+id/login_username"

@@ -122,14 +122,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         setStatus();
         setDeptJobTitle();
         setContactWay();
-        PhotoDisplayHelper.displayPhoto(this, imgPhoto, R.drawable.default_avatar_90, buddy, true);
-        
-      //如果有值，显示“忽略”和“同意”选项
-        if (getIntent().getStringExtra(EXTRA_REQUEST_INFO) != null) {
-        	initView_request();
-        	((TextView)findViewById(R.id.txt_extra_info)).setText(getIntent().getStringExtra(EXTRA_REQUEST_INFO));//显示验证请求信息
-        }
-        
+        PhotoDisplayHelper.displayPhoto(this, imgPhoto, R.drawable.default_avatar_90, buddy, true);        
     }
 
     /**
@@ -325,8 +318,14 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     			  q.find(R.id.module_chat).invisible();
     		  }
               q.find(R.id.btn_goto_moments).gone();
+              
               q.find(R.id.btn_delete).gone();
-              q.find(R.id.btn_add).visible();
+              if (getIntent().getStringExtra(EXTRA_REQUEST_INFO) != null) {
+            	  q.find(R.id.btn_add).gone();
+              } else {
+            	  q.find(R.id.btn_add).visible(); 
+              }
+//              q.find(R.id.btn_add).visible();
               q.find(R.id.btn_edit_remarkname).gone();//不是好友隐藏修改好友备注名的功能
     	  }if(buddyType == BUDDY_TYPE_MYSELF){
               q.find(R.id.module_chat).visible();
@@ -346,7 +345,7 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     	AQuery q = new AQuery(this);
     	q.find(R.id.navbar_btn_right).gone();
     	q.find(R.id.request_layout).visible();
-    	q.find(R.id.btn_add).gone();
+//    	q.find(R.id.btn_add).gone();
     	q.find(R.id.btn_agree_request).visible();
     	q.find(R.id.btn_ignore_request).visible();
     	
@@ -388,10 +387,10 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
         q.find(R.id.btn_edit_remarkname).clicked(this);//修改备注名添加监听事件
         
         //如果有值，显示“忽略”和“同意”选项
-//        if (getIntent().getStringExtra(EXTRA_REQUEST_INFO) != null) {
-//        	initView_request();
-//        	((TextView)findViewById(R.id.txt_extra_info)).setText(getIntent().getStringExtra(EXTRA_REQUEST_INFO));//显示验证请求信息
-//        }
+        if (getIntent().getStringExtra(EXTRA_REQUEST_INFO) != null) {
+        	initView_request();
+        	((TextView)findViewById(R.id.txt_extra_info)).setText(getIntent().getStringExtra(EXTRA_REQUEST_INFO));//显示验证请求信息
+        }
         
         if ((buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE) == 0) {
         	((ImageView)findViewById(R.id.navbar_btn_right)).setVisibility(View.GONE);

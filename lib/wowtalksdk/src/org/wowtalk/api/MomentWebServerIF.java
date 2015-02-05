@@ -441,8 +441,9 @@ public class MomentWebServerIF {
 				+ "&moment_id=" + Utils.urlencodeUtf8(momentId)
 				+ "&comment_type=" + type 
 				+ "&comment=" + (comment == null ? "" : Utils.urlencodeUtf8(comment))
-                + "&reply_to_review_id=" + (replyToReviewId == null ? "0" : replyToReviewId)
 				+ "&lang=" + Locale.getDefault().getLanguage();
+        if (replyToReviewId != null)
+            postStr += "&reply_to_review_id=" + replyToReviewId;
 
         Connect2 connect2 = new Connect2();
         Element root = connect2.Post(postStr);

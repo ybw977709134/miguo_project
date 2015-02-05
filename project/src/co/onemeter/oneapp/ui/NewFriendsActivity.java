@@ -36,9 +36,8 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
         private Context mContext;
 
         public NewFriendAdapter(Context context) {
-            mContext = context;
-            
-        }
+            mContext = context;    
+        }       
 
         @Override
         public int getCount() {
@@ -337,7 +336,7 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
         String strUserId = PrefUtil.getInstance(NewFriendsActivity.this).getUid();
         final PendingRequest p = pendings.get(position);
         if (p.type == PendingRequest.BUDDY_IN || p.type == PendingRequest.BUDDY_OUT) {
-            ContactInfoActivity.launch(this, p.uid, ContactInfoActivity.BUDDY_TYPE_NOT_FRIEND);
+            ContactInfoActivity.launch(this, p, ContactInfoActivity.BUDDY_TYPE_NOT_FRIEND);
         } else if (p.type == PendingRequest.GROUP_IN) {
             ContactGroupInfoActivity.launchForResult(this, p.group_id, 0);
         } else if (p.type == PendingRequest.GROUP_ADMIN) {

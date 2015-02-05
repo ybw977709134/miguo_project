@@ -161,16 +161,6 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
 				strMessage = context.getString(R.string.newer_chatmessage_receive);
 			} else if (msg.msgType.equals(ChatMessage.MSGTYPE_OFFICIAL_ACCOUNT_MSG)) {
                 strMessage = msg.messageContent;
-            } else if (msg.msgType.equals(ChatMessage.MSGTYPE_THIRDPARTY_MSG)) {
-                // TODO 处理推送通知
-                Log.i("receive MSGTYPE_THIRDPARTY_MSG: ", msg.messageContent);
-                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
-                    @Override
-                    protected Integer doInBackground(Void... params) {
-                        return WowTalkWebServerIF.getInstance(context).fGetBuddyList();
-                    }
-                });
-                strMessage = null;
             } else {
                 strMessage = null;
             }

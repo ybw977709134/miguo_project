@@ -60,7 +60,7 @@ public class XmlHelper {
             result.isVoted = Utils.tryParseInt(e.getTextContent(), 0)==1;
     }
 
-    public static void parseReview(Element reviewNode, Review result) {
+    public static boolean parseReview(Element reviewNode, Review result) {
         Element e;
         e = Utils.getFirstElementByTagName(reviewNode, "review_id");
         if(e != null)
@@ -102,6 +102,7 @@ public class XmlHelper {
             result.hostId = Utils.getFirstTextByTagName(reviewNode, "event_id");
 
         result.read = 1 == Utils.getFirstIntByTagName(reviewNode, "has_been_read", 1);
+        return !TextUtils.isEmpty(result.id);
     }
 
     public static WEvent parseWEvent(Element eventNode) {

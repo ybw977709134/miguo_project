@@ -46,9 +46,7 @@ public class ChatMessageHandler {
      * 系统消息来自这个 uid.
      */
     private static final String SYSTEM_NOTIFICATION_SENDER = "10000";
-    private static final String NOTI_ACTION_REVIEW = "review";
-    private static final String NOTI_ACTION_BUDDY_PROFILE = "buddy_profile_updated";
-    private static final String NOTI_ACTION_GROUP_PROFILE = "group_profile_updated";
+    private static final String NOTI_ACTION_REVIEW = "NOTIFICATION/MOMENT_REVIEW";
 
     private Context context;
     private Database mDb;
@@ -367,9 +365,10 @@ public class ChatMessageHandler {
     }
 
     private void handleX(ChatMessage msg) {
+        JSONObject json = null;
         String action = null;
         try {
-            JSONObject json = new JSONObject(msg.messageContent);
+            json = new JSONObject(msg.messageContent);
             action = json.getString("action");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -377,38 +376,20 @@ public class ChatMessageHandler {
 
         if (NOTI_ACTION_REVIEW.equals(action)) {
             mPrefUtil.setLatestReviewTimestamp();
-        } else if (NOTI_ACTION_BUDDY_PROFILE.equals(action)) {
-            String uid = msg.getEntityIdAsBuddyProfileUpdated();
-            if(uid != null) {
-                if(mWeb == null)
-                    mWeb = WowTalkWebServerIF.getInstance(context);
-                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Integer, Void>() {
+
+            try {
+                final String moment_id = json.getString("moment_id");
+                final String review_id = json.getString("review_id");
+                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
                     @Override
-                    protected Void doInBackground(String... params) {
-                        if (ErrorCode.OK == mWeb.fGetBuddyWithUID(params[0])) {
-                            mPrefUtil.setLocalContactListLastModified();
-                        }
-                        ;
+                    protected Void doInBackground(Void... voids) {
+                        MomentWebServerIF.getInstance(context).fGetReviewById(moment_id, review_id, null);
                         return null;
                     }
-                }, uid);
-                mDb.deleteChatMessage(msg);
+                });
             }
-        } else if (NOTI_ACTION_GROUP_PROFILE.equals(action)) {
-            String gid = msg.getEntityIdAsGroupProfileUpdated();
-            if(gid != null) {
-                if(mWeb == null)
-                    mWeb = WowTalkWebServerIF.getInstance(context);
-                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Integer, Void>() {
-                    @Override
-                    protected Void doInBackground(String... params) {
-                        if(ErrorCode.OK == mWeb.fGroupChat_GetGroupDetail(params[0])) {
-                            mPrefUtil.setLocalGroupListLastModified();
-                        };
-                        return null;
-                    }
-                }, gid);
-                mDb.deleteChatMessage(msg);
+            catch (JSONException e) {
+                e.printStackTrace();
             }
         }
     }

@@ -8,6 +8,7 @@
     <dimen name="multimedia_thumbnail_round_radius">3dp</dimen>
     <dimen name="search_bar_inner_height">35dp</dimen>
     <dimen name="section_row_height">45dp</dimen>
+    <dimen name="request_info_height">60dp</dimen>
     <dimen name="msg_time_size">7sp</dimen>
     <dimen name="bottom_board_btn_height">45dp</dimen>
     <dimen name="bottom_board_btn_margin">5dp</dimen>

@@ -205,7 +205,8 @@ public class ContactListAdapter extends BaseAdapter implements Filterable {
 
                 for(Person p : mAllPersons) {
                     String s = p.getName();
-                    if (s != null && s.toLowerCase().contains(fs)) {
+                    String n = p.getUsername();
+                    if ((s != null && s.toLowerCase().contains(fs)) || (n != null && n.toLowerCase().contains(fs))) {
                         values.add(p);
                     }
                 }

@@ -586,27 +586,25 @@ public class MomentWebServerIF {
     }
 
     /**
-     * Get all reviews on a Moment.
+     * Get review by id.
      *
-     * Automatically update db.
-     *
-     * @param moment
-     * @param result
+     * @param moment_id
+     * @param review_id
+     * @param result null-able. auto save into db.
      * @return
      */
-    public int fGetReviewForMoment(Moment moment, List<Review> result) {
+    public int fGetReviewById(String moment_id, String review_id, Review result) {
         String uid = mPrefUtil.getUid();
         String password = mPrefUtil.getPassword();
-    	if(uid == null || password == null || moment == null)
+    	if(uid == null || password == null || moment_id == null || review_id == null)
     		return ErrorCode.INVALID_ARGUMENT;
 
-        String moment_id = moment.id;
-
-        final String action = "get_reviews_on_moment";
+        final String action = "get_review_by_id";
     	String postStr = "action=" + action
     			+ "&uid=" + Utils.urlencodeUtf8(uid)
     			+ "&password=" + Utils.urlencodeUtf8(password)
     			+ "&moment_id=" + Utils.urlencodeUtf8(moment_id)
+                + "&review_id=" + Utils.urlencodeUtf8(review_id)
     			+ "&lang=" + Locale.getDefault().getLanguage();
     	Connect2 connect2 = new Connect2();
     	Element root = connect2.Post(postStr);
@@ -625,16 +623,15 @@ public class MomentWebServerIF {
 					NodeList buddyNodeList = resultElement.getElementsByTagName("review");
 					if(buddyNodeList != null && buddyNodeList.getLength() > 0) {
 
-                        Database db = new Database(mContext);
+                        if (result == null)
+                            result = new Review();
 
-						for(int i = 0, n = buddyNodeList.getLength(); i < n; ++i) {
-							Review r = new Review();
-                            XmlHelper.parseReview((Element)buddyNodeList.item(i), r);
-                            if (r != null) {
-                                result.add(r);
-                                db.storeReview(moment, r);
-                            }
-						}
+                        if (XmlHelper.parseReview((Element)buddyNodeList.item(0), result)) {
+                            Database db = new Database(mContext);
+                            Moment moment = db.fetchMoment(moment_id);
+                            if (moment != null)
+                                db.storeReview(moment, result);
+                        }
 					}
 				}
 			} else {

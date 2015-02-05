@@ -37,7 +37,8 @@ public class SchoolMatesFragment extends Fragment
 
     private static final int REQ_ADD_CLASS = 1;
 
-    Adapter adapter;
+//    Adapter adapter;
+    GroupTreeAdapter adapter;
     AQuery aQuery;
     MessageBox msgbox;
     List<GroupChatRoom> schools;
@@ -98,7 +99,6 @@ public class SchoolMatesFragment extends Fragment
 //                	}      
                 	msgbox.toast(R.string.timeout_contacts_message, Toast.LENGTH_SHORT);              	
             	}
-
                 updateUi();
             }
         });
@@ -111,6 +111,11 @@ public class SchoolMatesFragment extends Fragment
             aQuery.find(R.id.schoolmate_emptyview).visibility(View.GONE);
         } else {
             aQuery.find(R.id.schoolmate_emptyview).visibility(View.VISIBLE);
+            schools.clear();
+//            adapter.notifyDataSetChanged();
+            adapter = new GroupTreeAdapter(getActivity(), schools);
+            aQuery.find(R.id.listview).adapter(adapter);
+           
         }
     }
 

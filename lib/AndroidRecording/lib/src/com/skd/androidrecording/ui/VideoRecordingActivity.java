@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera.Size;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -42,6 +43,8 @@ public class VideoRecordingActivity extends Activity {
 	private ImageButton recordBtn;
 	private ImageButton switchBtn;
 	private Spinner videoSizeSpinner;
+	private TextView durationText;
+	private TextView fileSizeText;
 
 	private Size videoSize = null;
 	private int preferredWidth;
@@ -51,7 +54,7 @@ public class VideoRecordingActivity extends Activity {
 	private boolean hideVideoSizePicker;
 	private ArrayList<Size> supportedSizes = new ArrayList<Size>();
 	private VideoRecordingManager recordingManager;
-	
+
 	private VideoRecordingHandler recordingHandler = new VideoRecordingHandler() {
 		@Override
 		public boolean onPrepareRecording() {
@@ -82,6 +85,46 @@ public class VideoRecordingActivity extends Activity {
 					preview();
 				}
 			});
+		}
+
+		@Override
+		public void onRecordingProgress(final int duration, final int fileSize) {
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					if (durationLimit <= 0)
+						durationText.setText(formatDuration(duration));
+					else
+						durationText.setText(formatDuration(duration) + "/" + formatDuration(durationLimit));
+
+					if (fileLimit <= 0)
+						fileSizeText.setText(formatFileSize(fileSize));
+					else
+						fileSizeText.setText(formatFileSize(fileSize) + "/" + formatFileSize(fileLimit));
+				}
+			});
+		}
+
+		/**
+		 * @param duration in sec.
+		 * @return
+		 */
+		private String formatDuration(int duration) {
+			return String.format("%02d:%02d", duration / 60, (duration % 60));
+		}
+
+		/**
+		 * @param size in bytes.
+		 * @return
+		 */
+		private String formatFileSize(int size) {
+			if (size >= 1024 * 1024) {
+				return String.format("%.1fMB", (float) size / 1024 / 1024);
+			} else if (size >= 1024) {
+				return String.format("%dKB", size / 1024);
+			} else {
+				return String.format("%dB", size);
+			}
 		}
 	};
 
@@ -117,7 +160,13 @@ public class VideoRecordingActivity extends Activity {
 		
 		videoView = (AdaptiveSurfaceView) findViewById(R.id.videoView);
 		recordingManager = new VideoRecordingManager(videoView, recordingHandler);
-		
+
+		durationText = (TextView) findViewById(R.id.durationText);
+		durationText.setVisibility(View.INVISIBLE);
+
+		fileSizeText = (TextView) findViewById(R.id.fileSizeText);
+		fileSizeText.setVisibility(View.INVISIBLE);
+
 		recordBtn = (ImageButton) findViewById(R.id.recordBtn);
 		recordBtn.setOnClickListener(new OnClickListener() {
 			@Override
@@ -254,24 +303,40 @@ public class VideoRecordingActivity extends Activity {
 		recordingManager.getCameraManager().setupCameraAndStartPreview(videoView.getHolder(),
 				recordingHandler.getVideoSize(), recordingHandler.getDisplayRotation());
 	}
-	
+
 	private void record() {
 		if (recordingManager.stopRecording(false)) {
 			updateUiStateForNotRecording();
 			addToMediaStore();
 			preview();
-		}
-		else {
+		} else {
 			startRecording();
 		}
 	}
 
 	private void startRecording() {
-		if (recordingManager.startRecording(fileName, videoSize, fileLimit, durationLimit)) {
-			updateUiStateForRecording();
-			return;
-		}
-		Toast.makeText(this, getString(R.string.videoRecordingError), Toast.LENGTH_LONG).show();
+		new AsyncTask<Void, Void, Boolean>() {
+			@Override
+			protected void onPreExecute() {
+				// temporarily disable button to avoid MediaRecorder RuntimeException
+				recordBtn.setEnabled(false);
+			}
+
+			@Override
+			protected Boolean doInBackground(Void... voids) {
+				return recordingManager.startRecording(fileName, videoSize, fileLimit, durationLimit);
+			}
+
+			@Override
+			protected void onPostExecute(Boolean result) {
+				recordBtn.setEnabled(true);
+				if (result)
+					updateUiStateForRecording();
+				else
+					Toast.makeText(VideoRecordingActivity.this,
+							getString(R.string.videoRecordingError), Toast.LENGTH_LONG).show();
+			}
+		}.execute();
 	}
 
 	private void updateUiStateForNotRecording() {
@@ -279,6 +344,8 @@ public class VideoRecordingActivity extends Activity {
 		switchBtn.setVisibility(View.VISIBLE);
 		if (!hideVideoSizePicker)
 			videoSizeSpinner.setVisibility(View.VISIBLE);
+		durationText.setVisibility(View.INVISIBLE);
+		fileSizeText.setVisibility(View.INVISIBLE);
 	}
 
 	private void updateUiStateForRecording() {
@@ -286,6 +353,8 @@ public class VideoRecordingActivity extends Activity {
 		switchBtn.setVisibility(View.GONE);
 		if (!hideVideoSizePicker)
 			videoSizeSpinner.setVisibility(View.GONE);
+		durationText.setVisibility(View.VISIBLE);
+		fileSizeText.setVisibility(View.VISIBLE);
 	}
 
 	private void preview() {

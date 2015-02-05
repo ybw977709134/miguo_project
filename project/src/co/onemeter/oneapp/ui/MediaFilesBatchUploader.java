@@ -32,7 +32,7 @@ public class MediaFilesBatchUploader {
             throw new RuntimeException("WFile.remoteDir not set before uploading.");
         }
         wowweb.fPostFileToServer(f.localPath, f.remoteDir,
-                new NetworkIFDelegate() {
+                false, new NetworkIFDelegate() {
                     @Override
                     public void didFinishNetworkIFCommunication(int i, byte[] bytes) {
                         Log.i(String.format("uploading event media successful for file #%s", new String(bytes)));
@@ -43,7 +43,7 @@ public class MediaFilesBatchUploader {
                         } else {
                             // upload thumbnail
                             wowweb.fPostFileToServer(f.localThumbnailPath, f.remoteDir,
-                                    new NetworkIFDelegate() {
+                                    false, new NetworkIFDelegate() {
                                         @Override
                                         public void didFinishNetworkIFCommunication(int i, byte[] bytes) {
                                             f.thumb_fileid = new String(bytes);

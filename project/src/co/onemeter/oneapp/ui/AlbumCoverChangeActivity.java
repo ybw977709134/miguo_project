@@ -97,7 +97,7 @@ public class AlbumCoverChangeActivity extends Activity implements OnClickListene
             @Override
             protected Void doInBackground(final String... params) {
                 try {
-                    mWebIF.fPostFileToServer(params[0], GlobalSetting.S3_MOMENT_FILE_DIR, new NetworkIFDelegate() {
+                    mWebIF.fPostFileToServer(params[0], GlobalSetting.S3_MOMENT_FILE_DIR, false, new NetworkIFDelegate() {
                                 @Override
                                 public void didFinishNetworkIFCommunication(int i, byte[] bytes) {
                                     String fileId = new String(bytes);

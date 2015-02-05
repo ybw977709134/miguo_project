@@ -34,6 +34,7 @@ import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.Moment;
 import org.wowtalk.ui.MediaInputHelper;
+import org.wowtalk.ui.crop.ImagePreviewActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -77,6 +78,9 @@ public class InputBoardManager implements Parcelable,
         /** 用户想发送图文音消息。 */
         public void onHybirdRequested();
         public void onVideoInputted(String path, String thumbPath);
+        
+        /** 开始录制语音 */
+        public void willRecordAudio();
 
         /**
          *
@@ -162,7 +166,7 @@ public class InputBoardManager implements Parcelable,
      * should be the height of layoutMediaWrapper or layoutStampWrapper.
      */
     private View layoutTextWrapper;
-    private View layoutTextInnerWrapper;
+    public View layoutTextInnerWrapper;
     private View layoutMediaWrapper;
     private View layoutStampWrapper;
     public EditText mTxtContent;
@@ -219,7 +223,7 @@ public class InputBoardManager implements Parcelable,
     private Uri outputUri2 = null;
     
     private TextView textView_spare_time;
-    private int recLen = 11;
+//    private int recLen = 11;
     
     private Handler handler = new Handler(){
     	public void handleMessage(android.os.Message msg) {
@@ -234,15 +238,16 @@ public class InputBoardManager implements Parcelable,
             	break;
     		case 2:
     			textView_spare_time.setVisibility(View.VISIBLE);
-//    			textView_spare_time.setText("还可以说  10  秒");
-    			recLen--;
-    			textView_spare_time.setText("还可以说 " + recLen + " 秒");
-    			if(recLen > 0){ 
-    				Message message = handler.obtainMessage(2);
-                    handler.sendMessageDelayed(message, 1000);
-    			}else{
-    				textView_spare_time.setVisibility(View.GONE);
-    			}
+    			textView_spare_time.setText("还可以说  10  秒");
+    			handler.removeMessages(2);
+//    			recLen--;
+//    			textView_spare_time.setText("还可以说 " + recLen + " 秒");
+//    			if(recLen > 0){ 
+//    				Message message = handler.obtainMessage(2);
+//                    handler.sendMessageDelayed(message, 1000);
+//    			}else{
+//    				textView_spare_time.setVisibility(View.GONE);
+//    			}
     			break;
     		}   		
     		
@@ -436,9 +441,10 @@ public class InputBoardManager implements Parcelable,
                         btnSpeak.setText(R.string.msg_release_to_send);
                         btnSpeak.setBackgroundResource(mDrawableResId.voicePressed);
                         mContext.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                        mResultHandler.willRecordAudio();
                         startRecording();                  
-                        Message message = handler.obtainMessage(2);
-                        handler.sendMessageDelayed(message, 50000);
+
+                        handler.sendEmptyMessageDelayed(2, 50000);
                         handler.sendEmptyMessageDelayed(1, 60000);
                         break;
                     case MotionEvent.ACTION_UP:
@@ -478,7 +484,14 @@ public class InputBoardManager implements Parcelable,
                             						}
                             					}                  	
 //                            showVoicePreviewDialog();
-                            			}              
+                            			}  
+                            
+                            handler.removeMessages(1);
+                    		if(mVoiceTimer.getElapsed() < 50){
+                    			handler.removeMessages(2);
+                    		}else if(mVoiceTimer.getElapsed() >= 50){
+                    			
+                    		}
                             break;
                             }
 
@@ -1239,34 +1252,35 @@ public class InputBoardManager implements Parcelable,
             case REQ_INPUT_PHOTO:
             	if(data != null){
                 	Uri  mImageCaptureUri = data.getData();
-                	if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
-                		File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_IMAGE, ".jpg");
-                		outputUri = Uri.fromFile(f);
-                	}
-                	Log.i("--mImageCaptureUri--" + mImageCaptureUri);
-                	doCrop(mImageCaptureUri,outputUri);	
-            	}else{
-            		
-//            		doCrop(outputUri);	
-                    if (null != mMediaInputHelper) {
-                        String[] photoPath = new String[2];
-                        if (mMediaInputHelper.handleImageResult(
-                                mContext,
-                                data,
-                                PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
-                                PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
-                                photoPath)) {
-                            doodleOutFilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
-                            mContext.startActivityForResult(
-                                    new Intent(mContext, BitmapPreviewActivity.class)
-                                            .putExtra(BitmapPreviewActivity.EXTRA_MAX_WIDTH, PHOTO_SEND_WIDTH)
-                                            .putExtra(BitmapPreviewActivity.EXTRA_MAX_HEIGHT, PHOTO_SEND_HEIGHT)
-                                            .putExtra(BitmapPreviewActivity.EXTRA_BACKGROUND_FILENAME, photoPath[0])
-                                            .putExtra(BitmapPreviewActivity.EXTRA_OUTPUT_FILENAME, doodleOutFilename),
-                                    REQ_INPUT_DOODLE
-                            );
-                        }
-                    }
+//                	if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+//                		File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_IMAGE, ".jpg");
+//                		outputUri = Uri.fromFile(f);
+//                	}
+//                	Log.i("--mImageCaptureUri--" + mImageCaptureUri);
+//                	doCrop(mImageCaptureUri,outputUri);	
+//            	}else{
+//            		
+////            		doCrop(outputUri);	
+//                    if (null != mMediaInputHelper) {
+//                        String[] photoPath = new String[2];
+//                        if (mMediaInputHelper.handleImageResult(
+//                                mContext,
+//                                data,
+//                                PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
+//                                PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
+//                                photoPath)) {
+//                            doodleOutFilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
+//                            mContext.startActivityForResult(
+//                                    new Intent(mContext, BitmapPreviewActivity.class)
+//                                            .putExtra(BitmapPreviewActivity.EXTRA_MAX_WIDTH, PHOTO_SEND_WIDTH)
+//                                            .putExtra(BitmapPreviewActivity.EXTRA_MAX_HEIGHT, PHOTO_SEND_HEIGHT)
+//                                            .putExtra(BitmapPreviewActivity.EXTRA_BACKGROUND_FILENAME, mImageCaptureUri.toString())
+//                                            .putExtra(BitmapPreviewActivity.EXTRA_OUTPUT_FILENAME, doodleOutFilename),
+//                                    REQ_INPUT_DOODLE
+//                            );
+//                        }
+//                    }
+                	mContext.startActivityForResult(new Intent().setData(mImageCaptureUri).setClass(mContext, ImagePreviewActivity.class), REQ_INPUT_DOODLE);
             	}
 
                 result = true; 

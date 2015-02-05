@@ -7,8 +7,10 @@ import co.onemeter.oneapp.BuildConfig;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.ui.Log;
+import co.onemeter.oneapp.ui.MessageComposerActivity;
 import co.onemeter.oneapp.ui.StartActivity;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.api.*;
@@ -44,9 +46,7 @@ public class ChatMessageHandler {
      * 系统消息来自这个 uid.
      */
     private static final String SYSTEM_NOTIFICATION_SENDER = "10000";
-    private static final String NOTI_ACTION_REVIEW = "review";
-    private static final String NOTI_ACTION_BUDDY_PROFILE = "buddy_profile_updated";
-    private static final String NOTI_ACTION_GROUP_PROFILE = "group_profile_updated";
+    private static final String NOTI_ACTION_REVIEW = "NOTIFICATION/MOMENT_REVIEW";
 
     private Context context;
     private Database mDb;
@@ -170,6 +170,8 @@ public class ChatMessageHandler {
             android.util.Log.d(LOG_TAG, "ChatMessage.MSGTYPE_GROUPCHAT_SOMEONE_QUIT_ROOM: gid:"
                     + msg.chatUserName + ", uid: " + msg.groupChatSenderID);
 
+        android.util.Log.i("abc",msg.messageContent);
+
         String action = null;
         String group_id = null;
         String groupName = null;
@@ -196,10 +198,30 @@ public class ChatMessageHandler {
             mDb.deleteChatMessage(msg);
             return true;
         }
+        
+        if("disband_group".equals(action)){
+        	 if (!TextUtils.isEmpty(groupName)) {
+                 msg.displayName = groupName;
+             }
+             msg.messageContent = buddy_nickname + " " + context.getString(R.string.msg_someone_leave_group);
+             msg.msgType = ChatMessage.MSGTYPE_SYSTEM_PROMPT;
+             if (mSaveDb) {
+//             mDb.deleteGroupChatRoomWithID(msg.chatUserName);
+                 mDb.deletePendingRequest(msg.chatUserName, myUid);
+//                 mDb.deleteChatMessage(msg);
+                 mDb.updateChatMessage(msg, true);
+                 mDb.deleteBuddyFromGroupChatRoom(msg.chatUserName, buddy_id);
+                 mDb.deleteMyselfFlagFromGroupChatRoom(msg.chatUserName);
+//             mDb.deleteChatMessageWithUser(group_id);
+             }
+             return true;
+         } 
 
         // action = "remove_from_group"
         if (group_id == null || buddy_id == null || buddy_nickname == null)
             return false;
+        
+	    android.util.Log.i("abc", buddy_id.equals(myUid) +"");    
         if (buddy_id.equals(myUid)) {
             // I was kicked out, or reject from the group,
             // or the group has been disbanded
@@ -271,6 +293,9 @@ public class ChatMessageHandler {
 		} else if(ChatMessage.MSGTYPE_GROUPCHAT_SOMEONE_QUIT_ROOM.equals(msg.msgType)) {
             humanReadable = false;
             handleGroupQuit(msg);
+            if(!MessageComposerActivity.activityIsNull()){
+            	MessageComposerActivity.instance().finish();
+            }
 		} else if(ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST.equals(msg.msgType)) {
             humanReadable = false;
             handleGroupRequest(msg);
@@ -340,9 +365,10 @@ public class ChatMessageHandler {
     }
 
     private void handleX(ChatMessage msg) {
+        JSONObject json = null;
         String action = null;
         try {
-            JSONObject json = new JSONObject(msg.messageContent);
+            json = new JSONObject(msg.messageContent);
             action = json.getString("action");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -350,38 +376,20 @@ public class ChatMessageHandler {
 
         if (NOTI_ACTION_REVIEW.equals(action)) {
             mPrefUtil.setLatestReviewTimestamp();
-        } else if (NOTI_ACTION_BUDDY_PROFILE.equals(action)) {
-            String uid = msg.getEntityIdAsBuddyProfileUpdated();
-            if(uid != null) {
-                if(mWeb == null)
-                    mWeb = WowTalkWebServerIF.getInstance(context);
-                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Integer, Void>() {
+
+            try {
+                final String moment_id = json.getString("moment_id");
+                final String review_id = json.getString("review_id");
+                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
                     @Override
-                    protected Void doInBackground(String... params) {
-                        if (ErrorCode.OK == mWeb.fGetBuddyWithUID(params[0])) {
-                            mPrefUtil.setLocalContactListLastModified();
-                        }
-                        ;
+                    protected Void doInBackground(Void... voids) {
+                        MomentWebServerIF.getInstance(context).fGetReviewById(moment_id, review_id, null);
                         return null;
                     }
-                }, uid);
-                mDb.deleteChatMessage(msg);
+                });
             }
-        } else if (NOTI_ACTION_GROUP_PROFILE.equals(action)) {
-            String gid = msg.getEntityIdAsGroupProfileUpdated();
-            if(gid != null) {
-                if(mWeb == null)
-                    mWeb = WowTalkWebServerIF.getInstance(context);
-                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<String, Integer, Void>() {
-                    @Override
-                    protected Void doInBackground(String... params) {
-                        if(ErrorCode.OK == mWeb.fGroupChat_GetGroupDetail(params[0])) {
-                            mPrefUtil.setLocalGroupListLastModified();
-                        };
-                        return null;
-                    }
-                }, gid);
-                mDb.deleteChatMessage(msg);
+            catch (JSONException e) {
+                e.printStackTrace();
             }
         }
     }

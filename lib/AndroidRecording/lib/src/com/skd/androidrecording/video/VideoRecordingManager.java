@@ -45,7 +45,7 @@ public class VideoRecordingManager implements SurfaceHolder.Callback {
 	}
 
 	/**
-	 *
+	 * may block a while.
 	 * @param fileName
 	 * @param videoSize
 	 * @param fileSizeLimit maximum allowed file size in bytes. 0 means infinite.
@@ -56,7 +56,9 @@ public class VideoRecordingManager implements SurfaceHolder.Callback {
 								  final long fileSizeLimit, final int durationLimit) {
 		int degree = cameraManager.getCameraDisplayOrientation();
 		boolean startted = recorderManager.startRecording(cameraManager.getCamera(), fileName, videoSize, degree);
-		if (startted && (fileSizeLimit > 0 || durationLimit > 0)) {
+		if (startted) {
+			if (recordingHandler != null)
+				recordingHandler.onRecordingProgress(0, 0);
 			monitorThrd = new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -69,7 +71,9 @@ public class VideoRecordingManager implements SurfaceHolder.Callback {
 							break;
 						}
 
+						int durationMs = (int) (System.currentTimeMillis() - beginTime);
 						long fileSize = new File(fileName).length();
+
 						Log.i(TAG, "file size: " + fileSize);
 						if (fileSizeLimit > 0 && fileSizeLimit < fileSize) {
 							Log.i(TAG, "file size limitation reached, stop recording");
@@ -77,10 +81,13 @@ public class VideoRecordingManager implements SurfaceHolder.Callback {
 							break;
 						}
 
-						if (durationLimit > 0 && durationLimit * 1000 < System.currentTimeMillis() - beginTime) {
+						if (durationLimit > 0 && durationLimit * 1000 + 1000 < durationMs) {
 							Log.i(TAG, "duration limitation reached, stop recording");
 							stopRecording(true);
 						}
+
+						if (recordingHandler != null)
+							recordingHandler.onRecordingProgress(durationMs / 1000, (int) fileSize);
 					}
 					monitorThrd = null;
 				}
@@ -91,7 +98,13 @@ public class VideoRecordingManager implements SurfaceHolder.Callback {
 	}
 	
 	public boolean stopRecording(boolean willNotifyHandler) {
-		boolean stopped = recorderManager.stopRecording();
+		boolean stopped;
+		try {
+			stopped = recorderManager.stopRecording();
+		} catch (RuntimeException e) {
+			stopped = true;
+			e.printStackTrace();
+		}
 		if (stopped && monitorThrd != null && monitorThrd.isAlive()) {
 			monitorThrd.interrupt();
 			monitorThrd = null;

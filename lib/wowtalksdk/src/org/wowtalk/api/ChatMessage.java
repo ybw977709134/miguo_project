@@ -593,7 +593,7 @@ public class ChatMessage {
      * </ul>
      */
 	public String getMediaFileID() {
-		Pattern p = Pattern.compile("[^_]pathoffileincloud\" *: *\"([0-9a-zA-Z-_]+)");
+		Pattern p = Pattern.compile("[^_]pathoffileincloud\" *: *\"([0-9a-zA-Z-_\\.]+)");
 		Matcher m = p.matcher(messageContent);
 		if(m.find())
 			return m.group(1);
@@ -609,7 +609,7 @@ public class ChatMessage {
 		Assert.assertTrue(hybirdComponent == HYBIRD_COMPONENT_AUDIO);
 
 		if (hybirdComponent == HYBIRD_COMPONENT_AUDIO) {
-			Pattern p = Pattern.compile("audio_pathoffileincloud\" *: *\"([0-9a-zA-Z-_]+)");
+			Pattern p = Pattern.compile("audio_pathoffileincloud\" *: *\"([0-9a-zA-Z-_\\.]+)");
 			Matcher m = p.matcher(messageContent);
 			if (m.find())
 				return m.group(1);
@@ -627,7 +627,7 @@ public class ChatMessage {
      * </ul>
      */
     public String getThumbnailFileID() {
-        Pattern p = Pattern.compile("pathofthumbnailincloud\" *: *\"([0-9a-zA-Z-_]+)");
+        Pattern p = Pattern.compile("pathofthumbnailincloud\" *: *\"([0-9a-zA-Z-_\\.]+)");
         Matcher m = p.matcher(messageContent);
         if(m.find())
             return m.group(1);

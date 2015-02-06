@@ -56,7 +56,7 @@ public class GroupMemberManageActivity extends Activity implements View.OnClickL
             PendingRequest p = pendingRequests.get(position);
             if (convertView == null) {
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.listitem_group_apply, parent, false);
-            }
+            } 
             RoundedImageView imgPhoto = (RoundedImageView) convertView.findViewById(R.id.img_photo);
             TextView txtName = (TextView) convertView.findViewById(R.id.txt_name);
             imgPhoto.setBackgroundDrawable(null);

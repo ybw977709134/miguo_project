@@ -564,9 +564,10 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 		super.onResume();
         MobclickAgent.onResume(this);
 
-        refreshMemberGrid();
+//        refreshMemberGrid();
         setTitleSettingImage();
         refreshGroupInfo();
+        refreshMemberGrid();
         Database.addDBTableChangeListener(Database.TBL_BUDDIES,buddiesObserver);
         Database.addDBTableChangeListener(Database.TBL_GROUP_MEMBER,groupMembersObserver);
         Database.addDBTableChangeListener(Database.TBL_PENDING_REQUESTS,mPendingRequestObserver);

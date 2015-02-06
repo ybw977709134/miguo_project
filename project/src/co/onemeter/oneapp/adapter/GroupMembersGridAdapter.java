@@ -88,11 +88,11 @@ public class GroupMembersGridAdapter extends BaseAdapter {
         ImageView imgDel = (ImageView) lView.findViewById(R.id.img_del);
         
         //判断群组中各个成员的账号类型的判断
-        if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
-        	imageView_tag_tea.setVisibility(View.VISIBLE);
-        } else {
-        	imageView_tag_tea.setVisibility(View.GONE);
-        }        
+//        if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+//        	imageView_tag_tea.setVisibility(View.VISIBLE);
+//        } else {
+//        	imageView_tag_tea.setVisibility(View.GONE);
+//        }        
         
         if ((myLevel == GroupMember.LEVEL_CREATOR || myLevel == GroupMember.LEVEL_ADMIN)) {
             if (showDummyItems) {
@@ -197,6 +197,13 @@ public class GroupMembersGridAdapter extends BaseAdapter {
             }
             
         }
+        
+        //判断群组中各个成员的账号类型的判断
+        if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+        	imageView_tag_tea.setVisibility(View.VISIBLE);
+        } else {
+        	imageView_tag_tea.setVisibility(View.GONE);
+        } 
         
         Buddy newBuddy = mDbHelper.buddyWithUserID(buddy.userID);
         if (newBuddy != null) {

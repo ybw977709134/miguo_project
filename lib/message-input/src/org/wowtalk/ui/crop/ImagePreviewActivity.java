@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
 import org.wowtalk.ui.msg.R;
 
@@ -49,12 +50,12 @@ public class ImagePreviewActivity extends Activity implements OnClickListener {
         	Bitmap bm = null;;
 			try {
 				bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imagePickedUri);//将uri转换bitmap
+	        	resultView.setImageBitmap(bm);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-        	resultView.setImageBitmap(bm);
         }
         findViewById(R.id.btn_crop).setOnClickListener(this);
         findViewById(R.id.btn_send).setOnClickListener(this);
@@ -71,14 +72,19 @@ public class ImagePreviewActivity extends Activity implements OnClickListener {
     }
 
     private void beginCrop(Uri source) {
-        Uri outputUri = Uri.fromFile(new File(getCacheDir(), "cropped"));
+    	int ran = new Random().nextInt(100);
+    	File file = new File(getCacheDir(), "cropped" + ran);
+    	if(file.exists()){
+    		file.delete();
+    	}
+        Uri outputUri = Uri.fromFile(file);
         new Crop(source).output(outputUri).start(this);
     }
 
     private void handleCrop(int resultCode, Intent result) {
         if (resultCode == RESULT_OK) {
         	resultUri = Crop.getOutput(result);
-            resultView.setImageURI(Crop.getOutput(result));
+            resultView.setImageURI(resultUri);
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }

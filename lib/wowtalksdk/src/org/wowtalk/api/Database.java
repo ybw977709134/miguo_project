@@ -6379,6 +6379,23 @@ public class Database {
         return result;
     }
 
+    /**
+     * get school's ID by arguement "classId"
+     * @param classId
+     * @return
+     */
+    public String fetchSchoolIdByClassId(String classId){
+    	String result = null;
+    	Cursor cursor = database.query(TBL_GROUP, 
+    			new String[]{"parent_group_id"}, 
+    			"category = '__classroom__' AND group_id = ?", new String[]{classId}, 
+    			null, null, null);
+    	 if (cursor.moveToFirst()) {
+             result = cursor.getString(0);
+         }
+    	 cursor.close();
+    	return result;
+    }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //db table change notification wraper
 

@@ -334,6 +334,10 @@ public class MediaInputHelper implements Parcelable {
         }
     }
 
+    public Uri getLastImageUri(){
+    	return mLastImageUri;
+    }
+    
     /**
 	 * Call me in Activity.onActivityResult() if the requestCode matches and
 	 * resultCode equals Activity.RESULT_OK.

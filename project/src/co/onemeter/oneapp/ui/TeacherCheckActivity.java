@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 	private int lessonId;
 	private int lvFlag;
 	private String classId;
+	private String schoolId;
 	
 	private List<GroupMember> members;
 	private List<GroupMember> stus;
@@ -75,6 +77,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 			lvFlag = intent.getIntExtra("lvFlag", 0);
 			lessonId = intent.getIntExtra(Constants.LESSONID, 0);
 			classId = intent.getStringExtra("classId");
+			schoolId = mdbHelper.fetchSchoolIdByClassId(classId);
 			if(lvFlag == LESSITUATION){
 				txtTitle.setText(R.string.class_lesson_situation_table);
 			}else if(lvFlag == PARENTSUG){
@@ -85,7 +88,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 		stus = new ArrayList<GroupMember>();
 		
 		members = mdbHelper.fetchGroupMembers(classId);
-//		android.util.Log.i("-->>", members.toString());
+//		Log.i("-->>" +  members.toString());
 		if(members == null || members.isEmpty()){
 			AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
@@ -99,6 +102,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 						members = mdbHelper.fetchGroupMembers(classId);
 						for (GroupMember m : members) {
 							if (m.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT) {
+								m.alias =  mdbHelper.fetchStudentAlias(schoolId, m.userID);
 								stus.add(m);
 							}
 						}
@@ -111,6 +115,8 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 		}else{
 			for (GroupMember m: members) {
 				if(m.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
+					m.alias =  mdbHelper.fetchStudentAlias(schoolId, m.userID);
+					Log.i("-->>" + mdbHelper.fetchStudentAlias(schoolId, m.userID));
 					stus.add(m);
 				}
 			}
@@ -231,7 +237,11 @@ class StuAdapter extends BaseAdapter{
 				holder = (ViewHolder) convertView.getTag();
 			}
 			GroupMember member = members.get(position);
-			holder.name.setText(member.nickName);
+			if(!TextUtils.isEmpty(member.alias)){
+				holder.name.setText(member.alias);
+			}else{
+				holder.name.setText(member.nickName);
+			}
 			holder.msg.setText("");
 			return convertView;
 		}

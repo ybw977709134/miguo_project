@@ -689,7 +689,6 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                         finish();
                     } else {
                         moment=dbHelper.fetchMoment(moment.id);
-                        dbHelper.setReviewsRead(moment);
                         setupContent(moment);
 
                         // 以便动态列表页面重新刷新评论数
@@ -782,6 +781,9 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         mImageResizer.flushCache();
 
         mImageResizer.clearCacheInMem();
+
+        if (dbHelper != null)
+            dbHelper.setReviewsRead(moment);
     }
 
     @Override

@@ -30,7 +30,9 @@
             android:id="@+id/btn_send"
             style="@style/Crop.ActionButton" >
 
-            <TextView style="@style/Crop.ActionButtonText" 
+            <TextView 
+                android:id="@+id/txt_sendordone"
+                style="@style/Crop.ActionButtonText" 
                 android:drawableLeft="@drawable/crop__ic_done"
                 android:text="@string/send"/>
         </FrameLayout>

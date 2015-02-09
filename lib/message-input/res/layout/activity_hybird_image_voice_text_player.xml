@@ -44,7 +44,7 @@
         android:id="@+id/img_msg_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent" 
-        android:layout_below="@+id/title_bar"/>
+        android:layout_above="@+id/frameLayout1"/>
 
     <!-- 音频播放进度条 -->
 

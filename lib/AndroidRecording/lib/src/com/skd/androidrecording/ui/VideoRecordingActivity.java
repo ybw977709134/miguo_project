@@ -240,7 +240,7 @@ public class VideoRecordingActivity extends Activity {
 				@Override
 				public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 					videoSize = (Size) arg0.getItemAtPosition(arg2);
-					recordingManager.setPreviewSize(videoSize);
+					startPreview();
 				}
 
 				@Override
@@ -252,7 +252,7 @@ public class VideoRecordingActivity extends Activity {
 			videoSizeSpinner.setVisibility(View.GONE);
 		}
 	}
-	
+
 	@SuppressLint("NewApi")
 	private void updateVideoSizes() {
 		if (Build.VERSION.SDK_INT >= 11) {
@@ -282,9 +282,12 @@ public class VideoRecordingActivity extends Activity {
 				}
 			}
 
-			videoSize = supportedSizes.get(idx);
-			videoSizeSpinner.setSelection(idx);
-			recordingManager.setPreviewSize(videoSize);
+			if (hideVideoSizePicker) {
+				videoSize = supportedSizes.get(idx);
+				startPreview();
+			} else {
+				videoSizeSpinner.setSelection(idx);
+			}
 		}
 	}
 
@@ -314,6 +317,17 @@ public class VideoRecordingActivity extends Activity {
 		}
 	}
 
+	private void startPreview() {
+		recordingManager.setPreviewSize(videoSize);
+		if (recordingHandler != null && !recordingHandler.onPrepareRecording())
+		{
+			recordingManager.getCameraManager().setupCameraAndStartPreview(
+					videoView.getHolder(),
+					recordingHandler.getVideoSize(),
+					recordingHandler.getDisplayRotation());
+		}
+	}
+
 	private void startRecording() {
 		new AsyncTask<Void, Void, Boolean>() {
 			@Override
@@ -324,7 +338,7 @@ public class VideoRecordingActivity extends Activity {
 
 			@Override
 			protected Boolean doInBackground(Void... voids) {
-				return recordingManager.startRecording(fileName, videoSize, fileLimit, durationLimit);
+				return recordingManager.startRecording(fileName, fileLimit, durationLimit);
 			}
 
 			@Override

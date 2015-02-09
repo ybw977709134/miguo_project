@@ -1,5 +1,8 @@
 package co.onemeter.oneapp.ui;
 
+import org.wowtalk.api.ChatMessage;
+import org.wowtalk.api.Database;
+
 import android.content.Context;
 import android.content.Intent;
 import android.text.ClipboardManager;
@@ -19,15 +22,17 @@ public class TextOperationHelper {
 
     public static void fillMenu(final Context ctx,
                                 final BottomButtonBoard mMenu,
+                                final ChatMessage messageDetail,
                                 final String message,
                                 boolean addCloseItem) {
         String[] phones = PhoneNumberHelper.extractPhoneNumbers(message);
         String[] links = HyperLinkHelper.extractHyperLinks(message);
-        fillMenu(ctx, mMenu, message, phones, links, addCloseItem);
+        fillMenu(ctx, mMenu,messageDetail, message, phones, links, addCloseItem);
     }
 
     public static void fillMenu(final Context ctx,
                                 final BottomButtonBoard mMenu,
+                                final ChatMessage messageDetail,
                                 final String message,
                                 String[] phones,
                                 String[] links,
@@ -45,6 +50,18 @@ public class TextOperationHelper {
                         }
                     }
                 });
+        
+        mMenu.add(ctx.getString(R.string.contacts_local_delete),
+                BottomButtonBoard.BUTTON_BLUE,
+                new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                    	Database db = new Database(ctx);
+                    	db.deleteChatMessage(messageDetail);
+                    	mMenu.dismiss();
+                    }
+                });
+        
         if (phones != null && phones.length > 0) {
             for(final String phone : phones) {
                 mMenu.add(ctx.getString(R.string.chat_menu_call) + " " + phone,  BottomButtonBoard.BUTTON_BLUE,

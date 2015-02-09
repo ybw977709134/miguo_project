@@ -193,7 +193,7 @@ public class MessageComposerActivity extends MessageComposerActivityBase {
         else
             mMenu.clearView();
 
-        TextOperationHelper.fillMenu(this, mMenu, message.messageContent, phones, links, true);
+        TextOperationHelper.fillMenu(this, mMenu, message , message.messageContent, phones, links, true);
 
         mMenu.show();
     }

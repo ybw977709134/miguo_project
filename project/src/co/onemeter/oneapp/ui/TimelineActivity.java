@@ -516,7 +516,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         }
 
 
-        TextOperationHelper.fillMenu(activity, menu, replyTo.text, true);
+        TextOperationHelper.fillMenu(activity, menu,null, replyTo.text, true);
 
         menu.show();
     }

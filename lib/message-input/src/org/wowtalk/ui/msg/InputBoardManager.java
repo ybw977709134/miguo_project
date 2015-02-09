@@ -1347,23 +1347,27 @@ public class InputBoardManager implements Parcelable,
                  			 .putExtra(ImagePreviewActivity.ISDOODLE, true), REQ_INPUT_PHOTO_FOR_DOODLE_CROP);
             	}else {
                     if (null != mMediaInputHelper) {
-                        String[] photoPath = new String[2];
-                        if (mMediaInputHelper.handleImageResult(
-                                mContext,
-                                data,
-                                PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
-                                PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
-                                photoPath)) {
-                            outputfilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
-                            mContext.startActivityForResult(
-                                    new Intent(mContext, DoodleActivity.class)
-                                            .putExtra(DoodleActivity.EXTRA_MAX_WIDTH, PHOTO_SEND_WIDTH)
-                                            .putExtra(DoodleActivity.EXTRA_MAX_HEIGHT, PHOTO_SEND_HEIGHT)
-                                            .putExtra(DoodleActivity.EXTRA_BACKGROUND_FILENAME, photoPath[0])
-                                            .putExtra(DoodleActivity.EXTRA_OUTPUT_FILENAME, outputfilename),
-                                    REQ_INPUT_DOODLE
-                            );
-                        }
+                    	Log.i("--mLastImageUri" + mMediaInputHelper.getLastImageUri());
+                    	File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_IMAGE, ".jpg");
+                		outputUri2 = Uri.fromFile(f);
+                    	doCrop_doodle(mMediaInputHelper.getLastImageUri(), outputUri2);
+//                        String[] photoPath = new String[2];
+//                        if (mMediaInputHelper.handleImageResult(
+//                                mContext,
+//                                data,
+//                                PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
+//                                PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
+//                                photoPath)) {
+//                            outputfilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
+//                            mContext.startActivityForResult(
+//                                    new Intent(mContext, DoodleActivity.class)
+//                                            .putExtra(DoodleActivity.EXTRA_MAX_WIDTH, PHOTO_SEND_WIDTH)
+//                                            .putExtra(DoodleActivity.EXTRA_MAX_HEIGHT, PHOTO_SEND_HEIGHT)
+//                                            .putExtra(DoodleActivity.EXTRA_BACKGROUND_FILENAME, photoPath[0])
+//                                            .putExtra(DoodleActivity.EXTRA_OUTPUT_FILENAME, outputfilename),
+//                                    REQ_INPUT_DOODLE
+//                            );
+//                        }
                     }
             	}
             	
@@ -1371,12 +1375,12 @@ public class InputBoardManager implements Parcelable,
                 break;
             case REQ_INPUT_PHOTO_FOR_DOODLE_CROP:
                 if (null != mMediaInputHelper) {
-                	//Log.i("--after crop data --" + data.getData());
+                	Log.i("--after crop data --" + data.getData());
                 	//针对部分4.4机型返回的intent(data)为空，重新传进之前的Uri
-//                	if(data.getData() == null){
-//                		data = new Intent();
-//                		data.setData( outputUri2);
-//                	}
+                	if(data.getData() == null){
+                		data = new Intent();
+                		data.setData( outputUri2);
+                	}
                     String[] photoPath = new String[2];
                     if (mMediaInputHelper.handleImageResult(
                             mContext,

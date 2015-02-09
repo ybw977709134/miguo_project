@@ -41,6 +41,7 @@ public class ImagePreviewActivity extends Activity implements OnClickListener {
         resultView = (ImageView) findViewById(R.id.result_image);
         Intent intent = getIntent();
         imagePickedUri = intent.getData();
+        android.util.Log.i("--uri--", imagePickedUri.toString());
         outpath = intent.getStringExtra(OUTPUTPATH);
         if(intent.getBooleanExtra(ISDOODLE, false)){
 	        TextView txt_doneorsend = (TextView) findViewById(R.id.txt_sendordone);

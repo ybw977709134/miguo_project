@@ -43,7 +43,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 	private static final int GET_BUDDY_BY_UID = 1002;
 //	private static final int GET_GROUP_BY_NAME = 1001;
 //	private static final int GET_GROUP_BY_GID = 1003;
-	private int searchKind = GET_BUDDY_BY_USERNAME;
+	private int searchKind = GET_BUDDY_BY_UID;
 	private static int SEARCH_DEFAULT = 0;
 	private static int SEARCH_RECOVER = 1;
 	
@@ -414,16 +414,16 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
 //        setSearchResultStatus();
 //	}
     private void setTitleMode(){
-    	if (searchKind == GET_BUDDY_BY_USERNAME) {
-    		search_nickname.setBackgroundResource(R.drawable.tab_button_left_white_a);
-    		search_uid.setBackgroundResource(R.drawable.tab_button_right_white);
-    		search_nickname.setTextColor(getResources().getColor(R.color.blue));
-    		search_uid.setTextColor(getResources().getColor(R.color.white));
-    	}else if(searchKind == GET_BUDDY_BY_UID){
-    		search_uid.setBackgroundResource(R.drawable.tab_button_right_white_a);
-    		search_nickname.setBackgroundResource(R.drawable.tab_button_left_white);
+    	if (searchKind == GET_BUDDY_BY_UID) {
+    		search_uid.setBackgroundResource(R.drawable.tab_button_left_white_a);
+    		search_nickname.setBackgroundResource(R.drawable.tab_button_right_white);
     		search_uid.setTextColor(getResources().getColor(R.color.blue));
     		search_nickname.setTextColor(getResources().getColor(R.color.white));
+    	}else if(searchKind == GET_BUDDY_BY_USERNAME){
+    		search_nickname.setBackgroundResource(R.drawable.tab_button_right_white_a);
+    		search_uid.setBackgroundResource(R.drawable.tab_button_left_white);
+    		search_nickname.setTextColor(getResources().getColor(R.color.blue));
+    		search_uid.setTextColor(getResources().getColor(R.color.white));
     	}
     }
 	
@@ -450,7 +450,7 @@ public class ContactSearchActivity extends Activity implements OnClickListener {
         lvBuddy=(ListView) findViewById(R.id.list_buddy_find);
 //		lvGroups = (ListView) findViewById(R.id.list_group_find);
 		
-		search_title_back = (ImageButton) findViewById(R.id. search_title_back);
+		search_title_back = (ImageButton) findViewById(R.id.search_title_back);
 		
 		search_nickname = (Button) findViewById(R.id.search_nickname);
 		search_uid = (Button) findViewById(R.id.search_uid);

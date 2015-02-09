@@ -19,23 +19,23 @@
 			android:layout_centerInParent="true"
             android:visibility="visible">
 			<Button
-				android:id="@+id/search_nickname"
+				android:id="@+id/search_uid"
 				android:layout_height="wrap_content"
 				android:layout_width="70dp"
                 android:lines="1"
                 android:background="@drawable/tab_button_left_white_a"
 				android:textColor="@color/green"
 				android:textSize="14sp"
-				android:text="名字搜索"/>
+				android:text="账号搜索"/>
 			<Button
-				android:id="@+id/search_uid"
+				android:id="@+id/search_nickname"
 				android:layout_height="wrap_content"
 				android:layout_width="70dp"
                 android:lines="1"
                 android:background="@drawable/tab_button_right_white"
 				android:textColor="@color/white"
 				android:textSize="14sp"
-				android:text="帐号搜索"/>
+				android:text="名字搜索"/>
 		</LinearLayout>
 
         <ImageButton

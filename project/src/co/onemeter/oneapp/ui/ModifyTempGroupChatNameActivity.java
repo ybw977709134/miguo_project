@@ -4,13 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GroupChatRoom;
@@ -66,7 +70,12 @@ public class ModifyTempGroupChatNameActivity extends Activity {
                     setResult(Activity.RESULT_OK, data);
                     finish();
                 } else {
-                    mMsgBox.show(null, getString(R.string.group_chat_title_modify_failure));
+                   mMsgBox.show(null, getString(R.string.group_chat_title_modify_failure));
+//                    Toast toast = Toast.makeText(ModifyTempGroupChatNameActivity.this, getString(R.string.group_chat_title_modify_failure), Toast.LENGTH_SHORT);
+//                    toast.setGravity(Gravity.CENTER, 0, 0);
+//                    toast.show();
+                   mMsgBox.dismissDialog();
+                   
                 }
             }
         });

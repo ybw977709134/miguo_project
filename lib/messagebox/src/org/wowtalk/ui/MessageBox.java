@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.*;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import org.wowtalk.ui.messagebox.R;
 
 /**
@@ -304,6 +305,25 @@ public class MessageBox {
             // try to catch: android.view.WindowManager$BadTokenException
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * 自定义提示对话框提示3秒后消失
+     */
+    public void dismissDialog(){
+    	new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(3000);
+					mMsgDlg.dismiss();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+			}
+		}).start();
     }
 
     private void _toastOnCurrThrd(String msg, int durationMs) {

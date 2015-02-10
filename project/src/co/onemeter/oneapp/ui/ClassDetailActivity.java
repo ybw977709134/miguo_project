@@ -333,6 +333,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				//android.util.Log.i("-->>", buddy.getAccountType() + "");
 				if(Buddy.ACCOUNT_TYPE_TEACHER == buddy.getAccountType()){
 					members.add(buddy);
+					android.util.Log.d("----:", buddy.userID);
+					
 				}
 			}
 		}
@@ -359,6 +361,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				holder = new ViewHolder();
 				convertView = getLayoutInflater().inflate(R.layout.listitem_class_detail_teacher, parent, false);
 				holder.img_photo = (ImageView) convertView.findViewById(R.id.img_photo);
+				holder.img_tag_tea = (ImageView) convertView.findViewById(R.id.imageView_tag_tea);
 				holder.txt_name = (TextView) convertView.findViewById(R.id.txt_name);
 				convertView.setTag(holder);
 			}else{
@@ -367,6 +370,12 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			final GroupMember member = members.get(position);
 			holder.txt_name.setText(TextUtils.isEmpty(member.alias) ? member.nickName : member.alias);
 			PhotoDisplayHelper.displayPhoto(ClassDetailActivity.this, holder.img_photo, R.drawable.default_avatar_90, member, true);
+			//对头像的身份进行标记
+			if (member.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+				holder.img_tag_tea.setVisibility(View.VISIBLE);
+			} else {
+				holder.img_tag_tea.setVisibility(View.GONE);
+			}
 			
 			View.OnClickListener listener = new View.OnClickListener() {
 				
@@ -393,6 +402,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		
 		class ViewHolder{
 			ImageView img_photo;
+			ImageView img_tag_tea;
 			TextView txt_name;
 		}
 		

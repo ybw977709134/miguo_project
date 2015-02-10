@@ -458,16 +458,17 @@ public class MomentWebServerIF {
 
         if (errno == ErrorCode.OK) {
             Element reviewNode = Utils.getFirstElementByTagName(root, "review");
-            if(reviewNode != null) {
+            if(reviewNode != null) {            	
 //                Database db = Database.open(mContext);
-//                Review r = new Review();
+//                Review r = new Review();                
                 XmlHelper.parseReview(reviewNode, result);
                 if (result.id != null) {
-                    storeReview2db(momentId,result);
+                    storeReview2db(momentId,result);                   
 //                    db.storeReview(new Moment(momentId), r);
 //                    if(Review.TYPE_LIKE == type) {
 //                        db.updateMomentLikedAttr(momentId, true);
 //                    }
+                                       
                 }
             }
         }

@@ -1359,7 +1359,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 				protected void onProgressUpdate(Integer... params) {
 					if (progress != null) {
 						progress.setProgress(params[0]);
-					}
+					} 
 				}
 			};
 			mDlVoiceFileTaskMap.put(path, taskDlVoiceFile);

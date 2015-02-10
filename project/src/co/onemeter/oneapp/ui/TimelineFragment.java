@@ -226,7 +226,7 @@ public abstract class TimelineFragment extends ListFragment
 
                 @Override
                 protected Integer doInBackground(String... params) {
-                    MomentWebServerIF web = MomentWebServerIF.getInstance(getActivity());
+                    MomentWebServerIF web = MomentWebServerIF.getInstance(getActivity());  
                     if (!moment.likedByMe) { // 点赞
                         return web.fReviewMoment(params[0], Review.TYPE_LIKE, null, null, r);
                     } else { // 撤销赞

@@ -605,12 +605,21 @@ public class InputBoardManager implements Parcelable,
             }
             setInputMode(FLAG_SHOW_STAMP);
         } else if (i == R.id.btn_input_pic) {
+        	if(DoubleClickedUtils.isFastDoubleClick()){
+        		return;  
+        	}
             inputImage(REQ_INPUT_PHOTO);
 //            inputImage(REQ_INPUT_PHOTO_FOR_DOODLE);
 
         } else if (i == R.id.btn_input_video) {
+        	if(DoubleClickedUtils.isFastDoubleClick()){
+        		return;  
+        	}
             inputVideo();
         } else if (i == R.id.btn_input_doodle) {
+        	if(DoubleClickedUtils.isFastDoubleClick()){
+        		return;  
+        	}
             inputDoodle();
         } else if (i == R.id.btn_input_picvoice) {
             mResultHandler.onHybirdRequested();

@@ -3,11 +3,14 @@ package org.wowtalk.ui.msg;
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.androidquery.AQuery;
+
 import junit.framework.Assert;
 
 import java.io.File;
@@ -35,6 +38,7 @@ public class HybirdImageVoiceTextPreview extends Activity implements View.OnClic
     View audioProgressBarElapsed;
     View audioProgressBarRemained;
     TextView audioButton;
+    TextView txt_msg_text;
 
 
     @Override
@@ -66,6 +70,9 @@ public class HybirdImageVoiceTextPreview extends Activity implements View.OnClic
         q.find(R.id.title_back).clicked(this);
         q.find(R.id.btn_commit).clicked(this);
         startAudioPositionMonitorThread();
+        
+        txt_msg_text = (TextView) findViewById(R.id.txt_msg_text);
+        txt_msg_text.setMovementMethod(ScrollingMovementMethod.getInstance());
     }
 
     @Override

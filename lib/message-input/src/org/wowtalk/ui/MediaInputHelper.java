@@ -85,7 +85,7 @@ public class MediaInputHelper implements Parcelable {
 
         Intent getContentIntent = new Intent();
         getContentIntent.setType("image/*");
-        getContentIntent.setAction(Intent.ACTION_GET_CONTENT);
+        getContentIntent.setAction(Intent.ACTION_PICK);
 
 //        Intent pickIntent = new Intent(Intent.ACTION_PICK,
 //                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

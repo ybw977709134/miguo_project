@@ -359,6 +359,8 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
             @Override
             protected void onPostExecute(Integer result) {
                 groupMembers = dbHelper.fetchGroupMembers(groupId);
+                groupMembers = sortMembersInGroup(groupMembers);
+                setMyLevel();
                 txtMemberCount.setText(String.format(getResources().getString(R.string.groupchat_members),
                         String.valueOf(groupMembers.size())));
                 if (!_isDeleteMode) {
@@ -371,6 +373,8 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 	
 	private void getGroupChatMemberFromLocal() {
         groupMembers = dbHelper.fetchGroupMembers(groupId);
+        groupMembers = sortMembersInGroup(groupMembers);
+        setMyLevel();
         txtMemberCount.setText(String.format(getResources().getString(R.string.groupchat_members),
                 String.valueOf(groupMembers.size())));
         setGridLast();
@@ -573,7 +577,6 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 
         mMsgBox = new MessageBox(this);
         mWeb = WowTalkWebServerIF.getInstance(this);
-		Intent intent = getIntent();
 		groupId = getIntent().getStringExtra(GROUP_ID); 
 		if (groupId == null)
 			return;
@@ -586,14 +589,14 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 		initView();
 		getGroupChatMemberFromLocal();
 		getGroupChatMemberFromServer();
-		refreshMemberGrid();
+		//refreshMemberGrid();
 	}
 
     @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
-        refreshMemberGrid();
+     // refreshMemberGrid();
     }
 
     @Override
@@ -631,6 +634,19 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
         return list;
     }
     
+    private void setMyLevel(){
+    	myLevel = GroupMember.LEVEL_DEFAULT;
+		String myUid = mPrefUtil.getUid();
+		for(GroupMember b : groupMembers) {
+			if(b != null && b.userID != null && b.userID.equals(myUid)) {
+				myLevel = b.getLevel();
+				Log.i("myLevel : " + myLevel+"");
+				break;
+			}
+		}
+    }
+    
+    /*
     private void refreshMemberGrid() {
 		groupMembers = mDbHelper.fetchGroupMembers(groupRoom.groupID);
         groupMembers = sortMembersInGroup(groupMembers);
@@ -649,5 +665,5 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
 		memberAdapter = new MemberAdapter();
 		gridMembers.setAdapter(memberAdapter);
 	}
-
+     */
 }

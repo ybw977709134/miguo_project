@@ -80,6 +80,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
             @Override
             protected void onPostExecute(Void result) {
                 if (errno == ErrorCode.OK) {
+                	new Database(MyClassesActivity.this).storeSchools(schoolrooms);
                     AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
 
                         @Override

@@ -272,7 +272,7 @@ class HighlightView {
             // Convert to image space before sending to growBy()
             float xDelta = dx * (cropRect.width() / r.width());
             float yDelta = dy * (cropRect.height() / r.height());
-            growBy((((edge & GROW_LEFT_EDGE) != 0) ? -1 : 1) * xDelta,
+            growBy(edge,(((edge & GROW_LEFT_EDGE) != 0) ? -1 : 1) * xDelta,
                     (((edge & GROW_TOP_EDGE) != 0) ? -1 : 1) * yDelta);
         }
     }
@@ -298,6 +298,81 @@ class HighlightView {
         viewContext.invalidate(invalRect);
     }
 
+    void growBy(int edge,float dx, float dy) {
+        if (maintainAspectRatio) {
+            if (dx != 0) {
+                dy = dx / initialAspectRatio;
+            } else if (dy != 0) {
+                dx = dy * initialAspectRatio;
+            }
+        }
+
+        // Don't let the cropping rectangle grow too fast.
+        // Grow at most half of the difference between the image rectangle and
+        // the cropping rectangle.
+        RectF r = new RectF(cropRect);
+        if (dx > 0F && r.width() + 2 * dx > imageRect.width()) {
+            dx = (imageRect.width() - r.width()) / 2F;
+            if (maintainAspectRatio) {
+                dy = dx / initialAspectRatio;
+            }
+        }
+        if (dy > 0F && r.height() + 2 * dy > imageRect.height()) {
+            dy = (imageRect.height() - r.height()) / 2F;
+            if (maintainAspectRatio) {
+                dx = dy * initialAspectRatio;
+            }
+        }
+
+        //Log.e("edge" + edge);
+        //r.inset(-dx, -dy);
+        switch (edge) {
+		case 3://left
+			r.left +=  -dx;
+			break;
+		case 5://right
+			r.right -=  -dx;
+			break;
+		case 9://top
+			r.top +=  -dy;
+			break;
+		case 17://bottom
+			r.bottom -=  -dy;
+			break;
+		default: r.inset(-dx, -dy);//default scale four corners
+			break;
+		}
+
+        // Don't let the cropping rectangle shrink too fast
+        final float widthCap = 25F;
+        if (r.width() < widthCap) {
+            r.inset(-(widthCap - r.width()) / 2F, 0F);
+        }
+        float heightCap = maintainAspectRatio
+                ? (widthCap / initialAspectRatio)
+                : widthCap;
+        if (r.height() < heightCap) {
+            r.inset(0F, -(heightCap - r.height()) / 2F);
+        }
+
+        // Put the cropping rectangle inside the image rectangle
+        if (r.left < imageRect.left) {
+            r.offset(imageRect.left - r.left, 0F);
+        } else if (r.right > imageRect.right) {
+            r.offset(-(r.right - imageRect.right), 0F);
+        }
+        if (r.top < imageRect.top) {
+            r.offset(0F, imageRect.top - r.top);
+        } else if (r.bottom > imageRect.bottom) {
+            r.offset(0F, -(r.bottom - imageRect.bottom));
+        }
+
+        cropRect.set(r);
+        drawRect = computeLayout();
+        viewContext.invalidate();
+    }
+    
+    /*
     // Grows the cropping rectangle by (dx, dy) in image space.
     void growBy(float dx, float dy) {
         if (maintainAspectRatio) {
@@ -355,6 +430,7 @@ class HighlightView {
         drawRect = computeLayout();
         viewContext.invalidate();
     }
+    */
 
     // Returns the cropping rectangle in image space with specified scale
     public Rect getScaledCropRect(float scale) {

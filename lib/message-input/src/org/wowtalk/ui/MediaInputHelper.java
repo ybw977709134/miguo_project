@@ -51,10 +51,10 @@ public class MediaInputHelper implements Parcelable {
 	public static final int MEDIA_TYPE_VOICE = 3;
 	public static final int MEDIA_TYPE_THUMNAIL = 4;
 
-    private static final int VIDEO_FILE_LIMIT = 1024 * 1024 * 5;
-    private static final int VIDEO_DURATION_LIMIT = 10; // 90秒 x VGA x 3gp ~= 5MB
-    private static final int VIDEO_PREFERRED_WIDTH = 640; // VGA
-    private static final int VIDEO_PREFERRED_HEIGHT = 480; // VGA
+    private static final int VIDEO_FILE_LIMIT = 1024 * 1024 * 16;
+    private static final int VIDEO_DURATION_LIMIT = 10;
+    private static final int VIDEO_PREFERRED_WIDTH = 1280;
+    private static final int VIDEO_PREFERRED_HEIGHT = 720;
 
     /* MediaStore.ACTION_IMAGE_CAPTURE will not return the Uri passed as EXTRA_OUTPUT. */
 	private Uri mLastImageUri = null;
@@ -334,6 +334,10 @@ public class MediaInputHelper implements Parcelable {
         }
     }
 
+    public Uri getLastImageUri(){
+    	return mLastImageUri;
+    }
+    
     /**
 	 * Call me in Activity.onActivityResult() if the requestCode matches and
 	 * resultCode equals Activity.RESULT_OK.

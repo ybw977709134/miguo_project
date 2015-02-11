@@ -675,7 +675,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         else
             mMenu.clearView();
 
-        TextOperationHelper.fillMenu(this, mMenu, message, null, null, true);
+        TextOperationHelper.fillMenu(this, mMenu,null, message, null, null, true);
 
         mMenu.show();
     }

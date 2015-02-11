@@ -37,6 +37,8 @@ public class PickLocActivityWithAMap extends FragmentActivity implements AMapLoc
 
     private boolean cameraMoveWithAnim=true;
     private int  cameraMoveAnimInterval=1000;
+    
+    private String address = "";
 
 //    private TextView tvLocationIndicator;
     /**
@@ -61,6 +63,7 @@ public class PickLocActivityWithAMap extends FragmentActivity implements AMapLoc
         if(null != data) {
             double lat = data.getDouble("target_lat");
             double lon = data.getDouble("target_lon");
+            address = data.getString("addr");
 
             if(Math.abs(lat) > Double.MIN_NORMAL && Math.abs(lon) > Double.MIN_NORMAL) {
             	Log.i("-->>" + lat + "/" + lon);
@@ -162,7 +165,7 @@ public class PickLocActivityWithAMap extends FragmentActivity implements AMapLoc
             aMap.clear();
             aMap.addMarker(new MarkerOptions()
                     .position(new LatLng(latitude, longitude)).anchor(0.5f, 0.5f)
-                    .title("Current Position")
+                    .title(address)
                     .icon(BitmapDescriptorFactory
                             .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).draggable(false));
         }

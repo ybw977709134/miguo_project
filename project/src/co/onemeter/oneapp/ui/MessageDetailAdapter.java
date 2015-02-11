@@ -821,6 +821,7 @@ public class MessageDetailAdapter extends BaseAdapter{
             Intent i = new Intent(context, PickLocActivityWithAMap.class);
             i.putExtra("target_lat", flat);
             i.putExtra("target_lon", flon);
+            i.putExtra("addr", faddr);
             i.putExtra("no_pick", true);
             context.startActivity(i);
 //        } else {

@@ -83,12 +83,13 @@ public class MediaInputHelper implements Parcelable {
             mChangeAppsListener.changeToOtherApps();
         mLastImageUri = Uri.fromFile(makeOutputMediaFile(MEDIA_TYPE_IMAGE, ".jpg")); // create a file to save the image
 
-        Intent getContentIntent = new Intent();
-        getContentIntent.setType("image/*");
-        getContentIntent.setAction(Intent.ACTION_GET_CONTENT);
+//        Intent getContentIntent = new Intent();
+//        getContentIntent.setType("image/*");
+//        getContentIntent.setAction(Intent.ACTION_GET_CONTENT);
 
-//        Intent pickIntent = new Intent(Intent.ACTION_PICK,
-//                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent getContentIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        getContentIntent.setType("image/*");
 
 		PackageManager pm = activity.getPackageManager();
 		if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {

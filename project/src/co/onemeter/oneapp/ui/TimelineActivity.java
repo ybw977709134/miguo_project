@@ -462,7 +462,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
 
         final InputBoardManager inputMgr = handler.getInputBoardMangager();
         if (inputMgr != null)
-            inputMgr.setSoftKeyboardVisibility(false);
+        	 inputMgr.setSoftKeyboardVisibility(false);
 
         menu.add(activity.getString(R.string.moments_reply), BottomButtonBoard.BUTTON_BLUE,
                 new View.OnClickListener() {

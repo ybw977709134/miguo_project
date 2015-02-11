@@ -12,6 +12,8 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnLongClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.view.ViewGroup;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
@@ -128,12 +130,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 
         imgPhoto = (ImageView) findViewById(R.id.img_photo);
         imageView_tag_tea = (ImageView) findViewById(R.id.imageView_tag_tea);
-//        dbHelper = new Database(this);
-//        if (dbHelper.getBuddyCountType(moment.owner.userID) == 2) {//老师
-//        	imageView_tag_tea.setVisibility(View.VISIBLE);//显示标记
-//        } else {
-//        	imageView_tag_tea.setVisibility(View.GONE);
-//        } 
+        
         //根据moment获得帐号的类型
         if (moment.owner.getAccountType() == 2) {//此时的moment不为空//老师
         	imageView_tag_tea.setVisibility(View.VISIBLE);//显示标记
@@ -702,14 +699,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_moment_detail);
-        
-        
-//        if (getIntent().getIntExtra("isowner", 0) == 1) {//自己
-//        	momentOp.setVisibility(View.VISIBLE);
-//        } else {//好友
-//        	momentOp.setVisibility(View.GONE);
-//        }
+        setContentView(R.layout.activity_moment_detail);   
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
@@ -729,6 +719,24 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                 }
             }
         };
+        
+
+//        mInputMgr = new InputBoardManager(this, (ViewGroup) findViewById(R.id.input_board_holder), this, this);
+//        if (mInputMgr.setupViews()) {
+//        	mInputMgr.mTxtContent.setFocusable(true);
+//            mInputMgr.mTxtContent.setFocusableInTouchMode(true);
+//            mInputMgr.mTxtContent.requestFocus();
+//        }  
+//        Handler hanlder = new Handler();
+//        hanlder.postDelayed(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+//				InputMethodManager imm = (InputMethodManager)mInputMgr.mTxtContent.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);  
+//		        imm.showSoftInput(mInputMgr.mTxtContent, 0);
+//			}
+//		}, 200);
+//        
 
         mediaPlayerWraper= new MediaPlayerWraper(this);
 
@@ -973,6 +981,28 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             TimelineActivity.doWithReview(-1, moment.id, replyTo, mMenu, this, this,
                     this, onMomentReviewDeleteListener, getLikeBtnClickListener(moment.id));
         }
+       
+        //点击评论按钮，进入详情页自动弹起输入软键盘,而不是item
+      if (mInputMgr != null && getIntent().getBooleanExtra("button_reply", false)) {
+    	  
+    	  mInputMgr.mTxtContent.setFocusable(true);
+          mInputMgr.mTxtContent.setFocusableInTouchMode(true);
+          mInputMgr.mTxtContent.requestFocus();
+          
+        Handler hanlder = new Handler();
+        hanlder.postDelayed(new Runnable() {
+    		
+    		@Override
+    		public void run() {
+    			InputMethodManager imm = (InputMethodManager)mInputMgr.mTxtContent.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);  
+    	        imm.showSoftInput(mInputMgr.mTxtContent, 0);
+    		}
+    	}, 200);
+    	  
+      }
+      
+      
+      
     }
 
     @Override
@@ -1025,6 +1055,8 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             return;
         }
         mInputMgr.setSoftKeyboardVisibility(false);
+//        mInputMgr.setSoftKeyboardVisibility(true);
+        
         String mid = mInputMgr.extra().getString(EXTRA_REPLY_TO_MOMENT_ID);
         Review replyTo = mInputMgr.extra().getParcelable(EXTRA_REPLY_TO_REVIEW);
         if (mid == null)

@@ -266,6 +266,7 @@ public abstract class TimelineFragment extends ListFragment
         	
             //评论按钮进入详情页刷新
         	Intent intent = new Intent(this.getActivity(), MomentDetailActivity.class).putExtra("moment", moment);
+        	intent.putExtra("button_reply", true);//通过评论按钮进入详情页，自动弹起输入软键盘，有标志值且为true        	
         	String mMyUid = PrefUtil.getInstance(this.getActivity()).getUid();
             if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
                 intent.putExtra("isowner", 1);//给自己多传一个标志值
@@ -287,7 +288,7 @@ public abstract class TimelineFragment extends ListFragment
 
         Intent intent = new Intent(this.getActivity(), MomentDetailActivity.class)
                 .putExtra("moment", moment);
-
+        intent.putExtra("button_reply", false);
         String mMyUid = PrefUtil.getInstance(context).getUid();
         if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
             intent.putExtra("isowner", 1);//给自己多传一个标志值

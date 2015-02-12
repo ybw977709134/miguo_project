@@ -88,7 +88,6 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 		stus = new ArrayList<GroupMember>();
 		
 		members = mdbHelper.fetchGroupMembers(classId);
-//		Log.i("-->>" +  members.toString());
 		if(members == null || members.isEmpty()){
 			AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
@@ -116,7 +115,6 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 			for (GroupMember m: members) {
 				if(m.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
 					m.alias =  mdbHelper.fetchStudentAlias(schoolId, m.userID);
-					Log.i("-->>" + mdbHelper.fetchStudentAlias(schoolId, m.userID));
 					stus.add(m);
 				}
 			}
@@ -156,10 +154,9 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 							errno = LessonWebServerIF.getInstance(TeacherCheckActivity.this).getLessonParentFeedback(lessonId, stus.get(pos).userID);
 							if(errno == ErrorCode.OK){
 								LessonParentFeedback feedback = db.fetchLessonParentFeedback(lessonId, stus.get(pos).userID);
-								//android.util.Log.i("-->>", feedback.toString());
 								Moment moment = db.fetchMoment(feedback.moment_id + "");
 								if(moment != null){
-									FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment,stus.get(pos).nickName);
+									FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment,stus.get(pos).alias != null ? stus.get(pos).alias : stus.get(pos).nickName);
 									mHandler.sendEmptyMessage(errno);
 								}else{
 									mHandler.sendEmptyMessage(errno);
@@ -175,7 +172,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 			}else{
 				Moment moment = db.fetchMoment(feedback0.moment_id + "");
 				if(moment != null){
-					FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment,stus.get(pos).nickName);
+					FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment,stus.get(pos).alias != null ? stus.get(pos).alias : stus.get(pos).nickName);
 					mHandler.sendEmptyMessage(ErrorCode.OK);
 				}else{
 					mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);

@@ -2,7 +2,6 @@ package co.onemeter.oneapp.ui;
 
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.Lesson;
 import org.wowtalk.api.LessonParentFeedback;
 import org.wowtalk.api.Moment;
@@ -25,10 +24,11 @@ import android.widget.LinearLayout;
  */
 public class LessonDetailActivity extends Activity implements OnClickListener {
 	
+	private static final int REQ_PARENT_FEEDBACK = 100;
+	
 	private int lessonId;
 	private String classId;
 	private Lesson lesson;
-	private MessageBox mMsgBox = new MessageBox(this);
 	
 	protected void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,20 +70,19 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		lay_first.setOnClickListener(this);
 		lay_second.setOnClickListener(this);
 		lay_third.setOnClickListener(this);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
+		
 		if(!isTeacher()){
-			AQuery q = new AQuery(this);
 			if(Database.getInstance(this).fetchLessonParentFeedback(lessonId, PrefUtil.getInstance(this).getUid()) != null){
 				q.find(R.id.text_third_r).text(getString(R.string.class_parent_opinion_submitted));
 			}else{
 				q.find(R.id.text_third_r).text(getString(R.string.class_wait_submit));
 			}
 		}
-		
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
 	}
 	
 	@Override
@@ -124,7 +123,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 					intent.putExtra(Constants.STUID, mPre.getUid());
 					intent.putExtra(LessonStatusActivity.FALG, false);
 					intent.setClass(this, LessonParentFeedbackActivity.class);
-					startActivity(intent);
+					startActivityForResult(intent,REQ_PARENT_FEEDBACK);
 				}else{
 					Moment moment = mDbHelper.fetchMoment(feedback.moment_id + "");
 					if(moment != null){
@@ -137,6 +136,16 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			break;
 		default:
 			break;
+		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(resultCode == Activity.RESULT_OK){
+			if(requestCode == REQ_PARENT_FEEDBACK){
+				AQuery q = new AQuery(this);
+				q.find(R.id.text_third_r).text(getString(R.string.class_parent_opinion_submitted));
+			}
 		}
 	}
 	

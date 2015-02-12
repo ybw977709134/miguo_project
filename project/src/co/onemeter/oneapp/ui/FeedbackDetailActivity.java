@@ -303,6 +303,8 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
         photoFiles = new ArrayList<WFile>();
         if (moment != null && moment.multimedias != null && !moment.multimedias.isEmpty()) {
             for (WFile file : moment.multimedias) {
+            	Log.i("--file--" + file.localPath);
+            	Log.i("--remoteDir--" + file.remoteDir);
                 if (file.isAudioByExt()) {
                     voiceFile = file;
                 } else {

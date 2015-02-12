@@ -15,6 +15,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
+import co.onemeter.oneapp.liveplayer.VideoPlayingActivity;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
 
@@ -226,7 +227,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			finish();
 			break;
 		case R.id.class_live_class:
-			msgBox.toast("功能正在实现中...");
+			startActivity(new Intent(this, VideoPlayingActivity.class));
+//			msgBox.toast("功能正在实现中...");
 			break;
 		case R.id.more:
 			showMore(v);

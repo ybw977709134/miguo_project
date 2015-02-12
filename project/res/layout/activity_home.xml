@@ -226,7 +226,7 @@
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:gravity="center"
-					android:visibility="visible"
+					android:visibility="gone"
 					android:orientation="vertical">
 					<ImageButton
 					    android:id="@+id/btn_live_play"

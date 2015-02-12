@@ -282,7 +282,7 @@ public class MediaInputHelper implements Parcelable {
             mChangeAppsListener.changeToOtherApps();
         Intent pickIntent = new Intent();
         pickIntent.setType("video/*");
-        pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+        pickIntent.setAction(Intent.ACTION_PICK);
 
         PackageManager pm = activity.getPackageManager();
         if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -293,7 +293,7 @@ public class MediaInputHelper implements Parcelable {
                     .putExtra(VideoRecordingActivity.EXTRA_PREFERRED_WIDTH, VIDEO_PREFERRED_WIDTH)
                     .putExtra(VideoRecordingActivity.EXTRA_PREFERRED_HEIGHT, VIDEO_PREFERRED_HEIGHT);
 
-            String pickTitle = "Select or take a new video"; // Or get from strings.xml
+            String pickTitle = "选择操作"; // Or get from strings.xml
             Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
             chooserIntent.putExtra (
                     Intent.EXTRA_INITIAL_INTENTS,

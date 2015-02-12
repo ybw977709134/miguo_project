@@ -6,7 +6,8 @@
 	<!-- 在 Android 2.3 上，PullToRefreshListView 产生 stack overflow 错误。 -->
 	<uses-sdk
 		android:minSdkVersion="11"
-		android:targetSdkVersion="17" />
+		/>
+	<!-- android:targetSdkVersion="17"  -->
 
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.INTERNET" />

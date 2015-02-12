@@ -258,7 +258,7 @@ public abstract class TimelineFragment extends ListFragment
                         }
                         Database dbHelper = new Database(getActivity());
                         dbHelper.storeMoment(moment, moment.id);
-                        adapter.notifyDataSetChanged();
+//                        adapter.notifyDataSetChanged();
                     }
                 }
             }, moment.id);

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
 
@@ -298,7 +300,9 @@ public class LoginActivity extends Activity implements OnClickListener {
             startActivity(new Intent(this, RegisterActivity.class));
             break;
 		case R.id.forgotPassWord:
-			fGotoFetchPwd();
+//			fGotoFetchPwd();
+			//找回密码
+			showPopupMenu();
 			break;
         case R.id.field_clear:
             edtPassword.setText("");
@@ -398,6 +402,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 		}).start();
     }
 
+    /**
+     * 跳转到找回密码的界面
+     */
     private void fGotoFetchPwd() {
 		Intent fetchIntent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
 		startActivity(fetchIntent);
@@ -535,5 +542,22 @@ public class LoginActivity extends Activity implements OnClickListener {
 //		});
 //		dialog.show();
 	}
+	
+    private void showPopupMenu() {
+        final BottomButtonBoard bottomBoard = new BottomButtonBoard(this, findViewById(R.id.layout_login));
+
+        //邮箱找回
+        bottomBoard.add(getString(R.string.login_findPassWord_email), BottomButtonBoard.BUTTON_BLUE, new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomBoard.dismiss();
+                fGotoFetchPwd();
+            }
+        });
+
+        //close popupMenu
+        bottomBoard.addCancelBtn(getString(R.string.login_findPassWord_cancel));
+        bottomBoard.show();
+    }
 
 }

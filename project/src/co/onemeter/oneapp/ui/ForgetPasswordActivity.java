@@ -14,4 +14,11 @@ public class ForgetPasswordActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
     }
+    
+    /**
+     * 初始化控件
+     */
+    private void initView() {
+    	
+    }
 }

@@ -184,7 +184,9 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:divider="@drawable/divider"
-            android:padding="@dimen/padding_medium" >
+            android:padding="@dimen/padding_medium" 
+            android:background="@color/white"
+            android:cacheColorHint="#00000000">
         </ListView>
 
 

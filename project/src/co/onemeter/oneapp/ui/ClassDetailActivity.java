@@ -288,7 +288,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                         Intent intent = new Intent(ClassDetailActivity.this, LessonInfoEditActivity.class);
                         intent.putExtra("class", class_group);
                         intent.putExtra("tag", LessonInfoEditActivity.TAG_CLASS_INFO);
-
+                        if(lessons!=null && !lessons.isEmpty()){
+                            intent.putExtra("firstlesdate", lessons.get(0).start_date);
+                        }
                         startActivityForResult(intent, 0);
                         bottomBoard.dismiss();
                     }

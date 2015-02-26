@@ -27,7 +27,8 @@
     <ListView
         android:id="@+id/lvStu"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent" 
+        android:divider="@drawable/divider">
     </ListView>
 
 </LinearLayout>

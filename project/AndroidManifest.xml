@@ -168,6 +168,12 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		
+		<activity
+            android:name=".WelcomeActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        
 		<activity
 			android:name=".ui.StartActivity"
             android:launchMode="singleTask"

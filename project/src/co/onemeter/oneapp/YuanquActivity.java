@@ -3,6 +3,7 @@ package co.onemeter.oneapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
@@ -23,6 +24,10 @@ import co.onemeter.oneapp.ui.GlobalValue;
 import java.io.*;
 
 public class YuanquActivity extends Activity {
+	
+	private SharedPreferences prefs;
+	private boolean flag;
+	
 	protected void onCreate(Bundle savedInstanceState) {
 
         // setup BugSenseHandler before setContentView
@@ -36,6 +41,10 @@ public class YuanquActivity extends Activity {
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
+        //把是否启动欢迎页的信息写入配置参数里面
+        prefs = getSharedPreferences("onemeter_visit_log", Context.MODE_PRIVATE);
+		flag = prefs.getBoolean("visit", false);
+		
         Handler hdl = new Handler();
 		hdl.postDelayed(new splashHandler(), 500);
 
@@ -174,7 +183,12 @@ public class YuanquActivity extends Activity {
 			} else {
 			    GlobalValue.IS_BOOT_FROM_LOGIN = true;
 //				intent.setClass(YuanquActivity.this, LoginInvitedActivity.class);
-			    intent.setClass(YuanquActivity.this, LoginActivity.class);
+			    if (!flag) {//还未安装本软件，跳转到欢迎引导页
+			    	intent.setClass(YuanquActivity.this, WelcomeActivity.class);
+			    } else {
+			    	intent.setClass(YuanquActivity.this, LoginActivity.class);
+			    }
+			    
 			}
 			startActivity(intent);
 			

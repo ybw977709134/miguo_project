@@ -1,10 +1,14 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -51,6 +55,22 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 				lvPerformances.setAdapter(new LessonStatusAdapter(preformstrs));
 				if(stuPersFromNet.isEmpty()){
 					findViewById(R.id.btn_parent_confirm).setVisibility(View.VISIBLE);
+					if(!isTeacher){
+						ContextThemeWrapper themedContext;
+						if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+						    themedContext = new ContextThemeWrapper( LessonStatusActivity.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar );
+						}
+						else {
+						    themedContext = new ContextThemeWrapper( LessonStatusActivity.this, android.R.style.Theme_Light_NoTitleBar );
+						}
+						new AlertDialog.Builder(themedContext).setTitle("温馨提示").setMessage("老师还没有评分！").setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								finish();
+							}
+						}).create().show();
+					}
 				}
 				if(!isTeacher){
 					findViewById(R.id.btn_parent_confirm).setVisibility(View.GONE);

@@ -7,7 +7,6 @@ package org.wowtalk.ui.crop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Random;
 
 import org.wowtalk.ui.msg.R;
@@ -15,6 +14,7 @@ import org.wowtalk.ui.msg.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -34,6 +34,7 @@ public class ImagePreviewActivity extends Activity implements OnClickListener {
 	private Uri resultUri = null;
 	private String outpath = null;
 	
+	private Bitmap bm = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,20 +42,25 @@ public class ImagePreviewActivity extends Activity implements OnClickListener {
         resultView = (ImageView) findViewById(R.id.result_image);
         Intent intent = getIntent();
         imagePickedUri = intent.getData();
-        android.util.Log.i("--uri--", imagePickedUri.toString());
+        //android.util.Log.i("--uri--", imagePickedUri.toString());
         outpath = intent.getStringExtra(OUTPUTPATH);
         if(intent.getBooleanExtra(ISDOODLE, false)){
 	        TextView txt_doneorsend = (TextView) findViewById(R.id.txt_sendordone);
 	        txt_doneorsend.setText(R.string.done);
         }
         if(imagePickedUri != null){
-        	Bitmap bm = null;;
 			try {
-				bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imagePickedUri);//将uri转换bitmap
+				//避免OOM发生
+				BitmapFactory.Options option = new BitmapFactory.Options();
+				option.inPreferredConfig = Bitmap.Config.RGB_565;
+				option.inPurgeable = true;
+				option.inInputShareable = true;
+				option.inSampleSize = 4;
+				//bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imagePickedUri);//将uri转换bitmap
+				bm = BitmapFactory.decodeStream(getContentResolver().openInputStream(imagePickedUri), null, option);
+				//bm = bm.copy(Bitmap.Config.ARGB_4444, false);
 	        	resultView.setImageBitmap(bm);
 			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
 				e.printStackTrace();
 			}
         }
@@ -91,6 +97,15 @@ public class ImagePreviewActivity extends Activity implements OnClickListener {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	if(bm != null && !bm.isRecycled()){
+    		bm.recycle();
+    		System.gc();
+    	}
+    }
+    
 	@Override
 	public void onClick(View v) {
 		int id = v.getId();
@@ -100,14 +115,18 @@ public class ImagePreviewActivity extends Activity implements OnClickListener {
 	                try {
 	                	Uri returnUri = imagePickedUri;
 						if(resultUri != null){
-							outBmp = MediaStore.Images.Media.getBitmap(getContentResolver(), resultUri);
+							//outBmp = MediaStore.Images.Media.getBitmap(getContentResolver(), resultUri);
+							outBmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(resultUri));
 							returnUri = resultUri;
 		                }else if(imagePickedUri != null){
-		                	outBmp = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePickedUri);
+		                	//outBmp = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePickedUri);
+							outBmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(imagePickedUri));
 		                }
 						if(outBmp != null){
 							 outBmp.compress(Bitmap.CompressFormat.JPEG, 90, new FileOutputStream(outpath));
-							 outBmp.recycle();
+							 if(!outBmp.isRecycled()){
+								 outBmp.recycle();
+							 }
 						}
 						Intent data = new Intent();
 						data.setData(returnUri);

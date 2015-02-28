@@ -365,33 +365,7 @@ public class ChatMessageHandler {
     }
 
     private void handleX(ChatMessage msg) {
-        JSONObject json = null;
-        String action = null;
-        try {
-            json = new JSONObject(msg.messageContent);
-            action = json.getString("action");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        if (NOTI_ACTION_REVIEW.equals(action)) {
-            mPrefUtil.setLatestReviewTimestamp();
-
-            try {
-                final String moment_id = json.getString("moment_id");
-                final String review_id = json.getString("review_id");
-                AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... voids) {
-                        MomentWebServerIF.getInstance(context).fGetReviewById(moment_id, review_id, null);
-                        return null;
-                    }
-                });
-            }
-            catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+        // nothing to do
     }
 
     /**

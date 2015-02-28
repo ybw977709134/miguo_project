@@ -1,9 +1,6 @@
 package co.onemeter.oneapp.ui;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TabActivity;
+import android.app.*;
 import android.content.*;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
@@ -24,6 +21,8 @@ import co.onemeter.oneapp.utils.WebServerEventPoller;
 import co.onemeter.utils.AsyncTaskExecutor;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.wowtalk.Log;
 import org.wowtalk.api.*;
 import org.wowtalk.core.RegistrationState;
@@ -47,6 +46,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
     public static final String KEY_IS_START_FROM_LOGIN = "is_start_from_login";
 
     private static final String ACTION_CONNECTIVITY_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
+    private static final String NOTI_ACTION_REVIEW = "NOTIFICATION/MOMENT_REVIEW";
 //    private static final String ACTION_WIFI_STATE_CHANGE = "android.net.wifi.STATE_CHANGE";
     private NetworkStateChangeReceiver mNetworkStateChangedReceiver = new NetworkStateChangeReceiver();
 
@@ -1292,7 +1292,40 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
     }
 
     @Override
-    public void getMomentRelateNotificaiton(String arg0, String arg1) {
-        // TODO Auto-generated method stub
+    public void getMomentRelateNotificaiton(String uid, String msgLiteralWithoutType) {
+        Log.i("getMomentRelateNotificaiton", uid, " ", msgLiteralWithoutType);
+
+        // find JSON str
+        int i = msgLiteralWithoutType.lastIndexOf('{');
+        if (i != -1) {
+            String jsonStr = msgLiteralWithoutType.substring(i);
+            JSONObject json = null;
+            String action = null;
+            try {
+                json = new JSONObject(jsonStr);
+                action = json.getString("action");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            if (NOTI_ACTION_REVIEW.equals(action)) {
+                mPrefUtil.setLatestReviewTimestamp();
+
+                try {
+                    final String moment_id = json.getString("moment_id");
+                    final String review_id = json.getString("review_id");
+                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            MomentWebServerIF.getInstance(StartActivity.this).fGetReviewById(moment_id, review_id, null);
+                            return null;
+                        }
+                    });
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

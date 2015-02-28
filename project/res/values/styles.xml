@@ -192,6 +192,10 @@
 	<style name="button_green" parent="button">
 		<item name="android:background">@drawable/btn_green_selector</item>
 	</style>
+	
+	<style name="button_green_thin" parent="button">
+		<item name="android:background">@drawable/btn_green_selector</item>
+	</style>
 
     <style name="inputbox_borderless" parent="@android:style/Widget.EditText">
         <item name="android:layout_width">match_parent</item>

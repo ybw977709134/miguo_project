@@ -78,5 +78,11 @@
 		<item>拍摄</item>
 		<item>选择</item>
 	</string-array>
+	
+	<!-- 欢迎页图片数组 -->
+	<string-array name="arrWelcomeImage">
+        <item>slide1</item>
+        <item>slide2</item>
+    </string-array>
 
 </resources>

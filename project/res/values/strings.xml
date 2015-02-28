@@ -442,6 +442,9 @@
     <string name="login_pwd_cannot_be_null">密码不能为空</string>
     <string name="login_otherwise">或者</string>
     <string name="login_input_email">邮箱</string>
+    <string name="login_input_verification">验证码</string>
+    <string name="login_newPassword">新密码</string>
+    <string name="login_confirm_password">确认新密码</string>
     <string name="login_others">使用其它方式登录</string>
     <string name="login_qrcode">扫描二维码登录</string>
 	<string name="login_signup">注册</string>
@@ -452,6 +455,12 @@
     <string name="login">登录</string>
     <string name="login_retrieve_password_btn">提交</string>
     <string name="forgotPassWord">忘记密码？</string>
+    <string name="login_findPassWord_email">邮箱找回</string>
+    <string name="login_findPassWord_cancel">取消</string>
+    <string name="login_findPassWord_ok">确定</string>
+    <string name="login_newPassWord_ok">确定</string>
+    <string name="login_receive_verificationCode_btn">获取验证码</string>
+    <string name="login_again_receive_verificationCode_btn">重新获取验证码</string>
     <string name="automatically_registered">自动注册</string>
     <string name="input_yuanqu_account">请输入WowTalk ID</string>
     <string name="input_password">请输入密码</string>

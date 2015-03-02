@@ -45,6 +45,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	public static final String DATE = "date";
 	public static final String TIME = "time";
 	public static final String PLACE = "place";
+	public static final String LENGTH = "length";
 
 	private int tag;
 	private String classId;
@@ -57,6 +58,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	private EditText dtSubject;
 	private DatePicker dpDate;
 	private TimePicker tpTime;
+	private TimePicker tpLength;
 	private EditText dtPlace;
 
 	private Database mDBHelper;
@@ -109,6 +111,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		dtSubject = (EditText) findViewById(R.id.ed_lesinfo_subject);
 		dpDate = (DatePicker) findViewById(R.id.datePicker_lesinfo_date);
 		tpTime = (TimePicker) findViewById(R.id.timePicker_lesinfo_time);
+		tpLength = (TimePicker) findViewById(R.id.timePicker_lesinfo_length);
 		dtPlace = (EditText) findViewById(R.id.ed_lesinfo_place);
 		lvCourtable = (ListView) findViewById(R.id.lv_courtable);
 
@@ -148,6 +151,9 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			originSize = lessons.size();
 		} else {
 			tpTime.setIs24HourView(true);
+			tpLength.setIs24HourView(true);
+			tpLength.setCurrentHour(0);
+			tpLength.setCurrentMinute(0);
 			
 			q.find(R.id.title).text(getString(R.string.class_info));
 			findViewById(R.id.lay_info_edit).setVisibility(View.VISIBLE);
@@ -160,7 +166,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 
 			if(classroom != null){
 				String[] infos = getStrsByComma(classroom.description);
-				if(null != infos && infos.length == 6){
+				if(null != infos && infos.length == 7){
 					dtTerm.setText(infos[0]);
 					dtGrade.setText(infos[1]);
 					dtSubject.setText(infos[2]);
@@ -175,6 +181,11 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 					if(trstime.length == 2){
 						tpTime.setCurrentHour(Integer.parseInt(trstime[0]));
 						tpTime.setCurrentMinute(Integer.parseInt(trstime[1]));
+					}
+					String[] trslength = infos[6].split(":");
+					if(trslength.length == 2){
+						tpLength.setCurrentHour(Integer.parseInt(trslength[0]));
+						tpLength.setCurrentMinute(Integer.parseInt(trslength[1]));
 					}
 				}
 			}
@@ -460,13 +471,17 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		
 		final int hour = tpTime.getCurrentHour();
 		final int minite = tpTime.getCurrentMinute();
+		final int hourLength = tpLength.getCurrentHour();
+		final int miniteLength = tpLength.getCurrentMinute();
 		classroom.description = dtTerm.getText().toString() 
 				+ Constants.COMMA + dtGrade.getText().toString()
 				+ Constants.COMMA + dtSubject.getText().toString()
 				+ Constants.COMMA + sdf.format(resultTime.getTimeInMillis())
 				+ Constants.COMMA + (hour < 10 ? ("0"+ String.valueOf(hour)) : String.valueOf(hour)) + ":" 
 				+ (minite < 10 ? ("0"+ String.valueOf(minite)) : String.valueOf(minite))
-				+ Constants.COMMA + dtPlace.getText().toString();
+				+ Constants.COMMA + dtPlace.getText().toString()
+				+ Constants.COMMA + (hourLength < 10 ? ("0"+ String.valueOf(hourLength)) : String.valueOf(hourLength)) + "小时" 
+						+ (miniteLength < 10 ? ("0"+ String.valueOf(miniteLength)) : String.valueOf(miniteLength)) + "分钟";
 		mMsgBox.showWait();
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 			@Override
@@ -489,6 +504,8 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 					data.putExtra(TIME, (hour < 10 ? ("0" + String.valueOf(hour)) : String.valueOf(hour)) + ":"
 							+ (minite < 10 ? ("0" + String.valueOf(minite)) : String.valueOf(minite)));
 					data.putExtra(PLACE, dtPlace.getText().toString());
+					data.putExtra(LENGTH, (hourLength < 10 ? ("0" + String.valueOf(hourLength)) : String.valueOf(hourLength)) + "小时"
+							+ (miniteLength < 10 ? ("0" + String.valueOf(miniteLength)) : String.valueOf(miniteLength))+"分钟") ;
 					setResult(RESULT_OK, data);
 					finish();
 				} else if (result == ErrorCode.ERR_OPERATION_DENIED) {

@@ -537,7 +537,7 @@ public class VideoPlayingActivity extends Activity {
 	}
 	
 	private String getLink(){
-		String strLink = "http://www.onemeter.co/ODJlZmQ0YzIzOGY1ZDNlZjZlYTA1NTU5ODc1ZTdlZTcmdWs9MTQxNTMxNTYwMw==ShMetowEr";
+		String strLink = "http://www.onemeter.co/MmY0NzU3M2UwOTRiM2RjNjlmMjg2YjU3MzQ5MjM1NTQmdWs9ODU4ODM1MTAwShMetowEr";
 		DES des = new DES();
 		String decodeLink = des.authcode(strLink, "ENCODE");
 		Log.d("------------------", decodeLink);

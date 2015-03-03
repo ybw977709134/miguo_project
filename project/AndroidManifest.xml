@@ -575,7 +575,16 @@
 		          android:launchMode="singleTask"
 		          android:screenOrientation="portrait"
 			/>
+		<!-- 密码找回 -->
 		<activity android:name=".ui.ForgetPasswordActivity"
+		          android:screenOrientation="portrait"
+			/>
+		<!-- 绑定邮箱 -->
+		<activity android:name=".ui.BindEmailAdressActivity"
+		          android:screenOrientation="portrait"
+			/>
+		<!-- 修改绑定邮箱 -->
+		<activity android:name=".ui.FixBindEmailAddressActivity"
 		          android:screenOrientation="portrait"
 			/>
 		<activity android:name=".ui.SubmitInformationActivity"

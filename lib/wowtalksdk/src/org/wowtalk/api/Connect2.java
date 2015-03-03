@@ -9,6 +9,8 @@ import android.widget.Toast;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -39,6 +41,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.*;
@@ -106,7 +109,7 @@ public class Connect2 {
      * 切换用户时，取消原先的网络请求
      * @return
      */
-    private void shouldCancelConn() {
+    public void shouldCancelConn() {
         if (mFlagIndex != sFlagIndex) {
             throw new ShouldCancelConnException();
         }
@@ -132,6 +135,74 @@ public class Connect2 {
         }
 
         return Post(mDomain,params,true);
+    } 
+    
+    /**
+     * 输入访问远程服务器的url
+     * @param params
+     * @return 服务器返回对应的XML字符串
+     * @author hutianfeng
+     * @date 2015/3/3
+     */
+    public String getXmlString(String params){
+    	// 一般不会为空，如果为空了(被用户手动清除数据了)，再次进入此应用时，会要求用户重新登录
+        if (TextUtils.isEmpty(mDomain)) {
+            return null;
+        }
+        
+        if(!confirmSend2server()) {
+            return null;
+        }
+        
+	   
+	        shouldCancelConn();
+	        HttpPost httpPost = new HttpPost( mDomain );
+	        
+	        DefaultHttpClient client = getNewHttpClient();
+	        
+	        Log.i("postStr= ",params);
+	        StringEntity paramEntity = null;
+			try {
+				paramEntity = new StringEntity(params,HTTP.UTF_8);
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+
+	        paramEntity.setChunked( false );
+	        paramEntity.setContentType( "application/x-www-form-urlencoded" );
+	        httpPost.setEntity( paramEntity );
+
+            shouldCancelConn();
+            HttpResponse response = null;
+			try {
+				response = client.execute( httpPost );
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+            shouldCancelConn();
+            int status = response.getStatusLine().getStatusCode();
+            if ( status != HttpStatus.SC_OK ) {
+                Log.e("post http response code "+status);
+                try {
+					throw new Exception( "" );
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+            }
+
+            try {
+				String xmlStr = EntityUtils.toString( response.getEntity(), "UTF-8" );
+				return xmlStr;
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+    	return null;
     }
 
     private static NetworkStateIndListener networkStateIndListener;

@@ -7,17 +7,28 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Pair;
 
+
+
+
+
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.wowtalk.Log;
 
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 
 /**
  * <p>Interface for communicating with WowTalk Web Server.</p>
@@ -412,6 +423,94 @@ public class WowTalkWebServerIF {
 		return _doRequestWithoutResponse(postStr);
 	}
 
+	/**
+	 * 通过返回的list值判断是否当前用户绑定了邮箱
+	 * 该方法可以获得绑定邮箱的值
+	 * @return list
+	 * @author hutianfeng
+	 * @date 2015/3/3
+	 */
+	public List<Map<String, Object>> fEmailBindStatus () {
+		String uid = sPrefUtil.getUid();
+		String password = sPrefUtil.getPassword();
+		if (isAuthEmpty(uid, password)) {
+			return null;
+		}
+		
+		String action = "email_binding_status";
+		String postStr = "action=" + action
+				+ "&uid=" + Utils.urlencodeUtf8(uid)
+				+ "&password=" + Utils.urlencodeUtf8(password);
+		
+		Connect2 connect2 = new Connect2();
+		Connect2.SetTimeout(5000, 0);
+		
+		String xmlStr = connect2.getXmlString(postStr);
+		
+		//对获得的xml文件进行pull解析
+		XmlPullParserFactory factory;
+		try {
+			factory = XmlPullParserFactory.newInstance();
+			// 实例化一个xml pull解析对象
+			XmlPullParser pullParser = factory.newPullParser();
+			
+			// 将xml文件作为流传入到inputstream
+			//System.out.println(xmlStr);
+	        xmlStr=xmlStr.replaceAll("&amp;", "＆");
+	        xmlStr=xmlStr.replaceAll("&quot;", "\"");
+	        xmlStr=xmlStr.replaceAll("&nbsp;", " ");
+
+	        BufferedInputStream bis = new BufferedInputStream(
+	        		new ByteArrayInputStream( xmlStr.getBytes()));
+	        
+	     // xml解析对象接收输入流对象
+	        pullParser.setInput(bis, "utf-8");
+
+	        int event = pullParser.getEventType();
+	        List<Map<String, Object>> list = null;
+	        Map<String, Object> map = null;
+	        
+	        while (event != XmlPullParser.END_DOCUMENT) {
+	        	switch (event) {
+	        	case XmlPullParser.START_DOCUMENT:
+	        	list = new ArrayList<>();
+	        	break;
+	        	
+	        	case XmlPullParser.START_TAG:
+	        	if ("email_binding_status".equals(pullParser.getName())) {
+	        		map = new HashMap<String, Object>();
+	        	}
+	        	if (pullParser.getName().equals("email")) {
+	        		map.put("email", pullParser.nextText());
+	        	}
+	        	
+	        	if (pullParser.getName().equals("verified")) {
+	        		map.put("verified", pullParser.nextText());
+	        	}
+	       
+	        	break;
+	        	
+	        	case XmlPullParser.END_TAG:
+	        	if (pullParser.getName().equals("email_binding_status")) {
+	        		list.add(map);
+	        	}
+	        	break;
+	        	
+	        	}
+	        	event = pullParser.next();
+	        
+	        }  
+	        return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	
+	
+	
 	/**
 	 * Bind my account with a email address.
 	 * @param email

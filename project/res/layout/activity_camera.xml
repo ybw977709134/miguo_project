@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_dark"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        style="?attr/navbar" >
+
+        <ImageButton
+            android:id="@+id/title_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:background="@null"
+            android:src="@drawable/nav_back_selector" />
+
+        <TextView
+            android:id="@+id/classroom_title"
+            style="?attr/navbar_title"
+            android:text="@string/class_lesson_camera" />
+
+    </RelativeLayout>
+    <LinearLayout
+            android:id="@+id/camera_lay_front"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/background_light"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="@string/class_camera_select_front"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/btn_isOpenCamera_front"
+                android:layout_width="48dp"
+                android:layout_height="30dp"
+                android:background="@drawable/icon_switch_on"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/camera_lay_middle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/background_light"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="@string/class_camera_select_middle"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/btn_isOpenCamera_middle"
+                android:layout_width="48dp"
+                android:layout_height="30dp"
+                android:background="@drawable/icon_switch_on"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/camera_lay_back"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/background_light"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="@string/class_camera_select_back"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/btn_isOpenCamera_back"
+                android:layout_width="48dp"
+                android:layout_height="30dp"
+                android:background="@drawable/icon_switch_on"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+</LinearLayout>

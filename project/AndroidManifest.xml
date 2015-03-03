@@ -580,6 +580,14 @@
 			      android:theme="@style/Theme.Blue"
 			      android:screenOrientation="portrait" >
 		</activity>
+		<activity android:name=".ui.ClassroomActivity"
+			      android:theme="@style/Theme.Green"
+			      android:screenOrientation="portrait" >
+		</activity>
+		<activity android:name=".ui.CameraActivity"
+			      android:theme="@style/Theme.Green"
+			      android:screenOrientation="portrait" >
+		</activity>
 		<activity
             android:name=".liveplayer.VideoPlayingActivity"
             android:configChanges="orientation|screenSize"

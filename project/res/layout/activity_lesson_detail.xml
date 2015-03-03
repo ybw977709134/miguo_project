@@ -30,6 +30,124 @@
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:padding="5dp" >
+        
+        <LinearLayout
+            android:id="@+id/les_lay_classroom"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/background_light"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/text_classroom"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="@string/class_lesson_classroom"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/text_classroom_r"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/icon_more_light"
+                android:gravity="right"
+                android:padding="5dp" />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/les_lay_camera"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/background_light"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible" >
+
+            <TextView
+                android:id="@+id/text_camera"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="@string/class_lesson_camera"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/text_camera_r"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/icon_more_light"
+                android:gravity="right"
+                android:padding="5dp" />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/les_lay_knowledge"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/background_light"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible" >
+
+            <TextView
+                android:id="@+id/text_knowledge"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="@string/class_lesson_knowledge"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/text_knowledge_r"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/icon_more_light"
+                android:gravity="right"
+                android:padding="5dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/les_lay_attendance"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/background_light"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible" >
+
+            <TextView
+                android:id="@+id/text_attendance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="@string/class_lesson_attendance"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/text_attendance_r"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/icon_more_light"
+                android:gravity="right"
+                android:padding="5dp" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/les_lay_first"
@@ -81,6 +199,36 @@
 
             <TextView
                 android:id="@+id/text_second_r"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/icon_more_light"
+                android:gravity="right"
+                android:padding="5dp" />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/les_lay_homework"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/background_light"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible" >
+
+            <TextView
+                android:id="@+id/text_homework"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="@string/class_lesson_homework"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/text_homework_r"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

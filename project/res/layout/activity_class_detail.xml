@@ -91,6 +91,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/class_subject" />
+           <TextView
+                android:id="@+id/class_place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/class_place" />
         </LinearLayout>
 
         <LinearLayout
@@ -105,18 +110,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/class_date" />
-
+            
             <TextView
                 android:id="@+id/class_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/class_time" />
-
             <TextView
-                android:id="@+id/class_place"
+                android:id="@+id/class_length"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/class_place" />
+                android:text="@string/class_length" />
         </LinearLayout>
     </LinearLayout>
 
@@ -141,7 +145,8 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:divider="@drawable/divider"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:cacheColorHint="#00000000">
         
     </ListView>
 </RelativeLayout>

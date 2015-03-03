@@ -51,6 +51,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private TextView tvDate;
 	private TextView tvTime;
 	private TextView tvPlace;
+	private TextView tvLength;
 	
 	private GroupChatRoom class_group = new GroupChatRoom();
 	
@@ -73,6 +74,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		tvDate = (TextView) findViewById(R.id.class_date);
 		tvTime = (TextView) findViewById(R.id.class_time);
 		tvPlace = (TextView) findViewById(R.id.class_place);
+		tvLength = (TextView) findViewById(R.id.class_length);
 		lvTeachers = (HorizontalListView) findViewById(R.id.hor_lv_teachers);
 		
 		mWTWebSer = WowTalkWebServerIF.getInstance(this);
@@ -209,14 +211,16 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		final String date = getString(R.string.class_date);
 		final String time = getString(R.string.class_time);
 		final String place = getString(R.string.class_place);
+		final String length = getString(R.string.class_length);
 		String[] infos = getStrsByComma(class_group.description);
-		if(null != infos && infos.length == 6){
+		if(null != infos && infos.length == 7){
 			tvTerm.setText(term + infos[0]);
 			tvGrade.setText(grade + infos[1]);
 			tvSubject.setText(subject + infos[2]);
 			tvDate.setText(date + infos[3]);
 			tvTime.setText(time + infos[4]);
 			tvPlace.setText(place + infos[5]);
+			tvLength.setText(length + infos[6]);
 		}
 	}
 	
@@ -248,24 +252,28 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			final String date = getString(R.string.class_date);
 			final String time = getString(R.string.class_time);
 			final String place = getString(R.string.class_place);
+			final String length = getString(R.string.class_length);
 			String reTerm = data.getStringExtra(LessonInfoEditActivity.TERM);
 			String reGrade = data.getStringExtra(LessonInfoEditActivity.GRADE);
 			String reSubject = data.getStringExtra(LessonInfoEditActivity.SUBJECT);
 			String reDate = data.getStringExtra(LessonInfoEditActivity.DATE);
 			String reTime = data.getStringExtra(LessonInfoEditActivity.TIME);
 			String rePlace = data.getStringExtra(LessonInfoEditActivity.PLACE);
+			String reLength = data.getStringExtra(LessonInfoEditActivity.LENGTH);
 			tvTerm.setText(term + reTerm);
 			tvGrade.setText(grade + reGrade);
 			tvSubject.setText(subject + reSubject);
 			tvDate.setText(date + reDate);
 			tvTime.setText(time + reTime);
 			tvPlace.setText(place + rePlace);
+			tvLength.setText(length + reLength);
 			class_group.description = reTerm + Constants.COMMA + 
 					reGrade + Constants.COMMA + 
 					reSubject + Constants.COMMA +
 					reDate + Constants.COMMA +
 					reTime + Constants.COMMA +
-					rePlace;
+					rePlace + Constants.COMMA +
+					reLength;
 		}
 	}
 	
@@ -288,7 +296,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                         Intent intent = new Intent(ClassDetailActivity.this, LessonInfoEditActivity.class);
                         intent.putExtra("class", class_group);
                         intent.putExtra("tag", LessonInfoEditActivity.TAG_CLASS_INFO);
-
+                        if(lessons!=null && !lessons.isEmpty()){
+                            intent.putExtra("firstlesdate", lessons.get(0).start_date);
+                        }
                         startActivityForResult(intent, 0);
                         bottomBoard.dismiss();
                     }

@@ -15,9 +15,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkVoipIF;
@@ -63,8 +66,8 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 		txtEmail = (TextView) findViewById(R.id.email_text);
 		mUsername = (LinearLayout) findViewById(R.id.layout_id);
 		mPassword = (LinearLayout) findViewById(R.id.layout_password);
-		mBindPhone = (LinearLayout) findViewById(R.id.layout_phone);
-		mBindEmail = (LinearLayout) findViewById(R.id.layout_email);
+		mBindPhone = (LinearLayout) findViewById(R.id.layout_bind_phone);
+		mBindEmail = (LinearLayout) findViewById(R.id.layout_bind_email);
 		txtPwdSetting.setText(getResources().getString(R.string.settings_account_not_set));
 		txtPwdSetting.setTextColor(getResources().getColor(R.color.orange));
 		
@@ -124,7 +127,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 					@Override
 					public void run() {
 						mBindPhone.setEnabled(true);
-						mBindEmail.setEnabled(true);
+						mBindEmail.setEnabled(true); 
 						long endTime = System.currentTimeMillis();
 						Log.d(TAG, ", onResume, the time of invoking queryBinds() is " + (endTime - startTime) + " milliseconds.");
 					}
@@ -176,12 +179,6 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 			finish();
 			break;
 		case R.id.btn_logout:
-//            if(mPrefUtil.getMyUsernameChangedState()
-//                    && mPrefUtil.getMyPasswordChangedState()) {
-//                logout();
-//            } else {
-//                mMsgBox.show(null, getString(R.string.settings_account_logout_without_set_id_pwd));
-//            }
 			
 			Builder builder = new AlertDialog.Builder(AccountSettingActivity.this);
 			builder.setTitle("提示");
@@ -196,9 +193,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 		            	logout();
 		            } else {
 		            	mMsgBox.show(null, getString(R.string.settings_account_logout_without_set_id_pwd));
-		            }
-//					Toast.makeText(AccountSettingActivity.this, "我被点击了", Toast.LENGTH_SHORT).show();
-					
+		            }					
 				}
 			});
 			builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {			
@@ -223,34 +218,36 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 			Intent passwordIntent = new Intent(AccountSettingActivity.this, SettingPasswordActivity.class);
 			startActivityForResult(passwordIntent, REQ_INPUT_PASSWORD);
 			break;
-		case R.id.layout_phone:
-		    String phoneNumber = txtPhonenumber.getText().toString();
-		    // judge whether the password is empty
-		    if (!mPrefUtil.getMyPasswordChangedState()) {
-		        mMsgBox.toast(R.string.accountsetting_bindphone_email_set_pwd_first);
-		    } else if (!TextUtils.isEmpty(phoneNumber) && !getResources().getString(R.string.not_binded).equals(phoneNumber)) {
-		        Intent bindPhoneIntent = new Intent(AccountSettingActivity.this, UnBindActivity.class);
-		        bindPhoneIntent.putExtra(UnBindActivity.UNBIND_PHONE_EMAIL_VALUE, phoneNumber);
-		        bindPhoneIntent.putExtra(UnBindActivity.UNBIND_TYPE, UnBindActivity.UNBIND_TYPE_PHONE);
-                startActivity(bindPhoneIntent);
-            } else {
-                Intent bindPhoneIntent = new Intent(AccountSettingActivity.this, BindPhoneActivity.class);
-                startActivity(bindPhoneIntent);
-            }
+		case R.id.layout_bind_phone:
+//		    String phoneNumber = txtPhonenumber.getText().toString();
+//		    // judge whether the password is empty
+//		    if (!mPrefUtil.getMyPasswordChangedState()) {
+//		        mMsgBox.toast(R.string.accountsetting_bindphone_email_set_pwd_first);
+//		    } else if (!TextUtils.isEmpty(phoneNumber) && !getResources().getString(R.string.not_binded).equals(phoneNumber)) {
+//		        Intent bindPhoneIntent = new Intent(AccountSettingActivity.this, UnBindActivity.class);
+//		        bindPhoneIntent.putExtra(UnBindActivity.UNBIND_PHONE_EMAIL_VALUE, phoneNumber);
+//		        bindPhoneIntent.putExtra(UnBindActivity.UNBIND_TYPE, UnBindActivity.UNBIND_TYPE_PHONE);
+//                startActivity(bindPhoneIntent);
+//            } else {
+//                Intent bindPhoneIntent = new Intent(AccountSettingActivity.this, BindPhoneActivity.class);
+//                startActivity(bindPhoneIntent);
+//            }
+			Toast.makeText(AccountSettingActivity.this, "功能尚未实现..", Toast.LENGTH_LONG).show();
 			break;
-		case R.id.layout_email:
-		    String email = txtEmail.getText().toString();
-		    if (!mPrefUtil.getMyPasswordChangedState()) {
-		        mMsgBox.toast(R.string.accountsetting_bindphone_email_set_pwd_first);
-		    } else if (!TextUtils.isEmpty(email) && !getResources().getString(R.string.not_binded).equals(email)) {
-		        Intent bindEmailIntent = new Intent(AccountSettingActivity.this, UnBindActivity.class);
-		        bindEmailIntent.putExtra(UnBindActivity.UNBIND_PHONE_EMAIL_VALUE, email);
-		        bindEmailIntent.putExtra(UnBindActivity.UNBIND_TYPE, UnBindActivity.UNBIND_TYPE_EMAIL);
-                startActivity(bindEmailIntent);
-            } else {
-                Intent bindEmailIntent = new Intent(AccountSettingActivity.this, BindEmailActivity.class);
-                startActivity(bindEmailIntent);
-            }
+		case R.id.layout_bind_email:
+//		    String email = txtEmail.getText().toString();
+//		    if (!mPrefUtil.getMyPasswordChangedState()) {
+//		        mMsgBox.toast(R.string.accountsetting_bindphone_email_set_pwd_first);
+//		    } else if (!TextUtils.isEmpty(email) && !getResources().getString(R.string.not_binded).equals(email)) {
+//		        Intent bindEmailIntent = new Intent(AccountSettingActivity.this, UnBindActivity.class);
+//		        bindEmailIntent.putExtra(UnBindActivity.UNBIND_PHONE_EMAIL_VALUE, email);
+//		        bindEmailIntent.putExtra(UnBindActivity.UNBIND_TYPE, UnBindActivity.UNBIND_TYPE_EMAIL);
+//                startActivity(bindEmailIntent);
+//            } else {
+//                Intent bindEmailIntent = new Intent(AccountSettingActivity.this, BindEmailActivity.class);
+//                startActivity(bindEmailIntent);
+//            }
+			Toast.makeText(AccountSettingActivity.this, "功能正在实现中..", Toast.LENGTH_LONG).show();
 			break;
 		default:
 			mMsgBox.toast(R.string.not_implemented);

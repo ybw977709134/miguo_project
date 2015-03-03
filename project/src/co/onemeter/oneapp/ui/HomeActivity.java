@@ -1,6 +1,9 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -38,6 +41,24 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         q.find(R.id.btn_funnyevent).clicked(this);
         q.find(R.id.btn_myclasses).clicked(this);
         q.find(R.id.live_play).clicked(this);
+        
+        //登陆后跳转到此页面检测用户是否绑定了邮箱，绑定了，不提示，未绑定，弹框提示用户是否要绑定邮箱
+        //如果用户未绑定邮箱，跳转到绑定邮箱界面
+        Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("你还未绑定邮箱");
+        builder.setMessage("绑定邮箱有助于你找回密码，你需要绑定邮箱吗?");
+        builder.setPositiveButton("以后再说", null);
+        builder.setNegativeButton("去绑定邮箱", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				Intent intent = new Intent();
+				intent.setClass(HomeActivity.this, BindEmailActivity.class);
+				startActivity(intent);
+				
+			}
+		});
+        builder.create().show();
     }
 
     @Override

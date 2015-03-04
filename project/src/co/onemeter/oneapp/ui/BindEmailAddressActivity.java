@@ -264,7 +264,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
         				textView_show_bind_email.setText("你输入的邮箱"+txt_bind_email.getText().toString());
         				
 //        				60秒内不可点击  重新获取验证码
-//        				stopGetAccessCode();
+        				stopGetAccessCode();
 
                         break;
                     case ErrorCode.EMAIL_ADDRESS_VERIFICATION_CODE_ERROR://18:邮箱格式错误

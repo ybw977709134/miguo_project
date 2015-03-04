@@ -31,7 +31,7 @@ public class SideBar extends View {
     public SideBar(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		TypedArray a = context.obtainStyledAttributes(attrs, co.onemeter.oneapp.R.styleable.SideBar);
-		textSize = a.getDimension(co.onemeter.oneapp.R.styleable.SideBar_textSize, 15);
+		textSize = a.getDimension(co.onemeter.oneapp.R.styleable.SideBar_textSize, 23);
         Drawable d = a.getDrawable(R.styleable.SideBar_drawableStart);
         if (d != null) {
             mStartBmp = drawableToBitmap(d);
@@ -43,7 +43,7 @@ public class SideBar extends View {
     public SideBar(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		TypedArray a = context.obtainStyledAttributes(attrs, co.onemeter.oneapp.R.styleable.SideBar);
-		textSize = a.getDimension(co.onemeter.oneapp.R.styleable.SideBar_textSize, 15);
+		textSize = a.getDimension(co.onemeter.oneapp.R.styleable.SideBar_textSize, 23);
         Drawable d = a.getDrawable(R.styleable.SideBar_drawableStart);
         if (d != null) {
             mStartBmp = drawableToBitmap(d);

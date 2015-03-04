@@ -91,7 +91,7 @@
 
 		<co.onemeter.oneapp.ui.SideBar
 			android:id="@+id/side_bar"
-			android:visibility="gone"
+			android:visibility="visible"
 			style="@style/side_index_bar"/>
 	</RelativeLayout>
 

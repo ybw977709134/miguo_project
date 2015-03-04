@@ -74,6 +74,8 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			q.find(R.id.text_classroom_r).text("");
 		}else{
 			q.find(R.id.text_first_r).text(getString(R.string.class_wait_confirm));
+			lay_classroom.setVisibility(View.GONE);
+			lay_camera.setVisibility(View.GONE);
 		}
 		lay_first.setOnClickListener(this);
 		lay_second.setOnClickListener(this);

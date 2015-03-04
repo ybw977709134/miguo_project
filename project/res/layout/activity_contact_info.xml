@@ -106,7 +106,7 @@
                             android:layout_width="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_alignParentLeft="true"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="15dp"
                             style="@style/standard_text"
                             android:singleLine="true"
                             android:text="name"/>
@@ -118,7 +118,7 @@
                             android:layout_width="wrap_content"
                             android:text="pinyin"/>
                     </LinearLayout>
-
+<!--
                     <LinearLayout
                         android:id="@+id/module_chat"
                         android:layout_height="wrap_content"
@@ -150,72 +150,9 @@
                             android:layout_marginLeft="@dimen/padding_medium"
                             android:src="@drawable/profile_btn_video"/>
                     </LinearLayout>
+                    -->
                 </RelativeLayout>
             </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/status_layout"
-                android:layout_height="@dimen/section_row_height"
-                android:layout_width="fill_parent"
-                android:layout_margin="@dimen/padding_medium"
-                android:gravity="center"
-                android:background="@drawable/table_white"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_height="@dimen/section_row_height"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:paddingLeft="10dp"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/text_gray2"
-                    android:textStyle="bold"
-                    android:textSize="17sp"
-                    android:text="@string/signature"/>
-                <co.onemeter.oneapp.utils.AlwaysMarqueeTextView
-                    android:id="@+id/txt_status"
-                    android:layout_height="@dimen/section_row_height"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:singleLine="true"
-                    android:gravity="center_vertical"
-                    android:textSize="17sp"
-                    android:textColor="@color/black"
-                    android:ellipsize="marquee"
-                    android:marqueeRepeatLimit="1"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:scrollHorizontally="true"/>
-            </LinearLayout>
-            
-            <!-- 对方请求加为好友的信息 -->
-            <LinearLayout
-                android:id="@+id/request_layout"
-                android:layout_height="@dimen/request_info_height"
-                android:layout_width="fill_parent"
-                android:layout_margin="@dimen/padding_medium"
-                android:background="@drawable/table_white"
-                android:orientation="vertical"
-                android:visibility="gone" >
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:gravity="left"
-                    android:textStyle="bold"
-                    android:textColor="@color/gray"
-                    android:textSize="20sp"
-                    android:text="@string/contacts_newfriend_extra_info"/>
-            	<TextView
-                    android:id="@+id/txt_extra_info"
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:layout_marginLeft="5dp"
-                    android:gravity="top|left"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
-      
-            </LinearLayout>
-
             <LinearLayout
                 android:id="@+id/layout_dept_job"
                 android:layout_height="wrap_content"
@@ -298,6 +235,70 @@
                         android:textColor="@color/black"/>
                 </LinearLayout>
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/status_layout"
+                android:layout_height="@dimen/section_row_height"
+                android:layout_width="fill_parent"
+                android:layout_margin="@dimen/padding_medium"
+                android:gravity="center"
+                android:background="@drawable/table_white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_height="@dimen/section_row_height"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text_gray2"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:text="@string/signature"/>
+                <co.onemeter.oneapp.utils.AlwaysMarqueeTextView
+                    android:id="@+id/txt_status"
+                    android:layout_height="@dimen/section_row_height"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:singleLine="true"
+                    android:gravity="center_vertical"
+                    android:textSize="17sp"
+                    android:textColor="@color/black"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:scrollHorizontally="true"/>
+            </LinearLayout>
+            
+            <!-- 对方请求加为好友的信息 -->
+            <LinearLayout
+                android:id="@+id/request_layout"
+                android:layout_height="@dimen/request_info_height"
+                android:layout_width="fill_parent"
+                android:layout_margin="@dimen/padding_medium"
+                android:background="@drawable/table_white"
+                android:orientation="vertical"
+                android:visibility="gone" >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="left"
+                    android:textStyle="bold"
+                    android:textColor="@color/gray"
+                    android:textSize="20sp"
+                    android:text="@string/contacts_newfriend_extra_info"/>
+            	<TextView
+                    android:id="@+id/txt_extra_info"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="top|left"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+      
+            </LinearLayout>
+
+
 
             <LinearLayout
                 android:id="@+id/layout_contact_way"
@@ -398,14 +399,74 @@
             </LinearLayout>
 
             <!-- 查看动态 -->
+            <!--
             <Button
                 style="@style/button_blue"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/contact_info_goto_moments"
                 android:id="@+id/btn_goto_moments"
+                android:layout_margin="@dimen/padding_medium"/>-->
+            <LinearLayout
+                android:id="@+id/btn_goto_moments"
+                android:layout_height="@dimen/section_row_height"
+                android:layout_width="fill_parent"
+                android:layout_margin="@dimen/padding_medium"
+                android:gravity="center"
+                android:background="@drawable/table_white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_height="@dimen/section_row_height"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text_gray2"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:text="@string/contact_info_goto_moments"/>
+                <co.onemeter.oneapp.utils.AlwaysMarqueeTextView
+                    android:id="@+id/txt_moments"
+                    android:layout_height="@dimen/section_row_height"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:singleLine="true"
+                    android:gravity="center_vertical"
+                    android:textSize="17sp"
+                    android:textColor="@color/black"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:scrollHorizontally="true"/>
+            </LinearLayout>
+            <!-- 发消息 -->
+            <Button
+                style="@style/button_blue"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/contact_info_send_msg"
+                android:id="@+id/btn_msg"
+                android:textColor="@color/text_gray2"
                 android:layout_margin="@dimen/padding_medium"/>
-
+            <!-- 语音聊天 -->
+            <Button
+                style="@style/button_blue"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/contact_info_send_call"
+                android:id="@+id/btn_call"
+                android:textColor="@color/text_gray2"
+                android:layout_margin="@dimen/padding_medium"/>
+            <!-- 视频聊天 -->
+            <Button
+                style="@style/button_blue"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/contact_info_send_video"
+                android:id="@+id/btn_video"
+                android:textColor="@color/text_gray2"
+                android:layout_margin="@dimen/padding_medium"/>
             <!-- 添加好友 -->
             <Button
                 style="@style/button_blue"
@@ -413,6 +474,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/contact_info_add_as_friend"
                 android:id="@+id/btn_add"
+                android:textColor="@color/text_gray2"
                 android:layout_margin="@dimen/padding_medium"/>
             <!-- 修改备注名 -->
             <Button
@@ -431,6 +493,7 @@
                 android:text="@string/contact_info_add_ingore_request"
                 android:id="@+id/btn_ignore_request"
                 android:layout_margin="@dimen/padding_medium"
+                android:textColor="@color/text_gray2"
                 android:visibility="gone" />
             <!-- 同意 -->
             <Button
@@ -440,6 +503,7 @@
                 android:text="@string/contact_info_add_agree_request"
                 android:id="@+id/btn_agree_request"
                 android:layout_margin="@dimen/padding_medium"
+                android:textColor="@color/text_gray2"
                 android:visibility="gone" />
 			<!-- 删除好友 -->
             <Button

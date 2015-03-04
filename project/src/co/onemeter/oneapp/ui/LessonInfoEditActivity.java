@@ -6,10 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
@@ -24,6 +23,7 @@ import com.androidquery.AQuery;
 
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.msg.DoubleClickedUtils;
 
 import java.lang.reflect.Field;
 import java.text.ParseException;
@@ -36,30 +36,11 @@ import java.util.*;
  */
 public class LessonInfoEditActivity extends Activity implements OnClickListener, OnItemClickListener {
 
-	public static final int TAG_CLASS_INFO = 0;//改班级信息
-	public static final int TAG_LES_TABLE = 1;//改课表
-
-	public static final String TERM = "term";
-	public static final String GRADE = "grade";
-	public static final String SUBJECT = "subject";
-	public static final String DATE = "date";
-	public static final String TIME = "time";
-	public static final String PLACE = "place";
-	public static final String LENGTH = "length";
-
-	private int tag;
 	private String classId;
 	private int originSize;
 	private long time_openclass;
 
 	private ListView lvCourtable;
-	private EditText dtTerm;
-	private EditText dtGrade;
-	private EditText dtSubject;
-	private DatePicker dpDate;
-	private TimePicker tpTime;
-	private TimePicker tpLength;
-	private EditText dtPlace;
 
 	private Database mDBHelper;
 	private GroupChatRoom classroom;
@@ -69,26 +50,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	private List<String> delLessons;
 	private List<Lesson> addLessons;
 	
-	private TextWatcher textwatcher = new TextWatcher() {
-		
-		@Override
-		public void onTextChanged(CharSequence s, int start, int before, int count) {
-			if(s.length() >= 20){
-				Toast.makeText(LessonInfoEditActivity.this, "最多输入20个字符", Toast.LENGTH_LONG).show();
-			}
-		}
-		
-		@Override
-		public void beforeTextChanged(CharSequence s, int start, int count,
-				int after) {
-			
-		}
-		
-		@Override
-		public void afterTextChanged(Editable s) {
-			
-		}
-	};
+	private AlertDialog.Builder addDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,18 +63,10 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 
 	private void initView() {
 		Intent intent = getIntent();
-		tag = intent.getIntExtra("tag", 0);
 		classroom = intent.getParcelableExtra("class");
 		classId = classroom.groupID;
 		//android.util.Log.i("-->>", classroom.groupID);
 
-		dtTerm = (EditText) findViewById(R.id.ed_lesinfo_term);
-		dtGrade = (EditText) findViewById(R.id.ed_lesinfo_grade);
-		dtSubject = (EditText) findViewById(R.id.ed_lesinfo_subject);
-		dpDate = (DatePicker) findViewById(R.id.datePicker_lesinfo_date);
-		tpTime = (TimePicker) findViewById(R.id.timePicker_lesinfo_time);
-		tpLength = (TimePicker) findViewById(R.id.timePicker_lesinfo_length);
-		dtPlace = (EditText) findViewById(R.id.ed_lesinfo_place);
 		lvCourtable = (ListView) findViewById(R.id.lv_courtable);
 
 		
@@ -132,7 +86,6 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		q.find(R.id.save).clicked(this);
 
 		
-		if (tag == TAG_LES_TABLE) {
 			String opentime = classroom.description.split(Constants.COMMA)[3];
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			try {
@@ -141,7 +94,6 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 				e.printStackTrace();
 			}
 			
-			findViewById(R.id.lay_info_edit).setVisibility(View.GONE);
 			findViewById(R.id.lay_les_edit).setVisibility(View.VISIBLE);
 			q.find(R.id.title).text(getString(R.string.class_coursetable_info));
 			
@@ -149,57 +101,17 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			Collections.sort(lessons, new LessonComparator());
 			adapter.notifyDataSetChanged();
 			originSize = lessons.size();
-		} else {
-			tpTime.setIs24HourView(true);
-			tpLength.setIs24HourView(true);
-			tpLength.setCurrentHour(0);
-			tpLength.setCurrentMinute(0);
 			
-			q.find(R.id.title).text(getString(R.string.class_info));
-			findViewById(R.id.lay_info_edit).setVisibility(View.VISIBLE);
-			findViewById(R.id.lay_les_edit).setVisibility(View.GONE);
-
-			dtTerm.addTextChangedListener(textwatcher);
-			dtSubject.addTextChangedListener(textwatcher);
-			dtGrade.addTextChangedListener(textwatcher);
-			dtPlace.addTextChangedListener(textwatcher);
-
-			if(classroom != null){
-				String[] infos = getStrsByComma(classroom.description);
-				if(null != infos && infos.length == 7){
-					dtTerm.setText(infos[0]);
-					dtGrade.setText(infos[1]);
-					dtSubject.setText(infos[2]);
-					dtPlace.setText(infos[5]);
-					
-					String[] trsdates = infos[3].split("-");
-					if(trsdates.length == 3){
-						dpDate.init(Integer.parseInt(trsdates[0]),Integer.parseInt(trsdates[1]) - 1 ,Integer.parseInt(trsdates[2]) , null);
-					}
-					
-					String[] trstime = infos[4].split(":");
-					if(trstime.length == 2){
-						tpTime.setCurrentHour(Integer.parseInt(trstime[0]));
-						tpTime.setCurrentMinute(Integer.parseInt(trstime[1]));
-					}
-					String[] trslength = infos[6].split(":");
-					if(trslength.length == 2){
-						tpLength.setCurrentHour(Integer.parseInt(trslength[0]));
-						tpLength.setCurrentMinute(Integer.parseInt(trslength[1]));
-					}
-				}
+			ContextThemeWrapper themedContext;
+			if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+			    themedContext = new ContextThemeWrapper( this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar );
 			}
-			
-		}
+			else {
+			    themedContext = new ContextThemeWrapper( this, android.R.style.Theme_Light_NoTitleBar );
+			}
+			addDialog = new AlertDialog.Builder(themedContext);
 	}
 
-	private String[] getStrsByComma(String str){
-		if(TextUtils.isEmpty(str)&& !str.contains(Constants.COMMA)){
-			return null;
-		}
-		return str.split(Constants.COMMA);
-	}
-	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -207,18 +119,16 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			finish();
 			break;
 		case R.id.save:
-			if (tag == TAG_LES_TABLE) {
 				if(delLessons.isEmpty() && addLessons.isEmpty()){
 					finish();
 				}else{
 					addOrDeletePostLesson(addLessons,delLessons);
 				}
-			} else {
-				updateClassInfo();
-			}
 			break;
 		case R.id.lay_footer_add:
-			showAddOrModifyLessonDialog(true,null,-1);
+			if(!DoubleClickedUtils.isFastDoubleClick()){
+				showAddOrModifyLessonDialog(true,null,-1);
+			}
 			break;
 		default:
 			break;
@@ -229,8 +139,11 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Lesson lesson = lessons.get(position);
+		//只允许今后的课程能够修改时间
 		if(lesson.start_date * 1000 > System.currentTimeMillis()){
-			showAddOrModifyLessonDialog(false,view,position);
+			if(!DoubleClickedUtils.isFastDoubleClick()){
+				showAddOrModifyLessonDialog(false,view, position);
+			}
 		}
 	}
 	
@@ -288,7 +201,6 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	}
 	
 	private void showAddOrModifyLessonDialog(final boolean isAdd,final View item,final int position){
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		View view = getLayoutInflater().inflate(R.layout.lay_add_lesson, null);
 		final EditText edName = (EditText) view.findViewById(R.id.ed_dialog_time);
 		final DatePicker datepicker = (DatePicker) view.findViewById(R.id.datepicker_dialog);
@@ -299,8 +211,8 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			datepicker.init(Integer.parseInt(startTime[0]), Integer.parseInt(startTime[1]) - 1, Integer.parseInt(startTime[2]), null);
 		}
 		
-		builder.setView(view);
-		builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+		addDialog.setView(view);
+		addDialog.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -350,8 +262,11 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 						if(lesson.lesson_id > 0){
 							modifyPostLesson(lesson);
 						}else{
-							addLessons.get(position).start_date = resultTime/1000;
-							addLessons.get(position).end_date = resultTime/1000 + 45 * 60;
+							int size = addLessons.size();
+							int totalsize = lessons.size();
+							int pos = position - (totalsize - size);
+							addLessons.get(pos).start_date = resultTime/1000;
+							addLessons.get(pos).end_date = resultTime/1000 + 45 * 60;
 						}
 					}
 				}
@@ -369,7 +284,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 				}
 			}
 		}).create();
-		builder.show();
+		addDialog.show();
 	}
 	
 	private void notdismissDialog(DialogInterface dialog){
@@ -449,71 +364,6 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		});
 	}
 	
-	private void updateClassInfo() {
-		if(classroom == null){
-			mMsgBox.toast(R.string.class_err_denied, 500);
-			return;
-		}
-		classroom.isEditable = true;
-		
-		final Calendar resultTime = Calendar.getInstance();
-		//resultTime.setTimeZone(TimeZone.getTimeZone("GMT"));
-		resultTime.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		
-		long firstlesTime = getIntent().getLongExtra("firstlesdate", 0);
-		if( firstlesTime < resultTime.getTimeInMillis() / 1000 ){
-			if(!mMsgBox.isWaitShowing()){
-				mMsgBox.toast("开班时间不得晚于课程时间！");
-			}
-			return;
-		}
-		
-		final int hour = tpTime.getCurrentHour();
-		final int minite = tpTime.getCurrentMinute();
-		final int hourLength = tpLength.getCurrentHour();
-		final int miniteLength = tpLength.getCurrentMinute();
-		classroom.description = dtTerm.getText().toString() 
-				+ Constants.COMMA + dtGrade.getText().toString()
-				+ Constants.COMMA + dtSubject.getText().toString()
-				+ Constants.COMMA + sdf.format(resultTime.getTimeInMillis())
-				+ Constants.COMMA + (hour < 10 ? ("0"+ String.valueOf(hour)) : String.valueOf(hour)) + ":" 
-				+ (minite < 10 ? ("0"+ String.valueOf(minite)) : String.valueOf(minite))
-				+ Constants.COMMA + dtPlace.getText().toString()
-				+ Constants.COMMA + (hourLength < 10 ? ("0"+ String.valueOf(hourLength)) : String.valueOf(hourLength)) + "小时" 
-						+ (miniteLength < 10 ? ("0"+ String.valueOf(miniteLength)) : String.valueOf(miniteLength)) + "分钟";
-		mMsgBox.showWait();
-		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
-			@Override
-			protected Integer doInBackground(Void... params) {
-				mDBHelper.updateGroupChatRoom(classroom);
-				return WowTalkWebServerIF.getInstance(LessonInfoEditActivity.this).fGroupChat_UpdateInfo(classroom);
-			}
-
-			@Override
-			protected void onPostExecute(Integer result) {
-				mMsgBox.dismissWait();
-				if (result == ErrorCode.OK) {
-					// update the display name of chatmessages.
-					mDBHelper.updateChatMessageDisplayNameWithUser(classroom.groupID, classroom.groupNameOriginal);
-					Intent data = new Intent();
-					data.putExtra(TERM, dtTerm.getText().toString());
-					data.putExtra(GRADE, dtGrade.getText().toString());
-					data.putExtra(SUBJECT, dtSubject.getText().toString());
-					data.putExtra(DATE, new SimpleDateFormat("yyyy-MM-dd").format(resultTime.getTimeInMillis()));
-					data.putExtra(TIME, (hour < 10 ? ("0" + String.valueOf(hour)) : String.valueOf(hour)) + ":"
-							+ (minite < 10 ? ("0" + String.valueOf(minite)) : String.valueOf(minite)));
-					data.putExtra(PLACE, dtPlace.getText().toString());
-					data.putExtra(LENGTH, (hourLength < 10 ? ("0" + String.valueOf(hourLength)) : String.valueOf(hourLength)) + "小时"
-							+ (miniteLength < 10 ? ("0" + String.valueOf(miniteLength)) : String.valueOf(miniteLength))+"分钟") ;
-					setResult(RESULT_OK, data);
-					finish();
-				} else if (result == ErrorCode.ERR_OPERATION_DENIED) {
-					mMsgBox.toast(R.string.class_err_denied, 500);
-				}
-			}
-		});
-	}
 	
 	@Override
 	protected void onDestroy() {

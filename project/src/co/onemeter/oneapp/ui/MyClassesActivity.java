@@ -35,7 +35,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
     
     private MyClassAdapter adapter;
     private ListView lvMyClass;
-    private MessageBox msgBox;
+    //private MessageBox msgBox;
     private WowTalkWebServerIF talkwebserver;
     private int errno;
     
@@ -45,7 +45,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
         setContentView(R.layout.activity_myclasses);
 
         AQuery q = new AQuery(this);
-        msgBox = new MessageBox(this);
+        //msgBox = new MessageBox(this);
         classrooms = new LinkedList<GroupChatRoom>();
         
 
@@ -57,6 +57,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 //        test1();
         
         lvMyClass.setOnItemClickListener(this);
+        lvMyClass.setEmptyView(this.findViewById(R.id.loading));
         
         talkwebserver =  WowTalkWebServerIF.getInstance(MyClassesActivity.this);
         
@@ -65,7 +66,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
 
             protected void onPreExecute() {
-                msgBox.showWait();
+                //msgBox.showWait();
             }
 
             ;
@@ -95,7 +96,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
                         }
 
                         protected void onPostExecute(Void result) {
-                            msgBox.dismissWait();
+                            //msgBox.dismissWait();
                             adapter = new MyClassAdapter(classrooms);
                             lvMyClass.setAdapter(adapter);
                         }
@@ -103,7 +104,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
                         ;
                     });
                 } else {
-                    msgBox.dismissWait();
+                    //msgBox.dismissWait();
                     Toast.makeText(MyClassesActivity.this,R.string.conn_time_out,Toast.LENGTH_LONG).show();
                     finish();
                 }

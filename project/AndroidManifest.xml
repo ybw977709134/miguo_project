@@ -631,6 +631,12 @@
         </activity>
         
         <activity
+            android:name="co.onemeter.oneapp.ui.ClassInfoEditActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Green" >
+        </activity>
+        
+        <activity
             android:name="co.onemeter.oneapp.ui.TeacherCheckActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Green" >

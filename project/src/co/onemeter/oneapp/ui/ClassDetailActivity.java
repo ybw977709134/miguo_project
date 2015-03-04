@@ -253,13 +253,13 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			final String time = getString(R.string.class_time);
 			final String place = getString(R.string.class_place);
 			final String length = getString(R.string.class_length);
-			String reTerm = data.getStringExtra(LessonInfoEditActivity.TERM);
-			String reGrade = data.getStringExtra(LessonInfoEditActivity.GRADE);
-			String reSubject = data.getStringExtra(LessonInfoEditActivity.SUBJECT);
-			String reDate = data.getStringExtra(LessonInfoEditActivity.DATE);
-			String reTime = data.getStringExtra(LessonInfoEditActivity.TIME);
-			String rePlace = data.getStringExtra(LessonInfoEditActivity.PLACE);
-			String reLength = data.getStringExtra(LessonInfoEditActivity.LENGTH);
+			String reTerm = data.getStringExtra(ClassInfoEditActivity.TERM);
+			String reGrade = data.getStringExtra(ClassInfoEditActivity.GRADE);
+			String reSubject = data.getStringExtra(ClassInfoEditActivity.SUBJECT);
+			String reDate = data.getStringExtra(ClassInfoEditActivity.DATE);
+			String reTime = data.getStringExtra(ClassInfoEditActivity.TIME);
+			String rePlace = data.getStringExtra(ClassInfoEditActivity.PLACE);
+			String reLength = data.getStringExtra(ClassInfoEditActivity.LENGTH);
 			tvTerm.setText(term + reTerm);
 			tvGrade.setText(grade + reGrade);
 			tvSubject.setText(subject + reSubject);
@@ -293,9 +293,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                 new OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(ClassDetailActivity.this, LessonInfoEditActivity.class);
+                        Intent intent = new Intent(ClassDetailActivity.this, ClassInfoEditActivity.class);
                         intent.putExtra("class", class_group);
-                        intent.putExtra("tag", LessonInfoEditActivity.TAG_CLASS_INFO);
                         if(lessons!=null && !lessons.isEmpty()){
                             intent.putExtra("firstlesdate", lessons.get(0).start_date);
                         }
@@ -314,7 +313,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                     	}
                     	Intent intent = new Intent(ClassDetailActivity.this, LessonInfoEditActivity.class);
                     	intent.putExtra("class", class_group);
-                    	intent.putExtra("tag", LessonInfoEditActivity.TAG_LES_TABLE);
                         startActivity(intent);
                         bottomBoard.dismiss();
                     }

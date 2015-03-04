@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_dark"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        style="?attr/navbar"
+        android:layout_width="fill_parent" >
+
+        <TextView
+            android:id="@+id/cancel"
+            style="?attr/navbar_btn_left"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/contacts_search_cancel"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/title"
+            style="?attr/navbar_title"
+            android:text="dummy" />
+
+        <TextView
+            android:id="@+id/save"
+            style="?attr/navbar_txt_right"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/save"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/cancel"
+        android:layout_marginRight="17dp" >
+
+        <LinearLayout
+            android:id="@+id/lay_info_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_medium" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_40"
+                android:layout_marginTop="@dimen/padding_small" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/class_term" />
+
+                <EditText
+                    android:id="@+id/ed_lesinfo_term"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/table_white"
+                    android:ems="10"
+                    android:padding="@dimen/padding_small"
+                    android:singleLine="true"
+                    android:textColor="@color/text_gray2"
+                    android:maxLength="20" >
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_40"
+                android:layout_marginTop="@dimen/padding_small" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/class_grade" />
+
+                <EditText
+                    android:id="@+id/ed_lesinfo_grade"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/table_white"
+                    android:ems="10"
+                    android:padding="@dimen/padding_small"
+                    android:singleLine="true"
+                    android:textColor="@color/text_gray2" 
+                    android:maxLength="20">
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_40"
+                android:layout_marginTop="@dimen/padding_small" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/class_subject" />
+
+                <EditText
+                    android:id="@+id/ed_lesinfo_subject"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/table_white"
+                    android:ems="10"
+                    android:padding="@dimen/padding_small"
+                    android:singleLine="true"
+                    android:textColor="@color/text_gray2"
+                    android:maxLength="20" >
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_small"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/class_date" />
+
+                <DatePicker
+                    android:id="@+id/datePicker_lesinfo_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_small"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/class_time" />
+
+                <TimePicker
+                    android:id="@+id/timePicker_lesinfo_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_small"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/class_length" />
+
+                <TimePicker
+                    android:id="@+id/timePicker_lesinfo_length"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_40"
+                android:layout_marginTop="@dimen/padding_small" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/class_place" />
+
+                <EditText
+                    android:id="@+id/ed_lesinfo_place"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/table_white"
+                    android:ems="10"
+                    android:padding="@dimen/padding_small"
+                    android:singleLine="true"
+                    android:textColor="@color/text_gray2"
+                    android:maxLength="20" >
+                </EditText>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/background_dark">
@@ -55,8 +54,16 @@
 
 	<ListView
 	    android:id="@+id/lv_myClass"
+	    android:layout_below="@+id/title_bar"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent" >
 	</ListView>
 
-</LinearLayout>
+	<ProgressBar 
+	    android:id="@+id/loading"
+	    android:layout_width="20dp" 
+	    android:layout_height="20dp"
+	    android:layout_centerInParent="true"
+	    android:indeterminateDrawable="@drawable/progressbar_load"
+	    style="@android:style/Widget.DeviceDefault.ProgressBar"/>
+</RelativeLayout>

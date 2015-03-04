@@ -205,8 +205,8 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 				+ Constants.COMMA + (hour < 10 ? ("0"+ String.valueOf(hour)) : String.valueOf(hour)) + ":" 
 				+ (minite < 10 ? ("0"+ String.valueOf(minite)) : String.valueOf(minite))
 				+ Constants.COMMA + dtPlace.getText().toString()
-				+ Constants.COMMA + (hourLength < 10 ? ("0"+ String.valueOf(hourLength)) : String.valueOf(hourLength)) + "小时" 
-						+ (miniteLength < 10 ? ("0"+ String.valueOf(miniteLength)) : String.valueOf(miniteLength)) + "分钟";
+				+ Constants.COMMA + (hourLength < 10 ? ("0"+ String.valueOf(hourLength)) : String.valueOf(hourLength)) + ":" 
+						+ (miniteLength < 10 ? ("0"+ String.valueOf(miniteLength)) : String.valueOf(miniteLength));
 		mMsgBox.showWait();
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 			@Override
@@ -229,8 +229,8 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 					data.putExtra(TIME, (hour < 10 ? ("0" + String.valueOf(hour)) : String.valueOf(hour)) + ":"
 							+ (minite < 10 ? ("0" + String.valueOf(minite)) : String.valueOf(minite)));
 					data.putExtra(PLACE, dtPlace.getText().toString());
-					data.putExtra(LENGTH, (hourLength < 10 ? ("0" + String.valueOf(hourLength)) : String.valueOf(hourLength)) + "小时"
-							+ (miniteLength < 10 ? ("0" + String.valueOf(miniteLength)) : String.valueOf(miniteLength))+"分钟") ;
+					data.putExtra(LENGTH, String.valueOf(hourLength) + ":"
+							+ (miniteLength < 10 ? ("0" + String.valueOf(miniteLength)) : String.valueOf(miniteLength))) ;
 					setResult(RESULT_OK, data);
 					finish();
 				} else if (result == ErrorCode.ERR_OPERATION_DENIED) {

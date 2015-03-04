@@ -62,7 +62,7 @@
 	<string name="contact_info_group_short_id">群组号：%s</string>
     <string name="contact_info_call">免费语音呼叫</string>
     <string name="contact_info_video_call">免费视频通话</string>
-    <string name="contactinfo_department">部门</string>
+    <string name="contactinfo_department">班级</string>
     <string name="contactinfo_job_title">职位</string>
     <string name="contactinfo_phone">电话</string>
     <string name="contactinfo_mobile">手机</string>
@@ -78,7 +78,7 @@
 	<string name="contacts_search_result_group">群组</string>
 	<string name="contacts_search_buddy_hint">请输入用户 ID</string>
 	<string name="contacts_search_group_hint">请输入群组号或名称</string>
-	<string name="contacts_search_null">你可以搜索到好友和群组</string>
+	<string name="contacts_search_null">你可以搜索到好友</string>
 	<string name="contacts_new_friends">新的朋友</string>
 	<string name="contacts_new_friends_add_list">请求列表</string>
 	<string name="contacts_new_friends_pending_in">发来好友请求</string>
@@ -363,7 +363,7 @@
 	<string name="group_creator">创建者</string>
 	<string name="group_delete_only_creator">此群组只包含创建者，不能删除</string>
 	<string name="see_all">查看全部</string>
-    <string name="signature">签名</string>
+    <string name="signature">个性签名</string>
     <string name="rigion">地区</string>
     <string name="input_birthday_error">日期选择错误，您所选择的日期不能晚于当前日期</string>
     <string name="bind_email_error_msg">邮箱和密码不能为空！</string>
@@ -651,7 +651,7 @@
 	<string name="contacts_add_buddy_succeed_without_pending">好友添加成功</string>
 	<string name="contacts_add_buddy_pending_out">请求已发出，对方验证通过后即会出现在您的联系人中</string>
 	<string name="contacts_not_found">查无此人</string>
-    <string name="contacts_goto_classroom_chat"><u>进入班级群聊</u></string>
+    <string name="contacts_goto_classroom_chat"><u>班级群聊</u></string>
 
 	<string name="group_chat_title_default">群聊</string>
 	<string name="group_chat_name">未设置</string>
@@ -681,6 +681,9 @@
 	<string name="account_web_api_auth_failure">帐号验证失败，请重新登录</string>
     <string name="refresh_from_server">刷新</string>
 	<string name="contact_info_goto_moments">查看动态</string>
+	<string name="contact_info_send_msg">发消息</string>
+	<string name="contact_info_send_call">语音聊天</string>
+	<string name="contact_info_send_video">视频聊天</string>
 	<string name="chat_menu_copy">复制</string>
 	<string name="chat_menu_call">拨打电话</string>
 	<string name="chat_menu_open_url">打开链接</string>
@@ -885,10 +888,16 @@
     <string name="more">更多</string>
     <string name="class_edit_class_info">编辑班级信息</string>
     <string name="class_edit_cursetable_info">编辑课表信息</string>
-    <string name="class_lesson_situation_table">上课状况一览表</string>
+    <string name="class_lesson_situation_table">课堂点评</string>
     <string name="class_set_homework">布置作业</string>
     <string name="class_parent_suggestion">家长意见</string>
-    <string name="class_lesson_situation">上课状况</string>
+    <string name="class_lesson_situation">课堂点评</string>
+    <string name="class_lesson_classroom">教室</string>
+    <string name="class_lesson_camera">摄像头</string>
+    <string name="class_lesson_knowledge">知识点</string>
+    <string name="class_lesson_attendance">考勤</string>
+    <string name="class_lesson_homework">答疑</string>
+    <string name="class_lesson_select_classroom">可选教室</string>
     <string name="class_homework">家庭作业</string>
     <string name="class_submitted">已提交</string>
     <string name="class_wait_submit">待提交意见</string>
@@ -910,6 +919,9 @@
 	<string name="class_editinfo_first">请先编辑班级信息!</string>
 	<string name="class_lessontitle_not_null">课名不得为空！</string>
 	<string name="class_les_not_before_start">课程时间不得早于开班时间！</string>
+	<string name="class_camera_select_front">前</string>
+	<string name="class_camera_select_middle">中</string>
+	<string name="class_camera_select_back">后</string>
     <string name="no_more_to_load">没有更多分享了，自己创建一条吧</string>
     <string name="capture_video">拍摄</string>
     <string name="contact_info_edit_remarkname">编辑备注名</string>

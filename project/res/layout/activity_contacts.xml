@@ -5,19 +5,21 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:background="@color/background_light" >
+
 	<RelativeLayout
-		android:id="@+id/title_bar"
-		android:layout_height="@dimen/title_bar_height"
-		android:layout_width="fill_parent"
-		android:layout_alignParentTop="true"
-		style="?attr/navbar">
-		<LinearLayout
-			android:id="@+id/navbar_btn_left"
-			style="@style/navbar_btn_left"
-			android:orientation="horizontal"/>
+	    android:id="@+id/title_bar"
+	    style="?attr/navbar"
+	    android:layout_width="fill_parent"
+	    android:layout_height="@dimen/title_bar_height"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignParentTop="true" >
 		<LinearLayout
 			android:id="@+id/navbar_btn_right"
-			style="@style/navbar_btn_right"
+			android:layout_width="25dp"
+		    android:layout_height="25dp"
+		    android:layout_alignParentRight="true"
+		    android:layout_centerVertical="true"
+		    android:layout_marginRight="15dp"
 			android:orientation="horizontal"/>
 		<TextView
 			android:id="@+id/title_text"
@@ -46,6 +48,17 @@
 				android:textColor="@color/white"
 				android:text="@string/contacts_tab_school"/>
 		</LinearLayout>
+
+		<LinearLayout
+		    android:id="@+id/navbar_btn_left"
+		    android:layout_width="25dp"
+		    android:layout_height="25dp"
+		    android:layout_alignParentLeft="true"
+		    android:layout_centerVertical="true"
+		    android:layout_marginLeft="15dp"
+		    android:orientation="horizontal" >
+		</LinearLayout>
+
 	</RelativeLayout>
 
 	<RelativeLayout

@@ -244,7 +244,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
         }
 
         map = new HashMap<String, Integer>();
-        map.put("image", R.drawable.new_friends);
+        map.put("image", R.drawable.icon_contact_add);
         map.put("text", R.string.contacts_new_friends);
         map.put("badge", pendingRequestCountIn);
         list.add(map);

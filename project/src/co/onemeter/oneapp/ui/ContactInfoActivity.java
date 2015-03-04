@@ -304,7 +304,10 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 
     	  AQuery q = new AQuery(this);
     	  if(buddyType == BUDDY_TYPE_IS_FRIEND){
-              q.find(R.id.module_chat).visible();
+//              q.find(R.id.module_chat).visible();
+    		  q.find(R.id.btn_msg).visible();
+    		  q.find(R.id.btn_call).visible();
+    		  q.find(R.id.btn_video).visible();
               q.find(R.id.btn_goto_moments).visible();
               q.find(R.id.btn_delete).gone();
               q.find(R.id.btn_add).gone();
@@ -315,7 +318,10 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     			  q.find(R.id.btn_call).invisible();
     			  q.find(R.id.btn_video).invisible();
     		  }else{
-    			  q.find(R.id.module_chat).invisible();
+//    			  q.find(R.id.module_chat).invisible();
+        		  q.find(R.id.btn_msg).gone();
+        		  q.find(R.id.btn_call).gone();
+        		  q.find(R.id.btn_video).gone();
     		  }
               q.find(R.id.btn_goto_moments).gone();
               
@@ -328,7 +334,10 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
 //              q.find(R.id.btn_add).visible();
               q.find(R.id.btn_edit_remarkname).gone();//不是好友隐藏修改好友备注名的功能
     	  }if(buddyType == BUDDY_TYPE_MYSELF){
-              q.find(R.id.module_chat).visible();
+//              q.find(R.id.module_chat).visible();
+    		  q.find(R.id.btn_msg).visible();
+    		  q.find(R.id.btn_call).visible();
+    		  q.find(R.id.btn_video).visible();
               q.find(R.id.btn_goto_moments).visible();
               q.find(R.id.btn_delete).gone();
               q.find(R.id.btn_add).gone();

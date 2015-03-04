@@ -167,7 +167,7 @@ public class GroupTreeAdapter extends BaseAdapter {
 	}
 
 	private void indent(ContactTreeNode node, View view) {
-		int indentDp = 40;
+		int indentDp = 10;
 		int indentPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) indentDp, context.getResources().getDisplayMetrics());
 		view.setPadding(
 				node.getIndentLevel() * indentPx + view.getPaddingRight(),

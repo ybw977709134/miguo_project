@@ -47,29 +47,41 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		}
 		q.find(R.id.title_back).clicked(this);
 		
+		LinearLayout lay_classroom = (LinearLayout) q.find(R.id.les_lay_classroom).getView();
 		LinearLayout lay_first = (LinearLayout) q.find(R.id.les_lay_first).getView();
 		LinearLayout lay_second = (LinearLayout) q.find(R.id.les_lay_second).getView();
 		LinearLayout lay_third = (LinearLayout) q.find(R.id.les_lay_third).getView();
+		LinearLayout lay_camera = (LinearLayout) q.find(R.id.les_lay_camera).getView();
+		
 		if(lesson.end_date * 1000 > System.currentTimeMillis()){
 			q.find(R.id.text_first).textColor(getResources().getColor(R.color.text_gray4));
 			q.find(R.id.text_second).textColor(getResources().getColor(R.color.text_gray4));
 			q.find(R.id.text_third).textColor(getResources().getColor(R.color.text_gray4));
+			q.find(R.id.text_classroom).textColor(getResources().getColor(R.color.text_gray4));
 			lay_first.setEnabled(false);
 			lay_second.setEnabled(false);
 			lay_third.setEnabled(false);
+			lay_classroom.setEnabled(false);
+			lay_camera.setEnabled(false);
 		}
 		if(isTeacher()){
 			q.find(R.id.text_first).text(getString(R.string.class_lesson_situation_table));
 			q.find(R.id.text_second).text(getString(R.string.class_set_homework));
 			q.find(R.id.text_third).text(getString(R.string.class_parent_suggestion));
+			q.find(R.id.text_classroom).text(getString(R.string.class_lesson_classroom));
 			q.find(R.id.text_first_r).text("");
 			q.find(R.id.text_third_r).text("");
+			q.find(R.id.text_classroom_r).text("");
 		}else{
 			q.find(R.id.text_first_r).text(getString(R.string.class_wait_confirm));
+			lay_classroom.setVisibility(View.GONE);
+			lay_camera.setVisibility(View.GONE);
 		}
 		lay_first.setOnClickListener(this);
 		lay_second.setOnClickListener(this);
 		lay_third.setOnClickListener(this);
+		lay_classroom.setOnClickListener(this);
+		lay_camera.setOnClickListener(this);
 		
 		if(!isTeacher()){
 			if(Database.getInstance(this).fetchLessonParentFeedback(lessonId, PrefUtil.getInstance(this).getUid()) != null){
@@ -133,6 +145,15 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 					}
 				}
 			}
+			break;
+			
+		case R.id.les_lay_classroom:
+			intent.setClass(this, ClassroomActivity.class);
+			startActivity(intent);
+			break;
+		case R.id.les_lay_camera:
+			intent.setClass(this, CameraActivity.class);
+			startActivity(intent);
 			break;
 		default:
 			break;

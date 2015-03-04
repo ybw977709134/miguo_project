@@ -79,7 +79,7 @@
                         android:layout_height="35dp"
                         android:layout_width="60dp"
                         android:layout_alignParentBottom="true"
-                        style="@style/button_blue"
+                        android:background="@color/blue"
                         android:src="@drawable/profile_btn_message"/>
                 </RelativeLayout>
             </RelativeLayout>

@@ -452,7 +452,7 @@
 		</activity>
 		<activity
 			android:name=".ui.InputPlainTextActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue"
 			android:screenOrientation="portrait">
 		</activity>
         <activity
@@ -595,6 +595,14 @@
 			      android:theme="@style/Theme.Blue"
 			      android:screenOrientation="portrait" >
 		</activity>
+		<activity android:name=".ui.ClassroomActivity"
+			      android:theme="@style/Theme.Blue"
+			      android:screenOrientation="portrait" >
+		</activity>
+		<activity android:name=".ui.CameraActivity"
+			      android:theme="@style/Theme.Blue"
+			      android:screenOrientation="portrait" >
+		</activity>
 		<activity
             android:name=".liveplayer.VideoPlayingActivity"
             android:configChanges="orientation|screenSize"
@@ -604,13 +612,13 @@
 		<activity
             android:name="co.onemeter.oneapp.ui.ClassDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Green" >
+            android:theme="@style/Theme.Blue" >
         </activity>
         
 		<activity
             android:name="co.onemeter.oneapp.ui.LessonDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Green" >
+            android:theme="@style/Theme.Blue" >
         </activity>
         
 		<activity

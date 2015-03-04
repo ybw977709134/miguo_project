@@ -184,12 +184,14 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		resultTime.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
-		long firstlesTime = getIntent().getLongExtra("firstlesdate", 0);
-		if( firstlesTime < resultTime.getTimeInMillis() / 1000 ){
-			if(!mMsgBox.isWaitShowing()){
-				mMsgBox.toast("开班时间不得晚于课程时间！");
-			}
-			return;
+		long firstlesTime = getIntent().getLongExtra("firstlesdate", -1);
+		if(firstlesTime != -1){
+		    if( firstlesTime < resultTime.getTimeInMillis() / 1000 ){
+			    if(!mMsgBox.isWaitShowing()){
+				    mMsgBox.toast("开班时间不得晚于课程时间！");
+			    }
+			    return;
+		    }
 		}
 		
 		final int hour = tpTime.getCurrentHour();

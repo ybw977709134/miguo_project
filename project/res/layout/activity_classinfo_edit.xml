@@ -68,7 +68,8 @@
                     android:ems="10"
                     android:padding="@dimen/padding_small"
                     android:singleLine="true"
-                    android:textColor="@color/text_gray2" >
+                    android:textColor="@color/text_gray2"
+                    android:maxLength="20" >
                 </EditText>
             </LinearLayout>
 
@@ -91,7 +92,8 @@
                     android:ems="10"
                     android:padding="@dimen/padding_small"
                     android:singleLine="true"
-                    android:textColor="@color/text_gray2" >
+                    android:textColor="@color/text_gray2" 
+                    android:maxLength="20">
                 </EditText>
             </LinearLayout>
 
@@ -114,7 +116,8 @@
                     android:ems="10"
                     android:padding="@dimen/padding_small"
                     android:singleLine="true"
-                    android:textColor="@color/text_gray2" >
+                    android:textColor="@color/text_gray2"
+                    android:maxLength="20" >
                 </EditText>
             </LinearLayout>
 
@@ -188,7 +191,8 @@
                     android:ems="10"
                     android:padding="@dimen/padding_small"
                     android:singleLine="true"
-                    android:textColor="@color/text_gray2" >
+                    android:textColor="@color/text_gray2"
+                    android:maxLength="20" >
                 </EditText>
             </LinearLayout>
         </LinearLayout>

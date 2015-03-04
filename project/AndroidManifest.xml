@@ -580,7 +580,7 @@
 		          android:screenOrientation="portrait"
 			/>
 		<!-- 绑定邮箱 -->
-		<activity android:name=".ui.BindEmailAdressActivity"
+		<activity android:name=".ui.BindEmailAddressActivity"
 		          android:screenOrientation="portrait"
 			/>
 		<!-- 修改绑定邮箱 -->

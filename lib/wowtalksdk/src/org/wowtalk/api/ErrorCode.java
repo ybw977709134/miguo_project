@@ -33,6 +33,9 @@ public class ErrorCode {
 	public static final int MOMENT_NOT_EXISTS = 13;
 	/** Error Code */
 	public static final int REVIEW_NOT_EXISTS = 14;
+	
+	/** Error Code */
+	public static final int EMAIL_ADDRESS_VERIFICATION_CODE_ERROR = 18;
     /** Error Code */
 	public static final int PHONE_VERIFICATION_CODE_ERROR = 20;
     /** Error Code */

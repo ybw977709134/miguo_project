@@ -508,8 +508,66 @@ public class WowTalkWebServerIF {
 		return null;
 	}
 	
+	/**
+	 * 绑定邮箱，获取验证码
+	 * @author hutianfeng
+	 * @date 2015/3/4
+	 * @param emailAddress
+	 * @return
+	 */
+	public int fBindEmialAddress(String emailAddress) {
+		String uid = sPrefUtil.getUid();
+		String password = sPrefUtil.getPassword();
+		
+		if(isAuthEmpty(uid, password))
+			return ErrorCode.INVALID_ARGUMENT;
+		
+		String action = "bind_email";
+		String postStr = "action=" + action
+				+ "&uid=" + Utils.urlencodeUtf8(uid)
+				+ "&password=" + Utils.urlencodeUtf8(password)
+				+ "&email_address=" + Utils.urlencodeUtf8(emailAddress);
+		
+		return _doRequestWithoutResponse(postStr);
+	}
 	
+	/**
+	 * 修改邮箱，解绑邮箱
+	 * @author hutianfeng
+	 * @date 2015/3/4
+	 * @return
+	 */
+	public int fFixBindEmailAddress() {
+		String uid = sPrefUtil.getUid();
+		String password = sPrefUtil.getPassword();
+		
+		String action = "unbind_email";
+		String postStr = "action=" + action
+				+ "&uid=" + Utils.urlencodeUtf8(uid)
+				+ "&password=" + Utils.urlencodeUtf8(password);
+		return _doRequestWithoutResponse(postStr);
+	}
 	
+	/**
+	 * 验证绑定邮箱
+	 * @author hutianfeng
+	 * @date 2015/3/4
+	 * @param access_code
+	 * @param emailAddress
+	 * @return
+	 */
+	public int fVerifyEmailAddress (String access_code,String emailAddress) {
+		String uid = sPrefUtil.getUid();
+		String password = sPrefUtil.getPassword();
+		
+		String action = "verify_email";
+		String postStr = "action=" + action
+				+ "&uid=" + Utils.urlencodeUtf8(uid)
+				+ "&password=" + Utils.urlencodeUtf8(password)
+				+ "&access_code=" + Utils.urlencodeUtf8(access_code)
+				+ "&email_address=" + Utils.urlencodeUtf8(emailAddress);
+		return _doRequestWithoutResponse(postStr);
+	}
 	
 	/**
 	 * Bind my account with a email address.

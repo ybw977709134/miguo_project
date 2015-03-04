@@ -1,5 +1,8 @@
 package co.onemeter.oneapp.ui;
 
+import java.util.List;
+import java.util.Map;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -50,6 +53,8 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
     WowTalkWebServerIF mWeb;
     private PrefUtil mPrefUtil;
 	private MessageBox mMsgBox;
+	
+	private String bindEmail = null;//是否绑定邮箱
 
 	public static final AccountSettingActivity instance() {
 		if (instance != null)
@@ -98,44 +103,44 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
         }
 	}
 	
-	private void queryBindings() {
-        mBindPhone.setEnabled(false);
-        mBindEmail.setEnabled(false);
-        final long startTime = System.currentTimeMillis();
-		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
-
-			@Override
-			protected Integer doInBackground(Void... params) {
-				return WowTalkWebServerIF.getInstance(AccountSettingActivity.this).fGetBindedStuff(binds);
-			}
-
-			@Override
-			protected void onPostExecute(Integer result) {
-				if (result == ErrorCode.OK) {
-					if (binds[0] != null && !binds[0].equals("")) {
-						txtEmail.setText(binds[0]);
-					} else {
-						txtEmail.setText(getResources().getString(R.string.not_binded));
-					}
-					if (binds[1] != null && !binds[1].equals("")) {
-						txtPhonenumber.setText(binds[1]);
-					} else {
-						txtPhonenumber.setText(getResources().getString(R.string.not_binded));
-					}
-				}
-				new Handler().post(new Runnable() {
-					@Override
-					public void run() {
-						mBindPhone.setEnabled(true);
-						mBindEmail.setEnabled(true); 
-						long endTime = System.currentTimeMillis();
-						Log.d(TAG, ", onResume, the time of invoking queryBinds() is " + (endTime - startTime) + " milliseconds.");
-					}
-				});
-			}
-
-		});
-	}
+//	private void queryBindings() {
+//        mBindPhone.setEnabled(false);
+//        mBindEmail.setEnabled(false);
+//        final long startTime = System.currentTimeMillis();
+//		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
+//
+//			@Override
+//			protected Integer doInBackground(Void... params) {
+//				return WowTalkWebServerIF.getInstance(AccountSettingActivity.this).fGetBindedStuff(binds);
+//			}
+//
+//			@Override
+//			protected void onPostExecute(Integer result) {
+//				if (result == ErrorCode.OK) {
+//					if (binds[0] != null && !binds[0].equals("")) {
+//						txtEmail.setText(binds[0]);
+//					} else {
+//						txtEmail.setText(getResources().getString(R.string.not_binded));
+//					}
+//					if (binds[1] != null && !binds[1].equals("")) {
+//						txtPhonenumber.setText(binds[1]);
+//					} else {
+//						txtPhonenumber.setText(getResources().getString(R.string.not_binded));
+//					}
+//				}
+//				new Handler().post(new Runnable() {
+//					@Override
+//					public void run() {
+//						mBindPhone.setEnabled(true);
+//						mBindEmail.setEnabled(true); 
+//						long endTime = System.currentTimeMillis();
+//						Log.d(TAG, ", onResume, the time of invoking queryBinds() is " + (endTime - startTime) + " milliseconds.");
+//					}
+//				});
+//			}
+//
+//		});
+//	}
 	
 	private void logout() {
         mMsgBox.showWait();
@@ -247,7 +252,20 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 //                Intent bindEmailIntent = new Intent(AccountSettingActivity.this, BindEmailActivity.class);
 //                startActivity(bindEmailIntent);
 //            }
-			Toast.makeText(AccountSettingActivity.this, "功能正在实现中..", Toast.LENGTH_LONG).show();
+			
+		    if (!mPrefUtil.getMyPasswordChangedState()) {
+		        mMsgBox.toast(R.string.accountsetting_bindphone_email_set_pwd_first);
+		    } else  {
+		    	if (bindEmail != null) {//绑定了邮箱，点击进入，修改邮箱的解绑界面
+		    		Intent fixEmailIntent = new Intent(AccountSettingActivity.this, FixBindEmailAddressActivity.class);
+		    		startActivity(fixEmailIntent);
+		    	} else {//未绑定邮箱进入绑定邮箱界面
+		    		Intent bindEmailIntent = new Intent(AccountSettingActivity.this, BindEmailAddressActivity.class);
+		    		startActivity(bindEmailIntent);
+		    	}
+		    }
+			
+//			Toast.makeText(AccountSettingActivity.this, "功能正在实现中..", Toast.LENGTH_LONG).show();
 			break;
 		default:
 			mMsgBox.toast(R.string.not_implemented);
@@ -267,6 +285,33 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
         mPrefUtil = PrefUtil.getInstance(this);
 		instance = this;
 		initView();
+		
+
+
+			AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, List<Map<String, Object>>> () {
+
+	            @Override
+	            protected List<Map<String, Object>> doInBackground(Void... params) {
+	                return WowTalkWebServerIF.getInstance(AccountSettingActivity.this).fEmailBindStatus();
+	            }
+
+	            @Override
+	            protected void onPostExecute(List<Map<String, Object>> result) {
+	            	if (result != null) {
+	            	bindEmail = (String) result.get(0).get("email");
+	            	
+	            	if (bindEmail != null) {//说明绑定邮箱，显示绑定的邮箱
+	            		txtEmail.setText(bindEmail);
+	            		
+	            	} else {//未绑定，显示请绑定邮箱
+	            		txtEmail.setText(getResources().getString(R.string.settings_account_bindEmail));
+	            	} 
+	            } else {
+	            	Toast.makeText(AccountSettingActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
+	            }
+	            
+	            } 
+	        });
 	}
 
     @Override
@@ -274,7 +319,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
         super.onResume();
         MobclickAgent.onResume(this);
         fetchData();
-        queryBindings();
+//        queryBindings();
 
     }
 

@@ -1,11 +1,19 @@
 package co.onemeter.oneapp.ui;
 
+import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.ui.MessageBox;
+
 import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -25,10 +33,9 @@ import android.widget.Toast;
  * @date 2015/3/3
  *
  */
-public class BindEmailAdressActivity extends Activity implements OnClickListener {
+public class BindEmailAddressActivity extends Activity implements OnClickListener {
 	private static int BIND_EMAIL_PAGE = 1;//验证绑定邮箱阶段
 	private static int AUTH_CODE_PAGE = 2;//验证验证码阶段
-	private static int RESET_NEW_PASSWORD_PAGE = 3;//重置密码阶段
 	//验证阶段判断标志
 	private int pageFlag = BIND_EMAIL_PAGE;//默认为验证绑定邮箱阶段
 	
@@ -53,23 +60,18 @@ public class BindEmailAdressActivity extends Activity implements OnClickListener
 	private TextView textView_verification_authCode_result;//验证码验证结果
 	private Button btn_verification_auth_code;//确认验证验证码
 	private Button btn_again_receive_auth_code;//重新获取验证码
+
+	private MessageBox mMsgBox;
+	private int time;
 	
-	//重置新密码
-	
-	private RelativeLayout layout_reset_password;
-	private EditText txt_new_password;//新密码
-	private EditText txt_confirm_new_password;//确认新密码
-	private ImageView imageview_show_password;//显示密码
-	private ImageView imageview_hint_password;//隐藏密码
-	private TextView textView_isshow_password;//显示密码文本提示
-	private TextView textView_verification_newPassword;//验证新设置的密码两次设置是否一致
-	private Button btn_newPassWord_ok;//提交重新设置后的密码
-	
+	private Handler mHandler = new Handler();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bind_email_adress);
         initView();
+        mMsgBox = new MessageBox(this);
+        
     }
     
     /**
@@ -97,18 +99,6 @@ public class BindEmailAdressActivity extends Activity implements OnClickListener
     	textView_verification_authCode_result = (TextView) findViewById(R.id.textView_verification_authCode_result);
     	btn_verification_auth_code = (Button) findViewById(R.id.btn_verification_auth_code);
     	btn_again_receive_auth_code = (Button) findViewById(R.id.btn_again_receive_auth_code);
-    	
-    	//重置新密码
-    	layout_reset_password = (RelativeLayout) findViewById(R.id.layout_reset_password);
-    	txt_new_password =  (EditText) findViewById(R.id.txt_new_password);
-    	txt_confirm_new_password =  (EditText) findViewById(R.id.txt_confirm_new_password);
-    	imageview_show_password = (ImageView) findViewById(R.id.imageview_show_password);
-    	imageview_hint_password = (ImageView) findViewById(R.id.imageview_hint_password);
-    	textView_isshow_password = (TextView) findViewById(R.id.textView_isshow_password);
-    	textView_verification_newPassword = (TextView) findViewById(R.id.textView_verification_newPassword);
-    	btn_newPassWord_ok = (Button) findViewById(R.id.btn_newPassWord_ok);
-    	
-    	
     	
     	//对各个控件设置监听事件
     	
@@ -166,9 +156,6 @@ public class BindEmailAdressActivity extends Activity implements OnClickListener
     	field_clear_auth_code.setOnClickListener(this);
     	btn_verification_auth_code.setOnClickListener(this);
     	btn_again_receive_auth_code.setOnClickListener(this);
-    	imageview_show_password.setOnClickListener(this);
-    	imageview_hint_password.setOnClickListener(this);
-    	btn_newPassWord_ok.setOnClickListener(this);
     	
     }
     
@@ -181,10 +168,13 @@ public class BindEmailAdressActivity extends Activity implements OnClickListener
 		//清除绑定邮箱中文本框中的内容
 		case R.id.field_clear_email:
 			txt_bind_email.setText("");
+			textView_verification_email_result.setVisibility(View.GONE);
 			break;
 		//清除验证码文本框中的内容	
 		case R.id.field_clear_auth_code:
 			txt_auth_code.setText("");
+			textView_verification_authCode_result.setVisibility(View.GONE);
+						
 			break;
 		//返回
 		case R.id.textView_bindEmail_back:
@@ -195,15 +185,12 @@ public class BindEmailAdressActivity extends Activity implements OnClickListener
 				pageFlag = BIND_EMAIL_PAGE;
 				layout_verification_auth_code.setVisibility(View.GONE);
 				layout_verification_email.setVisibility(View.VISIBLE);
-			} else {
-				pageFlag = AUTH_CODE_PAGE;
-				layout_reset_password.setVisibility(View.GONE);
-				layout_verification_auth_code.setVisibility(View.VISIBLE);
-				imageview_show_password.setVisibility(View.VISIBLE);
-				imageview_hint_password.setVisibility(View.GONE);
-				txt_new_password.setText("");
-				txt_confirm_new_password.setText("");
-			}
+				txt_auth_code.setText("");
+				txt_bind_email.setText("");
+				textView_verification_email_result.setVisibility(View.GONE);
+				textView_verification_authCode_result.setVisibility(View.GONE);
+
+			} 
 			
 			break;
 			
@@ -211,7 +198,7 @@ public class BindEmailAdressActivity extends Activity implements OnClickListener
 		case R.id.textView_findPassword_cancel:
 			Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
-			builder.setMessage("你确定要取消密码找回吗？");
+			builder.setMessage("你确定要取消绑定邮箱吗？");
 			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 				
 				@Override
@@ -227,47 +214,18 @@ public class BindEmailAdressActivity extends Activity implements OnClickListener
 			
 		//验证绑定邮箱	
 		case R.id.btn_verification_email:
-			//成功时
-			pageFlag = AUTH_CODE_PAGE;//2
-			layout_verification_email.setVisibility(View.GONE);
-			layout_verification_auth_code.setVisibility(View.VISIBLE);
+			bindEmailAddress(txt_bind_email.getText().toString());
 			break;
 			
 		//验证验证码	
 		case R.id.btn_verification_auth_code:
 			//成功时
-			pageFlag = RESET_NEW_PASSWORD_PAGE;//3
-			layout_verification_auth_code.setVisibility(View.GONE);
-			layout_reset_password.setVisibility(View.VISIBLE);
-			
+			verifyBindEmailAddress(txt_auth_code.getText().toString(),txt_bind_email.getText().toString());
 			break;
 			
 		//重新获得验证码	
 		case R.id.btn_again_receive_auth_code:
-			
-			break;
-			
-		//显示密码
-		case R.id.imageview_show_password:
-			imageview_show_password.setVisibility(View.GONE);
-			imageview_hint_password.setVisibility(View.VISIBLE);
-			txt_new_password.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-			txt_confirm_new_password.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-			textView_isshow_password.setText("隐藏密码");
-			break;
-			
-		//隐藏密码	
-		case R.id.imageview_hint_password:
-			imageview_show_password.setVisibility(View.VISIBLE);
-			imageview_hint_password.setVisibility(View.GONE);
-			txt_new_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-			txt_confirm_new_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-			textView_isshow_password.setText("显示密码");
-			break;
-			
-		//重置后的密码
-		case R.id.btn_newPassWord_ok:
-			Toast.makeText(BindEmailAdressActivity.this, "功能正在实现中..", Toast.LENGTH_SHORT).show();
+			bindEmailAddress(txt_bind_email.getText().toString());
 			break;
 			
 		default:
@@ -275,4 +233,146 @@ public class BindEmailAdressActivity extends Activity implements OnClickListener
 		}
 		
 	}
+	
+	/**
+	 * 
+	 * 绑定邮箱地址
+	 * @param emailAddress
+	 * @author hutianfeng
+	 * @date 2015/3/4
+	 */
+	private void bindEmailAddress(final String emailAddress) {
+		mMsgBox.showWait();
+		
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
+
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return WowTalkWebServerIF.getInstance(BindEmailAddressActivity.this).fBindEmialAddress(emailAddress);
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                mMsgBox.dismissWait();
+               
+                switch (result) {
+                    case ErrorCode.OK://0
+                    	pageFlag = BIND_EMAIL_PAGE;
+        				layout_verification_auth_code.setVisibility(View.VISIBLE);
+        				layout_verification_email.setVisibility(View.GONE);
+        				textView_show_bind_email.setVisibility(View.VISIBLE);
+        				textView_show_bind_email.setText("你输入的邮箱"+txt_bind_email.getText().toString());
+        				
+//        				60秒内不可点击  重新获取验证码
+//        				stopGetAccessCode();
+
+                        break;
+                    case ErrorCode.EMAIL_ADDRESS_VERIFICATION_CODE_ERROR://18:邮箱格式错误
+                    	textView_verification_email_result.setVisibility(View.VISIBLE);
+                    	textView_verification_email_result.setText(getString(R.string.bind_email_format_error_msg));
+                    	break;
+                    case ErrorCode.AUTH://2:认证失败，错误的用户名或密码
+                        mMsgBox.show(null, getString(R.string.bind_email_pwd_err));
+                        break;
+                    case ErrorCode.EMAIL_USED_BY_OTHERS://28：该邮箱已被其他用户绑定
+//                        changeBindStyle();
+                        mMsgBox.show(null, getString(R.string.settings_account_email_used_by_others));
+                        break;
+                    default:
+                        mMsgBox.show(null, getString(R.string.bind_email_failed));
+                        break;
+                }
+            }
+        });
+		
+	}
+	
+	/**
+	 * 控制重新获取验证的按钮状态
+	 * @author hutainfeng
+	 * @date 2015/3/4
+	 * 
+	 */
+	private void stopGetAccessCode() {
+		//60秒内不可点击  重新获取验证码
+		btn_again_receive_auth_code.setEnabled(false);
+		btn_again_receive_auth_code.setTextColor(getResources().getColor(R.color.blue));
+		
+		
+		for (time = 60; time > 0; time--) {
+			mHandler.postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					btn_again_receive_auth_code.setText("重新获取验证码" + "("+ time + ")");
+				}
+			}, 1000);
+		}
+		
+		//60秒后又变成可点击的状态
+		btn_again_receive_auth_code.setEnabled(true);
+		btn_again_receive_auth_code.setTextColor(getResources().getColor(R.color.blue_light));
+	}
+	
+	/**
+	 * 验证绑定邮箱收到的验证码
+	 * @param access_code
+	 * @param emailAddress
+	 * @author hutainfeng
+	 * @date 2015/3/4
+	 */
+	private void verifyBindEmailAddress(final String access_code,final String emailAddress) {
+		mMsgBox.showWait();
+		
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
+
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return WowTalkWebServerIF.getInstance(BindEmailAddressActivity.this).fVerifyEmailAddress(access_code,emailAddress);
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                mMsgBox.dismissWait();
+               
+                switch (result) {
+                    case ErrorCode.OK://0
+                    	mMsgBox.show(null, getString(R.string.bind_email_successed));
+                        break;
+                        
+                    case ErrorCode.ACCESS_CODE_ERROR://22:无效的验证码，验证码有有效期，目前是一天的有效期
+                    	textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                    	textView_verification_authCode_result.setText(getString(R.string.access_code_error));
+                        break;
+                        
+                    default:
+                        mMsgBox.show(null, getString(R.string.bind_email_failed));
+                        break;
+                }
+            }
+        });
+	}	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

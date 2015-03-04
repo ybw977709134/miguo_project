@@ -69,8 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title_bar"
         android:gravity="center"
-        android:visibility="gone"
-         >
+        >
         
 
         <LinearLayout
@@ -132,7 +131,6 @@
                 android:layout_marginBottom="5dp"
                 android:gravity="center_vertical"
                 android:textColor="@color/red"
-                android:text="邮箱格式不正确" 
                 android:visibility="gone"/>
 			<!-- 确认输入的绑定邮箱 -->
             <Button
@@ -153,7 +151,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title_bar"
         android:gravity="center"
-         >
+        android:visibility="gone" >
         
 
         <LinearLayout
@@ -169,7 +167,6 @@
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:textColor="@color/black_30"
-                android:text="你输入的邮箱hutianfeng@onemeter.com"
                 android:visibility="gone"/>
             
             <TextView 
@@ -225,7 +222,6 @@
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
                 android:textColor="@color/red"
-                android:text="验证码不正确"
                 android:visibility="gone" />
 			<!-- 验证输入的验证码 -->
             <Button
@@ -234,6 +230,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_small"
+                android:textColor="@color/white"
                 android:text="@string/login_findPassWord_ok" />
             
             <!-- 重新获取验证码 -->
@@ -243,137 +240,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_small"
+                android:textColor="@color/blue"
                 android:text="@string/login_again_receive_verificationCode_btn" />
-
-        </LinearLayout>
-    </RelativeLayout>
-    
-     <!-- 在成功输入绑定邮箱和验证码后设置新密码和确认新密码 -->
-      <RelativeLayout
-        android:id="@+id/layout_reset_password"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title_bar"
-        android:gravity="center"
-        android:visibility="gone" >
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/padding_large"
-                android:background="@color/white"
-                android:orientation="vertical" >
-
-                <ImageView
-                    style="@style/standard_list_divider"/>
-                
-				<RelativeLayout 
-				    android:layout_width="match_parent"
-				    android:layout_height="wrap_content">
-				<!-- 新密码 -->    
-                <EditText
-                    android:id="@+id/txt_new_password"
-                    style="@style/inputbox_borderless"
-                    android:imeOptions="actionDone"
-                    android:password="true"
-                    android:hint="@string/login_newPassword"/>
-
-                <!--  
-                <ImageButton
-        			android:id="@+id/field_clear"
-        			android:layout_height="19dp"
-        			android:layout_width="19dp"
-        			android:layout_alignRight="@+id/txt_bind_email"
-        			android:layout_marginRight="5dp"
-        			android:layout_centerVertical="true"
-        			android:background="@drawable/field_clear"/>
-                -->
-                
-                </RelativeLayout>
-                
-				<RelativeLayout 
-				    android:layout_width="match_parent"
-				    android:layout_height="wrap_content">
-				
-				<!-- 确认新密码 -->
-                <EditText
-                    android:id="@+id/txt_confirm_new_password"
-                    style="@style/inputbox_borderless"
-                    android:imeOptions="actionDone"
-                    android:password="true"
-                    android:hint="@string/login_confirm_password"/>
-				<!--  
-                <ImageButton
-        			android:id="@+id/field_clear"
-        			android:layout_height="19dp"
-        			android:layout_width="19dp"
-        			android:layout_alignRight="@+id/txt_bind_email"
-        			android:layout_marginRight="5dp"
-        			android:layout_centerVertical="true"
-        			android:background="@drawable/field_clear"/>
-                -->
-                
-                </RelativeLayout>
-
-                <ImageView
-                    style="@style/standard_list_divider"/>
-            </LinearLayout>
-            
-            <LinearLayout 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical" >
-                <!-- 是否显示密码 -->
-               <ImageView
-                   android:id="@+id/imageview_show_password" 
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:layout_marginLeft="10dp"
-                   android:layout_marginRight="10dp"
-                   android:src="@drawable/share_vote_chb" />
-               
-               <ImageView
-                   android:id="@+id/imageview_hint_password" 
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:layout_marginLeft="10dp"
-                   android:layout_marginRight="10dp"
-                   android:src="@drawable/share_vote_chb_1"
-                   android:visibility="gone" />
-                   
-               <TextView 
-                   android:id="@+id/textView_isshow_password"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:textColor="@color/black_30"
-                   android:text="显示密码 "/>
-            </LinearLayout>
-            
-            <!-- 验证两次输入的密码是否一致 -->
-            <TextView
-                android:id="@+id/textView_verification_newPassword" 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:textColor="@color/red"
-                android:text="两次输入不一致"
-                android:visibility="gone"/>
-            
-			<!-- 提交重新设置后的密码 -->
-            <Button
-                android:id="@+id/btn_newPassWord_ok"
-                style="@style/button_blue"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/padding_small"
-                android:text="@string/login_newPassWord_ok" />
 
         </LinearLayout>
     </RelativeLayout>

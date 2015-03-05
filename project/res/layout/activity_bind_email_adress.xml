@@ -20,7 +20,7 @@
             android:background="@null"
             android:src="@drawable/nav_back_selector"/>
         
-        <!-- 添加找回密码页表头的文本 -->
+        <!-- 绑定邮箱页表头的文本 -->
         <TextView 
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"

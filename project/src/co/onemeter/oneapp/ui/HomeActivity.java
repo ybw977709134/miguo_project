@@ -86,7 +86,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             			});
             			builder.create().show();
             		} else {
-            			Toast.makeText(HomeActivity.this, bindEmail, Toast.LENGTH_SHORT).show();
+//            			Toast.makeText(HomeActivity.this, bindEmail, Toast.LENGTH_SHORT).show();
             		} 
             	} else {
             		Toast.makeText(HomeActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();

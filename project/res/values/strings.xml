@@ -242,6 +242,7 @@
 	<string name="settings_account_wowid_already_changed">一米家校ID只能修改一次</string>
 	<string name="settings_account_wowid_used_by_others">您所设置的用户 ID已经存在，请重新选择一个用户 ID</string>
 	<string name="settings_account_email_used_by_others">您要绑定的邮箱已经绑定到其它帐号,请使用其它邮箱</string>
+	<string name="settings_account_email_used">该用户已绑定其它邮箱</string>
 	<string name="settings_account_phone_used_by_others">您要绑定的手机号码已经绑定到其它帐号</string>
 	<string name="settings_account_passwd_format_error">密码格式不正确，可以使用6-20个字母，数字，下划线和减号</string>
 	<string name="settings_account_pwdConfrim_format_error">密码格式不正确，可以使用6-20个字母，数字，下划线和减号</string>
@@ -374,6 +375,7 @@
     <string name="bind_phone_pwd_err">密码错误，请重新输入</string>
     <string name="bind_phone_failed">手机号绑定失败</string>
     <string name="bind_email_failed">邮箱绑定失败</string>
+    <string name="fix_bind_email_failed">修改邮箱绑定失败</string>
     <string name="bind_email_successed">邮箱绑定成功</string>
     <string name="access_code_error">验证码不正确</string>
     <string name="register_must_input_id">WowTalk ID不能为空</string>
@@ -463,6 +465,7 @@
     <string name="login_findPassWord_cancel">取消</string>
     <string name="login_findPassWord_ok">确定</string>
     <string name="login_newPassWord_ok">确定</string>
+    <string name="fix_bindEmail_ok">确定</string>
     <string name="login_receive_verificationCode_btn">获取验证码</string>
     <string name="login_again_receive_verificationCode_btn">重新获取验证码</string>
     <string name="automatically_registered">自动注册</string>

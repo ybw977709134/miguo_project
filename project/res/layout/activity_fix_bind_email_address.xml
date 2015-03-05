@@ -24,7 +24,7 @@
         <TextView 
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:id="@+id/textView_bindEmail_back"
+            android:id="@+id/textView_fixBindEmail_back"
             android:layout_toRightOf="@id/title_back"
             android:layout_centerVertical="true"
             android:textColor="@color/white"
@@ -46,7 +46,7 @@
 
         <!-- 取消 -->
         <TextView
-            android:id="@+id/textView_findPassword_cancel"
+            android:id="@+id/textView_fixBindEmail_cancel"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_centerVertical="true"
@@ -62,5 +62,87 @@
         
     </RelativeLayout>
     
+      <!-- 对绑定邮箱的输入格式和是否绑定进行验证 -->
+    <RelativeLayout
+        android:id="@+id/layout_verification_email"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_bar"
+        android:gravity="center"
+        >
+        
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_large"
+                android:background="@color/white"
+                android:orientation="vertical" >
+
+                <ImageView
+                    style="@style/standard_list_divider"/>
+                
+				<RelativeLayout 
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content">
+				<!-- 输入绑定邮箱 获得的验证码-->    
+                <EditText
+                    android:id="@+id/txt_access_code"
+                    style="@style/inputbox_borderless"
+                    android:imeOptions="actionDone"
+                    android:hint="@string/login_input_verification"/>
+                <!-- 获取旧的绑定邮箱 验证码的按钮事件-->
+                <Button
+        			android:id="@+id/btn_access_code"
+        			android:layout_height="wrap_content"
+        			android:layout_width="wrap_content"
+        			android:layout_alignRight="@+id/txt_access_code"
+        			android:layout_marginRight="5dp"
+        			android:layout_centerVertical="true"
+        			android:text="获取验证码"
+        			android:textColor="@color/blue"
+        			android:background="@drawable/btn_small_valid"/>
+                
+                </RelativeLayout>
+
+                <ImageView
+                    style="@style/standard_list_divider"/>
+            </LinearLayout>
+            
+            <TextView 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/black_30"
+                android:text="请输入旧邮箱收到的验证码"/>
+
+            <!-- 绑定邮箱的验证结果 -->
+            <TextView 
+                android:id="@+id/textView_verification_code_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/red"
+                android:visibility="gone"
+                android:text="ddd"
+                />
+			<!-- 确认输入的绑定邮箱 -->
+            <Button
+                android:id="@+id/btn_verification_code"
+                style="@style/button_blue"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_small"
+                android:text="@string/fix_bindEmail_ok" />
+
+        </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -55,6 +55,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 	private MessageBox mMsgBox;
 	
 	private String bindEmail = null;//是否绑定邮箱
+	private static final int BIND_EMAIL_REQUEST_CODE = 1;//绑定邮箱页面的请求码
 
 	public static final AccountSettingActivity instance() {
 		if (instance != null)
@@ -240,28 +241,16 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 			Toast.makeText(AccountSettingActivity.this, "功能尚未实现..", Toast.LENGTH_LONG).show();
 			break;
 		case R.id.layout_bind_email:
-//		    String email = txtEmail.getText().toString();
-//		    if (!mPrefUtil.getMyPasswordChangedState()) {
-//		        mMsgBox.toast(R.string.accountsetting_bindphone_email_set_pwd_first);
-//		    } else if (!TextUtils.isEmpty(email) && !getResources().getString(R.string.not_binded).equals(email)) {
-//		        Intent bindEmailIntent = new Intent(AccountSettingActivity.this, UnBindActivity.class);
-//		        bindEmailIntent.putExtra(UnBindActivity.UNBIND_PHONE_EMAIL_VALUE, email);
-//		        bindEmailIntent.putExtra(UnBindActivity.UNBIND_TYPE, UnBindActivity.UNBIND_TYPE_EMAIL);
-//                startActivity(bindEmailIntent);
-//            } else {
-//                Intent bindEmailIntent = new Intent(AccountSettingActivity.this, BindEmailActivity.class);
-//                startActivity(bindEmailIntent);
-//            }
-			
+
 		    if (!mPrefUtil.getMyPasswordChangedState()) {
 		        mMsgBox.toast(R.string.accountsetting_bindphone_email_set_pwd_first);
 		    } else  {
 		    	if (bindEmail != null) {//绑定了邮箱，点击进入，修改邮箱的解绑界面
-		    		Intent fixEmailIntent = new Intent(AccountSettingActivity.this, FixBindEmailAddressActivity.class);
-		    		startActivity(fixEmailIntent);
+//		    		Intent fixEmailIntent = new Intent(AccountSettingActivity.this, FixBindEmailAddressActivity.class);
+//		    		startActivity(fixEmailIntent);
 		    	} else {//未绑定邮箱进入绑定邮箱界面
 		    		Intent bindEmailIntent = new Intent(AccountSettingActivity.this, BindEmailAddressActivity.class);
-		    		startActivity(bindEmailIntent);
+		    		startActivityForResult(bindEmailIntent, BIND_EMAIL_REQUEST_CODE);
 		    	}
 		    }
 			
@@ -286,32 +275,9 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 		instance = this;
 		initView();
 		
+		//检测用户绑定邮箱的状态
+		bindEmailStatus ();
 
-
-			AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, List<Map<String, Object>>> () {
-
-	            @Override
-	            protected List<Map<String, Object>> doInBackground(Void... params) {
-	                return WowTalkWebServerIF.getInstance(AccountSettingActivity.this).fEmailBindStatus();
-	            }
-
-	            @Override
-	            protected void onPostExecute(List<Map<String, Object>> result) {
-	            	if (result != null) {
-	            	bindEmail = (String) result.get(0).get("email");
-	            	
-	            	if (bindEmail != null) {//说明绑定邮箱，显示绑定的邮箱
-	            		txtEmail.setText(bindEmail);
-	            		
-	            	} else {//未绑定，显示请绑定邮箱
-	            		txtEmail.setText(getResources().getString(R.string.settings_account_bindEmail));
-	            	} 
-	            } else {
-	            	Toast.makeText(AccountSettingActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
-	            }
-	            
-	            } 
-	        });
 	}
 
     @Override
@@ -328,4 +294,58 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
         super.onPause();
         MobclickAgent.onPause(this);
     }
+    
+    /**
+     * 检测用户绑定邮箱的状态
+     */
+    private void bindEmailStatus () {
+    	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, List<Map<String, Object>>> () {
+
+            @Override
+            protected List<Map<String, Object>> doInBackground(Void... params) {
+                return WowTalkWebServerIF.getInstance(AccountSettingActivity.this).fEmailBindStatus();
+            }
+
+            @Override
+            protected void onPostExecute(List<Map<String, Object>> result) {
+            	if (result != null) {
+            	bindEmail = (String) result.get(0).get("email");
+            	
+            	if (bindEmail != null) {//说明绑定邮箱，显示绑定的邮箱
+            		txtEmail.setText(bindEmail);
+            		
+            	} else {//未绑定，显示请绑定邮箱
+            		txtEmail.setText(getResources().getString(R.string.settings_account_bindEmail));
+            	} 
+            } else {
+            	Toast.makeText(AccountSettingActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
+            }
+            
+            } 
+        });
+    }
+    
+    /**
+     * 绑定邮箱成功后返回到设置界面，显示你已经绑定的邮箱
+     * @author hutianfeng
+     * @date 2015/3/5
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	super.onActivityResult(requestCode, resultCode, data);
+    	if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+			case BIND_EMAIL_REQUEST_CODE://绑定邮箱成功后的处理结果
+				Toast.makeText(AccountSettingActivity.this, getString(R.string.bind_email_successed), Toast.LENGTH_LONG).show();
+//				mMsgBox.show(null, getString(R.string.bind_email_successed));
+				bindEmailStatus ();
+//				mMsgBox.dismissDialog();
+				
+				break;
+			default:
+				break;
+			}
+    	}
+    }
+    
 }

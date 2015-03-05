@@ -537,7 +537,7 @@ public class WowTalkWebServerIF {
 	 * @date 2015/3/4
 	 * @return
 	 */
-	public int fFixBindEmailAddress() {
+	public int fUnBindEmailAddress() {
 		String uid = sPrefUtil.getUid();
 		String password = sPrefUtil.getPassword();
 		

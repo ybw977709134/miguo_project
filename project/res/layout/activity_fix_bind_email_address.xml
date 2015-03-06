@@ -30,7 +30,6 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             android:clickable="true"
-            android:onClick="clickButton"
             android:text="返回"/>
         
         <TextView
@@ -57,14 +56,12 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             android:clickable="true"
-            android:onClick="clickButton"
             android:text="取消"/>
         
     </RelativeLayout>
     
       <!-- 对绑定邮箱的输入格式和是否绑定进行验证 -->
     <RelativeLayout
-        android:id="@+id/layout_verification_email"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title_bar"
@@ -130,9 +127,8 @@
                 android:layout_marginBottom="5dp"
                 android:gravity="center_vertical"
                 android:textColor="@color/red"
-                android:visibility="gone"
-                android:text="ddd"
-                />
+                android:visibility="gone" />
+            
 			<!-- 确认输入的绑定邮箱 -->
             <Button
                 android:id="@+id/btn_verification_code"

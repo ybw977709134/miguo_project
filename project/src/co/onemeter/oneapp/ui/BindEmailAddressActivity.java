@@ -215,6 +215,10 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 		case R.id.textView_bindEmail_back:
 		case R.id.title_back:
 			if (pageFlag == BIND_EMAIL_PAGE) {
+//				Intent intent = new Intent();
+//                setResult(RESULT_OK, intent);
+              //返回时，没验证或验证不通过的都要解绑
+    			unBindEmailAddress();
 				finish();
 			} else if (pageFlag == AUTH_CODE_PAGE) {
 				pageFlag = BIND_EMAIL_PAGE;
@@ -225,10 +229,6 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 				textView_verification_email_result.setVisibility(View.GONE);
 				textView_verification_authCode_result.setVisibility(View.GONE);
 			} 
-			
-			//返回时，没验证或验证不通过的都要解绑
-			unBindEmailAddress();
-			
 			break;
 			
 		//取消
@@ -242,6 +242,8 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 				public void onClick(DialogInterface arg0, int arg1) {
 					//取消绑定邮箱，解绑
 					unBindEmailAddress();
+					Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
 					finish();
 				}
 			});

@@ -14,6 +14,7 @@ import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -25,15 +26,21 @@ import android.widget.LinearLayout;
 public class LessonDetailActivity extends Activity implements OnClickListener {
 	
 	private static final int REQ_PARENT_FEEDBACK = 100;
+	private static final int REQ_CLASSROOM_FEEDBACK = 1001;
 	
 	private int lessonId;
 	private String classId;
+	private String schoolId;
 	private Lesson lesson;
+	private long startdate;
+	private long enddate;
+	private int roomId;
 	
 	protected void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_lesson_detail);
 		initView();
+		Log.d("--------lessonId-------", lessonId+"");
 	};
 
 	private void initView(){
@@ -44,6 +51,9 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			lessonId = intent.getIntExtra(Constants.LESSONID,0);
 			classId = intent.getStringExtra("classId");
 			lesson = intent.getParcelableExtra("lesson");
+			schoolId = intent.getStringExtra("schoolId");
+			startdate = intent.getLongExtra("startdate", 0);
+			enddate = intent.getLongExtra("enddate", 0);
 		}
 		q.find(R.id.title_back).clicked(this);
 		
@@ -57,12 +67,12 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			q.find(R.id.text_first).textColor(getResources().getColor(R.color.text_gray4));
 			q.find(R.id.text_second).textColor(getResources().getColor(R.color.text_gray4));
 			q.find(R.id.text_third).textColor(getResources().getColor(R.color.text_gray4));
-			q.find(R.id.text_classroom).textColor(getResources().getColor(R.color.text_gray4));
+//			q.find(R.id.text_classroom).textColor(getResources().getColor(R.color.text_gray4));
 			lay_first.setEnabled(false);
 			lay_second.setEnabled(false);
 			lay_third.setEnabled(false);
-			lay_classroom.setEnabled(false);
-			lay_camera.setEnabled(false);
+//			lay_classroom.setEnabled(false);
+//			lay_camera.setEnabled(false);
 		}
 		if(isTeacher()){
 			q.find(R.id.text_first).text(getString(R.string.class_lesson_situation_table));
@@ -149,10 +159,16 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			
 		case R.id.les_lay_classroom:
 			intent.setClass(this, ClassroomActivity.class);
-			startActivity(intent);
+			intent.putExtra("schoolId", schoolId);
+			intent.putExtra("start_date", startdate);
+			intent.putExtra("end_date", enddate);
+			intent.putExtra("lessonId", lessonId);
+			startActivityForResult(intent,REQ_CLASSROOM_FEEDBACK);
 			break;
 		case R.id.les_lay_camera:
 			intent.setClass(this, CameraActivity.class);
+			intent.putExtra("schoolId", schoolId);
+			intent.putExtra("roomId", roomId);
 			startActivity(intent);
 			break;
 		default:
@@ -166,6 +182,9 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			if(requestCode == REQ_PARENT_FEEDBACK){
 				AQuery q = new AQuery(this);
 				q.find(R.id.text_third_r).text(getString(R.string.class_parent_opinion_submitted));
+			}else if(requestCode == REQ_CLASSROOM_FEEDBACK){
+				roomId = data.getIntExtra("roomId",0);
+				Log.i("-----onActivityResult----------", roomId+"");
 			}
 		}
 	}

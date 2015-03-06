@@ -37,6 +37,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class VideoPlayingActivity extends Activity {
 
 	private static final String TAG = "VideoPlayingActivity";
+	private String httpURL = null;
 
 	class EventHandler extends Handler {
 		public EventHandler(Looper looper) {
@@ -406,6 +407,9 @@ public class VideoPlayingActivity extends Activity {
 
 		mLock = new ReentrantLock();
 		getLink();
+		httpURL = getIntent().getStringExtra("httpURL");
+		Log.i("---------httpURL-----------", httpURL);
+		
 	}
 
 	@Override
@@ -537,10 +541,11 @@ public class VideoPlayingActivity extends Activity {
 	}
 	
 	private String getLink(){
-		String strLink = "http://www.onemeter.co/MmY0NzU3M2UwOTRiM2RjNjlmMjg2YjU3MzQ5MjM1NTQmdWs9ODU4ODM1MTAwShMetowEr";
+//		String strLink = "http://www.onemeter.co/MmY0NzU3M2UwOTRiM2RjNjlmMjg2YjU3MzQ5MjM1NTQmdWs9ODU4ODM1MTAwShMetowEr";
+		String strLink  = httpURL;
 		DES des = new DES();
 		String decodeLink = des.authcode(strLink, "ENCODE");
-		Log.d("------------------", decodeLink);
+//		Log.d("------------------", decodeLink);
 		return decodeLink;
 	}
 

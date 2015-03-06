@@ -8,9 +8,15 @@ import android.os.Parcelable;
  * Created by zz on 03/03/15.
  */
 public class Classroom implements Parcelable{
-	public int lesson_id;
-	public int room_id;
+	public int id;
+	public String school_id;
 	public String room_name;
+	public String room_num;
+	public int students;
+	public int is_camera;
+	public int camaras;
+	public int is_multimedia;
+	
 	@Override
 	public int describeContents() {
 		return 0;
@@ -18,9 +24,15 @@ public class Classroom implements Parcelable{
 
 	@Override
 	public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeInt(lesson_id);
-        parcel.writeInt(room_id);
+        parcel.writeInt(id);
+        parcel.writeString(school_id);
         parcel.writeString(room_name);
+        parcel.writeString(room_num);
+        parcel.writeInt(students);
+        parcel.writeInt(is_camera);
+        parcel.writeInt(camaras);
+        parcel.writeInt(is_multimedia);
+        
 	}
 	
 	public final static Creator<Classroom> CREATOR = new Creator<Classroom>() {
@@ -33,9 +45,14 @@ public class Classroom implements Parcelable{
 		@Override
 		public Classroom createFromParcel(Parcel parcel) {
 			Classroom  c = new Classroom();
-            c.lesson_id = parcel.readInt();
-            c.room_id = parcel.readInt();
+            c.id = parcel.readInt();
+            c.school_id = parcel.readString();
             c.room_name = parcel.readString();
+            c.room_num = parcel.readString();
+            c.students = parcel.readInt();
+            c.is_camera = parcel.readInt();
+            c.camaras = parcel.readInt();
+            c.is_multimedia = parcel.readInt();
 			return null;
 		}
 	};

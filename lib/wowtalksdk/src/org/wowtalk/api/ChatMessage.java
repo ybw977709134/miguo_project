@@ -239,6 +239,7 @@ public class ChatMessage {
     public static String MSGTYPE_MOMENT = "r";
 	/**Message Type : hybird of text, image, and voice. */
 	public static String MSGTYPE_PIC_VOICE = "o";
+	public static String MSGTYPE_SCHOOL_STRUCTURE_CHANGED = "s";
     public static String MSGTYPE_OUTGOING_MSG = "z";
 
     public static String MSGTYPE_SYSTEM_PROMPT = "local_a";

@@ -6124,6 +6124,23 @@ public class Database {
         markDBTableModified(TBL_MOMENT_REVIEWS);
     }
 
+    public String getParentGroupId(String classId){
+        if (isDBUnavailable()) {
+            return null;
+        }
+        Cursor cursor = database.query(TBL_GROUP, new String[]{"parent_group_id"}, "group_id = ?", new String[]{classId}, null, null, null);
+        String parent_group_id = null;
+        if(cursor != null && cursor.moveToFirst()){
+        	parent_group_id = cursor.getString(0);
+        }      
+        
+        if (null != cursor && !cursor.isClosed()) {
+        	cursor.close();
+        }
+
+		return parent_group_id;
+    	
+    }
     public List<GroupChatRoom> fetchSchools() {
         List<GroupChatRoom> schools = _fetchGroupChatRooms(
                 "category=?", new String[] { GroupChatRoom.CATEGORY_SCHOOL });

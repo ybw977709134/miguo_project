@@ -1,18 +1,18 @@
 package co.onemeter.oneapp.ui;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.wowtalk.api.Classroom;
-import org.wowtalk.api.Lesson;
+import org.wowtalk.api.LessonWebServerIF;
 
 import com.androidquery.AQuery;
 
 import android.app.Activity;
-import android.graphics.Color;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -21,11 +21,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.ClassDetailActivity.CourseTableAdapter;
-import co.onemeter.oneapp.ui.ClassDetailActivity.CourseTableAdapter.ViewHodler;
-import co.onemeter.oneapp.utils.Utils;
+import co.onemeter.utils.AsyncTaskExecutor;
 
 /**
  * 教室选择页面。
@@ -35,13 +34,18 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 	private List<Classroom> classroom;
 	private ClassroomAdapter classroomAdapter;
 	private ListView listView_classroom_show;
+	private String schoolId;
+	private long startdate;
+	private long enddate;
+	private int roomId;
+	private int lessonId;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_classroom);
 		
 		initView();
-
+		getClassroomInfo();
 	}
 	
 	private void initView(){
@@ -55,6 +59,10 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 		classroomAdapter = new ClassroomAdapter(classroom);
 		listView_classroom_show.setAdapter(classroomAdapter);
 		
+		schoolId = getIntent().getStringExtra("schoolId");
+		startdate = getIntent().getLongExtra("start_date", 0);
+		enddate = getIntent().getLongExtra("end_date", 0);
+		lessonId = getIntent().getIntExtra("lessonId", 0);
 	}
 
 	@Override
@@ -64,6 +72,7 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 			finish();
 			break;
 		case R.id.classroom_refresh:
+			getClassroomInfo();
 			break;
 		}
 		
@@ -72,8 +81,52 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		// TODO Auto-generated method stub
-		
+		roomId = classroom.get(position).id;
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+
+			@Override
+			protected Integer doInBackground(Void... params) {
+				int status= LessonWebServerIF.getInstance(ClassroomActivity.this).setUseRoom(roomId, lessonId + "");				
+				return status;
+			}
+			
+			@Override
+			protected void onPostExecute(Integer result) {
+				super.onPostExecute(result);
+				if(result == 1){
+					Toast.makeText(ClassroomActivity.this, "OK", Toast.LENGTH_LONG).show();
+					Intent intent = new Intent();
+				    intent.putExtra("roomId", roomId);
+				    setResult(RESULT_OK, intent);
+				    finish();
+				}else if(result == 0){
+					Toast.makeText(ClassroomActivity.this, "Room is busy", Toast.LENGTH_LONG).show();
+				}else if(result == -1){
+					Toast.makeText(ClassroomActivity.this, "stupid", Toast.LENGTH_LONG).show();
+				}
+			}
+			
+		});
+
+	}
+	
+	private void getClassroomInfo(){
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+
+			@Override
+			protected Integer doInBackground(Void... params) {
+				classroom.addAll(LessonWebServerIF.getInstance(ClassroomActivity.this)
+						.getClassroom(schoolId, startdate, enddate));
+				return null;
+			}
+			
+			@Override
+			protected void onPostExecute(Integer result) {
+				super.onPostExecute(result);
+				classroomAdapter.notifyDataSetChanged();
+			}
+
+		});
 	}
 	
 	class ClassroomAdapter extends BaseAdapter{

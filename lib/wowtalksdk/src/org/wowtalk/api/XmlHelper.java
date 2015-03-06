@@ -964,7 +964,87 @@ public class XmlHelper {
         }
         return result;
     }
+    public static Camera parseCamera(Element roomElement){
+    	Camera camera = new Camera();
+    	Element e;
 
+        e = Utils.getFirstElementByTagName(roomElement, "id");
+        if(e != null)
+        	camera.id = Integer.parseInt(e.getTextContent());
+
+        e = Utils.getFirstElementByTagName(roomElement, "name");
+        if(e != null)
+        	camera.camera_name = e.getTextContent();
+
+        e = Utils.getFirstElementByTagName(roomElement, "mac");
+        if(e != null)
+        	camera.mac = e.getTextContent();
+        
+        e = Utils.getFirstElementByTagName(roomElement, "http");
+        if(e != null)
+        	camera.httpURL = e.getTextContent();
+
+        e = Utils.getFirstElementByTagName(roomElement, "order_id");
+        if(e != null)
+        	camera.order_id = e.getTextContent();
+
+        e = Utils.getFirstElementByTagName(roomElement, "im_id");
+        if(e != null)
+        	camera.im_id = e.getTextContent();
+        
+        e = Utils.getFirstElementByTagName(roomElement, "school_id");
+        if(e != null)
+        	camera.school_id = e.getTextContent();
+        
+        e = Utils.getFirstElementByTagName(roomElement, "status");
+        if(e != null)
+        	camera.status = Integer.parseInt(e.getTextContent());
+
+
+		return camera;
+    	
+    }
+    public static Classroom parseRoom(Element roomElement){
+    	Classroom room = new Classroom();
+
+        Element e;
+
+        e = Utils.getFirstElementByTagName(roomElement, "id");
+        if(e != null)
+        	room.id = Integer.parseInt(e.getTextContent());
+
+        e = Utils.getFirstElementByTagName(roomElement, "school_id");
+        if(e != null)
+        	room.school_id = e.getTextContent();
+
+        e = Utils.getFirstElementByTagName(roomElement, "room_name");
+        if(e != null)
+            room.room_name = e.getTextContent();
+
+        e = Utils.getFirstElementByTagName(roomElement, "room_num");
+        if(e != null)
+        	room.room_num = e.getTextContent();
+
+        e = Utils.getFirstElementByTagName(roomElement, "students");
+        if(e != null)
+            room.students = Integer.parseInt(e.getTextContent());
+        
+        e = Utils.getFirstElementByTagName(roomElement, "is_camera");
+        if(e != null)
+            room.is_camera = Integer.parseInt(e.getTextContent());
+        
+        e = Utils.getFirstElementByTagName(roomElement, "camaras");
+        if(e != null)
+            room.camaras = Integer.parseInt(e.getTextContent());
+        
+        e = Utils.getFirstElementByTagName(roomElement, "is_multimedia");
+        if(e != null)
+            room.is_multimedia = Integer.parseInt(e.getTextContent());
+
+		return room;
+    	
+    }
+    
     public static Lesson parseLesson(Element lessonElement) {
         Lesson lesson = new Lesson();
         Element e;

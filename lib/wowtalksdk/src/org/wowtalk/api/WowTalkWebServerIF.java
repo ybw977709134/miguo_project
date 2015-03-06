@@ -570,6 +570,23 @@ public class WowTalkWebServerIF {
 	}
 	
 	/**
+	 * 重置密码
+	 * @param emailAddress
+	 * @return
+	 * @author hutianfeng
+	 * @date 2015/3/6
+	 */
+	public int newRetrievePassword(String wowtalk_id,String emailAddress) {
+		
+		String action = "retrieve_password";
+		String postStr = "action=" + action
+				+ "&wowtalk_id=" + Utils.urlencodeUtf8(wowtalk_id)
+				+ "&email_address=" + Utils.urlencodeUtf8(emailAddress);
+		
+		return _doRequestWithoutResponse(postStr);
+	}
+	
+	/**
 	 * Bind my account with a email address.
 	 * @param email
 	 * @param password

@@ -153,7 +153,7 @@
 				android:layout_marginTop="@dimen/padding_large"
 				android:layout_marginLeft="@dimen/padding_large"
 				android:layout_marginRight="@dimen/padding_large"
-				android:textColor="@color/blue"/>
+				android:textColor="@color/white"/>
 			<!--  
 			<Button
 				android:id="@+id/login_qrcode"

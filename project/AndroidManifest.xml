@@ -580,6 +580,12 @@
 		<activity android:name=".ui.ForgetPasswordActivity"
 		          android:screenOrientation="portrait"
 			/>
+		
+		<!-- 邮箱密码找回 -->
+		<activity android:name=".ui.FindPasswordEmialActivity"
+		          android:screenOrientation="portrait"
+			/>
+		
 		<!-- 绑定邮箱 -->
 		<activity android:name=".ui.BindEmailAddressActivity"
 		          android:screenOrientation="portrait"

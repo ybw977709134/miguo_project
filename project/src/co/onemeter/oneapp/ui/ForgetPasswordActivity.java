@@ -1,9 +1,17 @@
 package co.onemeter.oneapp.ui;
 
+import java.util.List;
+import java.util.Map;
+
+import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.ui.MessageBox;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -19,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
 
 /**
  * <p>找回密码。</p>
@@ -65,11 +74,19 @@ public class ForgetPasswordActivity extends Activity implements OnClickListener 
 	private TextView textView_verification_newPassword;//验证新设置的密码两次设置是否一致
 	private Button btn_newPassWord_ok;//提交重新设置后的密码
 	
+	private MessageBox mMsgBox;
+	private String bindEmail = null;
+	
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
+        mMsgBox = new MessageBox(this);
         initView();
+        
+//        bindEmailStatus ();
+        
     }
     
     /**
@@ -228,9 +245,13 @@ public class ForgetPasswordActivity extends Activity implements OnClickListener 
 		//验证绑定邮箱	
 		case R.id.btn_verification_email:
 			//成功时
-			pageFlag = AUTH_CODE_PAGE;//2
-			layout_verification_email.setVisibility(View.GONE);
-			layout_verification_auth_code.setVisibility(View.VISIBLE);
+//			pageFlag = AUTH_CODE_PAGE;//2
+//			layout_verification_email.setVisibility(View.GONE);
+//			layout_verification_auth_code.setVisibility(View.VISIBLE);
+			
+//			bindEmailStatus ();
+			ret("Back3","2364611478@qq.com");
+			
 			break;
 			
 		//验证验证码	
@@ -275,6 +296,60 @@ public class ForgetPasswordActivity extends Activity implements OnClickListener 
 		}
 		
 	}
+	
+	
+	
+	 /**
+     * 检测用户绑定邮箱的状态
+     */
+    private void bindEmailStatus () {
+    	mMsgBox.showWait();
+    	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, List<Map<String, Object>>> () {
+    		
+            @Override
+            protected List<Map<String, Object>> doInBackground(Void... params) {
+                return WowTalkWebServerIF.getInstance(ForgetPasswordActivity.this).fEmailBindStatus();
+            }
+
+            @Override
+            protected void onPostExecute(List<Map<String, Object>> result) {
+            	mMsgBox.dismissWait();
+            	if (result != null) {
+            	bindEmail = (String) result.get(0).get("email");
+            } else {
+            	Toast.makeText(ForgetPasswordActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
+            }
+            
+            } 
+        });
+    }
+    
+    private void ret(final String wowtalk_id,final String emailAddress) {
+    	mMsgBox.showWait();
+    	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
+
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return WowTalkWebServerIF.getInstance(ForgetPasswordActivity.this).newRetrievePassword(wowtalk_id,emailAddress);
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                mMsgBox.dismissWait();
+               
+                switch (result) {
+                    case ErrorCode.OK://0
+                    	mMsgBox.show(null,"重置密码成功");
+                    	mMsgBox.dismissDialog();
+                        break;
+                    default://邮箱绑定失败
+                        mMsgBox.show(null, getString(R.string.bind_email_failed));
+                        mMsgBox.dismissDialog();
+                        break;
+                }
+            }
+        });
+    }
 	
 }
 

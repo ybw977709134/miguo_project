@@ -80,7 +80,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             				@Override
             				public void onClick(DialogInterface arg0, int arg1) {
             					Intent intent = new Intent();
-            					intent.setClass(HomeActivity.this, BindEmailAddressActivity.class);
+            					intent.setClass(HomeActivity.this, AccountSettingActivity.class);
             					startActivity(intent);
             				}
             			});

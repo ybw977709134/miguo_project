@@ -45,11 +45,14 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 	
 	private Button btn_verification_code;//确认
 	
+	private static final int REBIND_EMAIL_REQUEST_CODE = 3;//修改绑定邮箱页面的请求码
+	
 	private MessageBox mMsgBox;
 	String bindEmail= null;
 	
 	private int time;
 	private Timer mTimer;
+	
 	
 	private Handler mHandler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
@@ -91,6 +94,12 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
             
             } 
         });
+		
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
 	}
 	
 	
@@ -108,7 +117,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 		textView_verification_code_result = (TextView) findViewById(R.id.textView_verification_code_result);
 		btn_verification_code = (Button) findViewById(R.id.btn_verification_code);
 		btn_verification_code.setEnabled(false);
-		btn_verification_code.setBackgroundResource(getResources().getColor(R.color.gray));
+		btn_verification_code.setBackgroundColor(R.color.gray);
 		
 		title_back.setOnClickListener(this);
 		textView_fixBindEmail_back.setOnClickListener(this);
@@ -156,12 +165,13 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 			break;
 			
 		case R.id.btn_access_code:
-			stopGetAccessCode();
+			textView_verification_code_result.setVisibility(View.GONE);
 			getAccessCode(bindEmail);
+			stopGetAccessCode();
 			break;
 			
 		case R.id.btn_verification_code://确认，跳转到绑定邮箱界面
-			verifyBindEmailAddress(txt_access_code.getText().toString(),bindEmail);
+			verifyAccessCode(txt_access_code.getText().toString(),bindEmail);
 			break;
 		default:
 			break;
@@ -185,7 +195,6 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 		time = 60;
 		
 		mTimer = new Timer();
-		
 		mTimer.schedule(new TimerTask() {
 			
 			@Override
@@ -195,8 +204,6 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 		}, 0, 1000);
 		
 	}
-	
-
 	
 	/**
 	 * 
@@ -217,17 +224,23 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 
             @Override
             protected void onPostExecute(Integer result) {
-                mMsgBox.dismissWait();
-               
+            	mMsgBox.dismissWait();
                 switch (result) {
                     case ErrorCode.OK://0
                     	btn_verification_code.setEnabled(true);
-                    	btn_verification_code.setBackgroundResource(getResources().getColor(R.color.blue));
+                    	btn_verification_code.setBackgroundColor(R.color.blue);
                         break;
+                                 	
+                    case ErrorCode.ERR_OPERATION_DENIED://37:该用户已绑定其它邮箱//对自己而言，说明我是绑定的邮箱
+                    	fixBindEmailAddress();
+                    	break;
   
                     default://获取验证码失败
-                        mMsgBox.show(null, "获取验证码失败");
-                        break;
+//                        mMsgBox.show(null, "获取验证码失败");
+                        textView_verification_code_result.setVisibility(View.VISIBLE);
+                        textView_verification_code_result.setText("获取验证码失败");
+                        Toast.makeText(FixBindEmailAddressActivity.this, "获取验证码失败", Toast.LENGTH_SHORT).show();
+                        break;    
                 }
             }
         });
@@ -240,7 +253,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 	 * @author hutainfeng
 	 * @date 2015/3/5
 	 */
-	private void verifyBindEmailAddress(final String access_code,final String emailAddress) {
+	private void verifyAccessCode(final String access_code,final String emailAddress) {
 		mMsgBox.showWait();
 		
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
@@ -257,8 +270,8 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                 switch (result) {
                     case ErrorCode.OK://0 
                     	unBindEmailAddress();
+                    	Intent bindEmialIntent = new Intent(FixBindEmailAddressActivity.this, BindEmailAddressActivity.class);
                     	
-                        
                         break;
                         
                     case ErrorCode.ACCESS_CODE_ERROR://22:无效的验证码，验证码有有效期，目前是一天的有效期
@@ -297,7 +310,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                 switch (result) {
                     case ErrorCode.OK://0 //解绑成功后方可跳转到重新绑定邮箱的界面       	
                     	Intent intent = new Intent(FixBindEmailAddressActivity.this,BindEmailAddressActivity.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, REBIND_EMAIL_REQUEST_CODE);
                         break;
                         
                     default:
@@ -308,7 +321,56 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
             }
         });
 	}
+	
+	/**
+	 * 由于缺少接口，使用此方法来获取已绑定邮箱的验证码
+	 */
+	private void fixBindEmailAddress() {
 
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return WowTalkWebServerIF.getInstance(FixBindEmailAddressActivity.this).fUnBindEmailAddress();
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+               
+                switch (result) {
+                    case ErrorCode.OK://0 //解绑成功后方可跳转到重新绑定邮箱的界面       
+                    	getAccessCode(bindEmail);
+                        break;   
+                    default:
+                        mMsgBox.show(null, "请检查网络");
+                        mMsgBox.dismissDialog();
+                        break;
+                }
+            }
+        });
+	}
+	
+	/**
+     * 绑定邮箱成功后返回到设置界面，显示你已经绑定的邮箱
+     * @author hutianfeng
+     * @date 2015/3/5
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	super.onActivityResult(requestCode, resultCode, data);
+    	if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+			case REBIND_EMAIL_REQUEST_CODE://解除绑定，重新绑定邮箱成功后的处理结果
+				Intent intent = new Intent(FixBindEmailAddressActivity.this, AccountSettingActivity.class);
+				intent.putExtra("isband", true);
+				startActivity(intent);
+				finish();
+				break;
+			
+			default:
+				break;
+			}
+    	}
+    }
 	
 }

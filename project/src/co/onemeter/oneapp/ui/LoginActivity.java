@@ -406,7 +406,7 @@ public class LoginActivity extends Activity implements OnClickListener {
      * 跳转到找回密码的界面
      */
     private void fGotoFetchPwd() {
-		Intent fetchIntent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+		Intent fetchIntent = new Intent(LoginActivity.this, FindPasswordEmialActivity.class);
 		startActivity(fetchIntent);
 	}
 

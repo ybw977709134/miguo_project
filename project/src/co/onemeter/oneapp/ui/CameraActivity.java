@@ -3,12 +3,17 @@ package co.onemeter.oneapp.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Camera;
 import org.wowtalk.api.LessonWebServerIF;
+import org.wowtalk.api.PrefUtil;
 
 import com.androidquery.AQuery;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,6 +29,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.liveplayer.VideoPlayingActivity;
+import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
 /**
  * 摄像头控制页面。
@@ -59,18 +65,45 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 		
 		schoolId = getIntent().getStringExtra("schoolId");
 		roomId = getIntent().getIntExtra("roomId",0);
+		lessonId = getIntent().getIntExtra("lessonId", 0);
 		cameras = new  ArrayList<Camera>();
 		listView_camera_show = (ListView) findViewById(R.id.listView_camera_show);
 		cameraAdapter = new CameraAdapter();
 		listView_camera_show.setAdapter(cameraAdapter);	
 		listView_camera_show.setOnItemClickListener(this);
+		
+		if(Utils.isAccoTeacher(this)){
+			listView_camera_show.setEnabled(false);
+		}
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.title_back:
-			saveCamerasStatus();
+			if(Utils.isAccoTeacher(this)){
+				Builder alertDialog = new AlertDialog.Builder(CameraActivity.this);
+				alertDialog.setTitle("提示");
+				alertDialog.setMessage("确定保存修改吗？");
+				alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						saveCamerasStatus();
+					}
+				});  
+				alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {			
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						finish();
+					}
+				});
+				alertDialog.create().show();
+			}else{
+				finish();
+			}
+
+
 			break;
 		}
 		
@@ -125,7 +158,7 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 			@Override
 			protected Integer doInBackground(Void... params) {
 				cameras.addAll(LessonWebServerIF.getInstance(CameraActivity.this)
-						.getCameraByLesson(schoolId, 340));
+						.getCameraByLesson(schoolId, lessonId));
 				Log.i("------cameras--------", cameras+"");
 				return null;
 			}

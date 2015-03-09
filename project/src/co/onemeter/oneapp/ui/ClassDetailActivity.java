@@ -54,7 +54,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private TextView tvTime;
 	private TextView tvPlace;
 	private TextView tvLength;
-	private String reTime2;
+	private long currentTime;
+	private int lessonId;
 	
 	private GroupChatRoom class_group = new GroupChatRoom();
 	
@@ -237,9 +238,26 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		case R.id.class_live_class:
 //			startActivity(new Intent(this, VideoPlayingActivity.class));
 //			msgBox.toast("功能正在实现中...");
+			currentTime = System.currentTimeMillis()/1000;
+			String time = tvTime.getText().toString().substring(5);
+			String length = tvLength.getText().toString().substring(5);		
+			String[] times = time.split(":");
+			String[] lengths = length.split(":");
+			long startDateStamps =Integer.parseInt(times[0])*3600 + Integer.parseInt(times[1])*60;
+			long endDateStamps =startDateStamps + Integer.parseInt(lengths[0])*3600 + Integer.parseInt(lengths[1])*60;
 
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			for(Lesson lesson:lessons){
+				String date = sdf.format(new Date(lesson.start_date * 1000));
+				String[] dates = date.split("-");
+				long timeStamps = Utils.getTimeStamp(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]), Integer.parseInt(dates[2]))/1000;
+				if(currentTime > (timeStamps + startDateStamps) && currentTime < (timeStamps + endDateStamps)){
+					lessonId = lesson.lesson_id;
+				}
+			}
 			Intent intent = new Intent();
 			intent.putExtra("student_live", 1);
+			intent.putExtra("lessonId", lessonId);
 			intent.putExtra("schoolId", parent_group_id);
 			intent.setClass(this, CameraActivity.class);
 			startActivity(intent);
@@ -283,9 +301,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 					reDate + Constants.COMMA +
 					reTime + Constants.COMMA +
 					rePlace + Constants.COMMA +
-					reLength;
-			
-			reTime2 = tvTime.getText().toString();
+					reLength;			
 		}
 	}
 	

@@ -5,6 +5,8 @@ import android.content.Context;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.PrefUtil;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -150,4 +152,17 @@ public class Utils {
 		cal.set(Calendar.MILLISECOND, 0);
 		return cal.getTimeInMillis() / 1000;
     }
+    
+  //只获取年月日所对应的时间戳
+  	public static long getTimeStamp(int year,int month,int day){
+  		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+  		String resultdate = year + "-" + month + "-" + day;
+  		long resultTime = 0;
+  		try {
+  			resultTime = sdf.parse(resultdate).getTime();
+  		} catch (ParseException e) {
+  			e.printStackTrace();
+  		}
+  		return resultTime;
+  	}
 }

@@ -195,18 +195,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		return view;
 	}
 	
-	//只获取年月日所对应的时间戳
-	private long getTimeStamp(int year,int month,int day){
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String resultdate = year + "-" + month + "-" + day;
-		long resultTime = 0;
-		try {
-			resultTime = sdf.parse(resultdate).getTime();
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return resultTime;
-	}
+	
 	
 	private void showAddOrModifyLessonDialog(final boolean isAdd,final View item,final int position){
 		View view = getLayoutInflater().inflate(R.layout.lay_add_lesson, null);

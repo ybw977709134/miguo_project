@@ -7,19 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
+import co.onemeter.oneapp.ui.GlobalValue;
 import co.onemeter.oneapp.ui.IncallActivity;
 import co.onemeter.oneapp.ui.LoginActivity;
-import co.onemeter.oneapp.ui.LoginInvitedActivity;
 import co.onemeter.oneapp.ui.StartActivity;
-
-import com.bugsense.trace.BugSenseHandler;
-
 import org.wowtalk.NetworkManager;
 import org.wowtalk.api.JapaneseHelper;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkVoipIF;
-
-import co.onemeter.oneapp.ui.GlobalValue;
 
 import java.io.*;
 
@@ -29,9 +24,6 @@ public class YuanquActivity extends Activity {
 	private boolean flag;
 	
 	protected void onCreate(Bundle savedInstanceState) {
-
-        // setup BugSenseHandler before setContentView
-        BugSenseHandler.initAndStartSession(this, GlobalValue.BUGSENSE_APIKEY);
 
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);

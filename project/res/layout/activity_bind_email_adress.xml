@@ -94,7 +94,7 @@
                 android:orientation="vertical" >
 
                 <ImageView
-                    style="@style/standard_list_divider"/>
+                    style="@style/bg_section_divider_line_dark"/>
                 
 				<RelativeLayout 
 				    android:layout_width="match_parent"
@@ -119,7 +119,7 @@
                 </RelativeLayout>
 
                 <ImageView
-                    style="@style/standard_list_divider"/>
+                    style="@style/bg_section_divider_line_dark"/>
             </LinearLayout>
             
             <!-- 绑定邮箱的验证结果 -->
@@ -185,7 +185,7 @@
                 android:orientation="vertical" >
 
                 <ImageView
-                    style="@style/standard_list_divider"/>
+                    style="@style/bg_section_divider_line_dark"/>
                 
 				<RelativeLayout 
 				    android:layout_width="match_parent"
@@ -212,7 +212,7 @@
                 </RelativeLayout>
 
                 <ImageView
-                    style="@style/standard_list_divider"/>
+                    style="@style/bg_section_divider_line_dark"/>
             </LinearLayout>
             <!-- 验证码不正确时给出的提示 -->
             <TextView

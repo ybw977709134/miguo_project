@@ -1050,15 +1050,15 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         Button btnSurvey;
 	}
 
-    private boolean isTheSameDay(long newTimestamp, long oldTimestamp) {
-        Date newDate = new Date(newTimestamp);
-        Date oldDate = new Date(oldTimestamp);
-        if (newDate.getDate() == oldDate.getDate() && newDate.getMonth() == oldDate.getMonth()
-                && newDate.getYear() == oldDate.getYear()) {
-            return true;
-        }
-        return false;
-    }
+//    private boolean isTheSameDay(long newTimestamp, long oldTimestamp) {
+//        Date newDate = new Date(newTimestamp);
+//        Date oldDate = new Date(oldTimestamp);
+//        if (newDate.getDate() == oldDate.getDate() && newDate.getMonth() == oldDate.getMonth()
+//                && newDate.getYear() == oldDate.getYear()) {
+//            return true;
+//        }
+//        return false;
+//    }
 
     private final static int MAX_FILE_GETTING_FROM_SERVER_COUNT=5;
     private static int curLoadingFileFromServerCount;
@@ -1292,14 +1292,14 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         txtTime.setText(strTime);
     }
 
-    private void setTimeForOne(TextView txtDate, TextView txtTime, long time) {
-        SimpleDateFormat format = new SimpleDateFormat(context.getResources().getString(R.string.moment_me_time_format));
-        String strDate = format.format(time);
-        format = new SimpleDateFormat("HH:mm");
-        String strTime = format.format(time);
-        txtDate.setText(strDate);
-        txtTime.setText(strTime);
-    }
+//    private void setTimeForOne(TextView txtDate, TextView txtTime, long time) {
+//        SimpleDateFormat format = new SimpleDateFormat(context.getResources().getString(R.string.moment_me_time_format));
+//        String strDate = format.format(time);
+//        format = new SimpleDateFormat("HH:mm");
+//        String strTime = format.format(time);
+//        txtDate.setText(strDate);
+//        txtTime.setText(strTime);
+//    }
 
     private void showVoiceFile(WFile file, final LinearLayout voiceLayout, ProgressBar progress,
                                  ImageView micButton, TimerTextView micTime) {

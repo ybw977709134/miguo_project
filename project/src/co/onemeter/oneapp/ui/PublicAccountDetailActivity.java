@@ -175,24 +175,24 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
         initView();
     }
 
-    private void cancelFollow() {
-        mMsgBox.showWait();
-        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
-            @Override
-            protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(PublicAccountDetailActivity.this)
-                        .fRemoveBuddy(buddy.userID);
-            }
-
-            @Override
-            protected void onPostExecute(Integer result) {
-                mMsgBox.dismissWait();
-                if (result == ErrorCode.OK) {
-                    finish();
-                }
-            }
-        });
-    }
+//    private void cancelFollow() {
+//        mMsgBox.showWait();
+//        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+//            @Override
+//            protected Integer doInBackground(Void... params) {
+//                return WowTalkWebServerIF.getInstance(PublicAccountDetailActivity.this)
+//                        .fRemoveBuddy(buddy.userID);
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Integer result) {
+//                mMsgBox.dismissWait();
+//                if (result == ErrorCode.OK) {
+//                    finish();
+//                }
+//            }
+//        });
+//    }
 
     private void followBuddy() {
         mMsgBox.showWait();

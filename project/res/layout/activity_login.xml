@@ -3,7 +3,7 @@
     			android:id="@+id/layout_login"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-                android:background="@color/background_light"
+                android:background="@drawable/bg_login"
                 android:orientation="vertical" >
                 
     <TextView 
@@ -29,47 +29,36 @@
 			android:layout_height="wrap_content"
 			android:orientation="vertical" >
 
-			<ImageView
-				android:id="@+id/logo"
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:layout_gravity="center_horizontal"
-				android:layout_marginLeft="20dp"
-				android:layout_marginRight="20dp"
-				android:src="@drawable/login_logo"
-				android:scaleType="centerInside"/>
-
-			<TextView
-				android:id="@+id/logo_view"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center_horizontal"
-				android:gravity="center"
-				android:layout_marginBottom="@dimen/login_logo_margin_bottom"
-				android:textSize="25sp"
-				android:textColor="@color/green"
-				android:text="@string/logo_name"/>
+			
+			<co.onemeter.oneapp.ui.CircleImageView
+                        android:id="@+id/logo"
+                        android:layout_height="60dp"
+                        android:layout_width="60dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/login_logo"
+                        
+                        />
 
 			<LinearLayout
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/padding_large"
 				android:layout_marginBottom="@dimen/padding_large"
 				android:background="@color/white"
 				android:orientation="vertical" >
 
 				<ImageView
-					style="@style/standard_list_divider"/>
+					style="@style/bg_section_divider_line_dark"/>
 
 				<EditText
 					android:id="@+id/accountInput"
 					style="@style/inputbox_borderless"
+					android:gravity="center_horizontal"
 					android:imeOptions="actionNext"
 					android:hint="@string/account_hint"
 					android:textCursorDrawable="@color/green"/>
 
-				<ImageView
-					android:layout_marginLeft="@dimen/padding_medium"
-					style="@style/standard_list_divider"/>
+				
 
 				<RelativeLayout
 					android:layout_height="wrap_content"
@@ -77,6 +66,7 @@
 					<EditText
 						android:id="@+id/passWordInput"
 						style="@style/inputbox_borderless"
+						android:gravity="center_horizontal"
 						android:hint="@string/passWord_hint"
 						android:imeOptions="actionDone"
 						android:inputType="textPassword"
@@ -94,29 +84,32 @@
 				</RelativeLayout>
 
 				<ImageView
-					style="@style/standard_list_divider"/>
+					style="@style/bg_section_divider_line_dark"/>
 
 			</LinearLayout>
 
+			
+
+			<Button
+				android:id="@+id/login_username"
+				style="@style/button_blue"
+				android:text="@string/login"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="@dimen/padding_small"
+				android:layout_marginRight="@dimen/padding_small"/>
+			
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="@string/forgotPassWord"
 				android:id="@+id/forgotPassWord"
 				android:layout_gravity="right"
+				android:layout_marginTop="@dimen/padding_medium"
 				android:layout_marginRight="@dimen/padding_large"
 				android:layout_marginBottom="@dimen/padding_large"
 				android:textColor="@color/text_gray3"				
 				/>
-
-			<Button
-				android:id="@+id/login_username"
-				style="@style/button_green"
-				android:text="@string/login"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="@dimen/padding_large"
-				android:layout_marginRight="@dimen/padding_large"/>
 
 		</LinearLayout>
 
@@ -127,33 +120,19 @@
 			android:layout_marginBottom="20dp"
 			android:orientation="vertical">
 
-			<RelativeLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginBottom="20dp" >
-				<ImageView
-					android:layout_centerInParent="true"
-					style="@style/standard_list_divider"/>
-				<TextView
-					android:layout_width="wrap_content"
+			
+				<Button
+					android:id="@+id/btn_signup"
+					android:background="@drawable/btn_bule_register"
+					android:textSize="18sp"
+					android:padding="@dimen/padding_medium"
+					android:text="@string/login_signup"
+					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
-					android:layout_centerInParent="true"
-					android:paddingLeft="@dimen/padding_medium"
-					android:paddingRight="@dimen/padding_medium"
-					android:background="@color/background_light"
-					android:textColor="@color/text_gray3"
-					android:text="@string/login_otherwise"/>
-			</RelativeLayout>
-			<Button
-				android:id="@+id/btn_signup"
-				style="@style/button_blue"
-				android:text="@string/login_signup"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/padding_large"
-				android:layout_marginLeft="@dimen/padding_large"
-				android:layout_marginRight="@dimen/padding_large"
-				android:textColor="@color/white"/>
+					android:layout_marginTop="@dimen/padding_large"
+					android:layout_marginLeft="@dimen/padding_small"
+					android:layout_marginRight="@dimen/padding_small"
+					android:textColor="@color/white"/>
 			<!--  
 			<Button
 				android:id="@+id/login_qrcode"

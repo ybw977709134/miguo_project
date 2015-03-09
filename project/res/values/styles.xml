@@ -199,7 +199,7 @@
 	
 	<style name="button_blue_light" parent="button">
 		<item name="android:background">@drawable/btn_bule_light</item>
-	</style>
+	</style>	
 
     <style name="inputbox_borderless" parent="@android:style/Widget.EditText">
         <item name="android:layout_width">match_parent</item>
@@ -345,6 +345,18 @@
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:layout_width">match_parent</item>
 		<item name="android:background">@drawable/divider</item>
+	</style>
+	
+	<style name="bg_section_divider_line_dark">
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:background">@drawable/bg_section_divider_line_dark</item>
+	</style>
+	
+	<style name="bg_section_divider_line_light">
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:background">@drawable/bg_section_divider_line_light</item>
 	</style>
 
 	<style name="standard_radio_green" parent="standard_text">

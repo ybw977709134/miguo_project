@@ -60,7 +60,8 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 				btn_access_code.setText("获取验证码");
 				btn_access_code.setEnabled(true);
 				btn_access_code.setTextColor(getResources().getColor(R.color.blue));
-				btn_access_code.setBackground(getResources().getDrawable(R.drawable.btn_small_valid));
+				btn_verification_code.setEnabled(false);
+				btn_verification_code.setBackground(getResources().getDrawable(R.drawable.btn_gray_medium_selector));
 				mTimer.cancel();
 			} else {
 				btn_access_code.setText("重新发送验证码" + "("+ time + "s" + ")");
@@ -117,7 +118,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 		textView_verification_code_result = (TextView) findViewById(R.id.textView_verification_code_result);
 		btn_verification_code = (Button) findViewById(R.id.btn_verification_code);
 		btn_verification_code.setEnabled(false);
-		btn_verification_code.setBackgroundColor(R.color.gray);
+		btn_verification_code.setBackground(getResources().getDrawable(R.drawable.btn_gray_medium_selector));
 		
 		title_back.setOnClickListener(this);
 		textView_fixBindEmail_back.setOnClickListener(this);
@@ -228,7 +229,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                 switch (result) {
                     case ErrorCode.OK://0
                     	btn_verification_code.setEnabled(true);
-                    	btn_verification_code.setBackgroundColor(R.color.blue);
+                    	btn_verification_code.setBackground(getResources().getDrawable(R.drawable.btn_blue_medium_selector));
                         break;
                                  	
                     case ErrorCode.ERR_OPERATION_DENIED://37:该用户已绑定其它邮箱//对自己而言，说明我是绑定的邮箱
@@ -270,8 +271,6 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                 switch (result) {
                     case ErrorCode.OK://0 
                     	unBindEmailAddress();
-                    	Intent bindEmialIntent = new Intent(FixBindEmailAddressActivity.this, BindEmailAddressActivity.class);
-                    	
                         break;
                         
                     case ErrorCode.ACCESS_CODE_ERROR://22:无效的验证码，验证码有有效期，目前是一天的有效期

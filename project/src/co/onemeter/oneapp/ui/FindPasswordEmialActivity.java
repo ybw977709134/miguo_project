@@ -40,8 +40,6 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 		initView();
 	}
 	
-	
-	
 	private void initView() {
 		title_back = (ImageButton) findViewById(R.id.title_back);
 		textView_findPassword_back = (TextView) findViewById(R.id.textView_findPassword_back);
@@ -54,6 +52,10 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 		btn_verification_email = (Button) findViewById(R.id.btn_verification_email);
 		
 		title_back.setOnClickListener(this);
+		textView_findPassword_back.setOnClickListener(this);
+		textView_findPassword_cancel.setOnClickListener(this);
+		btn_verification_email.setOnClickListener(this);
+		
 				
 	}
 
@@ -68,7 +70,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 			break;
 			
 		case R.id.btn_verification_email://重新获得密码
-			textView_verification_email_result.setVisibility(View.INVISIBLE);
+			textView_verification_email_result.setVisibility(View.GONE);
 			resetPassword(txt_bind_account.getText().toString(),txt_bind_email.getText().toString());
 			break;
 
@@ -78,6 +80,11 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 		
 	}
 	
+	/**
+	 * 重置密码
+	 * @param wowtalk_id
+	 * @param emailAddress
+	 */
 	private void resetPassword(final String wowtalk_id,final String emailAddress) {
     	mMsgBox.showWait();
     	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
@@ -95,6 +102,20 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                     case ErrorCode.OK://0
                     	mMsgBox.show(null,"重置密码成功,请查收你的绑定邮箱");
                     	mMsgBox.dismissDialog();
+                    	new Thread(new Runnable() {
+							
+							@Override
+							public void run() {
+								try {
+									Thread.sleep(3500);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+								finish();
+								
+							}
+						}).start();
+                    	
                         break;
                         
                     case ErrorCode.EMAIL_ADDRESS_VERIFICATION_CODE_ERROR:
@@ -115,8 +136,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                     case ErrorCode.EMAIL_USED_BY_OTHERS:
                     	textView_verification_email_result.setVisibility(View.VISIBLE);
                     	textView_verification_email_result.setText("该邮箱已被其他用户绑定");
-                    	break;
-                    	
+                    	break; 	
                     	
                     default://邮箱绑定失败
                         mMsgBox.show(null, "你输入的账号或邮箱有误，请重新输入");

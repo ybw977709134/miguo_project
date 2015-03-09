@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private MessageBox msgBox;
 	
 	private String classId;
+	private String parent_group_id;
 	private List<Lesson> lessons;
 	private List<GroupMember> members;
 	private CourseTableAdapter courseAdapter;
@@ -52,6 +54,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private TextView tvTime;
 	private TextView tvPlace;
 	private TextView tvLength;
+	private String reTime2;
 	
 	private GroupChatRoom class_group = new GroupChatRoom();
 	
@@ -89,7 +92,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		Intent intent = getIntent();
 //		classId = "0b2f933f-a4d7-44de-a711-569abb04846a";
 		classId = intent.getStringExtra("classId");
-		
+		Database db = Database.getInstance(this);
+		parent_group_id = db.getParentGroupId(classId);
 //		members = mdb.fetchGroupMembers(classId);
 		if(members == null || members.isEmpty()){
 			AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
@@ -231,8 +235,14 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			finish();
 			break;
 		case R.id.class_live_class:
-			startActivity(new Intent(this, VideoPlayingActivity.class));
+//			startActivity(new Intent(this, VideoPlayingActivity.class));
 //			msgBox.toast("功能正在实现中...");
+
+			Intent intent = new Intent();
+			intent.putExtra("student_live", 1);
+			intent.putExtra("schoolId", parent_group_id);
+			intent.setClass(this, CameraActivity.class);
+			startActivity(intent);
 			break;
 		case R.id.more:
 			showMore(v);
@@ -274,20 +284,22 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 					reTime + Constants.COMMA +
 					rePlace + Constants.COMMA +
 					reLength;
+			
+			reTime2 = tvTime.getText().toString();
 		}
 	}
 	
 	private void showMore(View parentView) {
         final BottomButtonBoard bottomBoard = new BottomButtonBoard(this, parentView);
         // class live
-        bottomBoard.add(getString(R.string.class_live_class), BottomButtonBoard.BUTTON_BLUE,
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                    	msgBox.toast("功能正在实现中...");
-                        bottomBoard.dismiss();
-                    }
-                });
+//        bottomBoard.add(getString(R.string.class_live_class), BottomButtonBoard.BUTTON_BLUE,
+//                new OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                    	msgBox.toast("功能正在实现中...");
+//                        bottomBoard.dismiss();
+//                    }
+//                });
         // edit class info 
         bottomBoard.add(getString(R.string.class_edit_class_info), BottomButtonBoard.BUTTON_BLUE,
                 new OnClickListener() {
@@ -313,6 +325,11 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                     	}
                     	Intent intent = new Intent(ClassDetailActivity.this, LessonInfoEditActivity.class);
                     	intent.putExtra("class", class_group);
+                    	intent.putExtra("reLength", tvLength.getText().toString().substring(5));
+                    	Bundle b = new Bundle();
+                    	b.putString("retime", tvTime.getText().toString().substring(5));
+                    	intent.putExtras(b);
+//                    	intent.putExtra("reTime", tvTime.getText().toString().substring(5));
                         startActivity(intent);
                         bottomBoard.dismiss();
                     }
@@ -325,12 +342,18 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		Lesson lesson = lessons.get(position);
+		long startdate = lesson.start_date;
+		long enddate = lesson.end_date;
 		Intent intent = new Intent();
 		intent.setClass(this, LessonDetailActivity.class);
 		intent.putExtra(Constants.LESSONID, lessons.get(position).lesson_id);
 		intent.putExtra("title", lessons.get(position).title);
 		intent.putExtra("classId", classId);
+		intent.putExtra("schoolId", parent_group_id);
 		intent.putExtra("lesson", lessons.get(position));
+		intent.putExtra("startdate", startdate);
+		intent.putExtra("enddate", enddate);
 		startActivity(intent);
 	}
 	

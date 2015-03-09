@@ -9,23 +9,23 @@
         android:layout_height="wrap_content"
         android:padding="10dp" 
         android:gravity="center">
-
+        <TextView
+            android:id="@+id/camera_item_name"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:text="dummy" />
+        
         <ImageView
-            android:id="@+id/classroom_item_icon"
+            android:id="@+id/camera_item_icon"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src = "@drawable/icon_section_select"
+            android:src = "@drawable/icon_switch_on"
             android:gravity="center"/>
-
-        <TextView
-            android:id="@+id/classroom_item_name"
-            android:layout_width="0dp"
-            android:layout_weight="9"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textColor="@color/gray"
-            android:text="dummy" />
 
     </LinearLayout>
 

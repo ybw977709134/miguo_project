@@ -181,6 +181,10 @@
         <item name="android:padding">@dimen/padding_medium</item>
     </style>
 
+    
+    <style name="button_bule_register" parent="button">
+        <item name="android:background">@drawable/btn_blue_register_selector</item>
+    </style>
 	<style name="button_red" parent="button">
 		<item name="android:background">@drawable/btn_red_selector</item>
 	</style>

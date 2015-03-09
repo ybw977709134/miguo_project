@@ -442,7 +442,7 @@
             </LinearLayout>
             <!-- 发消息 -->
             <Button
-                style="@style/button_blue"
+                style="@style/button_bule_register"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/contact_info_send_msg"
@@ -451,7 +451,7 @@
                 android:layout_margin="@dimen/padding_medium"/>
             <!-- 语音聊天 -->
             <Button
-                style="@style/button_blue"
+                style="@style/button_bule_register"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/contact_info_send_call"
@@ -460,7 +460,7 @@
                 android:layout_margin="@dimen/padding_medium"/>
             <!-- 视频聊天 -->
             <Button
-                style="@style/button_blue"
+                style="@style/button_bule_register"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/contact_info_send_video"
@@ -469,7 +469,7 @@
                 android:layout_margin="@dimen/padding_medium"/>
             <!-- 添加好友 -->
             <Button
-                style="@style/button_blue"
+                style="@style/button_bule_register"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/contact_info_add_as_friend"
@@ -487,7 +487,7 @@
                 android:visibility="gone" />
             <!-- 忽略 -->
             <Button
-                style="@style/button_blue"
+                style="@style/button_bule_register"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/contact_info_add_ingore_request"
@@ -497,7 +497,7 @@
                 android:visibility="gone" />
             <!-- 同意 -->
             <Button
-                style="@style/button_blue"
+                style="@style/button_bule_register"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/contact_info_add_agree_request"

@@ -44,6 +44,6 @@
 			android:layout_margin="@dimen/padding_medium"
 			android:text="@string/add"
 			android:textColor="@color/text_gray2"
-			style="?attr/button"/>
+			style="@style/button_bule_register"/>
 	</LinearLayout>
 </LinearLayout>

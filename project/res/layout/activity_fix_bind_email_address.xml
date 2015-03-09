@@ -81,7 +81,7 @@
                 android:orientation="vertical" >
 
                 <ImageView
-                    style="@style/standard_list_divider"/>
+                    style="@style/bg_section_divider_line_dark"/>
                 
 				<RelativeLayout 
 				    android:layout_width="match_parent"
@@ -107,7 +107,7 @@
                 </RelativeLayout>
 
                 <ImageView
-                    style="@style/standard_list_divider"/>
+                    style="@style/bg_section_divider_line_dark"/>
             </LinearLayout>
             
             <TextView 

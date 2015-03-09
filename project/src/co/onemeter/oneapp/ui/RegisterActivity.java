@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.InputType;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,6 +15,10 @@ import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
 
@@ -36,9 +41,17 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	private EditText edtPwdConfirm;
 	
 	private View btnBack;
+	
+	private LinearLayout layout_register_user_type;
+	private TextView textView_register_user_type;
+	private ImageView imageview_show_password;//显示密码
+	private ImageView imageview_hint_password;//隐藏密码
+	private TextView textView_isshow_password;//显示密码文本提示
+	private TextView textView_verification_newPassword;//验证注册的密码
 	private Button btnCreate;
 
     private MessageBox mMsgBox;
+    private int userType;
     
     private InputMethodManager mInputMethodManager;
 	
@@ -81,6 +94,15 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	
 	private void initView() {
 		btnBack = findViewById(R.id.title_back);
+		
+		layout_register_user_type = (LinearLayout) findViewById(R.id.layout_register_user_type);
+		
+		textView_register_user_type = (TextView) findViewById(R.id.textView_register_user_type);
+		imageview_show_password = (ImageView) findViewById(R.id.imageview_show_password);
+    	imageview_hint_password = (ImageView) findViewById(R.id.imageview_hint_password);
+    	textView_isshow_password = (TextView) findViewById(R.id.textView_isshow_password);
+    	textView_verification_newPassword = (TextView) findViewById(R.id.textView_verification_newPassword);
+    	
 		btnCreate = (Button) findViewById(R.id.create_button);
 		
 		edtAccount = (EditText) findViewById(R.id.account_edit);
@@ -114,16 +136,18 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			}
 		});
 		
+		
+		layout_register_user_type.setOnClickListener(this);
+		imageview_show_password.setOnClickListener(this);
+    	imageview_hint_password.setOnClickListener(this);
+		
 	}
 
 	private void fRegister() {
 		
 		final String strUserName = edtAccount.getText().toString();
 		final String strPassword = edtPwd.getText().toString();
-		final String strPwdConfirm = edtPwdConfirm.getText().toString();
-		
-        final int userType = new AQuery(this).find(R.id.rad_teacher).isChecked() ?
-                Buddy.ACCOUNT_TYPE_TEACHER : Buddy.ACCOUNT_TYPE_STUDENT;
+		final String strPwdConfirm = edtPwdConfirm.getText().toString();	
         
         /**
          * 帐号验证
@@ -242,11 +266,37 @@ public class RegisterActivity extends Activity implements OnClickListener{
 		}
 	}
 	
+	/**
+	 * 处理各个监听事件
+	 */
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.title_back:
 			finish();
 			break;
+			
+		case R.id.layout_register_user_type://选择账号类型
+			showPopupMenu();
+			break;
+			
+		//显示密码
+		case R.id.imageview_show_password:
+			imageview_show_password.setVisibility(View.GONE);
+			imageview_hint_password.setVisibility(View.VISIBLE);
+			edtPwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+			edtPwdConfirm.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+			textView_isshow_password.setText("隐藏密码");
+			break;
+						
+		//隐藏密码	
+		case R.id.imageview_hint_password:
+			imageview_show_password.setVisibility(View.VISIBLE);
+			imageview_hint_password.setVisibility(View.GONE);
+			edtPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+			edtPwdConfirm.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+			textView_isshow_password.setText("显示密码");
+			break;
+			
 		case R.id.create_button:
 			fRegister();
 			break;
@@ -303,5 +353,40 @@ public class RegisterActivity extends Activity implements OnClickListener{
 						dialog.dismiss();
 					}
 				}).create().show();
+    }
+    
+    /**
+     * 用于选择注册账号的类型
+     */
+    private void showPopupMenu() {
+        final BottomButtonBoard bottomBoard = new BottomButtonBoard(this, findViewById(R.id.layout_register));
+
+        //邮箱找回
+        bottomBoard.add("老师", BottomButtonBoard.BUTTON_BLUE, new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomBoard.dismiss();
+                //process
+                userType = Buddy.ACCOUNT_TYPE_TEACHER;
+                textView_register_user_type.setText("老师");
+                
+            }
+        });
+        
+        bottomBoard.add("学生", BottomButtonBoard.BUTTON_BLUE, new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomBoard.dismiss();
+                //process
+                userType = Buddy.ACCOUNT_TYPE_STUDENT;
+                textView_register_user_type.setText("学生");
+                
+                
+            }
+        });
+
+        //close popupMenu
+        bottomBoard.addCancelBtn(getString(R.string.login_findPassWord_cancel));
+        bottomBoard.show();
     }
 }

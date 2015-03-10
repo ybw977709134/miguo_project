@@ -21,17 +21,26 @@
             android:id="@+id/classroom_title"
             style="?attr/navbar_title"
             android:text="@string/class_lesson_select_classroom" />
-        
+
         <ImageView
             android:id="@+id/classroom_refresh"
             style="?attr/navbar_txt_right"
-            android:src="@drawable/nav_refresh_selector"/>
+            android:src="@drawable/nav_refresh_selector" />
     </RelativeLayout>
 
     <ListView
         android:id="@+id/listView_classroom_show"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="447dp" >
+
     </ListView>
+
+    <include
+        android:id="@+id/bottombar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/footer_view" >
+    </include>
 
 </LinearLayout>

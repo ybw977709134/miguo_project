@@ -19,13 +19,44 @@
             android:textColor="@color/black"
             android:text="dummy" />
         
-        <ImageView
-            android:id="@+id/camera_item_icon"
+        <FrameLayout 
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src = "@drawable/icon_switch_on"
-            android:gravity="center"/>
+            android:layout_weight="1"
+            android:layout_gravity="left|center">
+                <LinearLayout
+                    android:id="@+id/camera_LinearLayout_isONorOFF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="visible"
+                    android:layout_gravity="right|center">
+
+                    <TextView
+                        android:id="@+id/camera_tv_isONorOFF"
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content"
+                        android:text="ON"
+                        android:textColor="@color/gray"
+                        android:textSize="13sp" />
+
+                    <ImageView 
+                        android:id="@+id/camera_iv_isONorOFF"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/icon_section_row"/>
+                </LinearLayout>
+            
+            <ImageView
+                android:id="@+id/camera_item_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src = "@drawable/icon_switch_on"
+                android:layout_gravity="right|center"
+                android:visibility="gone"/>
+        </FrameLayout>
+
 
     </LinearLayout>
 

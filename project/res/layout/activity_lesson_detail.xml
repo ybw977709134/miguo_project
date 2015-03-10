@@ -39,25 +39,47 @@
             android:background="@color/background_light"
             android:gravity="center_vertical"
             android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/text_classroom"
-                android:layout_width="0dp"
+            
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:text="@string/class_lesson_classroom"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:orientation="vertical">
+                <ImageView
+                    style="@style/standard_list_divider"/>
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/text_classroom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/class_lesson_classroom"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+                    <TextView
+                        android:id="@+id/text_classroom_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:padding="5dp" />
 
-            <TextView
-                android:id="@+id/text_classroom_r"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableRight="@drawable/icon_more_light"
-                android:gravity="right"
-                android:padding="5dp" />
+                    <TextView
+                        android:id="@+id/text_classroom_r"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/icon_more_light"
+                        android:gravity="right"
+                        android:padding="5dp" />
+
+                    </LinearLayout>
+                <ImageView
+                    style="@style/standard_list_divider"/>
+            </LinearLayout>
+
         </LinearLayout>
         
         <LinearLayout
@@ -69,25 +91,48 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:visibility="visible" >
-
-            <TextView
-                android:id="@+id/text_camera"
-                android:layout_width="0dp"
+            
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:text="@string/class_lesson_camera"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:orientation="vertical">
+                <ImageView
+                    style="@style/standard_list_divider"/>
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/text_camera"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:text="@string/class_lesson_camera"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+                    <TextView
+                        android:id="@+id/text_camera_num"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:padding="5dp" />
 
-            <TextView
-                android:id="@+id/text_camera_r"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableRight="@drawable/icon_more_light"
-                android:gravity="right"
-                android:padding="5dp" />
+                    <TextView
+                        android:id="@+id/text_camera_r"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/icon_more_light"
+                        android:gravity="right"
+                        android:padding="5dp" />
+
+                    </LinearLayout>
+                <ImageView
+                    style="@style/standard_list_divider"/>
+            </LinearLayout>
+
         </LinearLayout>
         
         <LinearLayout
@@ -99,25 +144,42 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:visibility="visible" >
-
-            <TextView
-                android:id="@+id/text_knowledge"
-                android:layout_width="0dp"
+            
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:text="@string/class_lesson_knowledge"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:orientation="vertical">
+                <ImageView
+                    style="@style/standard_list_divider"/>
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/text_knowledge"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:text="@string/class_lesson_knowledge"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/text_knowledge_r"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableRight="@drawable/icon_more_light"
-                android:gravity="right"
-                android:padding="5dp" />
+                    <TextView
+                        android:id="@+id/text_knowledge_r"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableRight="@drawable/icon_more_light"
+                        android:gravity="right"
+                        android:padding="5dp" />
+
+                    </LinearLayout>
+                <ImageView
+                    style="@style/standard_list_divider"/>
+            </LinearLayout>
+
         </LinearLayout>
         <LinearLayout
             android:id="@+id/les_lay_attendance"
@@ -128,25 +190,48 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:visibility="visible" >
-
-            <TextView
-                android:id="@+id/text_attendance"
-                android:layout_width="0dp"
+            
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:text="@string/class_lesson_attendance"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:orientation="vertical">
+                <ImageView
+                    style="@style/standard_list_divider"/>
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/text_attendance"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:text="@string/class_lesson_attendance"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+                    <TextView
+                        android:id="@+id/text_isattendance"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="未考勤"
+                        android:gravity="right"
+                        android:padding="5dp" />
 
-            <TextView
-                android:id="@+id/text_attendance_r"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableRight="@drawable/icon_more_light"
-                android:gravity="right"
-                android:padding="5dp" />
+                    <TextView
+                        android:id="@+id/text_attendance_r"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/icon_more_light"
+                        android:gravity="right"
+                        android:padding="5dp" />
+
+                </LinearLayout>
+               
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -166,13 +251,20 @@
                 android:padding="5dp"
                 android:text="@string/class_lesson_situation"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
-
+                android:textSize="18sp" />
             <TextView
-                android:id="@+id/text_first_r"
+                android:id="@+id/text_isfirst"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:text="未点评"
+                android:gravity="right"
+                android:padding="5dp" />
+
+            <TextView
+                android:id="@+id/text_first_r"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:drawableRight="@drawable/icon_more_light"
                 android:gravity="right"
                 android:padding="5dp" />
@@ -195,13 +287,20 @@
                 android:padding="5dp"
                 android:text="@string/class_homework"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
-
+                android:textSize="18sp" />
             <TextView
-                android:id="@+id/text_second_r"
+                android:id="@+id/text_issecond"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:text="未布置"
+                android:gravity="right"
+                android:padding="5dp" />
+
+            <TextView
+                android:id="@+id/text_second_r"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:drawableRight="@drawable/icon_more_light"
                 android:gravity="right"
                 android:padding="5dp" />
@@ -216,25 +315,39 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:visibility="visible" >
-
-            <TextView
-                android:id="@+id/text_homework"
-                android:layout_width="0dp"
+            
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:text="@string/class_lesson_homework"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:orientation="vertical">               
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/text_homework"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:text="@string/class_lesson_homework"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/text_homework_r"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableRight="@drawable/icon_more_light"
-                android:gravity="right"
-                android:padding="5dp" />
+                    <TextView
+                        android:id="@+id/text_homework_r"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableRight="@drawable/icon_more_light"
+                        android:gravity="right"
+                        android:padding="5dp" />
+
+                    </LinearLayout>
+                <ImageView
+                    style="@style/standard_list_divider"/>
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -245,8 +358,19 @@
             android:background="@color/background_light"
             android:gravity="center_vertical"
             android:orientation="horizontal" >
-
-            <TextView
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    style="@style/standard_list_divider"/>
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
                 android:id="@+id/text_third"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -254,9 +378,9 @@
                 android:padding="5dp"
                 android:text="@string/class_parent_suggestion"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
-            <TextView
+                    <TextView
                 android:id="@+id/text_third_r"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -264,6 +388,12 @@
                 android:drawableRight="@drawable/icon_more_light"
                 android:gravity="right"
                 android:padding="5dp" />
+
+                    </LinearLayout>
+                <ImageView
+                    style="@style/standard_list_divider"/>
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 

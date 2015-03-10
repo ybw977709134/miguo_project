@@ -5,14 +5,17 @@ import java.util.List;
 
 import org.wowtalk.api.Classroom;
 import org.wowtalk.api.LessonWebServerIF;
+import org.wowtalk.ui.MessageBox;
 
 import com.androidquery.AQuery;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -39,6 +42,8 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 	private long enddate;
 	private int roomId;
 	private int lessonId;
+	private String roomName;
+	private MessageBox msgbox;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,8 +57,10 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 		AQuery q = new AQuery(this);
 		q.find(R.id.title_back).clicked(this);
 		q.find(R.id.classroom_refresh).clicked(this);
+		q.find(R.id.LinearLayout_release).clicked(this);
 		listView_classroom_show = (ListView) findViewById(R.id.listView_classroom_show);
 		listView_classroom_show.setOnItemClickListener(this);
+		msgbox = new MessageBox(this);
 		
 		classroom = new LinkedList<Classroom>();
 		classroomAdapter = new ClassroomAdapter(classroom);
@@ -74,6 +81,25 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 		case R.id.classroom_refresh:
 			getClassroomInfo();
 			break;
+		case R.id.LinearLayout_release:
+			Builder alertDialog = new AlertDialog.Builder(ClassroomActivity.this);
+			alertDialog.setTitle("提示");
+			alertDialog.setMessage("确定要解除绑定教室吗？");
+			alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					releaseClassroom();
+				}
+			});  
+			alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {			
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					
+				}
+			});
+			alertDialog.create().show();
+			break;
 		}
 		
 	}
@@ -82,6 +108,7 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		roomId = classroom.get(position).id;
+		roomName = classroom.get(position).room_name;
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
@@ -96,8 +123,9 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 				if(result == 1){
 					Toast.makeText(ClassroomActivity.this, "OK", Toast.LENGTH_LONG).show();
 					Intent intent = new Intent();
-				    intent.putExtra("roomId", roomId);
-				    setResult(RESULT_OK, intent);
+//				    intent.putExtra("roomId", roomId);
+//				    intent.putExtra("roomName", roomName);
+				    setResult(RESULT_OK);
 				    finish();
 				}else if(result == 0){
 					Toast.makeText(ClassroomActivity.this, "Room is busy", Toast.LENGTH_LONG).show();
@@ -109,12 +137,36 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 		});
 
 	}
-	
-	private void getClassroomInfo(){
+	private void releaseClassroom(){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
+				int status= LessonWebServerIF.getInstance(ClassroomActivity.this).releaseRoom(lessonId);				
+				return status;
+			}
+			
+			@Override
+			protected void onPostExecute(Integer result) {
+				super.onPostExecute(result);
+				if(result == 1){
+					Toast.makeText(ClassroomActivity.this, "解除成功", Toast.LENGTH_LONG).show();
+				    setResult(RESULT_OK);
+				    finish();
+				}else if(result == 0){
+					Toast.makeText(ClassroomActivity.this, "还没有选择教室", Toast.LENGTH_LONG).show();
+				}
+			}
+			
+		});
+	}
+	private void getClassroomInfo(){
+		msgbox.showWait();
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+
+			@Override
+			protected Integer doInBackground(Void... params) {
+				classroom.clear();
 				classroom.addAll(LessonWebServerIF.getInstance(ClassroomActivity.this)
 						.getClassroom(schoolId, startdate, enddate));
 				return null;
@@ -122,7 +174,7 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 			
 			@Override
 			protected void onPostExecute(Integer result) {
-				super.onPostExecute(result);
+				msgbox.dismissWait();
 				classroomAdapter.notifyDataSetChanged();
 			}
 

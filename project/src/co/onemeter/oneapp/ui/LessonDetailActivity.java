@@ -1,9 +1,16 @@
 package co.onemeter.oneapp.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.wowtalk.api.Buddy;
+import org.wowtalk.api.Camera;
 import org.wowtalk.api.Database;
+import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.Lesson;
+import org.wowtalk.api.LessonDetail;
 import org.wowtalk.api.LessonParentFeedback;
+import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.Moment;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.ui.MessageBox;
@@ -12,12 +19,14 @@ import com.androidquery.AQuery;
 
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
+import co.onemeter.utils.AsyncTaskExecutor;
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
+import android.os.AsyncTask;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * 课表详情页面。
@@ -27,7 +36,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 	
 	private static final int REQ_PARENT_FEEDBACK = 100;
 	private static final int REQ_CLASSROOM_FEEDBACK = 1001;
-	
+	private static final int REQ_CAMERA_FEEDBACK = 1002;
 	private int lessonId;
 	private String classId;
 	private String schoolId;
@@ -35,12 +44,19 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 	private long startdate;
 	private long enddate;
 	private int roomId;
+	private String roomName;
+	
+	private TextView text_classroom_name;
+	private TextView text_camera_num;
+	
+	private List<LessonDetail> lessonDetails;
+	private List<Camera> lessoonDetails_camera;
 	
 	protected void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_lesson_detail);
 		initView();
-		Log.d("--------lessonId-------", lessonId+"");
+		getLessonDetail();
 	};
 
 	private void initView(){
@@ -67,12 +83,9 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			q.find(R.id.text_first).textColor(getResources().getColor(R.color.text_gray4));
 			q.find(R.id.text_second).textColor(getResources().getColor(R.color.text_gray4));
 			q.find(R.id.text_third).textColor(getResources().getColor(R.color.text_gray4));
-//			q.find(R.id.text_classroom).textColor(getResources().getColor(R.color.text_gray4));
 			lay_first.setEnabled(false);
 			lay_second.setEnabled(false);
 			lay_third.setEnabled(false);
-//			lay_classroom.setEnabled(false);
-//			lay_camera.setEnabled(false);
 		}
 		if(isTeacher()){
 			q.find(R.id.text_first).text(getString(R.string.class_lesson_situation_table));
@@ -100,11 +113,16 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 				q.find(R.id.text_third_r).text(getString(R.string.class_wait_submit));
 			}
 		}
+		lessonDetails = new ArrayList<LessonDetail>();
+		lessoonDetails_camera = new ArrayList<Camera>();
+		text_classroom_name = (TextView) findViewById(R.id.text_classroom_name);
+		text_camera_num = (TextView) findViewById(R.id.text_camera_num);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
 	}
 	
 	@Override
@@ -169,7 +187,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			intent.setClass(this, CameraActivity.class);
 			intent.putExtra("schoolId", schoolId);
 			intent.putExtra("roomId", roomId);
-			startActivity(intent);
+			startActivityForResult(intent, REQ_CAMERA_FEEDBACK);
 			break;
 		default:
 			break;
@@ -183,8 +201,11 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 				AQuery q = new AQuery(this);
 				q.find(R.id.text_third_r).text(getString(R.string.class_parent_opinion_submitted));
 			}else if(requestCode == REQ_CLASSROOM_FEEDBACK){
-				roomId = data.getIntExtra("roomId",0);
-				Log.i("-----onActivityResult----------", roomId+"");
+//				roomName = data.getStringExtra("roomName");
+//				text_classroom_name.setText(roomName);
+				getLessonDetail();
+			}else if(requestCode == REQ_CAMERA_FEEDBACK){
+				getLessonDetail();
 			}
 		}
 	}
@@ -196,4 +217,33 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		return false;
 	}
 	
+	private void getLessonDetail(){
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+
+			@Override
+			protected Integer doInBackground(Void... params) {
+				lessoonDetails_camera.clear();
+				return LessonWebServerIF.getInstance(LessonDetailActivity.this).getLessonDetail(lessonId,lessonDetails,lessoonDetails_camera);
+			}
+			@Override
+			protected void onPostExecute(Integer result) {
+				if (ErrorCode.OK == result) {
+					int count = 0;
+				    int count_on = 0;
+					text_classroom_name.setText(lessonDetails.get(0).room_name);
+					roomId = lessonDetails.get(0).room_id;
+
+					for(Camera camera:lessoonDetails_camera){
+						count++;
+						if(camera.status == 1){
+							count_on++;
+						}
+					}
+					text_camera_num.setText("打开"+count_on+"/"+count);
+				}
+				
+			}
+
+		});
+	}
 }

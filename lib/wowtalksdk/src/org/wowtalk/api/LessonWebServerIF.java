@@ -395,6 +395,43 @@ public class LessonWebServerIF {
 		return errno;
 		
 	}
+	public int releaseRoom(int lesson_id){
+		int status = -1;
+		String uid = mPrefUtil.getUid();
+		String password = mPrefUtil.getPassword();
+		if (uid == null || password == null)
+			return status;
+
+		final String action = "release_room";
+		String postStr = "action=" + action + "&uid="
+				+ Utils.urlencodeUtf8(uid) + "&password="
+				+ Utils.urlencodeUtf8(password) + "&lesson_id=" + lesson_id;
+		Connect2 connect2 = new Connect2();
+		Element root = connect2.Post(postStr);
+
+		int errno = ErrorCode.BAD_RESPONSE;
+		if (root != null) {
+			NodeList errorList = root.getElementsByTagName("err_no");
+			Element errorElement = (Element) errorList.item(0);
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				errno = ErrorCode.OK;
+
+				Element resultElement = Utils.getFirstElementByTagName(root,
+						action);
+				if (resultElement != null) {
+					Element e = Utils.getFirstElementByTagName(resultElement,
+							"status");
+					status = Integer.parseInt(e.getTextContent());
+				}
+			} else {
+				errno = Integer.parseInt(errorStr);
+			}
+		}
+		return status;
+		
+	}
 	public int setUseRoom(int room_id, String lesson_id) {
 		int status = -1;
 		String uid = mPrefUtil.getUid();
@@ -432,7 +469,68 @@ public class LessonWebServerIF {
 		}
 		return status;
 	}
+	
+	public int getLessonDetail(int lesson_id,List<LessonDetail> lessonDetails,List<Camera> lessonDetails_camera){
+		String uid = mPrefUtil.getUid();
+		String password = mPrefUtil.getPassword();
+		if (uid == null || password == null)
+			return ErrorCode.NOT_LOGGED_IN;
 
+		final String action = "get_lesson_detail";
+		String postStr = "action=" + action + "&uid="
+				+ Utils.urlencodeUtf8(uid) + "&password="
+				+ Utils.urlencodeUtf8(password) + "&lesson_id="
+				+ lesson_id;
+
+		Connect2 connect2 = new Connect2();
+		Element root = connect2.Post(postStr);
+
+		int errno = ErrorCode.BAD_RESPONSE;
+		if (root != null) {
+			NodeList errorList = root.getElementsByTagName("err_no");
+			Element errorElement = (Element) errorList.item(0);
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				errno = ErrorCode.OK;
+
+				Element resultElement = Utils.getFirstElementByTagName(root,
+						action);
+				
+				if (resultElement != null) {
+				
+					NodeList roomNodes = resultElement
+							.getElementsByTagName("room");
+					int len = roomNodes.getLength();
+					for (int i = 0; i < len; ++i) {
+						Node roomNode = roomNodes.item(i);
+						if (roomNode instanceof Element) {
+							LessonDetail detail = XmlHelper
+									.parseLessonDetail_classroom((Element) roomNode);
+							lessonDetails.add(detail);
+						}
+					}
+				}
+				if (resultElement != null) {
+					NodeList roomNodes = resultElement
+							.getElementsByTagName("camera");
+					int len = roomNodes.getLength();
+					for (int i = 0; i < len; ++i) {
+						Node roomNode = roomNodes.item(i);
+						if (roomNode instanceof Element) {
+							Camera detail_camera = XmlHelper
+									.parseCamera((Element) roomNode);
+							lessonDetails_camera.add(detail_camera);
+						}
+					}
+				}
+			} else {
+				errno = Integer.parseInt(errorStr);
+			}
+		}
+		return errno;
+		
+	}
 	public List<Classroom> getClassroom(String school_id,
 			long start_date_timestamp, long end_date_timestamp) {
 		List<Classroom> classrooms = new ArrayList<Classroom>();

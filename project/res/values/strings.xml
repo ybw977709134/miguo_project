@@ -925,6 +925,7 @@
 	<string name="class_camera_select_front">前</string>
 	<string name="class_camera_select_middle">中</string>
 	<string name="class_camera_select_back">后</string>
+	<string name="class_classroom_release">解除绑定教室</string>
     <string name="no_more_to_load">没有更多分享了，自己创建一条吧</string>
     <string name="capture_video">拍摄</string>
     <string name="contact_info_edit_remarkname">编辑备注名</string>

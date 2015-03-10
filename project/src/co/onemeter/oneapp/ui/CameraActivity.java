@@ -3,10 +3,9 @@ package co.onemeter.oneapp.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Camera;
 import org.wowtalk.api.LessonWebServerIF;
-import org.wowtalk.api.PrefUtil;
+import org.wowtalk.ui.MessageBox;
 
 import com.androidquery.AQuery;
 
@@ -17,7 +16,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -25,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
@@ -43,6 +42,7 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 	private int lessonId;
 	private int roomId;
 	private int studentTag;
+	private MessageBox msgbox;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 	private void initView(){
 		AQuery q = new AQuery(this);
 		q.find(R.id.title_back).clicked(this);
-		
+		msgbox = new MessageBox(this);
 		schoolId = getIntent().getStringExtra("schoolId");
 		roomId = getIntent().getIntExtra("roomId",0);
 		lessonId = getIntent().getIntExtra("lessonId", 0);
@@ -95,7 +95,7 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 				alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {			
 					@Override
 					public void onClick(DialogInterface arg0, int arg1) {
-						finish();
+						
 					}
 				});
 				alertDialog.create().show();
@@ -128,6 +128,7 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 			@Override
 			protected void onPostExecute(Integer result) {
 				super.onPostExecute(result);
+				setResult(RESULT_OK);
 				finish();
 			}
 
@@ -135,36 +136,36 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 	}
 	
 	private void getCameraInfo(){
+		msgbox.showWait();
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
 				cameras.addAll(LessonWebServerIF.getInstance(CameraActivity.this)
 						.getCamera(schoolId, String.valueOf(roomId)));
-				Log.i("------cameras--------", cameras+"");
 				return null;
 			}
 			@Override
 			protected void onPostExecute(Integer result) {
-				super.onPostExecute(result);
+				msgbox.dismissWait();
 				cameraAdapter.notifyDataSetChanged();
 			}
 
 		});
 	}
 	private void getCameraInfo_Student(){
+		msgbox.showWait();
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
 				cameras.addAll(LessonWebServerIF.getInstance(CameraActivity.this)
 						.getCameraByLesson(schoolId, lessonId));
-				Log.i("------cameras--------", cameras+"");
 				return null;
 			}
 			@Override
 			protected void onPostExecute(Integer result) {
-				super.onPostExecute(result);
+				msgbox.dismissWait();
 				cameraAdapter.notifyDataSetChanged();
 			}
 
@@ -201,10 +202,16 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 				holder = new ViewHodler();
 				convertView = getLayoutInflater().inflate(R.layout.listitem_cameratable, parent, false);
 				holder.camera_item_icon = (ImageView) convertView.findViewById(R.id.camera_item_icon);
+				holder.camera_iv_isONorOFF = (ImageView) convertView.findViewById(R.id.camera_iv_isONorOFF);
+				holder.camera_tv_isONorOFF =  (TextView) convertView.findViewById(R.id.camera_tv_isONorOFF);
 				holder.camera_item_name = (TextView) convertView.findViewById(R.id.camera_item_name);
+				holder.camera_LinearLayout_isONorOFF = (LinearLayout) convertView.findViewById(R.id.camera_LinearLayout_isONorOFF);
 				if(studentTag == 1){
 					holder.camera_item_icon.setVisibility(View.GONE);
+					holder.camera_LinearLayout_isONorOFF.setVisibility(View.VISIBLE);
+					
 				}else{
+					holder.camera_LinearLayout_isONorOFF.setVisibility(View.GONE);
 				    holder.camera_item_icon.setVisibility(View.VISIBLE);	
 				}
 				convertView.setTag(holder);
@@ -213,10 +220,16 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 			}
 			if(status == 0){
 				holder.camera_item_icon.setImageResource(offId);
+				holder.camera_tv_isONorOFF.setText("OFF");
+				holder.camera_iv_isONorOFF.setImageResource(R.drawable.icon_section_row_invalid);
 				isOn = false;
+				convertView.setEnabled(false);
 			}else{
 				holder.camera_item_icon.setImageResource(onId);
+				holder.camera_tv_isONorOFF.setText("ON");
+				holder.camera_iv_isONorOFF.setImageResource(R.drawable.icon_section_row);
 				isOn = true;
+				convertView.setEnabled(true);
 			}
 			Camera c = cameras.get(position);
 			holder.camera_item_name.setText(c.camera_name);
@@ -241,6 +254,9 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 		class ViewHodler{
 			ImageView camera_item_icon;
 			TextView camera_item_name;
+			TextView camera_tv_isONorOFF;
+			ImageView camera_iv_isONorOFF;
+			LinearLayout camera_LinearLayout_isONorOFF;
 		}
 		
 		

@@ -56,6 +56,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private TextView tvLength;
 	private long currentTime;
 	private int lessonId;
+	private int isOnResume = 1;
 	
 	private GroupChatRoom class_group = new GroupChatRoom();
 	
@@ -370,6 +371,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		intent.putExtra("lesson", lessons.get(position));
 		intent.putExtra("startdate", startdate);
 		intent.putExtra("enddate", enddate);
+		intent.putExtra("onResume", isOnResume);
 		startActivity(intent);
 	}
 	

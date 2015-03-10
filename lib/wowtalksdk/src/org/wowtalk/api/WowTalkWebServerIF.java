@@ -574,17 +574,34 @@ public class WowTalkWebServerIF {
 	 * @param emailAddress
 	 * @return
 	 * @author hutianfeng
-	 * @date 2015/3/6
+	 * @date 2015/3/10
 	 */
-	public int newRetrievePassword(String wowtalk_id,String emailAddress) {
+	public int newRetrievePassword(String wowtalk_id,String password,String access_code) {
 		
 		String action = "retrieve_password";
 		String postStr = "action=" + action
 				+ "&wowtalk_id=" + Utils.urlencodeUtf8(wowtalk_id)
-				+ "&email_address=" + Utils.urlencodeUtf8(emailAddress);
+				+ "&password=" + Utils.urlencodeUtf8(password)
+				+ "&access_code=" + Utils.urlencodeUtf8(access_code);
 		
 		return _doRequestWithoutResponse(postStr);
 	}
+	
+	/**
+	 * 找回密码，获得验证码
+	 * @param emailAddress
+	 * @return
+	 * @author hutianfeng
+	 * @date 2015/3/10
+	 */
+	public int fSendCodeRetrievePassword (String wowtalk_id,String emailAddress) {
+		String action = "send_code_for_retrieve_password";
+		String postStr = "action=" + action
+				+ "&wowtalk_id=" + Utils.urlencodeUtf8(wowtalk_id)
+				+ "&email_address=" + Utils.urlencodeUtf8(emailAddress);
+		return _doRequestWithoutResponse(postStr);
+	}
+	
 	
 	/**
 	 * Bind my account with a email address.

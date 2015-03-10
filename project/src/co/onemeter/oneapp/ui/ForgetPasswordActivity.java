@@ -250,7 +250,7 @@ public class ForgetPasswordActivity extends Activity implements OnClickListener 
 //			layout_verification_auth_code.setVisibility(View.VISIBLE);
 			
 //			bindEmailStatus ();
-			ret("Back3","2364611478@qq.com");
+//			ret("Back3","2364611478@qq.com");
 			
 			break;
 			
@@ -302,54 +302,54 @@ public class ForgetPasswordActivity extends Activity implements OnClickListener 
 	 /**
      * 检测用户绑定邮箱的状态
      */
-    private void bindEmailStatus () {
-    	mMsgBox.showWait();
-    	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, List<Map<String, Object>>> () {
-    		
-            @Override
-            protected List<Map<String, Object>> doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(ForgetPasswordActivity.this).fEmailBindStatus();
-            }
-
-            @Override
-            protected void onPostExecute(List<Map<String, Object>> result) {
-            	mMsgBox.dismissWait();
-            	if (result != null) {
-            	bindEmail = (String) result.get(0).get("email");
-            } else {
-            	Toast.makeText(ForgetPasswordActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
-            }
-            
-            } 
-        });
-    }
-    
-    private void ret(final String wowtalk_id,final String emailAddress) {
-    	mMsgBox.showWait();
-    	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
-
-            @Override
-            protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(ForgetPasswordActivity.this).newRetrievePassword(wowtalk_id,emailAddress);
-            }
-
-            @Override
-            protected void onPostExecute(Integer result) {
-                mMsgBox.dismissWait();
-               
-                switch (result) {
-                    case ErrorCode.OK://0
-                    	mMsgBox.show(null,"重置密码成功");
-                    	mMsgBox.dismissDialog();
-                        break;
-                    default://邮箱绑定失败
-                        mMsgBox.show(null, getString(R.string.bind_email_failed));
-                        mMsgBox.dismissDialog();
-                        break;
-                }
-            }
-        });
-    }
+//    private void bindEmailStatus () {
+//    	mMsgBox.showWait();
+//    	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, List<Map<String, Object>>> () {
+//    		
+//            @Override
+//            protected List<Map<String, Object>> doInBackground(Void... params) {
+//                return WowTalkWebServerIF.getInstance(ForgetPasswordActivity.this).fEmailBindStatus();
+//            }
+//
+//            @Override
+//            protected void onPostExecute(List<Map<String, Object>> result) {
+//            	mMsgBox.dismissWait();
+//            	if (result != null) {
+//            	bindEmail = (String) result.get(0).get("email");
+//            } else {
+//            	Toast.makeText(ForgetPasswordActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
+//            }
+//            
+//            } 
+//        });
+//    }
+//    
+//    private void ret(final String wowtalk_id,final String emailAddress) {
+//    	mMsgBox.showWait();
+//    	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
+//
+//            @Override
+//            protected Integer doInBackground(Void... params) {
+//                return WowTalkWebServerIF.getInstance(ForgetPasswordActivity.this).newRetrievePassword(wowtalk_id,emailAddress);
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Integer result) {
+//                mMsgBox.dismissWait();
+//               
+//                switch (result) {
+//                    case ErrorCode.OK://0
+//                    	mMsgBox.show(null,"重置密码成功");
+//                    	mMsgBox.dismissDialog();
+//                        break;
+//                    default://邮箱绑定失败
+//                        mMsgBox.show(null, getString(R.string.bind_email_failed));
+//                        mMsgBox.dismissDialog();
+//                        break;
+//                }
+//            }
+//        });
+//    }
 	
 }
 

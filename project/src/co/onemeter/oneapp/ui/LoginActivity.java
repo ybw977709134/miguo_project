@@ -406,8 +406,9 @@ public class LoginActivity extends Activity implements OnClickListener {
      * 跳转到找回密码的界面
      */
     private void fGotoFetchPwd() {
-		Intent fetchIntent = new Intent(LoginActivity.this, BindEmailAddressActivity.class);
-		startActivity(fetchIntent);
+//		Intent fetchIntent = new Intent(LoginActivity.this, FindPasswordEmialActivity.class);
+//		startActivity(fetchIntent);
+    	Toast.makeText(LoginActivity.this, "功能正在实现中..", Toast.LENGTH_SHORT).show();
 	}
 
     @Override

@@ -16,7 +16,9 @@
 	    <LinearLayout 
 	        android:id="@+id/layout_back"
 	        android:layout_width="wrap_content"
-	        android:layout_height="match_parent">
+	        android:layout_height="match_parent"
+	        android:clickable="true"
+	        android:orientation="horizontal" >
 	        
 	        <ImageButton
             android:id="@+id/title_back"

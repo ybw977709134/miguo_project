@@ -80,6 +80,8 @@ public class ErrorCode {
     public static final int FORGET_PWD_EMAIL_NOT_MATCH = 1103;
     public static final int FORGET_PWD_PHONE_NOT_MATCH = 1104;
     public static final int FORGET_PWD_EMAIL_PHONE_NOT_BOUND = 1105;
+    public static final int FORGET_PWD_ACCESS_CODE_FALSE = 1108;
+    public static final int FORGET_PWD_ACCESS_CODE_OUT_TIME = 1109;
 
 	public final static int ERR_INVITATION_CODE_NOT_EXIST = -98;         //INVITATION_CODE not exist error
 	public final static int ERR_SCHOOL_USER_HAD_BOUND = -97;         //INVITATION_CODE HAD BOUND error

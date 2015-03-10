@@ -775,18 +775,6 @@ public class PrefUtil {
         return true;
     }
 
-    public String getOssUid() {
-        return "u9HhKKGaN779cDQQ";
-    }
-
-    public String getOssKey() {
-        return "E67LFFrjqeSQ4FKmVFhXgpACUrSgEf";
-    }
-
-    public String getOssBucket() {
-        return "om-im-dev01";
-    }
-
     /** Use Amazon S3 as storage service. */
     public boolean isUseS3() {
         return sPref.getBoolean(USE_S3, false);

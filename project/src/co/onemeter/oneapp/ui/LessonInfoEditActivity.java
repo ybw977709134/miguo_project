@@ -50,7 +50,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	private List<String> delLessons;
 	private List<Lesson> addLessons;
 	
-	private AlertDialog.Builder addDialog;
+	private AlertDialog.Builder dialog;
 	private String reLength;
 	private String reTime;
 	
@@ -70,8 +70,6 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 //		reTime = intent.getStringExtra("reTime");
 		reTime= intent.getExtras().getString("retime");
 		
-		android.util.Log.i("-----reLength-----", reLength);
-		android.util.Log.i("-----reTime-----", reTime);
 		classId = classroom.groupID;
 		//android.util.Log.i("-->>", classroom.groupID);
 
@@ -112,12 +110,12 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			
 			ContextThemeWrapper themedContext;
 			if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
-			    themedContext = new ContextThemeWrapper( this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar );
+			    themedContext = new ContextThemeWrapper( this, android.R.style.Theme_Holo_Light_Dialog);
 			}
 			else {
-			    themedContext = new ContextThemeWrapper( this, android.R.style.Theme_Light_NoTitleBar );
+			    themedContext = new ContextThemeWrapper( this, android.R.style.Theme_Light );
 			}
-			addDialog = new AlertDialog.Builder(themedContext);
+			dialog = new AlertDialog.Builder(themedContext);
 	}
 
 	@Override
@@ -135,7 +133,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			break;
 		case R.id.lay_footer_add:
 			if(!DoubleClickedUtils.isFastDoubleClick()){
-				showAddOrModifyLessonDialog(true,null,-1);
+				showAddOrModifyLessonDialog(true,null,-1,false);
 			}
 			break;
 		default:
@@ -147,18 +145,20 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Lesson lesson = lessons.get(position);
-		//只允许今后的课程能够修改时间
+		boolean isBeafore = true;
+		//允许今后的课程能够修,已经上过的课可以修改课名
 		if(lesson.start_date * 1000 > System.currentTimeMillis()){
-			if(!DoubleClickedUtils.isFastDoubleClick()){
-				showAddOrModifyLessonDialog(false,view, position);
-			}
+			isBeafore = false;
+		}
+		if(!DoubleClickedUtils.isFastDoubleClick()){
+			showAddOrModifyLessonDialog(false,view, position,isBeafore);
 		}
 	}
 	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
-		menu.add(0, 1, Menu.NONE, getString(R.string.contacts_local_delete)); 
+		//menu.add(0, 1, Menu.NONE, getString(R.string.contacts_local_delete)); 
 	}
 	
 	@Override
@@ -197,19 +197,26 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	
 	
 	
-	private void showAddOrModifyLessonDialog(final boolean isAdd,final View item,final int position){
+	private void showAddOrModifyLessonDialog(final boolean isAdd,final View item,final int position,boolean isBefore){
 		View view = getLayoutInflater().inflate(R.layout.lay_add_lesson, null);
 		final EditText edName = (EditText) view.findViewById(R.id.ed_dialog_time);
 		final DatePicker datepicker = (DatePicker) view.findViewById(R.id.datepicker_dialog);
 		
 		if(!isAdd){
-			view.findViewById(R.id.lay_lesson_name).setVisibility(View.GONE);
+			dialog.setTitle("修改课程");
+			view.findViewById(R.id.lay_lesson_name).setVisibility(View.VISIBLE);
 			String[] startTime = ((TextView)item.findViewById(R.id.coursetable_item_time)).getText().toString().split("-");
 			datepicker.init(Integer.parseInt(startTime[0]), Integer.parseInt(startTime[1]) - 1, Integer.parseInt(startTime[2]), null);
+		}else{
+			dialog.setTitle("添加课程");
 		}
 		
-		addDialog.setView(view);
-		addDialog.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+		if(isBefore){
+			view.findViewById(R.id.lay_dialog_date).setVisibility(View.GONE);
+		}
+		
+		dialog.setView(view);
+		dialog.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -220,14 +227,15 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 				Log.i("---resultTime---" + resultTime);
 				String[] times = reTime.split(":");
 				String[] lengths = reLength.split(":");
+				
+				String content = edName.getText().toString();
+				if(TextUtils.isEmpty(content)){
+					mMsgBox.toast(R.string.class_lessontitle_not_null);
+					notdismissDialog(dialog);
+					return;
+				}
+				
 				if(isAdd){
-					String content = edName.getText().toString();
-					if(TextUtils.isEmpty(content)){
-						mMsgBox.toast(R.string.class_lessontitle_not_null);
-						notdismissDialog(dialog);
-						return;
-					}
-					
 //					long now = System.currentTimeMillis();
 //					if(resultTime < now){
 //						mMsgBox.toast(R.string.class_time_ealier);
@@ -260,6 +268,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 						lessons.get(position).end_date = lessons.get(position).start_date + Integer.parseInt(lengths[0])*3600 + Integer.parseInt(lengths[1])*60;
 						Lesson lesson = lessons.get(position);
 						if(lesson.lesson_id > 0){
+							lesson.title = content;
 							modifyPostLesson(lesson);
 						}else{
 							int size = addLessons.size();
@@ -284,7 +293,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 				}
 			}
 		}).create();
-		addDialog.show();
+		dialog.show();
 	}
 	
 	private void notdismissDialog(DialogInterface dialog){

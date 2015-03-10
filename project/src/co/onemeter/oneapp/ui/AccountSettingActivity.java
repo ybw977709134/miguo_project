@@ -203,12 +203,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 		            }					
 				}
 			});
-			builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {			
-				@Override
-				public void onClick(DialogInterface arg0, int arg1) {
-					
-				}
-			});
+			builder.setNegativeButton("取消", null);
 			
 			builder.create().show();
 			
@@ -262,13 +257,13 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 		instance = this;
 		initView();
 		
-		boolean isBand = getIntent().getBooleanExtra("isband", false);
+//		boolean isBand = getIntent().getBooleanExtra("isband", false);
 		//检测用户绑定邮箱的状态
 		bindEmailStatus ();
-		if (isBand) {
-			mMsgBox.show(null, getString(R.string.bind_email_successed));
-			mMsgBox.dismissDialog();
-		}
+//		if (isBand) {
+//			mMsgBox.show(null, getString(R.string.bind_email_successed));
+//			mMsgBox.dismissDialog();
+//		}
 
 	}
 
@@ -303,7 +298,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
             	if (result != null) {
             	bindEmail = (String) result.get(0).get("email");
             	
-            	if (bindEmail != null) {//说明绑定邮箱，显示绑定的邮箱
+            	if (!TextUtils.isEmpty(bindEmail)) {//说明绑定邮箱，显示绑定的邮箱
             		txtEmail.setText(bindEmail);
             		
             	} else {//未绑定，显示请绑定邮箱
@@ -330,15 +325,24 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 			case BIND_EMAIL_REQUEST_CODE://绑定邮箱成功后的处理结果
 				
 				bindEmailStatus ();
-				mMsgBox.show(null, getString(R.string.bind_email_successed));
-				mMsgBox.dismissDialog();
-				
+				if (!TextUtils.isEmpty(bindEmail)) {
+					mMsgBox.show(null, getString(R.string.bind_email_successed));
+					mMsgBox.dismissDialog();
+				} 
 				break;
+				
 			case FIX_BIND_EMAIL_REQUEST_CODE://修改绑定邮箱后的处理结果
 				
-				bindEmailStatus ();
-				mMsgBox.show(null, getString(R.string.bind_email_successed));
-				mMsgBox.dismissDialog();
+				bindEmailStatus();
+				if (!TextUtils.isEmpty(bindEmail)) {
+					mMsgBox.show(null, getString(R.string.bind_email_successed));
+					mMsgBox.dismissDialog();
+				}
+//				} else {
+//					mMsgBox.show(null, getString(R.string.bind_email_failed));
+//					mMsgBox.dismissDialog();
+//					break;
+//				}
 				break;
 			default:
 				break;

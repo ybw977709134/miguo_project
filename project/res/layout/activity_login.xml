@@ -119,13 +119,10 @@
 			android:layout_alignParentBottom="true"
 			android:layout_marginBottom="20dp"
 			android:orientation="vertical">
-
 			
 				<Button
 					android:id="@+id/btn_signup"
-					android:background="@drawable/btn_bule_register"
-					android:textSize="18sp"
-					android:padding="@dimen/padding_medium"
+					style="@style/button_bule_register"
 					android:text="@string/login_signup"
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"

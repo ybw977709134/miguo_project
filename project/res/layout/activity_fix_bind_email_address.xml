@@ -30,7 +30,7 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             android:clickable="true"
-            android:text="返回"/>
+            android:text="账号"/>
         
         <TextView
             android:layout_height="wrap_content"
@@ -52,7 +52,6 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:singleLine="true"
-            android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:clickable="true"
@@ -101,6 +100,7 @@
         			android:layout_marginRight="5dp"
         			android:layout_centerVertical="true"
         			android:text="获取验证码"
+        			android:textSize="20sp"
         			android:textColor="@color/blue"
         			android:background="@drawable/btn_small_valid"/>
                 

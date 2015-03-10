@@ -53,7 +53,6 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:singleLine="true"
-            android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:clickable="true"

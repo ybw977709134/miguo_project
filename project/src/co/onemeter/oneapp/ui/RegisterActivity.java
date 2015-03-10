@@ -39,8 +39,8 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	private EditText edtAccount;
 	private EditText edtPwd;
 	private EditText edtPwdConfirm;
-	
-	private View btnBack;
+
+	private LinearLayout layout_back;
 	
 	private LinearLayout layout_register_user_type;
 	private TextView textView_register_user_type;
@@ -93,8 +93,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	};
 	
 	private void initView() {
-		btnBack = findViewById(R.id.title_back);
-		
+		layout_back = (LinearLayout) findViewById(R.id.layout_back);
 		layout_register_user_type = (LinearLayout) findViewById(R.id.layout_register_user_type);
 		
 		textView_register_user_type = (TextView) findViewById(R.id.textView_register_user_type);
@@ -109,7 +108,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 		edtPwd = (EditText) findViewById(R.id.pwd_edit);
 		edtPwdConfirm = (EditText) findViewById(R.id.pwd_confirm_edit);
 		
-		btnBack.setOnClickListener(this);
+		layout_back.setOnClickListener(this);
 		btnCreate.setOnClickListener(this);
 		
 		//每次密码框重新获得焦点时，清空密码框
@@ -120,7 +119,6 @@ public class RegisterActivity extends Activity implements OnClickListener{
 				if (hasFocus) {
 					edtPwd.setText("");
 				}
-				
 			}
 		});
 		
@@ -132,7 +130,6 @@ public class RegisterActivity extends Activity implements OnClickListener{
 				if (hasFocus) {
 					edtPwdConfirm.setText("");
 				}
-				
 			}
 		});
 		
@@ -271,7 +268,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	 */
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.title_back:
+		case R.id.layout_back:
 			finish();
 			break;
 			

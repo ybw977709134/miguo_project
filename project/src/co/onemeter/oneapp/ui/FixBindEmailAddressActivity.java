@@ -363,9 +363,11 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
     	if (resultCode == RESULT_OK) {
 			switch (requestCode) {
 			case REBIND_EMAIL_REQUEST_CODE://解除绑定，重新绑定邮箱成功后的处理结果
-				Intent intent = new Intent(FixBindEmailAddressActivity.this, AccountSettingActivity.class);
-				intent.putExtra("isband", true);
-				startActivity(intent);
+//				Intent intent = new Intent(FixBindEmailAddressActivity.this, AccountSettingActivity.class);
+//				intent.putExtra("isband", true);
+//				startActivity(intent);
+				Intent intent = new Intent();
+		        setResult(RESULT_OK, intent);
 				finish();
 				break;
 			

@@ -219,7 +219,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 //                setResult(RESULT_OK, intent);
               //返回时，没验证或验证不通过的都要解绑
     			unBindEmailAddress();
-				finish();
+//				finish();
 			} else if (pageFlag == AUTH_CODE_PAGE) {
 				pageFlag = BIND_EMAIL_PAGE;
 				layout_verification_auth_code.setVisibility(View.GONE);
@@ -242,9 +242,9 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 				public void onClick(DialogInterface arg0, int arg1) {
 					//取消绑定邮箱，解绑
 					unBindEmailAddress();
-					Intent intent = new Intent();
-                    setResult(RESULT_OK, intent);
-					finish();
+//					Intent intent = new Intent();
+//                    setResult(RESULT_OK, intent);
+//					finish();
 				}
 			});
 			
@@ -428,7 +428,10 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                
                 switch (result) {
                     case ErrorCode.OK://0        	
-                    	Toast.makeText(BindEmailAddressActivity.this, "邮箱未绑定", Toast.LENGTH_SHORT).show();
+//                    	Toast.makeText(BindEmailAddressActivity.this, "邮箱未绑定", Toast.LENGTH_SHORT).show();
+//                    	Intent intent = new Intent();
+//                      setResult(RESULT_OK, intent);
+    					finish();
                         break;
                         
                     default:

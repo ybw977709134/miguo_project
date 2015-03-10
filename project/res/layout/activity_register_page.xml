@@ -12,26 +12,31 @@
         android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
         style="@style/title_bar_blue">
-        <ImageButton
+
+	    <LinearLayout 
+	        android:id="@+id/layout_back"
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent">
+	        
+	        <ImageButton
             android:id="@+id/title_back"
             android:layout_height="50dp"
             android:layout_width="20dp"
-            android:layout_alignParentLeft="true"
             android:background="@null"
             android:src="@drawable/nav_back_selector"/>
         
         <!-- 添加找回密码页表头的文本 -->
         <TextView 
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:id="@+id/textView_fixBindEmail_back"
-            android:layout_toRightOf="@id/title_back"
-            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:clickable="true"
-            android:text="返回"/>
-        
+            android:text="返回"/>	        
+	    </LinearLayout>
+  
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -55,6 +60,7 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             android:clickable="true"
+            android:visibility="gone"
             android:text="取消"/>
         
     </RelativeLayout>

@@ -144,8 +144,12 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (s.length() == 0) {
 					field_clear_email.setVisibility(View.GONE);
+					btn_verification_email.setTextColor(getResources().getColor(R.color.white_40));
+					btn_verification_email.setEnabled(false);
 				} else {
 					field_clear_email.setVisibility(View.VISIBLE);
+					btn_verification_email.setTextColor(getResources().getColor(R.color.white));
+					btn_verification_email.setEnabled(true);
 				}
 				
 			}
@@ -167,8 +171,13 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (s.length() == 0) {
 					field_clear_auth_code.setVisibility(View.GONE);
+					btn_verification_auth_code.setTextColor(getResources().getColor(R.color.white_40));
+					btn_verification_auth_code.setEnabled(false);
+					
 				} else {
 					field_clear_auth_code.setVisibility(View.VISIBLE);
+					btn_verification_auth_code.setTextColor(getResources().getColor(R.color.white));
+					btn_verification_auth_code.setEnabled(true);
 				}
 				
 			}
@@ -203,11 +212,15 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 		//清除绑定邮箱中文本框中的内容
 		case R.id.field_clear_email:
 			txt_bind_email.setText("");
+			btn_verification_email.setTextColor(getResources().getColor(R.color.white_40));
+			btn_verification_email.setEnabled(false);
 			textView_verification_email_result.setVisibility(View.GONE);
 			break;
 		//清除验证码文本框中的内容	
 		case R.id.field_clear_auth_code:
 			txt_auth_code.setText("");
+			btn_verification_auth_code.setTextColor(getResources().getColor(R.color.white_40));
+			btn_verification_auth_code.setEnabled(false);
 			textView_verification_authCode_result.setVisibility(View.GONE);
 						
 			break;

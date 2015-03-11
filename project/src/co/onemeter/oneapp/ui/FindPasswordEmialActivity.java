@@ -34,10 +34,11 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 	private TextView textView_findPassword_back;//返回
 	private TextView textView_findPassword_cancel;//取消
 	
-	//验证邮箱
+	//验证账号和邮箱
 	
 	private RelativeLayout layout_verification_email;
 	private EditText txt_bind_account;//输入账号
+	private ImageButton field_clear_account;//清除账号
 	private EditText txt_bind_email;//输入绑定邮箱
 	private ImageButton field_clear_email;//清除邮箱
 	private TextView textView_verification_email_result;//账号和邮箱的验证结果
@@ -98,9 +99,10 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 		textView_findPassword_back = (TextView) findViewById(R.id.textView_findPassword_back);
 		textView_findPassword_cancel = (TextView) findViewById(R.id.textView_findPassword_cancel);
 		
-		//验证邮箱
+		//验证账号和邮箱
 		layout_verification_email = (RelativeLayout) findViewById(R.id.layout_verification_email);
 		txt_bind_account = (EditText) findViewById(R.id.txt_bind_account);
+		field_clear_account = (ImageButton) findViewById(R.id.field_clear_account);
 		txt_bind_email = (EditText) findViewById(R.id.txt_bind_email);
 		field_clear_email = (ImageButton) findViewById(R.id.field_clear_email);
 		textView_verification_email_result = (TextView) findViewById(R.id.textView_verification_email_result);
@@ -125,6 +127,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
     	textView_isshow_password = (TextView) findViewById(R.id.textView_isshow_password);
     	textView_verification_newPassword = (TextView) findViewById(R.id.textView_verification_newPassword);
     	btn_newPassWord_ok = (Button) findViewById(R.id.btn_newPassWord_ok);
+    	field_clear_account.setOnClickListener(this);
     	field_clear_auth_code.setOnClickListener(this);
     	btn_verification_auth_code.setOnClickListener(this);
     	btn_again_receive_auth_code.setOnClickListener(this);
@@ -135,6 +138,33 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
     	
     	//对各个控件设置监听事件
     	
+    	//输入账号时，清除图片按钮的控制
+    	txt_bind_account.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (s.length() == 0) {
+					field_clear_account.setVisibility(View.GONE);
+					btn_verification_email.setTextColor(getResources().getColor(R.color.white_40));
+					btn_verification_email.setEnabled(false);
+				} else {
+					field_clear_account.setVisibility(View.VISIBLE);
+					btn_verification_email.setTextColor(getResources().getColor(R.color.white));
+					btn_verification_email.setEnabled(true);
+				}
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
+    	
     	//输入绑定邮箱时，清除图片按钮的控制
     	txt_bind_email.addTextChangedListener(new TextWatcher() {
 			
@@ -142,8 +172,12 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (s.length() == 0) {
 					field_clear_email.setVisibility(View.GONE);
+					btn_verification_email.setTextColor(getResources().getColor(R.color.white_40));
+					btn_verification_email.setEnabled(false);
 				} else {
 					field_clear_email.setVisibility(View.VISIBLE);
+					btn_verification_email.setTextColor(getResources().getColor(R.color.white));
+					btn_verification_email.setEnabled(true);
 				}
 				
 			}
@@ -165,8 +199,12 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (s.length() == 0) {
 					field_clear_auth_code.setVisibility(View.GONE);
+					btn_verification_auth_code.setTextColor(getResources().getColor(R.color.white_40));
+					btn_verification_auth_code.setEnabled(false);
 				} else {
 					field_clear_auth_code.setVisibility(View.VISIBLE);
+					btn_verification_auth_code.setTextColor(getResources().getColor(R.color.white));
+					btn_verification_auth_code.setEnabled(true);
 				}
 				
 			}
@@ -194,13 +232,21 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
+		//清空账号输入框中的内容
+		case R.id.field_clear_account:
+			txt_bind_account.setText("");
+			break;
 		//清除绑定邮箱中文本框中的内容
 		case R.id.field_clear_email:
 			txt_bind_email.setText("");
+			btn_verification_email.setTextColor(getResources().getColor(R.color.white_40));
+			btn_verification_email.setEnabled(false);
 			break;
 		//清除验证码文本框中的内容	
 		case R.id.field_clear_auth_code:
 			txt_auth_code.setText("");
+			btn_verification_auth_code.setTextColor(getResources().getColor(R.color.white_40));
+			btn_verification_auth_code.setEnabled(false);
 			break;
 		case R.id.title_back:
 		case R.id.textView_findPassword_back:
@@ -211,7 +257,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 			
 		case R.id.btn_verification_email://验证邮箱
 			
-			retrievePassword(txt_bind_account.getText().toString(),txt_bind_email.getText().toString());
+			sendCodeRetrievePassword(txt_bind_account.getText().toString(),txt_bind_email.getText().toString());
 			//60秒内不可点击  重新获取验证码
 			stopGetAccessCode();
 			break;
@@ -219,7 +265,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 		//验证验证码	
 		case R.id.btn_verification_auth_code:
 			//成功时
-			verifyBindEmailAddress(txt_auth_code.getText().toString(),txt_bind_email.getText().toString());		
+			checkCodeRetrievePassword(txt_bind_account.getText().toString(),txt_auth_code.getText().toString());		
 			
 //			layout_verification_auth_code.setVisibility(View.GONE);
 //			layout_reset_password.setVisibility(View.VISIBLE);
@@ -228,7 +274,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 						
 		//重新获得验证码	
 		case R.id.btn_again_receive_auth_code:
-			retrievePassword(txt_bind_account.getText().toString(),txt_bind_email.getText().toString());
+			sendCodeRetrievePassword(txt_bind_account.getText().toString(),txt_bind_email.getText().toString());
 			//60秒内不可点击  重新获取验证码
 			stopGetAccessCode();			
 		break;
@@ -253,11 +299,36 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 						
 		//重置后的密码
 		case R.id.btn_newPassWord_ok:
-			resetPassword(txt_bind_account.getText().toString(),txt_new_password.getText().toString(),txt_auth_code.getText().toString());
-			break;
+			if (txt_new_password.getText().toString().length() < 6) {
+				textView_verification_newPassword.setVisibility(View.VISIBLE);
+				textView_verification_newPassword.setText("密码至少6位");
+				
+				break;
+			} else  if (txt_new_password.getText().toString().length() > 20) {
+				textView_verification_newPassword.setVisibility(View.VISIBLE);
+				textView_verification_newPassword.setText("密码最多20位");
+				break;
+			} else  if (txt_confirm_new_password.getText().toString().length() < 6) {
+				textView_verification_newPassword.setVisibility(View.VISIBLE);
+				textView_verification_newPassword.setText("确认密码至少6位");
+				break;
+			} else  if (txt_confirm_new_password.getText().toString().length() > 20) {
+				textView_verification_newPassword.setVisibility(View.VISIBLE);
+				textView_verification_newPassword.setText("确认密码最多20位");
+				
+				break;
+			} else  if (!txt_new_password.getText().toString().equals(txt_confirm_new_password.getText().toString())) {
+				textView_verification_newPassword.setVisibility(View.VISIBLE);
+				textView_verification_newPassword.setText("密码和确认密码输入不一致");
+				break;
+			}else {
+				resetPassword(txt_bind_account.getText().toString(),txt_new_password.getText().toString());
+				break;
+			}
+			
 
 		default:
-			break;
+			break; 
 		}
 		
 	}
@@ -295,7 +366,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 	 * @author hutianfeng
 	 * @date 2015/3/10
 	 */
-	private void retrievePassword(final String wowtalk_id,final String emailAddress) {
+	private void sendCodeRetrievePassword(final String wowtalk_id,final String emailAddress) {
 		mMsgBox.showWait();
     	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
@@ -353,19 +424,19 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 	
 	/**
 	 * 验证绑定邮箱收到的验证码
+	 * @param wowtalk_id
 	 * @param access_code
-	 * @param emailAddress
 	 * @author hutainfeng
-	 * @date 2015/3/10
+	 * @date 2015/3/11
 	 */
-	private void verifyBindEmailAddress(final String access_code,final String emailAddress) {
+	private void checkCodeRetrievePassword (final String wowtalk_id,final String access_code) {
 		mMsgBox.showWait();
 		
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(FindPasswordEmialActivity.this).fVerifyEmailAddress(access_code,emailAddress);
+                return WowTalkWebServerIF.getInstance(FindPasswordEmialActivity.this).fCheckCodeRetrievePassword(wowtalk_id, access_code);
             }
 
             @Override
@@ -378,6 +449,21 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                     	layout_reset_password.setVisibility(View.VISIBLE);
                     	
                         break;
+                        
+                    case ErrorCode.USER_NOT_EXISTS://-99
+                    	textView_verification_email_result.setVisibility(View.VISIBLE);
+                    	textView_verification_email_result.setText("你输入的账号不存在");
+                    	break;
+                    	
+                    case ErrorCode.FORGET_PWD_ACCESS_CODE_FALSE://1108
+                    	textView_verification_email_result.setVisibility(View.VISIBLE);
+                    	textView_verification_email_result.setText("验证码不正确");
+                    	break;
+                    	
+                    case ErrorCode.FORGET_PWD_ACCESS_CODE_OUT_TIME://1109
+                    	textView_verification_email_result.setVisibility(View.VISIBLE);
+                    	textView_verification_email_result.setText("验证码已过时");
+                    	break;
                         
                     case ErrorCode.ACCESS_CODE_ERROR://22:无效的验证码，验证码有有效期，目前是一天的有效期
                     	textView_verification_authCode_result.setVisibility(View.VISIBLE);
@@ -396,16 +482,16 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 	/**
 	 * 重置密码
 	 * @param wowtalk_id
-	 * @param emailAddress
-	 * @date 2015/3/10
+	 * @param password
+	 * @date 2015/3/11
 	 */
-	private void resetPassword(final String wowtalk_id,final String password,final String access_code) {
+	private void resetPassword(final String wowtalk_id,final String password) {
     	mMsgBox.showWait();
     	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(FindPasswordEmialActivity.this).newRetrievePassword(wowtalk_id,password,access_code);
+                return WowTalkWebServerIF.getInstance(FindPasswordEmialActivity.this).newRetrievePassword(wowtalk_id,password);
             }
 
             @Override
@@ -434,7 +520,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                         
                     case ErrorCode.FORGET_PWD_ACCESS_CODE_FALSE://1108
                     	textView_verification_email_result.setVisibility(View.VISIBLE);
-                    	textView_verification_email_result.setText("验证码不存在或者不正确");
+                    	textView_verification_email_result.setText("未验证验证码");
                     	break;
                     	
                     case ErrorCode.FORGET_PWD_ACCESS_CODE_OUT_TIME://1109

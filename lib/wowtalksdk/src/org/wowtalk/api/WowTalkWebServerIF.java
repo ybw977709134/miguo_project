@@ -576,20 +576,19 @@ public class WowTalkWebServerIF {
 	 * @author hutianfeng
 	 * @date 2015/3/10
 	 */
-	public int newRetrievePassword(String wowtalk_id,String password,String access_code) {
+	public int newRetrievePassword(String wowtalk_id,String password) {
 		
 		String action = "retrieve_password";
 		String postStr = "action=" + action
 				+ "&wowtalk_id=" + Utils.urlencodeUtf8(wowtalk_id)
-				+ "&password=" + Utils.urlencodeUtf8(password)
-				+ "&access_code=" + Utils.urlencodeUtf8(access_code);
+				+ "&password=" + Utils.urlencodeUtf8(password);
 		
 		return _doRequestWithoutResponse(postStr);
 	}
 	
 	/**
 	 * 找回密码，获得验证码
-	 * @param emailAddress
+	 * @param wowtalk_id，emailAddress
 	 * @return
 	 * @author hutianfeng
 	 * @date 2015/3/10
@@ -599,6 +598,22 @@ public class WowTalkWebServerIF {
 		String postStr = "action=" + action
 				+ "&wowtalk_id=" + Utils.urlencodeUtf8(wowtalk_id)
 				+ "&email_address=" + Utils.urlencodeUtf8(emailAddress);
+		return _doRequestWithoutResponse(postStr);
+	}
+	
+	
+	/**
+	 * 找回密码，验证验证码
+	 * @param wowtalk_id,access_code
+	 * @return
+	 * @author hutianfeng
+	 * @date 2015/3/11
+	 */
+	public int fCheckCodeRetrievePassword (String wowtalk_id,String access_code) {
+		String action = "check_code_for_retrieve_password";
+		String postStr = "action=" + action
+				+ "&wowtalk_id=" + Utils.urlencodeUtf8(wowtalk_id)
+				+ "&access_code=" + Utils.urlencodeUtf8(access_code);
 		return _doRequestWithoutResponse(postStr);
 	}
 	

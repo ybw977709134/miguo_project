@@ -2,6 +2,7 @@ package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -40,8 +42,8 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	private EditText edtPwd;
 	private EditText edtPwdConfirm;
 
-	private LinearLayout layout_back;
-	
+	private ImageButton title_back;
+	private TextView textView_find_password_back;//返回
 	private LinearLayout layout_register_user_type;
 	private TextView textView_register_user_type;
 	private ImageView imageview_show_password;//显示密码
@@ -93,7 +95,9 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	};
 	
 	private void initView() {
-		layout_back = (LinearLayout) findViewById(R.id.layout_back);
+		
+		title_back = (ImageButton) findViewById(R.id.title_back);
+		textView_find_password_back =  (TextView) findViewById(R.id.textView_find_password_back);
 		layout_register_user_type = (LinearLayout) findViewById(R.id.layout_register_user_type);
 		
 		textView_register_user_type = (TextView) findViewById(R.id.textView_register_user_type);
@@ -105,10 +109,27 @@ public class RegisterActivity extends Activity implements OnClickListener{
 		btnCreate = (Button) findViewById(R.id.create_button);
 		
 		edtAccount = (EditText) findViewById(R.id.account_edit);
+		
+		//默认弹起键盘 用户账号输入界面
+		
+		edtAccount.setFocusable(true);
+		edtAccount.setFocusableInTouchMode(true); 
+		edtAccount.requestFocus();
+        
+        Handler hanlder = new Handler();
+        hanlder.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				mInputMethodManager.showSoftInput(edtAccount, InputMethodManager.RESULT_SHOWN);
+				mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY); 
+			}
+		}, 200);
+
+		
 		edtPwd = (EditText) findViewById(R.id.pwd_edit);
 		edtPwdConfirm = (EditText) findViewById(R.id.pwd_confirm_edit);
 		
-		layout_back.setOnClickListener(this);
 		btnCreate.setOnClickListener(this);
 		
 		//每次密码框重新获得焦点时，清空密码框
@@ -133,7 +154,8 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			}
 		});
 		
-		
+		title_back.setOnClickListener(this);
+		textView_find_password_back.setOnClickListener(this);
 		layout_register_user_type.setOnClickListener(this);
 		imageview_show_password.setOnClickListener(this);
     	imageview_hint_password.setOnClickListener(this);
@@ -268,10 +290,11 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	 */
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.layout_back:
+		//返回，撤销此次的注册
+		case R.id.title_back:
+		case R.id.textView_find_password_back:
 			finish();
-			break;
-			
+			break;		
 		case R.id.layout_register_user_type://选择账号类型
 			showPopupMenu();
 			break;
@@ -309,7 +332,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
         //获得系统的服务点击屏幕的其他的地方可以收起键盘
-        mInputMethodManager = (InputMethodManager) this.getSystemService(this.INPUT_METHOD_SERVICE);
+        mInputMethodManager = (InputMethodManager) RegisterActivity.this.getSystemService(this.INPUT_METHOD_SERVICE);
 
         mMsgBox = new MessageBox(this);
 		initView();
@@ -337,6 +360,14 @@ public class RegisterActivity extends Activity implements OnClickListener{
 
     @Override
     protected void onPause() {
+    	//退出页面关起软键盘
+    	if (edtAccount.hasFocus()) {
+    		mInputMethodManager.hideSoftInputFromWindow(edtAccount.getWindowToken() , 0);
+    	} else if (edtPwd.hasFocus()) {
+    		mInputMethodManager.hideSoftInputFromWindow(edtPwd.getWindowToken() , 0);
+    	} else {
+    		mInputMethodManager.hideSoftInputFromWindow(edtPwdConfirm.getWindowToken() , 0); 
+    	}
         super.onPause();
         MobclickAgent.onPause(this);
     }
@@ -356,6 +387,17 @@ public class RegisterActivity extends Activity implements OnClickListener{
      * 用于选择注册账号的类型
      */
     private void showPopupMenu() {
+
+    	 //选择账号类型时，可自动关闭打开的软键盘
+    	if (edtAccount.hasFocus()) {
+    		mInputMethodManager.hideSoftInputFromWindow(edtAccount.getWindowToken() , 0);
+    	} else if (edtPwd.hasFocus()) {
+    		mInputMethodManager.hideSoftInputFromWindow(edtPwd.getWindowToken() , 0);
+    	} else {
+    		mInputMethodManager.hideSoftInputFromWindow(edtPwdConfirm.getWindowToken() , 0); 
+    	}
+    	mInputMethodManager.hideSoftInputFromWindow(RegisterActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
         final BottomButtonBoard bottomBoard = new BottomButtonBoard(this, findViewById(R.id.layout_register));
 
         //邮箱找回
@@ -385,5 +427,11 @@ public class RegisterActivity extends Activity implements OnClickListener{
         //close popupMenu
         bottomBoard.addCancelBtn(getString(R.string.login_findPassWord_cancel));
         bottomBoard.show();
+    }
+    
+    
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
     }
 }

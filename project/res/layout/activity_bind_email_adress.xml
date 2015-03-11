@@ -68,7 +68,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title_bar"
         android:gravity="center"
-        android:visibility="gone"
         >
         
 
@@ -151,7 +150,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title_bar"
         android:gravity="center"
-         >
+        android:visibility="gone" >
         
 
         <LinearLayout
@@ -231,7 +230,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_small"
-                android:textColor="@color/white"
+                android:textColor="@color/white_40"
                 android:text="@string/login_findPassWord_ok" />
             
             <!-- 重新获取验证码 -->

@@ -363,6 +363,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		Lesson lesson = lessons.get(position);
 		long startdate = lesson.start_date;
 		long enddate = lesson.end_date;
+		String classTime = tvTime.getText().toString().substring(5); 
 		Intent intent = new Intent();
 		intent.setClass(this, LessonDetailActivity.class);
 		intent.putExtra(Constants.LESSONID, lessons.get(position).lesson_id);
@@ -372,6 +373,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		intent.putExtra("lesson", lessons.get(position));
 		intent.putExtra("startdate", startdate);
 		intent.putExtra("enddate", enddate);
+		intent.putExtra("classTime", classTime);
 		intent.putExtra("onResume", isOnResume);
 		startActivity(intent);
 	}

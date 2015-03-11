@@ -16,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 	private int roomId;
 	private int studentTag;
 	private MessageBox msgbox;
+	private TextView carema_empty;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,10 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 		if(studentTag == 1){
 			getCameraInfo_Student();
 		}else{
-		  getCameraInfo();
+			if(roomId != 0){
+				getCameraInfo();
+			}
+		  
 		}
 		
 	}
@@ -65,9 +70,11 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 		msgbox = new MessageBox(this);
 		schoolId = getIntent().getStringExtra("schoolId");
 		roomId = getIntent().getIntExtra("roomId",0);
+		Log.d("-----------roomId----------", roomId+"");
 		lessonId = getIntent().getIntExtra("lessonId", 0);
 		cameras = new  ArrayList<Camera>();
 		listView_camera_show = (ListView) findViewById(R.id.listView_camera_show);
+		carema_empty = (TextView) findViewById(R.id.carema_empty);
 		cameraAdapter = new CameraAdapter();
 		listView_camera_show.setAdapter(cameraAdapter);	
 		listView_camera_show.setOnItemClickListener(this);
@@ -148,6 +155,13 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 			@Override
 			protected void onPostExecute(Integer result) {
 				msgbox.dismissWait();
+				if(cameras.isEmpty() || cameras == null){
+					carema_empty.setVisibility(View.VISIBLE);
+					listView_camera_show.setVisibility(View.GONE);
+				}else{
+					carema_empty.setVisibility(View.GONE);
+					listView_camera_show.setVisibility(View.VISIBLE);
+				}
 				cameraAdapter.notifyDataSetChanged();
 			}
 
@@ -166,6 +180,13 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 			@Override
 			protected void onPostExecute(Integer result) {
 				msgbox.dismissWait();
+				if(cameras.isEmpty() || cameras == null){
+					carema_empty.setVisibility(View.VISIBLE);
+					listView_camera_show.setVisibility(View.GONE);
+				}else{
+					carema_empty.setVisibility(View.GONE);
+					listView_camera_show.setVisibility(View.VISIBLE);
+				}
 				cameraAdapter.notifyDataSetChanged();
 			}
 

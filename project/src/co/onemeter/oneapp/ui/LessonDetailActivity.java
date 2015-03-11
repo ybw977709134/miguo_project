@@ -203,6 +203,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			}else if(requestCode == REQ_CLASSROOM_FEEDBACK){
 //				roomName = data.getStringExtra("roomName");
 //				text_classroom_name.setText(roomName);
+				lessonDetails.clear();
 				getLessonDetail();
 			}else if(requestCode == REQ_CAMERA_FEEDBACK){
 				getLessonDetail();
@@ -239,7 +240,12 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 							count_on++;
 						}
 					}
-					text_camera_num.setText("打开"+count_on+"/"+count);
+					if(lessonDetails.get(0).room_name == null || lessonDetails.get(0).room_name.isEmpty()){
+						text_camera_num.setText("未设置");
+					}else{
+						text_camera_num.setText("打开"+count_on+"/"+count);
+					}
+					
 				}
 				
 			}

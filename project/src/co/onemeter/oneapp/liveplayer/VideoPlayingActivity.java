@@ -38,6 +38,7 @@ public class VideoPlayingActivity extends Activity {
 
 	private static final String TAG = "VideoPlayingActivity";
 	private String httpURL = null;
+	private String lessonName;
 
 	class EventHandler extends Handler {
 		public EventHandler(Looper looper) {
@@ -319,7 +320,9 @@ public class VideoPlayingActivity extends Activity {
 	private void initTop() {
 		mController = (RelativeLayout) findViewById(R.id.controlbar);
 		mBack = (ImageButton) mController.findViewById(R.id.back);
-	}
+		tv_play_description = (TextView) findViewById(R.id.tv_play_description);
+		tv_play_description.setText(lessonName);
+		}
 
 	/**
 	 * 初始化界面
@@ -386,6 +389,7 @@ public class VideoPlayingActivity extends Activity {
 		getParamFromLastPage(intent);
 
 		mIsHwDecode = intent.getBooleanExtra("isHW", false);
+		lessonName = getIntent().getStringExtra("lessonName");
 
 		initUI();
 

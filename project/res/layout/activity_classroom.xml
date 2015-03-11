@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_dark"
@@ -27,11 +27,24 @@
             style="?attr/navbar_txt_right"
             android:src="@drawable/nav_refresh_selector" />
     </RelativeLayout>
+    
+    <TextView
+	    android:paddingTop="20dp"
+	    android:id="@+id/classroom_empty"
+	    android:layout_alignBottom="@+id/title_bar"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:gravity="center"
+	    android:text="@string/class_classroom_empty"
+	    android:layout_below ="@+id/title_bar"
+	    android:textSize="15sp"
+	    android:visibility="gone"/>
 
     <ListView
         android:id="@+id/listView_classroom_show"
         android:layout_width="match_parent"
-        android:layout_height="447dp" >
+        android:layout_height="match_parent"
+        android:layout_below ="@+id/title_bar" >
 
     </ListView>
 
@@ -43,4 +56,4 @@
         layout="@layout/footer_view" >
     </include>
 
-</LinearLayout>
+</RelativeLayout>

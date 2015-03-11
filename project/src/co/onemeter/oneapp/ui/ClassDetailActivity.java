@@ -56,6 +56,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private TextView tvLength;
 	private long currentTime;
 	private int lessonId;
+	private String lessonName;
 	private int isOnResume = 1;
 	
 	private GroupChatRoom class_group = new GroupChatRoom();
@@ -237,8 +238,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			finish();
 			break;
 		case R.id.class_live_class:
-//			startActivity(new Intent(this, VideoPlayingActivity.class));
-//			msgBox.toast("功能正在实现中...");
 			currentTime = System.currentTimeMillis()/1000;
 			String time = tvTime.getText().toString().substring(5);
 			String length = tvLength.getText().toString().substring(5);		
@@ -254,11 +253,13 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				long timeStamps = Utils.getTimeStamp(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]), Integer.parseInt(dates[2]))/1000;
 				if(currentTime > (timeStamps + startDateStamps) && currentTime < (timeStamps + endDateStamps)){
 					lessonId = lesson.lesson_id;
+					lessonName = lesson.title;
 				}
 			}
 			Intent intent = new Intent();
 			intent.putExtra("student_live", 1);
 			intent.putExtra("lessonId", lessonId);
+			intent.putExtra("lessonName", lessonName);
 			intent.putExtra("schoolId", parent_group_id);
 			intent.setClass(this, CameraActivity.class);
 			startActivity(intent);
@@ -362,6 +363,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		Lesson lesson = lessons.get(position);
 		long startdate = lesson.start_date;
 		long enddate = lesson.end_date;
+		String classTime = tvTime.getText().toString().substring(5); 
 		Intent intent = new Intent();
 		intent.setClass(this, LessonDetailActivity.class);
 		intent.putExtra(Constants.LESSONID, lessons.get(position).lesson_id);
@@ -371,6 +373,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		intent.putExtra("lesson", lessons.get(position));
 		intent.putExtra("startdate", startdate);
 		intent.putExtra("enddate", enddate);
+		intent.putExtra("classTime", classTime);
 		intent.putExtra("onResume", isOnResume);
 		startActivity(intent);
 	}

@@ -16,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.liveplayer.VideoPlayingActivity;
 import co.onemeter.oneapp.utils.Utils;
@@ -41,8 +43,10 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 	private String schoolId;
 	private int lessonId;
 	private int roomId;
+	private String lessonName;
 	private int studentTag;
 	private MessageBox msgbox;
+	private TextView carema_empty;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,10 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 		if(studentTag == 1){
 			getCameraInfo_Student();
 		}else{
-		  getCameraInfo();
+			if(roomId != 0){
+				getCameraInfo();
+			}
+		  
 		}
 		
 	}
@@ -65,9 +72,12 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 		msgbox = new MessageBox(this);
 		schoolId = getIntent().getStringExtra("schoolId");
 		roomId = getIntent().getIntExtra("roomId",0);
+		lessonName = getIntent().getStringExtra("lessonName");
+		Log.d("-----------roomId----------", roomId+"");
 		lessonId = getIntent().getIntExtra("lessonId", 0);
 		cameras = new  ArrayList<Camera>();
 		listView_camera_show = (ListView) findViewById(R.id.listView_camera_show);
+		carema_empty = (TextView) findViewById(R.id.carema_empty);
 		cameraAdapter = new CameraAdapter();
 		listView_camera_show.setAdapter(cameraAdapter);	
 		listView_camera_show.setOnItemClickListener(this);
@@ -148,6 +158,13 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 			@Override
 			protected void onPostExecute(Integer result) {
 				msgbox.dismissWait();
+				if(cameras.isEmpty() || cameras == null){
+					carema_empty.setVisibility(View.VISIBLE);
+					listView_camera_show.setVisibility(View.GONE);
+				}else{
+					carema_empty.setVisibility(View.GONE);
+					listView_camera_show.setVisibility(View.VISIBLE);
+				}
 				cameraAdapter.notifyDataSetChanged();
 			}
 
@@ -166,6 +183,13 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 			@Override
 			protected void onPostExecute(Integer result) {
 				msgbox.dismissWait();
+				if(cameras.isEmpty() || cameras == null){
+					carema_empty.setVisibility(View.VISIBLE);
+					listView_camera_show.setVisibility(View.GONE);
+				}else{
+					carema_empty.setVisibility(View.GONE);
+					listView_camera_show.setVisibility(View.VISIBLE);
+				}
 				cameraAdapter.notifyDataSetChanged();
 			}
 
@@ -223,13 +247,11 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 				holder.camera_tv_isONorOFF.setText("OFF");
 				holder.camera_iv_isONorOFF.setImageResource(R.drawable.icon_section_row_invalid);
 				isOn = false;
-				convertView.setEnabled(false);
 			}else{
 				holder.camera_item_icon.setImageResource(onId);
 				holder.camera_tv_isONorOFF.setText("ON");
 				holder.camera_iv_isONorOFF.setImageResource(R.drawable.icon_section_row);
 				isOn = true;
-				convertView.setEnabled(true);
 			}
 			Camera c = cameras.get(position);
 			holder.camera_item_name.setText(c.camera_name);
@@ -265,11 +287,17 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		String httpUrl = cameras.get(position).httpURL;
-		Intent i = new Intent();
-		i.putExtra("httpURL", httpUrl);
-		i.setClass(this, VideoPlayingActivity.class);
-		startActivity(i);
+		if(cameras.get(position).status == 0){
+			Toast.makeText(this, "该摄像头已关闭", Toast.LENGTH_SHORT).show();
+		}else{
+			String httpUrl = cameras.get(position).httpURL;
+		    Intent i = new Intent();
+		    i.putExtra("httpURL", httpUrl);
+		    i.putExtra("lessonName", lessonName);
+		    i.setClass(this, VideoPlayingActivity.class);
+		    startActivity(i);
+		}
+		
 		
 	}
 

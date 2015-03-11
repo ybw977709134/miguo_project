@@ -23,6 +23,16 @@
             android:text="@string/class_lesson_camera" />
 
     </RelativeLayout>
+    
+    <TextView
+        android:paddingTop="20dp"
+	    android:id="@+id/carema_empty"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:gravity="center"
+	    android:text="@string/class_camera_empty"
+	    android:textSize="15sp"
+	    android:visibility="gone"/>
 
     <ListView
         android:id="@+id/listView_camera_show"

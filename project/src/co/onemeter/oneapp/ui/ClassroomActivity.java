@@ -1,7 +1,9 @@
 package co.onemeter.oneapp.ui;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.wowtalk.api.Classroom;
 import org.wowtalk.api.LessonWebServerIF;
@@ -16,12 +18,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +49,9 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 	private int lessonId;
 	private String roomName;
 	private MessageBox msgbox;
+	private TextView classroom_empty;
+	private LinearLayout LinearLayout_release;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,15 +59,19 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 		
 		initView();
 		getClassroomInfo();
+
 	}
 	
 	private void initView(){
 		AQuery q = new AQuery(this);
 		q.find(R.id.title_back).clicked(this);
 		q.find(R.id.classroom_refresh).clicked(this);
-		q.find(R.id.LinearLayout_release).clicked(this);
+		LinearLayout_release = (LinearLayout) findViewById(R.id.LinearLayout_release);
 		listView_classroom_show = (ListView) findViewById(R.id.listView_classroom_show);
+		classroom_empty = (TextView) findViewById(R.id.classroom_empty);
 		listView_classroom_show.setOnItemClickListener(this);
+
+		LinearLayout_release.setOnClickListener(this);
 		msgbox = new MessageBox(this);
 		
 		classroom = new LinkedList<Classroom>();
@@ -109,6 +121,7 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 			long id) {
 		roomId = classroom.get(position).id;
 		roomName = classroom.get(position).room_name;
+		classroomAdapter.setCurrPosition(position);
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
@@ -121,16 +134,14 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 			protected void onPostExecute(Integer result) {
 				super.onPostExecute(result);
 				if(result == 1){
-					Toast.makeText(ClassroomActivity.this, "OK", Toast.LENGTH_LONG).show();
+					Toast.makeText(ClassroomActivity.this, "选择教室成功", Toast.LENGTH_LONG).show();
 					Intent intent = new Intent();
 //				    intent.putExtra("roomId", roomId);
 //				    intent.putExtra("roomName", roomName);
 				    setResult(RESULT_OK);
 				    finish();
 				}else if(result == 0){
-					Toast.makeText(ClassroomActivity.this, "Room is busy", Toast.LENGTH_LONG).show();
-				}else if(result == -1){
-					Toast.makeText(ClassroomActivity.this, "stupid", Toast.LENGTH_LONG).show();
+					Toast.makeText(ClassroomActivity.this, "该教室已被使用", Toast.LENGTH_LONG).show();
 				}
 			}
 			
@@ -175,15 +186,28 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 			@Override
 			protected void onPostExecute(Integer result) {
 				msgbox.dismissWait();
+				
+				if(classroom.isEmpty() || classroom == null){
+					classroom_empty.setVisibility(View.VISIBLE);
+					LinearLayout_release.setVisibility(View.GONE);
+					listView_classroom_show.setVisibility(View.GONE);
+				}else{
+					classroom_empty.setVisibility(View.GONE);
+					LinearLayout_release.setVisibility(View.VISIBLE);
+					listView_classroom_show.setVisibility(View.VISIBLE);
+				}
+				
 				classroomAdapter.notifyDataSetChanged();
 			}
 
 		});
 	}
+
 	
 	class ClassroomAdapter extends BaseAdapter{
 
 		private List<Classroom> classroom;
+		private int currPosition = -1;
 		
 		public ClassroomAdapter(List<Classroom> classroom){
 			this.classroom = classroom;
@@ -217,11 +241,20 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 			}
 			Classroom cl = classroom.get(position);
 			holder.classroom_item_name.setText(cl.room_name);
+			holder.classroom_item_icon.setVisibility(View.INVISIBLE);
+			if(currPosition == position){
+				holder.classroom_item_icon.setVisibility(View.VISIBLE);
+			}
+			
 			return convertView;
 		}
 		class ViewHodler{
 			ImageView classroom_item_icon;
 			TextView classroom_item_name;
+		}		
+		public void setCurrPosition(int currPosition){
+			this.currPosition = currPosition;
+			notifyDataSetChanged();
 		}
 		
 	}

@@ -23,10 +23,12 @@ import co.onemeter.utils.AsyncTaskExecutor;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * 课表详情页面。
@@ -45,6 +47,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 	private long enddate;
 	private int roomId;
 	private String roomName;
+	private String classTime;
 	
 	private TextView text_classroom_name;
 	private TextView text_camera_num;
@@ -70,6 +73,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			schoolId = intent.getStringExtra("schoolId");
 			startdate = intent.getLongExtra("startdate", 0);
 			enddate = intent.getLongExtra("enddate", 0);
+			classTime = intent.getStringExtra("classTime");
 		}
 		q.find(R.id.title_back).clicked(this);
 		
@@ -176,12 +180,20 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			break;
 			
 		case R.id.les_lay_classroom:
-			intent.setClass(this, ClassroomActivity.class);
-			intent.putExtra("schoolId", schoolId);
-			intent.putExtra("start_date", startdate);
-			intent.putExtra("end_date", enddate);
-			intent.putExtra("lessonId", lessonId);
-			startActivityForResult(intent,REQ_CLASSROOM_FEEDBACK);
+			String[] classTimes = classTime.split(":");
+			long currentTime = System.currentTimeMillis()/1000;
+			long classTimesStamps =Integer.parseInt(classTimes[0])*3600 + Integer.parseInt(classTimes[1])*60+startdate;
+			if(currentTime > classTimesStamps){
+				Toast.makeText(this, "正在上课，无法修改", Toast.LENGTH_SHORT).show();;
+			}else{
+				intent.setClass(this, ClassroomActivity.class);
+			    intent.putExtra("schoolId", schoolId);
+			    intent.putExtra("start_date", startdate);
+			    intent.putExtra("end_date", enddate);
+			    intent.putExtra("lessonId", lessonId);
+			    startActivityForResult(intent,REQ_CLASSROOM_FEEDBACK);
+			}
+
 			break;
 		case R.id.les_lay_camera:
 			intent.setClass(this, CameraActivity.class);

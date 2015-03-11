@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.liveplayer.VideoPlayingActivity;
 import co.onemeter.oneapp.utils.Utils;
@@ -42,6 +43,7 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 	private String schoolId;
 	private int lessonId;
 	private int roomId;
+	private String lessonName;
 	private int studentTag;
 	private MessageBox msgbox;
 	private TextView carema_empty;
@@ -70,6 +72,7 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 		msgbox = new MessageBox(this);
 		schoolId = getIntent().getStringExtra("schoolId");
 		roomId = getIntent().getIntExtra("roomId",0);
+		lessonName = getIntent().getStringExtra("lessonName");
 		Log.d("-----------roomId----------", roomId+"");
 		lessonId = getIntent().getIntExtra("lessonId", 0);
 		cameras = new  ArrayList<Camera>();
@@ -244,13 +247,11 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 				holder.camera_tv_isONorOFF.setText("OFF");
 				holder.camera_iv_isONorOFF.setImageResource(R.drawable.icon_section_row_invalid);
 				isOn = false;
-				convertView.setEnabled(false);
 			}else{
 				holder.camera_item_icon.setImageResource(onId);
 				holder.camera_tv_isONorOFF.setText("ON");
 				holder.camera_iv_isONorOFF.setImageResource(R.drawable.icon_section_row);
 				isOn = true;
-				convertView.setEnabled(true);
 			}
 			Camera c = cameras.get(position);
 			holder.camera_item_name.setText(c.camera_name);
@@ -286,11 +287,17 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		String httpUrl = cameras.get(position).httpURL;
-		Intent i = new Intent();
-		i.putExtra("httpURL", httpUrl);
-		i.setClass(this, VideoPlayingActivity.class);
-		startActivity(i);
+		if(cameras.get(position).status == 0){
+			Toast.makeText(this, "该摄像头已关闭", Toast.LENGTH_SHORT).show();
+		}else{
+			String httpUrl = cameras.get(position).httpURL;
+		    Intent i = new Intent();
+		    i.putExtra("httpURL", httpUrl);
+		    i.putExtra("lessonName", lessonName);
+		    i.setClass(this, VideoPlayingActivity.class);
+		    startActivity(i);
+		}
+		
 		
 	}
 

@@ -27,7 +27,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dip"
             android:singleLine="true"
-            android:text="西三旗监控摄像头"
+
             android:textSize="12sp" />
     </RelativeLayout>
 

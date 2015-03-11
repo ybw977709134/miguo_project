@@ -12,6 +12,11 @@
 	<color name="green">#00c630</color>
 	<color name="blue">#ff1badfa</color>
 	<color name="blue_light">#0000a0</color>
+	
+	<color name="blue_10">#ff4379a0</color>
+	<color name="blue_11">#604379a0</color>
+	
+	
 	<color name="orange">#ff7200</color>
 	
 	<!-- barColors -->

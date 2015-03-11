@@ -71,7 +71,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			if (msg.what == 0) {
 				btn_again_receive_auth_code.setText("重新获取验证码");
 				btn_again_receive_auth_code.setEnabled(true);
-				btn_again_receive_auth_code.setTextColor(getResources().getColor(R.color.blue_light));
+				btn_again_receive_auth_code.setTextColor(getResources().getColor(R.color.blue_10));
 				mTimer.cancel();
 			} else {
 				btn_again_receive_auth_code.setText("重新获取验证码" + "("+ time + "s" + ")");
@@ -350,7 +350,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 	private void stopGetAccessCode() {
 		//60秒内不可点击  重新获取验证码
 		btn_again_receive_auth_code.setEnabled(false);
-		btn_again_receive_auth_code.setTextColor(getResources().getColor(R.color.blue));
+		btn_again_receive_auth_code.setTextColor(getResources().getColor(R.color.blue_11));
 		time = 60;
 		
 		mTimer = new Timer();

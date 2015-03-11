@@ -77,7 +77,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 			if (msg.what == 0) {
 				btn_again_receive_auth_code.setText("重新获取验证码");
 				btn_again_receive_auth_code.setEnabled(true);
-				btn_again_receive_auth_code.setTextColor(getResources().getColor(R.color.blue_light));
+				btn_again_receive_auth_code.setTextColor(getResources().getColor(R.color.blue_10));
 				mTimer.cancel();
 			} else {
 				btn_again_receive_auth_code.setText("重新获取验证码" + "("+ time + "s" + ")");
@@ -272,7 +272,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 	private void stopGetAccessCode() {
 		//60秒内不可点击  重新获取验证码
 		btn_again_receive_auth_code.setEnabled(false);
-		btn_again_receive_auth_code.setTextColor(getResources().getColor(R.color.blue));
+		btn_again_receive_auth_code.setTextColor(getResources().getColor(R.color.blue_11));
 		time = 60;
 		
 		mTimer = new Timer();
@@ -385,7 +385,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                         break;
                         
                     default:
-                        mMsgBox.show(null, getString(R.string.bind_email_failed));
+                        mMsgBox.show(null, "验证不通过");
                         mMsgBox.dismissDialog();
                         break;
                 }

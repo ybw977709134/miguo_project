@@ -500,7 +500,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                
                 switch (result) {
                     case ErrorCode.OK://0
-                    	mMsgBox.show(null,"重置密码成功,请查收你的绑定邮箱");
+                    	mMsgBox.show(null,"重置密码成功");
                     	mMsgBox.dismissDialog();
                     	new Thread(new Runnable() {
 							

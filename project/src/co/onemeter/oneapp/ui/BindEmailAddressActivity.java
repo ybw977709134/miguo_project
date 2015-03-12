@@ -7,6 +7,8 @@ import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 
+import com.baidu.cyberplayer.utils.A;
+
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
 import android.app.Activity;
@@ -96,7 +98,30 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
     public boolean onKeyDown(int keyCode, KeyEvent event) {
     	if (keyCode == KeyEvent.KEYCODE_BACK) {
     		unBindEmailAddress();//返回解绑
+    		
+			mMsgBox.show(null, "绑定邮箱失败");
+        	
+        	new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					Intent bindIntent = new Intent(BindEmailAddressActivity.this,BindEmailAddressActivity.class);
+                	startActivity(bindIntent);
+					
+				}
+			}).start();
+    		
     	}
+    	
+    	
+    	
+    	
+    	
     	return super.onKeyDown(keyCode, event);
     } 
     
@@ -125,6 +150,11 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
     	field_clear_email = (ImageButton) findViewById(R.id.field_clear_email);
     	textView_verification_email_result = (TextView) findViewById(R.id.textView_verification_email_result);
     	btn_verification_email = (Button) findViewById(R.id.btn_verification_email);
+    	
+    	//初始化绑定邮箱按钮的状态
+		btn_verification_email.setTextColor(getResources().getColor(R.color.white_40));
+		btn_verification_email.setEnabled(false);
+    	
     	
     	//验证验证码
     	layout_verification_auth_code = (RelativeLayout) findViewById(R.id.layout_verification_auth_code);
@@ -228,16 +258,33 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 		case R.id.textView_bindEmail_back:
 		case R.id.title_back:
 			if (pageFlag == BIND_EMAIL_PAGE) {
-//				Intent intent = new Intent();
-//                setResult(RESULT_OK, intent);
-              //返回时，没验证或验证不通过的都要解绑
-    			unBindEmailAddress();
-//				finish();
-			} else if (pageFlag == AUTH_CODE_PAGE) {
+				
+				mMsgBox.show(null, "绑定邮箱失败");
+            	
+            	new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						try {
+							Thread.sleep(3000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						Intent bindIntent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
+                    	startActivity(bindIntent);
+						
+					}
+				}).start();
+            	
+//    			Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
+//				startActivity(intent);
+				finish();
+			} else {
 				pageFlag = BIND_EMAIL_PAGE;
 				layout_verification_auth_code.setVisibility(View.GONE);
 				layout_verification_email.setVisibility(View.VISIBLE);
 				txt_auth_code.setText("");
+				
 				txt_bind_email.setText("");
 				textView_verification_email_result.setVisibility(View.GONE);
 				textView_verification_authCode_result.setVisibility(View.GONE);
@@ -253,11 +300,9 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 				
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
-					//取消绑定邮箱，解绑
-					unBindEmailAddress();
-//					Intent intent = new Intent();
-//                    setResult(RESULT_OK, intent);
-//					finish();
+					Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
+					startActivity(intent);
+					finish();
 				}
 			});
 			
@@ -277,7 +322,6 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			
 		//验证验证码	
 		case R.id.btn_verification_auth_code:
-			//成功时
 			verifyBindEmailAddress(txt_auth_code.getText().toString(),txt_bind_email.getText().toString());
 			break;
 			
@@ -287,7 +331,6 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			bindEmailAddress(txt_bind_email.getText().toString());
 			//60秒内不可点击  重新获取验证码
 			stopGetAccessCode();
-//			mTimerTask.cancel();
 			break;
 			
 		default:
@@ -400,9 +443,26 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                 mMsgBox.dismissWait();
                
                 switch (result) {
-                    case ErrorCode.OK://0        	
-                    	Intent intent = new Intent();
-                        setResult(RESULT_OK, intent);//发送结果码
+                    case ErrorCode.OK://0   
+                    	
+                    	mMsgBox.show(null, "绑定邮箱成功");
+                    	mMsgBox.dismissDialog();
+                    	
+                    	new Thread(new Runnable() {
+							
+							@Override
+							public void run() {
+								try {
+									Thread.sleep(3000);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+								Intent bindIntent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
+		                    	startActivity(bindIntent);
+								
+							}
+						}).start();
+                    	
                         finish();
                         break;
                         
@@ -419,6 +479,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
             }
         });
 	}
+	
 	
 	/**
 	 * 解除绑定邮箱
@@ -441,9 +502,6 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                
                 switch (result) {
                     case ErrorCode.OK://0        	
-//                    	Toast.makeText(BindEmailAddressActivity.this, "邮箱未绑定", Toast.LENGTH_SHORT).show();
-//                    	Intent intent = new Intent();
-//                      setResult(RESULT_OK, intent);
     					finish();
                         break;
                         

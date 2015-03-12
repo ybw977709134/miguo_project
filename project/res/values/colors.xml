@@ -8,6 +8,7 @@
 	<color name="black">#000</color>
 	<color name="black_30">#77000000</color>
 	<color name="gray">#b3b3b3</color>
+	<color name="gray_13">#ffc7c7cd</color>
 	<color name="gray_30">#dcdcdc</color>
 	<color name="red">#e71326</color>
 	<color name="green">#00c630</color>
@@ -16,6 +17,7 @@
 	
 	<color name="blue_10">#ff4379a0</color>
 	<color name="blue_11">#604379a0</color>
+	<color name="blue_12">#ff0079ff</color>
 	
 	
 	<color name="orange">#ff7200</color>

@@ -616,8 +616,7 @@ public class WowTalkWebServerIF {
 				+ "&access_code=" + Utils.urlencodeUtf8(access_code);
 		return _doRequestWithoutResponse(postStr);
 	}
-	
-	
+
 	/**
 	 * Bind my account with a email address.
 	 * @param email

@@ -259,7 +259,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 		
 //		boolean isBand = getIntent().getBooleanExtra("isband", false);
 		//检测用户绑定邮箱的状态
-		bindEmailStatus ();
+//		bindEmailStatus ();
 //		if (isBand) {
 //			mMsgBox.show(null, getString(R.string.bind_email_successed));
 //			mMsgBox.dismissDialog();
@@ -272,6 +272,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
         super.onResume();
         MobclickAgent.onResume(this);
         fetchData();
+        bindEmailStatus ();
 //        queryBindings();
 
     }
@@ -317,37 +318,32 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
      * @author hutianfeng
      * @date 2015/3/5
      */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	super.onActivityResult(requestCode, resultCode, data);
-    	if (resultCode == RESULT_OK) {
-			switch (requestCode) {
-			case BIND_EMAIL_REQUEST_CODE://绑定邮箱成功后的处理结果
-				
-				bindEmailStatus ();
-				if (!TextUtils.isEmpty(bindEmail)) {
-					mMsgBox.show(null, getString(R.string.bind_email_successed));
-					mMsgBox.dismissDialog();
-				} 
-				break;
-				
-			case FIX_BIND_EMAIL_REQUEST_CODE://修改绑定邮箱后的处理结果
-				
-				bindEmailStatus();
-				if (!TextUtils.isEmpty(bindEmail)) {
-					mMsgBox.show(null, getString(R.string.bind_email_successed));
-					mMsgBox.dismissDialog();
-				}
-//				} else {
-//					mMsgBox.show(null, getString(R.string.bind_email_failed));
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//    	super.onActivityResult(requestCode, resultCode, data);
+//    	if (resultCode == RESULT_OK) {
+//			switch (requestCode) {
+//			case BIND_EMAIL_REQUEST_CODE://绑定邮箱成功后的处理结果
+//				
+//				bindEmailStatus ();
+//				if (!TextUtils.isEmpty(bindEmail)) {
+//					mMsgBox.show(null, getString(R.string.bind_email_successed));
 //					mMsgBox.dismissDialog();
-//					break;
+//				} 
+//				break;
+//				
+//			case FIX_BIND_EMAIL_REQUEST_CODE://修改绑定邮箱后的处理结果
+//				
+//				bindEmailStatus();
+//				if (!TextUtils.isEmpty(bindEmail)) {
+//					mMsgBox.show(null, getString(R.string.bind_email_successed));
+//					mMsgBox.dismissDialog();
 //				}
-				break;
-			default:
-				break;
-			}
-    	}
-    }
+//				break;
+//			default:
+//				break;
+//			}
+//    	}
+//    }
     
 }

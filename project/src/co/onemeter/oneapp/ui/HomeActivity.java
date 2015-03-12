@@ -27,7 +27,7 @@ import org.wowtalk.ui.MessageBox;
  */
 public class HomeActivity extends Activity implements View.OnClickListener {
     MessageBox msgbox;
-    private static final int BIND_EMAIL_REQUEST_CODE = 1;
+//    private static final int BIND_EMAIL_REQUEST_CODE = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,13 +76,13 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 //            			builder.setTitle("你还未绑定邮箱");
             			builder.setMessage("请绑定邮箱，用于找回密码");
             			builder.setPositiveButton("以后再说", null);
-            			builder.setNegativeButton("去绑定邮箱", new DialogInterface.OnClickListener() {
+            			builder.setNegativeButton("去绑定", new DialogInterface.OnClickListener() {
             			
             				@Override
             				public void onClick(DialogInterface arg0, int arg1) {
             					Intent intent = new Intent();
             					intent.setClass(HomeActivity.this, AccountSettingActivity.class);
-            					startActivityForResult(intent, BIND_EMAIL_REQUEST_CODE);
+            					startActivity(intent);
             				}
             			});
             			builder.create().show();
@@ -134,53 +134,53 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     /**
      * 检测用户绑定邮箱的状态
      */
-    private void bindEmailStatus () {
-    	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, List<Map<String, Object>>> () {
-
-            @Override
-            protected List<Map<String, Object>> doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(HomeActivity.this).fEmailBindStatus();
-            }
-
-            @Override
-            protected void onPostExecute(List<Map<String, Object>> result) {
-            	if (result != null) {
-            	String bindEmail = (String) result.get(0).get("email");
-            	
-            	if (bindEmail != null) {
-					msgbox.show(null, getString(R.string.bind_email_successed));
-					msgbox.dismissDialog();
-				} else {
-					msgbox.show(null, getString(R.string.bind_email_failed));
-					msgbox.dismissDialog();
-				}
-            	
-            } else {
-            	Toast.makeText(HomeActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
-            }
-            
-            } 
-        });
-    }
+//    private void bindEmailStatus () {
+//    	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, List<Map<String, Object>>> () {
+//
+//            @Override
+//            protected List<Map<String, Object>> doInBackground(Void... params) {
+//                return WowTalkWebServerIF.getInstance(HomeActivity.this).fEmailBindStatus();
+//            }
+//
+//            @Override
+//            protected void onPostExecute(List<Map<String, Object>> result) {
+//            	if (result != null) {
+//            	String bindEmail = (String) result.get(0).get("email");
+//            	
+//            	if (bindEmail != null) {
+//					msgbox.show(null, getString(R.string.bind_email_successed));
+//					msgbox.dismissDialog();
+//				} else {
+//					msgbox.show(null, getString(R.string.bind_email_failed));
+//					msgbox.dismissDialog();
+//				}
+//            	
+//            } else {
+//            	Toast.makeText(HomeActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
+//            }
+//            
+//            } 
+//        });
+//    }
     
     /**
      * 绑定邮箱成功后返回到主页界面，显示你已经绑定的邮箱
      * @author hutianfeng
      * @date 2015/3/10
      */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	super.onActivityResult(requestCode, resultCode, data);
-    	if (resultCode == RESULT_OK) {
-			switch (requestCode) {
-			case BIND_EMAIL_REQUEST_CODE://绑定邮箱成功后的处理结果
-				bindEmailStatus ();
-				break;			
-			default:
-				msgbox.show(null, getString(R.string.bind_email_failed));
-				msgbox.dismissDialog();
-				break;
-			}
-    	}
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//    	super.onActivityResult(requestCode, resultCode, data);
+//    	if (resultCode == RESULT_OK) {
+//			switch (requestCode) {
+//			case BIND_EMAIL_REQUEST_CODE://绑定邮箱成功后的处理结果
+//				bindEmailStatus ();
+//				break;			
+//			default:
+//				msgbox.show(null, getString(R.string.bind_email_failed));
+//				msgbox.dismissDialog();
+//				break;
+//			}
+//    	}
+//    }
 }

@@ -13,7 +13,7 @@
         <TextView
             android:id="@+id/coursetable_item_name"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:layout_height="wrap_content"
             android:textColor="@color/gray"
             android:gravity="center"
@@ -22,16 +22,26 @@
         <TextView
             android:id="@+id/coursetable_item_time"
             android:layout_width="0dp"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="center|right"
             android:textColor="@color/gray"
             android:text="" />
-
+        
+        <TextView
+            android:id="@+id/coursetable_item_islive"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:gravity="center|right"
+            android:textColor="@color/green"
+            android:text="正在直播" 
+            android:visibility="visible"/>
+        
         <TextView
             android:id="@+id/coursetable_item_msg"
             android:layout_width="0dp"
-            android:layout_weight="3"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:drawableRight="@drawable/history_next_disable"

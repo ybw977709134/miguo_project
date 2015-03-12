@@ -48,6 +48,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 	private int roomId;
 	private String roomName;
 	private String classTime;
+	private String classLength;
 	
 	private TextView text_classroom_name;
 	private TextView text_camera_num;
@@ -74,6 +75,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			startdate = intent.getLongExtra("startdate", 0);
 			enddate = intent.getLongExtra("enddate", 0);
 			classTime = intent.getStringExtra("classTime");
+			classLength = intent.getStringExtra("classLength");
 		}
 		q.find(R.id.title_back).clicked(this);
 		
@@ -181,10 +183,12 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			
 		case R.id.les_lay_classroom:
 			String[] classTimes = classTime.split(":");
+			String[] classLengths = classLength.split(":");
 			long currentTime = System.currentTimeMillis()/1000;
 			long classTimesStamps =Integer.parseInt(classTimes[0])*3600 + Integer.parseInt(classTimes[1])*60+startdate;
-			if(currentTime > classTimesStamps){
-				Toast.makeText(this, "正在上课，无法修改", Toast.LENGTH_SHORT).show();;
+			long classEndTimeStamps = Integer.parseInt(classLengths[0])*3600 + Integer.parseInt(classLengths[1])*60 + classTimesStamps;
+			if(currentTime > classTimesStamps && currentTime < classEndTimeStamps){
+				Toast.makeText(this, "正在上课，无法修改", Toast.LENGTH_SHORT).show();
 			}else{
 				intent.setClass(this, ClassroomActivity.class);
 			    intent.putExtra("schoolId", schoolId);

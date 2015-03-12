@@ -928,6 +928,11 @@
 	<string name="class_classroom_release">解除绑定教室</string>
 	<string name="class_classroom_empty">没有空余教室可供选择</string>
 	<string name="class_camera_empty">没有可以直播的摄像头</string>
+	<string name="class_camera_is3G">您当前的网络环境是2G/3G/4G网络，会耗费流量，确定要观看直播吗？</string>
+	<string name="class_camera_cancel">取消</string>
+    <string name="class_camera_ok">确定</string>
+    <string name="class_camera_title">提示</string>
+    <string name="class_camera_closed">该摄像头无法观看</string>
     <string name="no_more_to_load">没有更多分享了，自己创建一条吧</string>
     <string name="capture_video">拍摄</string>
     <string name="contact_info_edit_remarkname">编辑备注名</string>

@@ -100,6 +100,7 @@ public class VideoPlayingActivity extends Activity {
 	}
 
 	protected static final int NOTIFY_ERROR = 102;
+	protected static final int NOTIFY_CLOSE = 103;
 
 	private static final String POWER_LOCK = "VideoPlayingActivity";
 
@@ -116,6 +117,7 @@ public class VideoPlayingActivity extends Activity {
 
 	private ImageButton mBack = null;//返回按钮
 	private TextView tv_play_description;//摄像头描述
+	private TextView tvBack;
 	private long showTimestamp = 0;//直接切到点播时，需要显示的时间戳
 
 	//播放相关
@@ -149,6 +151,8 @@ public class VideoPlayingActivity extends Activity {
 					T.showShort(VideoPlayingActivity.this, info);
 				}
 				break;
+			case NOTIFY_CLOSE:
+				mController.setVisibility(View.GONE);
 			default:
 				break;
 			}
@@ -320,8 +324,10 @@ public class VideoPlayingActivity extends Activity {
 	private void initTop() {
 		mController = (RelativeLayout) findViewById(R.id.controlbar);
 		mBack = (ImageButton) mController.findViewById(R.id.back);
+		tvBack = (TextView) mController.findViewById(R.id.tv_back);
 		tv_play_description = (TextView) findViewById(R.id.tv_play_description);
 		tv_play_description.setText(lessonName);
+		mUIHandler.sendEmptyMessageDelayed(NOTIFY_CLOSE, 2000);
 		}
 
 	/**
@@ -526,6 +532,14 @@ public class VideoPlayingActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				finish();
+			}
+		});
+		tvBack.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				finish();
+				
 			}
 		});
 	}

@@ -364,6 +364,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		long startdate = lesson.start_date;
 		long enddate = lesson.end_date;
 		String classTime = tvTime.getText().toString().substring(5); 
+		String classLength = tvLength.getText().toString().substring(5);
 		Intent intent = new Intent();
 		intent.setClass(this, LessonDetailActivity.class);
 		intent.putExtra(Constants.LESSONID, lessons.get(position).lesson_id);
@@ -374,6 +375,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		intent.putExtra("startdate", startdate);
 		intent.putExtra("enddate", enddate);
 		intent.putExtra("classTime", classTime);
+		intent.putExtra("classLength", classLength);
 		intent.putExtra("onResume", isOnResume);
 		startActivity(intent);
 	}
@@ -493,6 +495,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				holder.item_name = (TextView) convertView.findViewById(R.id.coursetable_item_name);
 				holder.item_time = (TextView) convertView.findViewById(R.id.coursetable_item_time);
 				holder.item_msg = (TextView) convertView.findViewById(R.id.coursetable_item_msg);
+				holder.coursetable_item_islive = (TextView) convertView.findViewById(R.id.coursetable_item_islive);
 				convertView.setTag(holder);
 			}else{
 				holder = (ViewHodler) convertView.getTag();
@@ -500,6 +503,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			Lesson lesson = alessons.get(position);
 			holder.item_name.setText(lesson.title);
 			holder.item_name.setTextColor(getResources().getColor(R.color.gray));
+			holder.coursetable_item_islive.setVisibility(View.INVISIBLE);
 			long startdata = lesson.start_date;
 			
 			long now = Utils.getDayStampMoveMillis();
@@ -511,6 +515,10 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			}
 			if(startdata == now){
 				holder.item_name.setTextColor(Color.RED);
+				if(lesson.live == 1){
+					holder.coursetable_item_islive.setVisibility(View.VISIBLE);
+				}
+				
 			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			holder.item_time.setText(sdf.format(new Date(startdata * 1000)));
@@ -521,6 +529,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			TextView item_name;
 			TextView item_time;
 			TextView item_msg;
+			TextView coursetable_item_islive;
 		}
 		
 	}

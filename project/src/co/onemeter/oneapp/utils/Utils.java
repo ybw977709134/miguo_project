@@ -1,6 +1,8 @@
 package co.onemeter.oneapp.utils;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.PrefUtil;
@@ -165,4 +167,48 @@ public class Utils {
   		}
   		return resultTime;
   	}
+  	//判断当前网络是否是wifi网络
+  	public static boolean isWifi(Context context) {
+  		ConnectivityManager connectivityManager = (ConnectivityManager) context
+  				.getSystemService(Context.CONNECTIVITY_SERVICE);
+  		NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
+  		if (activeNetInfo != null
+  				&& activeNetInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+  			return true;
+  			}
+  		return false;
+  	} 
+  	
+    // 网络是否可用
+
+  	public static boolean isNetworkAvailable(Context context) {
+  		ConnectivityManager connectivity = (ConnectivityManager) context
+  				.getSystemService(Context.CONNECTIVITY_SERVICE);
+  		if (connectivity == null) {
+  			
+  		} else {
+  			NetworkInfo[] info = connectivity.getAllNetworkInfo();
+  			if (info != null) {
+  				for (int i = 0; i < info.length; i++) {
+  					if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+  						return true;
+  						}
+  					}
+  				}
+  			}
+  		return false;
+  	} 
+  	
+  	
+  	// 判断当前网络是否是3G网络
+
+  	public static boolean is3G(Context context) {
+  		ConnectivityManager connectivityManager = (ConnectivityManager) context
+  				.getSystemService(Context.CONNECTIVITY_SERVICE);
+  		NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
+  		if (activeNetInfo != null && activeNetInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+  			return true;
+  			}
+  		return false;  		
+  	} 
 }

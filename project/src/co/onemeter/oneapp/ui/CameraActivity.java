@@ -73,7 +73,6 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 		schoolId = getIntent().getStringExtra("schoolId");
 		roomId = getIntent().getIntExtra("roomId",0);
 		lessonName = getIntent().getStringExtra("lessonName");
-		Log.d("-----------roomId----------", roomId+"");
 		lessonId = getIntent().getIntExtra("lessonId", 0);
 		cameras = new  ArrayList<Camera>();
 		listView_camera_show = (ListView) findViewById(R.id.listView_camera_show);
@@ -285,20 +284,45 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
+	public void onItemClick(AdapterView<?> parent, View view, final int position,
 			long id) {
 		if(cameras.get(position).status == 0){
-			Toast.makeText(this, "该摄像头已关闭", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.class_camera_closed, Toast.LENGTH_SHORT).show();
 		}else{
-			String httpUrl = cameras.get(position).httpURL;
-		    Intent i = new Intent();
-		    i.putExtra("httpURL", httpUrl);
-		    i.putExtra("lessonName", lessonName);
-		    i.setClass(this, VideoPlayingActivity.class);
-		    startActivity(i);
+			if(!Utils.isNetworkAvailable(this)){
+				Toast.makeText(this, R.string.network_connection_unavailable, Toast.LENGTH_SHORT).show();
+			}else{
+				if(Utils.is3G(this)){
+					Builder alertDialog = new AlertDialog.Builder(CameraActivity.this);
+					alertDialog.setTitle(R.string.class_camera_title);
+					alertDialog.setMessage(R.string.class_camera_is3G);
+					alertDialog.setPositiveButton(R.string.class_camera_ok, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface arg0, int arg1) {
+							gotoVideoPlayer(position);
+						}
+					});  
+					alertDialog.setNegativeButton(R.string.class_camera_cancel, new DialogInterface.OnClickListener() {			
+						@Override
+						public void onClick(DialogInterface arg0, int arg1) {
+							
+						}
+					});
+					alertDialog.create().show();
+				}else if(Utils.isWifi(this)){
+					gotoVideoPlayer(position);
+				}
+			}
 		}
-		
-		
+	}
+	private void gotoVideoPlayer(int position){
+		String httpUrl = cameras.get(position).httpURL;
+	    Intent i = new Intent();
+	    i.putExtra("httpURL", httpUrl);
+	    i.putExtra("lessonName", lessonName);
+	    i.setClass(this, VideoPlayingActivity.class);
+	    startActivity(i);
 	}
 
 

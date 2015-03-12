@@ -189,11 +189,11 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 				
 				if(classroom.isEmpty() || classroom == null){
 					classroom_empty.setVisibility(View.VISIBLE);
-					LinearLayout_release.setVisibility(View.GONE);
+//					LinearLayout_release.setVisibility(View.GONE);
 					listView_classroom_show.setVisibility(View.GONE);
 				}else{
 					classroom_empty.setVisibility(View.GONE);
-					LinearLayout_release.setVisibility(View.VISIBLE);
+//					LinearLayout_release.setVisibility(View.VISIBLE);
 					listView_classroom_show.setVisibility(View.VISIBLE);
 				}
 				

@@ -1148,6 +1148,10 @@ public class XmlHelper {
         e = Utils.getFirstElementByTagName(lessonElement, "end_date");
         if(e != null)
             lesson.end_date = Long.parseLong(e.getTextContent());
+        
+        e = Utils.getFirstElementByTagName(lessonElement, "live");
+        if(e != null)
+            lesson.live = Integer.parseInt(e.getTextContent());
 
         return lesson;
     }

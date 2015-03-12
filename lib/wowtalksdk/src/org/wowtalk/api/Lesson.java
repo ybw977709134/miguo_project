@@ -16,6 +16,7 @@ public class Lesson implements Parcelable {
     public long start_date;
     /** unix timestamp in sec */
     public long end_date;
+    public int live;
 
     @Override
     public int describeContents() {
@@ -29,6 +30,7 @@ public class Lesson implements Parcelable {
         parcel.writeString(title);
         parcel.writeLong(start_date);
         parcel.writeLong(end_date);
+        parcel.writeInt(live);
     }
 
     public final static Creator<Lesson> CREATOR = new Creator<Lesson>() {
@@ -40,6 +42,7 @@ public class Lesson implements Parcelable {
             l.title = parcel.readString();
             l.start_date = parcel.readLong();
             l.end_date = parcel.readLong();
+            l.live = parcel.readInt();
             return l;
         }
 

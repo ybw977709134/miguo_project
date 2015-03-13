@@ -97,30 +97,26 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
     	if (keyCode == KeyEvent.KEYCODE_BACK) {
-    		unBindEmailAddress();//返回解绑
-    		
-			mMsgBox.show(null, "绑定邮箱失败");
-        	
-        	new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					try {
-						Thread.sleep(3000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					Intent bindIntent = new Intent(BindEmailAddressActivity.this,BindEmailAddressActivity.class);
-                	startActivity(bindIntent);
-					
-				}
-			}).start();
-    		
+
+		if (pageFlag == BIND_EMAIL_PAGE) {//绑定邮箱起始页
+  	
+//			Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
+//			startActivity(intent);
+			finish();
+		} else {
+			pageFlag = BIND_EMAIL_PAGE;
+			
+			unBindEmailAddress();//解绑
+			layout_verification_auth_code.setVisibility(View.GONE);
+			layout_verification_email.setVisibility(View.VISIBLE);
+			txt_auth_code.setText("");
+			
+			txt_bind_email.setText("");
+			textView_verification_email_result.setVisibility(View.GONE);
+			textView_verification_authCode_result.setVisibility(View.GONE);
+		}
+    	
     	}
-    	
-    	
-    	
-    	
     	
     	return super.onKeyDown(keyCode, event);
     } 
@@ -259,28 +255,30 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 		case R.id.title_back:
 			if (pageFlag == BIND_EMAIL_PAGE) {
 				
-				mMsgBox.show(null, "绑定邮箱失败");
+				
             	
-            	new Thread(new Runnable() {
+//            	new Thread(new Runnable() {
 					
-					@Override
-					public void run() {
-						try {
-							Thread.sleep(3000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						Intent bindIntent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
-                    	startActivity(bindIntent);
-						
-					}
-				}).start();
+//					@Override
+//					public void run() {
+//						try {
+//							Thread.sleep(3000);
+//						} catch (InterruptedException e) {
+//							e.printStackTrace();
+//						}
+//						Intent bindIntent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
+//                    	startActivity(bindIntent);
+//						
+//					}
+//				}).start();
             	
 //    			Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
 //				startActivity(intent);
 				finish();
 			} else {
 				pageFlag = BIND_EMAIL_PAGE;
+				
+				unBindEmailAddress();//解绑
 				layout_verification_auth_code.setVisibility(View.GONE);
 				layout_verification_email.setVisibility(View.VISIBLE);
 				txt_auth_code.setText("");
@@ -300,6 +298,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 				
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
+					unBindEmailAddress();
 					Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
 					startActivity(intent);
 					finish();
@@ -362,7 +361,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                
                 switch (result) {
                     case ErrorCode.OK://0
-                    	pageFlag = BIND_EMAIL_PAGE;
+                    	pageFlag = AUTH_CODE_PAGE;
         				layout_verification_auth_code.setVisibility(View.VISIBLE);
         				layout_verification_email.setVisibility(View.GONE);
         				textView_show_bind_email.setVisibility(View.VISIBLE);
@@ -446,7 +445,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                     case ErrorCode.OK://0   
                     	
                     	mMsgBox.show(null, "绑定邮箱成功");
-                    	mMsgBox.dismissDialog();
+//                    	mMsgBox.dismissDialog();
                     	
                     	new Thread(new Runnable() {
 							
@@ -457,13 +456,14 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
-								Intent bindIntent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
-		                    	startActivity(bindIntent);
+//								Intent bindIntent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
+//		                    	startActivity(bindIntent);
+		                    	finish();
 								
 							}
 						}).start();
                     	
-                        finish();
+                        
                         break;
                         
                     case ErrorCode.ACCESS_CODE_ERROR://22:无效的验证码，验证码有有效期，目前是一天的有效期
@@ -502,7 +502,8 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                
                 switch (result) {
                     case ErrorCode.OK://0        	
-    					finish();
+                    	mMsgBox.show(null, "绑定邮箱失败");
+                    	mMsgBox.dismissDialog();
                         break;
                         
                     default:

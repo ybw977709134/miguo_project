@@ -92,6 +92,11 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			lay_first.setEnabled(false);
 			lay_second.setEnabled(false);
 			lay_third.setEnabled(false);
+		}else{
+			q.find(R.id.text_classroom).textColor(getResources().getColor(R.color.text_gray4));
+			q.find(R.id.text_camera).textColor(getResources().getColor(R.color.text_gray4));
+			lay_classroom.setEnabled(false);
+			lay_camera.setEnabled(false);
 		}
 		if(isTeacher()){
 			q.find(R.id.text_first).text(getString(R.string.class_lesson_situation_table));

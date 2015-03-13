@@ -235,14 +235,12 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 				convertView = getLayoutInflater().inflate(R.layout.listitem_classroomtable, parent, false);
 				holder.classroom_item_icon = (ImageView) convertView.findViewById(R.id.classroom_item_icon);
 				holder.classroom_item_name = (TextView) convertView.findViewById(R.id.classroom_item_name);
-				holder.classroom_item_num = (TextView) convertView.findViewById(R.id.classroom_item_num);
 				convertView.setTag(holder);
 			}else{
 				holder = (ViewHodler) convertView.getTag();
 			}
 			Classroom cl = classroom.get(position);
-			holder.classroom_item_name.setText(cl.room_name);
-			holder.classroom_item_num.setText(cl.room_num);
+			holder.classroom_item_name.setText(cl.room_name+" - "+cl.room_num);
 			holder.classroom_item_icon.setVisibility(View.INVISIBLE);
 			if(currPosition == position){
 				holder.classroom_item_icon.setVisibility(View.VISIBLE);
@@ -253,7 +251,6 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 		class ViewHodler{
 			ImageView classroom_item_icon;
 			TextView classroom_item_name;
-			TextView classroom_item_num;
 		}		
 		public void setCurrPosition(int currPosition){
 			this.currPosition = currPosition;

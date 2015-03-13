@@ -16,15 +16,19 @@ import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -33,7 +37,7 @@ import android.widget.Toast;
  * @author jacky
  *this activity is used for editting class' info
  */
-public class ClassInfoEditActivity extends Activity implements View.OnClickListener{
+public class ClassInfoEditActivity extends Activity implements View.OnClickListener, View.OnTouchListener {
 
 
 	public static final String TERM = "term";
@@ -101,6 +105,7 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		tpLength = (TimePicker) findViewById(R.id.timePicker_lesinfo_length);
 		dtPlace = (EditText) findViewById(R.id.ed_lesinfo_place);
 
+        dpDate.setOnClickListener(this);
 		
 		mMsgBox = new MessageBox(this);
 		mDBHelper = new Database(this);
@@ -110,6 +115,19 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		q.find(R.id.cancel).clicked(this);
 		q.find(R.id.save).clicked(this);
 
+        tpTime.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                closeInputBoard();
+            }
+        });
+
+        tpLength.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                closeInputBoard();
+            }
+        });
 		
 			tpTime.setIs24HourView(true);
 			tpLength.setIs24HourView(true);
@@ -134,7 +152,12 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 					
 					String[] trsdates = infos[3].split("-");
 					if(trsdates.length == 3){
-						dpDate.init(Integer.parseInt(trsdates[0]),Integer.parseInt(trsdates[1]) - 1 ,Integer.parseInt(trsdates[2]) , null);
+						dpDate.init(Integer.parseInt(trsdates[0]),Integer.parseInt(trsdates[1]) - 1 ,Integer.parseInt(trsdates[2]) , new DatePicker.OnDateChangedListener() {
+                            @Override
+                            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                closeInputBoard();
+                            }
+                        });
 					}
 					
 					String[] trstime = infos[4].split(":");
@@ -149,9 +172,20 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 					}
 				}
 			}
+        findViewById(R.id.lay_classinfo_main).setOnTouchListener(this);
+        findViewById(R.id.scrollView_classinfo).setOnTouchListener(this);
+        findViewById(R.id.datePicker_lesinfo_date).setOnTouchListener(this);
 	}
 
-	private String[] getStrsByComma(String str){
+    private void closeInputBoard(){
+        View view = getWindow().peekDecorView();
+        if(view != null){
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+        }
+    }
+
+    private String[] getStrsByComma(String str){
 		if(TextUtils.isEmpty(str)&& !str.contains(Constants.COMMA)){
 			return null;
 		}
@@ -167,12 +201,15 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		case R.id.save:
 				updateClassInfo();
 			break;
+        case R.id.datePicker_lesinfo_date:
+            closeInputBoard();
+            break;
 		default:
 			break;
 		}
 	}
-	
-	private void updateClassInfo() {
+
+    private void updateClassInfo() {
 		if(classroom == null){
 			mMsgBox.toast(R.string.class_err_denied, 500);
 			return;
@@ -246,5 +283,20 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		mDBHelper.close();
 		mMsgBox = null;
 	}
-	
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (v.getId()){
+            case R.id.lay_classinfo_main:
+                closeInputBoard();
+                break;
+            case R.id.scrollView_classinfo:
+                closeInputBoard();
+                break;
+            case R.id.datePicker_lesinfo_date:
+                closeInputBoard();
+                break;
+        }
+        return false;
+    }
 }

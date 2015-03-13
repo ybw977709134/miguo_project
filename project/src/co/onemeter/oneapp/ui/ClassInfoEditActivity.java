@@ -243,7 +243,7 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		mDBHelper.close();
+//		mDBHelper.close();
 		mMsgBox = null;
 	}
 	

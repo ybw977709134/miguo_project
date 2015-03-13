@@ -6235,6 +6235,7 @@ public class Database {
         values.put("title", lesson.title);
         values.put("start_date", lesson.start_date);
         values.put("end_date", lesson.end_date);
+        values.put("live", lesson.live);
         return database.insertWithOnConflict(TBL_LESSON, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
@@ -6295,7 +6296,7 @@ public class Database {
     public List<Lesson> fetchLesson(String classId) {
         List<Lesson> result = new LinkedList<>();
         Cursor cur = database.query(TBL_LESSON,
-                new String[] { "lesson_id", "title", "start_date", "end_date" },
+                new String[] { "lesson_id", "title", "start_date", "end_date" ,"live"},
                 "class_id=?", new String[] { classId },
                 null, null, null);
         if (cur.moveToFirst()) {
@@ -6307,6 +6308,7 @@ public class Database {
                 lesson.title = cur.getString(++i);
                 lesson.start_date = cur.getLong(++i);
                 lesson.end_date = cur.getLong(++i);
+                lesson.live = cur.getInt(++i);
                 result.add(lesson);
             } while (cur.moveToNext());
         }
@@ -6571,7 +6573,7 @@ public class Database {
 
 class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME_PRE = GlobalSetting.DATABASE_NAME;
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 12;
     public int flagIndex;
 
 	private static final String DATABASE_CREATE_TBL_CHATMESSAGES = "CREATE TABLE IF NOT EXISTS `chatmessages` "
@@ -6852,7 +6854,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
                     + "class_id TEXT NOT NULL,"
                     + "title TEXT,"
                     + "start_date INTEGER,"
-                    + "end_date INTEGER"
+                    + "end_date INTEGER,"
+                    + "live INTEGER"
                     + ");";
 
     private static final String DATABASE_CREATE_TBL_LESSON_PERFORMANCE =
@@ -7063,6 +7066,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
             // 所以干脆 DROP & CREATE TABLE，反正 moment 表的数据清除也没关系。
             database.execSQL("DROP TABLE moment;");
             database.execSQL(DATABASE_CREATE_TBL_MOMENT);
+            ++oldVersion;
+        }
+        if(oldVersion == 11){
+        	database.execSQL("ALTER TABLE lesson ADD COLUMN live INTEGER;");
         }
     }
 }

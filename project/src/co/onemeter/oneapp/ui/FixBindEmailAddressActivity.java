@@ -262,8 +262,8 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
             	mMsgBox.dismissWait();
                 switch (result) {
                     case ErrorCode.OK://0
-                    	mMsgBox.show(null, "验证码已发送到你的绑定邮箱中了,请注意查收");
-                        mMsgBox.dismissDialog();
+//                    	mMsgBox.show(null, "验证码已发送到你的绑定邮箱中了,请注意查收");
+//                        mMsgBox.dismissDialog();
                     	btn_verification_code.setEnabled(true);
                     	btn_verification_code.setBackground(getResources().getDrawable(R.drawable.btn_blue_medium_selector));
                         break;
@@ -272,7 +272,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                     default://获取验证码失败
 //                        mMsgBox.show(null, "获取验证码失败");
                         textView_verification_code_result.setVisibility(View.VISIBLE);
-                        textView_verification_code_result.setText("获取验证码失败");
+                        textView_verification_code_result.setText("获取验证码失败");	
                         Toast.makeText(FixBindEmailAddressActivity.this, "获取验证码失败", Toast.LENGTH_SHORT).show();
                         break;    
                 }

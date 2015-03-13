@@ -32,12 +32,10 @@
 			
 			<co.onemeter.oneapp.ui.CircleImageView
                         android:id="@+id/logo"
-                        android:layout_height="60dp"
-                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/login_logo"
-                        
-                        />
+                        android:src="@drawable/login_logo_1" />
 
 			<LinearLayout
 				android:layout_width="fill_parent"
@@ -58,7 +56,8 @@
 					android:hint="@string/account_hint"
 					android:textCursorDrawable="@color/green"/>
 
-				
+				<ImageView
+					style="@style/bg_section_divider_line_light"/>
 
 				<RelativeLayout
 					android:layout_height="wrap_content"

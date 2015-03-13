@@ -12,14 +12,25 @@
         android:layout_centerInParent="true"
         android:layout_height="100dp"
         android:layout_width="100dp" >
-        <ProgressBar
-            android:id="@android:id/progress"
+           
+        <ImageView 
+            android:id="@+id/imageView_icon_success"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/icon_success" />
+
+        <TextView
+            android:id="@+id/wait_message"
+            android:layout_below="@id/imageView_icon_success"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:indeterminateDrawable="@drawable/progressbar_load"
-            android:max="10000"/>
-
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:text="wait"/>
     </RelativeLayout>
 
 </RelativeLayout>

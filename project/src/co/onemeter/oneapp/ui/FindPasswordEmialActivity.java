@@ -500,8 +500,8 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                
                 switch (result) {
                     case ErrorCode.OK://0
-                    	mMsgBox.show(null,"重置密码成功");
-                    	mMsgBox.dismissDialog();
+                    	mMsgBox.showWaitImageSuccess("新密码设置成功");
+                    	
                     	new Thread(new Runnable() {
 							
 							@Override

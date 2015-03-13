@@ -353,7 +353,7 @@ public class ManageAccountsActivity extends Activity implements OnClickListener,
                     @Override
                     public void onClick(View v) {
                         bottomBoard.dismiss();
-                        mMsgBox.showWait(getString(R.string.manage_account_switch_prompt));
+                        mMsgBox.showWaitProgressbar(getString(R.string.manage_account_switch_prompt));
                         Account oldAccount = mAccountDatas.get(0);
                         ManageAccountsActivity.switchAccount(ManageAccountsActivity.this,
                                 oldAccount, newAccount, mSwitchAccountHandler);

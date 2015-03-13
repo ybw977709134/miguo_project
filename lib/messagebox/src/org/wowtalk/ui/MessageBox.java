@@ -84,14 +84,78 @@ public class MessageBox {
         return null != mWaitDlg && mWaitDlg.isShowing();
     }
 
-    public void showWait() {
-        showWait("");
-    }
 
-    public void showWait(String message) {
+    /**
+     * 只显示进度条的弹框
+     * @author hutianfeng
+     * @date 2015/3/13
+     */
+    public void showWait() {
         // 每次 showWait()时，都需要重新布局，否则会出现滚动条不转动的情况
         mWaitDlg = new Dialog(mContext, android.R.style.Theme_Translucent_NoTitleBar);
         View waitView = LayoutInflater.from(mContext).inflate(R.layout.msgbox_wait, null);
+       
+        mWaitDlg.setContentView(waitView);
+        Window window = mWaitDlg.getWindow();
+        window.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        if(android.os.Build.VERSION.SDK_INT >= 14) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            window.setDimAmount(0.5f);
+        }
+        mWaitDlg.setCanceledOnTouchOutside(false);
+        try {
+            mWaitDlg.show();
+        } catch (Exception e) {
+            // try to catch: android.view.WindowManager$BadTokenException
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * 显示进度条和文本弹框
+     * @param message
+     * @author hutianfeng
+     * @date 2015/3/13
+     */
+    public void showWaitProgressbar(String message) {
+        // 每次 showWait()时，都需要重新布局，否则会出现滚动条不转动的情况
+        mWaitDlg = new Dialog(mContext, android.R.style.Theme_Translucent_NoTitleBar);
+        View waitView = LayoutInflater.from(mContext).inflate(R.layout.msgbox_wait_progressbar, null);
+        mWatiTextView = (TextView) waitView.findViewById(R.id.wait_message);
+        if (TextUtils.isEmpty(message)) {
+            mWatiTextView.setVisibility(View.GONE);
+        } else {
+            mWatiTextView.setVisibility(View.VISIBLE);
+            mWatiTextView.setText(message);
+        }
+        mWaitDlg.setContentView(waitView);
+        Window window = mWaitDlg.getWindow();
+        window.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        if(android.os.Build.VERSION.SDK_INT >= 14) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            window.setDimAmount(0.5f);
+        }
+        mWaitDlg.setCanceledOnTouchOutside(false);
+        try {
+            mWaitDlg.show();
+        } catch (Exception e) {
+            // try to catch: android.view.WindowManager$BadTokenException
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * 显示图片和文本的弹框 (验证成功时)
+     * @param message
+     * @author hutianfeng
+     * @date 2015/3/13
+     */
+    public void showWaitImageSuccess(String message) {
+        // 每次 showWait()时，都需要重新布局，否则会出现滚动条不转动的情况
+        mWaitDlg = new Dialog(mContext, android.R.style.Theme_Translucent_NoTitleBar);
+        View waitView = LayoutInflater.from(mContext).inflate(R.layout.msgbox_wait_image, null);
         mWatiTextView = (TextView) waitView.findViewById(R.id.wait_message);
         if (TextUtils.isEmpty(message)) {
             mWatiTextView.setVisibility(View.GONE);
@@ -131,7 +195,7 @@ public class MessageBox {
                 }
             }
         } else {
-            showWait(message);
+            showWaitProgressbar(message);
         }
     }
 

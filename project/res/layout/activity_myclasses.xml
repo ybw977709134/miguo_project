@@ -56,7 +56,8 @@
 	    android:id="@+id/lv_myClass"
 	    android:layout_below="@+id/title_bar"
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" >
+	    android:layout_height="match_parent" 
+	    android:cacheColorHint="#00000000">
 	</ListView>
 
 	<ProgressBar 

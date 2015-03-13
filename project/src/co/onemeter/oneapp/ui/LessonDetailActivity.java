@@ -85,6 +85,9 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		LinearLayout lay_third = (LinearLayout) q.find(R.id.les_lay_third).getView();
 		LinearLayout lay_camera = (LinearLayout) q.find(R.id.les_lay_camera).getView();
 		
+		q.find(R.id.text_camera).textColor(getResources().getColor(R.color.text_gray4));
+		lay_camera.setEnabled(false);
+		
 		if(lesson.end_date * 1000 > System.currentTimeMillis()){
 			q.find(R.id.text_first).textColor(getResources().getColor(R.color.text_gray4));
 			q.find(R.id.text_second).textColor(getResources().getColor(R.color.text_gray4));

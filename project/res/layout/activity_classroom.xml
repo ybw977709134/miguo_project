@@ -44,7 +44,8 @@
         android:id="@+id/listView_classroom_show"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below ="@+id/title_bar" >
+        android:layout_below ="@+id/title_bar"
+        android:cacheColorHint="#00000000" >
 
     </ListView>
 

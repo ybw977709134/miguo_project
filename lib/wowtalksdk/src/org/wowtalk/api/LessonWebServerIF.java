@@ -343,7 +343,10 @@ public class LessonWebServerIF {
 							Lesson lesson = XmlHelper
 									.parseLesson((Element) lessonNode);
 							if (lesson != null)
-								db.storeLesson(lesson);
+								if(db != null){
+									db.storeLesson(lesson);
+								}
+								
 						}
 					}
 				}

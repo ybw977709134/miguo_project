@@ -377,7 +377,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		mDBHelper.close();
+//		mDBHelper.close();
 		mMsgBox = null;
 	}
 	

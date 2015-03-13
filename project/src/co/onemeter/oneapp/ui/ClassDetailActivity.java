@@ -108,9 +108,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 
 				protected void onPostExecute(Integer result) {
 					if (ErrorCode.OK == result) {
-						Database mdb = Database.getInstance(ClassDetailActivity.this);
+						Database mdb = new Database(ClassDetailActivity.this);
 						members = mdb.fetchGroupMembers(classId);
-						mdb.close();
+//						mdb.close();
 						//android.util.Log.i("-->>", buddies.toString());
 						teaAdapter = new TeachersAdapter(members);
 						lvTeachers.setAdapter(teaAdapter);
@@ -173,7 +173,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		lessons.clear();
 		Database db = Database.open(ClassDetailActivity.this);
 		lessons.addAll(db.fetchLesson(classId));
-		db.close();
+//		db.close();
 		Collections.sort(lessons, new LessonInfoEditActivity.LessonComparator());
 		courseAdapter.notifyDataSetChanged();
 	}

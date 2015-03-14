@@ -289,7 +289,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 	 * @date 2015/3/12
 	 */
 	private void checkCodeRetrievePassword (final String wowtalk_id,final String access_code) {
-		mMsgBox.showWait();
+		mMsgBox.showWaitProgressbar("验证中");
 		
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
@@ -403,8 +403,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 	 * @date 2015/3/5
 	 */
 	private void unBindEmailAddress() {
-		mMsgBox.showWait();
-		
+
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
             @Override
@@ -414,8 +413,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 
             @Override
             protected void onPostExecute(Integer result) {
-                mMsgBox.dismissWait();
-               
+
                 switch (result) {
                     case ErrorCode.OK://0 //解绑成功后方可跳转到重新绑定邮箱的界面       	
                     	mMsgBox.show(null, "解除绑定邮箱成功");

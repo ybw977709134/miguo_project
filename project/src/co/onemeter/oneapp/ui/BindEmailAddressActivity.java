@@ -346,7 +346,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 	 * @date 2015/3/4
 	 */
 	private void bindEmailAddress(final String emailAddress) {
-		mMsgBox.showWait();
+		mMsgBox.showWaitProgressbar("验证中");
 		
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
@@ -428,7 +428,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 	 * @date 2015/3/4
 	 */
 	private void verifyBindEmailAddress(final String access_code,final String emailAddress) {
-		mMsgBox.showWait();
+		mMsgBox.showWaitProgressbar("验证中");
 		
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
@@ -444,7 +444,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                 switch (result) {
                     case ErrorCode.OK://0   
                     	
-                    	mMsgBox.show(null, "绑定邮箱成功");
+                    	mMsgBox.showWaitImageSuccess("邮箱绑定成功");
 //                    	mMsgBox.dismissDialog();
                     	
                     	new Thread(new Runnable() {
@@ -487,7 +487,6 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 	 * @date 2015/3/5
 	 */
 	private void unBindEmailAddress() {
-		mMsgBox.showWait();
 		
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
@@ -498,7 +497,6 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 
             @Override
             protected void onPostExecute(Integer result) {
-                mMsgBox.dismissWait();
                
                 switch (result) {
                     case ErrorCode.OK://0        	

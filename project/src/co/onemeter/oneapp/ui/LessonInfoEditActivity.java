@@ -270,6 +270,9 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 						Lesson lesson = lessons.get(position);
 						if(lesson.lesson_id > 0){
 							lesson.title = content;
+                            if(TextUtils.isEmpty(content)){
+                                lesson.title = edName.getHint().toString();
+                            }
 							modifyPostLesson(lesson);
 						}else{
 							int size = addLessons.size();

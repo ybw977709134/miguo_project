@@ -300,7 +300,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 					unBindEmailAddress();
 					Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
 					startActivity(intent);
-					finish();
+//					finish();
 				}
 			});
 			
@@ -455,9 +455,9 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
-//								Intent bindIntent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
-//		                    	startActivity(bindIntent);
-		                    	finish();
+								Intent bindIntent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
+		                    	startActivity(bindIntent);
+//		                    	finish();
 								
 							}
 						}).start();

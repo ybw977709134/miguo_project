@@ -12,12 +12,15 @@ import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.AppUpgradeTask;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
@@ -32,6 +35,7 @@ public class SettingActivity extends Activity implements OnClickListener {
     private static final int HANDLER_GET_ACCOUNT_UNREAD_COUNT = 1;
 
 	private ImageView imgPhoto;
+	private TextView textView_settings_myinfo;
 	private MessageBox mMsgBox;
 
     private WowTalkWebServerIF mWeb;
@@ -66,11 +70,12 @@ public class SettingActivity extends Activity implements OnClickListener {
 
     private void initView() {
 		imgPhoto = (ImageView) findViewById(R.id.img_thumbnail);
-
+		textView_settings_myinfo = (TextView) findViewById(R.id.settings_myinfo);
         AQuery q = new AQuery(this);
 
         q.find(R.id.img_thumbnail).clicked(this);
         q.find(R.id.settings_myinfo).clicked(this);
+        q.find(R.id.layout_settings_myinfo).clicked(this);
         q.find(R.id.settings_my_qrcode).clicked(this);
         q.find(R.id.settings_account).clicked(this);
         q.find(R.id.settings_privacy).clicked(this);
@@ -103,6 +108,7 @@ public class SettingActivity extends Activity implements OnClickListener {
         switch (v.getId()) {
             case R.id.img_thumbnail:
             case R.id.settings_myinfo:
+//            case R.id.layout_settings_myinfo:
                 startActivity(intent.setClass(SettingActivity.this, MyInfoActivity.class));
                 break;
             case R.id.settings_my_qrcode: {
@@ -290,11 +296,14 @@ public class SettingActivity extends Activity implements OnClickListener {
         mWeb = WowTalkWebServerIF.getInstance(SettingActivity.this);
         mPrefUtil = PrefUtil.getInstance(this);
         
-        if (mPrefUtil.getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
-        	findViewById(R.id.imageView_tag_tea).setVisibility(View.VISIBLE);
-        } else {
-        	findViewById(R.id.imageView_tag_tea).setVisibility(View.GONE);
-        }
+//        if (mPrefUtil.getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+//        	findViewById(R.id.imageView_tag_tea).setVisibility(View.VISIBLE);
+//        } else {
+//        	findViewById(R.id.imageView_tag_tea).setVisibility(View.GONE);
+//        }
+        
+        
+       
         
         initView();
     }
@@ -308,7 +317,8 @@ public class SettingActivity extends Activity implements OnClickListener {
 		me.userID = PrefUtil.getInstance(this).getUid();
 		me.photoUploadedTimeStamp = PrefUtil.getInstance(this).getMyPhotoUploadedTimestamp();
 		PhotoDisplayHelper.displayPhoto(this, imgPhoto, R.drawable.default_avatar_90, me, true);
-
+		//获取个人的账号信息
+		textView_settings_myinfo.setText(PrefUtil.getInstance(this).getMyNickName());
         updateNoticeStatus();
         setAccountData();
 

@@ -2,16 +2,23 @@ package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
+
+import org.w3c.dom.Text;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.LessonHomework;
@@ -21,14 +28,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 家庭作业作业页面。 Created by pzy on 11/10/14. Modified by yl on 23/12/2014
+ * 家庭作业作业页面.
+ * Created by pzy on 11/10/14. Modified by yl on 23/12/2014
  */
 public class HomeworkActivity extends Activity implements View.OnClickListener {
 	private int lessonId;
 	private List<LessonHomework> lessonHomeworkz;
 	private List<String> homeworktitles;
 	private AQuery q;
-	private ArrayAdapter<String> adapter;
+	private HomeWorkArrayAdater adapter;
 
 	private ListView lvHomework;
 
@@ -65,18 +73,19 @@ public class HomeworkActivity extends Activity implements View.OnClickListener {
 			}
 
 			protected void onPostExecute(Integer result) {
-				Database db = Database.getInstance(HomeworkActivity.this);
-				lessonHomeworkz = db.fetchLessonHomework(lessonId);
-				for (int i = 0; i < lessonHomeworkz.size(); i++) {
-					homeworktitles.add(i + 1 + "." + lessonHomeworkz.get(i).title);
-				}
-				adapter = new ArrayAdapter<>(HomeworkActivity.this,
-						android.R.layout.simple_list_item_1,
-						android.R.id.text1, homeworktitles);
-				if (Utils.isAccoTeacher(HomeworkActivity.this)) {
-					lvHomework.addFooterView(footerView());
-				}
-				lvHomework.setAdapter(adapter);
+                if(result == ErrorCode.OK){
+                    Database db = Database.getInstance(HomeworkActivity.this);
+                    lessonHomeworkz = db.fetchLessonHomework(lessonId);
+                    for (int i = 0; i < lessonHomeworkz.size(); i++) {
+                        homeworktitles.add(i + 1 + "." + lessonHomeworkz.get(i).title);
+                    }
+                    adapter = new HomeWorkArrayAdater(HomeworkActivity.this, homeworktitles);
+                    if (Utils.isAccoTeacher(HomeworkActivity.this)) {
+                        lvHomework.addFooterView(footerView());
+                    }
+                    lvHomework.setAdapter(adapter);
+                }
+
 
 			}
 
@@ -100,15 +109,21 @@ public class HomeworkActivity extends Activity implements View.OnClickListener {
 	}
 
 	private void showAddHomeworkDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        ContextThemeWrapper themeWrapper = null;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+            themeWrapper = new ContextThemeWrapper(this,android.R.style.Theme_Holo_Light_Dialog);
+        }else{
+            themeWrapper = new ContextThemeWrapper(this,android.R.style.Theme_Light);
+        }
+		AlertDialog.Builder dialog = new AlertDialog.Builder(themeWrapper);
 		View view = getLayoutInflater().inflate(R.layout.lay_add_lesson, null);
 		final EditText edName = (EditText) view.findViewById(R.id.ed_dialog_time);
 		edName.setMinLines(3);
 		view.findViewById(R.id.lay_dialog_date).setVisibility(View.GONE);
 		TextView tv =  (TextView)view.findViewById(R.id.txt_dialog_first);
 		tv.setText(getString(R.string.class_add_homework));
-		builder.setView(view);
-		builder.setTitle(getString(R.string.class_add_homework))
+		dialog.setView(view);
+		dialog.setTitle(getString(R.string.class_add_homework))
 				.setPositiveButton(getString(R.string.confirm),
 						new DialogInterface.OnClickListener() {
 
@@ -122,7 +137,7 @@ public class HomeworkActivity extends Activity implements View.OnClickListener {
 							}
 						}).setNegativeButton(getString(R.string.cancel), null)
 				.create();
-		builder.show();
+		dialog.show();
 	}
 
 	private void addPostHomework(final LessonHomework homework) {
@@ -160,4 +175,58 @@ public class HomeworkActivity extends Activity implements View.OnClickListener {
 		layout.setOnClickListener(this);
 		return view;
 	}
+
+    class HomeWorkArrayAdater extends BaseAdapter{
+
+        private Context mContext;
+        private List<String> mStrings;
+        public HomeWorkArrayAdater(Context context, List<String> strings) {
+            //super(context,android.R.layout.simple_list_item_1,android.R.id.text1,strings);
+            mContext = context;
+            mStrings = strings;
+        }
+
+        @Override
+        public int getCount() {
+            return mStrings.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mStrings.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        /**
+         * 将textview字体颜色设为黑色
+         * @param position
+         * @param convertView
+         * @param parent
+         * @return
+         */
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder = null;
+            if(holder == null){
+                holder = new ViewHolder();
+                convertView = LayoutInflater.from(mContext).inflate(android.R.layout.simple_list_item_1,parent,false);
+                holder.textView = (TextView)convertView.findViewById(android.R.id.text1);
+                convertView.setTag(holder);
+            }else{
+                holder = (ViewHolder)convertView.getTag();
+            }
+            holder.textView.setText(mStrings.get(position));
+            holder.textView.setTextColor(0xff000000);
+            holder.textView.setTextSize(15);
+            return convertView;
+        }
+
+        private class ViewHolder{
+            TextView textView;
+        }
+    }
 }

@@ -58,7 +58,8 @@
         android:id="@+id/lv_homework"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@drawable/divider" >
+        android:divider="@drawable/divider"
+        android:cacheColorHint="#00000000">
     </ListView>
 
 </LinearLayout>

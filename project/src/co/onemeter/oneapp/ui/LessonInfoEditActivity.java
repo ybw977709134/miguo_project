@@ -207,8 +207,8 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			view.findViewById(R.id.lay_lesson_name).setVisibility(View.VISIBLE);
 			String[] startTime = ((TextView)item.findViewById(R.id.coursetable_item_time)).getText().toString().split("-");
 			datepicker.init(Integer.parseInt(startTime[0]), Integer.parseInt(startTime[1]) - 1, Integer.parseInt(startTime[2]), null);
-		}else{
-			dialog.setTitle("添加课程");
+            edName.setHint(lessons.get(position).title);
+        }else{
 		}
 		
 		if(isBefore){
@@ -229,12 +229,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 				String[] lengths = reLength.split(":");
 				
 				String content = edName.getText().toString();
-				if(TextUtils.isEmpty(content)){
-					mMsgBox.toast(R.string.class_lessontitle_not_null);
-					notdismissDialog(dialog);
-					return;
-				}
-				
+
 				if(isAdd){
 //					long now = System.currentTimeMillis();
 //					if(resultTime < now){
@@ -242,7 +237,13 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 //						notdismissDialog(dialog);
 //						return;
 //					}
-					
+
+                    if(TextUtils.isEmpty(content)){
+                        mMsgBox.toast(R.string.class_lessontitle_not_null);
+                        notdismissDialog(dialog);
+                        return;
+                    }
+
 					if(resultTime < time_openclass){
 						mMsgBox.toast(R.string.class_les_not_before_start);
 						notdismissDialog(dialog);

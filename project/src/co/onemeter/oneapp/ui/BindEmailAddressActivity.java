@@ -7,8 +7,6 @@ import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 
-import com.baidu.cyberplayer.utils.A;
-
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
 import android.app.Activity;
@@ -159,6 +157,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
     	field_clear_auth_code = (ImageButton) findViewById(R.id.field_clear_auth_code);
     	textView_verification_authCode_result = (TextView) findViewById(R.id.textView_verification_authCode_result);
     	btn_verification_auth_code = (Button) findViewById(R.id.btn_verification_auth_code);
+    	btn_verification_auth_code.setEnabled(false);
     	btn_again_receive_auth_code = (Button) findViewById(R.id.btn_again_receive_auth_code);
     	
     	//对各个控件设置监听事件
@@ -238,15 +237,15 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 		//清除绑定邮箱中文本框中的内容
 		case R.id.field_clear_email:
 			txt_bind_email.setText("");
-			btn_verification_email.setTextColor(getResources().getColor(R.color.white_40));
-			btn_verification_email.setEnabled(false);
+//			btn_verification_email.setTextColor(getResources().getColor(R.color.white_40));
+//			btn_verification_email.setEnabled(false);
 			textView_verification_email_result.setVisibility(View.GONE);
 			break;
 		//清除验证码文本框中的内容	
 		case R.id.field_clear_auth_code:
 			txt_auth_code.setText("");
-			btn_verification_auth_code.setTextColor(getResources().getColor(R.color.white_40));
-			btn_verification_auth_code.setEnabled(false);
+//			btn_verification_auth_code.setTextColor(getResources().getColor(R.color.white_40));
+//			btn_verification_auth_code.setEnabled(false);
 			textView_verification_authCode_result.setVisibility(View.GONE);
 						
 			break;

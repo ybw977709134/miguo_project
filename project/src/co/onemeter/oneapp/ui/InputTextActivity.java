@@ -19,20 +19,20 @@ import android.widget.TextView;
 public class InputTextActivity extends Activity implements OnClickListener{
     private static final int MAX_NUM = 140;
 
-	private ImageButton btnTitleBack;
-    private ImageButton btnTitleConfirm;
+	private TextView btnTitleBack;
+    private TextView btnTitleConfirm;
 	private Button btnOK;
 	private EditText newNameInput;
     private TextView txtNum;
-
+    private ImageButton field_clear;
     private String strStatus;
     private MessageBox mMsgBox;
 	
 	private void initView() {
-		btnTitleBack = (ImageButton) findViewById(R.id.title_back);
+		btnTitleBack = (TextView) findViewById(R.id.title_back);
 		btnTitleBack.setOnClickListener(this);
 
-        btnTitleConfirm = (ImageButton) findViewById(R.id.title_confirm);
+        btnTitleConfirm = (TextView) findViewById(R.id.title_confirm);
         btnTitleConfirm.setOnClickListener(this);
 		
 		newNameInput=(EditText)findViewById(R.id.new_name);
@@ -52,6 +52,12 @@ public class InputTextActivity extends Activity implements OnClickListener{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+            	if (s.length() == 0) {
+					field_clear.setVisibility(View.GONE);
+				} else {
+					field_clear.setVisibility(View.VISIBLE);
+				}
+            	
                 txtNum.setText(String.format("%d/%d", newNameInput.getText().length(), MAX_NUM));
             }
 
@@ -59,6 +65,16 @@ public class InputTextActivity extends Activity implements OnClickListener{
             public void afterTextChanged(Editable s) {
             }
         });
+        
+        field_clear = (ImageButton) findViewById(R.id.field_clear);
+        field_clear.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				newNameInput.setText("");
+				
+			}
+		});
 		
 		TextView txtTitle = (TextView)findViewById(R.id.txtTitle);
 		Bundle b = this.getIntent().getExtras();

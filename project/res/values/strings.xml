@@ -222,6 +222,8 @@
 	<string name="settings_account_type">用户类型</string>
 	<string name="settings_name">名字</string>
 	<string name="settings_nickname">昵称</string>
+	<string name="settings_cancel">取消</string>
+	<string name="settings_nickname_confirm">保存</string>
 	<string name="settings_pinyin">发音</string>
 	<string name="settings_sex">性别</string>
 	<string name="settings_age">生日</string>
@@ -627,7 +629,10 @@
     <string name="change_nickname">更改名字</string>
     <string name="input_single_line_text_empty_not_allowed">不接受空值</string>
     <string name="change_nickname_info">好的昵称(长度小于30个字符)可以让好友更容易记住你。</string>
-    <string name="edit_status">编辑签名</string>
+    <string name="edit_status">签名</string>
+    <string name="edit_status_cancel">取消</string>
+    <string name="edit_status_confirm">保存</string>
+    
     <string name="edit_status_length_oom">签名字数已超过上限，请重新修改</string>
     <string name="accept_msg">接收消息</string>
     <string name="show_in_contact_list">在联系人列表显示</string>
@@ -664,7 +669,7 @@
 	<string name="group_chat_title_modify_msg">群聊名称可以帮您区分临时会话群组</string>
 	<string name="msg_buddy_pending_in">请求添加你为好友</string>
 	<string name="settings_upgrade_file_corrupted">升级文件已损坏，需重新下载</string>
-    <string name="logout">登出</string>
+    <string name="logout">退出登录</string>
 	<string name="moments_create_obtain_location_failed">无法获取地点信息</string>
 	<string name="moments_words_over_failed">新建动态最多只能包含600文字。</string>
     <string name="moment_me_time_format">yyyy年MM月dd日</string>

@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -40,10 +42,10 @@ public class InputPlainTextActivity extends Activity {
     public static final String EXTRA_ALLOW_EMPTY = "allowempty";
     public static final String EXTRA_INPUTTYPE = "inputtype";
 
-    private ImageButton btnTitleBack;
-    private ImageButton btnTitleConfirm;
+    private TextView btnTitleBack;
+    private TextView btnTitleConfirm;
     private EditText edtValue;
-
+    private ImageButton field_clear;
     private String defaultValue = "";
     private boolean allowEmpty = false;
 
@@ -75,10 +77,10 @@ public class InputPlainTextActivity extends Activity {
 
         AQuery q = new AQuery(this);
 
-        btnTitleBack = (ImageButton) findViewById(R.id.title_back);
-        btnTitleConfirm = (ImageButton) findViewById(R.id.title_confirm);
+        btnTitleBack = (TextView) findViewById(R.id.title_back);
+        btnTitleConfirm = (TextView) findViewById(R.id.title_confirm);
         edtValue = (EditText) findViewById(R.id.edt_value);
-
+        field_clear = (ImageButton) findViewById(R.id.field_clear);
         edtValue.setFocusable(true);
         edtValue.setFocusableInTouchMode(true);
         edtValue.setText(defaultValue);
@@ -113,6 +115,28 @@ public class InputPlainTextActivity extends Activity {
                 return false;
             }
         });
+        
+        edtValue.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (s.length() == 0) {
+					field_clear.setVisibility(View.GONE);
+				} else {
+					field_clear.setVisibility(View.VISIBLE);
+				}
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {			
+			}
+		});
 
         btnTitleBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,6 +153,15 @@ public class InputPlainTextActivity extends Activity {
                 closeSoftKeyboard();
             }
         });
+        
+        //清除设置的文本
+        field_clear.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				edtValue.setText("");
+			}
+		});
     }
 
     private void closeSoftKeyboard() {

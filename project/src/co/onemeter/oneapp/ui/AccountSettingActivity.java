@@ -37,11 +37,12 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 
 	private ImageButton btnTitleBack;
 	
-	private TextView txtYuanquID;
+	private TextView txtOneMeterID;
 	private TextView txtPwdSetting;
 	private TextView txtPhonenumber;
 	private TextView txtEmail;
-	private Button btnLogout;
+	private TextView txtLogout;
+	private TextView textView_setting_back;
 	
 	private LinearLayout mUsername;
 	private LinearLayout mPassword;
@@ -66,21 +67,23 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 	
 	private void initView() {
 		btnTitleBack = (ImageButton) findViewById(R.id.title_back);
-		btnLogout = (Button) findViewById(R.id.btn_logout);
-		txtYuanquID = (TextView) findViewById(R.id.yuanqu_id_text);
+		txtLogout = (TextView) findViewById(R.id.textView_logout);
+		txtOneMeterID = (TextView) findViewById(R.id.onemeter_id_text);
 		txtPwdSetting = (TextView) findViewById(R.id.pwd_text);
 		txtPhonenumber = (TextView) findViewById(R.id.phonenumber_text);
 		txtEmail = (TextView) findViewById(R.id.email_text);
+		textView_setting_back = (TextView) findViewById(R.id.textView_setting_back);
 		mUsername = (LinearLayout) findViewById(R.id.layout_id);
 		mPassword = (LinearLayout) findViewById(R.id.layout_password);
 		mBindPhone = (LinearLayout) findViewById(R.id.layout_bind_phone);
 		mBindEmail = (LinearLayout) findViewById(R.id.layout_bind_email);
-		txtPwdSetting.setText(getResources().getString(R.string.settings_account_not_set));
-		txtPwdSetting.setTextColor(getResources().getColor(R.color.orange));
+//		txtPwdSetting.setText(getResources().getString(R.string.settings_account_not_set));
+//		txtPwdSetting.setTextColor(getResources().getColor(R.color.orange));
 		
 		btnTitleBack.setOnClickListener(this);
-		btnLogout.setOnClickListener(this);
-		mUsername.setOnClickListener(this);
+		textView_setting_back.setOnClickListener(this); 
+		txtLogout.setOnClickListener(this);
+//		mUsername.setOnClickListener(this);
 		mPassword.setOnClickListener(this);
 		mBindPhone.setOnClickListener(this);
 		mBindEmail.setOnClickListener(this);
@@ -88,20 +91,18 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 	
 	private void fetchData() {
 
-		if (mPrefUtil.getMyPasswordChangedState()) {
-            txtPwdSetting.setText(getResources().getString(R.string.settings_account_setted));
-            txtPwdSetting.setTextColor(getResources().getColor(R.color.text_gray1));
-		} else {
-            txtPwdSetting.setText(getResources().getString(R.string.settings_account_not_set));
-            txtPwdSetting.setTextColor(getResources().getColor(R.color.orange));
-		}
+//		if (mPrefUtil.getMyPasswordChangedState()) {
+//            txtPwdSetting.setText(getResources().getString(R.string.settings_account_setted));
+//            txtPwdSetting.setTextColor(getResources().getColor(R.color.text_gray1));
+//		} else {
+//            txtPwdSetting.setText(getResources().getString(R.string.settings_account_not_set));
+//            txtPwdSetting.setTextColor(getResources().getColor(R.color.orange));
+//		}
 
         if (mPrefUtil.getMyUsernameChangedState()) {
-            txtYuanquID.setText(mPrefUtil.getMyUsername());
-            txtYuanquID.setTextColor(getResources().getColor(R.color.text_gray1));
+        	txtOneMeterID.setText(mPrefUtil.getMyUsername());
         } else {
-            txtYuanquID.setText(getResources().getString(R.string.settings_account_not_set));
-            txtYuanquID.setTextColor(getResources().getColor(R.color.orange));
+        	txtOneMeterID.setText(getResources().getString(R.string.settings_account_not_set));
         }
 	}
 	
@@ -183,9 +184,10 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.title_back:
+		case R.id.textView_setting_back:
 			finish();
 			break;
-		case R.id.btn_logout:
+		case R.id.textView_logout:
 			
 			Builder builder = new AlertDialog.Builder(AccountSettingActivity.this);
 			builder.setTitle("提示");
@@ -209,12 +211,12 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 			
 			break;
 		case R.id.layout_id:
-			Intent idIntent = new Intent(AccountSettingActivity.this, SettingUsernameActivity.class);
-            idIntent.putExtra(SettingUsernameActivity.EXTRA_WOWID,
-                    mPrefUtil.getMyUsername());
-            idIntent.putExtra(SettingUsernameActivity.EXTRA_READONLY,
-                    mPrefUtil.getMyUsernameChangedState());
-			startActivityForResult(idIntent, REQ_INPUT_ID);
+//			Intent idIntent = new Intent(AccountSettingActivity.this, SettingUsernameActivity.class);
+//            idIntent.putExtra(SettingUsernameActivity.EXTRA_WOWID,
+//                    mPrefUtil.getMyUsername());
+//            idIntent.putExtra(SettingUsernameActivity.EXTRA_READONLY,
+//                    mPrefUtil.getMyUsernameChangedState());
+//			startActivityForResult(idIntent, REQ_INPUT_ID);
 			break;
 		case R.id.layout_password:
 			Intent passwordIntent = new Intent(AccountSettingActivity.this, SettingPasswordActivity.class);

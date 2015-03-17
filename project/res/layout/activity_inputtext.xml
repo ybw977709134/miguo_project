@@ -10,21 +10,19 @@
         android:layout_height="@dimen/title_bar_height"
         android:layout_alignParentTop="true"
         style="?attr/navbar" >
-
-        <ImageButton
+    
+         <TextView 
             android:id="@+id/title_back"
-            android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:textSize="20sp"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
             android:layout_alignParentLeft="true"
-            android:background="@null"
-            android:src="@drawable/nav_back_selector" />
-        <ImageButton
-            android:id="@+id/title_confirm"
-            android:layout_height="50dp"
-            android:layout_width="50dp"
-            android:layout_alignParentRight="true"
-            android:background="@null"
-            android:src="@drawable/nav_confirm_selector"/>
+            android:paddingLeft="10dp"
+            android:clickable="true"
+            android:text="@string/edit_status_cancel" />
+        
         <TextView
             android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
@@ -34,24 +32,44 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
+        
+        <TextView 
+            android:id="@+id/title_confirm"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:textSize="20sp"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            android:text="@string/edit_status_confirm" />
+        
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title_bar" >
+        
+       <LinearLayout 
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+           android:orientation="vertical" >
+           
+       <ImageView
+				style="@style/bg_section_divider_line_dark"/>
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
+            <ImageView
+				style="@style/bg_section_divider_line_dark"/>
 
             <EditText
             	android:id="@+id/new_name"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_height="wrap_content" 
                 android:minHeight="150dp"
                 android:background="@drawable/table_white"
                 android:gravity="top"
@@ -59,17 +77,37 @@
                 android:paddingTop="5dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp" />
+            
+            <!-- 清除文本 -->
+                <ImageButton
+        			android:id="@+id/field_clear"
+        			android:layout_height="19dp"
+        			android:layout_width="19dp"
+        			android:layout_alignRight="@+id/new_name"
+        			android:layout_alignBottom="@+id/new_name"
+        			android:layout_marginRight="5dp"
+        			android:layout_marginBottom="5dp"
+        			android:layout_centerVertical="true"
+        			android:visibility="gone"
+        			android:background="@drawable/field_clear"/>
+            
             <TextView
                 android:id="@+id/txt_num"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_alignBottom="@+id/new_name"
                 android:layout_alignRight="@+id/new_name"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="30dp"
                 android:layout_marginBottom="5dp"
                 android:text="20/140"/>
 
         </RelativeLayout>
+        
+        <ImageView
+				style="@style/bg_section_divider_line_dark"/>
+        
+        </LinearLayout> 
+        
     </ScrollView>
 
 </RelativeLayout>

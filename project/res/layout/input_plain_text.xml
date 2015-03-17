@@ -10,48 +10,83 @@
             android:layout_width='fill_parent'
             android:layout_alignParentTop="true"
             style="?attr/navbar">
-        <ImageButton
-                android:id="@+id/title_back"
-                android:layout_height="50dp"
-                android:layout_width="50dp"
-                android:layout_alignParentLeft="true"
-                android:background="@null"
-                android:src="@drawable/nav_back_selector"/>
-        <ImageButton
-                android:id="@+id/title_confirm"
-                android:layout_height="50dp"
-                android:layout_width="50dp"
-                android:layout_alignParentRight="true"
-                android:background="@null"
-                android:src="@drawable/nav_confirm_selector"/>
+
+        
+        <TextView 
+            android:id="@+id/title_back"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:textSize="20sp"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="10dp"
+            android:clickable="true"
+            android:text="@string/settings_cancel" />
+
         <TextView
-				android:id="@+id/txt_title"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_centerInParent="true"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:text="@string/change_nickname"/>
-            </RelativeLayout>
+			android:id="@+id/txt_title"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:text="@string/settings_nickname"/>
+
+        <TextView 
+            android:id="@+id/title_confirm"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:textSize="20sp"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            android:text="@string/settings_nickname_confirm" />
+        
+        
+    </RelativeLayout>
+            
     <LinearLayout
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
             android:layout_below="@+id/title_bar"
             android:orientation="vertical">
+        
+        <ImageView
+				style="@style/bg_section_divider_line_dark"
+				android:layout_marginTop="20dp" />
+        
+        <RelativeLayout 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            
         <EditText
                 android:id="@+id/edt_value"
                 android:layout_height="45dp"
                 android:layout_width="fill_parent"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
                 android:maxLength="80"
                 android:singleLine="true"
                 style="@style/inputbox_white"
                 android:imeOptions="actionDone"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"/>
+        
+        <!-- 清除文本 -->
+                <ImageButton
+        			android:id="@+id/field_clear"
+        			android:layout_height="19dp"
+        			android:layout_width="19dp"
+        			android:layout_alignRight="@+id/edt_value"
+        			android:layout_marginRight="5dp"
+        			android:layout_centerVertical="true"
+        			android:visibility="gone"
+        			android:background="@drawable/field_clear"/>
+        </RelativeLayout>
+        
+        <ImageView
+				style="@style/bg_section_divider_line_dark"/>
         <TextView
 				android:id="@+id/txt_desc"
                 android:layout_height="wrap_content"
@@ -62,6 +97,7 @@
                 android:layout_marginRight="10dp"
                 android:textColor="@color/black"
                 android:textSize="15sp"
+                android:visibility="gone"
                 android:text="@string/change_nickname_info"/>
             </LinearLayout>
 

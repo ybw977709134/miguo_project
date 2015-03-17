@@ -31,6 +31,7 @@ import java.util.Iterator;
 
 public class MyInfoActivity extends Activity implements OnClickListener, InputBoardManager.ChangeToOtherAppsListener {
 	private ImageButton btnTitleBack;
+	private TextView textView_setting_back;
 	private TextView mPersonType, txtNick,txtSex,txtAge,txtArea,txtStatus;
 	private TextView mPronunciationText;
 	private TextView mDeptText;
@@ -100,6 +101,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 
     private void initView() {
 		btnTitleBack = (ImageButton) findViewById(R.id.title_back);
+		textView_setting_back = (TextView) findViewById(R.id.textView_setting_back);
 		progressBar = (ProgressBar) findViewById(R.id.progressBar1);
         mPersonType = (TextView)findViewById(R.id.person_account_type);
 		txtNick=(TextView)findViewById(R.id.person_name);
@@ -111,11 +113,11 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 		change_avatar=(RelativeLayout)findViewById(R.id.change_avatar);
 		imgPhoto=(ImageView)findViewById(R.id.thumbnail);
 		
-		if (mPrefUtil.getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
-			findViewById(R.id.imageView_tag_tea).setVisibility(View.VISIBLE);
-		} else {
-			findViewById(R.id.imageView_tag_tea).setVisibility(View.GONE);
-		}
+//		if (mPrefUtil.getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+//			findViewById(R.id.imageView_tag_tea).setVisibility(View.VISIBLE);
+//		} else {
+//			findViewById(R.id.imageView_tag_tea).setVisibility(View.GONE);
+//		}
 
 		mDeptText = (TextView)findViewById(R.id.txt_dept);
 		mJobTitleText = (TextView)findViewById(R.id.txt_job_title);
@@ -128,6 +130,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 		progressBar.setVisibility(View.GONE);
 
 		btnTitleBack.setOnClickListener(this);
+		textView_setting_back.setOnClickListener(this);
 		change_avatar.setOnClickListener(this);
         findViewById(R.id.boxNick).setOnClickListener(this);
 		findViewById(R.id.boxSex).setOnClickListener(this);
@@ -180,6 +183,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 	public void onClick(View v) {
 		switch (v.getId()) {
             case R.id.title_back:
+            case R.id.textView_setting_back:
                 setResult(mProfileUpdated ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
                 finish();
                 break;
@@ -187,7 +191,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
             {
                 Intent i = new Intent(MyInfoActivity.this, InputPlainTextActivity.class)
                         .putExtra(InputPlainTextActivity.EXTRA_VALUE, mPrefUtil.getMyNickName())
-                        .putExtra(InputPlainTextActivity.EXTRA_TITLE, getString(R.string.change_nickname))
+                        .putExtra(InputPlainTextActivity.EXTRA_TITLE, getString(R.string.settings_nickname))
                         .putExtra(InputPlainTextActivity.EXTRA_DESCRIPTION, getString(R.string.change_nickname_info));
                 startActivityForResult(i, REQ_INPUT_NICK);
             }

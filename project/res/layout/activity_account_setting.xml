@@ -12,10 +12,21 @@
 		<ImageButton
 			android:id="@+id/title_back"
 			android:layout_height="50dp"
-			android:layout_width="50dp"
+			android:layout_width="20dp"
 			android:layout_alignParentLeft="true"
 			android:background="@null"
-			android:src="@drawable/nav_back_selector"/>
+			android:src="@drawable/icon_back_selector"/>
+		<TextView 
+		    android:id="@+id/textView_setting_back"
+		    android:layout_width="wrap_content"
+		    android:layout_height="match_parent"
+		    android:layout_toRightOf="@id/title_back"
+		  	android:gravity="center_vertical"
+		  	android:textSize="20sp"
+		  	android:clickable="true"
+		   	android:textColor="@color/white"
+		    android:text="@string/settings_pagetitle" />
+		
 		<TextView
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
@@ -38,7 +49,7 @@
 				android:layout_marginTop="@dimen/padding_medium"
 				android:orientation="vertical">
 				<ImageView
-					style="@style/standard_list_divider"/>
+				style="@style/bg_section_divider_line_dark"/>
 				<LinearLayout
 					android:id="@+id/layout_id"
 					style="@style/standard_list_item_with_arrow"
@@ -47,24 +58,23 @@
 						android:layout_height="fill_parent"
 						android:layout_width="0dp"
 						android:layout_weight="1"
-						style="@style/standard_text_gray"
+						style="@style/standard_text"
 						android:gravity="center_vertical"
 						android:text="@string/settings_account"/>
 					<TextView
-						android:id="@+id/yuanqu_id_text"
+						android:id="@+id/onemeter_id_text"
 						android:layout_height="fill_parent"
 						android:layout_width="0dp"
 						android:layout_weight="2"
 						android:singleLine="true"
 						android:gravity="center_vertical|right"
 						android:drawablePadding="10dp"
-						android:drawableRight="@drawable/table_arrow"
-						android:textColor="@color/orange"
+						android:textColor="@color/gray"
 						android:textSize="18sp"/>
 				</LinearLayout>
 				
 				<ImageView
-					style="@style/standard_list_divider"/>
+				style="@style/bg_section_divider_line_light"/>
 				<LinearLayout
 					android:id="@+id/layout_bind_email"
 					android:layout_height="50dp"
@@ -78,7 +88,7 @@
 						android:layout_weight="1"
 						android:paddingLeft="10dp"
 						android:gravity="center_vertical"
-						style="@style/standard_text_gray"
+						style="@style/standard_text"
 						android:text="@string/settings_account_email"/>
 					<TextView
 						android:id="@+id/email_text"
@@ -89,13 +99,13 @@
 						android:paddingRight="10dp"
 						android:gravity="center_vertical|right"
 						android:drawablePadding="10dp"
-						android:drawableRight="@drawable/table_arrow"
+						android:drawableRight="@drawable/icon_section_row_selector"
 						android:textColor="@color/gray"
 						android:textSize="18sp"/>
 				</LinearLayout>
 				
 				<ImageView
-					style="@style/standard_list_divider"/>
+				style="@style/bg_section_divider_line_light"/>
 				<LinearLayout
 					android:id="@+id/layout_bind_phone"
 					android:layout_height="50dp"
@@ -110,7 +120,7 @@
 						android:layout_weight="1"
 						android:paddingLeft="10dp"
 						android:gravity="center_vertical"
-						style="@style/standard_text_gray"
+						style="@style/standard_text"
 						android:text="@string/settings_account_phone"/>
 					<TextView
 						android:id="@+id/phonenumber_text"
@@ -123,7 +133,7 @@
 						android:gravity="center_vertical|right"
 						android:drawablePadding="10dp"
 						android:text="@string/settings_account_bindPhone"
-						android:drawableRight="@drawable/table_arrow"
+						android:drawableRight="@drawable/icon_section_row_selector"
 						android:textColor="@color/gray"
 						android:textSize="18sp"/>
 				</LinearLayout>
@@ -138,9 +148,10 @@
 						android:layout_height="fill_parent"
 						android:layout_width="0dp"
 						android:layout_weight="1"
-						style="@style/standard_text_gray"
+						style="@style/standard_text"
 						android:gravity="center_vertical"
 						android:text="@string/settings_account_pwd"/>
+					
 					<TextView
 						android:id="@+id/pwd_text"
 						android:layout_height="fill_parent"
@@ -149,16 +160,34 @@
 						android:singleLine="true"
 						android:gravity="center_vertical|right"
 						android:drawablePadding="10dp"
-						android:drawableRight="@drawable/table_arrow"
-						android:textColor="@color/orange"
+						android:drawableRight="@drawable/icon_section_row_selector"
+						android:textColor="@color/gray"
 						android:textSize="18sp"/>
 				</LinearLayout>
 				<ImageView
-					style="@style/standard_list_divider"/>
+				style="@style/bg_section_divider_line_dark"/>
 			</LinearLayout>
 
-
-
+			
+			<ImageView
+				style="@style/bg_section_divider_line_dark"
+				android:layout_marginTop="20dp"/>
+			
+			<TextView
+			    android:id="@+id/textView_logout"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:gravity="center"
+			    android:padding="10dp"
+			    android:textSize="17sp"
+			    android:textColor="@color/red"
+			    android:background="@drawable/menu_view_middle_selector"
+			    android:clickable="true"
+			    android:text="@string/logout" />
+			<ImageView
+				style="@style/bg_section_divider_line_dark"/>
+			
+		<!--  
 			<Button
 				android:id="@+id/btn_logout"
 				android:layout_height="wrap_content"
@@ -166,6 +195,8 @@
 				style="@style/button_red"
 				android:layout_margin="@dimen/padding_medium"
 				android:text="@string/logout"/>
+				
+		-->
 		</LinearLayout>
 	</ScrollView>
 </RelativeLayout>

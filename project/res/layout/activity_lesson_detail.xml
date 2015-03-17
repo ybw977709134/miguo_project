@@ -21,6 +21,14 @@
             android:id="@+id/lesson_title"
             style="?attr/navbar_title"
             android:text="dummy" />
+        
+        <ImageButton
+            android:id="@+id/title_refresh"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:background="@null"
+            android:src="@drawable/nav_refresh_selector" />
     </RelativeLayout>
 
     <LinearLayout

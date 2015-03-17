@@ -56,6 +56,12 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 	private List<LessonDetail> lessonDetails;
 	private List<Camera> lessoonDetails_camera;
 	
+	private long currentTime;
+	private long classTimesStamps;
+	private long classEndTimeStamps;
+	
+	private MessageBox msgbox;
+	
 	protected void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_lesson_detail);
@@ -64,6 +70,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 	};
 
 	private void initView(){
+		msgbox = new MessageBox(this);
 		AQuery q = new AQuery(this);
 		Intent intent = getIntent();
 		if(null != intent){
@@ -78,6 +85,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			classLength = intent.getStringExtra("classLength");
 		}
 		q.find(R.id.title_back).clicked(this);
+		q.find(R.id.title_refresh).clicked(this);
 		
 		LinearLayout lay_classroom = (LinearLayout) q.find(R.id.les_lay_classroom).getView();
 		LinearLayout lay_first = (LinearLayout) q.find(R.id.les_lay_first).getView();
@@ -95,12 +103,13 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			lay_first.setEnabled(false);
 			lay_second.setEnabled(false);
 			lay_third.setEnabled(false);
-		}else{
-			q.find(R.id.text_classroom).textColor(getResources().getColor(R.color.text_gray4));
-			q.find(R.id.text_camera).textColor(getResources().getColor(R.color.text_gray4));
-			lay_classroom.setEnabled(false);
-			lay_camera.setEnabled(false);
 		}
+//		else{
+//			q.find(R.id.text_classroom).textColor(getResources().getColor(R.color.text_gray4));
+//			q.find(R.id.text_camera).textColor(getResources().getColor(R.color.text_gray4));
+//			lay_classroom.setEnabled(false);
+//			lay_camera.setEnabled(false);
+//		}
 		if(isTeacher()){
 			q.find(R.id.text_first).text(getString(R.string.class_lesson_situation_table));
 			q.find(R.id.text_second).text(getString(R.string.class_set_homework));
@@ -131,6 +140,19 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		lessoonDetails_camera = new ArrayList<Camera>();
 		text_classroom_name = (TextView) findViewById(R.id.text_classroom_name);
 		text_camera_num = (TextView) findViewById(R.id.text_camera_num);
+		
+		String[] classTimes = classTime.split(":");
+		String[] classLengths = classLength.split(":");
+		currentTime = System.currentTimeMillis()/1000;
+		classTimesStamps =Integer.parseInt(classTimes[0])*3600 + Integer.parseInt(classTimes[1])*60+startdate;
+		classEndTimeStamps = Integer.parseInt(classLengths[0])*3600 + Integer.parseInt(classLengths[1])*60 + classTimesStamps;
+		if(currentTime > classEndTimeStamps){
+			q.find(R.id.text_classroom).textColor(getResources().getColor(R.color.text_gray4));
+			q.find(R.id.text_camera).textColor(getResources().getColor(R.color.text_gray4));
+			lay_classroom.setEnabled(false);
+			lay_camera.setEnabled(false);
+		}
+		
 	}
 
 	@Override
@@ -148,6 +170,9 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.title_back:
 			finish();
+			break;
+		case R.id.title_refresh:
+			getLessonDetail();
 			break;
 		case R.id.les_lay_first:
 			if(isTeacher()){
@@ -190,11 +215,11 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			break;
 			
 		case R.id.les_lay_classroom:
-			String[] classTimes = classTime.split(":");
-			String[] classLengths = classLength.split(":");
-			long currentTime = System.currentTimeMillis()/1000;
-			long classTimesStamps =Integer.parseInt(classTimes[0])*3600 + Integer.parseInt(classTimes[1])*60+startdate;
-			long classEndTimeStamps = Integer.parseInt(classLengths[0])*3600 + Integer.parseInt(classLengths[1])*60 + classTimesStamps;
+//			String[] classTimes = classTime.split(":");
+//			String[] classLengths = classLength.split(":");
+//			long currentTime = System.currentTimeMillis()/1000;
+//			long classTimesStamps =Integer.parseInt(classTimes[0])*3600 + Integer.parseInt(classTimes[1])*60+startdate;
+//			long classEndTimeStamps = Integer.parseInt(classLengths[0])*3600 + Integer.parseInt(classLengths[1])*60 + classTimesStamps;
 			if(currentTime > classTimesStamps && currentTime < classEndTimeStamps){
 				Toast.makeText(this, "正在上课，无法修改", Toast.LENGTH_SHORT).show();
 			}else{
@@ -243,6 +268,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 	}
 	
 	private void getLessonDetail(){
+		msgbox.showWait();
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
@@ -252,6 +278,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			}
 			@Override
 			protected void onPostExecute(Integer result) {
+				msgbox.dismissWait();
 				if (ErrorCode.OK == result) {
 					int count = 0;
 				    int count_on = 0;

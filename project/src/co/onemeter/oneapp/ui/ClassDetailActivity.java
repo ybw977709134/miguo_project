@@ -22,6 +22,7 @@ import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.androidquery.AQuery;
 
+import org.w3c.dom.Text;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.HorizontalListView;
 import org.wowtalk.ui.MessageBox;
@@ -58,6 +59,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private int lessonId;
 	private String lessonName;
 	private int isOnResume = 1;
+	
+	private long startDateStamps;
+	private long endDateStamps;
 	
 	private GroupChatRoom class_group = new GroupChatRoom();
 	
@@ -234,35 +238,41 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+
 		case R.id.title_back:
 			finish();
 			break;
 		case R.id.class_live_class:
 			currentTime = System.currentTimeMillis()/1000;
 			String time = tvTime.getText().toString().substring(5);
-			String length = tvLength.getText().toString().substring(5);		
-			String[] times = time.split(":");
-			String[] lengths = length.split(":");
-			long startDateStamps =Integer.parseInt(times[0])*3600 + Integer.parseInt(times[1])*60;
-			long endDateStamps =startDateStamps + Integer.parseInt(lengths[0])*3600 + Integer.parseInt(lengths[1])*60;
+			String length = tvLength.getText().toString().substring(5);	
+			if(TextUtils.isEmpty(time) && TextUtils.isEmpty(length)){
+				Toast.makeText(this, "班级信息还未添加", Toast.LENGTH_SHORT).show();
+			}else{
+				String[] times = time.split(":");
+				String[] lengths = length.split(":");
+				startDateStamps =Integer.parseInt(times[0])*3600 + Integer.parseInt(times[1])*60;
+				endDateStamps =startDateStamps + Integer.parseInt(lengths[0])*3600 + Integer.parseInt(lengths[1])*60;
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				for(Lesson lesson:lessons){
+					String date = sdf.format(new Date(lesson.start_date * 1000));
+					String[] dates = date.split("-");
+					long timeStamps = Utils.getTimeStamp(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]), Integer.parseInt(dates[2]))/1000;
+					if(currentTime > (timeStamps + startDateStamps) && currentTime < (timeStamps + endDateStamps)){
+						lessonId = lesson.lesson_id;
+						lessonName = lesson.title;
+						}
+					}
 
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			for(Lesson lesson:lessons){
-				String date = sdf.format(new Date(lesson.start_date * 1000));
-				String[] dates = date.split("-");
-				long timeStamps = Utils.getTimeStamp(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]), Integer.parseInt(dates[2]))/1000;
-				if(currentTime > (timeStamps + startDateStamps) && currentTime < (timeStamps + endDateStamps)){
-					lessonId = lesson.lesson_id;
-					lessonName = lesson.title;
-				}
-			}
-			Intent intent = new Intent();
-			intent.putExtra("student_live", 1);
-			intent.putExtra("lessonId", lessonId);
-			intent.putExtra("lessonName", lessonName);
-			intent.putExtra("schoolId", parent_group_id);
-			intent.setClass(this, CameraActivity.class);
-			startActivity(intent);
+				Intent intent = new Intent();
+				intent.putExtra("student_live", 1);
+				intent.putExtra("lessonId", lessonId);
+				intent.putExtra("lessonName", lessonName);
+				intent.putExtra("schoolId", parent_group_id);
+				intent.setClass(this, CameraActivity.class);
+				startActivity(intent);
+			}		
+
 			break;
 		case R.id.more:
 			showMore(v);
@@ -505,20 +515,19 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			holder.item_name.setTextColor(getResources().getColor(R.color.gray));
 			holder.coursetable_item_islive.setVisibility(View.INVISIBLE);
 			long startdata = lesson.start_date;
-			
+			long enddata = lesson.end_date;
+			long curTime = System.currentTimeMillis()/1000;
 			long now = Utils.getDayStampMoveMillis();
-
 //			Log.i("---startdata---" +startdata);
 //			Log.i("---now---" +now);
 			if(startdata < now){
 				holder.item_name.setTextColor(0xff8eb4e6);
 			}
 			if(startdata == now){
-				holder.item_name.setTextColor(Color.RED);
-				if(lesson.live == 1){
-					holder.coursetable_item_islive.setVisibility(View.VISIBLE);
-				}
-				
+				holder.item_name.setTextColor(Color.RED);				
+			}
+			if((startdata < curTime) && (curTime < enddata) && (lesson.live == 1)){
+				holder.coursetable_item_islive.setVisibility(View.VISIBLE);
 			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			holder.item_time.setText(sdf.format(new Date(startdata * 1000)));

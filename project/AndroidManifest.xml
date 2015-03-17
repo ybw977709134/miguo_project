@@ -178,12 +178,13 @@
 		<activity
 			android:name=".ui.StartActivity"
             android:launchMode="singleTask"
+            android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
 		</activity>
 		<activity
 			android:name=".ui.ContactsActivity"
-			android:theme="@style/Theme.Blue"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait"
 			android:windowSoftInputMode="adjustResize" >
 		</activity>
@@ -194,28 +195,28 @@
         </activity>
 		<activity
 			android:name=".ui.LocalContactsActivity"
-			android:theme="@style/Theme.Blue"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait"
 			android:windowSoftInputMode="adjustPan">
 		</activity>
 		<activity
 			android:name=".ui.ContactInfoActivity"
-			android:theme="@style/Theme.Blue"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.ContactGroupInfoActivity"
-			android:theme="@style/Theme.Blue"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.ModifyTempGroupChatNameActivity"
-			android:theme="@style/Theme.Red"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.MessageComposerActivity"
-			android:theme="@style/Theme.Red"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait"
 			android:windowSoftInputMode="adjustResize" >
 		</activity>
@@ -225,49 +226,49 @@
 		</activity>
 		<activity
 			android:name=".ui.ContactSearchActivity"
-			android:theme="@style/Theme.Blue"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.ContactAddActivity"
-			android:theme="@style/Theme.Blue"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.ContactImportActivity"
-			android:theme="@style/Theme.Blue"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.CreateGroupActivity"
-			android:theme="@style/Theme.Blue"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait"
 			android:windowSoftInputMode="stateHidden" >
 		</activity>
 		<activity
 			android:name=".ui.CreateEventActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait"
 			android:windowSoftInputMode="stateHidden" >
 		</activity>
 		<activity
 			android:name=".ui.EventActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.EventDetailActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.EventApplyActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.LoginActivity"
-			android:theme="@style/Theme.White"
+			android:theme="@style/Theme.Blue_main"
             android:launchMode="singleTop"
 			android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
@@ -275,12 +276,12 @@
         <!--android:noHistory="true"-->
 		<activity
 			android:name=".ui.RegisterActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.CallMainActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:label="@string/app_name"
 			android:launchMode="singleTop"
 			android:screenOrientation="portrait" >
@@ -297,49 +298,49 @@
 		</activity>
 		<activity
 			android:name=".ui.GroupChatInfoActivity"
-			android:theme="@style/Theme.Red"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
         <activity
             android:name=".ui.SingleContactChatDetailActivity"
-            android:theme="@style/Theme.Red"
+            android:theme="@style/Theme.Blue_main"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.MessageHistoryActivity"
-            android:theme="@style/Theme.Red"
+            android:theme="@style/Theme.Blue_main"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden|adjustResize">
         </activity>
 		<activity
 			android:name=".ui.SettingActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
         <activity
             android:name=".ui.ManageAccountsActivity"
-            android:theme="@style/Theme.Green"
+            android:theme="@style/Theme.Blue_main"
             android:screenOrientation="portrait" >
         </activity>
 		<activity
 			android:name=".ui.AccountSettingActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:launchMode="singleTask"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
             android:name=".ui.PrivacySettingActivity"
-            android:theme="@style/Theme.Green"
+            android:theme="@style/Theme.Blue_main"
             android:screenOrientation="portrait" >
         </activity>
 		<activity
 			android:name=".ui.MyInfoActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.InputTextActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
@@ -348,157 +349,157 @@
         </activity>
 		<activity
             android:name=".ui.AlbumCoverChangeActivity"
-            android:theme="@style/Theme.Blue"
+            android:theme="@style/Theme.Blue_main"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.ProviderAlbumCoverActivity"
-            android:theme="@style/Theme.Blue"
+            android:theme="@style/Theme.Blue_main"
             android:screenOrientation="portrait" >
         </activity>
 		<activity
 			android:name=".ui.CreateMomentActivity"
-			android:theme="@style/Theme.Blue"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.AboutPage"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.MultiSelectActivity"
-			android:theme="@style/Theme.Red"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.BindPhoneActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.BindEmailActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.BindCodeActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
             android:name=".ui.UnBindActivity"
-            android:theme="@style/Theme.Green"
+            android:theme="@style/Theme.Blue_main"
             android:screenOrientation="portrait" >
         </activity>
 		<activity
 			android:name=".ui.SettingUsernameActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.SettingPasswordActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.PickTempGroupActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name="org.wowtalk.ui.msg.PickLocActivity"
-			android:theme="@style/Theme.Red"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity android:name=".ui.HybirdMessageEditor"
-		          android:theme="@style/Theme.Red"
+		          android:theme="@style/Theme.Blue_main"
 		          android:screenOrientation="portrait" >
 		</activity>
 		<activity android:name="org.wowtalk.ui.msg.HybirdImageVoiceTextPreview"
-		          android:theme="@style/Theme.Red"
+		          android:theme="@style/Theme.Blue_main"
 		          android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name="com.pzy.paint.DoodleActivity"
-			android:theme="@style/Theme.Red"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name="com.pzy.paint.BitmapPreviewActivity"
-			android:theme="@style/Theme.Red"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
 		<activity
 			android:name=".ui.NearbyActivity"
-			android:theme="@style/Theme.Blue"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait">
 		</activity>
 		<activity android:name=".ui.ImageViewActivity"
-		          android:theme="@style/Theme.Green"
+		          android:theme="@style/Theme.Blue_main"
 			/>
 		<activity
 			android:name=".ui.SelectPhotoActivity"
-			android:theme="@style/Theme.Green"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait">
 		</activity>
 		<activity
 			android:name=".ui.PublicAccountDetailActivity"
-			android:theme="@style/Theme.Blue"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait">
 		</activity>
 		<activity
 			android:name=".ui.PublicAccountActivity"
-			android:theme="@style/Theme.Blue"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait">
 		</activity>
 		<activity
 			android:name=".ui.InputPlainTextActivity"
-			android:theme="@style/Theme.Blue"
+			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait">
 		</activity>
         <activity
             android:name=".ui.ApplyInfoActivity"
-            android:theme="@style/Theme.Blue"
+            android:theme="@style/Theme.Blue_main"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.GroupMemberManageActivity"
-            android:theme="@style/Theme.Blue"
+            android:theme="@style/Theme.Blue_main"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.GroupJoinRequestActivity"
-            android:theme="@style/Theme.Blue"
+            android:theme="@style/Theme.Blue_main"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.ChooseAreaActivity"
-            android:theme="@style/Theme.Blue"
+            android:theme="@style/Theme.Blue_main"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.NewFriendsActivity"
-            android:theme="@style/Theme.Blue"
+            android:theme="@style/Theme.Blue_main"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.ContactDiscussionActivity"
-            android:theme="@style/Theme.Blue"
+            android:theme="@style/Theme.Blue_main"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.PublicSearchActivity"
-            android:theme="@style/Theme.Blue"
+            android:theme="@style/Theme.Blue_main"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.MomentDetailActivity"
-            android:theme="@style/Theme.Blue"
+            android:theme="@style/Theme.Blue_main"
             android:screenOrientation="portrait">
         </activity>
 		<activity android:name=".ui.NewReviewsActivity"
-		          android:theme="@style/Theme.Blue"
+		          android:theme="@style/Theme.Blue_main"
 		          android:screenOrientation="portrait"/>
         <activity android:name=".ui.AllMyReviewActivity"
                   android:screenOrientation="portrait"/>
@@ -514,13 +515,13 @@
 
         <activity
                 android:name=".ui.EmergencyContactActivity"
-                android:theme="@style/Theme.Blue"
+                android:theme="@style/Theme.Blue_main"
                 android:screenOrientation="portrait">
         </activity>
 
         <activity
                 android:name=".ui.ScanQRCodeActivity"
-                android:theme="@style/Theme.Green"
+                android:theme="@style/Theme.Blue_main"
                 android:screenOrientation="portrait">
         </activity>
 
@@ -538,7 +539,7 @@
         </activity>
         <activity
                 android:name=".ui.CreateNormalMomentWithTagActivity"
-                android:theme="@style/Theme.Blue"
+                android:theme="@style/Theme.Blue_main"
                 android:screenOrientation="portrait">
         </activity>
         <activity
@@ -554,23 +555,23 @@
                 android:screenOrientation="portrait">
         </activity>
 		<activity android:name=".ui.HomeActivity"
-		          android:theme="@style/Theme.Green"
+		          android:theme="@style/Theme.Blue_main"
 		          android:screenOrientation="portrait"
 			/>
 		<activity android:name=".ui.TimelineActivity"
-		          android:theme="@style/Theme.Blue"
+		          android:theme="@style/Theme.Blue_main"
 		          android:screenOrientation="portrait"
 			/>
 		<activity android:name=".ui.AddClassActivity"
-		          android:theme="@style/Theme.Green"
+		          android:theme="@style/Theme.Blue_main"
 		          android:screenOrientation="portrait"
 			/>
 		<activity android:name=".ui.HomeworkActivity"
-		          android:theme="@style/Theme.Green"
+		          android:theme="@style/Theme.Blue_main"
 		          android:screenOrientation="portrait"
 			/>
 		<activity android:name=".ui.MyClassesActivity"
-		          android:theme="@style/Theme.Green"
+		          android:theme="@style/Theme.Blue_main"
 		          android:screenOrientation="portrait"
 			/>
 		<activity android:name=".ui.LoginInvitedActivity"
@@ -596,19 +597,19 @@
 		          android:screenOrientation="portrait"
 			/>
 		<activity android:name=".ui.SubmitInformationActivity"
-		          android:theme="@style/Theme.Green"
+		          android:theme="@style/Theme.Blue_main"
 			      android:screenOrientation="portrait" >
 		</activity>
 		<activity android:name=".ui.FriendValidateActivity"
-			      android:theme="@style/Theme.Blue"
+			      android:theme="@style/Theme.Blue_main"
 			      android:screenOrientation="portrait" >
 		</activity>
 		<activity android:name=".ui.ClassroomActivity"
-			      android:theme="@style/Theme.Blue"
+			      android:theme="@style/Theme.Blue_main"
 			      android:screenOrientation="portrait" >
 		</activity>
 		<activity android:name=".ui.CameraActivity"
-			      android:theme="@style/Theme.Blue"
+			      android:theme="@style/Theme.Blue_main"
 			      android:screenOrientation="portrait" >
 		</activity>
 		<activity
@@ -620,48 +621,48 @@
 		<activity
             android:name="co.onemeter.oneapp.ui.ClassDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Blue" >
+            android:theme="@style/Theme.Blue_main" >
         </activity>
         
 		<activity
             android:name="co.onemeter.oneapp.ui.LessonDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Blue" >
+            android:theme="@style/Theme.Blue_main" >
         </activity>
         
 		<activity
             android:name="co.onemeter.oneapp.ui.LessonStatusActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Green" >
+            android:theme="@style/Theme.Blue_main" >
         </activity>
         <activity
             android:name="co.onemeter.oneapp.ui.LessonParentFeedbackActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Green" >
+            android:theme="@style/Theme.Blue_main" >
         </activity>
 		
         <activity
             android:name="co.onemeter.oneapp.ui.LessonInfoEditActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Green" >
+            android:theme="@style/Theme.Blue_main" >
         </activity>
         
         <activity
             android:name="co.onemeter.oneapp.ui.ClassInfoEditActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Green" >
+            android:theme="@style/Theme.Blue_main" >
         </activity>
         
         <activity
             android:name="co.onemeter.oneapp.ui.TeacherCheckActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Green" >
+            android:theme="@style/Theme.Blue_main" >
         </activity>
         
         <activity
             android:name="co.onemeter.oneapp.ui.FeedbackDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Green" >
+            android:theme="@style/Theme.Blue_main" >
         </activity>
 		<activity
 			android:name="com.skd.androidrecording.ui.VideoRecordingActivity"

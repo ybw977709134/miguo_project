@@ -3,6 +3,7 @@ package co.onemeter.oneapp.utils;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.widget.Toast;
 import co.onemeter.oneapp.BuildConfig;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
@@ -16,6 +17,7 @@ import org.json.JSONObject;
 import org.wowtalk.api.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,12 +55,14 @@ public class ChatMessageHandler {
     private WowTalkWebServerIF mWeb;
     private PrefUtil mPrefUtil;
     private boolean mSaveDb = false;
+    private List<GroupChatRoom> schools;
 
     public ChatMessageHandler(Context context) {
         this.context = context;
         mWeb = WowTalkWebServerIF.getInstance(context);
         mDb = Database.open(context);
         mPrefUtil = PrefUtil.getInstance(context);
+        schools = new Database(context).fetchSchools();
     }
 
     private boolean handleGroupJoin(ChatMessage msg) {
@@ -299,7 +303,9 @@ public class ChatMessageHandler {
 		} else if(ChatMessage.MSGTYPE_GROUPCHAT_JOIN_REQUEST.equals(msg.msgType)) {
             humanReadable = false;
             handleGroupRequest(msg);
-        } else {
+        } else if(ChatMessage.MSGTYPE_SCHOOL_STRUCTURE_CHANGED.equals(msg.msgType)){
+        	structureChangedRefresh();
+        }else {
             if (SYSTEM_NOTIFICATION_SENDER.equals(msg.chatUserName)) {
                 humanReadable = false;
             }
@@ -368,6 +374,24 @@ public class ChatMessageHandler {
         // nothing to do
     }
 
+    private void structureChangedRefresh(){
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... voids) {
+            	schools.clear();
+            	int errno;
+            	errno =  WowTalkWebServerIF.getInstance(context).getMySchoolsErrno(true, schools);
+            	return errno;
+            }
+
+            @Override
+            public void onPostExecute(Integer errno) {
+                if (errno == ErrorCode.OK) {
+                    new Database(context).storeSchools(schools);
+                }
+            }
+        });
+    }
     /**
      * @param msg
      * @return true : the msg is consumed (no more handling is required)

@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,9 +15,9 @@ import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.androidquery.AQuery;
 
-import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 /**
  * Created by pzy on 9/18/14.
@@ -54,7 +51,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         //登陆后跳转到此页面检测用户是否绑定了邮箱，绑定了，不提示，未绑定，弹框提示用户是否要绑定邮箱
         //如果用户未绑定邮箱，跳转到绑定邮箱界面
         
-        msgbox.showWait();
+        //msgbox.showWait();
 
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, List<Map<String, Object>>> () {
 
@@ -65,27 +62,28 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
             @Override
             protected void onPostExecute(List<Map<String, Object>> result) {
-            	msgbox.dismissWait();
+            	//msgbox.dismissWait();
             	String bindEmail = null;
             	if (result != null) {
             		bindEmail = (String) result.get(0).get("email");
             	
             		if (bindEmail == null) {
-            		
-            			Builder builder = new AlertDialog.Builder(HomeActivity.this);
-//            			builder.setTitle("你还未绑定邮箱");
-            			builder.setMessage("请绑定邮箱，用于找回密码");
-            			builder.setPositiveButton("以后再说", null);
-            			builder.setNegativeButton("去绑定", new DialogInterface.OnClickListener() {
-            			
-            				@Override
-            				public void onClick(DialogInterface arg0, int arg1) {
-            					Intent intent = new Intent();
-            					intent.setClass(HomeActivity.this, BindEmailAddressActivity.class);
-            					startActivity(intent);
-            				}
-            			});
-            			builder.create().show();
+                        MessageDialog dialog = new MessageDialog(HomeActivity.this);
+
+            			//Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                        dialog.setTitle("提示");
+                        dialog.setMessage("请绑定邮箱，用于找回密码");
+                        dialog.setOnRightClickListener("以后再说", null);
+                        dialog.setOnLeftClickListener("去绑定", new MessageDialog.MessageDialogClickListener() {
+                            @Override
+                            public void onclick(MessageDialog dialog) {
+                                dialog.dismiss();
+                                Intent intent = new Intent();
+                                intent.setClass(HomeActivity.this, BindEmailAddressActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+                        dialog.show();
             		} else {
 //            			Toast.makeText(HomeActivity.this, bindEmail, Toast.LENGTH_SHORT).show();
             		} 

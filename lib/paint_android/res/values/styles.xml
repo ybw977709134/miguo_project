@@ -4,7 +4,7 @@
 	<style name="palette_grid">
 		<item name="android:layout_width">30dp</item>
 		<item name="android:layout_height">30dp</item>
-		<item name="android:layout_margin">1dp</item>
+		<item name="android:layout_margin">2dp</item>
 	</style>
 
 	<style name="palette_grid_01" parent="palette_grid">

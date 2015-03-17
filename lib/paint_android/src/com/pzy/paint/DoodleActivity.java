@@ -53,8 +53,8 @@ public class DoodleActivity extends Activity implements View.OnClickListener {
 
     private void updateUI() {
         AQuery q = new AQuery(this);
-        q.find(R.id.stroke_width).getSeekBar().setProgress(strokeWidth);
-        q.find(R.id.stroke_opacity).getSeekBar().setProgress(strokeOpacity);
+        //q.find(R.id.stroke_width).getSeekBar().setProgress(strokeWidth);
+        //q.find(R.id.stroke_opacity).getSeekBar().setProgress(strokeOpacity);
         q.find(R.id.title_back).clicked(this);
         q.find(R.id.title_confirm).clicked(this);
         q.find(R.id.linearLayout_cancel).clicked(this);
@@ -62,7 +62,7 @@ public class DoodleActivity extends Activity implements View.OnClickListener {
 
     private void setupEventHandlers() {
         AQuery q = new AQuery(this);
-        q.find(R.id.stroke_width).getSeekBar().setOnSeekBarChangeListener(
+        /*q.find(R.id.stroke_width).getSeekBar().setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -105,7 +105,7 @@ public class DoodleActivity extends Activity implements View.OnClickListener {
                     }
                 }
         );
-
+        */
         ViewGroup palette =(ViewGroup) findViewById(R.id.palette);
         for (int i = 0, n = palette.getChildCount(); i < n; ++i) {
             View v = palette.getChildAt(i);

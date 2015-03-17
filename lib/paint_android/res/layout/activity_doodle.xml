@@ -2,8 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/padding_medium">
+                android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/title_bar"
@@ -39,48 +38,48 @@
         android:layout_alignParentBottom="true"
         android:id="@+id/linearLayout">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/linearLayout2">
+        <!--<LinearLayout-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:id="@+id/linearLayout2">-->
 
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/stroke_width"
-                android:id="@+id/textView3"/>
+            <!--<TextView-->
+                <!--android:layout_width="100dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+                <!--android:text="@string/stroke_width"-->
+                <!--android:id="@+id/textView3"/>-->
 
-            <SeekBar
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/padding_medium"
-                android:max="50"
-                android:id="@+id/stroke_width"/>
-        </LinearLayout>
+            <!--<SeekBar-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/padding_medium"-->
+                <!--android:max="50"-->
+                <!--android:id="@+id/stroke_width"/>-->
+        <!--</LinearLayout>-->
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:orientation="horizontal" >
+        <!--<LinearLayout-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="@dimen/padding_medium"-->
+            <!--android:orientation="horizontal" >-->
 
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/stoke_opacity"
-                android:id="@+id/textView"/>
+            <!--<TextView-->
+                <!--android:layout_width="100dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+                <!--android:text="@string/stoke_opacity"-->
+                <!--android:id="@+id/textView"/>-->
 
-            <SeekBar
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/padding_medium"
-                android:max="255"
-                android:id="@+id/stroke_opacity"/>
+            <!--<SeekBar-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/padding_medium"-->
+                <!--android:max="255"-->
+                <!--android:id="@+id/stroke_opacity"/>-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
         <LinearLayout
             android:orientation="horizontal"
@@ -88,14 +87,32 @@
             android:layout_height="fill_parent"
             android:layout_marginTop="@dimen/padding_medium"
             android:layout_below="@+id/linearLayout"
-            android:layout_alignParentLeft="true">
+            android:layout_alignParentLeft="true"
+            android:gravity="center_vertical"
+            android:background="#ff171717"
+            android:padding="5dp">
 
-            <TextView
-                android:layout_width="100dp"
+            <!--<TextView-->
+                <!--android:layout_width="100dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+                <!--android:text="@string/stroke_color"-->
+                <!--android:id="@+id/textView2"/>-->
+
+           <LinearLayout android:id="@+id/linearLayout_cancel"
+                android:layout_width="0dp"
+               android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/stroke_color"
-                android:id="@+id/textView2"/>
+                android:orientation="horizontal"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/textView_clear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stroke_cancel"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/palette"
@@ -103,8 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_medium"
-                android:padding="1dp"
-                android:background="#fff">
+                android:padding="1dp">
                 <ImageView
                     style="@style/palette_grid_01"/>
                 <ImageView
@@ -124,21 +140,21 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout_cancel"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout"
-        android:layout_alignLeft="@+id/doodle_canvas"
-        android:layout_marginBottom="17dp"
-        android:orientation="horizontal" >
+    <!--<LinearLayout-->
+        <!--android:id="@+id/linearLayout_cancel"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_above="@+id/linearLayout"-->
+        <!--android:layout_alignLeft="@+id/doodle_canvas"-->
+        <!--android:layout_marginBottom="17dp"-->
+        <!--android:orientation="horizontal" >-->
 
-        <TextView
-            android:id="@+id/textView_clear"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="@string/stroke_cancel"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </LinearLayout>
+        <!--<TextView-->
+            <!--android:id="@+id/textView_clear"-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/stroke_cancel"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium" />-->
+    <!--</LinearLayout>-->
 
 </RelativeLayout>

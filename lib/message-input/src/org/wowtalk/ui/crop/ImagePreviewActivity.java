@@ -7,6 +7,8 @@ package org.wowtalk.ui.crop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
 import org.wowtalk.ui.msg.R;
@@ -52,7 +54,7 @@ public class ImagePreviewActivity extends Activity implements OnClickListener {
 			try {
 				//避免OOM发生
 				BitmapFactory.Options option = new BitmapFactory.Options();
-				option.inPreferredConfig = Bitmap.Config.RGB_565;
+				option.inPreferredConfig = Bitmap.Config.ARGB_8888;
 				option.inPurgeable = true;
 				option.inInputShareable = true;
 				option.inSampleSize = 4;
@@ -92,6 +94,20 @@ public class ImagePreviewActivity extends Activity implements OnClickListener {
         if (resultCode == RESULT_OK) {
         	resultUri = Crop.getOutput(result);
             resultView.setImageURI(resultUri);
+            if(resultUri != null){
+                try {
+                    //避免OOM发生
+                    BitmapFactory.Options option = new BitmapFactory.Options();
+                    option.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    option.inPurgeable = true;
+                    option.inInputShareable = true;
+                    option.inSampleSize = 4;
+                    bm = BitmapFactory.decodeStream(getContentResolver().openInputStream(resultUri), null, option);
+                    resultView.setImageBitmap(bm);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -112,28 +128,39 @@ public class ImagePreviewActivity extends Activity implements OnClickListener {
 		if(id == R.id.btn_send){
 			 if (outpath != null ) {
 	                Bitmap outBmp = null;
+                    InputStream is = null;
 	                try {
 	                	Uri returnUri = imagePickedUri;
 						if(resultUri != null){
 							//outBmp = MediaStore.Images.Media.getBitmap(getContentResolver(), resultUri);
-							outBmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(resultUri));
+                            is = getContentResolver().openInputStream(resultUri);
+							outBmp = BitmapFactory.decodeStream(is);
 							returnUri = resultUri;
 		                }else if(imagePickedUri != null){
 		                	//outBmp = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePickedUri);
-							outBmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(imagePickedUri));
+                            is = getContentResolver().openInputStream(imagePickedUri);
+							outBmp = BitmapFactory.decodeStream(is);
 		                }
-						if(outBmp != null){
-							 outBmp.compress(Bitmap.CompressFormat.JPEG, 90, new FileOutputStream(outpath));
-							 if(!outBmp.isRecycled()){
-								 outBmp.recycle();
-							 }
-						}
+                        if(outBmp != null) {
+                            outBmp.compress(Bitmap.CompressFormat.JPEG, 90, new FileOutputStream(outpath));
+                        }
 						Intent data = new Intent();
 						data.setData(returnUri);
 		                setResult(RESULT_OK, data);
 					} catch (Exception e) {
 						e.printStackTrace();
-					}
+					}finally{
+                        if(outBmp != null && !outBmp.isRecycled()){
+                             outBmp.recycle();
+                        }
+                        if(is != null){
+                            try {
+                                is.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
 		                
 	            } else {
 	                setResult(RESULT_CANCELED, null);

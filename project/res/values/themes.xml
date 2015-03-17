@@ -64,4 +64,9 @@
 		<item name="radio">@style/standard_radio_green</item>
         <item name="button">@style/button_blue</item>
 	</style>
+		<style name="Theme.Blue_main" parent="Theme.White">
+		<item name="navbar">@style/title_bar_blue_main</item>
+		<item name="radio">@style/standard_radio_green</item>
+        <item name="button">@style/button_blue</item>
+	</style>
 </resources>

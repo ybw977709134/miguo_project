@@ -17,6 +17,10 @@
 	<style name="title_bar_blue" parent="title_bar">
 		<item name="android:background">@drawable/contacts_bg_navbar</item>
 	</style>
+	
+	<style name="title_bar_blue_main" parent="title_bar">
+		<item name="android:background">@drawable/bg_menubar_bule</item>
+	</style>
 
 	<style name="page_title">
 		<item name="android:layout_width">wrap_content</item>

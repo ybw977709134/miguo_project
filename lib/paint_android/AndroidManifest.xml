@@ -8,18 +8,4 @@
 
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-	<application
-		android:label="@string/paint_app_name"
-		android:icon="@drawable/ic_launcher">
-		<activity
-			android:name="DoodleActivity"
-			android:label="@string/paint_app_name">
-		</activity>
-		<activity android:name=".MyActivity">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN"/>
-				<category android:name="android.intent.category.LAUNCHER"/>
-			</intent-filter>
-		</activity>
-	</application>
 </manifest>

@@ -10,7 +10,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/pulltorefresh"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SimpleQRCodeLib"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/wowtalksdk"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/MyActivity"/>
 	<classpathentry kind="lib" path="libs/cyberplayer-sdk.jar"/>
 	<classpathentry kind="lib" path="libs/eventbus.jar"/>
 	<classpathentry kind="lib" path="libs/gson-2.1.jar"/>

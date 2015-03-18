@@ -12,6 +12,12 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+/**
+ * 
+ * @author hutianfeng
+ * @date 2015/3/18
+ *
+ */
 public class SexSettingActivity extends Activity implements OnClickListener{
 	
 	//返回

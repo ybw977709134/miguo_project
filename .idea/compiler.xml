@@ -2,24 +2,6 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <option name="DEFAULT_COMPILER" value="Javac" />
-    <excludeFromCompile>
-      <directory url="file://$PROJECT_DIR$/project/gen" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/lib/google-play-services_lib/gen" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/tester/gen" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/lib/library/gen" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/lib/pulltorefresh/gen" includeSubdirectories="true" />
-      <directory url="file://$USER_HOME$/bitmapfun/gen" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/lib/aws-sdk-android/gen" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/lib/bitmapfun/gen" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/lib/message-input/gen" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/lib/wowtalksdk/gen" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/lib/message-input_demo/gen" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/lib/bitmapfun_demo/gen" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/messagebox/gen" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/lib/messagebox/gen" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/lib/messagebox_demo/gen" includeSubdirectories="true" />
-      <directory url="file://$PROJECT_DIR$/lib/pulltorefresh_demo/gen" includeSubdirectories="true" />
-    </excludeFromCompile>
     <resourceExtensions />
     <wildcardResourcePatterns>
       <entry name="!?*.java" />

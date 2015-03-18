@@ -27,3 +27,20 @@ oneapp.xml
 project/module_oneapp.xml
 
 .idea/vcs.xml
+
+#gradle
+.gradle/
+build/
+lib/AndroidRecording/lib/build/
+lib/DraggableListView/build/
+lib/SimpleQRCodeLib/build/
+lib/bitmapfun/build/
+lib/google-play-services_lib/build/
+lib/message-input/build/
+lib/messagebox/build/
+lib/paint_android/build/
+lib/pulltorefresh/build/
+lib/wowtalksdk/build/
+project/build/
+
+local.properties

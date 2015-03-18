@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="android-query">
+  <library name="MapApiSearch">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/project/libs/android-query.0.26.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/message-input/libs/MapApiSearch.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

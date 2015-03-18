@@ -2,18 +2,22 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/lib/AndroidRecording/AndroidRecording.iml" filepath="$PROJECT_DIR$/lib/AndroidRecording/AndroidRecording.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib/AndroidRecording/lib/AndroidRecording-lib.iml" filepath="$PROJECT_DIR$/lib/AndroidRecording/lib/AndroidRecording-lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/DraggableListView/DraggableListView.iml" filepath="$PROJECT_DIR$/lib/DraggableListView/DraggableListView.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/SimpleQRCodeLib/SimpleQRCodeLib.iml" filepath="$PROJECT_DIR$/lib/SimpleQRCodeLib/SimpleQRCodeLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/bitmapfun/bitmapfun.iml" filepath="$PROJECT_DIR$/lib/bitmapfun/bitmapfun.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/google-play-services_lib/google-play-services_lib.iml" filepath="$PROJECT_DIR$/lib/google-play-services_lib/google-play-services_lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib/lib.iml" filepath="$PROJECT_DIR$/lib/lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/message-input/message-input.iml" filepath="$PROJECT_DIR$/lib/message-input/message-input.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/messagebox/messagebox.iml" filepath="$PROJECT_DIR$/lib/messagebox/messagebox.iml" />
-      <module fileurl="file://$PROJECT_DIR$/project/oneapp.iml" filepath="$PROJECT_DIR$/project/oneapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/om_im_android.iml" filepath="$PROJECT_DIR$/om_im_android.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/paint_android/paint_android.iml" filepath="$PROJECT_DIR$/lib/paint_android/paint_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/project/project.iml" filepath="$PROJECT_DIR$/project/project.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/pulltorefresh/pulltorefresh.iml" filepath="$PROJECT_DIR$/lib/pulltorefresh/pulltorefresh.iml" />
-      <module fileurl="file://$PROJECT_DIR$/lib/AndroidRecording/lib/recording.iml" filepath="$PROJECT_DIR$/lib/AndroidRecording/lib/recording.iml" />
-      <module fileurl="file://$PROJECT_DIR$/lib/AndroidRecording/demo/recording-demo.iml" filepath="$PROJECT_DIR$/lib/AndroidRecording/demo/recording-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib/pulltorefresh_demo/pulltorefresh_demo.iml" filepath="$PROJECT_DIR$/lib/pulltorefresh_demo/pulltorefresh_demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/wowtalksdk/wowtalksdk.iml" filepath="$PROJECT_DIR$/lib/wowtalksdk/wowtalksdk.iml" />
     </modules>
   </component>
 </project>
+

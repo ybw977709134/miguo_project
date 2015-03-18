@@ -1,8 +1,7 @@
 <component name="libraryTable">
-  <library name="libs">
+  <library name="simplesound-0.1">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/AndroidRecording/lib/libs/simplesound-0.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/AndroidRecording/lib/libs/android-support-v4.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

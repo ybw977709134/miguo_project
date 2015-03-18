@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="cyberplayer-sdk">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/project/libs/cyberplayer-sdk.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

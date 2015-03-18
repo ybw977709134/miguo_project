@@ -13,9 +13,9 @@
         <TextView
             android:id="@+id/coursetable_item_name"
             android:layout_width="0dp"
-            android:layout_weight="1.5"
+            android:layout_weight="2"
             android:layout_height="wrap_content"
-            android:textColor="@color/gray"
+            android:textColor="@color/black_30"
             android:gravity="center"
             android:text="dummy" />
 
@@ -44,7 +44,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:drawableRight="@drawable/history_next_disable"
+            android:drawableRight="@drawable/icon_home_movablebar"
             android:textColor="@color/gray"
             android:text="" />
 

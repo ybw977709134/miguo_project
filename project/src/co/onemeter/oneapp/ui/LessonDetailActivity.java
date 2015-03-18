@@ -86,6 +86,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		}
 		q.find(R.id.title_back).clicked(this);
 		q.find(R.id.title_refresh).clicked(this);
+		q.find(R.id.tv_back).clicked(this);
 		
 		LinearLayout lay_classroom = (LinearLayout) q.find(R.id.les_lay_classroom).getView();
 		LinearLayout lay_first = (LinearLayout) q.find(R.id.les_lay_first).getView();
@@ -169,6 +170,9 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		intent.putExtra(Constants.LESSONID, lessonId);
 		switch (v.getId()) {
 		case R.id.title_back:
+			finish();
+			break;
+		case R.id.tv_back:
 			finish();
 			break;
 		case R.id.title_refresh:

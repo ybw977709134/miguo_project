@@ -55,7 +55,7 @@
 					style="@style/inputbox_borderless"
 					android:gravity="center_horizontal"
 					android:imeOptions="actionNext"
-					android:hint="@string/account_hint"
+					android:hint="@string/userName_hint"
 					android:textCursorDrawable="@color/green"/>
 
 				<ImageView

@@ -18,7 +18,7 @@
             android:layout_height="50dp"
             android:layout_width="20dp"
             android:background="@null"
-            android:src="@drawable/nav_back_selector"/>
+            android:src="@drawable/icon_back_selector"/>
         
         <!-- 添加找回密码页表头的文本 -->
         <TextView 
@@ -81,13 +81,29 @@
 
 				<ImageView
 					style="@style/bg_section_divider_line_dark"/>
+				
+				<RelativeLayout
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent">
 
 				<EditText
 					android:id="@+id/account_edit"
 					style="@style/inputbox_borderless"
 					android:imeOptions="actionNext"
-					android:background="@color/white_40"
+					android:background="@color/white"
 					android:hint="@string/account_hint"/>
+				
+				<ImageButton
+						android:id="@+id/field_clear_account"
+						android:layout_height="20dp"
+						android:layout_width="20dp"
+						android:layout_marginRight="7dp"
+						android:layout_centerVertical="true"
+						android:layout_alignParentRight="true"
+						android:visibility="gone"
+						android:background="@drawable/field_clear"/>
+				
+				</RelativeLayout>
 				
 				<ImageView
 					style="@style/bg_section_divider_line_light"/>
@@ -100,10 +116,10 @@
 						style="@style/inputbox_borderless"
 						android:hint="@string/passWord_hint"
 						android:imeOptions="actionNext"
-						android:background="@color/white_40"
+						android:background="@color/white"
 						android:inputType="textPassword"/>
 					<ImageButton
-						android:id="@+id/field_clear"
+						android:id="@+id/field_clear_pwd"
 						android:layout_height="20dp"
 						android:layout_width="20dp"
 						android:layout_marginRight="7dp"
@@ -125,53 +141,53 @@
 						style="@style/inputbox_borderless"
 						android:hint="@string/input_password_again"
 						android:imeOptions="actionDone"
-						android:background="@color/white_40"
+						android:background="@color/white"
 						android:inputType="textPassword"/>
 					<ImageButton
-						android:id="@+id/field_clear2"
+						android:id="@+id/field_clear_confirm"
 						android:layout_height="20dp"
 						android:layout_width="20dp"
 						android:layout_marginRight="7dp"
 						android:layout_centerVertical="true"
 						android:layout_alignParentRight="true"
 						android:visibility="gone"
-						android:background="@drawable/field_clear"/>
+						android:background="@drawable/field_clear" />
 
 				</RelativeLayout>
 
 				<ImageView
-					style="@style/bg_section_divider_line_light"/>
+					style="@style/bg_section_divider_line_light" />
 
 				<LinearLayout
 				    android:id="@+id/layout_register_user_type"
 					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:background="@color/white_40"
+					android:layout_height="match_parent"
+					android:background="@color/white"
 					android:padding="@dimen/padding_medium" >
+					
+				    <!--  
 					<TextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						style="@style/standard_text_gray"
 						android:textColor="@color/text_hint"
 						android:layout_gravity="center_vertical"
-						android:text="@string/register_user_type"
+						android:text="@string/register_user_type" />
 						
-						/>
-					
+						-->
 					<TextView 
 					    android:id="@+id/textView_register_user_type"
 			    		android:layout_width="match_parent"
 			    		android:layout_height="wrap_content"
 			    		style="@style/standard_text_gray"
 			    		android:textColor="@color/text_hint"
-			    		android:layout_marginLeft="@dimen/padding_medium"
-			    		android:text="(不可更改)" 
-			    		android:drawableRight="@drawable/table_arrow"/>
+			    		android:text="账号类型(不可更改)" 
+			    		android:drawableRight="@drawable/icon_section_row_selector" />
 					
 				</LinearLayout>
 				
 				<ImageView
-					style="@style/bg_section_divider_line_dark"/>
+					style="@style/bg_section_divider_line_dark" />
 						
 				<LinearLayout 
                 android:layout_width="match_parent"
@@ -186,7 +202,8 @@
                    android:layout_height="wrap_content"
                    android:layout_marginLeft="10dp"
                    android:layout_marginRight="10dp"
-                   android:src="@drawable/btn_show_password_on" />
+                   android:src="@drawable/btn_show_password_on"
+                   android:visibility="gone" />
                
                <ImageView
                    android:id="@+id/imageview_hint_password" 
@@ -194,8 +211,7 @@
                    android:layout_height="wrap_content"
                    android:layout_marginLeft="10dp"
                    android:layout_marginRight="10dp"
-                   android:src="@drawable/btn_show_password_off"
-                   android:visibility="gone" />
+                   android:src="@drawable/btn_show_password_off" />
                    
                <TextView 
                    android:id="@+id/textView_isshow_password"

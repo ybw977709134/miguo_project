@@ -165,7 +165,7 @@
 			    		style="@style/standard_text_gray"
 			    		android:textColor="@color/text_hint"
 			    		android:layout_marginLeft="@dimen/padding_medium"
-			    		android:text="(注册后不可更改)" 
+			    		android:text="(不可更改)" 
 			    		android:drawableRight="@drawable/table_arrow"/>
 					
 				</LinearLayout>

@@ -197,25 +197,28 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
             }
             break;
             case R.id.boxSex:
-                bottomBoard.clearView();
-                bottomBoard.add(getSexLiteral(Buddy.SEX_FEMALE), BottomButtonBoard.BUTTON_BLUE,
-                        new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                bottomBoard.dismiss();
-                                updateMySex(Buddy.SEX_FEMALE);
-                            }
-                        });
-                bottomBoard.add(getSexLiteral(Buddy.SEX_MALE), BottomButtonBoard.BUTTON_BLUE,
-                        new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                bottomBoard.dismiss();
-                                updateMySex(Buddy.SEX_MALE);
-                            }
-                        });
-                bottomBoard.addCancelBtn(getString(R.string.cancel));
-                bottomBoard.show();
+//                bottomBoard.clearView();
+//                bottomBoard.add(getSexLiteral(Buddy.SEX_FEMALE), BottomButtonBoard.BUTTON_BLUE,
+//                        new OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                bottomBoard.dismiss();
+//                                updateMySex(Buddy.SEX_FEMALE);
+//                            }
+//                        });
+//                bottomBoard.add(getSexLiteral(Buddy.SEX_MALE), BottomButtonBoard.BUTTON_BLUE,
+//                        new OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                bottomBoard.dismiss();
+//                                updateMySex(Buddy.SEX_MALE);
+//                            }
+//                        });
+//                bottomBoard.addCancelBtn(getString(R.string.cancel));
+//                bottomBoard.show();
+            	
+            	Intent intentSex = new Intent(MyInfoActivity.this,SexSettingActivity.class);
+            	startActivityForResult(intentSex, REQ_INPUT_SEX);
                 break;
             case R.id.person_age:
             {
@@ -473,6 +476,20 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
                     updateMyAvatar(path[0], path[1]);
                 }
                 break;
+                
+            case REQ_INPUT_SEX:
+            	int sex = data.getIntExtra("sex", Buddy.SEX_NULL);
+
+            	if (sex == Buddy.SEX_MALE) {//男
+            		updateMySex(Buddy.SEX_MALE);
+            	} 
+            	
+            	if (sex == Buddy.SEX_FEMALE) {//女
+            		updateMySex(Buddy.SEX_FEMALE);
+            	} 
+
+            	break;
+            	
             case REQ_INPUT_AREA:
                 updateMyArea(data.getExtras().getString("text"));
                 break;
@@ -535,8 +552,9 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 	}
 
 	private void updateMySex(final int sex) {
+		mMsgBox.showWait();
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
-
+			
             @Override
             protected Integer doInBackground(Void... params) {
                 Buddy data = new Buddy();
@@ -546,9 +564,24 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 
             @Override
             protected void onPostExecute(Integer result) {
+            	mMsgBox.dismissWait();
                 displayPeronalInfo();
                 if (result == ErrorCode.OK) {
                     mProfileUpdated = true;
+                    mMsgBox.showWaitImageSuccess("修改成功");
+                    
+                    new Thread(new Runnable() {
+						
+						@Override
+						public void run() {
+							try {
+								Thread.sleep(2000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							mMsgBox.dismissWait();
+						}
+					}).start();
                 }
             }
 

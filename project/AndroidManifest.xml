@@ -312,6 +312,13 @@
 			android:launchMode="singleTask"
 			android:screenOrientation="portrait" >
 		</activity>
+		
+		<activity
+			android:name=".ui.SexSettingActivity"
+			android:theme="@style/Theme.Blue_main"
+			android:screenOrientation="portrait">
+		</activity>
+		
 		<activity
             android:name=".ui.PrivacySettingActivity"
             android:theme="@style/Theme.Blue_main"

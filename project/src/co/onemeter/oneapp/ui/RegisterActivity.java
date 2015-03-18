@@ -191,6 +191,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 					field_clear_account.setVisibility(View.GONE);
 				} else {
 					field_clear_account.setVisibility(View.VISIBLE);
+					edtAccount.setTextColor(getResources().getColor(R.color.black));
 				}
 				
 			}
@@ -214,6 +215,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 					field_clear_pwd.setVisibility(View.GONE);
 				} else {
 					field_clear_pwd.setVisibility(View.VISIBLE);
+					edtPwd.setTextColor(getResources().getColor(R.color.black));
 				}
 				
 			}
@@ -238,6 +240,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 				field_clear_confirm.setVisibility(View.GONE);
 		} else {
 			field_clear_confirm.setVisibility(View.VISIBLE);
+			edtPwdConfirm.setTextColor(getResources().getColor(R.color.black));
 		}
 		
 		}
@@ -536,7 +539,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
                 //process
                 userType = Buddy.ACCOUNT_TYPE_TEACHER;
                 textView_register_user_type.setText("老师");
-                textView_register_user_type.setTextColor(getResources().getColor(R.color.text_gray2));
+                textView_register_user_type.setTextColor(getResources().getColor(R.color.black));
                 
             }
         });
@@ -548,7 +551,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
                 //process
                 userType = Buddy.ACCOUNT_TYPE_STUDENT;
                 textView_register_user_type.setText("学生");
-                textView_register_user_type.setTextColor(getResources().getColor(R.color.text_gray2));
+                textView_register_user_type.setTextColor(getResources().getColor(R.color.black));
                 
                 
             }

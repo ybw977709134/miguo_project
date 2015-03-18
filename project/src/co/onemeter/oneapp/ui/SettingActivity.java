@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
@@ -36,6 +37,10 @@ public class SettingActivity extends Activity implements OnClickListener {
 
 	private ImageView imgPhoto;
 	private TextView textView_settings_myinfo;
+	
+//	private ImageButton title_back;
+//	private TextView textView_home_back;
+	
 	private MessageBox mMsgBox;
 
     private WowTalkWebServerIF mWeb;
@@ -71,7 +76,14 @@ public class SettingActivity extends Activity implements OnClickListener {
     private void initView() {
 		imgPhoto = (ImageView) findViewById(R.id.img_thumbnail);
 		textView_settings_myinfo = (TextView) findViewById(R.id.settings_myinfo);
+//		title_back = (ImageButton) findViewById(R.id.title_back);
+//		textView_home_back = (TextView) findViewById(R.id.textView_home_back);
+		
+		
         AQuery q = new AQuery(this);
+        
+        q.find(R.id.title_back).clicked(this);
+        q.find(R.id.textView_home_back).clicked(this);
 
         q.find(R.id.img_thumbnail).clicked(this);
         q.find(R.id.settings_myinfo).clicked(this);
@@ -106,6 +118,10 @@ public class SettingActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
+        	case R.id.title_back:
+        	case R.id.textView_home_back:
+        		finish();
+        		break;
             case R.id.img_thumbnail:
             case R.id.settings_myinfo:
 //            case R.id.layout_settings_myinfo:

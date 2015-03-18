@@ -463,6 +463,7 @@
     <string name="login">登录</string>
     <string name="login_retrieve_password_btn">提交</string>
     <string name="forgotPassWord">忘记密码？</string>
+    <string name="findPassWord">找回密码？</string>
     <string name="login_findPassWord_email">邮箱找回</string>
     <string name="login_findPassWord_cancel">取消</string>
     <string name="login_findPassWord_ok">确定</string>

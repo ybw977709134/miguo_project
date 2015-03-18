@@ -1,5 +1,6 @@
 package co.onemeter.oneapp.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -7,46 +8,56 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.liveplayer.VideoPlayingActivity;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.androidquery.AQuery;
+import com.pzy.paint.MyActivity;
 
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
 
 /**
- * Created by pzy on 9/18/14.
+ * Created by pzy on 9/18/14.Modified by Jacky on 3/18/2015.
  */
 public class HomeActivity extends Activity implements View.OnClickListener {
     MessageBox msgbox;
 //    private static final int BIND_EMAIL_REQUEST_CODE = 1;
+
+    private ViewPager viewPager_home;
+
+    private ArrayList<View> pageviews = new ArrayList<View>();
+
+    private int[] imgIds;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        initView();
+
         msgbox = new MessageBox(this);
 
-        AQuery q = new AQuery(this);
-        q.find(R.id.btn_event).clicked(this);
-        q.find(R.id.vg_event).clicked(this);
-        q.find(R.id.btn_study).clicked(this);
-        q.find(R.id.vg_study).clicked(this);
-        q.find(R.id.btn_bonus).clicked(this);
-        q.find(R.id.vg_bonus).clicked(this);
-        q.find(R.id.btn_grow).clicked(this);
-        q.find(R.id.vg_grow).clicked(this);
-        q.find(R.id.btn_add).clicked(this);
-        q.find(R.id.btn_live_play).clicked(this);
-        q.find(R.id.btn_funnyevent).clicked(this);
-        q.find(R.id.btn_myclasses).clicked(this);
-        q.find(R.id.live_play).clicked(this);
+        imgIds = new int[] {R.drawable.home_banner,R.drawable.home_banner};
+
+        int len = imgIds.length;
+        for (int i = 0;i < len; i ++){
+            ImageView imageView = new ImageView(this);
+            imageView.setImageResource(imgIds[i]);
+            pageviews.add(imageView);
+        }
+
+        viewPager_home.setAdapter(new HeaderPagerAadapter());
         
         //登陆后跳转到此页面检测用户是否绑定了邮箱，绑定了，不提示，未绑定，弹框提示用户是否要绑定邮箱
         //如果用户未绑定邮箱，跳转到绑定邮箱界面
@@ -92,9 +103,24 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             	}
             }
         });
-        
     }
-    
+
+    private void initView(){
+        viewPager_home = (ViewPager) findViewById(R.id.viewpager_home_headimages);
+
+        findViewById(R.id.img_home_event).setOnClickListener(this);
+        findViewById(R.id.btn_add).setOnClickListener(this);
+        findViewById(R.id.img_home_growth_class).setOnClickListener(this);
+        findViewById(R.id.img_home_friends).setOnClickListener(this);
+        findViewById(R.id.img_home_classnotice).setOnClickListener(this);
+        findViewById(R.id.img_home_register).setOnClickListener(this);
+        findViewById(R.id.img_home_classlive).setOnClickListener(this);
+        findViewById(R.id.img_home_answerquestion).setOnClickListener(this);
+        findViewById(R.id.img_home_homework).setOnClickListener(this);
+        findViewById(R.id.img_home_chatroom).setOnClickListener(this);
+        findViewById(R.id.img_home_movable).setOnClickListener(this);
+        findViewById(R.id.btn_home_setting).setOnClickListener(this);
+    }
 
     @Override
     public void onPause() {
@@ -105,30 +131,81 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        Intent intent = null;
         switch (view.getId()) {
-            case R.id.btn_event:
-            case R.id.vg_event:
-                startActivity(new Intent(this, EventActivity.class));
+            case R.id.img_home_event:
+                intent = new Intent(this, EventActivity.class);
                 break;
             case R.id.btn_add:
-                startActivity(new Intent(this, AddClassActivity.class));
+                intent = new Intent(this,AddClassActivity.class);
+            case R.id.img_home_growth_class:
+
                 break;
-            case R.id.btn_funnyevent:
-                startActivity(new Intent(this, EventActivity.class));
+            case R.id.img_home_friends:
                 break;
-            case R.id.btn_myclasses:
-                startActivity(new Intent(this, MyClassesActivity.class));
+
+            case R.id.btn_home_setting:
+                intent = new Intent(this,SettingActivity.class);
                 break;
-            case R.id.live_play:
-            case R.id.btn_live_play:
-            	startActivity(new Intent(this, VideoPlayingActivity.class));
-            	break;
+
+            case R.id.img_home_classnotice:
+                break;
+            case R.id.img_home_register:
+                break;
+            case R.id.img_home_classlive:
+                intent = new Intent(this, MyClassesActivity.class);
+                break;
+            case R.id.img_home_answerquestion:
+                break;
+            case R.id.img_home_chatroom:
+                break;
+            case R.id.img_home_movable:
+                break;
+            case R.id.img_home_homework:
+                break;
             default:
-                msgbox.toast(R.string.not_implemented);
                 break;
         }
+        if(intent != null){
+            startActivity(intent);
+        }
     }
-    
+
+    private class HeaderPagerAadapter extends PagerAdapter{
+
+
+        public HeaderPagerAadapter(){
+
+        }
+
+        @Override
+        public int getCount() {
+            return pageviews.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object o) {
+            return view == o;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            container.addView(pageviews.get(position));
+            return pageviews.get(position);
+        }
+
+        @Override
+        public void restoreState(Parcelable state, ClassLoader loader) {
+            super.restoreState(state, loader);
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            //super.destroyItem(container, position, object);
+            container.removeView((View) object);
+        }
+    }
+
     /**
      * 检测用户绑定邮箱的状态
      */

@@ -169,7 +169,7 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
                 break;
         }
         params.width = width;
-        params.height = height;
+        //params.height = height;
         return params;
     }
 

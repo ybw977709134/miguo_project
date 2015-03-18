@@ -211,11 +211,12 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 		imgTabFriends = (ImageView) findViewById(R.id.tab_friend_image);
 		imgTabHome = (ImageView) findViewById(R.id.tab_home_image);
 		imgTabSetting = (ImageView) findViewById(R.id.tab_setting_image);
-		
+
+        txtTabHome = (TextView) findViewById(R.id.tab_home_text);
 		txtTabSms = (TextView) findViewById(R.id.tab_sms_text);
 		txtTabContact = (TextView) findViewById(R.id.tab_contact_text);
 		txtTabFriend = (TextView) findViewById(R.id.tab_friend_text);
-		txtTabHome = (TextView) findViewById(R.id.tab_home_text);
+		//txtTabHome = (TextView) findViewById(R.id.tab_home_text);
 		txtTabSetting = (TextView) findViewById(R.id.tab_setting_text);
 		txt_unreadMsg = (TextView)findViewById(R.id.txt_unreadMsg);
         txt_friends_news = (TextView)findViewById(R.id.txt_friends_have_news);
@@ -234,11 +235,11 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 	}
 	
 	private void setDefaultImageView() {
-		imgTabSms.setImageResource(R.drawable.tabbar_sms);
-		imgTabContacts.setImageResource(R.drawable.tabbar_contact);
-		imgTabFriends.setImageResource(R.drawable.tabbar_feed);
-		imgTabHome.setImageResource(R.drawable.tabbar_home_green);
-		imgTabSetting.setImageResource(R.drawable.tabbar_settings);
+		imgTabSms.setImageResource(R.drawable.tabbar_messages);
+		imgTabContacts.setImageResource(R.drawable.tabbar_contacts);
+		imgTabFriends.setImageResource(R.drawable.tabbar_myclass);
+		imgTabHome.setImageResource(R.drawable.tabbar_home);
+		imgTabSetting.setImageResource(R.drawable.tabbar_find);
 		
 		txtTabSms.setTextColor(getResources().getColor(R.color.gray));
 		txtTabContact.setTextColor(getResources().getColor(R.color.gray));
@@ -253,28 +254,28 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 
 		switch (index) {
 		case TAB_SMS:
-			txtTabSms.setTextColor(getResources().getColor(R.color.red));
-			imgTabSms.setImageResource(R.drawable.tabbar_sms_a);
-            imgTabHome.setImageResource(R.drawable.tabbar_home_red);
+			txtTabSms.setTextColor(getResources().getColor(R.color.blue));
+			imgTabSms.setImageResource(R.drawable.tabbar_messages_press);
+            //imgTabHome.setImageResource(R.drawable.tabbar_home_red);
 			break;
 		case TAB_CONTACTS:
 			txtTabContact.setTextColor(getResources().getColor(R.color.blue));
-			imgTabContacts.setImageResource(R.drawable.tabbar_contact_a);
-            imgTabHome.setImageResource(R.drawable.tabbar_home_blue);
+			imgTabContacts.setImageResource(R.drawable.tabbar_contacts_press);
+            //imgTabHome.setImageResource(R.drawable.tabbar_home_blue);
 			break;
 		case TAB_FRIENDS:
 			txtTabFriend.setTextColor(getResources().getColor(R.color.blue));
-			imgTabFriends.setImageResource(R.drawable.tabbar_feed_a);
-            imgTabHome.setImageResource(R.drawable.tabbar_home_blue);
+			imgTabFriends.setImageResource(R.drawable.tabbar_myclass_press);
+            //imgTabHome.setImageResource(R.drawable.tabbar_home_blue);
 			break;
 		case TAB_HOME:
-			txtTabHome.setTextColor(getResources().getColor(R.color.green));
-			imgTabHome.setImageResource(R.drawable.tabbar_home_green);
+			txtTabHome.setTextColor(getResources().getColor(R.color.blue));
+			imgTabHome.setImageResource(R.drawable.tabbar_home_press);
 			break;
 		case TAB_SETTING:
 			txtTabSetting.setTextColor(getResources().getColor(R.color.blue));
-			imgTabSetting.setImageResource(R.drawable.tabbar_settings_a);
-            imgTabHome.setImageResource(R.drawable.tabbar_home_blue);
+			imgTabSetting.setImageResource(R.drawable.tabbar_find_press);
+            //imgTabHome.setImageResource(R.drawable.tabbar_home_blue);
 			break;
 		default:
             setTab(TAB_SMS);

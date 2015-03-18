@@ -20,13 +20,14 @@ import co.onemeter.oneapp.liveplayer.VideoPlayingActivity;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.androidquery.AQuery;
+import com.pzy.paint.MyActivity;
 
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
 
 /**
- * Created by pzy on 9/18/14.
+ * Created by pzy on 9/18/14.Modified by Jacky on 3/18/2015.
  */
 public class HomeActivity extends Activity implements View.OnClickListener {
     MessageBox msgbox;
@@ -111,6 +112,14 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.btn_add).setOnClickListener(this);
         findViewById(R.id.img_home_growth_class).setOnClickListener(this);
         findViewById(R.id.img_home_friends).setOnClickListener(this);
+        findViewById(R.id.img_home_classnotice).setOnClickListener(this);
+        findViewById(R.id.img_home_register).setOnClickListener(this);
+        findViewById(R.id.img_home_classlive).setOnClickListener(this);
+        findViewById(R.id.img_home_answerquestion).setOnClickListener(this);
+        findViewById(R.id.img_home_homework).setOnClickListener(this);
+        findViewById(R.id.img_home_chatroom).setOnClickListener(this);
+        findViewById(R.id.img_home_movable).setOnClickListener(this);
+        findViewById(R.id.btn_home_setting).setOnClickListener(this);
     }
 
     @Override
@@ -122,22 +131,44 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        Intent intent = new Intent();
+        Intent intent = null;
         switch (view.getId()) {
             case R.id.img_home_event:
-                intent.setClass(this,EventActivity.class);
+                intent = new Intent(this, EventActivity.class);
                 break;
             case R.id.btn_add:
-                intent.setClass(this,AddClassActivity.class);
+                intent = new Intent(this,AddClassActivity.class);
             case R.id.img_home_growth_class:
 
                 break;
             case R.id.img_home_friends:
                 break;
+
+            case R.id.btn_home_setting:
+                intent = new Intent(this,SettingActivity.class);
+                break;
+
+            case R.id.img_home_classnotice:
+                break;
+            case R.id.img_home_register:
+                break;
+            case R.id.img_home_classlive:
+                intent = new Intent(this, MyClassesActivity.class);
+                break;
+            case R.id.img_home_answerquestion:
+                break;
+            case R.id.img_home_chatroom:
+                break;
+            case R.id.img_home_movable:
+                break;
+            case R.id.img_home_homework:
+                break;
             default:
                 break;
         }
-        startActivity(intent);
+        if(intent != null){
+            startActivity(intent);
+        }
     }
 
     private class HeaderPagerAadapter extends PagerAdapter{

@@ -29,7 +29,7 @@
             <LinearLayout
                 android:id="@+id/tab_bar"
                 android:layout_width="fill_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
                 android:background="@drawable/tabbar_bg"
                 android:gravity="center|center_vertical|center_horizontal"
@@ -42,10 +42,12 @@
                     android:layout_weight="1">
                     <ImageView 
                         android:id="@+id/tab_sms_image"
-                        android:layout_height="40dp"
-                        android:layout_width="44dp"
-                        android:src="@drawable/tabbar_sms_a"
-                        android:layout_centerHorizontal="true"/>
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/tabbar_messages"
+                        android:layout_centerHorizontal="true"
+                        />
                     <ImageView
                             android:id="@+id/iv_center_horizontal_sms"
                             android:layout_height="match_parent"
@@ -80,10 +82,11 @@
 		            android:layout_weight="1" >
 		            <ImageView
 			            android:id="@+id/tab_contact_image"
-			            android:layout_height="40dp"
-			            android:layout_width="44dp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="10dp"
 			            android:layout_centerHorizontal="true"
-			            android:src="@drawable/tabbar_contact"/>
+			            android:src="@drawable/tabbar_contacts"/>
 		            <ImageView
                         android:id="@+id/tab_contact_image_sms"
                         android:layout_height="match_parent"
@@ -113,29 +116,69 @@
                         android:text="@string/tab_contacts"/>
 	            </RelativeLayout>
 
-	            <LinearLayout
-	                android:id="@+id/tab_home"
-	                android:layout_width="0dp"
-	                android:layout_height="fill_parent"
-	                android:layout_weight="1"
-	                android:gravity="center"
-	                android:orientation="vertical">
-	                <ImageView
-	                    android:id="@+id/tab_home_image"
-	                    android:layout_height="fill_parent"
-	                    android:layout_width="fill_parent"
-	                    android:layout_margin="2dp"
-	                    android:layout_gravity="center_horizontal"
-	                    android:src="@drawable/tabbar_home_green"/>
-	                <TextView
-	                    android:id="@+id/tab_home_text"
-	                    android:layout_height="wrap_content"
-	                    android:layout_width="wrap_content"
-	                    android:layout_gravity="center_horizontal"
-	                    android:visibility="gone"
-	                    android:textSize="11sp"
-	                    android:text="@string/tab_events"/>
-	            </LinearLayout>
+	            <!--<LinearLayout-->
+	                <!--android:id="@+id/tab_home"-->
+	                <!--android:layout_width="0dp"-->
+	                <!--android:layout_height="fill_parent"-->
+	                <!--android:layout_weight="1"-->
+	                <!--android:gravity="center"-->
+	                <!--android:orientation="vertical">-->
+	                <!--<ImageView-->
+	                    <!--android:id="@+id/tab_home_image"-->
+	                    <!--android:layout_height="fill_parent"-->
+	                    <!--android:layout_width="fill_parent"-->
+	                    <!--android:layout_margin="2dp"-->
+	                    <!--android:layout_gravity="center_horizontal"-->
+	                    <!--android:src="@drawable/tabbar_home_green"/>-->
+	                <!--<TextView-->
+	                    <!--android:id="@+id/tab_home_text"-->
+	                    <!--android:layout_height="wrap_content"-->
+	                    <!--android:layout_width="wrap_content"-->
+	                    <!--android:layout_gravity="center_horizontal"-->
+	                    <!--android:visibility="gone"-->
+	                    <!--android:textSize="11sp"-->
+	                    <!--android:text="@string/tab_events"/>-->
+                <RelativeLayout
+                    android:id="@+id/tab_home"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1" >
+                    <ImageView
+                        android:id="@+id/tab_home_image"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/tabbar_home"/>
+                    <ImageView
+                        android:id="@+id/tab_home_image_sms"
+                        android:layout_height="match_parent"
+                        android:layout_width="1dip"
+                        android:layout_centerHorizontal="true"
+                        android:visibility="invisible"/>
+
+                    <TextView
+                        android:layout_width="19dp"
+                        android:layout_height="17dp"
+                        android:layout_toRightOf="@id/tab_home_image_sms"
+                        android:background="@drawable/unread_count_bg"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:visibility="invisible"
+                        android:layout_marginTop="5dp"/>
+                    <TextView
+                        android:id="@+id/tab_home_text"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_below="@+id/tab_home_image"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="11sp"
+                        android:text="@string/tab_top"/>
+
+                </RelativeLayout>
+	            <!--</LinearLayout>-->
 
 	            <RelativeLayout
                     android:id="@+id/tab_friend"
@@ -144,10 +187,11 @@
                     android:layout_weight="1" >
                     <ImageView 
                         android:id="@+id/tab_friend_image"
-                        android:layout_height="40dp"
-                        android:layout_width="44dp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:layout_centerHorizontal="true"
-                        android:src="@drawable/tabbar_feed"/>
+                        android:src="@drawable/tabbar_myclass"/>
                     <ImageView
                             android:id="@+id/iv_center_horizontal_friend"
                             android:layout_height="match_parent"
@@ -173,7 +217,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_centerHorizontal="true"
                         android:textSize="11sp"
-                        android:text="@string/tab_friends"/>
+                        android:text="@string/tab_myclass"/>
                 </RelativeLayout>
 
 	            <RelativeLayout
@@ -183,11 +227,12 @@
                     android:layout_weight="1">
                     <ImageView 
                         android:id="@+id/tab_setting_image"
-                        android:layout_height="40dp"
-                        android:layout_width="44dp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_centerHorizontal="true"
-                        android:src="@drawable/tabbar_settings"/>
+                        android:src="@drawable/tabbar_find"/>
 
                     <ImageView
                             android:id="@+id/iv_center_horizontal_setting"
@@ -219,7 +264,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_below="@id/tab_setting_image"
                         android:textSize="11sp"
-                        android:text="@string/tab_settings"/>
+                        android:text="@string/tab_find"/>
 
                 </RelativeLayout>
             </LinearLayout>

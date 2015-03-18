@@ -9,6 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
         style="?attr/navbar">
+
         <ImageButton
             android:id="@+id/btn_add"
             android:layout_height="50dp"
@@ -22,10 +23,16 @@
             android:layout_centerInParent="true"
             android:text="@string/app_name"
             style="@style/page_title_dark"/>
+        <ImageButton
+            android:id="@+id/btn_home_setting"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            style="@style/navbar_btn_left"
+            android:src="@drawable/sel_home_set"/>
     </RelativeLayout>
     <co.onemeter.oneapp.ui.widget.ViewpagerScrollView
 
-        android:background="@color/background_light"
+        android:background="@color/background_dark"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fadingEdge="none"
@@ -50,6 +57,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:paddingTop="10dp"
                     android:background="@color/white">
 
                     <LinearLayout
@@ -64,11 +72,43 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:gravity="center">
-                            <ImageView
+                            <RelativeLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/icon_home_classnotice"
-                                />
+                                android:layout_height="wrap_content">
+                                <ImageView
+                                    android:id="@+id/img_home_classnotice"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/icon_home_classnotice"
+                                    />
+                                <!--<LinearLayout-->
+                                    <!--android:id="@+id/lay_notice"-->
+                                    <!--android:layout_width="wrap_content"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_alignRight="@id/img_home_classnotice"-->
+                                    <!--android:layout_alignTop="@id/img_home_classnotice"-->
+                                    <!--android:background="@drawable/btn_home_classnotice"-->
+                                    <!--android:gravity="center">-->
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/txt_home_classnotice"-->
+                                        <!--android:layout_width="wrap_content"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:text="1"-->
+                                        <!--android:textColor="@color/white"/>-->
+                                <!--</LinearLayout>-->
+                                <Button
+                                    android:id="@+id/btn_home_txt_classnotice"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignRight="@id/img_home_classnotice"
+                                    android:layout_alignTop="@id/img_home_classnotice"
+                                    android:background="@drawable/btn_home_classnotice"
+                                    android:gravity="center"
+                                    android:text="99"
+                                    android:textColor="@color/white"/>
+
+                            </RelativeLayout>
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -81,11 +121,27 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:gravity="center">
-                            <ImageView
+                            <RelativeLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/icon_home_register"
-                                />
+                                android:layout_height="wrap_content">
+                                <ImageView
+                                    android:id="@+id/img_home_register"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/icon_home_register"
+                                    />
+                                <LinearLayout
+                                    android:id="@+id/lay_register_notice"
+                                    android:layout_width="5dp"
+                                    android:layout_height="5dp"
+                                    android:layout_alignRight="@id/img_home_register"
+                                    android:layout_alignTop="@id/img_home_register"
+                                    android:background="@drawable/btn_home_classnotice"
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
+
+                                </LinearLayout>
+                            </RelativeLayout>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -99,6 +155,7 @@
                             android:orientation="vertical"
                             android:gravity="center">
                             <ImageView
+                                android:id="@+id/img_home_classlive"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/icon_home_classlive"
@@ -124,6 +181,7 @@
                             android:orientation="vertical"
                             android:gravity="center">
                             <ImageView
+                                android:id="@+id/img_home_answerquestion"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/icon_home_answerquestion"
@@ -141,6 +199,7 @@
                             android:orientation="vertical"
                             android:gravity="center">
                             <ImageView
+                                android:id="@+id/img_home_homework"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/icon_home_homework"
@@ -158,6 +217,7 @@
                             android:orientation="vertical"
                             android:gravity="center">
                             <ImageView
+                                android:id="@+id/img_home_chatroom"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/icon_home_chatroom"
@@ -171,12 +231,24 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/home_movablebar"
                     android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"/>
+                    android:layout_marginBottom="5dp">
+                    <ImageView
+                        android:id="@+id/img_home_movable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/home_movablebar"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/icon_section_row_selector"
+                        android:layout_marginRight="10dp"/>
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

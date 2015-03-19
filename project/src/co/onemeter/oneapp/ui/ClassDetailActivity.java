@@ -1,6 +1,9 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -258,7 +261,17 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			String time = tvTime.getText().toString().substring(5);
 			String length = tvLength.getText().toString().substring(5);	
 			if(TextUtils.isEmpty(time) && TextUtils.isEmpty(length)){
-				Toast.makeText(this, "班级信息还未添加", Toast.LENGTH_SHORT).show();
+				Builder alertDialog = new AlertDialog.Builder(ClassDetailActivity.this);
+    			alertDialog.setTitle("提示");
+    			alertDialog.setMessage("现在没有课程正在直播");
+    			alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+    				
+    				@Override
+    				public void onClick(DialogInterface arg0, int arg1) {
+
+    				}
+    			});        			
+    			alertDialog.create().show();
 			}else{
 				String[] times = time.split(":");
 				String[] lengths = length.split(":");

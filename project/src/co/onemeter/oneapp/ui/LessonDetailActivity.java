@@ -57,8 +57,8 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 	private List<Camera> lessoonDetails_camera;
 	
 	private long currentTime;
-	private long classTimesStamps;
-	private long classEndTimeStamps;
+//	private long classTimesStamps;
+//	private long classEndTimeStamps;
 	
 	private MessageBox msgbox;
 	
@@ -145,9 +145,9 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		String[] classTimes = classTime.split(":");
 		String[] classLengths = classLength.split(":");
 		currentTime = System.currentTimeMillis()/1000;
-		classTimesStamps =Integer.parseInt(classTimes[0])*3600 + Integer.parseInt(classTimes[1])*60+startdate;
-		classEndTimeStamps = Integer.parseInt(classLengths[0])*3600 + Integer.parseInt(classLengths[1])*60 + classTimesStamps;
-		if(currentTime > classEndTimeStamps){
+//		classTimesStamps =Integer.parseInt(classTimes[0])*3600 + Integer.parseInt(classTimes[1])*60+startdate;
+//		classEndTimeStamps = Integer.parseInt(classLengths[0])*3600 + Integer.parseInt(classLengths[1])*60 + classTimesStamps;
+		if(currentTime > enddate){
 			q.find(R.id.text_classroom).textColor(getResources().getColor(R.color.text_gray4));
 			q.find(R.id.text_camera).textColor(getResources().getColor(R.color.text_gray4));
 			lay_classroom.setEnabled(false);
@@ -224,7 +224,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 //			long currentTime = System.currentTimeMillis()/1000;
 //			long classTimesStamps =Integer.parseInt(classTimes[0])*3600 + Integer.parseInt(classTimes[1])*60+startdate;
 //			long classEndTimeStamps = Integer.parseInt(classLengths[0])*3600 + Integer.parseInt(classLengths[1])*60 + classTimesStamps;
-			if(currentTime > classTimesStamps && currentTime < classEndTimeStamps){
+			if(currentTime > startdate && currentTime < enddate){
 				Toast.makeText(this, "正在上课，无法修改", Toast.LENGTH_SHORT).show();
 			}else{
 				intent.setClass(this, ClassroomActivity.class);
@@ -297,6 +297,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 					}
 					if(lessonDetails.get(0).room_name == null || lessonDetails.get(0).room_name.isEmpty()){
 						text_camera_num.setText("未设置");
+						text_classroom_name.setText("未设置");
 					}else{
 						text_camera_num.setText("打开"+count_on+"/"+count);
 					}

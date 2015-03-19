@@ -1,7 +1,6 @@
 include ':lib:message-input'
 include ':lib:messagebox'
 include ':lib:bitmapfun'
-include ':lib:google-play-services_lib'
 include ':lib:AndroidRecording:lib'
 include ':lib:pulltorefresh_demo'
 include ':lib:DraggableListView'

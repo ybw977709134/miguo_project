@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?> <!-- from Android Layout Tricks #1 -->
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:roundedImgView="http://schemas.android.com/apk/res/co.onemeter.oneapp"
+	xmlns:roundedImgView="http://schemas.android.com/apk/res-auto"
     style="?page"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"

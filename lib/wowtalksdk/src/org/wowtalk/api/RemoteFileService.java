@@ -61,9 +61,9 @@ public class RemoteFileService {
                         .upload(remoteFileId, inFilename);
             }
             else if(sPrefUtil.isUseS3()){
-                S3FileUploader uploadFile = new S3FileUploader(sPrefUtil);
-                uploadFile.setup(callback, callbackTag, inFilename);
-                uploadFile.uploadFile(remoteDir);
+                //S3FileUploader uploadFile = new S3FileUploader(sPrefUtil);
+                //uploadFile.setup(callback, callbackTag, inFilename);
+                //uploadFile.uploadFile(remoteDir);
             }
             else{
                 List<NameValuePair> postData = new ArrayList<NameValuePair>(2);
@@ -123,9 +123,9 @@ public class RemoteFileService {
                         .download(remoteFileId, outFilename);
             }
             else if(sPrefUtil.isUseS3()){
-                S3FileDownloader downloadFile = new S3FileDownloader(context);
-                downloadFile.setup(callback, callbackTag, outFilename);
-                downloadFile.downloadFile(remoteFileId, remoteDir);
+                //S3FileDownloader downloadFile = new S3FileDownloader(context);
+                //downloadFile.setup(callback, callbackTag, outFilename);
+                //downloadFile.downloadFile(remoteFileId, remoteDir);
             }
             else{
                 String action = "get_file";

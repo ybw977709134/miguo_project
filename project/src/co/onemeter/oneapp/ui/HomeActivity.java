@@ -111,6 +111,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.btn_add).setOnClickListener(this);
         findViewById(R.id.img_home_growth_class).setOnClickListener(this);
         findViewById(R.id.img_home_friends).setOnClickListener(this);
+        findViewById(R.id.btn_goto_myclass).setOnClickListener(this);
     }
 
     @Override
@@ -134,6 +135,9 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.img_home_friends:
                 break;
+            case R.id.btn_goto_myclass:
+            	intent.setClass(HomeActivity.this, MyClassesActivity.class);
+            	break;
             default:
                 break;
         }

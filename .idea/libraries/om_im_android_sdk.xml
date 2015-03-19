@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="om_im_android_sdk">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/wowtalksdk/libs/om_im_android_sdk.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

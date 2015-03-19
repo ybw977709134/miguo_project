@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="liveplayer">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/project/libs/liveplayer.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

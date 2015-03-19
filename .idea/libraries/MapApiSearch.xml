@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="MapApiSearch">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/message-input/libs/MapApiSearch.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

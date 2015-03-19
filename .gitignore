@@ -1,6 +1,12 @@
 out
 tester
+
+#intellij
+.idea/
 .idea/workspace.xml
+.idea/vcs.xml
+*.iml
+
 .directory
 *.apk
 proguard_logs
@@ -25,8 +31,6 @@ lib/wowtalksdk/module_wowtalksdk.xml
 oneapp.properties
 oneapp.xml
 project/module_oneapp.xml
-
-.idea/vcs.xml
 
 #gradle
 .gradle/

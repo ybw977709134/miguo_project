@@ -8,6 +8,8 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.AsyncTask;
@@ -221,10 +223,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     private void initView() {
         AQuery q = new AQuery(this);
-
+       
 		edtAccount = (EditText) findViewById(R.id.accountInput);
 		edtPassword = (EditText) findViewById(R.id.passWordInput);
         fieldClear = (ImageButton) findViewById(R.id.field_clear);
+        
 
         q.find(R.id.forgotPassWord).clicked(this);
         q.find(R.id.login_username).clicked(this);
@@ -476,6 +479,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
+        
     }
 
     @Override

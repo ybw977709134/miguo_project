@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -43,6 +45,10 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	private EditText edtPwdConfirm;
 
 	private ImageButton title_back;
+	private ImageButton field_clear_account;
+	private ImageButton field_clear_pwd;
+	private ImageButton field_clear_confirm;
+	
 	private TextView textView_find_password_back;//返回
 	private LinearLayout layout_register_user_type;
 	private TextView textView_register_user_type;
@@ -64,13 +70,29 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			switch (msg.what) {
 			case MSG_REGISTER_SUCCESS:
 			{
-				String[] args = (String[])msg.obj;
-				startActivity(new Intent(RegisterActivity.this, LoginActivity.class)
+				final String[] args = (String[])msg.obj;
+				mMsgBox.showWaitImageSuccess("注册成功");
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						try {
+							Thread.sleep(3000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						
+					startActivity(new Intent(RegisterActivity.this, LoginActivity.class)
 						.putExtra(LoginActivity.EXTRA_USERNAME, args[0])
 						.putExtra(LoginActivity.EXTRA_PASSWORD, args[1]));
+						
+					}
+				}).start();
+				
                 finish();
 			}
 			break;
+			
 			case MSG_USER_ALREADY_EXIST:
 			{
 //				AlertDialog.Builder dialog = new AlertDialog.Builder(RegisterActivity.this);
@@ -97,6 +119,12 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	private void initView() {
 		
 		title_back = (ImageButton) findViewById(R.id.title_back);
+		
+		field_clear_account = (ImageButton) findViewById(R.id.field_clear_account);
+		field_clear_pwd = (ImageButton) findViewById(R.id.field_clear_pwd);
+		field_clear_confirm = (ImageButton) findViewById(R.id.field_clear_confirm);
+		
+		
 		textView_find_password_back =  (TextView) findViewById(R.id.textView_find_password_back);
 		layout_register_user_type = (LinearLayout) findViewById(R.id.layout_register_user_type);
 		
@@ -154,7 +182,84 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			}
 		});
 		
+		//账号的清除控制
+		edtAccount.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (s.length() == 0) {
+					field_clear_account.setVisibility(View.GONE);
+				} else {
+					field_clear_account.setVisibility(View.VISIBLE);
+					edtAccount.setTextColor(getResources().getColor(R.color.black));
+				}
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {			
+			}
+		});
+		
+		//密码的清除控制
+		edtPwd.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (s.length() == 0) {
+					field_clear_pwd.setVisibility(View.GONE);
+				} else {
+					field_clear_pwd.setVisibility(View.VISIBLE);
+					edtPwd.setTextColor(getResources().getColor(R.color.black));
+				}
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {			
+			}
+		});
+
+		
+		//确认密码的清除按钮控制
+		edtPwdConfirm.addTextChangedListener(new TextWatcher() {
+	
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {
+			if (s.length() == 0) {
+				field_clear_confirm.setVisibility(View.GONE);
+		} else {
+			field_clear_confirm.setVisibility(View.VISIBLE);
+			edtPwdConfirm.setTextColor(getResources().getColor(R.color.black));
+		}
+		
+		}
+	
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {				
+		}
+	
+		@Override
+		public void afterTextChanged(Editable s) {			
+		}
+		});
+		
 		title_back.setOnClickListener(this);
+		field_clear_account.setOnClickListener(this);
+		field_clear_pwd.setOnClickListener(this);
+		field_clear_confirm.setOnClickListener(this);
+		
 		textView_find_password_back.setOnClickListener(this);
 		layout_register_user_type.setOnClickListener(this);
 		imageview_show_password.setOnClickListener(this);
@@ -294,7 +399,20 @@ public class RegisterActivity extends Activity implements OnClickListener{
 		case R.id.title_back:
 		case R.id.textView_find_password_back:
 			finish();
-			break;		
+			break;	
+			
+		case R.id.field_clear_account:
+			edtAccount.setText("");
+			break;
+			
+		case R.id.field_clear_pwd:
+			edtPwd.setText("");
+			break;
+			
+		case R.id.field_clear_confirm:
+			edtPwdConfirm.setText("");
+			break;
+			
 		case R.id.layout_register_user_type://选择账号类型
 			showPopupMenu();
 			break;
@@ -303,18 +421,18 @@ public class RegisterActivity extends Activity implements OnClickListener{
 		case R.id.imageview_show_password:
 			imageview_show_password.setVisibility(View.GONE);
 			imageview_hint_password.setVisibility(View.VISIBLE);
-			edtPwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-			edtPwdConfirm.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-			textView_isshow_password.setText("隐藏密码");
+			edtPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+			edtPwdConfirm.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+//			textView_isshow_password.setText("隐藏密码");
 			break;
 						
 		//隐藏密码	
 		case R.id.imageview_hint_password:
 			imageview_show_password.setVisibility(View.VISIBLE);
 			imageview_hint_password.setVisibility(View.GONE);
-			edtPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-			edtPwdConfirm.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-			textView_isshow_password.setText("显示密码");
+			edtPwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+			edtPwdConfirm.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+//			textView_isshow_password.setText("显示密码");
 			break;
 			
 		case R.id.create_button:
@@ -344,10 +462,23 @@ public class RegisterActivity extends Activity implements OnClickListener{
     @Override
     public boolean onTouchEvent(MotionEvent event) {
     	// TODO Auto-generated method stub
+    	
+    	
+    	
     	  if(event.getAction() == MotionEvent.ACTION_DOWN){  
-    		  if(getCurrentFocus()!=null && getCurrentFocus().getWindowToken()!=null){  
-    			  mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);  
-    			  }  
+//    		  if(getCurrentFocus()!=null && getCurrentFocus().getWindowToken()!=null){  
+//    			  mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);  
+//    			  }
+    		  
+    		//退出页面关起软键盘
+    	    	if (edtAccount.hasFocus()) {
+    	    		mInputMethodManager.hideSoftInputFromWindow(edtAccount.getWindowToken() , 0);
+    	    	} else if (edtPwd.hasFocus()) {
+    	    		mInputMethodManager.hideSoftInputFromWindow(edtPwd.getWindowToken() , 0);
+    	    	} else {
+    	    		mInputMethodManager.hideSoftInputFromWindow(edtPwdConfirm.getWindowToken() , 0); 
+    	    	}
+    		  
     		  }
     	return super.onTouchEvent(event);
     }
@@ -408,6 +539,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
                 //process
                 userType = Buddy.ACCOUNT_TYPE_TEACHER;
                 textView_register_user_type.setText("老师");
+                textView_register_user_type.setTextColor(getResources().getColor(R.color.black));
                 
             }
         });
@@ -419,6 +551,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
                 //process
                 userType = Buddy.ACCOUNT_TYPE_STUDENT;
                 textView_register_user_type.setText("学生");
+                textView_register_user_type.setTextColor(getResources().getColor(R.color.black));
                 
                 
             }

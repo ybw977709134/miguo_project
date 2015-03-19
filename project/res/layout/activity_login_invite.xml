@@ -25,7 +25,7 @@
 				android:layout_gravity="center_horizontal"
 				android:layout_marginLeft="20dp"
 				android:layout_marginRight="20dp"
-				android:src="@drawable/login_logo"
+				android:src="@drawable/login_logo_scale"
 				android:scaleType="centerInside"/>
 
 			<TextView

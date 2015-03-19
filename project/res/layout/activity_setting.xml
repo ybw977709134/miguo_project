@@ -13,6 +13,27 @@
 		android:layout_height="@dimen/title_bar_height"
 		android:layout_alignParentTop="true"
 		style="?attr/navbar">
+		
+	    
+	    
+	    <ImageButton
+			android:id="@+id/title_back"
+			android:layout_height="50dp"
+			android:layout_width="20dp"
+			android:layout_alignParentLeft="true"
+			android:background="@null"
+			android:src="@drawable/icon_back_selector"/>
+		
+		<TextView 
+		    android:id="@+id/textView_home_back"
+		    android:layout_width="wrap_content"
+		    android:layout_height="match_parent"
+		    android:layout_toRightOf="@id/title_back"
+		  	android:gravity="center_vertical"
+		  	android:textSize="20sp"
+		  	android:clickable="true"
+		   	android:textColor="@color/white"
+		    android:text="首页" />
 
 		<TextView
 			android:id="@+id/contact_current_group"

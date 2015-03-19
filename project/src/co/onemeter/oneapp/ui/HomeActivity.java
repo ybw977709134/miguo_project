@@ -1,10 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Handler;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -19,15 +14,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.liveplayer.VideoPlayingActivity;
 import co.onemeter.utils.AsyncTaskExecutor;
-
-import com.androidquery.AQuery;
-import com.pzy.paint.MyActivity;
-
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by pzy on 9/18/14.Modified by Jacky on 3/18/2015.
@@ -184,7 +178,6 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.img_home_friends).setOnClickListener(this);
         findViewById(R.id.img_home_classnotice).setOnClickListener(this);
         findViewById(R.id.img_home_register).setOnClickListener(this);
-        findViewById(R.id.img_home_classlive).setOnClickListener(this);
         findViewById(R.id.img_home_answerquestion).setOnClickListener(this);
         findViewById(R.id.img_home_homework).setOnClickListener(this);
         findViewById(R.id.img_home_chatroom).setOnClickListener(this);
@@ -230,9 +223,6 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             case R.id.img_home_classnotice:
                 break;
             case R.id.img_home_register:
-                break;
-            case R.id.img_home_classlive:
-                intent = new Intent(this, MyClassesActivity.class);
                 break;
             case R.id.img_home_answerquestion:
                 break;

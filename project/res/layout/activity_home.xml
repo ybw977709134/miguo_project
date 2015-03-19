@@ -8,7 +8,8 @@
         android:id="@+id/title_bar"
         android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
-        style="?attr/navbar">
+        style="?attr/navbar"
+        android:layout_height="50dp">
 
         <ImageButton
             android:id="@+id/btn_add"
@@ -47,12 +48,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 >
-                <co.onemeter.oneapp.ui.widget.WrapContentViewpager
-                    android:id="@+id/viewpager_home_headimages"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/shp_home_viewpage"
-                    />
+                    android:layout_height="wrap_content">
+                    <co.onemeter.oneapp.ui.widget.WrapContentViewpager
+                        android:id="@+id/viewpager_home_headimages"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shp_home_viewpage"
+                        />
+                    <LinearLayout
+                        android:id="@+id/lay_dots"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="5dp">
+
+                        </LinearLayout>
+                </RelativeLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

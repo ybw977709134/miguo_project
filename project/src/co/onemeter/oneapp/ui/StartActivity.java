@@ -39,9 +39,9 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 	
 	public static final int TAB_SMS = 0;
 	public static final int TAB_CONTACTS = 1;
-	public static final int TAB_FRIENDS = 2;
+	public static final int TAB_MyClass = 2;
 	public static final int TAB_HOME = 3;
-	public static final int TAB_SETTING = 4;
+	public static final int TAB_Discov = 4;
 
     public static final String KEY_IS_START_FROM_LOGIN = "is_start_from_login";
 
@@ -75,33 +75,35 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 	private TabHost mHost;
 	private Intent mSmsIntent;
 	private Intent mContactIntent;
-	private Intent mFriendIntent;
+	private Intent mMyClassIntent;
 	private Intent mHomeIntent;
-	private Intent mSettingIntent;
+	private Intent mDiscovIntent;
 	
 //	private View mTabbar;
 	private View mTabSms;
 	private View mTabContact;
 	private View mTabFriend;
-	private View mTabEvent;
+	private View mTabHome;
 	private View mTabSetting;
 	
 	private ImageView imgTabSms;
 	private ImageView imgTabContacts;
-	private ImageView imgTabFriends;
+	private ImageView imgTabMyClass;
 	private ImageView imgTabHome;
-	private ImageView imgTabSetting;
+	private ImageView imgTabDiscov;
 	private TextView mNewUpdateView;
 	
 	private TextView txtTabSms;
 	private TextView txtTabContact;
-	private TextView txtTabFriend;
+	private TextView txtTabMyClass;
 	private TextView txtTabHome;
-	private TextView txtTabSetting;
+	private TextView txtTabDiscov;
+
 	private int _selectedTabIndex;
 	private TextView txt_unreadMsg;
     private TextView txt_friends_news;
     private TextView txt_pendingin_requests;
+
     private WowTalkWebServerIF mWeb = null;
     private Database mDb = null;
     private PrefUtil mPrefUtil;
@@ -203,21 +205,21 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 		mTabSms =  findViewById(R.id.tab_sms);
 		mTabContact =  findViewById(R.id.tab_contact);
 		mTabFriend =  findViewById(R.id.tab_friend);
-		mTabEvent =  findViewById(R.id.tab_home);
+		mTabHome =  findViewById(R.id.tab_home);
 		mTabSetting =  findViewById(R.id.tab_setting);
 		
 		imgTabSms = (ImageView) findViewById(R.id.tab_sms_image);
 		imgTabContacts = (ImageView) findViewById(R.id.tab_contact_image);
-		imgTabFriends = (ImageView) findViewById(R.id.tab_friend_image);
+		imgTabMyClass = (ImageView) findViewById(R.id.tab_friend_image);
 		imgTabHome = (ImageView) findViewById(R.id.tab_home_image);
-		imgTabSetting = (ImageView) findViewById(R.id.tab_setting_image);
+		imgTabDiscov = (ImageView) findViewById(R.id.tab_setting_image);
 
         txtTabHome = (TextView) findViewById(R.id.tab_home_text);
 		txtTabSms = (TextView) findViewById(R.id.tab_sms_text);
 		txtTabContact = (TextView) findViewById(R.id.tab_contact_text);
-		txtTabFriend = (TextView) findViewById(R.id.tab_friend_text);
+		txtTabMyClass = (TextView) findViewById(R.id.tab_friend_text);
 		//txtTabHome = (TextView) findViewById(R.id.tab_home_text);
-		txtTabSetting = (TextView) findViewById(R.id.tab_setting_text);
+		txtTabDiscov = (TextView) findViewById(R.id.tab_setting_text);
 		txt_unreadMsg = (TextView)findViewById(R.id.txt_unreadMsg);
         txt_friends_news = (TextView)findViewById(R.id.txt_friends_have_news);
         txt_pendingin_requests = (TextView)findViewById(R.id.txt_pendingin_requests);
@@ -230,22 +232,22 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 		mTabSms.setOnClickListener(this);
 		mTabContact.setOnClickListener(this);
 		mTabFriend.setOnClickListener(this);
-		mTabEvent.setOnClickListener(this);
+		mTabHome.setOnClickListener(this);
 		mTabSetting.setOnClickListener(this);
 	}
 	
 	private void setDefaultImageView() {
 		imgTabSms.setImageResource(R.drawable.tabbar_messages);
 		imgTabContacts.setImageResource(R.drawable.tabbar_contacts);
-		imgTabFriends.setImageResource(R.drawable.tabbar_myclass);
+		imgTabMyClass.setImageResource(R.drawable.tabbar_myclass);
 		imgTabHome.setImageResource(R.drawable.tabbar_home);
-		imgTabSetting.setImageResource(R.drawable.tabbar_find);
+		imgTabDiscov.setImageResource(R.drawable.tabbar_find);
 		
 		txtTabSms.setTextColor(getResources().getColor(R.color.gray));
 		txtTabContact.setTextColor(getResources().getColor(R.color.gray));
-		txtTabFriend.setTextColor(getResources().getColor(R.color.gray));
+		txtTabMyClass.setTextColor(getResources().getColor(R.color.gray));
 		txtTabHome.setTextColor(getResources().getColor(R.color.gray));
-		txtTabSetting.setTextColor(getResources().getColor(R.color.gray));
+		txtTabDiscov.setTextColor(getResources().getColor(R.color.gray));
 	}
 	
 	private void setTab(int index) {
@@ -263,18 +265,18 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 			imgTabContacts.setImageResource(R.drawable.tabbar_contacts_press);
             //imgTabHome.setImageResource(R.drawable.tabbar_home_blue);
 			break;
-		case TAB_FRIENDS:
-			txtTabFriend.setTextColor(getResources().getColor(R.color.blue));
-			imgTabFriends.setImageResource(R.drawable.tabbar_myclass_press);
+		case TAB_MyClass:
+			txtTabMyClass.setTextColor(getResources().getColor(R.color.blue));
+			imgTabMyClass.setImageResource(R.drawable.tabbar_myclass_press);
             //imgTabHome.setImageResource(R.drawable.tabbar_home_blue);
 			break;
 		case TAB_HOME:
 			txtTabHome.setTextColor(getResources().getColor(R.color.blue));
 			imgTabHome.setImageResource(R.drawable.tabbar_home_press);
 			break;
-		case TAB_SETTING:
-			txtTabSetting.setTextColor(getResources().getColor(R.color.blue));
-			imgTabSetting.setImageResource(R.drawable.tabbar_find_press);
+		case TAB_Discov:
+			txtTabDiscov.setTextColor(getResources().getColor(R.color.blue));
+			imgTabDiscov.setImageResource(R.drawable.tabbar_find_press);
             //imgTabHome.setImageResource(R.drawable.tabbar_home_blue);
 			break;
 		default:
@@ -304,15 +306,15 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 			
 		mSmsIntent = new Intent(StartActivity.this, SmsActivity.class);
         mContactIntent = new Intent(StartActivity.this, ContactsActivity.class);
-		mFriendIntent = new Intent(StartActivity.this, TimelineActivity.class);
+		mMyClassIntent = new Intent(StartActivity.this, TimelineActivity.class);
         mHomeIntent = new Intent(StartActivity.this, HomeActivity.class);
-		mSettingIntent = new Intent(StartActivity.this, SettingActivity.class);
+		mDiscovIntent = new Intent(StartActivity.this, SettingActivity.class);
 		
 		mHost.addTab(buildTabSpec(String.valueOf(TAB_SMS), getResources().getString(R.string.app_name), R.drawable.ic_action_search, mSmsIntent));
 		mHost.addTab(buildTabSpec(String.valueOf(TAB_CONTACTS), getResources().getString(R.string.app_name), R.drawable.ic_action_search, mContactIntent));
-		mHost.addTab(buildTabSpec(String.valueOf(TAB_FRIENDS), getResources().getString(R.string.app_name), R.drawable.ic_action_search, mFriendIntent));
+		mHost.addTab(buildTabSpec(String.valueOf(TAB_MyClass), getResources().getString(R.string.app_name), R.drawable.ic_action_search, mMyClassIntent));
 		mHost.addTab(buildTabSpec(String.valueOf(TAB_HOME), getResources().getString(R.string.app_name), R.drawable.ic_action_search, mHomeIntent));
-		mHost.addTab(buildTabSpec(String.valueOf(TAB_SETTING), getResources().getString(R.string.app_name), R.drawable.ic_action_search, mSettingIntent));
+		mHost.addTab(buildTabSpec(String.valueOf(TAB_Discov), getResources().getString(R.string.app_name), R.drawable.ic_action_search, mDiscovIntent));
 		
         _selectedTabIndex=TAB_HOME;
 	}
@@ -327,13 +329,13 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 			setTab(TAB_CONTACTS);
 			break;
 		case R.id.tab_friend:
-			setTab(TAB_FRIENDS);
+			setTab(TAB_MyClass);
 			break;
 		case R.id.tab_home:
 			setTab(TAB_HOME);
 			break;
 		case R.id.tab_setting:
-			setTab(TAB_SETTING);
+			setTab(TAB_Discov);
 			break;
 		default:
 			_selectedTabIndex = TAB_SMS;
@@ -567,7 +569,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
             //as original friend_activity is replaced with TimelineActivity
             //TimelineActivity is sub activity in tabActivity,it can not receive onBackPressed mask by this function
             //so check it manually
-            if(TAB_FRIENDS == _selectedTabIndex && null != TimelineActivity.instance() && TimelineActivity.instance().handleBackPress()) {
+            if(TAB_MyClass == _selectedTabIndex && null != TimelineActivity.instance() && TimelineActivity.instance().handleBackPress()) {
                 //TODO this should be removed when FriendActivity is come back
                 Log.i("moment activity handled back press");
             } else {

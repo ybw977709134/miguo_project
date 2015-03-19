@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
-import com.amazonaws.util.StringInputStream;
 import junit.framework.Assert;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -815,7 +814,7 @@ public class ChatMessage {
                 }
             };
 
-            parser.parse(new StringInputStream(messageContent), handler);
+            parser.parse(messageContent, handler);
         } catch (Exception e) {
             e.printStackTrace();
         }

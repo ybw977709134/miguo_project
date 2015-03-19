@@ -397,11 +397,6 @@
 			android:theme="@style/Theme.Blue_main"
 			android:screenOrientation="portrait" >
 		</activity>
-		<activity
-			android:name="org.wowtalk.ui.msg.PickLocActivity"
-			android:theme="@style/Theme.Blue_main"
-			android:screenOrientation="portrait" >
-		</activity>
 		<activity android:name=".ui.HybirdMessageEditor"
 		          android:theme="@style/Theme.Blue_main"
 		          android:screenOrientation="portrait" >

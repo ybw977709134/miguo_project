@@ -1,10 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Handler;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -16,17 +11,17 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.liveplayer.VideoPlayingActivity;
 import co.onemeter.utils.AsyncTaskExecutor;
-
-import com.androidquery.AQuery;
-import com.pzy.paint.MyActivity;
-
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by pzy on 9/18/14.Modified by Jacky on 3/18/2015.
@@ -39,8 +34,10 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 //    private static final int BIND_EMAIL_REQUEST_CODE = 1;
 
     private ViewPager viewPager_home;
+    private LinearLayout group;
 
     private ArrayList<View> pageviews = new ArrayList<View>();
+    private ArrayList<ImageView> dots = new ArrayList<ImageView>();
 
     private int[] imgIds;
 
@@ -78,7 +75,26 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             pageviews.add(imageView);
         }
 
+        initDots();
+
         viewPager_home.setAdapter(new HeaderPagerAadapter());
+
+        viewPager_home.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                setCurDot(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
         
         //登陆后跳转到此页面检测用户是否绑定了邮箱，绑定了，不提示，未绑定，弹框提示用户是否要绑定邮箱
         //如果用户未绑定邮箱，跳转到绑定邮箱界面
@@ -126,8 +142,35 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         });
     }
 
+    private void initDots(){
+        int len = imgIds.length;
+        for(int i = 0;i < len;i ++){
+            ImageView imageView = new ImageView(this);
+            imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+            if(i == 0){
+                imageView.setImageResource(R.drawable.dot2);
+            }else{
+                imageView.setImageResource(R.drawable.dot1);
+            }
+            group.addView(imageView);
+            dots.add(imageView);
+        }
+    }
+
+    private void setCurDot(int index){
+        int len = imgIds.length;
+        for(int i = 0;i < len;i ++){
+            if(i == index){
+                dots.get(index).setImageResource(R.drawable.dot2);
+            }else{
+                dots.get(i).setImageResource(R.drawable.dot1);
+            }
+        }
+    }
+
     private void initView(){
         viewPager_home = (ViewPager) findViewById(R.id.viewpager_home_headimages);
+        group = (LinearLayout) findViewById(R.id.lay_dots);
 
         findViewById(R.id.img_home_event).setOnClickListener(this);
         findViewById(R.id.btn_add).setOnClickListener(this);
@@ -135,12 +178,12 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.img_home_friends).setOnClickListener(this);
         findViewById(R.id.img_home_classnotice).setOnClickListener(this);
         findViewById(R.id.img_home_register).setOnClickListener(this);
-        findViewById(R.id.img_home_classlive).setOnClickListener(this);
         findViewById(R.id.img_home_answerquestion).setOnClickListener(this);
         findViewById(R.id.img_home_homework).setOnClickListener(this);
         findViewById(R.id.img_home_chatroom).setOnClickListener(this);
         findViewById(R.id.img_home_movable).setOnClickListener(this);
         findViewById(R.id.btn_home_setting).setOnClickListener(this);
+        findViewById(R.id.btn_goto_myclass).setOnClickListener(this);
     }
 
     @Override
@@ -167,9 +210,10 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             case R.id.btn_add:
                 intent = new Intent(this,AddClassActivity.class);
             case R.id.img_home_growth_class:
-
+                intent = new Intent(this,TimelineActivity.class);
                 break;
             case R.id.img_home_friends:
+                intent = new Intent(this,TimelineActivity.class);
                 break;
 
             case R.id.btn_home_setting:
@@ -180,9 +224,6 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.img_home_register:
                 break;
-            case R.id.img_home_classlive:
-                intent = new Intent(this, MyClassesActivity.class);
-                break;
             case R.id.img_home_answerquestion:
                 break;
             case R.id.img_home_chatroom:
@@ -191,6 +232,9 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.img_home_homework:
                 break;
+            case R.id.btn_goto_myclass:
+            	intent.setClass(HomeActivity.this, MyClassesActivity.class);
+            	break;
             default:
                 break;
         }

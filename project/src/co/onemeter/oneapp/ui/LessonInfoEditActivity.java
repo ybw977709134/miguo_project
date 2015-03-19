@@ -207,7 +207,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			view.findViewById(R.id.lay_lesson_name).setVisibility(View.VISIBLE);
 			String[] startTime = ((TextView)item.findViewById(R.id.coursetable_item_time)).getText().toString().split("-");
 			datepicker.init(Integer.parseInt(startTime[0]), Integer.parseInt(startTime[1]) - 1, Integer.parseInt(startTime[2]), null);
-            edName.setHint(lessons.get(position).title);
+            edName.setText(lessons.get(position).title);
         }else{
 		}
 		

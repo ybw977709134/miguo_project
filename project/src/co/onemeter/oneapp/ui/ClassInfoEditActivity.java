@@ -2,6 +2,7 @@ package co.onemeter.oneapp.ui;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
@@ -104,7 +105,7 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		tpTime = (TimePicker) findViewById(R.id.timePicker_lesinfo_time);
 		tpLength = (TimePicker) findViewById(R.id.timePicker_lesinfo_length);
 		dtPlace = (EditText) findViewById(R.id.ed_lesinfo_place);
-
+		tpTime.setIs24HourView(true);
         dpDate.setOnClickListener(this);
 		
 		mMsgBox = new MessageBox(this);
@@ -170,6 +171,10 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 						tpLength.setCurrentHour(Integer.parseInt(trslength[0]));
 						tpLength.setCurrentMinute(Integer.parseInt(trslength[1]));
 					}
+				}else{
+					Date date = new Date();
+					tpTime.setCurrentHour(date.getHours());
+					tpTime.setCurrentMinute(date.getMinutes());
 				}
 			}
         findViewById(R.id.lay_classinfo_main).setOnTouchListener(this);

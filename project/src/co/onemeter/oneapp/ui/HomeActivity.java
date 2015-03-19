@@ -3,11 +3,13 @@ package co.onemeter.oneapp.ui;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Handler;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Message;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -30,6 +32,9 @@ import org.wowtalk.ui.MessageDialog;
  * Created by pzy on 9/18/14.Modified by Jacky on 3/18/2015.
  */
 public class HomeActivity extends Activity implements View.OnClickListener {
+
+    private static final int sLoopMessage = 1001;
+
     MessageBox msgbox;
 //    private static final int BIND_EMAIL_REQUEST_CODE = 1;
 
@@ -38,6 +43,22 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     private ArrayList<View> pageviews = new ArrayList<View>();
 
     private int[] imgIds;
+
+    private int curpage = 0;
+
+    private android.os.Handler mHandler = new android.os.Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what == sLoopMessage){
+                if(curpage >= 2){
+                    curpage = 0;
+                }
+                viewPager_home.setCurrentItem(curpage);
+            }
+            mHandler.sendEmptyMessageDelayed(sLoopMessage , 5000);
+            curpage ++;
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -123,10 +144,17 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mHandler.sendEmptyMessageDelayed(sLoopMessage , 5000);
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         msgbox.dismissWait();
         msgbox.dismissToast();
+        mHandler.removeMessages(sLoopMessage);
     }
 
     @Override

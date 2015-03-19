@@ -406,7 +406,7 @@
 
     <style name="home_txt_middle">
         <item name="android:layout_margin">8dp</item>
-        <item name="android:textColor">@color/text_gray1</item>
+        <item name="android:textColor">@color/text_gray2</item>
     </style>
 
     <style name="home_txt_bottom_relative">

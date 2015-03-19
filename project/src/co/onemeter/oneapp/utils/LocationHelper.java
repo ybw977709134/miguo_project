@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.TextView;
 import co.onemeter.oneapp.ui.TimePiece;
-import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.amap.api.location.AMapLocation;
@@ -17,12 +16,10 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
 import com.amap.api.services.core.LatLonPoint;
-import com.amap.api.services.geocoder.GeocodeAddress;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch.OnGeocodeSearchListener;
-import com.amap.api.services.geocoder.RegeocodeAddress;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 
 import org.json.JSONArray;
@@ -33,7 +30,6 @@ import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.WowTalkVoipIF;
 import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.msg.PickLocActivity;
 
 import java.io.IOException;
 import java.io.InputStream;

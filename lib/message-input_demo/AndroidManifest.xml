@@ -45,10 +45,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="org.wowtalk.ui.msg.PickLocActivity"
-            android:screenOrientation="portrait" >
-        </activity>
     </application>
 
 </manifest>

@@ -47,7 +47,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private TeachersAdapter teaAdapter;
 
 	private ListView lvLessonTable;
-	private HorizontalListView lvTeachers;
+//	private HorizontalListView lvTeachers;
 	private TextView tvTerm;
 	private TextView tvGrade;
 	private TextView tvSubject;
@@ -85,7 +85,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		tvTime = (TextView) findViewById(R.id.class_time);
 		tvPlace = (TextView) findViewById(R.id.class_place);
 		tvLength = (TextView) findViewById(R.id.class_length);
-		lvTeachers = (HorizontalListView) findViewById(R.id.hor_lv_teachers);
+//		lvTeachers = (HorizontalListView) findViewById(R.id.hor_lv_teachers);
 		
 		mWTWebSer = WowTalkWebServerIF.getInstance(this);
 		
@@ -102,37 +102,48 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		Database db = Database.getInstance(this);
 		parent_group_id = db.getParentGroupId(classId);
 //		members = mdb.fetchGroupMembers(classId);
-		if(members == null || members.isEmpty()){
-			AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
-
-				@Override
-				protected Integer doInBackground(Void... params) {
-					return (Integer) mWTWebSer.fGroupChat_GetMembers(classId).get("code");
-				}
-
-				protected void onPostExecute(Integer result) {
-					if (ErrorCode.OK == result) {
-						Database mdb = new Database(ClassDetailActivity.this);
-						members = mdb.fetchGroupMembers(classId);
-//						mdb.close();
-						//android.util.Log.i("-->>", buddies.toString());
-						teaAdapter = new TeachersAdapter(members);
-						lvTeachers.setAdapter(teaAdapter);
-					}
-				}
-
-				;
-
-			});
-		}else{
-			teaAdapter = new TeachersAdapter(members);
-			lvTeachers.setAdapter(teaAdapter);
-		}
+//		if(members == null || members.isEmpty()){
+//			AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+//
+//				@Override
+//				protected Integer doInBackground(Void... params) {
+//					return (Integer) mWTWebSer.fGroupChat_GetMembers(classId).get("code");
+//				}
+//
+//				protected void onPostExecute(Integer result) {
+//					if (ErrorCode.OK == result) {
+//						Database mdb = new Database(ClassDetailActivity.this);
+//						members = mdb.fetchGroupMembers(classId);
+////						mdb.close();
+//						//android.util.Log.i("-->>", buddies.toString());
+//						teaAdapter = new TeachersAdapter(members);
+//						lvTeachers.setAdapter(teaAdapter);
+//					}
+//				}
+//
+//				;
+//
+//			});
+//		}else{
+//			teaAdapter = new TeachersAdapter(members);
+//			lvTeachers.setAdapter(teaAdapter);
+//		}
 		
-		query.find(R.id.class_detail_title).text(intent.getStringExtra("classroomName"));
-		query.find(R.id.title_back).clicked(this);
+//		query.find(R.id.class_detail_title).text(intent.getStringExtra("classroomName"));
+		query.find(R.id.myclasses_title).text(intent.getStringExtra("classroomName"));
+//		query.find(R.id.title_back).clicked(this);
+		query.find(R.id.btn_myclass_addclass).clicked(this);
 		query.find(R.id.class_live_class).clicked(this);
 		query.find(R.id.more).clicked(this);
+		
+		query.find(R.id.btn_gotoclass).clicked(this);
+		query.find(R.id.btn_tea_stu_list).clicked(this);
+		query.find(R.id.btn_class_notice).clicked(this);
+		query.find(R.id.btn_holiday_apply).clicked(this);
+		
+		query.find(R.id.btn_apply_lesson).clicked(this);
+		query.find(R.id.btn_photo_answering).clicked(this);
+		query.find(R.id.btn_homework_online).clicked(this);
 		
 		lvLessonTable = (ListView) findViewById(R.id.lvLessonTable);
 		lvLessonTable.setAdapter(courseAdapter);
@@ -239,7 +250,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	public void onClick(View v) {
 		switch (v.getId()) {
 
-		case R.id.title_back:
+		case R.id.btn_myclass_addclass:
 			finish();
 			break;
 		case R.id.class_live_class:

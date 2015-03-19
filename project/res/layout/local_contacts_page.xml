@@ -88,7 +88,6 @@
             <include
                     android:id="@+id/search_bar"
                     layout="@layout/piece_filter_bar"
-                    android:layout_below="@+id/title_bar"
                     android:layout_alignParentTop="true"/>
         </RelativeLayout>
 

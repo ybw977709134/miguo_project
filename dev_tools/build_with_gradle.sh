@@ -4,7 +4,7 @@ gradle clean
 gradle assembleRelease
 
 src=./project/build/outputs/apk/project-release-unsigned.apk
-dest=./project/project-release.apk
+dest=./project/project.apk
 
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 \
     -keystore doc/release.keystore -storepass qwerty \

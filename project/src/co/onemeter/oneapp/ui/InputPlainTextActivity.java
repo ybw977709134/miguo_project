@@ -11,12 +11,16 @@ import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 
@@ -48,6 +52,8 @@ public class InputPlainTextActivity extends Activity {
     private ImageButton field_clear;
     private String defaultValue = "";
     private boolean allowEmpty = false;
+    private RelativeLayout layout_input_plain_text;
+    InputMethodManager mInputMethodManager ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,11 +82,15 @@ public class InputPlainTextActivity extends Activity {
         }
 
         AQuery q = new AQuery(this);
-
+        layout_input_plain_text = (RelativeLayout) findViewById(R.id.layout_input_plain_text);
         btnTitleBack = (TextView) findViewById(R.id.title_back);
         btnTitleConfirm = (TextView) findViewById(R.id.title_confirm);
         edtValue = (EditText) findViewById(R.id.edt_value);
         field_clear = (ImageButton) findViewById(R.id.field_clear);
+        
+        mInputMethodManager = (InputMethodManager) this
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        
         edtValue.setFocusable(true);
         edtValue.setFocusableInTouchMode(true);
         edtValue.setText(defaultValue);
@@ -91,8 +101,11 @@ public class InputPlainTextActivity extends Activity {
 			
 			@Override
 			public void run() {
-				InputMethodManager imm = (InputMethodManager)edtValue.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);  
-		        imm.showSoftInput(edtValue, 0);
+//				InputMethodManager imm = (InputMethodManager)edtValue.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);  
+//				imm.showSoftInput(edtValue, 0);
+				
+				mInputMethodManager.showSoftInput(edtValue, InputMethodManager.RESULT_SHOWN);
+				mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 			}
 		}, 200);
         
@@ -137,6 +150,19 @@ public class InputPlainTextActivity extends Activity {
 			public void afterTextChanged(Editable s) {			
 			}
 		});
+        
+        edtValue.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					edtValue.setCursorVisible(true);
+				} else {
+					edtValue.setCursorVisible(false);
+				}
+				
+			}
+		});
 
         btnTitleBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,14 +188,38 @@ public class InputPlainTextActivity extends Activity {
 				edtValue.setText("");
 			}
 		});
+        
+        layout_input_plain_text.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				layout_input_plain_text.setFocusable(true);
+				layout_input_plain_text.setFocusableInTouchMode(true);
+				layout_input_plain_text.requestFocus();
+				return false;
+			}
+		});
+    }
+    
+    
+	/**
+	 * 重写onTouchEvent方法，获得向下点击事件，隐藏输入法
+	 */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+    	  if(event.getAction() == MotionEvent.ACTION_DOWN){  
+    		  if(getCurrentFocus()!=null && getCurrentFocus().getWindowToken()!=null){  
+//    			  mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);  
+    			  closeSoftKeyboard();
+    			  
+    			  }
+    		  }
+    	return super.onTouchEvent(event);
     }
 
     private void closeSoftKeyboard() {
-        InputMethodManager mInputMethodManager ;
-        mInputMethodManager = (InputMethodManager) this
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        mInputMethodManager .hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
+    		mInputMethodManager.hideSoftInputFromWindow(edtValue.getWindowToken() , 0);
     }
     
     private void onDone() {
@@ -204,4 +254,5 @@ public class InputPlainTextActivity extends Activity {
         super.onPause();
         MobclickAgent.onPause(this);
     }
+    
 }

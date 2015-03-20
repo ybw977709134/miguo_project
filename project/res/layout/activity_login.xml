@@ -56,6 +56,7 @@
 					android:gravity="center_horizontal"
 					android:imeOptions="actionNext"
 					android:hint="@string/userName_hint"
+					android:cursorVisible="true"
 					android:textCursorDrawable="@color/green"/>
 
 				<ImageView
@@ -71,6 +72,7 @@
 						android:hint="@string/passWord_hint"
 						android:imeOptions="actionDone"
 						android:inputType="textPassword"
+						android:cursorVisible="true"
 						android:textCursorDrawable="@color/green"/>
 					<ImageButton
 						android:id="@+id/field_clear"

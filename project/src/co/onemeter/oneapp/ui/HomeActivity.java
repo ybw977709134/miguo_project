@@ -37,7 +37,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     private LinearLayout group;
 
     private ArrayList<View> pageviews = new ArrayList<View>();
-    private ArrayList<ImageView> dots = new ArrayList<ImageView>();
+    private ArrayList<ImageView> img_dots = new ArrayList<ImageView>();
 
     private int[] imgIds;
 
@@ -47,7 +47,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         @Override
         public void handleMessage(Message msg) {
             if(msg.what == sLoopMessage){
-                if(curpage >= 2){
+                if(curpage >= imgIds.length){
                     curpage = 0;
                 }
                 viewPager_home.setCurrentItem(curpage);
@@ -146,14 +146,16 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         int len = imgIds.length;
         for(int i = 0;i < len;i ++){
             ImageView imageView = new ImageView(this);
-            imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+            LinearLayout.LayoutParams params =  new LinearLayout.LayoutParams(20,20);
+            params.setMargins(15,0, 15, 0);
+            imageView.setLayoutParams(params);
             if(i == 0){
                 imageView.setImageResource(R.drawable.dot2);
             }else{
                 imageView.setImageResource(R.drawable.dot1);
             }
             group.addView(imageView);
-            dots.add(imageView);
+            img_dots.add(imageView);
         }
     }
 
@@ -161,9 +163,9 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         int len = imgIds.length;
         for(int i = 0;i < len;i ++){
             if(i == index){
-                dots.get(index).setImageResource(R.drawable.dot2);
+                img_dots.get(index).setImageResource(R.drawable.dot2);
             }else{
-                dots.get(i).setImageResource(R.drawable.dot1);
+                img_dots.get(i).setImageResource(R.drawable.dot1);
             }
         }
     }
@@ -233,7 +235,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             case R.id.img_home_homework:
                 break;
             case R.id.btn_goto_myclass:
-            	intent.setClass(HomeActivity.this, MyClassesActivity.class);
+            	intent = new Intent(HomeActivity.this, MyClassesActivity.class);
             	break;
             default:
                 break;

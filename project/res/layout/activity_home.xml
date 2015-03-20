@@ -63,6 +63,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_centerHorizontal="true"
+                        android:layout_alignBottom="@+id/viewpager_home_headimages"
                         android:layout_marginBottom="5dp">
 
                         </LinearLayout>

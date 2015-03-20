@@ -308,7 +308,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         mContactIntent = new Intent(StartActivity.this, ContactsActivity.class);
 		mMyClassIntent = new Intent(StartActivity.this, TimelineActivity.class);
         mHomeIntent = new Intent(StartActivity.this, HomeActivity.class);
-		mDiscovIntent = new Intent(StartActivity.this, SettingActivity.class);
+		mDiscovIntent = new Intent(StartActivity.this, DiscoveryActivity.class);
 		
 		mHost.addTab(buildTabSpec(String.valueOf(TAB_SMS), getResources().getString(R.string.app_name), R.drawable.ic_action_search, mSmsIntent));
 		mHost.addTab(buildTabSpec(String.valueOf(TAB_CONTACTS), getResources().getString(R.string.app_name), R.drawable.ic_action_search, mContactIntent));

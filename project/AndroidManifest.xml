@@ -661,6 +661,9 @@
 		</activity>
 		<activity android:name="org.wowtalk.ui.crop.CropImageActivity" />
         <activity android:name="org.wowtalk.ui.crop.ImagePreviewActivity"/>
+        <activity android:name="co.onemeter.oneapp.ui.DiscoveryActivity" 
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue_main" ></activity>
 	</application>
 
 </manifest>

@@ -17,7 +17,6 @@
 			android:layout_width="50dp"
 			android:layout_alignParentLeft="true"
 			android:background="@null"
-			android:visibility="gone"
 			android:src="@drawable/nav_back_selector"/>
 		<ImageButton
 			android:id="@+id/title_edit"

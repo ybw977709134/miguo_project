@@ -29,12 +29,12 @@ public class DiscoveryActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.img_friends:
-			Intent intent = new Intent(this,EventActivity.class);
+			Intent intent = new Intent(this,TimelineActivity.class);
 			startActivity(intent);
 			break;
 
 		case R.id.img_events:
-			intent = new Intent(this,TimelineActivity.class);
+			intent = new Intent(this,EventActivity.class);
 			startActivity(intent);
 		break;
 		default:

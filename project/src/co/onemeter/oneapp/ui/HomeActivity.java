@@ -66,7 +66,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
         msgbox = new MessageBox(this);
 
-        imgIds = new int[] {R.drawable.home_banner,R.drawable.home_banner};
+        imgIds = new int[] {R.drawable.home_banner1,R.drawable.home_banner2};
 
         int len = imgIds.length;
         for (int i = 0;i < len; i ++){
@@ -211,6 +211,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btn_add:
                 intent = new Intent(this,AddClassActivity.class);
+                break;
             case R.id.img_home_growth_class:
                 intent = new Intent(this,TimelineActivity.class);
                 break;

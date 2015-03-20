@@ -9,6 +9,8 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.DrawerLayout.LayoutParams;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +22,8 @@ import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.liveplayer.VideoPlayingActivity;
+import co.onemeter.oneapp.ui.MyClassesActivity.MyClassAdapter;
+import co.onemeter.oneapp.ui.MyClassesActivity.MyClassAdapter.ViewHolder;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
 
@@ -67,6 +71,16 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private long endDateStamps;
 	
 	private GroupChatRoom class_group = new GroupChatRoom();
+	private DrawerLayout layout_main_drawer;
+	private RelativeLayout layout_main_leftdrawer;
+	private LinearLayout layout_main_show;
+		
+    private List<GroupChatRoom> classrooms;
+    private List<GroupChatRoom> schoolrooms;   
+    private MyClassAdapter adapter;
+    private ListView lvMyClass;
+    private int errno;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +103,11 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		tvPlace = (TextView) findViewById(R.id.class_place);
 		tvLength = (TextView) findViewById(R.id.class_length);
 //		lvTeachers = (HorizontalListView) findViewById(R.id.hor_lv_teachers);
+		layout_main_drawer = (DrawerLayout) findViewById(R.id.layout_main_drawer);
+		layout_main_leftdrawer = (RelativeLayout) findViewById(R.id.layout_main_leftdrawer);
+		layout_main_show = (LinearLayout) findViewById(R.id.layout_main_show);
+		
+		lvMyClass = (ListView) findViewById(R.id.listview_lessons);
 		
 		mWTWebSer = WowTalkWebServerIF.getInstance(this);
 		
@@ -152,6 +171,11 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		lvLessonTable.setAdapter(courseAdapter);
 		lvLessonTable.setOnItemClickListener(this);
 		
+		classrooms = new LinkedList<GroupChatRoom>();
+		lvMyClass.setOnItemClickListener(this);
+		lvMyClass.setEmptyView(this.findViewById(R.id.loading));
+		schoolrooms = new ArrayList<GroupChatRoom>();
+		
 		TextView tv_class_live = (TextView) findViewById(R.id.class_live_class);
 		TextView tv_more = (TextView) findViewById(R.id.more);
 		if(PrefUtil.getInstance(this).getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER){
@@ -170,6 +194,55 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		refreshLessonInfo();
 	}
 	
+	private void getSchoolClassInfo(){
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
+
+            protected void onPreExecute() {
+                //msgBox.showWait();
+            }
+
+            ;
+
+            @Override
+            protected Void doInBackground(Void... params) {
+//                schoolrooms = talkwebserver.getMySchools(true);
+                errno = mWTWebSer.getMySchoolsErrno(true, schoolrooms);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                if (errno == ErrorCode.OK) {
+                	new Database(ClassDetailActivity.this).storeSchools(schoolrooms);
+                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
+
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            for (GroupChatRoom school : schoolrooms) {
+                                List<GroupChatRoom> claz = mWTWebSer.getSchoolClassRooms(school.groupID);
+                                for (GroupChatRoom classroom : claz) {
+                                    classrooms.add(classroom);
+                                }
+                            }
+                            return null;
+                        }
+
+                        protected void onPostExecute(Void result) {
+                            //msgBox.dismissWait();
+                            adapter = new MyClassAdapter(classrooms);
+                            lvMyClass.setAdapter(adapter);
+                        }
+
+                        ;
+                    });
+                } else {
+                    //msgBox.dismissWait();
+                    Toast.makeText(ClassDetailActivity.this,R.string.conn_time_out,Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+        });
+	}
 	private void getLessonInfo(){
 			AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
@@ -254,7 +327,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		switch (v.getId()) {
 
 		case R.id.btn_myclass_addclass:
-			finish();
+//			finish();
+			layout_main_drawer.openDrawer(layout_main_leftdrawer);
+			layout_main_show.setEnabled(false);
 			break;
 		case R.id.class_live_class:
 			currentTime = System.currentTimeMillis()/1000;
@@ -566,5 +641,49 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		}
 		
 	}
+	
+    class MyClassAdapter extends BaseAdapter{
+    	private List<GroupChatRoom> classrooms;
+    	
+    	public MyClassAdapter(List<GroupChatRoom> classrooms){
+    		this.classrooms = classrooms;
+    	}
+
+		@Override
+		public int getCount() {
+			return classrooms.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return classrooms.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHolder holder = null;
+			if(null == convertView){
+				convertView = getLayoutInflater().inflate(R.layout.listitem_myclass_drawerlayout, parent, false);
+				holder = new ViewHolder();
+				holder.item_myclass_textview = (TextView) convertView.findViewById(R.id.item_myclass_tv);
+				holder.item_myclass_imageview = (ImageView) convertView.findViewById(R.id.item_myclass_iv);
+				convertView.setTag(holder);
+			}else{
+				holder = (ViewHolder) convertView.getTag();
+			}
+			holder.item_myclass_textview.setText(classrooms.get(position).groupNameOriginal);		
+			return convertView;
+		}
+		class ViewHolder{
+			ImageView item_myclass_imageview;
+			TextView item_myclass_textview;
+		}
+    	
+    }
 
 }

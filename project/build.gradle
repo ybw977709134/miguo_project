@@ -26,6 +26,13 @@ android {
         multiDexEnabled false
     }
 
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFile 'proguard.cfg'
+        }
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'

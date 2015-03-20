@@ -264,8 +264,8 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                     case ErrorCode.OK://0
 //                    	mMsgBox.show(null, "验证码已发送到你的绑定邮箱中了,请注意查收");
 //                        mMsgBox.dismissDialog();
-                    	btn_verification_code.setEnabled(true);
-                    	btn_verification_code.setBackground(getResources().getDrawable(R.drawable.btn_blue_medium_selector));
+//                    	btn_verification_code.setEnabled(true);
+//                    	btn_verification_code.setBackground(getResources().getDrawable(R.drawable.btn_blue_medium_selector));
                         break;
                                  	
   

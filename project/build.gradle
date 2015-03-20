@@ -4,18 +4,11 @@ dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     compile project(':lib:message-input')
     compile project(':lib:wowtalksdk')
-    compile project(':lib:SimpleQRCodeLib')
-    compile project(':lib:DraggableListView')
     compile project(':lib:pulltorefresh')
     compile project(':lib:bitmapfun')
     compile project(':lib:messagebox')
-    compile project(':lib:bitmapfun')
     compile project(':lib:DraggableListView')
-    compile project(':lib:message-input')
-    compile project(':lib:messagebox')
-    compile project(':lib:pulltorefresh')
     compile project(':lib:SimpleQRCodeLib')
-    compile project(':lib:wowtalksdk')
     compile 'com.android.support:multidex:1.0.0'
 }
 

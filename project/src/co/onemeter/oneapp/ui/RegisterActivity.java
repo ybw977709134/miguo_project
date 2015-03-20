@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,6 +41,8 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	private static final int MSG_USER_ALREADY_EXIST = 102;
     private static final int MSG_ERROR_UNKNOWN = 104;    
 	
+    
+    private RelativeLayout layout_register;
 	private EditText edtAccount;
 	private EditText edtPwd;
 	private EditText edtPwdConfirm;
@@ -118,6 +121,22 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	
 	private void initView() {
 		
+		layout_register = (RelativeLayout) findViewById(R.id.layout_register);
+		
+		layout_register.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				layout_register.setFocusable(true);
+				layout_register.setFocusableInTouchMode(true);
+				layout_register.requestFocus();
+				field_clear_account.setVisibility(View.GONE);
+				field_clear_pwd.setVisibility(View.GONE);
+				field_clear_confirm.setVisibility(View.GONE);
+				return false;
+			}
+		});
+		
 		title_back = (ImageButton) findViewById(R.id.title_back);
 		
 		field_clear_account = (ImageButton) findViewById(R.id.field_clear_account);
@@ -160,6 +179,19 @@ public class RegisterActivity extends Activity implements OnClickListener{
 		
 		btnCreate.setOnClickListener(this);
 		
+		//每次确认密码框重新获得焦点时，清空密码框
+		edtAccount.setOnFocusChangeListener(new OnFocusChangeListener() {
+					
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					edtAccount.setText("");
+				} else {
+					field_clear_account.setVisibility(View.GONE);
+				}
+			}
+		});
+		
 		//每次密码框重新获得焦点时，清空密码框
 		edtPwd.setOnFocusChangeListener(new OnFocusChangeListener() {
 			
@@ -167,6 +199,8 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
 					edtPwd.setText("");
+				} else {
+					field_clear_pwd.setVisibility(View.GONE);
 				}
 			}
 		});
@@ -178,6 +212,8 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
 					edtPwdConfirm.setText("");
+				} else {
+					field_clear_confirm.setVisibility(View.GONE);
 				}
 			}
 		});

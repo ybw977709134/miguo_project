@@ -15,6 +15,7 @@ import co.onemeter.utils.AsyncTaskExecutor;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -22,10 +23,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 /**
@@ -36,6 +41,8 @@ import android.widget.Toast;
  */
 public class FixBindEmailAddressActivity extends Activity implements OnClickListener{
 	
+	private RelativeLayout layout_fix_bind_email;
+	InputMethodManager mInputMethodManager ;
 	private ImageButton title_back;
 	private TextView textView_fixBindEmail_back;//返回
 	
@@ -75,8 +82,29 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fix_bind_email_address);
+		
 		mMsgBox = new MessageBox(this);
 		initView();
+		
+		mInputMethodManager = (InputMethodManager) this
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        
+		txt_access_code.setFocusable(true);
+		txt_access_code.setFocusableInTouchMode(true);
+		txt_access_code.requestFocus();
+        
+        Handler hanlder = new Handler();
+        hanlder.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {		
+				mInputMethodManager.showSoftInput(txt_access_code, InputMethodManager.RESULT_SHOWN);
+				mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+			}
+		}, 200);
+        
+        
+		
 		
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, List<Map<String, Object>>> () {
 			
@@ -105,11 +133,44 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 		super.onResume();
 	}
 	
+	/**
+	 * 重写onTouchEvent方法，获得向下点击事件，隐藏输入法
+	 */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+    	  if(event.getAction() == MotionEvent.ACTION_DOWN){  
+    		  if(getCurrentFocus()!=null && getCurrentFocus().getWindowToken()!=null){  
+//    			  mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);  
+    			  closeSoftKeyboard();
+    			  
+    			  }
+    		  }
+    	return super.onTouchEvent(event);
+    }
+    
+    private void closeSoftKeyboard() {
+		mInputMethodManager.hideSoftInputFromWindow(txt_access_code.getWindowToken() , 0);
+}
+	
 	
 	/**
 	 * 初始化各个控件
 	 */
 	private void initView() {
+		layout_fix_bind_email = (RelativeLayout) findViewById(R.id.layout_fix_bind_email);
+		
+		layout_fix_bind_email.setOnTouchListener(new OnTouchListener() {
+				
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					layout_fix_bind_email.setFocusable(true);
+					layout_fix_bind_email.setFocusableInTouchMode(true);
+					layout_fix_bind_email.requestFocus();
+					return false;
+				}
+			});
+		  
 		title_back = (ImageButton) findViewById(R.id.title_back);
 		textView_fixBindEmail_back = (TextView) findViewById(R.id.textView_fixBindEmail_back);
 		textView_fixBindEmail_cancel = (TextView) findViewById(R.id.textView_fixBindEmail_cancel);
@@ -165,6 +226,11 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 		if (mTimer != null) {
 			mTimer.cancel();
 		}
+		
+		if (txt_access_code.hasFocus()) {
+			closeSoftKeyboard();
+		}
+		
 		super.onDestroy();
 	}
 	

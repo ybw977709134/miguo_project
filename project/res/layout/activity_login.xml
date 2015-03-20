@@ -49,6 +49,10 @@
 
 				<ImageView
 					style="@style/bg_section_divider_line_dark"/>
+				
+				<RelativeLayout
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent">
 
 				<EditText
 					android:id="@+id/accountInput"
@@ -58,6 +62,17 @@
 					android:hint="@string/userName_hint"
 					android:cursorVisible="true"
 					android:textCursorDrawable="@color/green"/>
+				
+				<ImageButton
+						android:id="@+id/field_clear_account"
+						android:layout_height="20dp"
+						android:layout_width="20dp"
+						android:layout_marginRight="7dp"
+						android:layout_centerVertical="true"
+						android:layout_alignParentRight="true"
+						android:visibility="gone"
+						android:background="@drawable/icon_delete"/>
+				</RelativeLayout>
 
 				<ImageView
 					style="@style/bg_section_divider_line_light"/>
@@ -75,14 +90,14 @@
 						android:cursorVisible="true"
 						android:textCursorDrawable="@color/green"/>
 					<ImageButton
-						android:id="@+id/field_clear"
+						android:id="@+id/field_clear_password"
 						android:layout_height="20dp"
 						android:layout_width="20dp"
 						android:layout_marginRight="7dp"
 						android:layout_centerVertical="true"
 						android:layout_alignParentRight="true"
 						android:visibility="gone"
-						android:background="@drawable/field_clear"/>
+						android:background="@drawable/icon_delete"/>
 
 				</RelativeLayout>
 

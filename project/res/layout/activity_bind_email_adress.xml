@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    			android:id="@+id/layout_bind_email"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:background="@color/background_dark"
@@ -113,7 +114,7 @@
         			android:layout_marginRight="5dp"
         			android:layout_centerVertical="true"
         			android:visibility="gone"
-        			android:background="@drawable/field_clear"/>
+        			android:background="@drawable/icon_delete"/>
                 
                 </RelativeLayout>
 
@@ -206,7 +207,7 @@
         			android:layout_marginRight="5dp"
         			android:layout_centerVertical="true"
         			android:visibility="gone"
-        			android:background="@drawable/field_clear"/>
+        			android:background="@drawable/icon_delete"/>
                 
                 </RelativeLayout>
 

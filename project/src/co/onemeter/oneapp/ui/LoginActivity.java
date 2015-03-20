@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
@@ -32,6 +33,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
@@ -67,10 +69,13 @@ public class LoginActivity extends Activity implements OnClickListener {
 	private static final int MSG_LOGIN_FAILED = 106;
 
     private static final int REQ_SCAN = 123;
-
+    
+    
+    private RelativeLayout layout_login;
     private EditText edtAccount;
 	private EditText edtPassword;
-    private ImageButton fieldClear;
+    private ImageButton fieldClear_account;
+    private ImageButton fieldClear_passWord;
 
 	private Buddy buddy = new Buddy();
 	
@@ -191,15 +196,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 				break;
 			case MSG_AUTO_REGISTER_SUCCESS:
                 handleSuccessLogin(true, msg.obj);
-//                oldUId = String.valueOf(msg.obj);
-//                newUId = mWebIF.getPrefUid();
-//                clearCachedValues(oldUId, newUId);
-//				PrefUtil.getInstance(LoginActivity.this).setAutoLogin(true);
-//				Intent aIntent = new Intent(LoginActivity.this, StartActivity.class);
-//				startActivity(aIntent);
-//
-//                mMsgBox.dismissWait();
-//                finish();
 				break;
 			case MSG_AUTH:
                 mMsgBox.dismissWait();
@@ -223,26 +219,52 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     private void initView() {
         AQuery q = new AQuery(this);
+        
+        layout_login = (RelativeLayout) findViewById(R.id.layout_login);
+        
+        layout_login.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				layout_login.setFocusable(true);
+				layout_login.setFocusableInTouchMode(true);
+				layout_login.requestFocus();
+				fieldClear_account.setVisibility(View.GONE);
+				fieldClear_passWord.setVisibility(View.GONE);
+				return false;
+			}
+		});
        
 		edtAccount = (EditText) findViewById(R.id.accountInput);
+		
+		edtAccount.setFocusable(true);
+		edtAccount.setFocusableInTouchMode(true); 
+		edtAccount.requestFocus();
+		
 		edtPassword = (EditText) findViewById(R.id.passWordInput);
-        fieldClear = (ImageButton) findViewById(R.id.field_clear);
+		
+		fieldClear_account = (ImageButton) findViewById(R.id.field_clear_account);
+		fieldClear_passWord = (ImageButton) findViewById(R.id.field_clear_password);
         
 
         q.find(R.id.forgotPassWord).clicked(this);
         q.find(R.id.login_username).clicked(this);
 //        q.find(R.id.login_qrcode).clicked(this);
         q.find(R.id.btn_signup).clicked(this);
-        fieldClear.setOnClickListener(this);
-
-		edtPassword.addTextChangedListener(new TextWatcher() {
+        fieldClear_account.setOnClickListener(this);
+        fieldClear_passWord.setOnClickListener(this);
+        
+        
+        edtAccount.addTextChangedListener(new TextWatcher() {
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (s.length() == 0) {
-                    fieldClear.setVisibility(View.GONE);
+					fieldClear_account.setVisibility(View.GONE);
+					
 				} else {
-                    fieldClear.setVisibility(View.VISIBLE);
+					fieldClear_account.setVisibility(View.VISIBLE);
+					
 				}
 			}
 			
@@ -257,6 +279,30 @@ public class LoginActivity extends Activity implements OnClickListener {
 				
 			}
 		});
+
+		edtPassword.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (s.length() == 0) {
+					fieldClear_passWord.setVisibility(View.GONE);
+				} else {
+					fieldClear_passWord.setVisibility(View.VISIBLE);
+				}
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				
+			}
+		});
+		
         edtPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -268,6 +314,20 @@ public class LoginActivity extends Activity implements OnClickListener {
             }
         });
         
+        
+        edtAccount.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					edtAccount.setText("");
+				} else {
+					fieldClear_account.setVisibility(View.GONE);
+				}
+				
+			}
+		});
+        
         //每次密码框重新获得焦点时，清空密码框
         edtPassword.setOnFocusChangeListener(new OnFocusChangeListener() {
 			
@@ -275,6 +335,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
 					edtPassword.setText("");
+				} else {
+					fieldClear_passWord.setVisibility(View.GONE);
 				}
 				
 			}

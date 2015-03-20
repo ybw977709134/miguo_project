@@ -89,7 +89,7 @@
         			android:layout_marginBottom="5dp"
         			android:layout_centerVertical="true"
         			android:visibility="gone"
-        			android:background="@drawable/field_clear"/>
+        			android:background="@drawable/icon_delete"/>
             
             <TextView
                 android:id="@+id/txt_num"

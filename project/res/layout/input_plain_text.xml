@@ -83,7 +83,7 @@
         			android:layout_marginRight="5dp"
         			android:layout_centerVertical="true"
         			android:visibility="gone"
-        			android:background="@drawable/field_clear"/>
+        			android:background="@drawable/icon_delete"/>
         </RelativeLayout>
         
         <ImageView

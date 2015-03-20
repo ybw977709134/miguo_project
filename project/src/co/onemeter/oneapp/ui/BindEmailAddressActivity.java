@@ -12,6 +12,7 @@ import co.onemeter.utils.AsyncTaskExecutor;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -20,8 +21,12 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
+import android.view.View.OnTouchListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -40,6 +45,8 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 	private static int AUTH_CODE_PAGE = 2;//验证验证码阶段
 	//验证阶段判断标志
 	private int pageFlag = BIND_EMAIL_PAGE;//默认为验证绑定邮箱阶段
+	
+	private RelativeLayout layout_bind_email;
 	
 	private TextView textView_bindEmail_back;//文本返回
 	private TextView textView_findPassword_cancel;//取消
@@ -62,10 +69,12 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 	private TextView textView_verification_authCode_result;//验证码验证结果
 	private Button btn_verification_auth_code;//确认验证验证码
 	private Button btn_again_receive_auth_code;//重新获取验证码
-
+	
+	
+	InputMethodManager mInputMethodManager ;
 	private MessageBox mMsgBox;
 	private int time;
-	
+	private Timer mTimer;
 	private Handler mHandler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
 			if (msg.what == 0) {
@@ -80,7 +89,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 	};
 	
 
-	private Timer mTimer;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +97,25 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
         initView();
         mMsgBox = new MessageBox(this);
         
+        mInputMethodManager = (InputMethodManager) this
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        
+        txt_bind_email.setFocusable(true);
+        txt_bind_email.setFocusableInTouchMode(true);
+        txt_bind_email.requestFocus();
+        
+        Handler hanlder = new Handler();
+        hanlder.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+//				InputMethodManager imm = (InputMethodManager)edtValue.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);  
+//				imm.showSoftInput(edtValue, 0);
+				
+				mInputMethodManager.showSoftInput(txt_bind_email, InputMethodManager.RESULT_SHOWN);
+				mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+			}
+		}, 200);
         
     }
     
@@ -117,7 +145,37 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
     	}
     	
     	return super.onKeyDown(keyCode, event);
-    } 
+    }
+    
+    
+	/**
+	 * 重写onTouchEvent方法，获得向下点击事件，隐藏输入法
+	 */
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//
+//    	  if(event.getAction() == MotionEvent.ACTION_DOWN){  
+//    		  if(getCurrentFocus()!=null && getCurrentFocus().getWindowToken()!=null){  
+//    			    
+//    			  closeSoftKeyboard();
+//    			  
+//    			  }
+//    		  }
+//    	return super.onTouchEvent(event);
+//    }
+    
+    private void closeSoftKeyboard() {
+    	
+//    	mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    	if (txt_bind_email.hasFocus()) {
+    		mInputMethodManager.hideSoftInputFromWindow(txt_bind_email.getWindowToken() , 0);
+    	}
+    	
+    	if (txt_auth_code.hasFocus()) {
+    		mInputMethodManager.hideSoftInputFromWindow(txt_auth_code.getWindowToken() , 0);
+    	}
+		
+}
     
     
     @Override
@@ -125,6 +183,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
     	if (mTimer != null) {
     		mTimer.cancel();
     	}
+    	closeSoftKeyboard();
     	super.onDestroy();
     }
     
@@ -132,6 +191,21 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
      * 初始化控件
      */
     private void initView() {
+    	
+    	//点击布局的空白处使得edittext失去说有的焦点和光标
+    	layout_bind_email = (RelativeLayout) findViewById(R.id.layout_bind_email);
+    	layout_bind_email.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				layout_bind_email.setFocusable(true);
+				layout_bind_email.setFocusableInTouchMode(true);
+				layout_bind_email.requestFocus();
+				field_clear_email.setVisibility(View.GONE);
+				field_clear_auth_code.setVisibility(View.GONE);
+				return false;
+			}
+		});
     	
     	//页标题
     	textView_bindEmail_back = (TextView) findViewById(R.id.textView_bindEmail_back);
@@ -189,6 +263,20 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			}
 		});
     	
+    	txt_bind_email.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					txt_bind_email.setText("");
+				} else {
+					field_clear_email.setVisibility(View.GONE);
+					mInputMethodManager.hideSoftInputFromWindow(txt_bind_email.getWindowToken() , 0);
+				}
+				
+			}
+		});
+    	
     	//输入验证码时，清除图片按钮的控制
     	txt_auth_code.addTextChangedListener(new TextWatcher() {
 			
@@ -214,6 +302,20 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			
 			@Override
 			public void afterTextChanged(Editable s) {
+			}
+		});
+    	
+    	txt_auth_code.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					txt_auth_code.setText("");
+				} else {
+					field_clear_auth_code.setVisibility(View.GONE);
+					mInputMethodManager.hideSoftInputFromWindow(txt_auth_code.getWindowToken() , 0);
+				}
+				
 			}
 		});
     	
@@ -345,7 +447,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 	 * @date 2015/3/4
 	 */
 	private void bindEmailAddress(final String emailAddress) {
-		mMsgBox.showWaitProgressbar("验证中");
+		mMsgBox.showWait();
 		
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 

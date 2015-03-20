@@ -9,6 +9,7 @@ dependencies {
     compile project(':lib:messagebox')
     compile project(':lib:DraggableListView')
     compile project(':lib:SimpleQRCodeLib')
+    compile 'com.android.support:support-v4:21.0.2'
     compile 'com.android.support:multidex:1.0.0'
 }
 

@@ -9,7 +9,11 @@ tester
 
 .directory
 *.apk
+
+#proguard
 proguard_logs
+project/classes-processed.map
+
 Manifest.java
 BuildConfig.java
 R.java

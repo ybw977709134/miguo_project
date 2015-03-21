@@ -1,0 +1,102 @@
+关于用 gradle 构建
+
+
+--------------------------------------------------------------------------------
+项目依赖的 jar，通过以下命令安装到本地 maven repo：
+
+    mvn install:install-file \
+            -Dfile=project/libs/AMap_Services_V2.3.1.jar \
+            -DgroupId=com.amap.api \
+            -DartifactId=services \
+            -Dversion=2.3.1 \
+            -Dpackaging=jar \
+            -DlocalRepositoryPath=$ANDROID_HOME/extras/android/m2repository/
+
+    mvn install:install-file \
+            -Dfile=project/libs/cyberplayer-sdk.jar \
+            -DgroupId=com.baidu \
+            -DartifactId=cyberplayer \
+            -Dversion=1.0.0 \
+            -Dpackaging=jar \
+            -DlocalRepositoryPath=$ANDROID_HOME/extras/android/m2repository/
+
+    mvn install:install-file \
+            -Dfile=project/libs/eventbus.jar \
+            -DgroupId=de.greenrobot \
+            -DartifactId=eventbus \
+            -Dversion=1.0.0 \
+            -Dpackaging=jar \
+            -DlocalRepositoryPath=$ANDROID_HOME/extras/android/m2repository/
+
+    mvn install:install-file \
+            -Dfile=project/libs/gson-2.1.jar \
+            -DgroupId=com.google \
+            -DartifactId=gson \
+            -Dversion=2.1 \
+            -Dpackaging=jar \
+            -DlocalRepositoryPath=$ANDROID_HOME/extras/android/m2repository/
+
+    mvn install:install-file \
+            -Dfile=project/libs/liveplayer.jar \
+            -DgroupId=com.baidu.lightapp.plugin.videoplayer \
+            -DartifactId=coreplayer \
+            -Dversion=1.0.0 \
+            -Dpackaging=jar \
+            -DlocalRepositoryPath=$ANDROID_HOME/extras/android/m2repository/
+
+    mvn install:install-file \
+            -Dfile=project/libs/umeng_sdk.jar \
+            -DgroupId=com.umeng \
+            -DartifactId=sdk \
+            -Dversion=1.0.0 \
+            -Dpackaging=jar \
+            -DlocalRepositoryPath=$ANDROID_HOME/extras/android/m2repository/
+
+    mvn install:install-file \
+            -Dfile=project/libs/android-query.0.26.7.jar \
+            -DgroupId=com.androidquery \
+            -DartifactId=android-query \
+            -Dversion=0.26.7 \
+            -Dpackaging=jar \
+            -DlocalRepositoryPath=$ANDROID_HOME/extras/android/m2repository/
+
+    mvn install:install-file \
+            -Dfile=lib/wowtalksdk/libs/kakasi.jar \
+            -DgroupId=com.kawao \
+            -DartifactId=kakasi \
+            -Dversion=1.0.0 \
+            -Dpackaging=jar \
+            -DlocalRepositoryPath=$ANDROID_HOME/extras/android/m2repository/
+
+    mvn install:install-file \
+            -Dfile=lib/wowtalksdk/libs/aliyun-openservices-1.2.3.jar \
+            -DgroupId=com.aliyun \
+            -DartifactId=openservices \
+            -Dversion=1.2.3 \
+            -Dpackaging=jar \
+            -DlocalRepositoryPath=$ANDROID_HOME/extras/android/m2repository/
+
+    # git checkout dev
+    mvn install:install-file \
+            -Dfile=lib/wowtalksdk/libs/om_im_android_sdk.jar \
+            -DgroupId=co.onemeter \
+            -DartifactId=im-sdk-dev01 \
+            -Dversion=1.0.0 \
+            -Dpackaging=jar \
+            -DlocalRepositoryPath=$ANDROID_HOME/extras/android/m2repository/
+
+    # git checkout product
+    mvn install:install-file \
+            -Dfile=lib/wowtalksdk/libs/om_im_android_sdk.jar \
+            -DgroupId=co.onemeter \
+            -DartifactId=im-sdk-product \
+            -Dversion=1.0.0 \
+            -Dpackaging=jar \
+            -DlocalRepositoryPath=$ANDROID_HOME/extras/android/m2repository/
+
+--------------------------------------------------------------------------------
+
+NDK *.so
+
+    project/libs/ndk_libs.jar 包含了 NDK *.so，把它添加到 gradle dependencies，
+    否则 gradle 不会把 *.so 打包进 apk。

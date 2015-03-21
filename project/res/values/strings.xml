@@ -246,7 +246,7 @@
 	<string name="settings_account_setted">已设定</string>
 	<string name="settings_account_wowid_already_changed">一米家校ID只能修改一次</string>
 	<string name="settings_account_wowid_used_by_others">您所设置的用户 ID已经存在，请重新选择一个用户 ID</string>
-	<string name="settings_account_email_used_by_others">您要绑定的邮箱已经绑定到其它帐号,请使用其它邮箱</string>
+	<string name="settings_account_email_used_by_others">该邮箱已被绑定，请使用其他邮箱</string>
 	<string name="settings_account_email_used">该用户已绑定其它邮箱</string>
 	<string name="settings_account_phone_used_by_others">您要绑定的手机号码已经绑定到其它帐号</string>
 	<string name="settings_account_passwd_format_error">密码格式不正确，可以使用6-20个字母，数字，下划线和减号</string>

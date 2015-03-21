@@ -369,9 +369,12 @@ public class LoginActivity extends Activity implements OnClickListener {
 			//找回密码
 			showPopupMenu();
 			break;
-        case R.id.field_clear:
-            edtPassword.setText("");
+        case R.id.field_clear_account:
+        	edtAccount.setText("");
             break;
+        case R.id.field_clear_password:
+        	edtPassword.setText("");
+        	break;
 		default:
             mMsgBox.toast(R.string.not_implemented);
 			break;

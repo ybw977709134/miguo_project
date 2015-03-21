@@ -133,6 +133,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			pageFlag = BIND_EMAIL_PAGE;
 			
 			unBindEmailAddress();//解绑
+			mTimer.cancel();
 			layout_verification_auth_code.setVisibility(View.GONE);
 			layout_verification_email.setVisibility(View.VISIBLE);
 			txt_auth_code.setText("");
@@ -380,10 +381,10 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 				pageFlag = BIND_EMAIL_PAGE;
 				
 				unBindEmailAddress();//解绑
+				mTimer.cancel();
 				layout_verification_auth_code.setVisibility(View.GONE);
 				layout_verification_email.setVisibility(View.VISIBLE);
 				txt_auth_code.setText("");
-				
 				txt_bind_email.setText("");
 				textView_verification_email_result.setVisibility(View.GONE);
 				textView_verification_authCode_result.setVisibility(View.GONE);

@@ -254,7 +254,7 @@
 			android:theme="@style/Theme.Blue_main"
             android:launchMode="singleTask"
 			android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan" >
 		</activity>
         <!--android:noHistory="true"-->
 		<activity
@@ -308,7 +308,6 @@
 		<activity
 			android:name=".ui.AccountSettingActivity"
 			android:theme="@style/Theme.Blue_main"
-			
 			android:screenOrientation="portrait" >
 		</activity>
 		
@@ -560,7 +559,7 @@
 		          android:screenOrientation="portrait"
 			/>
 		<activity android:name=".ui.LoginInvitedActivity"
-		          android:launchMode="singleTask"
+		          android:launchMode="singleTop"
 		          android:screenOrientation="portrait"
 			/>
 		<!-- 密码找回 -->

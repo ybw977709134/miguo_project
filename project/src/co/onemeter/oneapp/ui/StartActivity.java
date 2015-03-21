@@ -258,17 +258,14 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 		case TAB_SMS:
 			txtTabSms.setTextColor(getResources().getColor(R.color.blue));
 			imgTabSms.setImageResource(R.drawable.tabbar_messages_press);
-            //imgTabHome.setImageResource(R.drawable.tabbar_home_red);
 			break;
 		case TAB_CONTACTS:
 			txtTabContact.setTextColor(getResources().getColor(R.color.blue));
 			imgTabContacts.setImageResource(R.drawable.tabbar_contacts_press);
-            //imgTabHome.setImageResource(R.drawable.tabbar_home_blue);
 			break;
 		case TAB_MyClass:
 			txtTabMyClass.setTextColor(getResources().getColor(R.color.blue));
 			imgTabMyClass.setImageResource(R.drawable.tabbar_myclass_press);
-            //imgTabHome.setImageResource(R.drawable.tabbar_home_blue);
 			break;
 		case TAB_HOME:
 			txtTabHome.setTextColor(getResources().getColor(R.color.blue));
@@ -277,7 +274,6 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 		case TAB_Discov:
 			txtTabDiscov.setTextColor(getResources().getColor(R.color.blue));
 			imgTabDiscov.setImageResource(R.drawable.tabbar_find_press);
-            //imgTabHome.setImageResource(R.drawable.tabbar_home_blue);
 			break;
 		default:
             setTab(TAB_SMS);

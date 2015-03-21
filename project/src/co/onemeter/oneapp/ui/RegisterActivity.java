@@ -88,11 +88,12 @@ public class RegisterActivity extends Activity implements OnClickListener{
 					startActivity(new Intent(RegisterActivity.this, LoginActivity.class)
 						.putExtra(LoginActivity.EXTRA_USERNAME, args[0])
 						.putExtra(LoginActivity.EXTRA_PASSWORD, args[1]));
+					finish();
 						
 					}
 				}).start();
 				
-                finish();
+//                finish();
 			}
 			break;
 			
@@ -378,6 +379,13 @@ public class RegisterActivity extends Activity implements OnClickListener{
             alert(getResources().getString(R.string.settings_account_pwdConfrim_format_error));
             return;
         }
+        
+        //对账号类型的确认
+        if (!(textView_register_user_type.getText().equals("老师")) && !(textView_register_user_type.getText().equals("学生"))) {
+        	alert(getResources().getString(R.string.settings_account_type_select));
+        	return;
+        }
+        
 
 		if (fIsPasswordFit()) {
 		    mMsgBox.showWait();

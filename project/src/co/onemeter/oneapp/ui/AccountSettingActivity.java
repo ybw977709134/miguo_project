@@ -29,6 +29,7 @@ import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkVoipIF;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 public class AccountSettingActivity extends Activity implements OnClickListener{
     private static final String TAG = "AccountSettingActivity";
@@ -173,6 +174,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 				IncomeMessageIntentReceiver.closeNoticeMessage();
 				
 				Intent intent = new Intent(AccountSettingActivity.this, LoginActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
 
 				finish();
@@ -188,26 +190,29 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 			finish();
 			break;
 		case R.id.textView_logout:
-			
-			Builder builder = new AlertDialog.Builder(AccountSettingActivity.this);
-			builder.setTitle("提示");
-			builder.setMessage("你确定要退出吗?");
-			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface arg0, int arg1) {
-					
-		            if(mPrefUtil.getMyUsernameChangedState()
-                  && mPrefUtil.getMyPasswordChangedState()) {
-		            	logout();
-		            } else {
-		            	mMsgBox.show(null, getString(R.string.settings_account_logout_without_set_id_pwd));
-		            }					
-				}
-			});
-			builder.setNegativeButton("取消", null);
-			
-			builder.create().show();
+
+			   MessageDialog dialog = new MessageDialog(AccountSettingActivity.this);
+
+   			//Builder builder = new AlertDialog.Builder(HomeActivity.this);
+               dialog.setTitle("提示");
+               dialog.setMessage("你确定要退出吗?");
+               dialog.setOnRightClickListener("取消", null);
+               
+               dialog.setOnLeftClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                   @Override
+                   public void onclick(MessageDialog dialog) {
+                       dialog.dismiss();
+                       if(mPrefUtil.getMyUsernameChangedState()
+                               && mPrefUtil.getMyPasswordChangedState()) {
+             		            	logout();
+             		            } else {
+             		            	mMsgBox.show(null, getString(R.string.settings_account_logout_without_set_id_pwd));
+             		            }
+                   }
+               }
+               );
+               dialog.show();
+               
 			
 			break;
 		case R.id.layout_id:

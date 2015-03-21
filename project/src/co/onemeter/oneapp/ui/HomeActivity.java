@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.ui.widget.AutoScrollViewPager;
 import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
@@ -33,7 +34,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     MessageBox msgbox;
 //    private static final int BIND_EMAIL_REQUEST_CODE = 1;
 
-    private ViewPager viewPager_home;
+    private AutoScrollViewPager viewPager_home;
     private LinearLayout group;
 
     private ArrayList<View> pageviews = new ArrayList<View>();
@@ -41,21 +42,21 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
     private int[] imgIds;
 
-    private int curpage = 0;
-
-    private android.os.Handler mHandler = new android.os.Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            if(msg.what == sLoopMessage){
-                if(curpage >= imgIds.length){
-                    curpage = 0;
-                }
-                viewPager_home.setCurrentItem(curpage);
-            }
-            mHandler.sendEmptyMessageDelayed(sLoopMessage , 5000);
-            curpage ++;
-        }
-    };
+//    private int curpage = 0;
+//
+//    private android.os.Handler mHandler = new android.os.Handler(){
+//        @Override
+//        public void handleMessage(Message msg) {
+//            if(msg.what == sLoopMessage){
+//                if(curpage >= imgIds.length){
+//                    curpage = 0;
+//                }
+//                viewPager_home.setCurrentItem(curpage);
+//            }
+//            mHandler.sendEmptyMessageDelayed(sLoopMessage , 5000);
+//            curpage ++;
+//        }
+//    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,7 +88,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
             @Override
             public void onPageSelected(int i) {
-                setCurDot(i);
+                setCurDot(i % pageviews.size());
             }
 
             @Override
@@ -95,7 +96,13 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
             }
         });
-        
+
+        viewPager_home.setCycle(true);
+        viewPager_home.setSlideBorderMode(AutoScrollViewPager.SLIDE_BORDER_MODE_CYCLE);
+        viewPager_home.setBorderAnimation(true);
+        viewPager_home.setStopScrollWhenTouch(true);
+        viewPager_home.setInterval(5000);
+
         //登陆后跳转到此页面检测用户是否绑定了邮箱，绑定了，不提示，未绑定，弹框提示用户是否要绑定邮箱
         //如果用户未绑定邮箱，跳转到绑定邮箱界面
         
@@ -171,7 +178,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     }
 
     private void initView(){
-        viewPager_home = (ViewPager) findViewById(R.id.viewpager_home_headimages);
+        viewPager_home = (AutoScrollViewPager) findViewById(R.id.viewpager_home_headimages);
         group = (LinearLayout) findViewById(R.id.lay_dots);
 
         findViewById(R.id.img_home_event).setOnClickListener(this);
@@ -191,7 +198,8 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        mHandler.sendEmptyMessageDelayed(sLoopMessage , 5000);
+        //mHandler.sendEmptyMessageDelayed(sLoopMessage , 5000);
+        viewPager_home.startAutoScroll();
     }
 
     @Override
@@ -199,7 +207,8 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         super.onPause();
         msgbox.dismissWait();
         msgbox.dismissToast();
-        mHandler.removeMessages(sLoopMessage);
+        //mHandler.removeMessages(sLoopMessage);
+        viewPager_home.stopAutoScroll();
     }
 
     @Override

@@ -2,16 +2,19 @@ package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import co.onemeter.oneapp.Constants;
@@ -200,8 +203,22 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	private void showAddOrModifyLessonDialog(final boolean isAdd,final View item,final int position,boolean isBefore){
 		View view = getLayoutInflater().inflate(R.layout.lay_add_lesson, null);
 		final EditText edName = (EditText) view.findViewById(R.id.ed_dialog_time);
+		edName.setFocusable(true);
+		edName.setFocusableInTouchMode(true); 
+		edName.requestFocus();
 		final DatePicker datepicker = (DatePicker) view.findViewById(R.id.datepicker_dialog);
 		
+		Handler hanlder = new Handler();
+        hanlder.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				InputMethodManager imm = (InputMethodManager)edName.getContext().getSystemService(Context.INPUT_METHOD_SERVICE); 
+				imm.showSoftInput(edName, InputMethodManager.RESULT_SHOWN);
+				imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY); 
+			}
+		}, 200);
+        
 		if(!isAdd){
 			dialog.setTitle("修改课程");
 			view.findViewById(R.id.lay_lesson_name).setVisibility(View.VISIBLE);

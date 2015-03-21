@@ -1,7 +1,7 @@
 apply plugin: 'android-library'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+    compile 'com.androidquery:android-query:0.26.7'
 }
 
 android {

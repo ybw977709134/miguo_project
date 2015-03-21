@@ -36,10 +36,20 @@ android {
         multiDexEnabled false
     }
 
+    signingConfigs {
+        onemeter {
+            storeFile file("../doc/release.keystore")
+            storePassword "qwerty"
+            keyAlias "onemeter"
+            keyPassword "qwerty"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             proguardFile 'proguard.cfg'
+            signingConfig signingConfigs.onemeter
         }
     }
 

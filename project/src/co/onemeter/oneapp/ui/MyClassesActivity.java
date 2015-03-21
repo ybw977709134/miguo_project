@@ -73,6 +73,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 
             @Override
             protected Void doInBackground(Void... params) {
+            	classrooms.clear();
 //                schoolrooms = talkwebserver.getMySchools(true);
                 errno = talkwebserver.getMySchoolsErrno(true, schoolrooms);
                 return null;

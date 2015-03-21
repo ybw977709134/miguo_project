@@ -80,6 +80,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
     private MyClassAdapter adapter;
     private ListView lvMyClass;
     private int errno;
+    private TextView myclasses_title;
 	
 	
 	@Override
@@ -102,6 +103,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		tvTime = (TextView) findViewById(R.id.class_time);
 		tvPlace = (TextView) findViewById(R.id.class_place);
 		tvLength = (TextView) findViewById(R.id.class_length);
+		myclasses_title = (TextView) findViewById(R.id.myclasses_title);
 //		lvTeachers = (HorizontalListView) findViewById(R.id.hor_lv_teachers);
 		layout_main_drawer = (DrawerLayout) findViewById(R.id.layout_main_drawer);
 		layout_main_leftdrawer = (RelativeLayout) findViewById(R.id.layout_main_leftdrawer);
@@ -172,8 +174,21 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		lvLessonTable.setOnItemClickListener(this);
 		
 		classrooms = new LinkedList<GroupChatRoom>();
-		lvMyClass.setOnItemClickListener(this);
+		lvMyClass.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				classId = classrooms.get(position).groupID;
+				myclasses_title.setText(classrooms.get(position).groupNameOriginal);
+				layout_main_drawer.closeDrawer(layout_main_leftdrawer);
+				getLessonInfo();
+				setClassInfo();
+				
+			}
+		});
 		lvMyClass.setEmptyView(this.findViewById(R.id.loading));
+		lvMyClass.addFooterView(footerView());
 		schoolrooms = new ArrayList<GroupChatRoom>();
 		
 		TextView tv_class_live = (TextView) findViewById(R.id.class_live_class);
@@ -205,6 +220,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 
             @Override
             protected Void doInBackground(Void... params) {
+            	schoolrooms.clear();
 //                schoolrooms = talkwebserver.getMySchools(true);
                 errno = mWTWebSer.getMySchoolsErrno(true, schoolrooms);
                 return null;
@@ -218,6 +234,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 
                         @Override
                         protected Void doInBackground(Void... params) {
+                        	classrooms.clear();
                             for (GroupChatRoom school : schoolrooms) {
                                 List<GroupChatRoom> claz = mWTWebSer.getSchoolClassRooms(school.groupID);
                                 for (GroupChatRoom classroom : claz) {
@@ -276,6 +293,15 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		return str.split(Constants.COMMA);
 	}
 	
+	private View footerView() {
+		View view = getLayoutInflater().inflate(R.layout.drawerlay_lv_footer, null);
+		TextView txt_footer = (TextView) view.findViewById(R.id.txt_footer_add);
+		txt_footer.setText(getString(R.string.class_add_classes));
+		LinearLayout layout = (LinearLayout) view.findViewById(R.id.lay_footer_add);
+		layout.setOnClickListener(this);
+		
+		return view;
+	}
 	private void setClassInfo(){
 		final Handler hanlder = new Handler();
 		
@@ -327,15 +353,14 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		switch (v.getId()) {
 
 		case R.id.btn_myclass_addclass:
-//			finish();
 			layout_main_drawer.openDrawer(layout_main_leftdrawer);
-			layout_main_show.setEnabled(false);
+			getSchoolClassInfo();
 			break;
 		case R.id.class_live_class:
 			currentTime = System.currentTimeMillis()/1000;
 			String time = tvTime.getText().toString().substring(5);
 			String length = tvLength.getText().toString().substring(5);	
-			if(TextUtils.isEmpty(time) && TextUtils.isEmpty(length)){
+			if(lessons.isEmpty()){
 				Builder alertDialog = new AlertDialog.Builder(ClassDetailActivity.this);
     			alertDialog.setTitle("提示");
     			alertDialog.setMessage("现在没有课程正在直播");
@@ -375,6 +400,14 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			break;
 		case R.id.more:
 			showMore(v);
+			break;
+		case R.id.btn_gotoclass:
+			Intent intent = new Intent(this,TimelineActivity.class);
+			startActivity(intent);
+			break;
+		case R.id.lay_footer_add:
+			Intent i = new Intent(this,AddClassActivity.class);
+			startActivity(i);
 			break;
 		default:
 			break;
@@ -487,6 +520,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		intent.putExtra("classLength", classLength);
 		intent.putExtra("onResume", isOnResume);
 		startActivity(intent);
+
+		
 	}
 	
 	class TeachersAdapter extends BaseAdapter{

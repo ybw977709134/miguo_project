@@ -359,7 +359,7 @@
             android:layout_height="match_parent"
             android:background="@color/white"
             android:cacheColorHint="#00000000"
-            android:divider="@drawable/divider" >
+            android:divider="@null"  >
         </ListView>
         <ProgressBar 
             android:id="@+id/loading"

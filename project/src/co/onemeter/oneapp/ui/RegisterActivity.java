@@ -186,7 +186,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
-					edtAccount.setText("");
+//					edtAccount.setText("");
 				} else {
 					field_clear_account.setVisibility(View.GONE);
 				}

@@ -10,25 +10,29 @@ import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
 import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
+import android.view.View.OnTouchListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class FindPasswordEmialActivity extends Activity implements OnClickListener{
 	
+	private RelativeLayout layout_find_password;
 	
 	private ImageButton title_back;
 	private TextView textView_findPassword_back;//返回
@@ -68,7 +72,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 		private Button btn_newPassWord_ok;//提交重新设置后的密码
 	
 	
-	
+	InputMethodManager mInputMethodManager ;
 	private MessageBox mMsgBox;
 	private int time;
 	private Timer mTimer;
@@ -92,9 +96,80 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 		setContentView(R.layout.activity_find_password_email);
 		mMsgBox = new MessageBox(this);
 		initView();
+		
+		mInputMethodManager = (InputMethodManager) this
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        
+		txt_bind_account.setFocusable(true);
+		txt_bind_account.setFocusableInTouchMode(true);
+		txt_bind_account.requestFocus();
+        
+        Handler hanlder = new Handler();
+        hanlder.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {		
+				mInputMethodManager.showSoftInput(txt_bind_account, InputMethodManager.RESULT_SHOWN);
+				mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+			}
+		}, 200);
 	}
 	
+	
+	@Override
+	protected void onDestroy() {
+		closeSoftKeyboard();
+		super.onDestroy();
+	}
+	
+	
+	/**
+	 * 重写onTouchEvent方法，获得向下点击事件，隐藏输入法
+	 */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+    	  if(event.getAction() == MotionEvent.ACTION_DOWN){  
+    		  if(getCurrentFocus()!=null && getCurrentFocus().getWindowToken()!=null){  
+//    			  mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);  
+    			  closeSoftKeyboard();
+    			  
+    			  }
+    		  }
+    	return super.onTouchEvent(event);
+    }
+    
+    private void closeSoftKeyboard() {
+    	if (txt_bind_email.hasFocus()) {
+    		mInputMethodManager.hideSoftInputFromWindow(txt_bind_email.getWindowToken() , 0);
+    	}
+    	
+    	if (txt_bind_account.hasFocus()) {
+    		mInputMethodManager.hideSoftInputFromWindow(txt_bind_account.getWindowToken() , 0);
+    	}
+    	
+    	if (txt_auth_code.hasFocus()) {
+    		mInputMethodManager.hideSoftInputFromWindow(txt_auth_code.getWindowToken() , 0);
+    	}
+		
+    }
+	
 	private void initView() {
+		
+		layout_find_password = (RelativeLayout) findViewById(R.id.layout_find_password);
+		
+		//点击布局时，使得布局获得事件的焦点
+		layout_find_password.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				layout_find_password.setFocusable(true);
+				layout_find_password.setFocusableInTouchMode(true);
+				layout_find_password.requestFocus();
+				return false;
+			}
+		});
+		
 		title_back = (ImageButton) findViewById(R.id.title_back);
 		textView_findPassword_back = (TextView) findViewById(R.id.textView_findPassword_back);
 		textView_findPassword_cancel = (TextView) findViewById(R.id.textView_findPassword_cancel);
@@ -165,6 +240,20 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 			}
 		});
     	
+    	txt_bind_account.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+//					txt_bind_account.setText("");
+				} else {
+					field_clear_account.setVisibility(View.GONE);
+					mInputMethodManager.hideSoftInputFromWindow(txt_bind_account.getWindowToken() , 0);
+				}
+				
+			}
+		});
+    	
     	//输入绑定邮箱时，清除图片按钮的控制
     	txt_bind_email.addTextChangedListener(new TextWatcher() {
 			
@@ -191,6 +280,21 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 			public void afterTextChanged(Editable s) {
 			}
 		});
+    	
+    	txt_bind_email.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+//					txt_bind_email.setText("");
+				} else {
+					field_clear_email.setVisibility(View.GONE);
+					mInputMethodManager.hideSoftInputFromWindow(txt_bind_email.getWindowToken() , 0);
+				}
+				
+			}
+		});
+    	
     	
     	//输入验证码时，清除图片按钮的控制
     	txt_auth_code.addTextChangedListener(new TextWatcher() {
@@ -219,6 +323,20 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 			}
 		});
     	
+    	
+    	txt_auth_code.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+//					txt_auth_code.setText("");
+				} else {
+					field_clear_auth_code.setVisibility(View.GONE);
+					mInputMethodManager.hideSoftInputFromWindow(txt_auth_code.getWindowToken() , 0);
+				}
+				
+			}
+		});
 		
 		title_back.setOnClickListener(this);
 		textView_findPassword_back.setOnClickListener(this);
@@ -264,12 +382,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 			
 		//验证验证码	
 		case R.id.btn_verification_auth_code:
-			//成功时
-			checkCodeRetrievePassword(txt_bind_account.getText().toString(),txt_auth_code.getText().toString());		
-			
-//			layout_verification_auth_code.setVisibility(View.GONE);
-//			layout_reset_password.setVisibility(View.VISIBLE);
-						
+			checkCodeRetrievePassword(txt_bind_account.getText().toString(),txt_auth_code.getText().toString());			
 			break;
 						
 		//重新获得验证码	

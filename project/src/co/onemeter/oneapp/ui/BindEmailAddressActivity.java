@@ -269,7 +269,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
-					txt_bind_email.setText("");
+//					txt_bind_email.setText("");
 				} else {
 					field_clear_email.setVisibility(View.GONE);
 					mInputMethodManager.hideSoftInputFromWindow(txt_bind_email.getWindowToken() , 0);
@@ -311,7 +311,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
-					txt_auth_code.setText("");
+//					txt_auth_code.setText("");
 				} else {
 					field_clear_auth_code.setVisibility(View.GONE);
 					mInputMethodManager.hideSoftInputFromWindow(txt_auth_code.getWindowToken() , 0);

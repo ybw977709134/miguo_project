@@ -58,6 +58,9 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 //        }
 //    };
 
+    private int mCurrentPagePosition = 1;//用于记录viewpager的当前位置
+    private boolean mIsChanged = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,10 +72,17 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
         imgIds = new int[] {R.drawable.home_banner1,R.drawable.home_banner2};
 
-        int len = imgIds.length;
-        for (int i = 0;i < len; i ++){
+        final int len = imgIds.length;
+        final int pagerlen = len + 2;
+        for (int i = 0;i < pagerlen; i ++){
             ImageView imageView = new ImageView(this);
-            imageView.setImageResource(imgIds[i]);
+            if (i == 0){
+                imageView.setImageResource(imgIds[len - 1]);
+            }else if(i == pagerlen - 1){
+                imageView.setImageResource(imgIds[0]);
+            }else{
+                imageView.setImageResource(imgIds[i - 1]);
+            }
             pageviews.add(imageView);
         }
 
@@ -80,6 +90,8 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
         viewPager_home.setAdapter(new HeaderPagerAadapter());
 
+        final int first_pos = 1;
+        final int last_pos = len - 1;
         viewPager_home.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i2) {
@@ -87,16 +99,31 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             }
 
             @Override
-            public void onPageSelected(int i) {
-                setCurDot(i % pageviews.size());
+            public void onPageSelected(int pos) {
+                mIsChanged = true;
+                if(pos < first_pos){
+                    mCurrentPagePosition = len;
+                    setCurDot(len - 1);
+                }else if(pos > len){
+                    mCurrentPagePosition = first_pos;
+                    setCurDot(0);
+                }else{
+                    mCurrentPagePosition = pos;
+                    setCurDot(pos - 1);
+                }
             }
 
             @Override
-            public void onPageScrollStateChanged(int i) {
-
+            public void onPageScrollStateChanged(int status) {
+                if (ViewPager.SCROLL_STATE_IDLE == status) {
+                    if (mIsChanged) {
+                        mIsChanged = false;
+                        viewPager_home.setCurrentItem(mCurrentPagePosition, false);
+                    }
+                }
             }
         });
-
+        viewPager_home.setCurrentItem(1,false);
         viewPager_home.setCycle(true);
         viewPager_home.setSlideBorderMode(AutoScrollViewPager.SLIDE_BORDER_MODE_CYCLE);
         viewPager_home.setBorderAnimation(true);
@@ -239,6 +266,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             case R.id.img_home_answerquestion:
                 break;
             case R.id.img_home_chatroom:
+                intent = new Intent(this,ParentChatroomActivity.class);
                 break;
             case R.id.img_home_movable:
                 break;

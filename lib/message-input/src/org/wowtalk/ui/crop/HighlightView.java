@@ -52,7 +52,7 @@ class HighlightView {
 
     private static final int DEFAULT_HIGHLIGHT_COLOR = 0xFF33B5E5;
     private static final float HANDLE_RADIUS_DP = 12f;
-    private static final float OUTLINE_DP = 2f;
+    private static final float OUTLINE_DP = 2.5f;
 
     enum ModifyMode { None, Move, Grow }
     enum HandleMode { Changing, Always, Never }

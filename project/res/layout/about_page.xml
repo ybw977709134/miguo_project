@@ -12,10 +12,23 @@
         <ImageButton
             android:id="@+id/title_back"
             android:layout_height="50dp"
-            android:layout_width="50dp"
+            android:layout_width="20dp"
             android:layout_alignParentLeft="true"
             android:background="@null"
             android:src="@drawable/nav_back_selector"/>
+        
+        <TextView 
+		    android:id="@+id/textView_about_back"
+		    android:layout_width="wrap_content"
+		    android:layout_height="match_parent"
+		    android:layout_toRightOf="@id/title_back"
+		  	android:gravity="center_vertical"
+		  	android:textSize="20sp"
+		  	android:clickable="true"
+		   	android:textColor="@color/white"
+		    android:text="@string/settings_pagetitle" />
+        
+        
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -48,7 +61,7 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:textSize="25sp"
-            android:textColor="@color/green"
+            android:textColor="@color/blue_18"
             android:text="@string/logo_name"/>
         
         <!--  去掉了分隔线
@@ -93,7 +106,7 @@
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"        
-                android:textColor="@color/black"
+                android:textColor="@color/black_24"
                 android:textSize="18sp"
                 android:text="@string/version_info_new"/>
             <TextView
@@ -101,7 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_marginLeft="2dp"
-                android:textColor="@color/black"
+                android:textColor="@color/black_24"
                 android:textSize="18sp"/>        
         </LinearLayout>
         
@@ -183,9 +196,9 @@
             android:layout_width="wrap_content"
             android:layout_marginBottom="20dp"
             android:gravity="center"
-            android:shadowColor="@color/black"
+            android:shadowColor="@color/gray_40"
             android:shadowDy="1"
-            android:textColor="@color/black"
+            android:textColor="@color/gray_40"
             android:textSize="15sp"
             android:text="@string/copyright_info"/>
     </LinearLayout>

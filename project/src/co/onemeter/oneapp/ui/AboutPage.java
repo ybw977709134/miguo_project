@@ -21,14 +21,17 @@ public class AboutPage extends Activity implements OnClickListener{
     private static final String SUPPORT_EMAIL_ADD = "support@onemeter.co";
 
     private ImageButton btnTitleBack;
+    private TextView textView_about_back;
     private TextView txtVersion;
     private MessageBox mMsgBox;
 
     private void initView() {
         btnTitleBack = (ImageButton) findViewById(R.id.title_back);
+        textView_about_back = (TextView) findViewById(R.id.textView_about_back);
         txtVersion = (TextView) findViewById(R.id.txt_version);
         txtVersion.setText(getVersion(false));
         btnTitleBack.setOnClickListener(this);
+        textView_about_back.setOnClickListener(this);
         findViewById(R.id.app_support_layout).setOnClickListener(this);
     }
 
@@ -59,6 +62,7 @@ public class AboutPage extends Activity implements OnClickListener{
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.title_back:
+            case R.id.textView_about_back:
                 finish();
                 break;
             case R.id.app_support_layout:

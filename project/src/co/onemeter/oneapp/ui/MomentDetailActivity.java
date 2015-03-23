@@ -23,6 +23,7 @@ import co.onemeter.utils.AsyncTaskExecutor;
 
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 import org.wowtalk.ui.msg.InputBoardManager;
@@ -585,19 +586,36 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     }
 
     private void confirmDeleteMoment() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.contacts_local_delete)
-                .setMessage(R.string.delete_moment)
-                .setPositiveButton(R.string.msg_ok,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(
-                                    DialogInterface dialog,
-                                    int whichButton) {
-                                doDeleteMoment();
-                            }
-                        })
-                .setNegativeButton(R.string.msg_cancel, null)
-                .show();
+    	
+//        new AlertDialog.Builder(this)
+//                .setTitle(R.string.contacts_local_delete)
+//                .setMessage(R.string.delete_moment)
+//                .setPositiveButton(R.string.msg_ok,
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(
+//                                    DialogInterface dialog,
+//                                    int whichButton) {
+//                                doDeleteMoment();
+//                            }
+//                        })
+//                .setNegativeButton(R.string.msg_cancel, null)
+//                .show();
+        
+        
+        MessageDialog dialog = new MessageDialog(MomentDetailActivity.this);
+        dialog.setTitle("");
+        dialog.setMessage("删除这条分享？");
+//        dialog.getBtnCancel().setTextColor(getResources().getColor(R.color.red_30));
+        dialog.setOnLeftClickListener("取消", null);
+        dialog.setOnRightClickListener("删除", new MessageDialog.MessageDialogClickListener() {
+            @Override
+            public void onclick(MessageDialog dialog) {
+                dialog.dismiss();
+                doDeleteMoment();
+            }
+        });
+        dialog.show();
+        
     }
 
     private void doDeleteMoment() {

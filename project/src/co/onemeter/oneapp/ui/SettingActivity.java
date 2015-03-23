@@ -310,10 +310,7 @@ public class SettingActivity extends Activity implements OnClickListener {
 //        } else {
 //        	findViewById(R.id.imageView_tag_tea).setVisibility(View.GONE);
 //        }
-        
-        
-       
-        
+
         initView();
     }
 

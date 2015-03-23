@@ -395,26 +395,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 		//取消
 		case R.id.textView_findPassword_cancel:
 			
-//			Builder builder = new AlertDialog.Builder(this);
-//			builder.setTitle("提示");
-//			builder.setMessage("你确定要取消绑定邮箱吗？");
-//			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//				
-//				@Override
-//				public void onClick(DialogInterface arg0, int arg1) {
-//					unBindEmailAddress();
-//					Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
-//					startActivity(intent);
-////					finish();
-//				}
-//			});
-//			
-//			builder.setNegativeButton("取消", null);
-//			builder.create().show();
-			
-			
 			 MessageDialog dialog = new MessageDialog(BindEmailAddressActivity.this);
-			 dialog.setTitle("");
              dialog.setMessage("你确定要取消绑定邮箱吗？");
              dialog.setOnRightClickListener("取消", null);
              dialog.setOnLeftClickListener("确定", new MessageDialog.MessageDialogClickListener() {
@@ -427,8 +408,6 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                  }
              });
              dialog.show();
-			
-			
 			break;
 			
 		//验证绑定邮箱	

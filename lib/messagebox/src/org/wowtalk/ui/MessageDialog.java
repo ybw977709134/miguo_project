@@ -36,6 +36,12 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
         void onclick(MessageDialog dialog);
     }
 
+    
+    private Button btn_ok;
+    private Button btn_cancel;
+    private Button btn_single;
+    private TextView txt_title;
+    
     private Context mContext;
     private MessageDialogClickListener mOnOkClickListener;
     private MessageDialogClickListener mCancelListener;
@@ -86,10 +92,10 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
             findViewById(R.id.lay_btn_single).setVisibility(View.VISIBLE);
         }
 
-        Button btn_ok = (Button) findViewById(R.id.buttonOK);
-        Button btn_cancel = (Button) findViewById(R.id.btnCancel);
-        Button btn_single = (Button) findViewById(R.id.btnOK_single);
-        TextView txt_title = (TextView) findViewById(R.id.txt_title);
+        btn_ok = (Button) findViewById(R.id.buttonOK);
+        btn_cancel = (Button) findViewById(R.id.btnCancel);
+        btn_single = (Button) findViewById(R.id.btnOK_single);
+         txt_title = (TextView) findViewById(R.id.txt_title);
 
         btn_ok.setOnClickListener(this);
         btn_cancel.setOnClickListener(this);
@@ -135,6 +141,9 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
         this.mMsg = mContext.getString(strId);
     }
 
+    public Button getBtnCancel(){
+    	return btn_cancel;
+    }
     public void setOnRightClickListener(String txt, MessageDialogClickListener listener){
         mCancelListener = listener;
         if(txt != null){

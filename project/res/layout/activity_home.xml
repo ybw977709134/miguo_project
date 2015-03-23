@@ -120,7 +120,8 @@
                                     android:background="@drawable/btn_home_classnotice"
                                     android:gravity="center"
                                     android:text="99"
-                                    android:textColor="@color/white"/>
+                                    android:textColor="@color/white"
+                                    android:visibility="gone"/>
 
                             </RelativeLayout>
 
@@ -155,7 +156,7 @@
                                     android:layout_alignTop="@id/img_home_register"
                                     android:background="@drawable/btn_home_classnotice"
                                     android:orientation="horizontal"
-                                    android:visibility="visible">
+                                    android:visibility="gone">
 
                                 </LinearLayout>
                             </RelativeLayout>

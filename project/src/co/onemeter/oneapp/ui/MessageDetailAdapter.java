@@ -5,8 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
@@ -650,7 +648,7 @@ public class MessageDetailAdapter extends BaseAdapter{
             
             //display accoutType flags
             if (holder.imgContactType != null) {
-            	if (sender.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+            	if (sender != null && sender.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
             		holder.imgContactType.setVisibility(View.VISIBLE);
             	} else {
             		holder.imgContactType.setVisibility(View.GONE);

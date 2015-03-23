@@ -97,11 +97,13 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
 
 
         txt_title.setText(mTitle);
+        
         TextView txt_msg = (TextView) findViewById(R.id.txt_msg);
         if (!mIsDouleBtn){
              txt_msg.setGravity(Gravity.CENTER);
         }
         if(mTitle.length() == 0){
+        	txt_title.setVisibility(View.GONE);
             txt_msg.setGravity(Gravity.CENTER);
         }
         txt_msg.setText(mMsg);
@@ -110,27 +112,27 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
         btn_single.setText(mBtnLeftText);
     }
 
-    public void setOnLeftClickListener(String txt, MessageDialogClickListener listener){
+    public void setOnLeftClickListener(String txt, MessageDialogClickListener listener) {
         mOnOkClickListener = listener;
-        if(txt != null){
+        if(txt != null) {
             mBtnLeftText = txt;
         }
     }
 
     public void setTitle(String title){
-        mTitle = title;
+        this.mTitle = title;
     }
 
     public void setTitle(int strId){
-        mTitle = mContext.getString(strId);
+        this.mTitle = mContext.getString(strId);
     }
 
     public void setMessage(String message){
-        mMsg = message;
+        this.mMsg = message;
     }
 
     public void setMessage(int strId){
-        mMsg = mContext.getString(strId);
+        this.mMsg = mContext.getString(strId);
     }
 
     public void setOnRightClickListener(String txt, MessageDialogClickListener listener){
@@ -138,6 +140,10 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
         if(txt != null){
             mBtnRightText = txt;
         }
+    }
+    
+    public void setIsDouleBtn(boolean mIsDouleBtn) {
+    	this.mIsDouleBtn = mIsDouleBtn;
     }
 
     @Override

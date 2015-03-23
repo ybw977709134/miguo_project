@@ -251,7 +251,7 @@
 	<string name="settings_account_phone_used_by_others">您要绑定的手机号码已经绑定到其它帐号</string>
 	<string name="settings_account_passwd_format_error">密码格式不正确，可以使用6-20个字母，数字，下划线和减号</string>
 	<string name="settings_account_pwdConfrim_format_error">密码格式不正确，可以使用6-20个字母，数字，下划线和减号</string>
-	<string name="settings_account_type_select">未选择账号类型</string>
+	<string name="settings_account_type_select">请选择账号类型</string>
 	<string name="settings_account_passwd_retypo">两次输入的密码不一致</string>
 	<string name="settings_account_logout_without_set_id_pwd">为了能够再次登录，请您先设置用户 ID和登录密码后再退出</string>
 	<string name="settings_account_verification_code_empty">验证码不能为空</string>
@@ -388,18 +388,18 @@
     
     <string name="register_pwd_must_fit">两次输入的密码不一致</string>
     <string name="register_cofrimPwd_must_fit">请输入确认密码</string>
-    <string name="register_username_empty">帐号不能为空，可以使用2-20个字母、数字、下划线和减号</string>
-    <string name="register_username_less">帐号最少为2位，可以使用2-20个字母、数字、下划线和减号</string>
-    <string name="register_username_more">帐号最多20位，可以使用2-20个字母、数字、下划线和减号</string>
+    <string name="register_username_empty">帐号不能为空，可以使用2-20位字母、数字、下划线和减号</string>
+    <string name="register_username_less">帐号最少为2位，可以使用2-20位字母、数字、下划线和减号</string>
+    <string name="register_username_more">帐号最多20位，可以使用2-20位字母、数字、下划线和减号</string>
     
     
-    <string name="register_password_empty">密码不能为空，可以使用6-20个字母、数字、下划线和减号</string>
-    <string name="register_password_less">密码最少为6位，可以使用6-20个字母、数字、下划线和减号</string>
-    <string name="register_password_more">密码最多为20位，可以使用6-20个字母、数字、下划线和减号</string>
+    <string name="register_password_empty">密码不能为空，可以使用6-20位字母、数字、下划线和减号</string>
+    <string name="register_password_less">密码最少为6位，可以使用6-20位字母、数字、下划线和减号</string>
+    <string name="register_password_more">密码最多为20位，可以使用6-20位字母、数字、下划线和减号</string>
     
-    <string name="register_pwdConfrim_empty">确认密码不能为空，可以使用6-20个字母、数字、下划线和减号</string>
-    <string name="register_pwdConfrim_less">确认密码最少为6位，可以使用6-20个字母、数字、下划线和减号</string>
-    <string name="register_pwdConfrim_more">确认密码最多为20位，可以使用6-20个字母、数字、下划线和减号</string>
+    <string name="register_pwdConfrim_empty">确认密码不能为空，可以使用6-20位字母、数字、下划线和减号</string>
+    <string name="register_pwdConfrim_less">确认密码最少为6位，可以使用6-20位字母、数字、下划线和减号</string>
+    <string name="register_pwdConfrim_more">确认密码最多为20位，可以使用6-20位字母、数字、下划线和减号</string>
     
     <string name="register_failure">注册失败</string>
     <string name="register_success">注册成功，正在进入主界面...</string>

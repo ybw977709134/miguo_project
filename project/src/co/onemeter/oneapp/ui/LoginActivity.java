@@ -44,6 +44,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import java.util.ArrayList;
 
@@ -571,57 +572,13 @@ public class LoginActivity extends Activity implements OnClickListener {
             // when displaying Dialogs From Background Threads
             return;
         }
-
-		AlertDialog.Builder dialog = new AlertDialog.Builder(LoginActivity.this);
-		dialog.setTitle(title).setMessage(message);
-		dialog.setPositiveButton(R.string.ok, 
-				new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						
-					}
-				});
-		dialog.create().show();
+		
+		 MessageDialog dialog = new MessageDialog(LoginActivity.this,false,MessageDialog.SIZE_NORMAL);
+         dialog.setTitle(title);
+         dialog.setMessage(message);
+         dialog.show();
         
-//        View view;
-//		view = LayoutInflater.from(context).inflate(R.layout.custom_dialog, null);
-//		TextView button_ok = (TextView) view.findViewById(R.id.textView_ok);
-//		TextView button_cancel = (TextView) view.findViewById(R.id.textView_cancel);
-//		ImageView imageView_dialogLine2 = (ImageView) view.findViewById(R.id.imageView_dialogLine2);
-//		button_cancel.setVisibility(View.GONE);
-//		imageView_dialogLine2.setVisibility(View.GONE);
-//		
-//		
-//		((TextView) view.findViewById(R.id.textView_title)).setText(title);//标题
-//		((TextView) view.findViewById(R.id.textView_message)).setText(message);//消息内容
-//		
-//		final Dialog dialog = new Dialog(context);
-//		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//		
-//		WindowManager.LayoutParams params = dialog.getWindow().getAttributes(); // 得到AlertDialog属性
-//        params.gravity = Gravity.CENTER; // 显示其显示在中间
-//        params.width = (int) (((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth() * 0.5); // 设置对话框的宽度为手机屏幕的0.8，MyTool.getWidth()自己写的一个方法，获取手机屏幕的宽度
-//        params.height = (int) (((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getHeight() * 0.2);// 设置对话框的高度为手机屏幕的0.25
-//        dialog.getWindow().setAttributes(params); //设置属性
-//		dialog.getWindow().setContentView(view);// 把自定义view加上去
-//		
-//		button_ok.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View arg0) {
-//				dialog.dismiss();
-//			}
-//		});
-//		
-//		button_cancel.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View arg0) {
-//				dialog.dismiss();
-//			}
-//		});
-//		dialog.show();
+
 	}
 	
     private void showPopupMenu() {

@@ -222,13 +222,14 @@
             </LinearLayout>
 				
 				
-			<!-- 验证两次输入的密码是否一致 -->
+			<!-- 验证注册新账户的结果 -->
             <TextView
                 android:id="@+id/textView_verification_newPassword" 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
                 android:gravity="center_vertical"
                 android:textColor="@color/red"
                 android:text="两次输入不一致"

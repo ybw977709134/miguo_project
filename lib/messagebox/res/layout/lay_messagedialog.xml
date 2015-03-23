@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:gravity="center"
         android:layout_marginTop="10dp"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textColor="#ff000000"
         android:textStyle="bold"/>
 
@@ -22,12 +22,12 @@
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:text="this is msg"
-        android:textSize="15dp"
+        android:textSize="17sp"
         android:id="@+id/txt_msg"
         android:textColor="#ff000000"
         android:layout_marginTop="10dp"
-        android:paddingLeft="10dp"
-        />
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
 
     <LinearLayout
         android:id="@+id/lay_buttons"
@@ -45,7 +45,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:src="#88bbbbbb"
+                android:src="#ffc8c7cc"
                 />
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,21 +55,23 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
-                    android:text="确    定"
-                    android:textColor="#FF19AAEF"
+                    android:text="确定"
+                    android:textSize="17sp"
+                    android:textColor="#FF0079ff"
                     android:id="@+id/buttonOK"
                     android:padding="5dp"
                     android:background="@drawable/sel_dialog_btn_l"/>
 
                 <ImageView android:layout_height="match_parent"
                     android:layout_width="1dp"
-                    android:src="#88bbbbbb"/>
+                    android:src="#ffc8c7cc"/>
                 <Button
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
-                    android:textColor="#FF19AAEF"
-                    android:text="取    消"
+                    android:textColor="#FF0079ff"
+                    android:text="取消"
+                     android:textSize="17sp"
                     android:id="@+id/btnCancel"
                     android:padding="5dp"
                     android:background="@drawable/sel_dialog_btn_r"/>
@@ -80,17 +82,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone" >
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:src="#88bbbbbb"
-                />
+                android:src="#ffc8c7cc" />
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="#FF19AAEF"
-                android:text="确    定"
+                android:textColor="#FF0079ff"
+                android:text="确定"
+                android:textSize="17sp"
                 android:id="@+id/btnOK_single"
                 android:padding="5dp"
                 android:background="@drawable/sel_dialog_btn_one"/>

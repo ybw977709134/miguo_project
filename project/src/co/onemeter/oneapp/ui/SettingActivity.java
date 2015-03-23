@@ -11,17 +11,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import co.onemeter.oneapp.AppUpgradeService;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.utils.AppUpgradeTask;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
-
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
@@ -45,9 +42,6 @@ public class SettingActivity extends Activity implements OnClickListener {
 
     private WowTalkWebServerIF mWeb;
     private PrefUtil mPrefUtil;
-
-    private AppUpgradeTask mUpgradeTask;
-
 
     private ArrayList<Account> mAccountDatas;
 
@@ -166,22 +160,7 @@ public class SettingActivity extends Activity implements OnClickListener {
                 break;
             case R.id.settings_upgrade_check_for_updates:
                 StartActivity.instance().changeNewUpdateFlagView(View.GONE);
-                if (null != mUpgradeTask && mUpgradeTask.isExecuting()) {
-                    new AlertDialog.Builder(this)
-                            .setMessage(R.string.settings_upgrade_will_you_cancel)
-                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    if (null != mUpgradeTask) {
-                                        mUpgradeTask.cancel(true);
-                                    }
-                                }
-                            })
-                            .setNegativeButton(R.string.cancel, null)
-                            .create().show();
-                } else {
-                    checkForUpdates();
-                }
+                checkForUpdates();
                 break;
             default:
                 break;
@@ -269,10 +248,24 @@ public class SettingActivity extends Activity implements OnClickListener {
                                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
-                                            if (true) { // go to download web page
+                                            // upgrade method:
+                                            // 0 - go to download web page
+                                            // 1 - auto download apk and install it later
+                                            // 2 - go to market
+                                            final int method = 1;
+
+                                            if (method == 0) { // go to download web page
                                                 startActivity(new Intent(
                                                         Intent.ACTION_VIEW,
                                                         Uri.parse("http://www.onemeter.co/dl/")));
+                                            } else if (method == 1) {
+                                                String destFilename = getExternalCacheDir()
+                                                        + "/om_im_" + updatesInfo.versionCode + ".apk";
+                                                startService(new Intent(SettingActivity.this, AppUpgradeService.class)
+                                                                .putExtra(AppUpgradeService.EXTRA_URL, updatesInfo.link)
+                                                                .putExtra(AppUpgradeService.EXTRA_MD5SUM, updatesInfo.md5sum)
+                                                                .putExtra(AppUpgradeService.EXTRA_DEST_FILENAME, destFilename)
+                                                );
                                             } else { // go to market
                                                 Intent intent = new Intent(Intent.ACTION_VIEW);
                                                 intent.setData(Uri.parse("market://details?id=" + getPackageName()));

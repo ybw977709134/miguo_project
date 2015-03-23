@@ -950,5 +950,9 @@
     <string name="change_alias">修改备注名</string>
     <string name="change_alias_info">好的备注名(长度小于30个字符)可以让你更容易记住好友。</string>
     <string name="fix_alias_success">修改备注名成功</string>
+	<string name="upgrade_downloading">正在下载升级包</string>
+	<string name="upgrade_failed_md5sum">升级包校验失败</string>
+	<string name="upgrade_failed_download">升级包下载失败</string>
+	<string name="upgrade_failed_unknown">升级失败</string>
 
 </resources>

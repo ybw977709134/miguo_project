@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="co.onemeter.oneapp"
           android:versionCode="10"
-          android:versionName="2.6.5.0313" >
+          android:versionName="2.6.5.0323" >
 	<!-- 版本号规则：双周发布 x.x.5，单周测试 x.x.0 -->
 
 	<!-- 在 Android 2.3 上，PullToRefreshListView 产生 stack overflow 错误。 -->
@@ -83,8 +83,11 @@
 			android:label="WowTalk Notification Center" />
 
 		<service
+			android:name=".AppUpgradeService"
+			android:label="Upgrade" />
+		<service
 			android:name=".ui.PublishMomentService"
-			android:label="WowTalk DownloadingAndUploading Worker" />
+			android:label="Publish Moment" />
         <service
             android:name=".ui.AppStatusService"/>
 

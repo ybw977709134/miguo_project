@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Message;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.view.PagerAdapter;
@@ -20,8 +19,6 @@ import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.widget.AutoScrollViewPager;
 import co.onemeter.utils.AsyncTaskExecutor;
-
-import org.wowtalk.*;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.UpdatesInfo;
 import org.wowtalk.api.WowTalkWebServerIF;
@@ -39,6 +36,7 @@ import java.util.Map;
 public class HomeActivity extends Activity implements View.OnClickListener {
 
     public static final int REQ_TAKE_PHO = 1001;
+    private static final int REQ_SETTINGS = 1002;
 
     MessageBox msgbox;
 //    private static final int BIND_EMAIL_REQUEST_CODE = 1;
@@ -69,6 +67,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
     private int mCurrentPagePosition = 1;//用于记录viewpager的当前位置
     private boolean mIsChanged = false;
+    private boolean appUpdatesAvailable;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -274,8 +273,9 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.btn_home_setting:
-                intent = new Intent(this,SettingActivity.class);
-                startActivity(intent);
+                intent = new Intent(this,SettingActivity.class)
+                        .putExtra(SettingActivity.EXTRA_APP_UPDATES_AVAILABLE, appUpdatesAvailable);
+                startActivityForResult(intent, REQ_SETTINGS);
                 break;
 
             case R.id.img_home_classnotice:
@@ -323,7 +323,22 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                             .setData(mLastImageUri)
                             .putExtra(ParentChatroomActivity.FLAG_HOMEWORK, true));
                     break;
+                case REQ_SETTINGS:
+                    if (resultCode == RESULT_OK && data != null) {
+                        appUpdatesAvailable = data.getBooleanExtra(
+                                SettingActivity.EXTRA_APP_UPDATES_AVAILABLE, appUpdatesAvailable);
+                        updateUi();
+                    }
+                    break;
             }
+        }
+    }
+
+    private void updateUi() {
+        if (appUpdatesAvailable) {
+            changeNewUpdateFlagView(View.VISIBLE);
+        } else {
+            changeNewUpdateFlagView(View.GONE);
         }
     }
 
@@ -357,11 +372,8 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                         int currVerCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
                         org.wowtalk.Log.i("checkAppUpdate when start app, the currVercode is " + currVerCode + ", the remoteVersion is " + updatesInfo.versionCode);
                         // There is new version of the app.
-                        if (currVerCode < updatesInfo.versionCode) {
-                            changeNewUpdateFlagView(View.VISIBLE);
-                        } else {
-                            changeNewUpdateFlagView(View.GONE);
-                        }
+                        appUpdatesAvailable = currVerCode < updatesInfo.versionCode;
+                        updateUi();
                     }
                     catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();

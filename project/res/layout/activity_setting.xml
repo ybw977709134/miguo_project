@@ -135,11 +135,30 @@
 				android:layout_marginTop="@dimen/padding_large"
 				style="@style/bg_section_divider_line_dark"/>
 
-			<TextView
+			<RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
 				android:id="@+id/settings_upgrade_check_for_updates"
-				android:text="@string/settings_upgrade_check_for_updates"
-				style="@style/standard_list_item_with_arrow"/>
-			
+				style="@style/standard_list_item"
+				android:padding="0dp">
+				<FrameLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content">
+
+					<TextView
+						android:text="@string/settings_upgrade_check_for_updates"
+						style="@style/standard_list_item"
+						android:layout_marginRight="20dp"/>
+
+					<ImageView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:id="@+id/app_updates_available_indicator"
+						android:src="@drawable/btn_home_classnotice"
+						android:layout_gravity="right|center_vertical"/>
+				</FrameLayout>
+			</RelativeLayout>
+
 			<ImageView
 				style="@style/bg_section_divider_line_light"/>
 

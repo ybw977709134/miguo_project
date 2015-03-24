@@ -1,8 +1,6 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -17,10 +15,8 @@ import co.onemeter.oneapp.AppUpgradeService;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
-
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
@@ -34,8 +30,12 @@ public class SettingActivity extends Activity implements OnClickListener {
 
     private static final int MSG_LOGOUT_SUCCESS = 100;
     private static final int HANDLER_GET_ACCOUNT_UNREAD_COUNT = 1;
+    /**
+     * 指示（输入）或回传（输出） app 是否有更新。若有更新，则显示红点。
+     */
+    public static final String EXTRA_APP_UPDATES_AVAILABLE = "app_updates_available";
 
-	private ImageView imgPhoto;
+    private ImageView imgPhoto;
 	private TextView textView_settings_myinfo;
 	
 //	private ImageButton title_back;
@@ -45,6 +45,7 @@ public class SettingActivity extends Activity implements OnClickListener {
 
     private WowTalkWebServerIF mWeb;
     private PrefUtil mPrefUtil;
+    private boolean appUpdatesAvailable;
 
     private ArrayList<Account> mAccountDatas;
 
@@ -93,8 +94,15 @@ public class SettingActivity extends Activity implements OnClickListener {
         q.find(R.id.settings_rate).clicked(this);
         q.find(R.id.settings_about).clicked(this);
 
+        updateUi();
+
         updateNoticeStatus();
 	}
+
+    private void updateUi() {
+        AQuery q = new AQuery(this);
+        q.find(R.id.app_updates_available_indicator).visibility(appUpdatesAvailable ? View.VISIBLE : View.GONE);
+    }
 
     private void updateNoticeStatus() {
         if(PrefUtil.getInstance(this).isSysNoticeEnabled()) {
@@ -234,8 +242,10 @@ public class SettingActivity extends Activity implements OnClickListener {
                         int currVerCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
                         String currVerName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
                         if (currVerCode >= updatesInfo.versionCode) {
+                            appUpdatesAvailable = false;
                             mMsgBox.show(null, getString(R.string.settings_upgrade_is_uptodate));
                         } else {
+                            appUpdatesAvailable = true;
                             StringBuilder sb = new StringBuilder();
                             sb.append(getString(R.string.settings_upgrade_curr_ver_is) + currVerName + "\n");
                             sb.append(getString(R.string.settings_upgrade_latest_ver_is) + updatesInfo.versionName + "\n");
@@ -328,6 +338,9 @@ public class SettingActivity extends Activity implements OnClickListener {
                             dialog.show();
                             
                         }
+
+                        updateUi();
+                        setResult(RESULT_OK, new Intent().putExtra(EXTRA_APP_UPDATES_AVAILABLE, appUpdatesAvailable));
                     }
                     catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
@@ -341,6 +354,12 @@ public class SettingActivity extends Activity implements OnClickListener {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(EXTRA_APP_UPDATES_AVAILABLE, appUpdatesAvailable);
+    }
+
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
@@ -351,6 +370,9 @@ public class SettingActivity extends Activity implements OnClickListener {
         mMsgBox = new MessageBox(this);
         mWeb = WowTalkWebServerIF.getInstance(SettingActivity.this);
         mPrefUtil = PrefUtil.getInstance(this);
+        appUpdatesAvailable = savedInstanceState != null
+                ? savedInstanceState.getBoolean(EXTRA_APP_UPDATES_AVAILABLE)
+                : getIntent().getBooleanExtra(EXTRA_APP_UPDATES_AVAILABLE, false);
         
 //        if (mPrefUtil.getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
 //        	findViewById(R.id.imageView_tag_tea).setVisibility(View.VISIBLE);

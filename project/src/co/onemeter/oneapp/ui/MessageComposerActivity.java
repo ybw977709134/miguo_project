@@ -17,6 +17,10 @@ import org.wowtalk.api.GroupChatRoom;
 
 public class MessageComposerActivity extends MessageComposerActivityBase {
 
+    public static final String LAUCH_WITH_SEND_MSG = "lauch_send_msg";
+    public static final String SEND_PIC_THUMB = "pic_thumb";
+    public static final String SEND_PIC_PATH = "pic_path";
+
     public static final String IS_CLEAR_CHAT_HISTORY = "is_clear_chat_history";
     private static MessageComposerActivity instance;
     private BottomButtonBoard mMenu;
@@ -100,6 +104,13 @@ public class MessageComposerActivity extends MessageComposerActivityBase {
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
+
+        Intent intent = getIntent();
+        boolean isSendMsg = intent.getBooleanExtra(LAUCH_WITH_SEND_MSG,false);
+        if(isSendMsg){
+            fSendMediaMsg_async(intent.getStringExtra(SEND_PIC_PATH), intent.getStringExtra(SEND_PIC_THUMB), 0, ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO);
+            refreshMsgListView(true);
+        }
 	}
 
 	public static  boolean activityIsNull(){

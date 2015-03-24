@@ -2,10 +2,14 @@ package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -16,7 +20,12 @@ import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.widget.AutoScrollViewPager;
 import co.onemeter.utils.AsyncTaskExecutor;
+
+import org.wowtalk.*;
+import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.UpdatesInfo;
 import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
 
@@ -29,7 +38,7 @@ import java.util.Map;
  */
 public class HomeActivity extends Activity implements View.OnClickListener {
 
-    private static final int sLoopMessage = 1001;
+    public static final int REQ_TAKE_PHO = 1001;
 
     MessageBox msgbox;
 //    private static final int BIND_EMAIL_REQUEST_CODE = 1;
@@ -65,6 +74,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        checkAppUpdate();
 
         initView();
 
@@ -139,7 +149,13 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
             @Override
             protected List<Map<String, Object>> doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(HomeActivity.this).fEmailBindStatus();
+                List<Map<String, Object>> reslut = null;
+                try {
+                    reslut = WowTalkWebServerIF.getInstance(HomeActivity.this).fEmailBindStatus();
+                }catch (NullPointerException e){
+
+                }
+                return reslut;
             }
 
             @Override
@@ -242,19 +258,24 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.img_home_event:
                 intent = new Intent(this, EventActivity.class);
+                startActivity(intent);
                 break;
             case R.id.btn_add:
                 intent = new Intent(this,AddClassActivity.class);
+                startActivity(intent);
                 break;
             case R.id.img_home_growth_class:
                 intent = new Intent(this,TimelineActivity.class);
+                startActivity(intent);
                 break;
             case R.id.img_home_friends:
                 intent = new Intent(this,TimelineActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.btn_home_setting:
                 intent = new Intent(this,SettingActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.img_home_classnotice:
@@ -265,20 +286,92 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.img_home_chatroom:
                 intent = new Intent(this,ParentChatroomActivity.class);
+                startActivity(intent);
                 break;
             case R.id.img_home_movable:
                 break;
             case R.id.img_home_homework:
+                takePhoto(this, REQ_TAKE_PHO);
                 break;
             case R.id.btn_goto_myclass:
             	intent = new Intent(HomeActivity.this, MyClassesActivity.class);
+                startActivity(intent);
             	break;
             default:
                 break;
         }
-        if(intent != null){
-            startActivity(intent);
+    }
+    private Uri mLastImageUri;
+    private void takePhoto(Activity activity, int requestCode) {
+        mLastImageUri = Uri.fromFile(MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_IMAGE, ".jpg"));
+        PackageManager pm = activity.getPackageManager();
+        if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mLastImageUri);
+            takePhotoIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.name());
+            activity.startActivityForResult(takePhotoIntent, requestCode);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK){
+            switch (requestCode){
+                case REQ_TAKE_PHO:
+                    startActivity(new Intent(this,ParentChatroomActivity.class)
+                            .setData(mLastImageUri)
+                            .putExtra(ParentChatroomActivity.FLAG_HOMEWORK, true));
+                    break;
+            }
+        }
+    }
+
+    /**
+     * check whether the application needs to update.
+     */
+    private void checkAppUpdate() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+            public UpdatesInfo updatesInfo = new UpdatesInfo();
+
+            @Override
+            protected Integer doInBackground(Void... voids) {
+                try {
+                    WowTalkWebServerIF mWeb = WowTalkWebServerIF.getInstance(HomeActivity.this);
+                    int errno = mWeb.fCheckForUpdates(updatesInfo);
+                    if (ErrorCode.OK != errno)
+                        return errno;
+                    if (0 == updatesInfo.versionCode)
+                        return ErrorCode.BAD_RESPONSE;
+                    return errno;
+                }
+                catch (Exception e) {
+                    return ErrorCode.BAD_RESPONSE;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Integer errno) {
+                if (ErrorCode.OK == errno) {
+                    try {
+                        int currVerCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+                        org.wowtalk.Log.i("checkAppUpdate when start app, the currVercode is " + currVerCode + ", the remoteVersion is " + updatesInfo.versionCode);
+                        // There is new version of the app.
+                        if (currVerCode < updatesInfo.versionCode) {
+                            changeNewUpdateFlagView(View.VISIBLE);
+                        } else {
+                            changeNewUpdateFlagView(View.GONE);
+                        }
+                    }
+                    catch (PackageManager.NameNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private void changeNewUpdateFlagView(int visibility){
+        findViewById(R.id.new_update_info).setVisibility(visibility);
     }
 
     private class HeaderPagerAadapter extends PagerAdapter{

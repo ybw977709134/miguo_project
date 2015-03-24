@@ -839,10 +839,10 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
                 int newReviewsCount = mDb.fetchNewReviews(dummy);
                 if (0 == newReviewsCount) {
                     txt_friends_news.setText("");
-                    txt_friends_news.setVisibility(View.GONE);
+                    //txt_friends_news.setVisibility(View.GONE);
                 } else {
                     txt_friends_news.setText(newReviewsCount <= MAX_COUNTS_ON_TABS ? String.valueOf(newReviewsCount) : MAX_COUNTS_ON_TABS + "+");
-                    txt_friends_news.setVisibility(View.VISIBLE);
+                    //txt_friends_news.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -967,48 +967,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         }
     }
 
-    /**
-     * check whether the application needs to update.
-     */
-    private void checkAppUpdate() {
-        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
-            public UpdatesInfo updatesInfo = new UpdatesInfo();
 
-            @Override
-            protected Integer doInBackground(Void... voids) {
-                try {
-                    int errno = mWeb.fCheckForUpdates(updatesInfo);
-                    if (ErrorCode.OK != errno)
-                        return errno;
-                    if (0 == updatesInfo.versionCode)
-                        return ErrorCode.BAD_RESPONSE;
-                    return errno;
-                }
-                catch (Exception e) {
-                    return ErrorCode.BAD_RESPONSE;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Integer errno) {
-                if (ErrorCode.OK == errno) {
-                    try {
-                        int currVerCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-                        Log.i("checkAppUpdate when start app, the currVercode is " + currVerCode + ", the remoteVersion is " + updatesInfo.versionCode);
-                        // There is new version of the app.
-                        if (currVerCode < updatesInfo.versionCode) {
-                            changeNewUpdateFlagView(View.VISIBLE);
-                        } else {
-                            changeNewUpdateFlagView(View.GONE);
-                        }
-                    }
-                    catch (PackageManager.NameNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
 
     /**
      * 1.get server info:必须在所有的网络操作之前调用。<br>
@@ -1035,9 +994,6 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
                 }
 
                 checkLocalLanguage();
-
-                // check update of version
-                checkAppUpdate();
 
                 getSecurityLevelFromServer();
 

@@ -19,6 +19,7 @@
             android:src="@drawable/icon_back_selector"/>
 
         <TextView
+            android:id="@+id/title_parentchatroom"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_centerInParent="true"

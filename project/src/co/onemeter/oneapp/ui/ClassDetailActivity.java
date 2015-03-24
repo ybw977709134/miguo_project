@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v4.widget.DrawerLayout.LayoutParams;
 import android.text.TextUtils;
 import android.util.Log;
@@ -61,7 +62,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private TextView tvDate;
 	private TextView tvTime;
 	private TextView tvPlace;
-	private TextView tvLength;
+//	private TextView tvLength;
 	private long currentTime;
 	private int lessonId;
 	private String lessonName;
@@ -73,14 +74,18 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	private GroupChatRoom class_group = new GroupChatRoom();
 	private DrawerLayout layout_main_drawer;
 	private RelativeLayout layout_main_leftdrawer;
-	private LinearLayout layout_main_show;
+//	private LinearLayout layout_main_show;
 		
     private List<GroupChatRoom> classrooms;
-    private List<GroupChatRoom> schoolrooms;   
+//    private List<GroupChatRoom> schoolrooms;   
     private MyClassAdapter adapter;
     private ListView lvMyClass;
-    private int errno;
     private TextView myclasses_title;
+    private List<ClassInfo> classInfos;
+    
+    private String end_time;
+    private String start_time;
+    private String schoolId;
 	
 	
 	@Override
@@ -92,6 +97,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		
 		getLessonInfo();
 		setClassInfo();
+		getClassInfo(classId);
 	}
 
 	private void initView(){
@@ -102,12 +108,12 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		tvDate = (TextView) findViewById(R.id.class_date);
 		tvTime = (TextView) findViewById(R.id.class_time);
 		tvPlace = (TextView) findViewById(R.id.class_place);
-		tvLength = (TextView) findViewById(R.id.class_length);
+//		tvLength = (TextView) findViewById(R.id.class_length);
 		myclasses_title = (TextView) findViewById(R.id.myclasses_title);
 //		lvTeachers = (HorizontalListView) findViewById(R.id.hor_lv_teachers);
 		layout_main_drawer = (DrawerLayout) findViewById(R.id.layout_main_drawer);
 		layout_main_leftdrawer = (RelativeLayout) findViewById(R.id.layout_main_leftdrawer);
-		layout_main_show = (LinearLayout) findViewById(R.id.layout_main_show);
+//		layout_main_show = (LinearLayout) findViewById(R.id.layout_main_show);
 		
 		lvMyClass = (ListView) findViewById(R.id.listview_lessons);
 		
@@ -116,6 +122,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		msgBox = new MessageBox(this);
 		query = new AQuery(this);
 		lessons = new LinkedList<Lesson>();
+		classInfos = new LinkedList<ClassInfo>();
 		courseAdapter = new CourseTableAdapter(lessons);
 		
 		
@@ -123,6 +130,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		Intent intent = getIntent();
 //		classId = "0b2f933f-a4d7-44de-a711-569abb04846a";
 		classId = intent.getStringExtra("classId");
+		schoolId = intent.getStringExtra("schoolId");
 		Database db = Database.getInstance(this);
 		parent_group_id = db.getParentGroupId(classId);
 //		members = mdb.fetchGroupMembers(classId);
@@ -179,17 +187,19 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				schoolId = classrooms.get(position).schoolID;
 				classId = classrooms.get(position).groupID;
 				myclasses_title.setText(classrooms.get(position).groupNameOriginal);
 				layout_main_drawer.closeDrawer(layout_main_leftdrawer);
 				getLessonInfo();
 				setClassInfo();
+				getClassInfo(classId);
 				
 			}
 		});
 		lvMyClass.setEmptyView(this.findViewById(R.id.loading));
 		lvMyClass.addFooterView(footerView());
-		schoolrooms = new ArrayList<GroupChatRoom>();
+//		schoolrooms = new ArrayList<GroupChatRoom>();
 		
 		TextView tv_class_live = (TextView) findViewById(R.id.class_live_class);
 		TextView tv_more = (TextView) findViewById(R.id.more);
@@ -201,6 +211,33 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			tv_more.setVisibility(View.GONE);
 		}
 		
+		layout_main_drawer.setDrawerListener(new DrawerListener() {
+			
+			@Override
+			public void onDrawerStateChanged(int arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onDrawerSlide(View arg0, float arg1) {
+//				getSchoolClassInfo();
+				
+			}
+			
+			@Override
+			public void onDrawerOpened(View arg0) {
+				getSchoolClassInfo();
+				
+			}
+			
+			@Override
+			public void onDrawerClosed(View arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 	}
 	
 	@Override
@@ -208,60 +245,77 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		super.onResume();
 		refreshLessonInfo();
 	}
-	
 	private void getSchoolClassInfo(){
-        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
-            protected void onPreExecute() {
-                //msgBox.showWait();
-            }
+			@Override
+			protected Integer doInBackground(Void... params) {
+				classrooms.clear();
+				classrooms.addAll(mWTWebSer.getSchoolClassRooms(null));
+				return null;
+			}
+			
+			@Override
+			protected void onPostExecute(Integer result) {
+				adapter = new MyClassAdapter(classrooms);
+                lvMyClass.setAdapter(adapter);
+			}
 
-            ;
-
-            @Override
-            protected Void doInBackground(Void... params) {
-            	schoolrooms.clear();
-//                schoolrooms = talkwebserver.getMySchools(true);
-                errno = mWTWebSer.getMySchoolsErrno(true, schoolrooms);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                if (errno == ErrorCode.OK) {
-                	new Database(ClassDetailActivity.this).storeSchools(schoolrooms);
-                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
-
-                        @Override
-                        protected Void doInBackground(Void... params) {
-                        	classrooms.clear();
-                            for (GroupChatRoom school : schoolrooms) {
-                                List<GroupChatRoom> claz = mWTWebSer.getSchoolClassRooms(school.groupID);
-                                for (GroupChatRoom classroom : claz) {
-                                    classrooms.add(classroom);
-                                }
-                            }
-                            return null;
-                        }
-
-                        protected void onPostExecute(Void result) {
-                            //msgBox.dismissWait();
-                            adapter = new MyClassAdapter(classrooms);
-                            lvMyClass.setAdapter(adapter);
-                        }
-
-                        ;
-                    });
-                } else {
-                    //msgBox.dismissWait();
-                    Toast.makeText(ClassDetailActivity.this,R.string.conn_time_out,Toast.LENGTH_LONG).show();
-                    finish();
-                }
-            }
-        });
+		});
 	}
+//	private void getSchoolClassInfo(){
+//        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
+//
+//            protected void onPreExecute() {
+//                //msgBox.showWait();
+//            }
+//
+//            ;
+//
+//            @Override
+//            protected Void doInBackground(Void... params) {
+//            	schoolrooms.clear();
+////                schoolrooms = talkwebserver.getMySchools(true);
+//                errno = mWTWebSer.getMySchoolsErrno(true, schoolrooms);
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void result) {
+//                if (errno == ErrorCode.OK) {
+//                	new Database(ClassDetailActivity.this).storeSchools(schoolrooms);
+//                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
+//
+//                        @Override
+//                        protected Void doInBackground(Void... params) {
+//                        	classrooms.clear();
+//                            for (GroupChatRoom school : schoolrooms) {
+//                                List<GroupChatRoom> claz = mWTWebSer.getSchoolClassRooms(school.groupID);
+//                                for (GroupChatRoom classroom : claz) {
+//                                    classrooms.add(classroom);
+//                                }
+//                            }
+//                            return null;
+//                        }
+//
+//                        protected void onPostExecute(Void result) {
+//                            //msgBox.dismissWait();
+//                            adapter = new MyClassAdapter(classrooms);
+//                            lvMyClass.setAdapter(adapter);
+//                        }
+//
+//                        ;
+//                    });
+//                } else {
+//                    //msgBox.dismissWait();
+//                    Toast.makeText(ClassDetailActivity.this,R.string.conn_time_out,Toast.LENGTH_LONG).show();
+//                    finish();
+//                }
+//            }
+//        });
+//	}
 	private void getLessonInfo(){
-			AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 				@Override
 				protected Integer doInBackground(Void... params) {
@@ -276,7 +330,33 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 
 			});
 	}
-	
+	private void getClassInfo(final String classId){
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+
+			@Override
+			protected Integer doInBackground(Void... params) {
+				classInfos.clear();
+				return LessonWebServerIF.getInstance(ClassDetailActivity.this).getClassInfo(classId,classInfos);
+			}
+
+			protected void onPostExecute(Integer result) {
+				if (ErrorCode.OK == result) {
+					String start_date = Utils.stampsToDate(classInfos.get(0).start_day);
+					String end_date = Utils.stampsToDate(classInfos.get(0).end_day);
+					start_time = Utils.stampsToTime(classInfos.get(0).start_time);
+					end_time = Utils.stampsToTime(classInfos.get(0).end_time);
+					final String date = getString(R.string.class_date);
+					final String time = getString(R.string.class_time);
+					if(classInfos.get(0).start_day != 0){
+						tvDate.setText(date + start_date + " - " + end_date);
+					    tvTime.setText(time + start_time + " - " + end_time);
+					}
+					
+				}
+			};
+
+		});
+	}
 	private void refreshLessonInfo(){
 		lessons.clear();
 		Database db = Database.open(ClassDetailActivity.this);
@@ -332,19 +412,19 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		final String term = getString(R.string.class_term);
 		final String grade = getString(R.string.class_grade);
 		final String subject = getString(R.string.class_subject);
-		final String date = getString(R.string.class_date);
-		final String time = getString(R.string.class_time);
+//		final String date = getString(R.string.class_date);
+//		final String time = getString(R.string.class_time);
 		final String place = getString(R.string.class_place);
-		final String length = getString(R.string.class_length);
+//		final String length = getString(R.string.class_length);
 		String[] infos = getStrsByComma(class_group.description);
-		if(null != infos && infos.length == 7){
+		if(null != infos && infos.length == 4){
 			tvTerm.setText(term + infos[0]);
 			tvGrade.setText(grade + infos[1]);
 			tvSubject.setText(subject + infos[2]);
-			tvDate.setText(date + infos[3]);
-			tvTime.setText(time + infos[4]);
-			tvPlace.setText(place + infos[5]);
-			tvLength.setText(length + infos[6]);
+//			tvDate.setText(date + infos[3]);
+//			tvTime.setText(time + infos[4]);
+			tvPlace.setText(place + infos[3]);
+//			tvLength.setText(length + infos[6]);
 		}
 	}
 	
@@ -354,12 +434,12 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 
 		case R.id.btn_myclass_addclass:
 			layout_main_drawer.openDrawer(layout_main_leftdrawer);
-			getSchoolClassInfo();
+//			getSchoolClassInfo();
 			break;
 		case R.id.class_live_class:
 			currentTime = System.currentTimeMillis()/1000;
-			String time = tvTime.getText().toString().substring(5);
-			String length = tvLength.getText().toString().substring(5);	
+//			String time = tvTime.getText().toString().substring(5);
+//			String length = tvLength.getText().toString().substring(5);	
 			if(lessons.isEmpty()){
 				Builder alertDialog = new AlertDialog.Builder(ClassDetailActivity.this);
     			alertDialog.setTitle("提示");
@@ -373,10 +453,13 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
     			});        			
     			alertDialog.create().show();
 			}else{
-				String[] times = time.split(":");
-				String[] lengths = length.split(":");
-				startDateStamps =Integer.parseInt(times[0])*3600 + Integer.parseInt(times[1])*60;
-				endDateStamps =startDateStamps + Integer.parseInt(lengths[0])*3600 + Integer.parseInt(lengths[1])*60;
+//				String[] times = time.split(":");
+//				String[] lengths = length.split(":");
+				String[] startTimes = start_time.split(":");
+				String[] endTimes = end_time.split(":");
+				startDateStamps =Integer.parseInt(startTimes[0])*3600 + Integer.parseInt(startTimes[1])*60;
+				endDateStamps =Integer.parseInt(endTimes[0])*3600 + Integer.parseInt(endTimes[1])*60;
+				
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				for(Lesson lesson:lessons){
 					String date = sdf.format(new Date(lesson.start_date * 1000));
@@ -392,7 +475,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				intent.putExtra("student_live", 1);
 				intent.putExtra("lessonId", lessonId);
 				intent.putExtra("lessonName", lessonName);
-				intent.putExtra("schoolId", parent_group_id);
+				intent.putExtra("schoolId", schoolId);
 				intent.setClass(this, CameraActivity.class);
 				startActivity(intent);
 			}		
@@ -421,31 +504,31 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			final String term = getString(R.string.class_term);
 			final String grade = getString(R.string.class_grade);
 			final String subject = getString(R.string.class_subject);
-			final String date = getString(R.string.class_date);
-			final String time = getString(R.string.class_time);
+//			final String date = getString(R.string.class_date);
+//			final String time = getString(R.string.class_time);
 			final String place = getString(R.string.class_place);
-			final String length = getString(R.string.class_length);
+//			final String length = getString(R.string.class_length);
 			String reTerm = data.getStringExtra(ClassInfoEditActivity.TERM);
 			String reGrade = data.getStringExtra(ClassInfoEditActivity.GRADE);
 			String reSubject = data.getStringExtra(ClassInfoEditActivity.SUBJECT);
-			String reDate = data.getStringExtra(ClassInfoEditActivity.DATE);
-			String reTime = data.getStringExtra(ClassInfoEditActivity.TIME);
+//			String reDate = data.getStringExtra(ClassInfoEditActivity.DATE);
+//			String reTime = data.getStringExtra(ClassInfoEditActivity.TIME);
 			String rePlace = data.getStringExtra(ClassInfoEditActivity.PLACE);
-			String reLength = data.getStringExtra(ClassInfoEditActivity.LENGTH);
+//			String reLength = data.getStringExtra(ClassInfoEditActivity.LENGTH);
 			tvTerm.setText(term + reTerm);
 			tvGrade.setText(grade + reGrade);
 			tvSubject.setText(subject + reSubject);
-			tvDate.setText(date + reDate);
-			tvTime.setText(time + reTime);
+//			tvDate.setText(date + reDate);
+//			tvTime.setText(time + reTime);
 			tvPlace.setText(place + rePlace);
-			tvLength.setText(length + reLength);
+//			tvLength.setText(length + reLength);
 			class_group.description = reTerm + Constants.COMMA + 
 					reGrade + Constants.COMMA + 
 					reSubject + Constants.COMMA +
-					reDate + Constants.COMMA +
-					reTime + Constants.COMMA +
-					rePlace + Constants.COMMA +
-					reLength;			
+					rePlace;
+			
+			getClassInfo(classId);
+		
 		}
 	}
 	
@@ -465,8 +548,15 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                 new OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                    	String reDate = tvDate.getText().toString().substring(3);
+                    	String reTime = tvTime.getText().toString().substring(3);
                         Intent intent = new Intent(ClassDetailActivity.this, ClassInfoEditActivity.class);
                         intent.putExtra("class", class_group);
+                        if(!TextUtils.isEmpty(reDate) && !TextUtils.isEmpty(reTime)){
+                        	intent.putExtra("tvDate", reDate);
+                            intent.putExtra("tvTime", reTime);
+                        }
+                        
                         if(lessons!=null && !lessons.isEmpty()){
                             intent.putExtra("firstlesdate", lessons.get(0).start_date);
                         }
@@ -485,9 +575,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                     	}
                     	Intent intent = new Intent(ClassDetailActivity.this, LessonInfoEditActivity.class);
                     	intent.putExtra("class", class_group);
-                    	intent.putExtra("reLength", tvLength.getText().toString().substring(5));
+//                    	intent.putExtra("reLength", tvLength.getText().toString().substring(5));
                     	Bundle b = new Bundle();
-                    	b.putString("retime", tvTime.getText().toString().substring(5));
+                    	b.putString("retime", tvTime.getText().toString().substring(3));
                     	intent.putExtras(b);
 //                    	intent.putExtra("reTime", tvTime.getText().toString().substring(5));
                         startActivity(intent);
@@ -505,19 +595,19 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		Lesson lesson = lessons.get(position);
 		long startdate = lesson.start_date;
 		long enddate = lesson.end_date;
-		String classTime = tvTime.getText().toString().substring(5); 
-		String classLength = tvLength.getText().toString().substring(5);
+//		String classTime = tvTime.getText().toString().substring(3); 
+//		String classLength = tvLength.getText().toString().substring(5);
 		Intent intent = new Intent();
 		intent.setClass(this, LessonDetailActivity.class);
 		intent.putExtra(Constants.LESSONID, lessons.get(position).lesson_id);
 		intent.putExtra("title", lessons.get(position).title);
 		intent.putExtra("classId", classId);
-		intent.putExtra("schoolId", parent_group_id);
+		intent.putExtra("schoolId", schoolId);
 		intent.putExtra("lesson", lessons.get(position));
 		intent.putExtra("startdate", startdate);
 		intent.putExtra("enddate", enddate);
-		intent.putExtra("classTime", classTime);
-		intent.putExtra("classLength", classLength);
+//		intent.putExtra("classTime", classTime);
+//		intent.putExtra("classLength", classLength);
 		intent.putExtra("onResume", isOnResume);
 		startActivity(intent);
 

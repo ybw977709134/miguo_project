@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.ui.ClassDetailActivity.MyClassAdapter;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.androidquery.AQuery;
@@ -65,54 +66,70 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
         
         schoolrooms = new ArrayList<GroupChatRoom>();
         //这里用两层异步任务，先取到学校的信息，在取班级信息
-        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
+//        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
+//
+//            protected void onPreExecute() {
+//                //msgBox.showWait();
+//            }
+//
+//            ;
+//
+//            @Override
+//            protected Void doInBackground(Void... params) {
+//            	classrooms.clear();
+////                schoolrooms = talkwebserver.getMySchools(true);
+//                errno = talkwebserver.getMySchoolsErrno(true, schoolrooms);
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void result) {
+//                if (errno == ErrorCode.OK) {
+//                	new Database(MyClassesActivity.this).storeSchools(schoolrooms);
+//                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
+//
+//                        @Override
+//                        protected Void doInBackground(Void... params) {
+//                            for (GroupChatRoom school : schoolrooms) {
+//                                List<GroupChatRoom> claz = talkwebserver.getSchoolClassRooms(school.groupID);
+//                                for (GroupChatRoom classroom : claz) {
+//                                    classrooms.add(classroom);
+//                                }
+//                            }
+//                            return null;
+//                        }
+//
+//                        protected void onPostExecute(Void result) {
+//                            //msgBox.dismissWait();
+//                            adapter = new MyClassAdapter(classrooms);
+//                            lvMyClass.setAdapter(adapter);
+//                        }
+//
+//                        ;
+//                    });
+//                } else {
+//                    //msgBox.dismissWait();
+//                    Toast.makeText(MyClassesActivity.this,R.string.conn_time_out,Toast.LENGTH_LONG).show();
+//                    finish();
+//                }
+//            }
+//        });
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
-            protected void onPreExecute() {
-                //msgBox.showWait();
-            }
+			@Override
+			protected Integer doInBackground(Void... params) {
+				classrooms.clear();
+				classrooms.addAll(talkwebserver.getSchoolClassRooms(null));
+				return null;
+			}
+			
+			@Override
+			protected void onPostExecute(Integer result) {
+				adapter = new MyClassAdapter(classrooms);
+                lvMyClass.setAdapter(adapter);
+			}
 
-            ;
-
-            @Override
-            protected Void doInBackground(Void... params) {
-            	classrooms.clear();
-//                schoolrooms = talkwebserver.getMySchools(true);
-                errno = talkwebserver.getMySchoolsErrno(true, schoolrooms);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                if (errno == ErrorCode.OK) {
-                	new Database(MyClassesActivity.this).storeSchools(schoolrooms);
-                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
-
-                        @Override
-                        protected Void doInBackground(Void... params) {
-                            for (GroupChatRoom school : schoolrooms) {
-                                List<GroupChatRoom> claz = talkwebserver.getSchoolClassRooms(school.groupID);
-                                for (GroupChatRoom classroom : claz) {
-                                    classrooms.add(classroom);
-                                }
-                            }
-                            return null;
-                        }
-
-                        protected void onPostExecute(Void result) {
-                            //msgBox.dismissWait();
-                            adapter = new MyClassAdapter(classrooms);
-                            lvMyClass.setAdapter(adapter);
-                        }
-
-                        ;
-                    });
-                } else {
-                    //msgBox.dismissWait();
-                    Toast.makeText(MyClassesActivity.this,R.string.conn_time_out,Toast.LENGTH_LONG).show();
-                    finish();
-                }
-            }
-        });
+		});
         
 //        Database db = Database.getInstance(this);
 //        schoolrooms = db.fetchSchools();
@@ -156,7 +173,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
                 lesson1.title = "第一课";
                 lesson1.start_date = new Date(2014 - 1900, 11, 29, 9, 0).getTime() / 1000;
                 lesson1.end_date = lesson1.start_date + 45 * 60;
-                lessonWeb.addOrModifyLesson(lesson1);
+                lessonWeb.addOrModifyLesson(lesson1,1);
 
                 // add lesson2
                 Lesson lesson2 = new Lesson();
@@ -164,14 +181,14 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
                 lesson2.title = "第二课";
                 lesson2.start_date = new Date(2015 - 1900, 0, 8, 14, 30).getTime() / 1000;
                 lesson2.end_date = lesson2.start_date + 45 * 60;
-                lessonWeb.addOrModifyLesson(lesson2);
+                lessonWeb.addOrModifyLesson(lesson2,1);
 
                 // get lessons
                 lessonWeb.getLesson(classId);
 
                 // modify lesson1
                 lesson1.title = "lesson 1";
-                lessonWeb.addOrModifyLesson(lesson1);
+                lessonWeb.addOrModifyLesson(lesson1,1);
 
                 // get lessons
                 lessonWeb.getLesson(classId);
@@ -256,7 +273,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
                 lesson1.title = "第一课";
                 lesson1.start_date = new Date(2014 - 1900, 11, 29, 9, 0).getTime() / 1000;
                 lesson1.end_date = lesson1.start_date + 45 * 60;
-                lessonWeb.addOrModifyLesson(lesson1);
+                lessonWeb.addOrModifyLesson(lesson1,1);
 
 
                 // get lessons
@@ -378,6 +395,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 			long id) {
 		Intent intent = new Intent(this, ClassDetailActivity.class);
 		intent.putExtra("classId", classrooms.get(position).groupID);
+		intent.putExtra("schoolId", classrooms.get(position).schoolID);
 		intent.putExtra("classroomName", classrooms.get(position).groupNameOriginal);
 		startActivity(intent);
 	}

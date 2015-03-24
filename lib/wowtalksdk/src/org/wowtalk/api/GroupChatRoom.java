@@ -23,6 +23,7 @@ public class GroupChatRoom extends TreeNode implements IHasPhoto{
 	public final static int FIELD_FLAG_STATUS = 4;
 	
 	/*************************************************************************/
+	public String schoolID = "";
 	/**
 	 *　Group ID : e.g. "28885bfa-8f64-4b22-9183-dcf965755ce9"
 	 */
@@ -235,6 +236,7 @@ public class GroupChatRoom extends TreeNode implements IHasPhoto{
 
     @Override
     public void writeToParcel(Parcel d, int flags) {
+    	d.writeString(schoolID);
         d.writeString(category);
         d.writeString(groupID);
         d.writeString(groupNameLocal);
@@ -265,6 +267,7 @@ public class GroupChatRoom extends TreeNode implements IHasPhoto{
         @Override
         public GroupChatRoom createFromParcel(Parcel s) {
             GroupChatRoom g = new GroupChatRoom();
+            g.schoolID = s.readString();
             g.category = s.readString();
             g.groupID = s.readString();
             g.groupNameLocal = s.readString();

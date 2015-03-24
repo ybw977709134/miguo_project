@@ -74,7 +74,7 @@ public class LessonWebServerIF {
 	 * @param lesson
 	 * @return Error Code.
 	 */
-	public int addOrModifyLesson(Lesson lesson) {
+	public int addOrModifyLesson(Lesson lesson,int live) {
 		String uid = mPrefUtil.getUid();
 		String password = mPrefUtil.getPassword();
 		if (uid == null || password == null)
@@ -87,7 +87,8 @@ public class LessonWebServerIF {
 				+ Utils.urlencodeUtf8(password) + "&lesson_id="
 				+ lesson.lesson_id + "&class_id=" + lesson.class_id + "&title="
 				+ Utils.urlencodeUtf8(lesson.title) + "&start_date="
-				+ lesson.start_date + "&end_date=" + lesson.end_date;
+				+ lesson.start_date + "&end_date=" + lesson.end_date
+				+ "&live=" + live;
 
 		Connect2 connect2 = new Connect2();
 		Element root = connect2.Post(postStr);
@@ -305,7 +306,44 @@ public class LessonWebServerIF {
 		}
 		return errno;
 	}
+	
+	public int getClassInfo(String class_id,List<ClassInfo> classInfos){
+		int errno = ErrorCode.BAD_RESPONSE;
+		String uid = mPrefUtil.getUid();
+		String password = mPrefUtil.getPassword();
+		if (uid == null || password == null)
+			return errno;
+		final String action = "get_class_info_by_id";
+		String postStr = "action=" + action + "&uid="
+				+ Utils.urlencodeUtf8(uid) + "&password="
+				+ Utils.urlencodeUtf8(password) + "&class_id="
+				+ Utils.urlencodeUtf8(class_id);
 
+		Connect2 connect2 = new Connect2();
+		Element root = connect2.Post(postStr);
+
+		
+		if (root != null) {
+			NodeList errorList = root.getElementsByTagName("err_no");
+			Element errorElement = (Element) errorList.item(0);
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				errno = ErrorCode.OK;
+
+				Element resultElement = Utils.getFirstElementByTagName(root,
+						action);
+				if (resultElement != null) {
+							ClassInfo info = XmlHelper
+									.parseInfo(resultElement);
+							classInfos.add(info);
+				}
+			} else {
+				errno = Integer.parseInt(errorStr);
+			}
+		}
+		return errno;
+	}
 	public int getLesson(String class_id) {
 		String uid = mPrefUtil.getUid();
 		String password = mPrefUtil.getPassword();

@@ -46,9 +46,9 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 	private long startdate;
 	private long enddate;
 	private int roomId;
-	private String roomName;
-	private String classTime;
-	private String classLength;
+//	private String roomName;
+//	private String classTime;
+//	private String classLength;
 	
 	private TextView text_classroom_name;
 	private TextView text_camera_num;
@@ -81,8 +81,8 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			schoolId = intent.getStringExtra("schoolId");
 			startdate = intent.getLongExtra("startdate", 0);
 			enddate = intent.getLongExtra("enddate", 0);
-			classTime = intent.getStringExtra("classTime");
-			classLength = intent.getStringExtra("classLength");
+//			classTime = intent.getStringExtra("classTime");
+//			classLength = intent.getStringExtra("classLength");
 		}
 		q.find(R.id.title_back).clicked(this);
 		q.find(R.id.title_refresh).clicked(this);
@@ -142,8 +142,8 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		text_classroom_name = (TextView) findViewById(R.id.text_classroom_name);
 		text_camera_num = (TextView) findViewById(R.id.text_camera_num);
 		
-		String[] classTimes = classTime.split(":");
-		String[] classLengths = classLength.split(":");
+//		String[] classTimes = classTime.split(":");
+//		String[] classLengths = classLength.split(":");
 		currentTime = System.currentTimeMillis()/1000;
 //		classTimesStamps =Integer.parseInt(classTimes[0])*3600 + Integer.parseInt(classTimes[1])*60+startdate;
 //		classEndTimeStamps = Integer.parseInt(classLengths[0])*3600 + Integer.parseInt(classLengths[1])*60 + classTimesStamps;
@@ -224,6 +224,9 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 //			long currentTime = System.currentTimeMillis()/1000;
 //			long classTimesStamps =Integer.parseInt(classTimes[0])*3600 + Integer.parseInt(classTimes[1])*60+startdate;
 //			long classEndTimeStamps = Integer.parseInt(classLengths[0])*3600 + Integer.parseInt(classLengths[1])*60 + classTimesStamps;
+			Log.d("---------startdate------------", startdate+"");
+			Log.d("---------enddate------------", enddate+"");
+			Log.d("---------currentTime------------", currentTime+"");
 			if(currentTime > startdate && currentTime < enddate){
 				Toast.makeText(this, "正在上课，无法修改", Toast.LENGTH_SHORT).show();
 			}else{

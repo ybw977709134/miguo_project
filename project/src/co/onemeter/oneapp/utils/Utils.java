@@ -10,6 +10,7 @@ import org.wowtalk.api.PrefUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -211,4 +212,15 @@ public class Utils {
   			}
   		return false;  		
   	} 
+  	
+  	public static String stampsToDate(long stamps){
+  		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+  		String date = sdf.format(new Date(stamps * 1000));
+  		return String.valueOf(date);
+  	}
+  	public static String stampsToTime(long stamps){
+  		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+  		String time = sdf.format(new Date(stamps * 1000));
+  		return String.valueOf(time);
+  	}
 }

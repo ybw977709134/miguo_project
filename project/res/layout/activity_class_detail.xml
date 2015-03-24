@@ -96,12 +96,7 @@
                     android:text="@string/class_subject"
                     android:textColor="@color/black_30" />
 
-                <TextView
-                    android:id="@+id/class_place"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/class_place"
-                    android:textColor="@color/black_30" />
+                
             </LinearLayout>
 
             <LinearLayout
@@ -126,10 +121,10 @@
                     android:textColor="@color/black_30" />
 
                 <TextView
-                    android:id="@+id/class_length"
+                    android:id="@+id/class_place"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/class_length"
+                    android:text="@string/class_place"
                     android:textColor="@color/black_30" />
             </LinearLayout>
         </LinearLayout>

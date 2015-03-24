@@ -11,12 +11,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TimePicker.OnTimeChangedListener;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
@@ -54,9 +56,16 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	private List<Lesson> addLessons;
 	
 	private AlertDialog.Builder dialog;
-	private String reLength;
+//	private String reLength;
 	private String reTime;
-	
+	private String[] startTime;
+	private String[] times;
+	private String[] startTimes;
+	private String[] endTimes;
+	private int startHour;
+	private int startMinute;
+	private int endHour;
+	private int endMinute;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -69,7 +78,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	private void initView() {
 		Intent intent = getIntent();
 		classroom = intent.getParcelableExtra("class");
-		reLength = intent.getStringExtra("reLength");
+//		reLength = intent.getStringExtra("reLength");
 //		reTime = intent.getStringExtra("reTime");
 		reTime= intent.getExtras().getString("retime");
 		
@@ -128,10 +137,11 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			finish();
 			break;
 		case R.id.save:
-				if(delLessons.isEmpty() && addLessons.isEmpty()){
-					finish();
-				}else{
-					addOrDeletePostLesson(addLessons,delLessons);
+			if(delLessons.isEmpty() && addLessons.isEmpty()){
+				finish();
+				}
+			else{
+				addOrDeletePostLesson(addLessons,delLessons);
 				}
 			break;
 		case R.id.lay_footer_add:
@@ -207,6 +217,10 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		edName.setFocusableInTouchMode(true); 
 		edName.requestFocus();
 		final DatePicker datepicker = (DatePicker) view.findViewById(R.id.datepicker_dialog);
+		final TimePicker starttimepicker = (TimePicker) view.findViewById(R.id.timePicker_dialog_starttime);
+		final TimePicker endtimepicker = (TimePicker) view.findViewById(R.id.timePicker_dialog_endtime);
+		starttimepicker.setIs24HourView(true);
+		endtimepicker.setIs24HourView(true);
 		
 		Handler hanlder = new Handler();
         hanlder.postDelayed(new Runnable() {
@@ -218,14 +232,26 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 				imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY); 
 			}
 		}, 200);
-        
+        times = reTime.split(" - ");
+		startTimes = times[0].split(":");
+		endTimes = times[1].split(":");
 		if(!isAdd){
 			dialog.setTitle("修改课程");
 			view.findViewById(R.id.lay_lesson_name).setVisibility(View.VISIBLE);
-			String[] startTime = ((TextView)item.findViewById(R.id.coursetable_item_time)).getText().toString().split("-");
+			startTime = ((TextView)item.findViewById(R.id.coursetable_item_time)).getText().toString().split("-");
 			datepicker.init(Integer.parseInt(startTime[0]), Integer.parseInt(startTime[1]) - 1, Integer.parseInt(startTime[2]), null);
+			
+			starttimepicker.setCurrentHour(Integer.parseInt(startTimes[0]));
+			starttimepicker.setCurrentMinute(Integer.parseInt(startTimes[1]));
+			endtimepicker.setCurrentHour(Integer.parseInt(endTimes[0]));
+			endtimepicker.setCurrentMinute(Integer.parseInt(endTimes[1]));
             edName.setText(lessons.get(position).title);
         }else{
+        	
+			starttimepicker.setCurrentHour(Integer.parseInt(startTimes[0]));
+			starttimepicker.setCurrentMinute(Integer.parseInt(startTimes[1]));
+			endtimepicker.setCurrentHour(Integer.parseInt(endTimes[0]));
+			endtimepicker.setCurrentMinute(Integer.parseInt(endTimes[1]));
 		}
 		
 		if(isBefore){
@@ -239,11 +265,16 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			public void onClick(DialogInterface dialog, int which) {
 				Calendar result = Calendar.getInstance();
 				//result.setTimeZone(TimeZone.getTimeZone("GMT"));
-				result.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(),0,0,0);
+				result.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(),0,0,0);				
 				long resultTime = result.getTimeInMillis();
-				Log.i("---resultTime---" + resultTime);
-				String[] times = reTime.split(":");
-				String[] lengths = reLength.split(":");
+
+				startHour =starttimepicker.getCurrentHour();
+				startMinute =starttimepicker.getCurrentMinute();
+				endHour =endtimepicker.getCurrentHour();
+				endMinute =endtimepicker.getCurrentMinute();
+//				Log.i("---resultTime---", resultTime);
+//				String[] times = reTime.split(":");
+//				String[] lengths = reLength.split(":");
 				
 				String content = edName.getText().toString();
 
@@ -271,8 +302,8 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 					lesson.class_id = classId;
 					lesson.title = content;
 					
-					lesson.start_date = resultTime/1000 + Integer.parseInt(times[0])*3600 + Integer.parseInt(times[1])*60;
-					lesson.end_date = lesson.start_date + Integer.parseInt(lengths[0])*3600 + Integer.parseInt(lengths[1])*60;
+					lesson.start_date = resultTime/1000 + startHour * 3600 + endHour * 60;
+					lesson.end_date = resultTime/1000 + endHour * 3600 + endMinute * 60;
 					addLessons.add(lesson);
 					lessons.add(lesson);
 					adapter.notifyDataSetChanged();
@@ -282,8 +313,8 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 					if(position >= 0){
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 						((TextView)item.findViewById(R.id.coursetable_item_time)).setText(sdf.format(resultTime));
-						lessons.get(position).start_date = resultTime/1000 + Integer.parseInt(times[0])*3600 + Integer.parseInt(times[1])*60;
-						lessons.get(position).end_date = lessons.get(position).start_date + Integer.parseInt(lengths[0])*3600 + Integer.parseInt(lengths[1])*60;
+						lessons.get(position).start_date = resultTime/1000 + startHour * 3600 + endHour * 60;
+						lessons.get(position).end_date = resultTime/1000 + endHour * 3600 + endMinute * 60;
 						Lesson lesson = lessons.get(position);
 						if(lesson.lesson_id > 0){
 							lesson.title = content;
@@ -295,8 +326,8 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 							int size = addLessons.size();
 							int totalsize = lessons.size();
 							int pos = position - (totalsize - size);
-							addLessons.get(pos).start_date = resultTime/1000 + Integer.parseInt(times[0])*3600 + Integer.parseInt(times[1])*60;
-							addLessons.get(pos).end_date = addLessons.get(pos).start_date + Integer.parseInt(lengths[0])*3600 + Integer.parseInt(lengths[1])*60;
+							addLessons.get(pos).start_date = resultTime/1000 + startHour * 3600 + endHour * 60;
+							addLessons.get(pos).end_date = resultTime/1000 + endHour * 3600 + endMinute * 60;
 						}
 					}
 				}
@@ -344,7 +375,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			@Override
 			public void run() {
 				LessonWebServerIF lesWeb = LessonWebServerIF.getInstance(LessonInfoEditActivity.this);
-				int errno = lesWeb.addOrModifyLesson(lesson);
+				int errno = lesWeb.addOrModifyLesson(lesson,1);
 				if(errno == ErrorCode.OK){
 					Database db = Database.getInstance(LessonInfoEditActivity.this);
 					db.storeLesson(lesson);
@@ -376,7 +407,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 				int errno = ErrorCode.BAD_RESPONSE;
 				if (!alessons.isEmpty()) {
 					for (Lesson lesson : alessons) {
-						errno = lesWeb.addOrModifyLesson(lesson);
+						errno = lesWeb.addOrModifyLesson(lesson,1);
 					}
 				}
 				return errno;

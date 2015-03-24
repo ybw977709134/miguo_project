@@ -511,7 +511,9 @@ public class XmlHelper {
             return;
 
         Element e;
-
+        e = Utils.getFirstElementByTagName(ge, "school_id");
+        if (null != e)
+            result.schoolID = e.getTextContent();
         e = Utils.getFirstElementByTagName(ge, "group_id");
         if (null != e)
             result.groupID = e.getTextContent();
@@ -1081,6 +1083,25 @@ public class XmlHelper {
         	detail.status = Integer.parseInt(e.getTextContent());
 
 		return detail;
+    }
+    public static ClassInfo parseInfo(Element roomElement){
+    	ClassInfo info = new ClassInfo();
+
+        Element e;
+        e = Utils.getFirstElementByTagName(roomElement, "start_day");
+        if(e != null)
+        	info.start_day = Integer.parseInt(e.getTextContent());
+        
+        e = Utils.getFirstElementByTagName(roomElement, "end_day");
+        if(e != null)
+        	info.end_day = Integer.parseInt(e.getTextContent());
+        e = Utils.getFirstElementByTagName(roomElement, "start_time");
+        if(e != null)
+        	info.start_time = Integer.parseInt(e.getTextContent());
+        e = Utils.getFirstElementByTagName(roomElement, "end_time");
+        if(e != null)
+        	info.end_time = Integer.parseInt(e.getTextContent());
+        return info;
     }
     public static Classroom parseRoom(Element roomElement){
     	Classroom room = new Classroom();

@@ -74,8 +74,10 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 	
 	InputMethodManager mInputMethodManager ;
 	private MessageBox mMsgBox;
-	private int time;
+	private int time = 60;
 	private Timer mTimer;
+	
+	
 	private Handler mHandler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
 			if (msg.what == 0) {
@@ -89,7 +91,14 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 		};
 	};
 	
-
+//	private TimerTask mTimerTask =  new TimerTask() {
+//		
+//		@Override
+//		public void run() {
+//			mHandler.sendEmptyMessage(time--);
+//			
+//		}
+//	};
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -134,7 +143,9 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			pageFlag = BIND_EMAIL_PAGE;
 			
 			unBindEmailAddress();//解绑
-			mTimer.cancel();
+			if (mTimer != null) {
+				mTimer.cancel();
+			}
 			layout_verification_auth_code.setVisibility(View.GONE);
 			layout_verification_email.setVisibility(View.VISIBLE);
 			txt_auth_code.setText("");
@@ -179,13 +190,19 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 		
 }
     
+    @Override
+    protected void onPause() {
+    	closeSoftKeyboard();
+    	super.onPause();
+    }
+    
     
     @Override
     protected void onDestroy() {
     	if (mTimer != null) {
     		mTimer.cancel();
     	}
-    	closeSoftKeyboard();
+    	
     	super.onDestroy();
     }
     
@@ -382,7 +399,9 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 				pageFlag = BIND_EMAIL_PAGE;
 				
 				unBindEmailAddress();//解绑
-				mTimer.cancel();
+				if (mTimer != null) {
+					mTimer.cancel();
+				}
 				layout_verification_auth_code.setVisibility(View.GONE);
 				layout_verification_email.setVisibility(View.VISIBLE);
 				txt_auth_code.setText("");
@@ -415,8 +434,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			
 			bindEmailAddress(txt_bind_email.getText().toString());
 			//60秒内不可点击  重新获取验证码
-			stopGetAccessCode();
-//			mTimerTask.cancel();
+//			stopGetAccessCode();
 			break;
 			
 		//验证验证码	
@@ -429,7 +447,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			
 			bindEmailAddress(txt_bind_email.getText().toString());
 			//60秒内不可点击  重新获取验证码
-			stopGetAccessCode();
+//			stopGetAccessCode();
 			break;
 			
 		default:
@@ -466,6 +484,10 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
         				layout_verification_email.setVisibility(View.GONE);
         				textView_show_bind_email.setVisibility(View.VISIBLE);
         				textView_show_bind_email.setText("你输入的邮箱"+txt_bind_email.getText().toString());
+        				if (mTimer != null) {
+        					mTimer.cancel();
+        				}
+        				stopGetAccessCode();
                         break;
                     case ErrorCode.EMAIL_ADDRESS_VERIFICATION_CODE_ERROR://18:邮箱格式错误
                     	textView_verification_email_result.setVisibility(View.VISIBLE);
@@ -518,6 +540,8 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			}
 		}, 0, 1000);
 		
+//		mTimer.schedule(mTimerTask, 0, 1000);
+		
 	}
 	
 	/**
@@ -558,7 +582,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 								}
 								Intent bindIntent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
 		                    	startActivity(bindIntent);
-//		                    	finish();
+		                    	finish();
 								
 							}
 						}).start();

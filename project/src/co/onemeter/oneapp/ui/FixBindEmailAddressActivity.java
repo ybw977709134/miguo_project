@@ -61,7 +61,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 	private MessageBox mMsgBox;
 	String bindEmail= null;
 	
-	private int time;
+	private int time = 60;
 	private Timer mTimer;
 	
 	
@@ -280,7 +280,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 		case R.id.btn_access_code:
 			textView_verification_code_result.setVisibility(View.GONE);
 			getAccessCode(PrefUtil.getInstance(FixBindEmailAddressActivity.this).getMyUsername(),bindEmail);
-			stopGetAccessCode();
+			
 			break;
 			
 		case R.id.btn_verification_code://确认，跳转到绑定邮箱界面
@@ -342,10 +342,10 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
             	mMsgBox.dismissWait();
                 switch (result) {
                     case ErrorCode.OK://0
-//                    	mMsgBox.show(null, "验证码已发送到你的绑定邮箱中了,请注意查收");
-//                        mMsgBox.dismissDialog();
-//                    	btn_verification_code.setEnabled(true);
-//                    	btn_verification_code.setBackground(getResources().getDrawable(R.drawable.btn_blue_medium_selector));
+                    	if (mTimer != null) {
+                			mTimer.cancel();
+                		}
+                    	stopGetAccessCode();
                         break;
                                  	
   

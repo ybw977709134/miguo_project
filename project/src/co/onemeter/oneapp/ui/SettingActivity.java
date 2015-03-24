@@ -17,10 +17,13 @@ import co.onemeter.oneapp.AppUpgradeService;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import java.util.ArrayList;
 
@@ -242,44 +245,88 @@ public class SettingActivity extends Activity implements OnClickListener {
                                     sb.append("  " + (i + 1) + ". " + updatesInfo.changeLog[i] + "\n");
                             }
 
-                            new AlertDialog.Builder(SettingActivity.this)
-                                    .setTitle(R.string.settings_upgrade_will_you_upgrade_now)
-                                    .setMessage(sb.toString())
-                                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            // upgrade method:
-                                            // 0 - go to download web page
-                                            // 1 - auto download apk and install it later
-                                            // 2 - go to market
-                                            final int method = 1;
+//                            new AlertDialog.Builder(SettingActivity.this)
+//                                    .setTitle(R.string.settings_upgrade_will_you_upgrade_now)
+//                                    .setMessage(sb.toString())
+//                                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(DialogInterface dialogInterface, int i) {
+//                                            // upgrade method:
+//                                            // 0 - go to download web page
+//                                            // 1 - auto download apk and install it later
+//                                            // 2 - go to market
+//                                            final int method = 1;
+//
+//                                            if (method == 0) { // go to download web page
+//                                                startActivity(new Intent(
+//                                                        Intent.ACTION_VIEW,
+//                                                        Uri.parse("http://www.onemeter.co/dl/")));
+//                                            } else if (method == 1) {
+//                                                String destFilename = getExternalCacheDir()
+//                                                        + "/om_im_" + updatesInfo.versionCode + ".apk";
+//                                                startService(new Intent(SettingActivity.this, AppUpgradeService.class)
+//                                                                .putExtra(AppUpgradeService.EXTRA_URL, updatesInfo.link)
+//                                                                .putExtra(AppUpgradeService.EXTRA_MD5SUM, updatesInfo.md5sum)
+//                                                                .putExtra(AppUpgradeService.EXTRA_DEST_FILENAME, destFilename)
+//                                                );
+//                                            } else { // go to market
+//                                                Intent intent = new Intent(Intent.ACTION_VIEW);
+//                                                intent.setData(Uri.parse("market://details?id=" + getPackageName()));
+//                                                if (getPackageManager().queryIntentActivities(intent, 0).size() != 0) {
+//                                                    AppStatusService.setIsMonitoring(false);
+//                                                    startActivity(intent);
+//                                                } else {
+//                                                    mMsgBox.toast(R.string.settings_upgrade_no_market);
+//                                                }
+//                                            }
+//                                        }
+//                                    })
+//                                    .setNegativeButton(R.string.cancel, null)
+//                                    .create().show();
+                            
+                            
+                            //新的弹框显示，版本更新操作
+                            MessageDialog dialog = new MessageDialog(SettingActivity.this);
+                            dialog.setTitle(R.string.settings_upgrade_will_you_upgrade_now);
+                            dialog.setMessage(sb.toString());
+                            dialog.setOnRightClickListener(getResources().getString(R.string.cancel), null);
+                            dialog.setOnLeftClickListener(getResources().getString(R.string.ok), new MessageDialog.MessageDialogClickListener() {
+                                @Override
+                                public void onclick(MessageDialog dialog) {
+                                    dialog.dismiss();
+                                    // upgrade method:
+                                    // 0 - go to download web page
+                                    // 1 - auto download apk and install it later
+                                    // 2 - go to market
+                                    final int method = 1;
 
-                                            if (method == 0) { // go to download web page
-                                                startActivity(new Intent(
-                                                        Intent.ACTION_VIEW,
-                                                        Uri.parse("http://www.onemeter.co/dl/")));
-                                            } else if (method == 1) {
-                                                String destFilename = getExternalCacheDir()
-                                                        + "/om_im_" + updatesInfo.versionCode + ".apk";
-                                                startService(new Intent(SettingActivity.this, AppUpgradeService.class)
-                                                                .putExtra(AppUpgradeService.EXTRA_URL, updatesInfo.link)
-                                                                .putExtra(AppUpgradeService.EXTRA_MD5SUM, updatesInfo.md5sum)
-                                                                .putExtra(AppUpgradeService.EXTRA_DEST_FILENAME, destFilename)
-                                                );
-                                            } else { // go to market
-                                                Intent intent = new Intent(Intent.ACTION_VIEW);
-                                                intent.setData(Uri.parse("market://details?id=" + getPackageName()));
-                                                if (getPackageManager().queryIntentActivities(intent, 0).size() != 0) {
-                                                    AppStatusService.setIsMonitoring(false);
-                                                    startActivity(intent);
-                                                } else {
-                                                    mMsgBox.toast(R.string.settings_upgrade_no_market);
-                                                }
-                                            }
+                                    if (method == 0) { // go to download web page
+                                        startActivity(new Intent(
+                                                Intent.ACTION_VIEW,
+                                                Uri.parse("http://www.onemeter.co/dl/")));
+                                    } else if (method == 1) {
+                                        String destFilename = getExternalCacheDir()
+                                                + "/om_im_" + updatesInfo.versionCode + ".apk";
+                                        startService(new Intent(SettingActivity.this, AppUpgradeService.class)
+                                                        .putExtra(AppUpgradeService.EXTRA_URL, updatesInfo.link)
+                                                        .putExtra(AppUpgradeService.EXTRA_MD5SUM, updatesInfo.md5sum)
+                                                        .putExtra(AppUpgradeService.EXTRA_DEST_FILENAME, destFilename)
+                                        );
+                                    } else { // go to market
+                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                                        intent.setData(Uri.parse("market://details?id=" + getPackageName()));
+                                        if (getPackageManager().queryIntentActivities(intent, 0).size() != 0) {
+                                            AppStatusService.setIsMonitoring(false);
+                                            startActivity(intent);
+                                        } else {
+                                            mMsgBox.toast(R.string.settings_upgrade_no_market);
                                         }
-                                    })
-                                    .setNegativeButton(R.string.cancel, null)
-                                    .create().show();
+                                    }
+                                    
+                                }
+                            });
+                            dialog.show();
+                            
                         }
                     }
                     catch (PackageManager.NameNotFoundException e) {

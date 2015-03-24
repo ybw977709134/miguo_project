@@ -9,14 +9,19 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.zxing.encoding.EncodingHandler;
+
 import org.json.JSONObject;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.PrefUtil;
@@ -65,6 +70,7 @@ public class MyQRCodeActivity extends Activity implements View.OnClickListener{
 
     private void initView() {
         findViewById(R.id.title_close).setOnClickListener(this);
+        findViewById(R.id.textView_setting_back).setOnClickListener(this);
         findViewById(R.id.title_right_op).setOnClickListener(this);
         findViewById(R.id.my_photo).setOnClickListener(this);
         findViewById(R.id.my_qr_code_photo).setOnClickListener(this);
@@ -154,8 +160,19 @@ public class MyQRCodeActivity extends Activity implements View.OnClickListener{
                 if (TextUtils.isEmpty(file.getAbsolutePath())) {
                     mMsgbBox.toast(R.string.msg_operation_failed);
                 } else {
-                    mMsgbBox.toast(String.format(getString(R.string.save_successed), file.getAbsolutePath()));
-
+//                    mMsgbBox.toast(String.format(getString(R.string.save_successed), file.getAbsolutePath()));
+                	
+                    //自定义的吐司
+                    Toast toast;
+            		toast = Toast.makeText(MyQRCodeActivity.this, getResources().getString(R.string.save_successed_gallery), Toast.LENGTH_LONG);            		
+            		toast.setGravity(Gravity.TOP|Gravity.CENTER, 0, 50);
+            		LinearLayout toastView = (LinearLayout) toast.getView();
+            		toastView.setOrientation(LinearLayout.HORIZONTAL);
+            		toastView.setAlpha(0.5f);
+            		ImageView imageOK = new ImageView(getApplicationContext());
+            		imageOK.setImageResource(R.drawable.icon_success_small);
+            		toastView.addView(imageOK, 0);
+            		toast.show();
                     //trigger media service scan new file,or you can not see this photo in gallery
                     Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file));
                     MyQRCodeActivity.this.sendBroadcast(scanIntent);
@@ -234,6 +251,7 @@ public class MyQRCodeActivity extends Activity implements View.OnClickListener{
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.title_close:
+            case R.id.textView_setting_back:
                 finish();
                 break;
             case R.id.my_photo:
@@ -243,7 +261,8 @@ public class MyQRCodeActivity extends Activity implements View.OnClickListener{
                 ImageViewActivity.launch(this, b);
                 break;
             case R.id.title_right_op:
-                bottomBoard.show();
+//                bottomBoard.show();
+                saveQRCodePhoto();//保存二维码
                 break;
             default:
                 Log.e("my qr code: unhandled view id "+view.getId());

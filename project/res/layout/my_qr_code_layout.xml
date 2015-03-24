@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background_light">
+                android:background="@color/background_dark">
 	<RelativeLayout
 		android:id="@+id/title_bar"
 		android:layout_height="50dp"
@@ -13,10 +13,22 @@
 		<ImageButton
 			android:id="@+id/title_close"
 			android:layout_height="50dp"
-			android:layout_width="50dp"
+			android:layout_width="20dp"
 			android:layout_alignParentLeft="true"
 			android:background="@null"
 			android:src="@drawable/nav_back_selector"/>
+		
+		<TextView 
+		    android:id="@+id/textView_setting_back"
+		    android:layout_width="wrap_content"
+		    android:layout_height="match_parent"
+		    android:layout_toRightOf="@id/title_close"
+		  	android:gravity="center_vertical"
+		  	android:textSize="20sp"
+		  	android:clickable="true"
+		   	android:textColor="@color/white"
+		    android:text="@string/settings_pagetitle" />
+		
 		<TextView
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
@@ -44,29 +56,37 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:layout_below="@id/title_bar"
-		android:layout_margin="20dp"
+		android:layout_margin="30dp"
+		android:background="@drawable/timeline_card_bg"
 		android:orientation="vertical">
 
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_centerInParent="true"
 			android:layout_marginTop="5dp"
 			android:layout_marginLeft="5dp"
 			android:layout_marginRight="5dp"
 			android:layout_marginBottom="5dp"
 			android:orientation="horizontal">
 
-			<co.onemeter.oneapp.ui.CircleImageView
-				android:id="@+id/my_photo"
-				android:layout_width="60dp"
-				android:layout_height="60dp"
-				android:layout_marginTop="3dp"
-				android:layout_marginLeft="3dp"
-				android:layout_marginRight="5dp"
-				android:layout_gravity="center_vertical"
-				android:clickable="true"
-				android:src="@drawable/default_avatar_90"/>
+			<FrameLayout
+        		android:id="@+id/frame_photo"
+        		android:layout_height="80dp"
+        		android:layout_width="80dp"
+        		android:padding="5dp" >
+ 
+        	<ImageView
+            	android:id="@+id/my_photo"
+            	android:layout_height="match_parent"
+            	android:layout_width="match_parent"
+            	android:background="@drawable/default_avatar_90"/>
+
+        	<ImageView
+            	android:layout_height="match_parent"
+            	android:layout_width="match_parent"
+            	android:background="@drawable/avatar_mask_40" />
+        	
+    		</FrameLayout>
 
 			<LinearLayout
 				android:layout_width="match_parent"
@@ -86,9 +106,17 @@
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:textColor="@color/gray"
-					android:text="@string/scan_to_add_friend"
+					android:textColor="@color/gray_40"
+					android:text="@string/scan_to_add_friend1"
 					android:textSize="15sp"/>
+				
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:textColor="@color/gray_40"
+					android:text="@string/scan_to_add_friend2"
+					android:textSize="15sp"/>
+				
 			</LinearLayout>
 		</LinearLayout>
 
@@ -98,10 +126,7 @@
 		<RelativeLayout
 			android:layout_height="match_parent"
 			android:layout_width="match_parent"
-			android:layout_marginLeft="10dp"
-			android:layout_marginRight="10dp"
-			android:layout_marginTop="10dp"
-			android:layout_marginBottom="10dp">
+			android:layout_margin="10dp">
 			<ImageView
 				android:id="@+id/my_qr_code_photo"
 				android:layout_height="match_parent"

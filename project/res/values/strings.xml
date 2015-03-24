@@ -750,12 +750,14 @@
     <string name="scan_qr_code_btn_qrcode">我的二维码</string>
     <string name="flash_not_supported">你的摄像机不支持补光灯</string>
     <string name="my_qr_code_card">我的二维码名片</string>
-    <string name="scan_to_add_friend">扫一扫二维码，加我为好友</string>
+    <string name="scan_to_add_friend1">扫一扫二维码</string>
+    <string name="scan_to_add_friend2">加我为一米家校好友</string>    
     <string name="decode_qrcode_failed">解码失败</string>
     <string name="encode_qrcode_failed">生成二维码失败</string>
     <string name="my_qr_code_bottom_op_share">分享二维码</string>
     <string name="my_qr_code_bottom_op_save">保存至相册</string>
     <string name="save_successed">保存成功 : %s</string>
+    <string name="save_successed_gallery">已保存到手机相册</string>
     <string name="family_qr_content_not_valid">无法识别的二维码内容 : %s</string>
     <string name="qr_code_content">二维码内容</string>
     <string name="event_list_empty">没有事件</string>

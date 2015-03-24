@@ -26,7 +26,7 @@ import java.util.List;
  * Created by pzy on 11/10/14.
  */
 public class MyClassesActivity extends Activity implements View.OnClickListener, OnItemClickListener {
-    private static final String TAG = "MyClassesActivity";
+    public static final String TAG = "MyClassesActivity";
     
     private final String classId = "0b2f933f-a4d7-44de-a711-569abb04846a";
 
@@ -47,8 +47,10 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
         AQuery q = new AQuery(this);
         //msgBox = new MessageBox(this);
         classrooms = new LinkedList<GroupChatRoom>();
-        
 
+        if(getIntent().getBooleanExtra(TAG,false)){
+            q.find(R.id.title_back).visibility(View.VISIBLE);
+        }
         q.find(R.id.title_back).clicked(this);
         lvMyClass = (ListView) findViewById(R.id.lv_myClass);
         //q.find(R.id.livingClass).clicked(this);

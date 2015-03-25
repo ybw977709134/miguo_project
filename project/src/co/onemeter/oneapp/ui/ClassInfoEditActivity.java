@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -65,6 +66,8 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 	private Database mDBHelper;
 	private GroupChatRoom classroom;
 	private MessageBox mMsgBox;
+	private LinearLayout layout_lesinfo_time;
+	private LinearLayout layout_lesinfo_length;
 
 	
 	private TextWatcher textwatcher = new TextWatcher() {
@@ -115,6 +118,8 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		tpTime = (TimePicker) findViewById(R.id.timePicker_lesinfo_time);
 		tpLength = (TimePicker) findViewById(R.id.timePicker_lesinfo_length);
 		dtPlace = (EditText) findViewById(R.id.ed_lesinfo_place);
+		layout_lesinfo_time = (LinearLayout) findViewById(R.id.layout_lesinfo_time);
+		layout_lesinfo_length = (LinearLayout) findViewById(R.id.layout_lesinfo_length);
 		tpTime.setIs24HourView(true);
         dpDate.setOnClickListener(this);
         dpEndDate.setOnClickListener(this);
@@ -127,25 +132,27 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 			String[] times = reTime.split(" - ");
 			String[] startTime = times[0].split(":");
 			String[] endTime = times[1].split(":");
-			int timeLengthTag = (Integer.parseInt(endTime[0])*3600 + Integer.parseInt(endTime[1])*60 - 
-					Integer.parseInt(startTime[0])*3600 - Integer.parseInt(startTime[1])*60);
-			int hourLength = timeLengthTag/3600;
-			int minuteLength = timeLengthTag % 3600 / 60;
+//			int timeLengthTag = (Integer.parseInt(endTime[0])*3600 + Integer.parseInt(endTime[1])*60 - 
+//					Integer.parseInt(startTime[0])*3600 - Integer.parseInt(startTime[1])*60);
+//			int hourLength = timeLengthTag/3600;
+//			int minuteLength = timeLengthTag % 3600 / 60;
 			dpDate.init(Integer.parseInt(startDate[0]), Integer.parseInt(startDate[1]) - 1, Integer.parseInt(startDate[2]), null);
 	        dpEndDate.init(Integer.parseInt(endDate[0]), Integer.parseInt(endDate[1]) - 1, Integer.parseInt(endDate[2]), null);
 	        tpTime.setCurrentHour(Integer.parseInt(startTime[0]));
 	        tpTime.setCurrentMinute(Integer.parseInt(startTime[1]));
-	        if(dtTerm.getText().toString() == null ){
-				tpLength.setCurrentHour(0);
-			    tpLength.setCurrentMinute(0);
-			}else{
-				tpLength.setCurrentHour(hourLength);
-	            tpLength.setCurrentMinute(minuteLength);
-			}
+//	        if(dtTerm.getText().toString() != null){
+//				tpLength.setCurrentHour(hourLength);
+//	            tpLength.setCurrentMinute(minuteLength);
+//			}
+	        if(String.valueOf(tpTime.getCurrentHour()) != null){
+	        	layout_lesinfo_time.setVisibility(View.GONE);
+	        	layout_lesinfo_length.setVisibility(View.GONE);
+	        }
 	        
 		}
         
-		
+		tpLength.setCurrentHour(0);
+	    tpLength.setCurrentMinute(0);
 		mMsgBox = new MessageBox(this);
 		mDBHelper = new Database(this);
 		AQuery q = new AQuery(this);
@@ -256,8 +263,6 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 			break;
 		case R.id.save:
 			modifyClassInfo();
-			updateClassInfo();
-			
 			break;
         case R.id.datePicker_lesinfo_date:
             closeInputBoard();
@@ -271,39 +276,6 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 	}
 	
 	private void modifyClassInfo(){
-		final int hour = tpTime.getCurrentHour();
-		final int minite = tpTime.getCurrentMinute();
-		final int hourLength = tpLength.getCurrentHour();
-		final int miniteLength = tpLength.getCurrentMinute();
-		
-		final Calendar startDay = Calendar.getInstance();
-		final Calendar endDay = Calendar.getInstance();
-		
-		long currentDayTimps = Utils.getDayStampMoveMillis();
-		int classTimps = hour * 3600 + minite * 60;
-		int classLengthTimps = hourLength * 3600 + miniteLength * 60;
-		final long startClassTimps = currentDayTimps + classTimps;
-		final long endClassTimps = startClassTimps + classLengthTimps;
-		startDay.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth());
-		endDay.set(dpEndDate.getYear(), dpEndDate.getMonth(), dpEndDate.getDayOfMonth());
-		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
-
-			@Override
-			protected Integer doInBackground(Void... params) {
-				int errno = WowTalkWebServerIF.getInstance(ClassInfoEditActivity.this)
-						.fModify_classInfo(classroom.groupID, startDay.getTimeInMillis()/1000, endDay.getTimeInMillis()/1000, startClassTimps, endClassTimps);
-				return errno;
-			}
-			@Override
-			protected void onPostExecute(Integer result) {
-				if (result == ErrorCode.OK) {
-					setResult(RESULT_OK);
-				}
-			}
-			
-		});
-	}
-    private void updateClassInfo() {
 		if(classroom == null){
 			mMsgBox.toast(R.string.class_err_denied, 500);
 			return;
@@ -311,8 +283,10 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		classroom.isEditable = true;
 		
 		final Calendar resultTime = Calendar.getInstance();
+		final Calendar resultEndTime = Calendar.getInstance();
 		//resultTime.setTimeZone(TimeZone.getTimeZone("GMT"));
 		resultTime.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth());
+		resultEndTime.set(dpEndDate.getYear(), dpEndDate.getMonth(), dpEndDate.getDayOfMonth());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
 		long firstlesTime = getIntent().getLongExtra("firstlesdate", -1);
@@ -324,6 +298,12 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 			    return;
 		    }
 		}
+		if(resultEndTime.getTimeInMillis() <= resultTime.getTimeInMillis()){
+			if(!mMsgBox.isWaitShowing()){
+			    mMsgBox.toast("结束时间不得早于开始时间！");
+		    }
+		    return;
+		}
 		
 		final int hour = tpTime.getCurrentHour();
 		final int minite = tpTime.getCurrentMinute();
@@ -333,18 +313,30 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 				+ Constants.COMMA + dtGrade.getText().toString()
 				+ Constants.COMMA + dtSubject.getText().toString()
 				+ Constants.COMMA + dtPlace.getText().toString();
-				
+		
+		final Calendar startDay = Calendar.getInstance();
+		final Calendar endDay = Calendar.getInstance();
+		
+		long currentDayTimps = Utils.getDayStampMoveMillis();
+		int classTimps = hour * 3600 + minite * 60;
+		int classLengthTimps = hourLength * 3600 + miniteLength * 60;
+		final long startClassTimps = currentDayTimps + classTimps;
+		final long endClassTimps = startClassTimps + classLengthTimps;
+		startDay.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth());
+		endDay.set(dpEndDate.getYear(), dpEndDate.getMonth(), dpEndDate.getDayOfMonth());
+		
 		mMsgBox.showWait();
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+
 			@Override
 			protected Integer doInBackground(Void... params) {
 				mDBHelper.updateGroupChatRoom(classroom);
-				return WowTalkWebServerIF.getInstance(ClassInfoEditActivity.this).fGroupChat_UpdateInfo(classroom);
+				int errno = WowTalkWebServerIF.getInstance(ClassInfoEditActivity.this)
+						.fModify_classInfo(classroom, startDay.getTimeInMillis()/1000, endDay.getTimeInMillis()/1000, startClassTimps, endClassTimps);
+				return errno;
 			}
-
 			@Override
 			protected void onPostExecute(Integer result) {
-				mMsgBox.dismissWait();
 				if (result == ErrorCode.OK) {
 					// update the display name of chatmessages.
 					mDBHelper.updateChatMessageDisplayNameWithUser(classroom.groupID, classroom.groupNameOriginal);
@@ -364,8 +356,72 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 					mMsgBox.toast(R.string.class_err_denied, 500);
 				}
 			}
+			
 		});
 	}
+//    private void updateClassInfo() {
+//		if(classroom == null){
+//			mMsgBox.toast(R.string.class_err_denied, 500);
+//			return;
+//		}
+//		classroom.isEditable = true;
+//		
+//		final Calendar resultTime = Calendar.getInstance();
+//		//resultTime.setTimeZone(TimeZone.getTimeZone("GMT"));
+//		resultTime.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth());
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//		
+//		long firstlesTime = getIntent().getLongExtra("firstlesdate", -1);
+//		if(firstlesTime != -1){
+//		    if( firstlesTime < resultTime.getTimeInMillis() / 1000 ){
+//			    if(!mMsgBox.isWaitShowing()){
+//				    mMsgBox.toast("开班时间不得晚于课程时间！");
+//			    }
+//			    return;
+//		    }
+//		}
+//		
+//		final int hour = tpTime.getCurrentHour();
+//		final int minite = tpTime.getCurrentMinute();
+//		final int hourLength = tpLength.getCurrentHour();
+//		final int miniteLength = tpLength.getCurrentMinute();
+//		classroom.description = dtTerm.getText().toString() 
+//				+ Constants.COMMA + dtGrade.getText().toString()
+//				+ Constants.COMMA + dtSubject.getText().toString()
+//				+ Constants.COMMA + dtPlace.getText().toString();
+//				
+//		mMsgBox.showWait();
+//		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+//			@Override
+//			protected Integer doInBackground(Void... params) {
+//				mDBHelper.updateGroupChatRoom(classroom);
+//				return WowTalkWebServerIF.getInstance(ClassInfoEditActivity.this).fGroupChat_UpdateInfo(classroom);
+//			}
+//
+//			@Override
+//			protected void onPostExecute(Integer result) {
+//				mMsgBox.dismissWait();
+//				if (result == ErrorCode.OK) {
+//					// update the display name of chatmessages.
+//					mDBHelper.updateChatMessageDisplayNameWithUser(classroom.groupID, classroom.groupNameOriginal);
+//					Intent data = new Intent();
+//					data.putExtra(TERM, dtTerm.getText().toString());
+//					data.putExtra(GRADE, dtGrade.getText().toString());
+//					data.putExtra(SUBJECT, dtSubject.getText().toString());
+////					data.putExtra(DATE, new SimpleDateFormat("yyyy-MM-dd").format(resultTime.getTimeInMillis()));
+////					data.putExtra(TIME, (hour < 10 ? ("0" + String.valueOf(hour)) : String.valueOf(hour)) + ":"
+////							+ (minite < 10 ? ("0" + String.valueOf(minite)) : String.valueOf(minite)));
+//					data.putExtra(PLACE, dtPlace.getText().toString());
+////					data.putExtra(LENGTH, String.valueOf(hourLength) + ":"
+////							+ (miniteLength < 10 ? ("0" + String.valueOf(miniteLength)) : String.valueOf(miniteLength))) ;
+//					setResult(RESULT_OK, data);
+//					finish();
+//				} else if (result == ErrorCode.ERR_OPERATION_DENIED) {
+//					mMsgBox.toast(R.string.class_err_denied, 500);
+//				}
+//			}
+//		});
+//	}
 	
 	@Override
 	protected void onDestroy() {

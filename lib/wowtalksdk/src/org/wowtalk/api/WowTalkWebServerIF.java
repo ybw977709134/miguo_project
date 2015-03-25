@@ -4270,7 +4270,7 @@ public class WowTalkWebServerIF {
 
         return _doRequestWithoutResponse(postStr);
     }
-    public int fModify_classInfo(String class_id,long start_day, long end_day,long start_time,long end_time){
+    public int fModify_classInfo(GroupChatRoom g,long start_day, long end_day,long start_time,long end_time){
     	int errno = -1;
     	String uid = sPrefUtil.getUid();
 		String password = sPrefUtil.getPassword();
@@ -4283,19 +4283,45 @@ public class WowTalkWebServerIF {
 			postStr = "action=" + action + "&uid="
 					+ Utils.urlencodeUtf8(uid) + "&password="
 					+ Utils.urlencodeUtf8(password) + "&class_id=" 
-					+ Utils.urlencodeUtf8(class_id)
+					+ Utils.urlencodeUtf8(g.groupID)
 					+ "&start_day=" + start_day
 					+ "&end_day=" + end_day;
 		}else{
 			postStr = "action=" + action + "&uid="
 				+ Utils.urlencodeUtf8(uid) + "&password="
 				+ Utils.urlencodeUtf8(password) + "&class_id=" 
-				+ Utils.urlencodeUtf8(class_id)
+				+ Utils.urlencodeUtf8(g.groupID)
 				+ "&start_day=" + start_day
 				+ "&end_day=" + end_day
 				+ "&start_time=" + start_time
 				+ "&end_time=" + end_time;
 		}
+		if (null != g.groupNameOriginal)
+            postStr += "&name=" + Utils.urlencodeUtf8(g.groupNameOriginal);
+
+        if (g.isTemporaryGroup && g.isGroupNameChanged) {
+            postStr += "&is_group_name_changed=" + Utils.urlencodeUtf8("1");
+        }
+
+        if (null != g.location) {
+            postStr += "&lat=" + g.location.y;
+            postStr += "&lon=" + g.location.x;
+        }
+
+        if (null != g.place)
+            postStr += "&place=" + Utils.urlencodeUtf8(g.place);
+
+        if (0 < g.getPhotoUploadedTimestamp())
+            postStr += "&upload_photo_timestamp=" + g.getPhotoUploadedTimestamp();
+
+        if (null != g.groupStatus)
+            postStr += "&status=" + Utils.urlencodeUtf8(g.groupStatus);
+
+        if (null != g.description)
+            postStr += "&intro=" + Utils.urlencodeUtf8(g.description);
+
+        if (null != g.category)
+            postStr += "&category=" + Utils.urlencodeUtf8(g.category);
 
 				
 		Connect2 connect2 = new Connect2();

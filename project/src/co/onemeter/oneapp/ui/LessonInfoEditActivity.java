@@ -267,7 +267,6 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 				//result.setTimeZone(TimeZone.getTimeZone("GMT"));
 				result.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(),0,0,0);				
 				long resultTime = result.getTimeInMillis();
-
 				startHour =starttimepicker.getCurrentHour();
 				startMinute =starttimepicker.getCurrentMinute();
 				endHour =endtimepicker.getCurrentHour();
@@ -302,7 +301,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 					lesson.class_id = classId;
 					lesson.title = content;
 					
-					lesson.start_date = resultTime/1000 + startHour * 3600 + endHour * 60;
+					lesson.start_date = resultTime/1000 + startHour * 3600 + startMinute * 60;
 					lesson.end_date = resultTime/1000 + endHour * 3600 + endMinute * 60;
 					addLessons.add(lesson);
 					lessons.add(lesson);
@@ -313,7 +312,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 					if(position >= 0){
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 						((TextView)item.findViewById(R.id.coursetable_item_time)).setText(sdf.format(resultTime));
-						lessons.get(position).start_date = resultTime/1000 + startHour * 3600 + endHour * 60;
+						lessons.get(position).start_date = resultTime/1000 + startHour * 3600 + startMinute * 60;
 						lessons.get(position).end_date = resultTime/1000 + endHour * 3600 + endMinute * 60;
 						Lesson lesson = lessons.get(position);
 						if(lesson.lesson_id > 0){
@@ -326,7 +325,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 							int size = addLessons.size();
 							int totalsize = lessons.size();
 							int pos = position - (totalsize - size);
-							addLessons.get(pos).start_date = resultTime/1000 + startHour * 3600 + endHour * 60;
+							addLessons.get(pos).start_date = resultTime/1000 + startHour * 3600 + startMinute * 60;
 							addLessons.get(pos).end_date = resultTime/1000 + endHour * 3600 + endMinute * 60;
 						}
 					}

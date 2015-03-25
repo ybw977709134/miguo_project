@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
-import android.support.v4.widget.DrawerLayout.LayoutParams;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +33,7 @@ import org.w3c.dom.Text;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.HorizontalListView;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.msg.DoubleClickedUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -187,13 +187,16 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				schoolId = classrooms.get(position).schoolID;
-				classId = classrooms.get(position).groupID;
-				myclasses_title.setText(classrooms.get(position).groupNameOriginal);
-				layout_main_drawer.closeDrawer(layout_main_leftdrawer);
-				getLessonInfo();
-				setClassInfo();
-				getClassInfo(classId);
+				if(classrooms != null ){
+					schoolId = classrooms.get(position).schoolID;
+				    classId = classrooms.get(position).groupID;
+				    myclasses_title.setText(classrooms.get(position).groupNameOriginal);
+				    layout_main_drawer.closeDrawer(layout_main_leftdrawer);
+				    getLessonInfo();
+				    setClassInfo();
+				    getClassInfo(classId);
+				}
+				
 				
 			}
 		});
@@ -227,7 +230,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			
 			@Override
 			public void onDrawerOpened(View arg0) {
-				getSchoolClassInfo();
+//				getSchoolClassInfo();
 				
 			}
 			
@@ -336,7 +339,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			@Override
 			protected Integer doInBackground(Void... params) {
 				classInfos.clear();
-				return LessonWebServerIF.getInstance(ClassDetailActivity.this).getClassInfo(classId,classInfos);
+				return LessonWebServerIF.getInstance(ClassDetailActivity.this).getClassInfo(classId,classInfos,class_group);
 			}
 
 			protected void onPostExecute(Integer result) {
@@ -351,6 +354,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 						tvDate.setText(date + start_date + " - " + end_date);
 					    tvTime.setText(time + start_time + " - " + end_time);
 					}
+					refreshClassInfo();
 					
 				}
 			};
@@ -434,7 +438,10 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 
 		case R.id.btn_myclass_addclass:
 			layout_main_drawer.openDrawer(layout_main_leftdrawer);
-//			getSchoolClassInfo();
+			if(!DoubleClickedUtils.isFastDoubleClick()){
+				getSchoolClassInfo();
+			}
+			
 			break;
 		case R.id.class_live_class:
 			currentTime = System.currentTimeMillis()/1000;

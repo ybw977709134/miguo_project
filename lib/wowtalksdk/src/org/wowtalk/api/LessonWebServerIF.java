@@ -307,7 +307,7 @@ public class LessonWebServerIF {
 		return errno;
 	}
 	
-	public int getClassInfo(String class_id,List<ClassInfo> classInfos){
+	public int getClassInfo(String class_id,List<ClassInfo> classInfos,GroupChatRoom result){
 		int errno = ErrorCode.BAD_RESPONSE;
 		String uid = mPrefUtil.getUid();
 		String password = mPrefUtil.getPassword();
@@ -337,6 +337,13 @@ public class LessonWebServerIF {
 							ClassInfo info = XmlHelper
 									.parseInfo(resultElement);
 							classInfos.add(info);
+				}
+				
+				Element resultElement2 = Utils.getFirstElementByTagName(root, action); 
+				if(resultElement2 != null) {
+					Element groupNode = Utils.getFirstElementByTagName(resultElement2, "group_info");
+					if(groupNode != null)
+						XmlHelper.parseGroup(groupNode, result);
 				}
 			} else {
 				errno = Integer.parseInt(errorStr);

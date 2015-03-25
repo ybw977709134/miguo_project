@@ -13,7 +13,7 @@ dst_branch=dev_as
 src_branch=origin/dev_yuanlei
 echo $src_branch
 cmd="git log --oneline --no-merges $chkpnt_dev_as..$dst_branch $src_branch"
-echo git cherry-pick `$cmd | col.sh 1`
+echo git cherry-pick `$cmd | col.sh 1 | tac`
 $cmd
 echo
 
@@ -21,7 +21,7 @@ dst_branch=dev
 src_branch=origin/dev_hutianfeng
 echo $src_branch
 cmd="git log --oneline --no-merges $chkpnt_dev..$dst_branch $src_branch"
-echo git cherry-pick `$cmd | col.sh 1`
+echo git cherry-pick `$cmd | col.sh 1 | tac`
 $cmd
 echo
 
@@ -29,6 +29,6 @@ dst_branch=dev
 src_branch=origin/dev_zhangzheng
 echo $src_branch
 cmd="git log --oneline --no-merges $chkpnt_dev..$dst_branch $src_branch"
-echo git cherry-pick `$cmd | col.sh 1`
+echo git cherry-pick `$cmd | col.sh 1 | tac`
 $cmd
 echo

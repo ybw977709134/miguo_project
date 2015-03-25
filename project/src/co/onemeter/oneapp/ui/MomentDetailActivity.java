@@ -637,7 +637,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                     
                     
                     if (dbHelper.deleteMoment(moment.id)) {
-                    	setResult(RESULT_OK, new Intent().putExtra(EXTRA_DELETED_MOMENT_ID, moment.id));
+                    	setResult(RESULT_OK, new Intent().putExtra(EXTRA_DELETED_MOMENT_ID, moment.id));       	
                     	mMsgBox.dismissWait();
                     	finish();
                     }
@@ -718,7 +718,13 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
                         setupContent(moment);
 
                         // 以便动态列表页面重新刷新评论数
-                        setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, moment.id));
+//                        setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, moment.id));
+                       
+                        try {
+                        	 setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, moment.id));
+						} catch (Exception e) {
+						}
+                        
                     }
                 }
             });

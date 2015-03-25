@@ -347,13 +347,12 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                 		}
                     	stopGetAccessCode();
                         break;
-                                 	
-  
+ 
                     default://获取验证码失败
 //                        mMsgBox.show(null, "获取验证码失败");
                         textView_verification_code_result.setVisibility(View.VISIBLE);
                         textView_verification_code_result.setText("获取验证码失败");	
-                        Toast.makeText(FixBindEmailAddressActivity.this, "获取验证码失败", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(FixBindEmailAddressActivity.this, "获取验证码失败", Toast.LENGTH_SHORT).show();
                         break;    
                 }
             }

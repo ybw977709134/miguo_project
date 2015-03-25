@@ -4,19 +4,24 @@
         xmlns:wow="http://schemas.android.com/apk/res-auto"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:layout_margin="5dp"
+        
         android:orientation="vertical">
 
     <RelativeLayout
         	android:id="@+id/layout_friend_item"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:background="@drawable/timeline_card_bg"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
             android:layout_gravity="center_horizontal">
-
+            
+            <ImageView
+                    style="@style/bg_section_divider_line_dark"/> 
+  
         <LinearLayout
                 style="@style/moment_listitem_outter_wrapper"
                 android:orientation="vertical">
+             
 
             <RelativeLayout
                     android:layout_height="wrap_content"
@@ -238,6 +243,9 @@
                     android:background="@drawable/timeline_card_bg_line" />
                     
             <include layout="@layout/piece_moment_operations"/>
+            
+            <ImageView
+                    style="@style/bg_section_divider_line_dark"/>
         </LinearLayout>
         
     </RelativeLayout>

@@ -631,9 +631,16 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             protected void onPostExecute(Integer errno) {
                 if (ErrorCode.OK == errno) {
                     
-                    dbHelper.deleteMoment(moment.id);
-                    setResult(RESULT_OK, new Intent().putExtra(EXTRA_DELETED_MOMENT_ID, moment.id));
-                    mHandler.sendEmptyMessageDelayed(MSG_ID_MOMENT_DELETE_WITH_DELAY_FINISH, 1000);
+//                    dbHelper.deleteMoment(moment.id);
+//                    setResult(RESULT_OK, new Intent().putExtra(EXTRA_DELETED_MOMENT_ID, moment.id));
+//                    mHandler.sendEmptyMessageDelayed(MSG_ID_MOMENT_DELETE_WITH_DELAY_FINISH, 1000);
+                    
+                    
+                    if (dbHelper.deleteMoment(moment.id)) {
+                    	setResult(RESULT_OK, new Intent().putExtra(EXTRA_DELETED_MOMENT_ID, moment.id));
+                    	mMsgBox.dismissWait();
+                    	finish();
+                    }
                     
                 } else {
                     mMsgBox.toast(R.string.operation_failed);
@@ -822,8 +829,11 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 
         mImageResizer.closeCache();
         Database.removeDBTableChangeListener(momentObserver);
-
-        mediaPlayerWraper.stop();
+        
+        if (mediaPlayerWraper != null) {
+        	mediaPlayerWraper.stop();
+        }
+        
     }
 
     private void setupContent(final Moment moment) {

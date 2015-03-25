@@ -455,7 +455,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 //    }
     
     /**
-     * 绑定邮箱成功后返回到主页界面，显示你已经绑定的邮箱
+     * 
      * @author hutianfeng
      * @date 2015/3/10
      */
@@ -463,15 +463,6 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //    	super.onActivityResult(requestCode, resultCode, data);
 //    	if (resultCode == RESULT_OK) {
-//			switch (requestCode) {
-//			case BIND_EMAIL_REQUEST_CODE://绑定邮箱成功后的处理结果
-//				bindEmailStatus ();
-//				break;			
-//			default:
-//				msgbox.show(null, getString(R.string.bind_email_failed));
-//				msgbox.dismissDialog();
-//				break;
-//			}
 //    	}
 //    }
 }

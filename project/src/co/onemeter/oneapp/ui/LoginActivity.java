@@ -2,6 +2,7 @@ package co.onemeter.oneapp.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.AlertDialog.Builder;
@@ -529,17 +530,6 @@ public class LoginActivity extends Activity implements OnClickListener {
         }   
     }
     
-    
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-    	if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-    		finish();
-    	
-    	}
-    	
-    	return super.onKeyDown(keyCode, event);
-    }
     
     @Override
     public boolean onTouchEvent(MotionEvent event) {

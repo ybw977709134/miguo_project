@@ -168,6 +168,7 @@ public abstract class TimelineFragment extends ListFragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i("---fragment");
         if (requestCode == REQ_COMMENT && resultCode == Activity.RESULT_OK) {
             // refresh views
             boolean handled = false;

@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.androidquery.AQuery;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.InputBoardManager;
@@ -122,7 +124,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        Log.i("---timeline");
         // 发布动态成功后，刷新
         if (requestCode == REQ_CREATE_MOMENT && resultCode == Activity.RESULT_OK
                 && currTimelineFragment != null) {

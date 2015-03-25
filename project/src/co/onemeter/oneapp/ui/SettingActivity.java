@@ -48,6 +48,19 @@ public class SettingActivity extends Activity implements OnClickListener {
     private boolean appUpdatesAvailable;
 
     private ArrayList<Account> mAccountDatas;
+    
+    
+    private static SettingActivity instance;
+    
+	public static final SettingActivity instance() {
+		if (instance != null)
+			return instance;
+		return null;
+	}
+
+	public static final boolean isInstanciated() {
+		return instance != null;
+	}
 
     private Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
@@ -70,7 +83,10 @@ public class SettingActivity extends Activity implements OnClickListener {
             });
         }
     };
-
+    
+/**
+ * 初始化各个控件
+ */
     private void initView() {
 		imgPhoto = (ImageView) findViewById(R.id.img_thumbnail);
 		textView_settings_myinfo = (TextView) findViewById(R.id.settings_myinfo);
@@ -366,6 +382,8 @@ public class SettingActivity extends Activity implements OnClickListener {
 
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
+        
+        instance = this;
 
         mMsgBox = new MessageBox(this);
         mWeb = WowTalkWebServerIF.getInstance(SettingActivity.this);
@@ -379,7 +397,7 @@ public class SettingActivity extends Activity implements OnClickListener {
 //        } else {
 //        	findViewById(R.id.imageView_tag_tea).setVisibility(View.GONE);
 //        }
-
+        Log.d("--create setting");
         initView();
     }
 
@@ -420,8 +438,18 @@ public class SettingActivity extends Activity implements OnClickListener {
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(this); 
         Database.removeDBTableChangeListener(mAlbumCoverObserver);
+    }
+    
+     
+    @Override
+    protected void onDestroy() {
+    	Log.d("---onDestroy");
+    	if (instance != null) {
+    		instance = null;
+    	}
+    	super.onDestroy();
     }
 
     /**

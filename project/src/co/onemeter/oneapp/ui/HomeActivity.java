@@ -193,8 +193,8 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         int len = imgIds.length;
         for(int i = 0;i < len;i ++){
             ImageView imageView = new ImageView(this);
-            LinearLayout.LayoutParams params =  new LinearLayout.LayoutParams(20,20);
-            params.setMargins(15,0, 15, 0);
+            LinearLayout.LayoutParams params =  new LinearLayout.LayoutParams(DensityUtil.dip2px(this,8),DensityUtil.dip2px(this,8));
+            params.setMargins(15,0, 15, 5);
             imageView.setLayoutParams(params);
             if(i == 0){
                 imageView.setImageResource(R.drawable.dot2);

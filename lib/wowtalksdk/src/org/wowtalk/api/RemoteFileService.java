@@ -53,9 +53,9 @@ public class RemoteFileService {
                 if (TextUtils.isEmpty(remoteFileId))
                     remoteFileId = UUID.randomUUID().toString();
                 new OssClient(
-                        sPrefUtil.getS3Uid(),
-                        sPrefUtil.getS3Pwd(),
-                        sPrefUtil.getS3Bucket())
+                        sPrefUtil.getOssUid(),
+                        sPrefUtil.getOssKey(),
+                        sPrefUtil.getOssBucket())
                         .setCallback(callback, callbackTag)
                         .setRemoteDir(remoteDir)
                         .upload(remoteFileId, inFilename);
@@ -115,9 +115,9 @@ public class RemoteFileService {
         try {
             if (sPrefUtil.isUseOss()) {
                 new OssClient(
-                        sPrefUtil.getS3Uid(),
-                        sPrefUtil.getS3Pwd(),
-                        sPrefUtil.getS3Bucket())
+                        sPrefUtil.getOssUid(),
+                        sPrefUtil.getOssKey(),
+                        sPrefUtil.getOssBucket())
                         .setCallback(callback, callbackTag)
                         .setRemoteDir(remoteDir)
                         .download(remoteFileId, outFilename);

@@ -775,6 +775,18 @@ public class PrefUtil {
         return true;
     }
 
+    public String getOssUid() {
+        return GlobalSetting.S3_ACCESS_KEY_ID;
+    }
+
+    public String getOssKey() {
+        return GlobalSetting.S3_SECRET_KEY;
+    }
+
+    public String getOssBucket() {
+        return "om-im-dev01";
+    }
+
     /** Use Amazon S3 as storage service. */
     public boolean isUseS3() {
         return sPref.getBoolean(USE_S3, false);

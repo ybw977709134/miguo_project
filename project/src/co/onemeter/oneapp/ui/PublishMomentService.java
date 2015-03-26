@@ -89,8 +89,10 @@ public class PublishMomentService extends android.app.Service {
         final NotificationManager mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setContentTitle(getString(R.string.moment_publishing_noti_title))
+                .setTicker(getString(R.string.moment_publishing_noti_title))
                 .setContentText(moment.text)
-                .setSmallIcon(R.drawable.icon);
+                .setSmallIcon(R.drawable.icon)
+                .setOngoing(true);
 
         final int[] errno = {ErrorCode.OK};
 
@@ -213,6 +215,7 @@ public class PublishMomentService extends android.app.Service {
                     this, 1, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             mBuilder.setContentTitle(getString(R.string.moment_publishing_failed))
+                    .setTicker(getString(R.string.moment_publishing_failed))
                     .setContentText(getString(R.string.moment_publishing_click_to_retry) + " " + moment.text)
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true);

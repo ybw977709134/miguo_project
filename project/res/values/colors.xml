@@ -44,6 +44,7 @@
 	<color name="text_gray2">#666</color>
 	<color name="text_gray3">#999</color>
 	<color name="text_gray4">#cccccc</color>
+	<color name="text_gray22">#ff6b6e7f</color>
 	<color name="text_gray32">#525252</color>
 	<color name="text_gray40">#999999</color>
 	<color name="text_hint">@color/text_gray4</color>

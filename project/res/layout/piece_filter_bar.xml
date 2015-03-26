@@ -13,8 +13,9 @@
 		android:hint="@string/filter"
 		android:layout_margin="5dp"
 		android:imeOptions="actionDone"
-            android:drawableLeft="@drawable/search_field_icon"
-            android:drawablePadding="5dp"/>
+        android:drawableLeft="@drawable/search_field_icon"
+       android:drawablePadding="5dp"/>
+	
     <ImageButton
         android:id="@+id/field_clear"
         android:layout_height="19dp"

@@ -63,7 +63,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 	
 	private int time = 60;
 	private Timer mTimer;
-	
+	private static FixBindEmailAddressActivity instance;
 	
 	private Handler mHandler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
@@ -78,12 +78,24 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 			}
 		};
 	};
+	
+	
+	public static final FixBindEmailAddressActivity instance() {
+		if (instance != null)
+			return instance;
+		return null;
+	}
+
+	public static final boolean isInstanciated() {
+		return instance != null;
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fix_bind_email_address);
 		
+		instance = this;
 		mMsgBox = new MessageBox(this);
 		initView();
 		
@@ -222,16 +234,25 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 		btn_verification_code.setOnClickListener(this);
 	}
 	
+	
+	@Override
+	protected void onPause() {
+
+		if (txt_access_code.hasFocus()) {
+			closeSoftKeyboard();
+		}
+		super.onPause();
+	}
+	
 	@Override
 	protected void onDestroy() {
 		if (mTimer != null) {
 			mTimer.cancel();
 		}
 		
-		if (txt_access_code.hasFocus()) {
-			closeSoftKeyboard();
+		if (instance != null) {
+			instance = null;
 		}
-		
 		super.onDestroy();
 	}
 	

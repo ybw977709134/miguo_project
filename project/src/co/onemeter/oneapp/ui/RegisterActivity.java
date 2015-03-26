@@ -184,6 +184,9 @@ public class RegisterActivity extends Activity implements OnClickListener{
 				if (hasFocus) {
 //					edtAccount.setText("");
 					textView_verification_newPassword.setVisibility(View.GONE);
+					if (edtAccount.getText().toString().length() > 0) {
+						field_clear_account.setVisibility(View.VISIBLE);
+					}
 				} else {
 					field_clear_account.setVisibility(View.GONE);
 				}
@@ -196,8 +199,11 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
-					edtPwd.setText("");
+//					edtPwd.setText("");
 					textView_verification_newPassword.setVisibility(View.GONE);
+					if (edtPwd.getText().toString().length() > 0) {
+						field_clear_pwd.setVisibility(View.VISIBLE);
+					}
 				} else {
 					field_clear_pwd.setVisibility(View.GONE);
 				}
@@ -210,8 +216,11 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
-					edtPwdConfirm.setText("");
+//					edtPwdConfirm.setText("");
 					textView_verification_newPassword.setVisibility(View.GONE);
+					if (edtPwdConfirm.getText().toString().length() > 0) {
+						field_clear_confirm.setVisibility(View.VISIBLE);
+					}
 				} else {
 					field_clear_confirm.setVisibility(View.GONE);
 				}

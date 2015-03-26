@@ -32,8 +32,8 @@
 			
 			<co.onemeter.oneapp.ui.CircleImageView
                         android:id="@+id/imageView_login_logo"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
+                        android:layout_height="70dp"
+                        android:layout_width="70dp"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/icon_login_logo" />
 
@@ -145,7 +145,7 @@
 					android:layout_marginTop="@dimen/padding_large"
 					android:layout_marginLeft="@dimen/padding_small"
 					android:layout_marginRight="@dimen/padding_small"
-					android:textColor="@color/white"/>
+					android:textColor="@color/blue"/>
 			<!--  
 			<Button
 				android:id="@+id/login_qrcode"

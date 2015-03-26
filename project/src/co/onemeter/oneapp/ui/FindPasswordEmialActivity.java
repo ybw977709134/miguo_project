@@ -115,10 +115,15 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 		}, 200);
 	}
 	
+	@Override
+	protected void onPause() {
+		closeSoftKeyboard();
+		super.onPause();
+	}
 	
 	@Override
 	protected void onDestroy() {
-		closeSoftKeyboard();
+		
 		super.onDestroy();
 	}
 	
@@ -246,6 +251,9 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
 //					txt_bind_account.setText("");
+					if (txt_bind_account.getText().toString().length() > 0 ) {
+						field_clear_account.setVisibility(View.VISIBLE);
+					}
 				} else {
 					field_clear_account.setVisibility(View.GONE);
 					mInputMethodManager.hideSoftInputFromWindow(txt_bind_account.getWindowToken() , 0);
@@ -287,6 +295,9 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
 //					txt_bind_email.setText("");
+					if (txt_bind_email.getText().toString().length() > 0 ) {
+						field_clear_email.setVisibility(View.VISIBLE);
+					}
 				} else {
 					field_clear_email.setVisibility(View.GONE);
 					mInputMethodManager.hideSoftInputFromWindow(txt_bind_email.getWindowToken() , 0);
@@ -330,6 +341,9 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
 //					txt_auth_code.setText("");
+					if (txt_auth_code.getText().toString().length() > 0 ) {
+						field_clear_auth_code.setVisibility(View.VISIBLE);
+					}
 				} else {
 					field_clear_auth_code.setVisibility(View.GONE);
 					mInputMethodManager.hideSoftInputFromWindow(txt_auth_code.getWindowToken() , 0);

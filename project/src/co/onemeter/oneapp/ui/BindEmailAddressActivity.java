@@ -136,9 +136,10 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 
 		if (pageFlag == BIND_EMAIL_PAGE) {//绑定邮箱起始页
   	
-//			Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
-//			startActivity(intent);
-			finish();
+			Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
+			startActivity(intent);
+			closeSoftKeyboard();
+			BindEmailAddressActivity.this.finish();
 		} else {
 			pageFlag = BIND_EMAIL_PAGE;
 			
@@ -202,7 +203,6 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
     	if (mTimer != null) {
     		mTimer.cancel();
     	}
-    	
     	super.onDestroy();
     }
     
@@ -288,6 +288,10 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
 //					txt_bind_email.setText("");
+					if (txt_bind_email.getText().toString().length() > 0) {
+						field_clear_email.setVisibility(View.VISIBLE);
+					}
+					
 				} else {
 					field_clear_email.setVisibility(View.GONE);
 					mInputMethodManager.hideSoftInputFromWindow(txt_bind_email.getWindowToken() , 0);
@@ -330,6 +334,9 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
 //					txt_auth_code.setText("");
+					if (txt_auth_code.getText().toString().length() > 0) {
+						field_clear_auth_code.setVisibility(View.VISIBLE);
+					}
 				} else {
 					field_clear_auth_code.setVisibility(View.GONE);
 					mInputMethodManager.hideSoftInputFromWindow(txt_auth_code.getWindowToken() , 0);
@@ -392,9 +399,10 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 //					}
 //				}).start();
             	
-//    			Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
-//				startActivity(intent);
-				finish();
+    			Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
+				startActivity(intent);
+				closeSoftKeyboard();
+				BindEmailAddressActivity.this.finish();
 			} else {
 				pageFlag = BIND_EMAIL_PAGE;
 				
@@ -570,7 +578,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                     	
                     	mMsgBox.showWaitImageSuccess("邮箱绑定成功");
 //                    	mMsgBox.dismissDialog();
-                    	
+                    	closeSoftKeyboard();
                     	new Thread(new Runnable() {
 							
 							@Override
@@ -582,7 +590,13 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 								}
 								Intent bindIntent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
 		                    	startActivity(bindIntent);
-		                    	finish();
+
+		                    	//自动关闭掉修改邮箱的页面
+		                    	if (FixBindEmailAddressActivity.isInstanciated()) {
+		                    		FixBindEmailAddressActivity.instance().finish();
+								}
+		                    	
+		                    	BindEmailAddressActivity.this.finish();
 								
 							}
 						}).start();

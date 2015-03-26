@@ -13,9 +13,7 @@
 		android:layout_height="@dimen/title_bar_height"
 		android:layout_alignParentTop="true"
 		style="?attr/navbar">
-		
-	    
-	    
+
 	    <ImageButton
 			android:id="@+id/title_back"
 			android:layout_height="50dp"
@@ -159,13 +157,9 @@
 				</FrameLayout>
 			</RelativeLayout>
 
-			<ImageView
-				style="@style/bg_section_divider_line_light"/>
+			
 
-			<TextView
-			    android:id="@+id/settings_about"
-			    style="@style/standard_list_item_with_arrow"
-			    android:text="@string/settings_about" />
+			
 
 			<ImageView
 				style="@style/bg_section_divider_line_light"/>
@@ -182,9 +176,15 @@
 				android:id="@+id/settings_rate"
 				android:text="@string/settings_rate"
 				style="@style/standard_list_item_with_arrow"/>
-
+			
 			<ImageView
 				style="@style/bg_section_divider_line_light"/>
+			
+			<TextView
+			    android:id="@+id/settings_about"
+			    style="@style/standard_list_item_with_arrow"
+			    android:text="@string/settings_about" />
+
 
 			<ImageView
 				style="@style/bg_section_divider_line_dark"/>

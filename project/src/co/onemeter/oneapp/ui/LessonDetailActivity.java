@@ -224,9 +224,6 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 //			long currentTime = System.currentTimeMillis()/1000;
 //			long classTimesStamps =Integer.parseInt(classTimes[0])*3600 + Integer.parseInt(classTimes[1])*60+startdate;
 //			long classEndTimeStamps = Integer.parseInt(classLengths[0])*3600 + Integer.parseInt(classLengths[1])*60 + classTimesStamps;
-			Log.d("---------startdate------------", startdate+"");
-			Log.d("---------enddate------------", enddate+"");
-			Log.d("---------currentTime------------", currentTime+"");
 			if(currentTime > startdate && currentTime < enddate){
 				Toast.makeText(this, "正在上课，无法修改", Toast.LENGTH_SHORT).show();
 			}else{

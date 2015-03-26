@@ -21,9 +21,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
-import co.onemeter.oneapp.liveplayer.VideoPlayingActivity;
-import co.onemeter.oneapp.ui.MyClassesActivity.MyClassAdapter;
-import co.onemeter.oneapp.ui.MyClassesActivity.MyClassAdapter.ViewHolder;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
 
@@ -94,10 +91,12 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		setContentView(R.layout.activity_class_detail);
 		
 		initView();
+		if(classId != null){
+			getLessonInfo();
+//			setClassInfo();
+			getClassInfo(classId,class_group);
+		}
 		
-		getLessonInfo();
-		setClassInfo();
-		getClassInfo(classId);
 	}
 
 	private void initView(){
@@ -128,11 +127,15 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		
 		
 		Intent intent = getIntent();
-//		classId = "0b2f933f-a4d7-44de-a711-569abb04846a";
-		classId = intent.getStringExtra("classId");
-		schoolId = intent.getStringExtra("schoolId");
+//		classId = "1678ff8f-2a41-438a-bb22-4f55530857f1";
+//		classId = intent.getStringExtra("classId");
+//		schoolId = intent.getStringExtra("schoolId");
+//		schoolId = "60f05397-dfa8-4ddc-9e0d-b4fad549f184";
 		Database db = Database.getInstance(this);
-		parent_group_id = db.getParentGroupId(classId);
+		if(classId != null){
+			parent_group_id = db.getParentGroupId(classId);
+		}
+		
 //		members = mdb.fetchGroupMembers(classId);
 //		if(members == null || members.isEmpty()){
 //			AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
@@ -162,7 +165,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 //		}
 		
 //		query.find(R.id.class_detail_title).text(intent.getStringExtra("classroomName"));
-		query.find(R.id.myclasses_title).text(intent.getStringExtra("classroomName"));
+//		query.find(R.id.myclasses_title).text("a");
 //		query.find(R.id.title_back).clicked(this);
 		query.find(R.id.btn_myclass_addclass).clicked(this);
 		query.find(R.id.class_live_class).clicked(this);
@@ -193,8 +196,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				    myclasses_title.setText(classrooms.get(position).groupNameOriginal);
 				    layout_main_drawer.closeDrawer(layout_main_leftdrawer);
 				    getLessonInfo();
-				    setClassInfo();
-				    getClassInfo(classId);
+//				    setClassInfo();
+				    getClassInfo(classId,class_group);
 				}
 				
 				
@@ -246,7 +249,10 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	@Override
 	protected void onResume() {
 		super.onResume();
-		refreshLessonInfo();
+		if(classId != null){
+			refreshLessonInfo();
+		}
+		
 	}
 	private void getSchoolClassInfo(){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
@@ -333,13 +339,13 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 
 			});
 	}
-	private void getClassInfo(final String classId){
+	private void getClassInfo(final String classId,final GroupChatRoom g){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
 				classInfos.clear();
-				return LessonWebServerIF.getInstance(ClassDetailActivity.this).getClassInfo(classId,classInfos,class_group);
+				return LessonWebServerIF.getInstance(ClassDetailActivity.this).getClassInfo(classId,classInfos,g);
 			}
 
 			protected void onPostExecute(Integer result) {
@@ -386,31 +392,31 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		
 		return view;
 	}
-	private void setClassInfo(){
-		final Handler hanlder = new Handler();
-		
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				int errno = WowTalkWebServerIF.getInstance(ClassDetailActivity.this).fGroupChat_GetByID(classId, class_group);
-//				android.util.Log.i("-->>", class_group.description);
-				if(errno == ErrorCode.OK){
-					hanlder.post(new Runnable() {
-						
-						@Override
-						public void run() {
-							if(class_group != null){
-								refreshClassInfo();
-							}
-						}
-					});
-				}
-			}
-		}).start();
-		
-			
-	}
+//	private void setClassInfo(){
+//		final Handler hanlder = new Handler();
+//		
+//		new Thread(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+//				int errno = WowTalkWebServerIF.getInstance(ClassDetailActivity.this).fGroupChat_GetByID(classId, class_group);
+////				android.util.Log.i("-->>", class_group.description);
+//				if(errno == ErrorCode.OK){
+//					hanlder.post(new Runnable() {
+//						
+//						@Override
+//						public void run() {
+//							if(class_group != null){
+//								refreshClassInfo();
+//							}
+//						}
+//					});
+//				}
+//			}
+//		}).start();
+//		
+//			
+//	}
 	
 	private void refreshClassInfo(){
 		final String term = getString(R.string.class_term);
@@ -447,7 +453,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			currentTime = System.currentTimeMillis()/1000;
 //			String time = tvTime.getText().toString().substring(5);
 //			String length = tvLength.getText().toString().substring(5);	
-			if(lessons.isEmpty()){
+			if(currentTime < lessons.get(0).start_date){
 				Builder alertDialog = new AlertDialog.Builder(ClassDetailActivity.this);
     			alertDialog.setTitle("提示");
     			alertDialog.setMessage("现在没有课程正在直播");
@@ -477,7 +483,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 						lessonName = lesson.title;
 						}
 					}
-
 				Intent intent = new Intent();
 				intent.putExtra("student_live", 1);
 				intent.putExtra("lessonId", lessonId);
@@ -497,7 +502,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			break;
 		case R.id.lay_footer_add:
 			Intent i = new Intent(this,AddClassActivity.class);
-			startActivity(i);
+			startActivityForResult(i, 1001);
 			break;
 		default:
 			break;
@@ -534,8 +539,10 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 					reSubject + Constants.COMMA +
 					rePlace;
 			
-			getClassInfo(classId);
+			getClassInfo(classId,class_group);
 		
+		}else if(requestCode == 1001 && resultCode == RESULT_OK){
+			getSchoolClassInfo();
 		}
 	}
 	
@@ -582,11 +589,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                     	}
                     	Intent intent = new Intent(ClassDetailActivity.this, LessonInfoEditActivity.class);
                     	intent.putExtra("class", class_group);
-//                    	intent.putExtra("reLength", tvLength.getText().toString().substring(5));
                     	Bundle b = new Bundle();
                     	b.putString("retime", tvTime.getText().toString().substring(3));
                     	intent.putExtras(b);
-//                    	intent.putExtra("reTime", tvTime.getText().toString().substring(5));
                         startActivity(intent);
                         bottomBoard.dismiss();
                     }
@@ -602,8 +607,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		Lesson lesson = lessons.get(position);
 		long startdate = lesson.start_date;
 		long enddate = lesson.end_date;
-//		String classTime = tvTime.getText().toString().substring(3); 
-//		String classLength = tvLength.getText().toString().substring(5);
 		Intent intent = new Intent();
 		intent.setClass(this, LessonDetailActivity.class);
 		intent.putExtra(Constants.LESSONID, lessons.get(position).lesson_id);
@@ -613,8 +616,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		intent.putExtra("lesson", lessons.get(position));
 		intent.putExtra("startdate", startdate);
 		intent.putExtra("enddate", enddate);
-//		intent.putExtra("classTime", classTime);
-//		intent.putExtra("classLength", classLength);
 		intent.putExtra("onResume", isOnResume);
 		startActivity(intent);
 
@@ -751,11 +752,18 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			long now = Utils.getDayStampMoveMillis();
 //			Log.i("---startdata---" +startdata);
 //			Log.i("---now---" +now);
-			if(startdata < now){
+//			if(startdata < now){
+//				holder.item_name.setTextColor(0xff8eb4e6);
+//			}
+//			if(startdata == now){
+//				holder.item_name.setTextColor(Color.RED);				
+//			}
+			if(curTime > enddata){
+				holder.item_name.setTextColor(getResources().getColor(R.color.gray));
+			}else if(curTime > now && curTime <startdata){
 				holder.item_name.setTextColor(0xff8eb4e6);
-			}
-			if(startdata == now){
-				holder.item_name.setTextColor(Color.RED);				
+			}else if(curTime > startdata && curTime < enddata){
+				holder.item_name.setTextColor(Color.RED);
 			}
 			if((startdata < curTime) && (curTime < enddata) && (lesson.live == 1)){
 				holder.coursetable_item_islive.setVisibility(View.VISIBLE);
@@ -808,7 +816,11 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			}else{
 				holder = (ViewHolder) convertView.getTag();
 			}
-			holder.item_myclass_textview.setText(classrooms.get(position).groupNameOriginal);		
+			holder.item_myclass_textview.setText(classrooms.get(position).groupNameOriginal);
+			if(classId != null && classId.equals(classrooms.get(position).groupID)){
+				holder.item_myclass_imageview.setImageResource(R.drawable.icon_myclass_leftpage_u);
+				holder.item_myclass_textview.setTextColor(0xFF00A2E8);
+			}
 			return convertView;
 		}
 		class ViewHolder{

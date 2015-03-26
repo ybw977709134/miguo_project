@@ -132,27 +132,27 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 			String[] times = reTime.split(" - ");
 			String[] startTime = times[0].split(":");
 			String[] endTime = times[1].split(":");
-//			int timeLengthTag = (Integer.parseInt(endTime[0])*3600 + Integer.parseInt(endTime[1])*60 - 
-//					Integer.parseInt(startTime[0])*3600 - Integer.parseInt(startTime[1])*60);
-//			int hourLength = timeLengthTag/3600;
-//			int minuteLength = timeLengthTag % 3600 / 60;
+			int timeLengthTag = (Integer.parseInt(endTime[0])*3600 + Integer.parseInt(endTime[1])*60 - 
+					Integer.parseInt(startTime[0])*3600 - Integer.parseInt(startTime[1])*60);
+			int hourLength = timeLengthTag/3600;
+			int minuteLength = timeLengthTag % 3600 / 60;
 			dpDate.init(Integer.parseInt(startDate[0]), Integer.parseInt(startDate[1]) - 1, Integer.parseInt(startDate[2]), null);
 	        dpEndDate.init(Integer.parseInt(endDate[0]), Integer.parseInt(endDate[1]) - 1, Integer.parseInt(endDate[2]), null);
 	        tpTime.setCurrentHour(Integer.parseInt(startTime[0]));
 	        tpTime.setCurrentMinute(Integer.parseInt(startTime[1]));
-//	        if(dtTerm.getText().toString() != null){
-//				tpLength.setCurrentHour(hourLength);
-//	            tpLength.setCurrentMinute(minuteLength);
-//			}
+	        if(dtTerm.getText().toString() != null){
+				tpLength.setCurrentHour(hourLength);
+	            tpLength.setCurrentMinute(minuteLength);
+			}
 	        if(String.valueOf(tpTime.getCurrentHour()) != null){
+	        	tpTime.setEnabled(false);
+	        	tpLength.setEnabled(false);
 	        	layout_lesinfo_time.setVisibility(View.GONE);
 	        	layout_lesinfo_length.setVisibility(View.GONE);
 	        }
 	        
 		}
-        
-		tpLength.setCurrentHour(0);
-	    tpLength.setCurrentMinute(0);
+		
 		mMsgBox = new MessageBox(this);
 		mDBHelper = new Database(this);
 		AQuery q = new AQuery(this);

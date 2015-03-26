@@ -58,6 +58,10 @@ public class ErrorCode {
      * 投票已经在web端或其他客户端投过，重复投票
      */
     public static final int MOMENT_SURVEY_HAS_VOTED = 42;
+    /**
+     * 表示这门课程在当天已经安排有课时了
+     */
+    public static final int ERR_DUPLICATE_LESSONS_ON_SAME_DAY = 50;
 
 	/** Error Code: Bad or no response from remote server. */
 	public static final int BAD_RESPONSE = -1;

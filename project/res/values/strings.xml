@@ -933,12 +933,15 @@
 	<string name="class_add_homework">添加练习</string>
 	<string name="class_submit_success">提交成功</string>
 	<string name="class_submit_failed">提交失败</string>
+	<string name="class_time_conflict">排课时间冲突！</string>
+	<string name="class_time_had">这个日期已经设置过课程，添加课程失败！</string>
 	<string name="class_time_ealier">时间不能早于现在!</string>
 	<string name="class_not_del_earlier">已经上过的课不能删除!</string>
 	<string name="class_lesson_no_start">该节课还未开始!</string>
 	<string name="class_editinfo_first">请先编辑班级信息!</string>
 	<string name="class_lessontitle_not_null">课名不得为空！</string>
 	<string name="class_les_not_before_start">课程时间不得早于开班时间！</string>
+	<string name="class_les_not_before_class">课程结束时间不得早于开始时间！</string>
 	<string name="class_camera_select_front">前</string>
 	<string name="class_camera_select_middle">中</string>
 	<string name="class_camera_select_back">后</string>

@@ -66,6 +66,8 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	private int startMinute;
 	private int endHour;
 	private int endMinute;
+	private EditText edName;
+	private InputMethodManager imm;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -212,7 +214,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	
 	private void showAddOrModifyLessonDialog(final boolean isAdd,final View item,final int position,boolean isBefore){
 		View view = getLayoutInflater().inflate(R.layout.lay_add_lesson, null);
-		final EditText edName = (EditText) view.findViewById(R.id.ed_dialog_time);
+		edName = (EditText) view.findViewById(R.id.ed_dialog_time);
 		edName.setFocusable(true);
 		edName.setFocusableInTouchMode(true); 
 		edName.requestFocus();
@@ -227,7 +229,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			
 			@Override
 			public void run() {
-				InputMethodManager imm = (InputMethodManager)edName.getContext().getSystemService(Context.INPUT_METHOD_SERVICE); 
+				imm = (InputMethodManager)edName.getContext().getSystemService(Context.INPUT_METHOD_SERVICE); 
 				imm.showSoftInput(edName, InputMethodManager.RESULT_SHOWN);
 				imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY); 
 			}
@@ -247,7 +249,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			endtimepicker.setCurrentMinute(Integer.parseInt(endTimes[1]));
             edName.setText(lessons.get(position).title);
         }else{
-        	
+        	dialog.setTitle("添加课程");
 			starttimepicker.setCurrentHour(Integer.parseInt(startTimes[0]));
 			starttimepicker.setCurrentMinute(Integer.parseInt(startTimes[1]));
 			endtimepicker.setCurrentHour(Integer.parseInt(endTimes[0]));
@@ -296,6 +298,13 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 						notdismissDialog(dialog);
 						return;
 					}
+					long startTag = startHour * 3600 + startMinute * 60;
+					long endTag = endHour * 3600 + endMinute * 60;
+					if(endTag <= startTag){
+						mMsgBox.toast(R.string.class_les_not_before_class);
+						notdismissDialog(dialog);
+						return;
+					}
 					
 					Lesson lesson = new Lesson();
 					lesson.class_id = classId;
@@ -330,6 +339,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 						}
 					}
 				}
+				closeSoftKeyboard();
 			}
 		}).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
 			
@@ -342,11 +352,17 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				closeSoftKeyboard();
 			}
 		}).create();
 		dialog.show();
 	}
 	
+	private void closeSoftKeyboard(){
+		if (edName.hasFocus()) {
+			imm.hideSoftInputFromWindow(edName.getWindowToken() , 0);
+    	}
+	}
 	private void notdismissDialog(DialogInterface dialog){
 		//利用反射使得dialog不消失
 		try {
@@ -378,6 +394,8 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 				if(errno == ErrorCode.OK){
 					Database db = Database.getInstance(LessonInfoEditActivity.this);
 					db.storeLesson(lesson);
+				}else{
+					mMsgBox.toast(R.string.class_time_conflict);
 				}
 			}
 		}).start();
@@ -416,6 +434,10 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 				mMsgBox.dismissWait();
 				if (ErrorCode.OK == result) {
 					mMsgBox.toast(R.string.class_submit_success);
+				}else if(ErrorCode.ERR_DUPLICATE_LESSONS_ON_SAME_DAY == result){
+					mMsgBox.toast(R.string.class_time_had);
+				}else{
+					mMsgBox.toast(R.string.class_time_conflict);
 				}
 				finish();
 			}
@@ -493,12 +515,21 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			
 			long now = Utils.getDayStampMoveMillis();
 			long startdate = lesson.start_date;
-			if(startdate < now){
+			long enddata = lesson.end_date;
+			long curTime = System.currentTimeMillis()/1000;
+			if(curTime > enddata){
+				holder.item_name.setTextColor(getResources().getColor(R.color.gray));
+			}else if(curTime > now && curTime <startdate){
 				holder.item_name.setTextColor(0xff8eb4e6);
-			}
-			if(startdate == now){
+			}else if(curTime > startdate && curTime < enddata){
 				holder.item_name.setTextColor(Color.RED);
 			}
+//			if(startdate < now){
+//				holder.item_name.setTextColor(0xff8eb4e6);
+//			}
+//			if(startdate == now){
+//				holder.item_name.setTextColor(Color.RED);
+//			}
 			holder.item_time.setText(sdf.format(new Date(startdate * 1000)));
 			holder.item_msg.setText("");
 			return convertView;

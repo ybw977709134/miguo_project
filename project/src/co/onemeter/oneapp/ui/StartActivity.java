@@ -302,7 +302,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 			
 		mSmsIntent = new Intent(StartActivity.this, SmsActivity.class);
         mContactIntent = new Intent(StartActivity.this, ContactsActivity.class);
-		mMyClassIntent = new Intent(StartActivity.this, MyClassesActivity.class);
+		mMyClassIntent = new Intent(StartActivity.this, ClassDetailActivity.class);
         mHomeIntent = new Intent(StartActivity.this, HomeActivity.class);
 		mDiscovIntent = new Intent(StartActivity.this, DiscoveryActivity.class);
 		

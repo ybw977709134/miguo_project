@@ -668,6 +668,9 @@
         <activity android:name="co.onemeter.oneapp.ui.ParentChatroomActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" ></activity>
+        <activity android:name="co.onemeter.oneapp.ui.PhotoSendToActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue_main" ></activity>
 	</application>
 
 </manifest>

@@ -113,6 +113,7 @@
     <string name="contacts_temp_group_delete_and_exit">删除并退出</string>
     <string name="newfriends_accept">同意</string>
     <string name="contacts_latest_contacts">最近联系人</string>
+    <string name="contacts_recent">最近</string>
     <string name="contacts_discussion">讨论组</string>
     <string name="contacts_discussion_member_counts">(%s)</string>
     <string name="contacts_frequent">常用联系人</string>

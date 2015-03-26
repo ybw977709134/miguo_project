@@ -141,17 +141,20 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
         //登陆后跳转到此页面检测用户是否绑定了邮箱，绑定了，不提示，未绑定，弹框提示用户是否要绑定邮箱
         //如果用户未绑定邮箱，跳转到绑定邮箱界面
-        
-        //msgbox.showWait();
+        checkBindEmail();
+    }
 
-		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, List<Map<String, Object>>> () {
+    private AsyncTask<Void, Integer, List<Map<String, Object>>> asyncTask_email_status;
+
+    private void checkBindEmail(){
+        asyncTask_email_status  = new AsyncTask<Void, Integer, List<Map<String, Object>>> () {
 
             @Override
             protected List<Map<String, Object>> doInBackground(Void... params) {
                 List<Map<String, Object>> reslut = null;
                 try {
                     reslut = WowTalkWebServerIF.getInstance(HomeActivity.this).fEmailBindStatus();
-                }catch (NullPointerException e){
+                }catch (Exception e){
 
                 }
                 return reslut;
@@ -159,12 +162,12 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
             @Override
             protected void onPostExecute(List<Map<String, Object>> result) {
-            	//msgbox.dismissWait();
-            	String bindEmail = null;
-            	if (result != null) {
-            		bindEmail = (String) result.get(0).get("email");
-            	
-            		if (bindEmail == null) {
+                //msgbox.dismissWait();
+                String bindEmail = null;
+                if (result != null) {
+                    bindEmail = (String) result.get(0).get("email");
+
+                    if (bindEmail == null) {
                         MessageDialog dialog = new MessageDialog(HomeActivity.this);
                         dialog.setTitle("");
                         dialog.setMessage("请绑定邮箱，用于找回密码");
@@ -179,14 +182,15 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                             }
                         });
                         dialog.show();
-            		} else {
+                    } else {
 //            			Toast.makeText(HomeActivity.this, bindEmail, Toast.LENGTH_SHORT).show();
-            		} 
-            	} else {
-            		Toast.makeText(HomeActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
-            	}
+                    }
+                } else {
+                    Toast.makeText(HomeActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
+                }
             }
-        });
+        };
+        AsyncTaskExecutor.executeShortNetworkTask(asyncTask_email_status);
     }
 
     private void initDots(){
@@ -252,6 +256,13 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        asyncTask_email_status.cancel(true);
+        asyncTask_check_update.cancel(true);
+    }
+
+    @Override
     public void onClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -283,6 +294,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             case R.id.img_home_register:
                 break;
             case R.id.img_home_answerquestion:
+                //startActivity(new Intent(this,PhotoSendToActivity.class));
                 break;
             case R.id.img_home_chatroom:
                 intent = new Intent(this,ParentChatroomActivity.class);
@@ -342,11 +354,13 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         }
     }
 
+
+    private AsyncTask<Void, Void, Integer> asyncTask_check_update;
     /**
      * check whether the application needs to update.
      */
     private void checkAppUpdate() {
-        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+        asyncTask_check_update =  new AsyncTask<Void, Void, Integer>() {
             public UpdatesInfo updatesInfo = new UpdatesInfo();
 
             @Override
@@ -380,7 +394,8 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                     }
                 }
             }
-        });
+        };
+        AsyncTaskExecutor.executeShortNetworkTask(asyncTask_check_update);
     }
 
     private void changeNewUpdateFlagView(int visibility){

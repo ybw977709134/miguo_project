@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_dark">
+
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        android:layout_width="fill_parent"
+        style="?attr/navbar"
+        android:layout_height="50dp">
+
+        <co.onemeter.oneapp.ui.widget.PressedTextView
+            android:id="@+id/txt_cancel"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/cancel"
+            android:onClick="true"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_alignParentRight="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="发送到"
+            style="@style/page_title_dark"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:paddingTop="@dimen/bottom_board_btn_top_margin"
+        android:paddingBottom="@dimen/bottom_board_btn_top_margin">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/txt_one"
+                android:padding="@dimen/padding_small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/contacts_recent"
+                android:textColor="@color/blue"
+                android:clickable="true"/>
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/txt_two"
+                android:padding="@dimen/padding_small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/contacts_tab_books"
+                android:textColor="@color/black_24"
+                android:clickable="true"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/txt_third"
+                android:padding="@dimen/padding_small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/contacts_tab_school"
+                android:textColor="@color/black_24"
+                android:clickable="true"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="2dp">
+        <ImageView
+            android:id="@+id/img_cursor"
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:background="@drawable/bg_menubar_bule"/>
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager_sendto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+</LinearLayout>

@@ -702,51 +702,51 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
     private void setupOpButtons(final ViewHolder holder,final Moment moment,final int position,
                                 final ArrayList<Review> likeReview,ArrayList<Review> commentReview) {
-        if (!TextUtils.isEmpty(moment.tag) &&
-                (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_QA))) {
-            holder.layoutLike.setVisibility(View.VISIBLE);
-            holder.layoutComment.setVisibility(View.GONE);
-            holder.layoutAnswer.setVisibility(View.VISIBLE);
-        } else if (Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag) || Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
-            holder.layoutLike.setVisibility(View.VISIBLE);
-            holder.layoutComment.setVisibility(View.VISIBLE);
-            holder.layoutAnswer.setVisibility(View.GONE);
-        } else {
-            holder.layoutLike.setVisibility(View.VISIBLE);
-            holder.layoutComment.setVisibility(View.VISIBLE);
-            holder.layoutAnswer.setVisibility(View.GONE);
-        }
+//        if (!TextUtils.isEmpty(moment.tag) &&
+//                (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_QA))) {
+//            holder.layoutLike.setVisibility(View.VISIBLE);
+//            holder.layoutComment.setVisibility(View.GONE);
+//            holder.layoutAnswer.setVisibility(View.VISIBLE);
+//        } else if (Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(moment.tag) || Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI.equals(moment.tag)) {
+//            holder.layoutLike.setVisibility(View.VISIBLE);
+//            holder.layoutComment.setVisibility(View.VISIBLE);
+//            holder.layoutAnswer.setVisibility(View.GONE);
+//        } else {
+//            holder.layoutLike.setVisibility(View.VISIBLE);
+//            holder.layoutComment.setVisibility(View.VISIBLE);
+//            holder.layoutAnswer.setVisibility(View.GONE);
+//        }
 
-        if(View.VISIBLE == holder.layoutLike.getVisibility()) {
-//            holder.tvLikeCountInd.setText(""+likeReview.size()+" "+context.getString(R.string.moments_like));
-//            holder.tvLikeCountInd.setVisibility(View.VISIBLE);
-        } else {
-            holder.tvLikeCountInd.setVisibility(View.GONE);
-        }
-
-        if(View.VISIBLE == holder.layoutComment.getVisibility()) {
-//            holder.tvCommentCountInd.setText(""+commentReview.size()+" "+context.getString(R.string.moments_comment));
-//            holder.tvCommentCountInd.setVisibility(View.VISIBLE);
-        } else {
-            holder.tvCommentCountInd.setVisibility(View.GONE);
-        }
-
-        if(View.VISIBLE == holder.layoutAnswer.getVisibility()) {
-//            holder.tvAnswerCountInd.setText(""+commentReview.size()+" "+context.getString(R.string.answer_qa));
-//            holder.tvAnswerCountInd.setVisibility(View.VISIBLE);
-        } else {
-            holder.tvAnswerCountInd.setVisibility(View.GONE);
-        }
+//        if(View.VISIBLE == holder.layoutLike.getVisibility()) {
+////            holder.tvLikeCountInd.setText(""+likeReview.size()+" "+context.getString(R.string.moments_like));
+////            holder.tvLikeCountInd.setVisibility(View.VISIBLE);
+//        } else {
+//            holder.tvLikeCountInd.setVisibility(View.GONE);
+//        }
+//
+//        if(View.VISIBLE == holder.layoutComment.getVisibility()) {
+////            holder.tvCommentCountInd.setText(""+commentReview.size()+" "+context.getString(R.string.moments_comment));
+////            holder.tvCommentCountInd.setVisibility(View.VISIBLE);
+//        } else {
+//            holder.tvCommentCountInd.setVisibility(View.GONE);
+//        }
+//
+//        if(View.VISIBLE == holder.layoutAnswer.getVisibility()) {
+////            holder.tvAnswerCountInd.setText(""+commentReview.size()+" "+context.getString(R.string.answer_qa));
+////            holder.tvAnswerCountInd.setVisibility(View.VISIBLE);
+//        } else {
+//            holder.tvAnswerCountInd.setVisibility(View.GONE);
+//        }
 
         //显示点赞的数量
-        holder.tvLike.setText(""+likeReview.size());
+//        holder.tvLike.setText(""+likeReview.size());
 
         //显示评论的数量
-//        holder.tvComment.setText(R.string.moments_comment);
-        holder.tvComment.setText(""+commentReview.size());
+//        holder.tvComment.setText(""+commentReview.size());
+        
         //显示回复的数量
 //        holder.tvAnswer.setText(R.string.answer_qa);
-        holder.tvAnswer.setText(""+commentReview.size());
+//        holder.tvAnswer.setText(""+commentReview.size());
 
         if (moment.likedByMe) {
 //            holder.btnLike.setEnabled(false);
@@ -765,19 +765,26 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //        }
         if(commentReview.size()>0){
         	holder.btnComment.setBackgroundResource(R.drawable.timeline_comment_a);
-        	holder.btnAnswer.setBackgroundResource(R.drawable.timeline_comment_a);
-        	holder.tvComment.setVisibility(View.VISIBLE);
-        	holder.tvAnswer.setVisibility(View.VISIBLE);
+//        	holder.btnAnswer.setBackgroundResource(R.drawable.timeline_comment_a);
+//        	holder.tvComment.setVisibility(View.VISIBLE);
+        	 //显示评论的数量
+            holder.tvComment.setText(""+commentReview.size());
+//        	holder.tvAnswer.setVisibility(View.VISIBLE);
         }else{
         	holder.btnComment.setBackgroundResource(R.drawable.timeline_comment);
-        	holder.btnAnswer.setBackgroundResource(R.drawable.timeline_comment);
-        	holder.tvComment.setVisibility(View.GONE);
-        	holder.tvAnswer.setVisibility(View.GONE);
+//        	holder.btnAnswer.setBackgroundResource(R.drawable.timeline_comment);
+//        	holder.tvComment.setVisibility(View.GONE);
+        	holder.tvComment.setText(activity.getResources().getString(R.string.moments_comment));
+//        	holder.tvAnswer.setVisibility(View.GONE);
         }
         if(likeReview.size()>0){
-        	holder.tvLike.setVisibility(View.VISIBLE);
+//        	holder.tvLike.setVisibility(View.VISIBLE);
+        	//显示点赞的数量
+            holder.tvLike.setText(""+likeReview.size());
         }else{
-        	holder.tvLike.setVisibility(View.GONE);
+//        	holder.tvLike.setVisibility(View.GONE);
+        	//显示点赞文本
+            holder.tvLike.setText(activity.getResources().getString(R.string.moments_like));
         }
 //        if (moment.allowReview) {
 //        	holder.btnAnswer.setBackgroundResource(R.drawable.share_icon_comment);
@@ -826,12 +833,12 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 holder.layoutAnswer.performClick();
             }
         });
-        holder.layoutAnswer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.layoutComment.performClick();
-            }
-        });
+//        holder.layoutAnswer.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                holder.layoutComment.performClick();
+//            }
+//        });
 
 //        setMomentFavoriteStatus(moment,holder.ivMomentFavorite);
 

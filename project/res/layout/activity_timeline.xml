@@ -14,10 +14,10 @@
 		<ImageButton
 			android:id="@+id/title_left"
 			android:layout_height="50dp"
-			android:layout_width="50dp"
+			android:layout_width="30dp"
 			android:layout_alignParentLeft="true"
 			android:background="@null"
-			android:src="@drawable/nav_back_selector"/>
+			android:src="@drawable/icon_back_selector"/>
 		<ImageButton
 			android:id="@+id/title_edit"
 			android:layout_height="50dp"
@@ -30,7 +30,7 @@
 			style="?attr/navbar_title" />
 		<LinearLayout
 			android:id="@+id/btn_layout"
-			android:layout_height="wrap_content"
+			android:layout_height="25dp"
 			android:layout_width="wrap_content"
 			android:layout_centerInParent="true"
 			android:orientation="horizontal">

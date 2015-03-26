@@ -73,7 +73,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_weight="1"
                                 android:text="小强"
-                                style="@style/moment_user_name"/>
+                                style="@style/moment_friend_user_name"/>
 
                         <LinearLayout
                                 android:layout_height="0dp"
@@ -167,7 +167,7 @@
                             android:layout_height="match_parent"
                             android:layout_width="wrap_content"
                             android:gravity="center_vertical"
-                            style="@style/moment_datetime"
+                            style="@style/moment_tag"
                             android:layout_marginRight="20dp" />
                     
                     <!-- 有背景色的表示方法
@@ -193,12 +193,14 @@
                             
                 </LinearLayout>
             </RelativeLayout>
-            
+           
+            <!--  
 			<ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:layout_marginTop="@dimen/padding_medium" 
                     android:background="@drawable/timeline_card_bg_line" />
+                    -->
 			
             <include layout="@layout/piece_moment_content"/>
 

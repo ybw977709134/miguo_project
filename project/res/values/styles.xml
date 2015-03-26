@@ -284,10 +284,20 @@
 		<item name="android:textSize">18sp</item>
 		<item name="android:textColor">@color/black</item>
 	</style>
+	
+	<style name="moment_friend_user_name">
+		<item name="android:textSize">16sp</item>
+		<item name="android:textColor">@color/black</item>
+	</style>
 
 	<style name="moment_datetime">
-		<item name="android:textColor">@color/default_subtext</item>
-		<item name="android:textSize">12sp</item>
+		<item name="android:textColor">@color/text_gray40</item>
+		<item name="android:textSize">14sp</item>
+	</style>
+	
+	<style name="moment_tag">
+		<item name="android:textColor">@color/text_gray4</item>
+		<item name="android:textSize">14sp</item>
 	</style>
 
 	<style name="moment_date">
@@ -297,8 +307,8 @@
 	</style>
 
 	<style name="moment_body">
-		<item name="android:textSize">14sp</item>
-		<item name="android:textColor">@color/default_text</item>
+		<item name="android:textSize">16sp</item>
+		<item name="android:textColor">@color/black</item>
 		<item name="android:layout_marginTop">@dimen/padding_medium</item>
 	</style>
 

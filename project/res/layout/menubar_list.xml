@@ -10,10 +10,10 @@
 	<ImageView
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:background="@drawable/divider"/>
+		android:background="@drawable/bg_section_divider_line_dark"/>
 	<ListView
 		android:id="@android:id/list"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:divider="@drawable/divider"/>
+		android:divider="@drawable/bg_section_divider_line_dark"/>
 </LinearLayout>

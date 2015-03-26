@@ -79,13 +79,13 @@ public abstract class MenuBar {
     }
 
     private void setCollapsedButtonSyle(TextView button) {
-        button.setTextColor(context.getResources().getColor(R.color.text_gray1));
-        setRightDrawable(button, R.drawable.timeline_dropdown_mark_collapsed);
+        button.setTextColor(context.getResources().getColor(R.color.text_gray32));
+        setRightDrawable(button, R.drawable.icon_events_category_triangle_grey);
     }
 
     private void setExpandedButtonSyle(TextView button) {
-        button.setTextColor(context.getResources().getColor(R.color.green));
-        setRightDrawable(button, R.drawable.timeline_dropdown_mark_expanded);
+        button.setTextColor(context.getResources().getColor(R.color.blue_main));
+        setRightDrawable(button, R.drawable.icon_events_category_triangle_bule);
     }
 
     private void showDialog(PopupWindow dlgToShow, TextView button) {
@@ -144,7 +144,7 @@ public abstract class MenuBar {
                         v.setBackgroundColor(backgroundColor);
                         TextView tv = (TextView) v.findViewById(android.R.id.text1);
                         Drawable rightDrawable = selectedIdx == position
-                                ? getContext().getResources().getDrawable(R.drawable.menubar_list_checkmark)
+                                ? getContext().getResources().getDrawable(R.drawable.icon_section_select)
                                 : null;
                         if (rightDrawable != null) {
                             rightDrawable.setBounds(0, 0, rightDrawable.getIntrinsicWidth(), rightDrawable.getIntrinsicHeight());

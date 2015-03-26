@@ -5,7 +5,7 @@
 	<color name="white">#ffffff</color>
 	<color name="white_40">#60ffffff</color>
 	<color name="white_80">#cdffffff</color>
-	<color name="black">#000</color>
+	<color name="black">#000000</color>
 	<color name="black_24">#ff525252</color>
 	<color name="black_30">#77000000</color>
 	<color name="gray">#b3b3b3</color>
@@ -22,6 +22,7 @@
 	<color name="blue_11">#604379a0</color>
 	<color name="blue_12">#ff0079ff</color>
 	<color name="blue_18">#ff10aaef</color>
+	<color name="blue_main">#ff19aaef</color>
 	
 	<color name="orange">#ff7200</color>
 	
@@ -42,7 +43,8 @@
 	<color name="text_gray1">#333</color>
 	<color name="text_gray2">#666</color>
 	<color name="text_gray3">#999</color>
-	<color name="text_gray4">#ccc</color>
+	<color name="text_gray4">#cccccc</color>
+	<color name="text_gray32">#525252</color>
 	<color name="text_gray40">#999999</color>
 	<color name="text_hint">@color/text_gray4</color>
 	<color name="default_text">@color/text_gray1</color>

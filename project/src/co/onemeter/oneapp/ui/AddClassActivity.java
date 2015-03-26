@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ThemeHelper;
@@ -29,7 +33,8 @@ import org.wowtalk.ui.MessageBox;
 public class AddClassActivity extends Activity implements View.OnClickListener {
 
     private MessageBox msgbox = new MessageBox(this);
-
+    private EditText et_code;
+    private InputMethodManager imm;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,15 +45,31 @@ public class AddClassActivity extends Activity implements View.OnClickListener {
         AQuery q = new AQuery(this);
         q.find(R.id.title_back).clicked(this);
         q.find(R.id.btn_add).clicked(this);
+        et_code = (EditText) findViewById(R.id.txt_code);
+        et_code.setFocusable(true);
+        et_code.setFocusableInTouchMode(true); 
+        et_code.requestFocus();
+        Handler hanlder = new Handler();
+        hanlder.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				imm = (InputMethodManager)et_code.getContext().getSystemService(Context.INPUT_METHOD_SERVICE); 
+				imm.showSoftInput(et_code, InputMethodManager.RESULT_SHOWN);
+				imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY); 
+			}
+		}, 200);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.title_back:
+            	closeSoftKeyboard();
                 onBackPressed();
                 break;
             case R.id.btn_add:
+            	closeSoftKeyboard();
                 submit();
                 break;
         }
@@ -83,6 +104,7 @@ public class AddClassActivity extends Activity implements View.OnClickListener {
         				public void onClick(DialogInterface arg0, int arg1) {
         					setResult(RESULT_OK);
                             finish();
+                            closeSoftKeyboard();
         				}
         			});        			
         			alertDialog.create().show();
@@ -114,4 +136,10 @@ public class AddClassActivity extends Activity implements View.OnClickListener {
         }, invitationCode);
 
     }
+    
+    private void closeSoftKeyboard(){
+		if (et_code.hasFocus()) {
+			imm.hideSoftInputFromWindow(et_code.getWindowToken() , 0);
+    	}
+	}
 }

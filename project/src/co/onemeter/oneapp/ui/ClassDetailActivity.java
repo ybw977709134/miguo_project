@@ -597,7 +597,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                     }
                 });
         //Cancel
-        bottomBoard.addCancelBtn(getString(R.string.close));
+        bottomBoard.addCancelBtn(getString(R.string.class_camera_cancel));
         bottomBoard.show();
     }
 	

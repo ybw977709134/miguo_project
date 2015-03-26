@@ -112,8 +112,8 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 //			lay_camera.setEnabled(false);
 //		}
 		if(isTeacher()){
-			q.find(R.id.text_first).text(getString(R.string.class_lesson_situation_table));
-			q.find(R.id.text_second).text(getString(R.string.class_set_homework));
+			q.find(R.id.text_first).text(getString(R.string.class_lesson_situation));
+			q.find(R.id.text_second).text(getString(R.string.class_homework));
 			q.find(R.id.text_third).text(getString(R.string.class_parent_suggestion));
 			q.find(R.id.text_classroom).text(getString(R.string.class_lesson_classroom));
 			q.find(R.id.text_first_r).text("");
@@ -291,7 +291,10 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 					text_classroom_name.setText(lessonDetails.get(0).room_name);
 					roomId = lessonDetails.get(0).room_id;
 
-					for(Camera camera:lessoonDetails_camera){
+					if(lessoonDetails_camera.get(0).camera_name == null){
+						text_camera_num.setText("打开0/0");
+					}else{
+						for(Camera camera:lessoonDetails_camera){
 						count++;
 						if(camera.status == 1){
 							count_on++;
@@ -302,8 +305,8 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 						text_classroom_name.setText("未设置");
 					}else{
 						text_camera_num.setText("打开"+count_on+"/"+count);
-					}
-					
+						}
+					}				
 				}
 				
 			}

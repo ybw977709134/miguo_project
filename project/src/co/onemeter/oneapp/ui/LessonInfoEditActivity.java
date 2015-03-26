@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
@@ -39,7 +40,7 @@ import java.util.*;
  * 课表修改以及班级信息修改页面。
  * Created by yl on 21/12/2014.
  */
-public class LessonInfoEditActivity extends Activity implements OnClickListener, OnItemClickListener {
+public class LessonInfoEditActivity extends Activity implements OnClickListener, OnItemClickListener, OnTouchListener {
 
 	private String classId;
 	private int originSize;
@@ -101,6 +102,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		lvCourtable.addFooterView(footerView());
 		lvCourtable.setAdapter(adapter);
 		lvCourtable.setOnItemClickListener(this);
+		lvCourtable.setOnTouchListener(this);
 		
 		q.find(R.id.cancel).clicked(this);
 		q.find(R.id.save).clicked(this);
@@ -540,6 +542,22 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			TextView item_msg;
 		}
 		
+	}
+	private void closeInputBoard(){
+		View view = getWindow().peekDecorView();
+		if(view != null){
+			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+			}
+	}
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		switch (v.getId()){
+        case R.id.lv_courtable:
+        	closeInputBoard();
+            break;
+    }
+		return false;
 	}
 
 

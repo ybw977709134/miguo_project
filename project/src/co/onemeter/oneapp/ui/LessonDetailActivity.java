@@ -182,6 +182,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			if(isTeacher()){
 				intent.setClass(this, TeacherCheckActivity.class);
 				intent.putExtra("classId", classId);
+				intent.putExtra("schoolId", schoolId);
 				intent.putExtra("lvFlag", 0);
 			}else{
 				intent.putExtra(Constants.STUID, mPre.getUid());
@@ -198,6 +199,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			if(isTeacher()){
 				intent.setClass(this, TeacherCheckActivity.class);
 				intent.putExtra("classId", classId);
+				intent.putExtra("schoolId", schoolId);
 				intent.putExtra("lvFlag", 1);
 				startActivity(intent);
 			}else{

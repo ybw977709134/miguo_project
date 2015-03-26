@@ -77,7 +77,8 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 			lvFlag = intent.getIntExtra("lvFlag", 0);
 			lessonId = intent.getIntExtra(Constants.LESSONID, 0);
 			classId = intent.getStringExtra("classId");
-			schoolId = mdbHelper.fetchSchoolIdByClassId(classId);
+			schoolId = intent.getStringExtra("schoolId");
+//			schoolId = mdbHelper.fetchSchoolIdByClassId(classId);
 			if(lvFlag == LESSITUATION){
 				txtTitle.setText(R.string.class_lesson_situation_table);
 			}else if(lvFlag == PARENTSUG){

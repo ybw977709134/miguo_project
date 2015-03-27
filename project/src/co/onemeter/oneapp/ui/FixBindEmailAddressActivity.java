@@ -68,7 +68,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 	private Handler mHandler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
 			if (msg.what == 0) {
-				btn_access_code.setText("获取验证码");
+				btn_access_code.setText("重新获取验证码");
 				btn_access_code.setEnabled(true);
 				btn_access_code.setTextColor(getResources().getColor(R.color.blue_12));
 				btn_access_code.setBackground(getResources().getDrawable(R.drawable.btn_small_valid));

@@ -129,6 +129,19 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
         
     }
     
+    
+	/**
+	 * 重写onTouchEvent方法，获得向下点击事件，隐藏输入法
+	 */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+    	  if(event.getAction() == MotionEvent.ACTION_DOWN){   
+    			  closeSoftKeyboard();			  
+    	  }
+    	return super.onTouchEvent(event);
+    }
+    
     //如何在绑定邮箱的过程中，任何时候按物理的返回键都绑定不成功，即使前面绑定了，还需要解绑
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -161,22 +174,6 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
     	return super.onKeyDown(keyCode, event);
     }
     
-    
-	/**
-	 * 重写onTouchEvent方法，获得向下点击事件，隐藏输入法
-	 */
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//
-//    	  if(event.getAction() == MotionEvent.ACTION_DOWN){  
-//    		  if(getCurrentFocus()!=null && getCurrentFocus().getWindowToken()!=null){  
-//    			    
-//    			  closeSoftKeyboard();
-//    			  
-//    			  }
-//    		  }
-//    	return super.onTouchEvent(event);
-//    }
     
     private void closeSoftKeyboard() {
     	
@@ -506,6 +503,12 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                         textView_verification_email_result.setVisibility(View.VISIBLE);
                     	textView_verification_email_result.setText(getString(R.string.bind_email_pwd_err));
                         break;
+                    case ErrorCode.ACCESS_CODE_ERROR_OVER://24:验证码一天最多只能验证5次
+                    	MessageDialog dialog = new MessageDialog(BindEmailAddressActivity.this,false,MessageDialog.SIZE_NORMAL);
+                        dialog.setTitle("");
+                        dialog.setMessage("今天邮箱验证次数已用完，请明天再试。");                      
+                        dialog.show();
+                        break;
                     case ErrorCode.EMAIL_USED_BY_OTHERS://28：该邮箱已被其他用户绑定
 //                        changeBindStyle();
 //                        mMsgBox.show(null, getString(R.string.settings_account_email_used_by_others));
@@ -521,6 +524,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                         mMsgBox.show(null, getString(R.string.bind_email_failed));
                         break;
                 }
+                closeSoftKeyboard();
             }
         });
 		
@@ -577,8 +581,6 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                     case ErrorCode.OK://0   
                     	
                     	mMsgBox.showWaitImageSuccess("邮箱绑定成功");
-//                    	mMsgBox.dismissDialog();
-                    	closeSoftKeyboard();
                     	new Thread(new Runnable() {
 							
 							@Override
@@ -588,13 +590,12 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
-								Intent bindIntent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
-		                    	startActivity(bindIntent);
+
 
 		                    	//自动关闭掉修改邮箱的页面
-		                    	if (FixBindEmailAddressActivity.isInstanciated()) {
-		                    		FixBindEmailAddressActivity.instance().finish();
-								}
+//		                    	if (FixBindEmailAddressActivity.isInstanciated()) {
+//		                    		FixBindEmailAddressActivity.instance().finish();
+//								}
 		                    	
 		                    	BindEmailAddressActivity.this.finish();
 								

@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
@@ -134,13 +135,9 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-    	  if(event.getAction() == MotionEvent.ACTION_DOWN){  
-    		  if(getCurrentFocus()!=null && getCurrentFocus().getWindowToken()!=null){  
-//    			  mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);  
-    			  closeSoftKeyboard();
-    			  
-    			  }
-    		  }
+    	  if(event.getAction() == MotionEvent.ACTION_DOWN){   
+    			  closeSoftKeyboard();			  
+    	  }
     	return super.onTouchEvent(event);
     }
     
@@ -538,7 +535,14 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                     case ErrorCode.EMAIL_USED_BY_OTHERS:
                     	textView_verification_email_result.setVisibility(View.VISIBLE);
                     	textView_verification_email_result.setText("该邮箱已被其他用户绑定");
-                    	break; 	
+                    	break; 
+                    	
+                    case ErrorCode.ACCESS_CODE_ERROR_OVER://24:验证码一天最多只能验证5次
+                    	MessageDialog dialog = new MessageDialog(FindPasswordEmialActivity.this,false,MessageDialog.SIZE_NORMAL);
+                        dialog.setTitle("");
+                        dialog.setMessage("今天邮箱验证次数已用完，请明天再试。");                      
+                        dialog.show();
+                        break;
                     	
                     default://邮箱绑定失败
                         mMsgBox.show(null, "你输入的账号或邮箱有误，请重新输入");
@@ -591,10 +595,17 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                     	textView_verification_email_result.setVisibility(View.VISIBLE);
                     	textView_verification_email_result.setText("验证码已过时");
                     	break;
-                        
+
                     case ErrorCode.ACCESS_CODE_ERROR://22:无效的验证码，验证码有有效期，目前是一天的有效期
                     	textView_verification_authCode_result.setVisibility(View.VISIBLE);
                     	textView_verification_authCode_result.setText(getString(R.string.access_code_error));
+                        break;
+                        
+                    case ErrorCode.ACCESS_CODE_ERROR_OVER://24:验证码一天最多只能验证5次
+                    	MessageDialog dialog = new MessageDialog(FindPasswordEmialActivity.this,false,MessageDialog.SIZE_NORMAL);
+                        dialog.setTitle("");
+                        dialog.setMessage("今天邮箱验证次数已用完，请明天再试。");                      
+                        dialog.show();
                         break;
                         
                     default:

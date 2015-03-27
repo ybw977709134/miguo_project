@@ -6,6 +6,7 @@ import java.util.Map;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -14,6 +15,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -269,14 +271,6 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 		instance = this;
 		initView();
 		
-//		boolean isBand = getIntent().getBooleanExtra("isband", false);
-		//检测用户绑定邮箱的状态
-//		bindEmailStatus ();
-//		if (isBand) {
-//			mMsgBox.show(null, getString(R.string.bind_email_successed));
-//			mMsgBox.dismissDialog();
-//		}
-
 	}
 
     @Override

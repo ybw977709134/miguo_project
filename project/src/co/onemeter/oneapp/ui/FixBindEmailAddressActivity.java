@@ -154,7 +154,6 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 
     	  if(event.getAction() == MotionEvent.ACTION_DOWN){  
     		  if(getCurrentFocus()!=null && getCurrentFocus().getWindowToken()!=null){  
-//    			  mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);  
     			  closeSoftKeyboard();
     			  
     			  }
@@ -225,7 +224,6 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 		btn_verification_code = (Button) findViewById(R.id.btn_verification_code);
 		btn_verification_code.setEnabled(false);
 		btn_verification_code.setBackground(getResources().getDrawable(R.drawable.btn_gray_medium_selector));
-		
 		title_back.setOnClickListener(this);
 		textView_fixBindEmail_back.setOnClickListener(this);
 		
@@ -267,22 +265,6 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 			
 		case R.id.textView_fixBindEmail_cancel:
 			
-//			Builder builder = new AlertDialog.Builder(this);
-//			builder.setTitle("提示");
-//			builder.setMessage("你确定要取消修改绑定邮箱吗？");
-//			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//				
-//				@Override
-//				public void onClick(DialogInterface arg0, int arg1) {
-//					//取消绑定邮箱，解绑
-////					unBindEmailAddress();
-//					finish();
-//				}
-//			});
-//			
-//			builder.setNegativeButton("取消", null);
-//			builder.create().show();
-
 			 MessageDialog dialog = new MessageDialog(FixBindEmailAddressActivity.this);
              
              dialog.setMessage("你确定要取消修改绑定邮箱吗？");
@@ -368,6 +350,14 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                 		}
                     	stopGetAccessCode();
                         break;
+                        
+                    case ErrorCode.ACCESS_CODE_ERROR_OVER://23:验证码一天最多只能验证5次
+                    	closeSoftKeyboard();
+                    	MessageDialog dialog = new MessageDialog(FixBindEmailAddressActivity.this,false,MessageDialog.SIZE_NORMAL);
+                        dialog.setTitle("");
+                        dialog.setMessage("今天邮箱验证次数已用完，请明天再试。");                      
+                        dialog.show();
+                        break;
  
                     default://获取验证码失败
 //                        mMsgBox.show(null, "获取验证码失败");
@@ -405,25 +395,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                 switch (result) {
                     case ErrorCode.OK://0 
                     	//跳转到绑定邮箱界面
-                    	unBindEmailAddress();
-//                    	mMsgBox.show(null, "解除绑定邮箱成功");
-//                    	mMsgBox.dismissDialog();
-//                    	
-//                    	new Thread(new Runnable() {
-//							
-//							@Override
-//							public void run() {
-//								try {
-//									Thread.sleep(3000);
-//								} catch (InterruptedException e) {
-//									e.printStackTrace();
-//								}
-//								Intent bindIntent = new Intent(FixBindEmailAddressActivity.this,BindEmailAddressActivity.class);
-//		                    	startActivity(bindIntent);
-//								
-//							}
-//						}).start();
-                    	
+                    	unBindEmailAddress();                    	
                         break;
                         
                     case ErrorCode.USER_NOT_EXISTS://-99
@@ -441,6 +413,13 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                     	textView_verification_code_result.setText("验证码已过时");
                     	break;
                         
+                    case ErrorCode.ACCESS_CODE_ERROR_OVER://24:验证码一天最多只能验证5次
+                    	MessageDialog dialog = new MessageDialog(FixBindEmailAddressActivity.this,false,MessageDialog.SIZE_NORMAL);
+                        dialog.setTitle("");
+                        dialog.setMessage("今天邮箱验证次数已用完，请明天再试。");                      
+                        dialog.show();
+                        break;
+                        
                     case ErrorCode.ACCESS_CODE_ERROR://22:无效的验证码，验证码有有效期，目前是一天的有效期
                     	textView_verification_code_result.setVisibility(View.VISIBLE);
                     	textView_verification_code_result.setText(getString(R.string.access_code_error));
@@ -453,49 +432,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                 }
             }
         });
-	}
-	
-	/**
-	 * 验证绑定邮箱收到的验证码
-	 * @param access_code
-	 * @param emailAddress
-	 * @author hutainfeng
-	 * @date 2015/3/5
-	 */
-//	private void verifyAccessCode(final String access_code,final String emailAddress) {
-//		mMsgBox.showWait();
-//		
-//		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
-//
-//            @Override
-//            protected Integer doInBackground(Void... params) {
-//                return WowTalkWebServerIF.getInstance(FixBindEmailAddressActivity.this).fVerifyEmailAddress(access_code,emailAddress);
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Integer result) {
-//                mMsgBox.dismissWait();
-//               
-//                switch (result) {
-//                    case ErrorCode.OK://0 
-//                    	unBindEmailAddress();
-//                        break;
-//                        
-//                    case ErrorCode.ACCESS_CODE_ERROR://22:无效的验证码，验证码有有效期，目前是一天的有效期
-//                    	textView_verification_code_result.setVisibility(View.VISIBLE);
-//                    	textView_verification_code_result.setText(getString(R.string.access_code_error));
-//                        break;
-//                        
-//                    default:
-//                        mMsgBox.show(null, getString(R.string.fix_bind_email_failed));
-//                        mMsgBox.dismissDialog();
-//                        break;
-//                }
-//            }
-//        });
-//	}
-	
-	
+	}	
 	
 	/**
 	 * 解除绑定邮箱
@@ -530,6 +467,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 								}
 								Intent bindIntent = new Intent(FixBindEmailAddressActivity.this,BindEmailAddressActivity.class);
 		                    	startActivity(bindIntent);
+		                    	FixBindEmailAddressActivity.this.finish();
 								
 							}
 						}).start();

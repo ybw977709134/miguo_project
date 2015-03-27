@@ -310,6 +310,7 @@
 		<activity
 			android:name=".ui.AccountSettingActivity"
 			android:theme="@style/Theme.Blue_main"
+			android:launchMode="singleTask"
 			android:screenOrientation="portrait" >
 		</activity>
 		

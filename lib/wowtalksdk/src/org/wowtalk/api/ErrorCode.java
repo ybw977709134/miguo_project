@@ -42,6 +42,8 @@ public class ErrorCode {
     public static final int EMAIL_VERIFICATION_CODE_ERROR = 21;
     /** Error Code */
     public static final int ACCESS_CODE_ERROR = 22;
+    /** Error Code */
+    public static final int ACCESS_CODE_ERROR_OVER = 23;
     /** Error Code: the email you trying to bind has been bound
      * by others. */
     public static final int EMAIL_USED_BY_OTHERS = 28;

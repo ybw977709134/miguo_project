@@ -59,10 +59,11 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	private AlertDialog.Builder dialog;
 //	private String reLength;
 	private String reTime;
+	private String[] startDate;
 	private String[] startTime;
 	private String[] times;
-	private String[] startTimes;
-	private String[] endTimes;
+	private String[] classStartTimes;
+	private String[] classEndTimes;
 	private int startHour;
 	private int startMinute;
 	private int endHour;
@@ -105,7 +106,8 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		lvCourtable.setOnTouchListener(this);
 		
 		q.find(R.id.cancel).clicked(this);
-		q.find(R.id.save).clicked(this);
+//		q.find(R.id.save).clicked(this);
+		q.find(R.id.lessoninfo_refresh).clicked(this);
 
 		
 			String opentime = classroom.description.split(Constants.COMMA)[3];
@@ -140,13 +142,16 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		case R.id.cancel:
 			finish();
 			break;
-		case R.id.save:
-			if(delLessons.isEmpty() && addLessons.isEmpty()){
-				finish();
-				}
-			else{
-				addOrDeletePostLesson(addLessons,delLessons);
-				}
+//		case R.id.save:
+//			if(delLessons.isEmpty() && addLessons.isEmpty()){
+//				finish();
+//				}
+//			else{
+//				addOrDeletePostLesson(addLessons,delLessons);
+//				}
+//			break;
+		case R.id.lessoninfo_refresh:
+			getLessonInfo();
 			break;
 		case R.id.lay_footer_add:
 			if(!DoubleClickedUtils.isFastDoubleClick()){
@@ -237,13 +242,16 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			}
 		}, 200);
         times = reTime.split(" - ");
-		startTimes = times[0].split(":");
-		endTimes = times[1].split(":");
+        classStartTimes = times[0].split(":");
+        classEndTimes = times[1].split(":");
 		if(!isAdd){
 			dialog.setTitle("修改课程");
 			view.findViewById(R.id.lay_lesson_name).setVisibility(View.VISIBLE);
-			startTime = ((TextView)item.findViewById(R.id.coursetable_item_time)).getText().toString().split("-");
-			datepicker.init(Integer.parseInt(startTime[0]), Integer.parseInt(startTime[1]) - 1, Integer.parseInt(startTime[2]), null);
+			startDate = ((TextView)item.findViewById(R.id.coursetable_item_date)).getText().toString().split("-");
+			startTime = ((TextView)item.findViewById(R.id.coursetable_item_time)).getText().toString().split(" - ");
+			String[] startTimes = startTime[0].split(":");
+			String[] endTimes = startTime[1].split(":");
+			datepicker.init(Integer.parseInt(startDate[0]), Integer.parseInt(startDate[1]) - 1, Integer.parseInt(startDate[2]), null);
 			
 			starttimepicker.setCurrentHour(Integer.parseInt(startTimes[0]));
 			starttimepicker.setCurrentMinute(Integer.parseInt(startTimes[1]));
@@ -252,10 +260,10 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
             edName.setText(lessons.get(position).title);
         }else{
         	dialog.setTitle("添加课程");
-			starttimepicker.setCurrentHour(Integer.parseInt(startTimes[0]));
-			starttimepicker.setCurrentMinute(Integer.parseInt(startTimes[1]));
-			endtimepicker.setCurrentHour(Integer.parseInt(endTimes[0]));
-			endtimepicker.setCurrentMinute(Integer.parseInt(endTimes[1]));
+			starttimepicker.setCurrentHour(Integer.parseInt(classStartTimes[0]));
+			starttimepicker.setCurrentMinute(Integer.parseInt(classStartTimes[1]));
+			endtimepicker.setCurrentHour(Integer.parseInt(classEndTimes[0]));
+			endtimepicker.setCurrentMinute(Integer.parseInt(classEndTimes[1]));
 		}
 		
 		if(isBefore){
@@ -317,12 +325,16 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 					addLessons.add(lesson);
 					lessons.add(lesson);
 					adapter.notifyDataSetChanged();
+					
+					if(!addLessons.isEmpty()){
+						addOrDeletePostLesson(addLessons,delLessons);
+					}
 						
 					dismissDialog(dialog);
 				}else{
 					if(position >= 0){
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-						((TextView)item.findViewById(R.id.coursetable_item_time)).setText(sdf.format(resultTime));
+						((TextView)item.findViewById(R.id.coursetable_item_date)).setText(sdf.format(resultTime));
 						lessons.get(position).start_date = resultTime/1000 + startHour * 3600 + startMinute * 60;
 						lessons.get(position).end_date = resultTime/1000 + endHour * 3600 + endMinute * 60;
 						Lesson lesson = lessons.get(position);
@@ -441,14 +453,40 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 				}else{
 					mMsgBox.toast(R.string.class_time_conflict);
 				}
-				finish();
+//				finish();
 			}
 
 			;
 		});
 	}
 	
+	private void getLessonInfo(){
+		mMsgBox.showWait();
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+
+				@Override
+				protected Integer doInBackground(Void... params) {
+					return LessonWebServerIF.getInstance(LessonInfoEditActivity.this).getLesson(classId);
+				}
+
+				protected void onPostExecute(Integer result) {
+					mMsgBox.dismissWait();
+					if (ErrorCode.OK == result) {
+						refreshLessonInfo();
+					}
+				};
+
+			});
+	}
 	
+	private void refreshLessonInfo(){
+		lessons.clear();
+		Database db = Database.open(LessonInfoEditActivity.this);
+		lessons.addAll(db.fetchLesson(classId));
+//		db.close();
+		Collections.sort(lessons, new LessonInfoEditActivity.LessonComparator());
+		adapter.notifyDataSetChanged();
+	}
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -500,12 +538,14 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat sdf_time = new SimpleDateFormat("HH:mm");
 			ViewHodler holder = null;
 			if(null == convertView){
 				holder = new ViewHodler();
 				convertView = getLayoutInflater().inflate(R.layout.listitem_coursetable, parent, false);
 				holder.item_name = (TextView) convertView.findViewById(R.id.coursetable_item_name);
 				holder.item_time = (TextView) convertView.findViewById(R.id.coursetable_item_time);
+				holder.item_date = (TextView) convertView.findViewById(R.id.coursetable_item_date);
 				holder.item_msg = (TextView) convertView.findViewById(R.id.coursetable_item_msg);
 				convertView.setTag(holder);
 			}else{
@@ -532,12 +572,14 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 //			if(startdate == now){
 //				holder.item_name.setTextColor(Color.RED);
 //			}
-			holder.item_time.setText(sdf.format(new Date(startdate * 1000)));
+			holder.item_date.setText(sdf.format(new Date(startdate * 1000)));
+			holder.item_time.setText(sdf_time.format(new Date(startdate * 1000)) + " - " + sdf_time.format(new Date(enddata * 1000)));
 			holder.item_msg.setText("");
 			return convertView;
 		}
 		class ViewHodler{
 			TextView item_name;
+			TextView item_date;
 			TextView item_time;
 			TextView item_msg;
 		}

@@ -105,9 +105,17 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		String reDate = intent.getStringExtra("tvDate");
 		String reTime = intent.getStringExtra("tvTime");
 
-		
+		if(TextUtils.isEmpty(reDate)){
+			classId = intent.getStringExtra("classId");
+		}
+//		classId = intent.getStringExtra("classId");
+		else{
+			classId = classroom.groupID;
+		}
 				
-		classId = classroom.groupID;
+		
+//		Log.d("-------------classroom---------------", classroom+"");
+
 		//android.util.Log.i("-->>", classroom.groupID);
 
 		dtTerm = (EditText) findViewById(R.id.ed_lesinfo_term);
@@ -140,10 +148,8 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 	        dpEndDate.init(Integer.parseInt(endDate[0]), Integer.parseInt(endDate[1]) - 1, Integer.parseInt(endDate[2]), null);
 	        tpTime.setCurrentHour(Integer.parseInt(startTime[0]));
 	        tpTime.setCurrentMinute(Integer.parseInt(startTime[1]));
-	        if(dtTerm.getText().toString() != null){
-				tpLength.setCurrentHour(hourLength);
-	            tpLength.setCurrentMinute(minuteLength);
-			}
+	        tpLength.setCurrentHour(hourLength);
+	        tpLength.setCurrentMinute(minuteLength);
 	        if(String.valueOf(tpTime.getCurrentHour()) != null){
 	        	tpTime.setEnabled(false);
 	        	tpLength.setEnabled(false);
@@ -151,6 +157,9 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 	        	layout_lesinfo_length.setVisibility(View.GONE);
 	        }
 	        
+		}else{
+			tpLength.setCurrentHour(1);
+	        tpLength.setCurrentMinute(0);
 		}
 		
 		mMsgBox = new MessageBox(this);
@@ -191,7 +200,7 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 			dtGrade.addTextChangedListener(textwatcher);
 			dtPlace.addTextChangedListener(textwatcher);
 
-			if(classroom != null){
+			if(!TextUtils.isEmpty(reDate)){
 				String[] infos = getStrsByComma(classroom.description);
 				if(null != infos && infos.length == 4){
 					dtTerm.setText(infos[0]);
@@ -262,7 +271,7 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 			finish();
 			break;
 		case R.id.save:
-			modifyClassInfo();
+			modifyClassInfo(classId);
 			break;
         case R.id.datePicker_lesinfo_date:
             closeInputBoard();
@@ -275,7 +284,7 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		}
 	}
 	
-	private void modifyClassInfo(){
+	private void modifyClassInfo(final String cId){
 		if(classroom == null){
 			mMsgBox.toast(R.string.class_err_denied, 500);
 			return;
@@ -332,7 +341,7 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 			protected Integer doInBackground(Void... params) {
 				mDBHelper.updateGroupChatRoom(classroom);
 				int errno = WowTalkWebServerIF.getInstance(ClassInfoEditActivity.this)
-						.fModify_classInfo(classroom, startDay.getTimeInMillis()/1000, endDay.getTimeInMillis()/1000, startClassTimps, endClassTimps);
+						.fModify_classInfo(classroom,cId,startDay.getTimeInMillis()/1000, endDay.getTimeInMillis()/1000, startClassTimps, endClassTimps);
 				return errno;
 			}
 			@Override

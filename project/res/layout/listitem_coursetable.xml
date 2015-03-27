@@ -13,25 +13,37 @@
         <TextView
             android:id="@+id/coursetable_item_name"
             android:layout_width="0dp"
-            android:layout_weight="2"
+            android:layout_weight="4"
             android:layout_height="wrap_content"
             android:textColor="@color/black_30"
-            android:gravity="center"
+            android:gravity="center|left"
             android:text="dummy" />
-
-        <TextView
-            android:id="@+id/coursetable_item_time"
-            android:layout_width="0dp"
-            android:layout_weight="3"
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center|right"
-            android:textColor="@color/gray"
-            android:text="" />
+            android:orientation="vertical"
+            android:layout_weight="3" 
+            android:paddingLeft="10dp">
+            
+            <TextView
+                android:id="@+id/coursetable_item_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"               
+                android:gravity="center"
+                android:textColor="@color/gray" />
+            <TextView
+                android:id="@+id/coursetable_item_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"               
+                android:gravity="center"
+                android:textColor="@color/gray" />
+        </LinearLayout>
         
         <TextView
             android:id="@+id/coursetable_item_islive"
             android:layout_width="0dp"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:layout_height="wrap_content"
             android:gravity="center|right"
             android:textColor="@color/green"

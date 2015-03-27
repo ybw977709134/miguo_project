@@ -24,14 +24,10 @@
             style="?attr/navbar_title"
             android:text="dummy" />
 
-        <TextView
-            android:id="@+id/save"
+        <ImageView
+            android:id="@+id/lessoninfo_refresh"
             style="?attr/navbar_txt_right"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="@string/save"
-            android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:src="@drawable/nav_refresh_selector" />
     </RelativeLayout>
 
     <LinearLayout

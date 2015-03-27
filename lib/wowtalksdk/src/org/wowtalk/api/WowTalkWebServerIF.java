@@ -4270,7 +4270,7 @@ public class WowTalkWebServerIF {
 
         return _doRequestWithoutResponse(postStr);
     }
-    public int fModify_classInfo(GroupChatRoom g,long start_day, long end_day,long start_time,long end_time){
+    public int fModify_classInfo(GroupChatRoom g,String classId,long start_day, long end_day,long start_time,long end_time){
     	int errno = -1;
     	String uid = sPrefUtil.getUid();
 		String password = sPrefUtil.getPassword();
@@ -4283,21 +4283,21 @@ public class WowTalkWebServerIF {
 			postStr = "action=" + action + "&uid="
 					+ Utils.urlencodeUtf8(uid) + "&password="
 					+ Utils.urlencodeUtf8(password) + "&class_id=" 
-					+ Utils.urlencodeUtf8(g.groupID)
+					+ Utils.urlencodeUtf8(classId)
 					+ "&start_day=" + start_day
 					+ "&end_day=" + end_day;
 		}else{
 			postStr = "action=" + action + "&uid="
 				+ Utils.urlencodeUtf8(uid) + "&password="
 				+ Utils.urlencodeUtf8(password) + "&class_id=" 
-				+ Utils.urlencodeUtf8(g.groupID)
+				+ Utils.urlencodeUtf8(classId)
 				+ "&start_day=" + start_day
 				+ "&end_day=" + end_day
 				+ "&start_time=" + start_time
 				+ "&end_time=" + end_time;
 		}
-		if (null != g.groupNameOriginal)
-            postStr += "&name=" + Utils.urlencodeUtf8(g.groupNameOriginal);
+//		if (null != g.groupNameOriginal)
+//            postStr += "&name=" + Utils.urlencodeUtf8(g.groupNameOriginal);
 
         if (g.isTemporaryGroup && g.isGroupNameChanged) {
             postStr += "&is_group_name_changed=" + Utils.urlencodeUtf8("1");

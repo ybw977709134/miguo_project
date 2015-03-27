@@ -197,7 +197,12 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				    layout_main_drawer.closeDrawer(layout_main_leftdrawer);
 				    getLessonInfo();
 //				    setClassInfo();
-				    getClassInfo(classId,class_group);
+				    if(TextUtils.isEmpty(classrooms.get(position).description)){
+				    	clearClassInfo();
+				    }else{
+				    	getClassInfo(classId,class_group);
+				    }
+				    
 				}
 				
 				
@@ -417,7 +422,20 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 //		
 //			
 //	}
-	
+	private void clearClassInfo(){
+		String term = getString(R.string.class_term);
+		String grade = getString(R.string.class_grade);
+		String subject = getString(R.string.class_subject);
+		String date = getString(R.string.class_date);
+		String time = getString(R.string.class_time);
+		String place = getString(R.string.class_place);
+    	tvTerm.setText(term);
+		tvGrade.setText(grade);
+		tvSubject.setText(subject);
+		tvDate.setText(date);
+		tvTime.setText(time);
+		tvPlace.setText(place);
+	}
 	private void refreshClassInfo(){
 		final String term = getString(R.string.class_term);
 		final String grade = getString(R.string.class_grade);
@@ -566,6 +584,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                     	String reTime = tvTime.getText().toString().substring(3);
                         Intent intent = new Intent(ClassDetailActivity.this, ClassInfoEditActivity.class);
                         intent.putExtra("class", class_group);
+                        intent.putExtra("classId", classId);
                         if(!TextUtils.isEmpty(reDate) && !TextUtils.isEmpty(reTime)){
                         	intent.putExtra("tvDate", reDate);
                             intent.putExtra("tvTime", reTime);
@@ -736,6 +755,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				convertView = getLayoutInflater().inflate(R.layout.listitem_coursetable, parent, false);
 				holder.item_name = (TextView) convertView.findViewById(R.id.coursetable_item_name);
 				holder.item_time = (TextView) convertView.findViewById(R.id.coursetable_item_time);
+				holder.item_date = (TextView) convertView.findViewById(R.id.coursetable_item_date);
 				holder.item_msg = (TextView) convertView.findViewById(R.id.coursetable_item_msg);
 				holder.coursetable_item_islive = (TextView) convertView.findViewById(R.id.coursetable_item_islive);
 				convertView.setTag(holder);
@@ -769,13 +789,16 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				holder.coursetable_item_islive.setVisibility(View.VISIBLE);
 			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			holder.item_time.setText(sdf.format(new Date(startdata * 1000)));
+			SimpleDateFormat sdf_time = new SimpleDateFormat("HH:mm");
+			holder.item_time.setText(sdf_time.format(new Date(startdata * 1000)) + " - " + sdf_time.format(new Date(enddata * 1000)));
+			holder.item_date.setText(sdf.format(new Date(startdata * 1000)));
 			holder.item_msg.setText("");
 			return convertView;
 		}
 		class ViewHodler{
 			TextView item_name;
 			TextView item_time;
+			TextView item_date;
 			TextView item_msg;
 			TextView coursetable_item_islive;
 		}

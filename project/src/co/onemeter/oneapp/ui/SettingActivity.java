@@ -117,7 +117,13 @@ public class SettingActivity extends Activity implements OnClickListener {
 
     private void updateUi() {
         AQuery q = new AQuery(this);
-        q.find(R.id.app_updates_available_indicator).visibility(appUpdatesAvailable ? View.VISIBLE : View.GONE);
+//        q.find(R.id.app_updates_available_indicator).visibility(appUpdatesAvailable ? View.VISIBLE : View.GONE);
+        if (appUpdatesAvailable) {
+        	q.find(R.id.app_updates_available_indicator).visibility(View.VISIBLE);
+        	
+        } else {
+        	q.find(R.id.app_updates_available_indicator).visibility(View.GONE);
+        }
     }
 
     private void updateNoticeStatus() {

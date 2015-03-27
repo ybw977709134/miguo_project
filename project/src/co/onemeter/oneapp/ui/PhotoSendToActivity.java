@@ -157,33 +157,36 @@ public class PhotoSendToActivity extends FragmentActivity implements View.OnClic
     private int mcurpagePosition = 0;
 
     private class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
-        //int one = mOffset + mImgWidth;//两个相邻页面的偏移量
+        int mOffset = mPerLayWidth - mImgWidth;
+        int one = mOffset + mImgWidth;//两个相邻页面的偏移量
 
         @Override
         public void onPageScrolled(int position, float percent, int pix) {
-            if(mIsChanging){
-                setImageLeftMargin(mImgWidth + (int)(percent * mPerLayWidth));
-            }
+//            if(mIsChanging){
+//                setImageLeftMargin(mImgWidth * (position+1) + (int)(percent * mPerLayWidth));
+//            }
+            mcurpagePosition = position;
         }
 
         @Override
         public void onPageScrollStateChanged(int status) {
             if (ViewPager.SCROLL_STATE_DRAGGING == status) {
                 mIsChanging = true;
+            }else if (ViewPager.SCROLL_STATE_SETTLING == status){
+
             }
         }
 
         @Override
         public void onPageSelected(int position) {
             mIsChanging = false;
-            mcurpagePosition = position;
+            //mcurpagePosition = position;
             setTextView(position);
-            setImageLeftMargin(mPerLayWidth * position + (mPerLayWidth - mImgWidth) / 2);
-//            Animation animation = new TranslateAnimation(mCurrIndex * one, postion * one, 0, 0);//平移动画
-//            mCurrIndex = postion;
-//            animation.setFillAfter(true);//动画终止时停留在最后一帧，不然会回到没有执行前的状态
-//            animation.setDuration(400);
-//            img_cursor.startAnimation(animation);//是用ImageView来显示动画的
+            //setImageLeftMargin(mPerLayWidth * position + (mPerLayWidth - mImgWidth) / 2);
+            Animation animation = new TranslateAnimation(mcurpagePosition * one, position * one, 0, 0);//平移动画
+            animation.setFillAfter(true);//动画终止时停留在最后一帧，不然会回到没有执行前的状态
+            animation.setDuration(1000);
+            img_cursor.startAnimation(animation);//是用ImageView来显示动画的
         }
     }
 

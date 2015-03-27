@@ -294,7 +294,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             case R.id.img_home_register:
                 break;
             case R.id.img_home_answerquestion:
-                //startActivity(new Intent(this,PhotoSendToActivity.class));
+                startActivity(new Intent(this,PhotoSendToActivity.class));
                 break;
             case R.id.img_home_chatroom:
                 intent = new Intent(this,ParentChatroomActivity.class);

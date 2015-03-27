@@ -134,7 +134,7 @@ public class GroupTreeAdapter extends BaseAdapter {
 		setupGroupItemView(position, node, view);
 	}
 
-	private void setupClassRoomItemView(final int position, final ContactTreeNode node, View view) {
+	protected void setupClassRoomItemView(final int position, final ContactTreeNode node, View view) {
 		setupGroupItemView(position, node, view);
 
 		new AQuery(view).find(R.id.btn_chat).clicked(new View.OnClickListener() {

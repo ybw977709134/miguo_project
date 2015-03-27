@@ -128,6 +128,8 @@ public class ContactListAdapter extends BaseAdapter implements Filterable {
 //		        holder.imgDivider.setVisibility(View.GONE);
 		        holder.txtContactFirstChar.setVisibility(View.VISIBLE);
 		        holder.txtContactFirstChar.setText(String.valueOf(newFirstChar));
+                holder.txtContactFirstChar.setBackgroundColor(context.getResources().getColor(R.color.background_light));
+                holder.txtContactFirstChar.setTextColor(context.getResources().getColor(R.color.black_24));
 		    } else {
 		        holder.txtContactFirstChar.setVisibility(View.GONE);
 //		        holder.imgDivider.setVisibility(View.VISIBLE);

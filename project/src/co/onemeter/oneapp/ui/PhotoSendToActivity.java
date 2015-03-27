@@ -1,6 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -9,7 +8,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
@@ -33,7 +31,7 @@ public class PhotoSendToActivity extends FragmentActivity implements View.OnClic
     private TextView txt_one,txt_two,txt_third;
     private ViewPager viewPager;
 
-    private ArrayList<Fragment> mFragList;
+    private ArrayList<Fragment> mfragments;
 
     private int mPerLayWidth = 0;
     private int mImgWidth = 0;
@@ -52,7 +50,6 @@ public class PhotoSendToActivity extends FragmentActivity implements View.OnClic
         color_black = getResources().getColor(R.color.black_24);
 
         setupView();
-
 
     }
 
@@ -100,17 +97,17 @@ public class PhotoSendToActivity extends FragmentActivity implements View.OnClic
         viewPager = (ViewPager) findViewById(R.id.viewpager_sendto);
         viewPager.setOnPageChangeListener(new MyOnPageChangeListener());
 
-        mFragList = new ArrayList<Fragment>();
-        mFragList.add(new Fragment());
-        mFragList.add(new Fragment());
-        mFragList.add(new Fragment());
-        viewPager.setAdapter(new SendtoPagerAdapter(getSupportFragmentManager(),mFragList));
+        mfragments = new ArrayList<Fragment>();
+        mfragments.add(new Fragment());
+        mfragments.add(new STContactsFragment());
+        mfragments.add(new STSchoolMateFragment());
+        viewPager.setAdapter(new SendtoPagerAdapter(getSupportFragmentManager(), mfragments));
         viewPager.setCurrentItem(IDX_0);
     }
 
     private void setImageLeftMargin(int left_margin){
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mImgWidth,mImgHeight);
-        params.setMargins(left_margin, 0, 0, 0);
+        params.leftMargin = left_margin;
         img_cursor.setLayoutParams(params);
     }
 
@@ -134,59 +131,63 @@ public class PhotoSendToActivity extends FragmentActivity implements View.OnClic
     }
 
     private void setTextView(int index){
+        txt_one.setTextColor(color_black);
+        txt_two.setTextColor(color_black);
+        txt_third.setTextColor(color_black);
         switch (index){
             case IDX_0:
                 txt_one.setTextColor(color_blue);
-                txt_two.setTextColor(color_black);
-                txt_third.setTextColor(color_black);
                 break;
             case IDX_1:
-                txt_one.setTextColor(color_black);
                 txt_two.setTextColor(color_blue);
-                txt_third.setTextColor(color_black);
                 break;
             case IDX_2:
-                txt_one.setTextColor(color_black);
-                txt_two.setTextColor(color_black);
                 txt_third.setTextColor(color_blue);
                 break;
         }
     }
 
-    private boolean mIsChanging = false;
-    private int mcurpagePosition = 0;
+//    private boolean mScrolling = false;
+      private int currentIndex = 0;
+//    private int mlastmargin = (mPerLayWidth - mImgWidth) / 2;
 
     private class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
-        int mOffset = mPerLayWidth - mImgWidth;
-        int one = mOffset + mImgWidth;//两个相邻页面的偏移量
 
         @Override
-        public void onPageScrolled(int position, float percent, int pix) {
-//            if(mIsChanging){
-//                setImageLeftMargin(mImgWidth * (position+1) + (int)(percent * mPerLayWidth));
+        public void onPageScrolled(int position, float offset, int pix) {
+//            if(mScrolling){
+//                setImageLeftMargin(mlastmargin + (int)(mPerLayWidth * offset));
 //            }
-            mcurpagePosition = position;
+
         }
 
         @Override
         public void onPageScrollStateChanged(int status) {
-            if (ViewPager.SCROLL_STATE_DRAGGING == status) {
-                mIsChanging = true;
-            }else if (ViewPager.SCROLL_STATE_SETTLING == status){
-
-            }
+//            if (ViewPager.SCROLL_STATE_DRAGGING == status) {
+//                mScrolling = true;
+//            }else if (ViewPager.SCROLL_STATE_SETTLING == status){
+//                mScrolling = false;
+//                //setImageLeftMargin(mlastmargin);
+//            }else if (ViewPager.SCROLL_STATE_IDLE == status){
+//                mScrolling = false;
+//            }else {
+//                mScrolling = false;
+//            }
         }
 
         @Override
         public void onPageSelected(int position) {
-            mIsChanging = false;
-            //mcurpagePosition = position;
+            //mIsChanging = false;
+            //currentIndex = position;
             setTextView(position);
-            //setImageLeftMargin(mPerLayWidth * position + (mPerLayWidth - mImgWidth) / 2);
-            Animation animation = new TranslateAnimation(mcurpagePosition * one, position * one, 0, 0);//平移动画
+//            setImageLeftMargin((mPerLayWidth - mImgWidth) / 2 + mPerLayWidth * position);
+//            mlastmargin = (mPerLayWidth - mImgWidth) / 2 + mPerLayWidth * position;
+            Animation animation = new TranslateAnimation(currentIndex * mPerLayWidth, position * mPerLayWidth, 0, 0);//平移动画
             animation.setFillAfter(true);//动画终止时停留在最后一帧，不然会回到没有执行前的状态
-            animation.setDuration(1000);
+            animation.setDuration(400);
             img_cursor.startAnimation(animation);//是用ImageView来显示动画的
+
+            currentIndex = position;
         }
     }
 
@@ -210,11 +211,6 @@ public class PhotoSendToActivity extends FragmentActivity implements View.OnClic
                 return list.size();
             }
             return 0;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
         }
 
     }

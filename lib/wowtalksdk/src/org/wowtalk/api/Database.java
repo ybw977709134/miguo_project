@@ -6175,6 +6175,43 @@ public class Database {
         }
     }
 
+    /**
+     * 校园里只获取老师的列表
+     * @return list
+     */
+    public List<GroupChatRoom> fetchSchoolsJustTeacher() {
+        List<GroupChatRoom> schools = _fetchGroupChatRooms(
+                "category=?", new String[] { GroupChatRoom.CATEGORY_SCHOOL });
+        if (schools != null && !schools.isEmpty()) {
+            for (GroupChatRoom school : schools) {
+                fetchClassRoomsJustTeacher(school.groupID, school);
+            }
+        }
+        return schools;
+    }
+
+    private void fetchClassRoomsJustTeacher(String schoolId, GroupChatRoom parent) {
+        ArrayList<GroupChatRoom> classrooms = _fetchGroupChatRooms(
+                "parent_group_id=?", new String[] { parent.groupID });
+        if (classrooms != null && !classrooms.isEmpty()) {
+            parent.childGroups = classrooms;
+            for (GroupChatRoom classroom : classrooms) {
+                classroom.level = parent.level + 1;
+                fetchClassRoomsJustTeacher(schoolId, classroom);
+            }
+        }
+
+        ArrayList<GroupMember> members = fetchGroupMembers(parent.groupID);
+        if (members != null && !members.isEmpty()) {
+            for (Buddy mem : members) {
+                if(mem.getAccountType() == Buddy.ACCOUNT_TYPE_TEACHER){
+                    mem.alias = fetchStudentAlias(schoolId, mem.userID);
+                    parent.addMember(mem);
+                }
+            }
+        }
+    }
+
     public void storeSchools(List<GroupChatRoom> schools) {
 
         // clear old data

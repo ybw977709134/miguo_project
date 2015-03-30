@@ -7,18 +7,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.androidquery.AQuery;
 
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
@@ -79,12 +73,14 @@ public class ParentChatroomActivity extends Activity implements AdapterView.OnIt
 
         msgbox = new MessageBox(this);
 
+        Database db = new Database(this);
         if(mIsFromHomeWork){
             Log.i("--this way--");
-            schools.addAll(new Database(this).fetchSchoolsJustTeacher());
+            schools.addAll(db.fetchSchoolsJustTeacher());
         }else {
-            schools.addAll(new Database(this).fetchSchools());
+            schools.addAll(db.fetchSchools());
         }
+        db.close();
 
         updateUi();
         if(schools.isEmpty()){
@@ -163,8 +159,7 @@ public class ParentChatroomActivity extends Activity implements AdapterView.OnIt
                             if (TextUtils.equals(uid, myUid)) {
                                 Toast.makeText(this,"请不要发给自己!",Toast.LENGTH_LONG).show();
                             }else {
-                                Buddy buddy = new Database(context).buddyWithUserID(uid);
-                                chatWith(uid, TextUtils.isEmpty(buddy.alias)?buddy.nickName:buddy.alias);
+                                MessageComposerActivity.launchToChatWithBuddyWithPicture(this,uid,path,true);
                             }
                         }else{
                             if (!TextUtils.equals(uid, myUid)) {
@@ -183,17 +178,6 @@ public class ParentChatroomActivity extends Activity implements AdapterView.OnIt
             }
     }
 
-    private void chatWith(String uid, String name) {
-        Intent intent = new Intent(this,MessageComposerActivity.class);
-        intent.putExtra(MessageComposerActivity.KEY_TARGET_UID,uid);
-        intent.putExtra(MessageComposerActivity.KEY_TARGET_DISPLAYNAME, name);
-        intent.putExtra(MessageComposerActivity.LAUCH_WITH_SEND_MSG,true);
-        intent.putExtra(MessageComposerActivity.SEND_PIC_PATH,path[0]);
-        intent.putExtra(MessageComposerActivity.SEND_PIC_THUMB,path[1]);
-        startActivity(intent);
-        finish();
-    }
-
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.title_back){
@@ -208,14 +192,16 @@ public class ParentChatroomActivity extends Activity implements AdapterView.OnIt
             this.context = context;
         }
 
-
         @Override
         protected void setupClassRoomItemView(final int position,final ContactTreeNode node, View view) {
             super.setupClassRoomItemView(position, node, view);
+            TextView btn_chat = (TextView) view.findViewById(R.id.btn_chat);
             if(mIsFromHomeWork){
-                view.findViewById(R.id.btn_chat).setVisibility(View.GONE);
+                btn_chat.setVisibility(View.GONE);
             }else {
-                new AQuery(view).find(R.id.btn_chat).clicked(new View.OnClickListener() {
+                btn_chat.setClickable(true);
+                btn_chat.setText("进入群聊");
+                btn_chat.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         MessageComposerActivity.launchToChatWithGroup(context, MessageComposerActivity.class, node.getGUID());

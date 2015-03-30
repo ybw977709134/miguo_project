@@ -261,6 +261,7 @@
 	<string name="settings_account_moment_take_photos_oom">动态中只支持%S张照片，请处理后再拍照</string>
 	<string name="settings_upgrade_check_for_updates">检查更新</string>
 	<string name="settings_upgrade_is_uptodate">已经是最新版本</string>
+	<string name="settings_upgrade_uptodate_avilable">有新版本可用</string>
 	<string name="settings_upgrade_curr_ver_is">当前版本：</string>
 	<string name="settings_upgrade_latest_ver_is">最新版本：</string>
 	<string name="settings_upgrade_changelogs_are">主要更新内容：</string>

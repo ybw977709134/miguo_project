@@ -12,7 +12,8 @@
         <ScrollView
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:id="@+id/stcontacts_scrollview">
+            android:id="@+id/stcontacts_scrollview"
+            android:paddingTop="5dp">
 
             <LinearLayout
                 android:id="@+id/main_linear_layout"
@@ -24,7 +25,7 @@
                 <TextView
                     android:id="@+id/group_indicator"
                     android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:paddingLeft="10dp"
                     android:gravity="left|center_vertical"
                     android:textSize ="15sp"
@@ -32,13 +33,13 @@
                     android:background="@color/background_light"
                     android:textColor="@color/black_24"/>
                 <ListView
-                    android:id="@+id/contacts_list"
+                    android:id="@+id/groups_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:divider="@drawable/bg_section_divider_line_light"
                     android:cacheColorHint="@null"/>
                 <ListView
-                    android:id="@+id/groups_list"
+                    android:id="@+id/contacts_list"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:cacheColorHint="@null"

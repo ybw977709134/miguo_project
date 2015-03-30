@@ -90,15 +90,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			}
 		};
 	};
-	
-//	private TimerTask mTimerTask =  new TimerTask() {
-//		
-//		@Override
-//		public void run() {
-//			mHandler.sendEmptyMessage(time--);
-//			
-//		}
-//	};
+
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,9 +111,6 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			
 			@Override
 			public void run() {
-//				InputMethodManager imm = (InputMethodManager)edtValue.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);  
-//				imm.showSoftInput(edtValue, 0);
-				
 				mInputMethodManager.showSoftInput(txt_bind_email, InputMethodManager.RESULT_SHOWN);
 				mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 			}
@@ -177,13 +166,14 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
     
     private void closeSoftKeyboard() {
     	
-//    	mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     	if (txt_bind_email.hasFocus()) {
     		mInputMethodManager.hideSoftInputFromWindow(txt_bind_email.getWindowToken() , 0);
+    		Log.i("---txt_bind_email");
     	}
     	
     	if (txt_auth_code.hasFocus()) {
     		mInputMethodManager.hideSoftInputFromWindow(txt_auth_code.getWindowToken() , 0);
+    		Log.i("---txt_auth_code");
     	}
 		
 }
@@ -362,15 +352,11 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 		//清除绑定邮箱中文本框中的内容
 		case R.id.field_clear_email:
 			txt_bind_email.setText("");
-//			btn_verification_email.setTextColor(getResources().getColor(R.color.white_40));
-//			btn_verification_email.setEnabled(false);
 			textView_verification_email_result.setVisibility(View.GONE);
 			break;
 		//清除验证码文本框中的内容	
 		case R.id.field_clear_auth_code:
 			txt_auth_code.setText("");
-//			btn_verification_auth_code.setTextColor(getResources().getColor(R.color.white_40));
-//			btn_verification_auth_code.setEnabled(false);
 			textView_verification_authCode_result.setVisibility(View.GONE);
 						
 			break;
@@ -378,24 +364,6 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 		case R.id.textView_bindEmail_back:
 		case R.id.title_back:
 			if (pageFlag == BIND_EMAIL_PAGE) {
-				
-				
-            	
-//            	new Thread(new Runnable() {
-					
-//					@Override
-//					public void run() {
-//						try {
-//							Thread.sleep(3000);
-//						} catch (InterruptedException e) {
-//							e.printStackTrace();
-//						}
-//						Intent bindIntent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
-//                    	startActivity(bindIntent);
-//						
-//					}
-//				}).start();
-            	
     			Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
 				startActivity(intent);
 				closeSoftKeyboard();
@@ -429,6 +397,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
  					 unBindEmailAddress();
  					 Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
  					 startActivity(intent);
+ 					 BindEmailAddressActivity.this.finish();
                  }
              });
              dialog.show();
@@ -436,23 +405,19 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			
 		//验证绑定邮箱	
 		case R.id.btn_verification_email:
-			
+			mInputMethodManager.hideSoftInputFromWindow(txt_bind_email.getWindowToken() , 0);
 			bindEmailAddress(txt_bind_email.getText().toString());
-			//60秒内不可点击  重新获取验证码
-//			stopGetAccessCode();
 			break;
 			
 		//验证验证码	
 		case R.id.btn_verification_auth_code:
+			mInputMethodManager.hideSoftInputFromWindow(txt_auth_code.getWindowToken() , 0);
 			verifyBindEmailAddress(txt_auth_code.getText().toString(),txt_bind_email.getText().toString());
 			break;
 			
 		//重新获得验证码	
 		case R.id.btn_again_receive_auth_code:
-			
 			bindEmailAddress(txt_bind_email.getText().toString());
-			//60秒内不可点击  重新获取验证码
-//			stopGetAccessCode();
 			break;
 			
 		default:
@@ -489,37 +454,53 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
         				layout_verification_email.setVisibility(View.GONE);
         				textView_show_bind_email.setVisibility(View.VISIBLE);
         				textView_show_bind_email.setText("你输入的邮箱"+txt_bind_email.getText().toString());
+
+        				txt_auth_code.setFocusable(true);
+        				txt_auth_code.setFocusableInTouchMode(true);
+        				txt_auth_code.requestFocus();
+        		        Handler hanlder = new Handler();
+        		        hanlder.postDelayed(new Runnable() {
+        					
+        					@Override
+        					public void run() {
+        						mInputMethodManager.showSoftInput(txt_auth_code, InputMethodManager.RESULT_SHOWN);
+        						mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        					}
+        				}, 200);
+        				
         				if (mTimer != null) {
         					mTimer.cancel();
         				}
         				stopGetAccessCode();
                         break;
+                        
                     case ErrorCode.EMAIL_ADDRESS_VERIFICATION_CODE_ERROR://18:邮箱格式错误
                     	textView_verification_email_result.setVisibility(View.VISIBLE);
                     	textView_verification_email_result.setText(getString(R.string.bind_email_format_error_msg));
                     	break;
+                    	
                     case ErrorCode.AUTH://2:认证失败，错误的用户名或密码
-//                        mMsgBox.show(null, getString(R.string.bind_email_pwd_err));
                         textView_verification_email_result.setVisibility(View.VISIBLE);
                     	textView_verification_email_result.setText(getString(R.string.bind_email_pwd_err));
                         break;
+                        
                     case ErrorCode.ACCESS_CODE_ERROR_OVER://24:验证码一天最多只能验证5次
                     	MessageDialog dialog = new MessageDialog(BindEmailAddressActivity.this,false,MessageDialog.SIZE_NORMAL);
                         dialog.setTitle("");
-                        dialog.setMessage("今天邮箱验证次数已用完，请明天再试。");                      
+                        dialog.setMessage("今天邮的箱验证次数已用完"+"\n"+"请明天再试。");                      
                         dialog.show();
                         break;
+                        
                     case ErrorCode.EMAIL_USED_BY_OTHERS://28：该邮箱已被其他用户绑定
-//                        changeBindStyle();
-//                        mMsgBox.show(null, getString(R.string.settings_account_email_used_by_others));
                         textView_verification_email_result.setVisibility(View.VISIBLE);
                     	textView_verification_email_result.setText(getString(R.string.settings_account_email_used_by_others));
                         break;
+                        
                     case ErrorCode.ERR_OPERATION_DENIED://37:该用户已绑定其它邮箱
-//                    	mMsgBox.show(null, getString(R.string.settings_account_email_used));
                     	textView_verification_email_result.setVisibility(View.VISIBLE);
                     	textView_verification_email_result.setText(getString(R.string.settings_account_email_used));
                     	break;
+                    	
                     default://邮箱绑定失败
                         mMsgBox.show(null, getString(R.string.bind_email_failed));
                         break;
@@ -590,13 +571,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
-
-
-		                    	//自动关闭掉修改邮箱的页面
-//		                    	if (FixBindEmailAddressActivity.isInstanciated()) {
-//		                    		FixBindEmailAddressActivity.instance().finish();
-//								}
-		                    	
+                    	
 		                    	BindEmailAddressActivity.this.finish();
 								
 							}

@@ -144,14 +144,17 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
     private void closeSoftKeyboard() {
     	if (txt_bind_email.hasFocus()) {
     		mInputMethodManager.hideSoftInputFromWindow(txt_bind_email.getWindowToken() , 0);
+    		Log.i("---find_txt_bind_email");
     	}
     	
     	if (txt_bind_account.hasFocus()) {
     		mInputMethodManager.hideSoftInputFromWindow(txt_bind_account.getWindowToken() , 0);
+    		Log.i("---find_txt_bind_account");
     	}
     	
     	if (txt_auth_code.hasFocus()) {
     		mInputMethodManager.hideSoftInputFromWindow(txt_auth_code.getWindowToken() , 0);
+    		Log.i("---find_txt_auth_code");
     	}
 		
     }
@@ -540,7 +543,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                     case ErrorCode.ACCESS_CODE_ERROR_OVER://24:验证码一天最多只能验证5次
                     	MessageDialog dialog = new MessageDialog(FindPasswordEmialActivity.this,false,MessageDialog.SIZE_NORMAL);
                         dialog.setTitle("");
-                        dialog.setMessage("今天邮箱验证次数已用完，请明天再试。");                      
+                        dialog.setMessage("今天邮的箱验证次数已用完"+"\n"+"请明天再试。");                      
                         dialog.show();
                         break;
                     	

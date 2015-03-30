@@ -163,6 +163,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
     
     private void closeSoftKeyboard() {
 		mInputMethodManager.hideSoftInputFromWindow(txt_access_code.getWindowToken() , 0);
+		Log.i("---fix_txt_access_code");
 }
 	
 	
@@ -273,7 +274,9 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                  @Override
                  public void onclick(MessageDialog dialog) {
                      dialog.dismiss();
-                     finish();
+                     Intent intent = new Intent(FixBindEmailAddressActivity.this,AccountSettingActivity.class);
+ 					 startActivity(intent);
+ 					 FixBindEmailAddressActivity.this.finish();
                  }
              });
              dialog.show();
@@ -343,7 +346,9 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
             @Override
             protected void onPostExecute(Integer result) {
             	mMsgBox.dismissWait();
+            	Log.i("---result:"+result);
                 switch (result) {
+                	
                     case ErrorCode.OK://0
                     	if (mTimer != null) {
                 			mTimer.cancel();
@@ -355,7 +360,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                     	closeSoftKeyboard();
                     	MessageDialog dialog = new MessageDialog(FixBindEmailAddressActivity.this,false,MessageDialog.SIZE_NORMAL);
                         dialog.setTitle("");
-                        dialog.setMessage("今天邮箱验证次数已用完，请明天再试。");                      
+                        dialog.setMessage("今天邮的箱验证次数已用完"+"\n"+"请明天再试。");                      
                         dialog.show();
                         break;
  
@@ -453,24 +458,28 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 
                 switch (result) {
                     case ErrorCode.OK://0 //解绑成功后方可跳转到重新绑定邮箱的界面       	
-                    	mMsgBox.show(null, "解除绑定邮箱成功");
-                    	mMsgBox.dismissDialog();
+//                    	mMsgBox.show(null, "解除绑定邮箱成功");
+//                    	mMsgBox.dismissDialog();
+//                    	
+//                    	new Thread(new Runnable() {
+//							
+//							@Override
+//							public void run() {
+//								try {
+//									Thread.sleep(3000);
+//								} catch (InterruptedException e) {
+//									e.printStackTrace();
+//								}
+//								Intent bindIntent = new Intent(FixBindEmailAddressActivity.this,BindEmailAddressActivity.class);
+//		                    	startActivity(bindIntent);
+//		                    	FixBindEmailAddressActivity.this.finish();
+//								
+//							}
+//						}).start();
                     	
-                    	new Thread(new Runnable() {
-							
-							@Override
-							public void run() {
-								try {
-									Thread.sleep(3000);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-								Intent bindIntent = new Intent(FixBindEmailAddressActivity.this,BindEmailAddressActivity.class);
-		                    	startActivity(bindIntent);
-		                    	FixBindEmailAddressActivity.this.finish();
-								
-							}
-						}).start();
+                    	Intent bindIntent = new Intent(FixBindEmailAddressActivity.this,BindEmailAddressActivity.class);
+                    	startActivity(bindIntent);
+                    	FixBindEmailAddressActivity.this.finish();
                     	
                         break;
                         

@@ -48,9 +48,12 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
     private static final int REQ_TAKE_PHO = 1001;
     private static final int REQ_SETTINGS = 1002;
+    private static final String REQ_BIND_EMAIL = "bind_email";
+
     private static final int REQ_TAKE_PHO_DOODLE = 1003;
     private static final int REQ_SEND_DOODLE = 1004;
     private static final int REQ_PICK_PHOTO_DOOLE = 1005;
+
 
     MessageBox msgbox;
 //    private static final int BIND_EMAIL_REQUEST_CODE = 1;
@@ -161,7 +164,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             protected void onPostExecute(List<Map<String, Object>> result) {
                 String bindEmail = null;
                 if (result != null) {
-                    bindEmail = (String) result.get(0).get("email");
+                    bindEmail = (String) result.get(0).get("email"); 
 
                     if (bindEmail == null) {
                         MessageDialog dialog = new MessageDialog(HomeActivity.this);
@@ -173,6 +176,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                             public void onclick(MessageDialog dialog) {
                                 dialog.dismiss();
                                 Intent intent = new Intent();
+                                intent.putExtra(REQ_BIND_EMAIL, true);
                                 intent.setClass(HomeActivity.this, BindEmailAddressActivity.class);
                                 startActivity(intent);
                             }

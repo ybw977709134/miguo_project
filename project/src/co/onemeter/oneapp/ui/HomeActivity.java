@@ -16,27 +16,41 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.pzy.paint.DoodleActivity;
+
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.widget.AutoScrollViewPager;
 import co.onemeter.utils.AsyncTaskExecutor;
+
+import org.wowtalk.*;
+import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.UpdatesInfo;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
+import org.wowtalk.ui.msg.BmpUtils;
+import org.wowtalk.ui.msg.InputBoardManager;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by pzy on 9/18/14.Modified by Jacky on 3/18/2015.
  */
 public class HomeActivity extends Activity implements View.OnClickListener {
 
-    public static final int REQ_TAKE_PHO = 1001;
+    private static final int REQ_TAKE_PHO = 1001;
     private static final int REQ_SETTINGS = 1002;
+    private static final int REQ_TAKE_PHO_DOODLE = 1003;
+    private static final int REQ_SEND_DOODLE = 1004;
+    private static final int REQ_PICK_PHOTO_DOOLE = 1005;
 
     MessageBox msgbox;
 //    private static final int BIND_EMAIL_REQUEST_CODE = 1;
@@ -48,22 +62,6 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     private ArrayList<ImageView> img_dots = new ArrayList<ImageView>();
 
     private int[] imgIds;
-
-//    private int curpage = 0;
-//
-//    private android.os.Handler mHandler = new android.os.Handler(){
-//        @Override
-//        public void handleMessage(Message msg) {
-//            if(msg.what == sLoopMessage){
-//                if(curpage >= imgIds.length){
-//                    curpage = 0;
-//                }
-//                viewPager_home.setCurrentItem(curpage);
-//            }
-//            mHandler.sendEmptyMessageDelayed(sLoopMessage , 5000);
-//            curpage ++;
-//        }
-//    };
 
     private int mCurrentPagePosition = 1;//用于记录viewpager的当前位置
     private boolean mIsChanged = false;
@@ -100,7 +98,6 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         viewPager_home.setAdapter(new HeaderPagerAadapter());
 
         final int first_pos = 1;
-        final int last_pos = len - 1;
         viewPager_home.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i2) {
@@ -162,7 +159,6 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
             @Override
             protected void onPostExecute(List<Map<String, Object>> result) {
-                //msgbox.dismissWait();
                 String bindEmail = null;
                 if (result != null) {
                     bindEmail = (String) result.get(0).get("email");
@@ -242,7 +238,6 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        //mHandler.sendEmptyMessageDelayed(sLoopMessage , 5000);
         viewPager_home.startAutoScroll();
     }
 
@@ -251,7 +246,6 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         super.onPause();
         msgbox.dismissWait();
         msgbox.dismissToast();
-        //mHandler.removeMessages(sLoopMessage);
         viewPager_home.stopAutoScroll();
     }
 
@@ -295,6 +289,8 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.img_home_answerquestion:
                 //startActivity(new Intent(this,PhotoSendToActivity.class));
+                //takePhoto(this,REQ_TAKE_PHO_DOODLE);
+                showTakeOrPickphoto(view);
                 break;
             case R.id.img_home_chatroom:
                 intent = new Intent(this,ParentChatroomActivity.class);
@@ -303,7 +299,19 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             case R.id.img_home_movable:
                 break;
             case R.id.img_home_homework:
-                takePhoto(this, REQ_TAKE_PHO);
+                MessageDialog dialog = new MessageDialog(this);
+                dialog.setIsDouleBtn(false);
+                dialog.setTitle("");
+                dialog.setMessage("请拍下作业,发送给老师");
+                dialog.setOnLeftClickListener("确定",new MessageDialog.MessageDialogClickListener() {
+                    @Override
+                    public void onclick(MessageDialog dialog) {
+                        dialog.dismiss();
+                        takePhoto(HomeActivity.this, REQ_TAKE_PHO);
+                    }
+                });
+                dialog.show();
+
                 break;
             case R.id.btn_goto_myclass:
             	intent = new Intent(HomeActivity.this, ClassDetailActivity.class);
@@ -314,6 +322,27 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 break;
         }
     }
+
+    private void showTakeOrPickphoto(View v){
+        final BottomButtonBoard board = new BottomButtonBoard(this,v);
+        board.add(getString(R.string.image_take_photo),BottomButtonBoard.BUTTON_BLUE, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                board.dismiss();
+                takePhoto(HomeActivity.this,REQ_TAKE_PHO_DOODLE);
+            }
+        });
+        board.add(getString(R.string.image_provider_cover),BottomButtonBoard.BUTTON_BLUE, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                board.dismiss();
+                pickPhoto(HomeActivity.this,REQ_PICK_PHOTO_DOOLE);
+            }
+        });
+        board.addCancelBtn(getString(R.string.cancel));
+        board.show();
+    }
+
     private Uri mLastImageUri;
     private void takePhoto(Activity activity, int requestCode) {
         mLastImageUri = Uri.fromFile(MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_IMAGE, ".jpg"));
@@ -325,6 +354,15 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             activity.startActivityForResult(takePhotoIntent, requestCode);
         }
     }
+
+    private void pickPhoto(Activity activity, int requestCode){
+        Intent pickIntent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        pickIntent.setType("image/*");
+//        pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+        activity.startActivityForResult(pickIntent, requestCode);
+    }
+
+    private String outputfilename;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -341,6 +379,65 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                                 SettingActivity.EXTRA_APP_UPDATES_AVAILABLE, appUpdatesAvailable);
                         updateUi();
                     }
+                    break;
+                case REQ_TAKE_PHO_DOODLE:
+                    String[] photoPath = new String[2];
+                    boolean isSuccess = new MediaInputHelper().handleImageResult(
+                            this,
+                            new Intent().setData(mLastImageUri),
+                            InputBoardManager.PHOTO_SEND_WIDTH, InputBoardManager.PHOTO_SEND_HEIGHT,
+                            InputBoardManager.PHOTO_THUMBNAIL_WIDTH, InputBoardManager.PHOTO_THUMBNAIL_HEIGHT,
+                            photoPath);
+                    if(isSuccess){
+                        outputfilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
+                        startActivityForResult(
+                                new Intent(this, DoodleActivity.class)
+                                        .putExtra(DoodleActivity.EXTRA_MAX_WIDTH, InputBoardManager.PHOTO_SEND_WIDTH)
+                                        .putExtra(DoodleActivity.EXTRA_MAX_HEIGHT, InputBoardManager.PHOTO_SEND_HEIGHT)
+                                        .putExtra(DoodleActivity.EXTRA_BACKGROUND_FILENAME, photoPath[0])
+                                        .putExtra(DoodleActivity.EXTRA_OUTPUT_FILENAME, outputfilename),
+                                REQ_SEND_DOODLE
+                        );
+                    }
+
+                    break;
+                case REQ_PICK_PHOTO_DOOLE:
+                    photoPath = new String[2];
+                    isSuccess = new MediaInputHelper().handleImageResult(
+                            this,
+                            data,
+                            InputBoardManager.PHOTO_SEND_WIDTH, InputBoardManager.PHOTO_SEND_HEIGHT,
+                            InputBoardManager.PHOTO_THUMBNAIL_WIDTH, InputBoardManager.PHOTO_THUMBNAIL_HEIGHT,
+                            photoPath);
+                    if(isSuccess){
+                        outputfilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
+                        startActivityForResult(
+                                new Intent(this, DoodleActivity.class)
+                                        .putExtra(DoodleActivity.EXTRA_MAX_WIDTH, InputBoardManager.PHOTO_SEND_WIDTH)
+                                        .putExtra(DoodleActivity.EXTRA_MAX_HEIGHT, InputBoardManager.PHOTO_SEND_HEIGHT)
+                                        .putExtra(DoodleActivity.EXTRA_BACKGROUND_FILENAME, photoPath[0])
+                                        .putExtra(DoodleActivity.EXTRA_OUTPUT_FILENAME, outputfilename),
+                                REQ_SEND_DOODLE
+                        );
+                    }
+                    break;
+                case REQ_SEND_DOODLE:
+                    photoPath = new String[2];
+                    photoPath[0] = outputfilename;
+                    // generate thumbnail
+                    File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_THUMNAIL, ".jpg");
+                    if (f != null) {
+                        photoPath[1] = f.getAbsolutePath();
+                        Bitmap thumbnail = BmpUtils.decodeFile(photoPath[0],InputBoardManager.PHOTO_THUMBNAIL_WIDTH, InputBoardManager.PHOTO_THUMBNAIL_HEIGHT);
+                        try {
+                            FileOutputStream fos = new FileOutputStream(photoPath[1]);
+                            thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+                            fos.close();
+                        } catch (java.io.IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    startActivity(new Intent(this,SendToActivity.class).putExtra(SendToActivity.INTENT_PAHT,photoPath));
                     break;
             }
         }
@@ -436,48 +533,4 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             container.removeView((View) object);
         }
     }
-
-    /**
-     * 检测用户绑定邮箱的状态
-     */
-//    private void bindEmailStatus () {
-//    	AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, List<Map<String, Object>>> () {
-//
-//            @Override
-//            protected List<Map<String, Object>> doInBackground(Void... params) {
-//                return WowTalkWebServerIF.getInstance(HomeActivity.this).fEmailBindStatus();
-//            }
-//
-//            @Override
-//            protected void onPostExecute(List<Map<String, Object>> result) {
-//            	if (result != null) {
-//            	String bindEmail = (String) result.get(0).get("email");
-//            	
-//            	if (bindEmail != null) {
-//					msgbox.show(null, getString(R.string.bind_email_successed));
-//					msgbox.dismissDialog();
-//				} else {
-//					msgbox.show(null, getString(R.string.bind_email_failed));
-//					msgbox.dismissDialog();
-//				}
-//            	
-//            } else {
-//            	Toast.makeText(HomeActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
-//            }
-//            
-//            } 
-//        });
-//    }
-    
-    /**
-     * 
-     * @author hutianfeng
-     * @date 2015/3/10
-     */
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//    	super.onActivityResult(requestCode, resultCode, data);
-//    	if (resultCode == RESULT_OK) {
-//    	}
-//    }
 }

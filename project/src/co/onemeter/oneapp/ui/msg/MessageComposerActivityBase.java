@@ -1461,6 +1461,53 @@ public abstract class MessageComposerActivityBase extends Activity
 		context.startActivity(intent);
 	}
 
+    /**
+     * used this methord to relay picture
+     * @param context
+     * @param uid
+     * @param path
+     * @param isFinish
+     */
+    public static void launchToChatWithBuddyWithPicture(Context context, String uid,String[] path,boolean isFinish){
+        Database db = new Database(context);
+        // 查询是否还是好友
+        Buddy b = db.buddyWithUserID(uid);
+        if(null == b) {
+            return;
+        }
+        mCanSendMsg = (0 != (b.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE)) ? CAN_SEND_MSG_OK : CAN_SEND_MSG_NO_FRIENDS;
+        if(0 == (b.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE)){
+            ArrayList<String> groupIds = db.getGroupIdsByMemberId(uid);
+            if(groupIds != null){
+                for(String groupId : groupIds){
+                    GroupChatRoom group = db.fetchGroupChatRoom(groupId);
+                    if(group != null){
+                        if(group.category.equals(GroupChatRoom.CATEGORY_CLASSROOM)){
+                            mCanSendMsg = CAN_SEND_MSG_OK;
+                        }
+                    }
+                }
+            }
+        }
+        sCanSendMsgInited = true;
+        String displayName = (b == null ?
+                context.getString(R.string.msg_session_unknown_buddy)
+                : (TextUtils.isEmpty(b.alias) ? b.nickName : b.alias));
+        String phoneNumber = (b == null ? null : b.phoneNumber);
+
+        Intent intent = new Intent(context, MessageComposerActivity.class);
+        intent.putExtra(MessageComposerActivityBase.KEY_TARGET_UID,uid);
+        intent.putExtra(MessageComposerActivityBase.KEY_TARGET_DISPLAYNAME,displayName);
+        intent.putExtra(MessageComposerActivityBase.KEY_TARGET_PHONENUMBER,phoneNumber);
+        intent.putExtra(MessageComposerActivity.LAUCH_WITH_SEND_MSG,true);
+        intent.putExtra(MessageComposerActivity.SEND_PIC_PATH,path[0]);
+        intent.putExtra(MessageComposerActivity.SEND_PIC_THUMB,path[1]);
+        context.startActivity(intent);
+        if(isFinish && context instanceof Activity){
+            ((Activity)context).finish();
+        }
+    }
+
 	public static void launchToChatWithGroup(Context context, Class<?> subclassType, String group_id) {
 		Database db = new Database(context);
 		GroupChatRoom g = db.fetchGroupChatRoom(group_id);
@@ -1496,6 +1543,42 @@ public abstract class MessageComposerActivityBase extends Activity
 				g.getDisplayName());
 		context.startActivity(intent);
 	}
+
+    /**
+     * this methord is used to send picture to group
+     * @param context
+     * @param group_id
+     * @param path
+     * @param isFinish
+     */
+    public static void launchToChatWithGroupWithPicture(Context context, String group_id,String[] path,boolean isFinish) {
+        Database db = new Database(context);
+        GroupChatRoom g = db.fetchGroupChatRoom(group_id);
+        if(g == null)
+            return;
+
+        // 查询是否还属于此群组
+        String myUid = PrefUtil.getInstance(context).getUid();
+        mCanSendMsg = db.isExistsInGroupChatRoom(myUid, g.groupID) ? CAN_SEND_MSG_OK : CAN_SEND_MSG_NO_GROUP_MEMBER;
+        sCanSendMsgInited = true;
+        Intent intent = new Intent(context,MessageComposerActivity.class);
+        intent.putExtra(MessageComposerActivityBase.KEY_TARGET_UID,g.groupID);
+        intent.putExtra(MessageComposerActivity.LAUCH_WITH_SEND_MSG,true);
+        intent.putExtra(MessageComposerActivity.SEND_PIC_PATH,path[0]);
+        intent.putExtra(MessageComposerActivity.SEND_PIC_THUMB,path[1]);
+        if(g.isTemporaryGroup) {
+            intent.putExtra(MessageComposerActivityBase.KEY_TARGET_IS_TMP_GROUP,true);
+        } else {
+            intent.putExtra(MessageComposerActivityBase.KEY_TARGET_IS_NORMAL_GROUP,true);
+        }
+        intent.putExtra(
+                MessageComposerActivityBase.KEY_TARGET_DISPLAYNAME,
+                g.getDisplayName());
+        context.startActivity(intent);
+        if(isFinish && context instanceof Activity){
+            ((Activity) context).finish();
+        }
+    }
 
 	/**
 	 * 组织架构内聊天时，不需要查询是否属于此群组；但临时会话还需要判断 {@link #launchToChatWithGroup()}

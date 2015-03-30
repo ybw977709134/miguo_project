@@ -1,5 +1,6 @@
 package co.onemeter.oneapp.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -19,9 +20,12 @@ import java.util.ArrayList;
 import co.onemeter.oneapp.R;
 
 /**
+ * This activity is used to choose buddy or group or schoolmate's buddy,and send picture
  * Created by jacky on 15-3-26.
  */
-public class PhotoSendToActivity extends FragmentActivity implements View.OnClickListener{
+public class SendToActivity extends FragmentActivity implements View.OnClickListener{
+    public static final String INTENT_PAHT = "pho_path";
+
 
     private final int IDX_0 = 0;
     private final int IDX_1 = 1;
@@ -98,9 +102,18 @@ public class PhotoSendToActivity extends FragmentActivity implements View.OnClic
         viewPager.setOnPageChangeListener(new MyOnPageChangeListener());
 
         mfragments = new ArrayList<Fragment>();
-        mfragments.add(new Fragment());
-        mfragments.add(new STContactsFragment());
-        mfragments.add(new STSchoolMateFragment());
+        Bundle bundle = new Bundle();
+        bundle.putStringArray(INTENT_PAHT,getIntent().getStringArrayExtra(INTENT_PAHT));
+        Fragment fragment = null;
+        fragment = new STSmsFragment();
+        fragment.setArguments(bundle);
+        mfragments.add(fragment);
+        fragment = new STContactsFragment();
+        fragment.setArguments(bundle);
+        mfragments.add(fragment);
+        fragment = new STSchoolMateFragment();
+        fragment.setArguments(bundle);
+        mfragments.add(fragment);
         viewPager.setAdapter(new SendtoPagerAdapter(getSupportFragmentManager(), mfragments));
         viewPager.setCurrentItem(IDX_0);
     }
@@ -118,13 +131,13 @@ public class PhotoSendToActivity extends FragmentActivity implements View.OnClic
                 finish();
                 break;
             case R.id.txt_one:
-                viewPager.setCurrentItem(IDX_0);
+                viewPager.setCurrentItem(IDX_0,true);
                 break;
             case R.id.txt_two:
-                viewPager.setCurrentItem(IDX_1);
+                viewPager.setCurrentItem(IDX_1,true);
                 break;
             case R.id.txt_third:
-                viewPager.setCurrentItem(IDX_2);
+                viewPager.setCurrentItem(IDX_2,true);
                 break;
 
         }

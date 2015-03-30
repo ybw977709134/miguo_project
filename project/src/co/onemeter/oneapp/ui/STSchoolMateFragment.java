@@ -27,16 +27,25 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.adapter.GroupTreeAdapter;
 import co.onemeter.oneapp.contacts.model.ContactTreeNode;
 import co.onemeter.oneapp.contacts.model.Person;
+import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 /**
  * Created by jacky on 15-3-27.
  */
 public class STSchoolMateFragment extends Fragment implements AdapterView.OnItemClickListener{
+    private String[] path;
+
     GroupTreeAdapter adapter;
     List<GroupChatRoom> schools;
     int errno;
     AQuery aQuery;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        path = getArguments().getStringArray(SendToActivity.INTENT_PAHT);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,7 +101,6 @@ public class STSchoolMateFragment extends Fragment implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        /*
         try {
             Context context = getActivity();
             Object item = adapterView.getItemAtPosition(i);
@@ -101,18 +109,15 @@ public class STSchoolMateFragment extends Fragment implements AdapterView.OnItem
                 if (!contact.isGroup()) {
                     String uid = contact.getGUID();
                     String myUid = PrefUtil.getInstance(context).getUid();
-                    if (!TextUtils.equals(uid, myUid)) {
-                        Buddy buddy = new Database(context).buddyWithUserID(uid);
-                        ContactInfoActivity.launch(context, Person.fromBuddy(buddy),
-                                buddy == null ? 0 : buddy.getFriendShipWithMe(),true);
-                    } else {
-                        startActivity(new Intent(context, MyInfoActivity.class));
+                    if (TextUtils.equals(uid, myUid)) {
+                        Toast.makeText(context,"请不要发给自己!",Toast.LENGTH_LONG).show();
+                    }else {
+                        MessageComposerActivity.launchToChatWithBuddyWithPicture(context,uid,path,true);
                     }
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
-        */
     }
 }

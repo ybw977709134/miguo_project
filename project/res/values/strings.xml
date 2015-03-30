@@ -919,6 +919,7 @@
     <string name="class_lesson_homework">答疑</string>
     <string name="class_lesson_select_classroom">可选教室</string>
     <string name="class_homework">在线作业</string>
+    <string name="class_tea_stu_list">师生名单</string>
     <string name="class_submitted">已提交</string>
     <string name="class_wait_submit">待提交意见</string>
     <string name="class_confirmed">已确认</string>

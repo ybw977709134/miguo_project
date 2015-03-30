@@ -314,8 +314,8 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
                 break;
             case R.id.btn_goto_myclass:
-            	intent = new Intent(HomeActivity.this, ClassDetailActivity.class);
-//                intent.putExtra(MyClassesActivity.TAG,true);
+            	intent = new Intent(HomeActivity.this, MyClassesActivity.class);
+                intent.putExtra(MyClassesActivity.TAG,true);
                 startActivity(intent);
             	break;
             default:

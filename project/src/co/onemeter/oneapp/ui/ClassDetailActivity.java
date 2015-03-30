@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
+import android.support.v4.widget.DrawerLayout.LayoutParams;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -124,12 +125,15 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		classInfos = new LinkedList<ClassInfo>();
 		courseAdapter = new CourseTableAdapter(lessons);
 		
-		
-		
+		LayoutParams layoutParams = (LayoutParams) layout_main_leftdrawer.getLayoutParams();
+		layoutParams.width = getResources().getDisplayMetrics().widthPixels * 2 / 3;
+		layout_main_leftdrawer.setLayoutParams(layoutParams);
+		layout_main_leftdrawer.getBackground().setAlpha(200);
+		lvMyClass.getBackground().setAlpha(200);
 		Intent intent = getIntent();
 //		classId = "1678ff8f-2a41-438a-bb22-4f55530857f1";
-//		classId = intent.getStringExtra("classId");
-//		schoolId = intent.getStringExtra("schoolId");
+		classId = intent.getStringExtra("classId");
+		schoolId = intent.getStringExtra("schoolId");
 //		schoolId = "60f05397-dfa8-4ddc-9e0d-b4fad549f184";
 		Database db = Database.getInstance(this);
 		if(classId != null){
@@ -165,7 +169,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 //		}
 		
 //		query.find(R.id.class_detail_title).text(intent.getStringExtra("classroomName"));
-//		query.find(R.id.myclasses_title).text("a");
+		query.find(R.id.myclasses_title).text(intent.getStringExtra("classroomName"));
 //		query.find(R.id.title_back).clicked(this);
 		query.find(R.id.btn_myclass_addclass).clicked(this);
 		query.find(R.id.class_live_class).clicked(this);
@@ -393,8 +397,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		TextView txt_footer = (TextView) view.findViewById(R.id.txt_footer_add);
 		txt_footer.setText(getString(R.string.class_add_classes));
 		LinearLayout layout = (LinearLayout) view.findViewById(R.id.lay_footer_add);
-		layout.setOnClickListener(this);
-		
+		layout.setOnClickListener(this);	
 		return view;
 	}
 //	private void setClassInfo(){
@@ -521,6 +524,11 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		case R.id.lay_footer_add:
 			Intent i = new Intent(this,AddClassActivity.class);
 			startActivityForResult(i, 1001);
+			break;
+		case R.id.btn_tea_stu_list:
+			Intent data = new Intent(this,ClassMembersActivity.class);
+			data.putExtra("schoolId", schoolId);
+			startActivity(data);
 			break;
 		default:
 			break;
@@ -779,9 +787,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 //				holder.item_name.setTextColor(Color.RED);				
 //			}
 			if(curTime > enddata){
-				holder.item_name.setTextColor(getResources().getColor(R.color.gray));
+				holder.item_name.setTextColor(0xff8eb4e6);				
 			}else if(curTime > now && curTime <startdata){
-				holder.item_name.setTextColor(0xff8eb4e6);
+				holder.item_name.setTextColor(getResources().getColor(R.color.gray));
 			}else if(curTime > startdata && curTime < enddata){
 				holder.item_name.setTextColor(Color.RED);
 			}

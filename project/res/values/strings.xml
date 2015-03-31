@@ -261,6 +261,7 @@
 	<string name="settings_account_moment_take_photos_oom">动态中只支持%S张照片，请处理后再拍照</string>
 	<string name="settings_upgrade_check_for_updates">检查更新</string>
 	<string name="settings_upgrade_is_uptodate">已经是最新版本</string>
+	<string name="settings_upgrade_uptodate_avilable">有新版本可用</string>
 	<string name="settings_upgrade_curr_ver_is">当前版本：</string>
 	<string name="settings_upgrade_latest_ver_is">最新版本：</string>
 	<string name="settings_upgrade_changelogs_are">主要更新内容：</string>
@@ -918,6 +919,7 @@
     <string name="class_lesson_homework">答疑</string>
     <string name="class_lesson_select_classroom">可选教室</string>
     <string name="class_homework">在线作业</string>
+    <string name="class_tea_stu_list">师生名单</string>
     <string name="class_submitted">已提交</string>
     <string name="class_wait_submit">待提交意见</string>
     <string name="class_confirmed">已确认</string>

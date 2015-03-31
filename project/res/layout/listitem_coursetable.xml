@@ -16,6 +16,7 @@
             android:layout_weight="4"
             android:layout_height="wrap_content"
             android:textColor="@color/black_30"
+            android:clickable="true"
             android:gravity="center|left"
             android:text="dummy" />
         
@@ -31,12 +32,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"               
                 android:gravity="center"
+                android:clickable="true"
                 android:textColor="@color/gray" />
             <TextView
                 android:id="@+id/coursetable_item_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"               
                 android:gravity="center"
+                android:clickable="true"
                 android:textColor="@color/gray" />
         </LinearLayout>
         
@@ -56,6 +59,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:clickable="true"
             android:drawableRight="@drawable/icon_home_movablebar"
             android:textColor="@color/gray"
             android:text="" />

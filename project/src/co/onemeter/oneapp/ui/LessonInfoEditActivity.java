@@ -119,6 +119,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			}
 			
 			findViewById(R.id.lay_les_edit).setVisibility(View.VISIBLE);
+			findViewById(R.id.lay_les_edit).setOnTouchListener(this);
 			q.find(R.id.title).text(getString(R.string.class_coursetable_info));
 			
 			lessons.addAll(mDBHelper.fetchLesson(classId));
@@ -141,6 +142,8 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		switch (v.getId()) {
 		case R.id.cancel:
 			finish();
+			closeSoftKeyboard();
+        	closeInputBoard();
 			break;
 //		case R.id.save:
 //			if(delLessons.isEmpty() && addLessons.isEmpty()){
@@ -152,12 +155,18 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 //			break;
 		case R.id.lessoninfo_refresh:
 			getLessonInfo();
+			closeSoftKeyboard();
+        	closeInputBoard();
 			break;
 		case R.id.lay_footer_add:
 			if(!DoubleClickedUtils.isFastDoubleClick()){
 				showAddOrModifyLessonDialog(true,null,-1,false);
 			}
 			break;
+		case R.id.lay_les_edit:
+			closeSoftKeyboard();
+        	closeInputBoard();
+        	break;
 		default:
 			break;
 		}
@@ -324,7 +333,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 					lesson.end_date = resultTime/1000 + endHour * 3600 + endMinute * 60;
 					addLessons.add(lesson);
 					lessons.add(lesson);
-					adapter.notifyDataSetChanged();
+//					adapter.notifyDataSetChanged();
 					
 					if(!addLessons.isEmpty()){
 						addOrDeletePostLesson(addLessons,delLessons);
@@ -448,6 +457,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 				mMsgBox.dismissWait();
 				if (ErrorCode.OK == result) {
 					mMsgBox.toast(R.string.class_submit_success);
+					adapter.notifyDataSetChanged();
 				}else if(ErrorCode.ERR_DUPLICATE_LESSONS_ON_SAME_DAY == result){
 					mMsgBox.toast(R.string.class_time_had);
 				}else{
@@ -560,9 +570,9 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 			long enddata = lesson.end_date;
 			long curTime = System.currentTimeMillis()/1000;
 			if(curTime > enddata){
-				holder.item_name.setTextColor(getResources().getColor(R.color.gray));
+				holder.item_name.setTextColor(0xff8eb4e6);		
 			}else if(curTime > now && curTime <startdate){
-				holder.item_name.setTextColor(0xff8eb4e6);
+				holder.item_name.setTextColor(getResources().getColor(R.color.gray));
 			}else if(curTime > startdate && curTime < enddata){
 				holder.item_name.setTextColor(Color.RED);
 			}
@@ -598,6 +608,10 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
         case R.id.lv_courtable:
         	closeInputBoard();
             break;
+        case R.id.lay_les_edit:
+        	closeSoftKeyboard();
+        	closeInputBoard();
+        	break;
     }
 		return false;
 	}

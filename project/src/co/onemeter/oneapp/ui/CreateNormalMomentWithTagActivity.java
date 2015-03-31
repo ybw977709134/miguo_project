@@ -27,6 +27,7 @@ import co.onemeter.oneapp.utils.LocationHelper;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
 import co.onemeter.utils.AsyncTaskExecutor;
+import junit.framework.Assert;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
@@ -415,7 +416,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                             listPhotoOrVideo.add(new CreateMomentActivity.WMediaFile(f));
                         }
                     }
-                } else {
+                } else if (listPhotoOrVideo == null) {
                     listPhotoOrVideo = new ArrayList<>();
                 }
 
@@ -1373,6 +1374,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         updateTriggerAddImgDescTxtStatus();
 
         if (isAdded) {
+            Assert.assertTrue(!listPhotoOrVideo.isEmpty());
             addMedia2moment(listPhotoOrVideo.get(listPhotoOrVideo.size() - 1));
 
             final View view = LayoutInflater.from(this).inflate(R.layout.listitem_moment_image, addedImgLayout, false);
@@ -1554,9 +1556,9 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 break;
             case ACTIVITY_REQ_ID_PICK_PHOTO_FROM_CAMERA:
                 if (resultCode == RESULT_OK) {
-                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Intent, Void, Void>() {
+                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Intent, Void, Boolean>() {
                         @Override
-                        protected Void doInBackground(Intent... params) {
+                        protected Boolean doInBackground(Intent... params) {
                             String[] path = new String[2];
                             boolean handleImageRet = mediaHelper.handleImageResult(CreateNormalMomentWithTagActivity.this, params[0],
                                     CreateMomentActivity.PHOTO_SEND_WIDTH, CreateMomentActivity.PHOTO_SEND_HEIGHT,
@@ -1571,12 +1573,15 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                             photo.localPath = path[0];
                             photo.isFromGallery = false;
                             listPhotoOrVideo.add(photo);
-                            return null;
+                            return handleImageRet;
                         }
 
                         @Override
-                        protected void onPostExecute(Void errno) {
-                            instance.notifyFileChanged(true);
+                        protected void onPostExecute(Boolean status) {
+                            if (status) {
+                                Assert.assertTrue(!listPhotoOrVideo.isEmpty());
+                                instance.notifyFileChanged(true);
+                            }
                         }
                     }, data);
                 }

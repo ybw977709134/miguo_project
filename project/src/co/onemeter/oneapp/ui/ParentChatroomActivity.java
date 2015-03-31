@@ -75,10 +75,9 @@ public class ParentChatroomActivity extends Activity implements AdapterView.OnIt
 
         Database db = new Database(this);
         if(mIsFromHomeWork){
-            Log.i("--this way--");
             schools.addAll(db.fetchSchoolsJustTeacher());
         }else {
-            schools.addAll(db.fetchSchools());
+            schools.addAll(db.fetchSchoolsNoBuddies());
         }
         db.close();
 
@@ -116,7 +115,7 @@ public class ParentChatroomActivity extends Activity implements AdapterView.OnIt
                     if(mIsFromHomeWork){
                         schools.addAll(dbHelper.fetchSchoolsJustTeacher());
                     }else {
-                        schools.addAll(dbHelper.fetchSchools());
+                        schools.addAll(dbHelper.fetchSchoolsNoBuddies());
                     }
                     dbHelper.close();
                 } else {
@@ -204,6 +203,14 @@ public class ParentChatroomActivity extends Activity implements AdapterView.OnIt
                 btn_chat.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        MessageComposerActivity.launchToChatWithGroup(context, MessageComposerActivity.class, node.getGUID());
+                    }
+                });
+                TextView btn_group_name = (TextView) view.findViewById(R.id.group_name);
+                btn_group_name.setClickable(true);
+                btn_group_name.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         MessageComposerActivity.launchToChatWithGroup(context, MessageComposerActivity.class, node.getGUID());
                     }
                 });

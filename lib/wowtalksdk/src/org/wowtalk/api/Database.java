@@ -6176,6 +6176,33 @@ public class Database {
     }
 
     /**
+     * 获得仅有学校班级的list
+     * @return
+     */
+    public List<GroupChatRoom> fetchSchoolsNoBuddies() {
+        List<GroupChatRoom> schools = _fetchGroupChatRooms(
+                "category=?", new String[] { GroupChatRoom.CATEGORY_SCHOOL });
+        if (schools != null && !schools.isEmpty()) {
+            for (GroupChatRoom school : schools) {
+                fetchClassRoomsNoBuddies(school.groupID, school);
+            }
+        }
+        return schools;
+    }
+
+    private void fetchClassRoomsNoBuddies(String schoolId, GroupChatRoom parent) {
+        ArrayList<GroupChatRoom> classrooms = _fetchGroupChatRooms(
+                "parent_group_id=?", new String[] { parent.groupID });
+        if (classrooms != null && !classrooms.isEmpty()) {
+            parent.childGroups = classrooms;
+            for (GroupChatRoom classroom : classrooms) {
+                classroom.level = parent.level + 1;
+                fetchClassRoomsNoBuddies(schoolId, classroom);
+            }
+        }
+    }
+
+    /**
      * 校园里只获取老师的列表
      * @return list
      */

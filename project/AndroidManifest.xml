@@ -672,7 +672,8 @@
             android:theme="@style/Theme.Blue_main" ></activity>
         <activity android:name="co.onemeter.oneapp.ui.ParentChatroomActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Blue_main" ></activity>
+            android:theme="@style/Theme.Blue_main"
+            android:launchMode="singleTop"></activity>
         <activity android:name=".ui.SendToActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" ></activity>

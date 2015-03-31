@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    android:background="@color/background_dark">
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        style="?attr/navbar"
+        android:layout_alignParentTop="true" >
+
+        <ImageButton
+            android:id="@+id/btn_notice_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:src="@drawable/nav_back_selector" />
+
+        <TextView
+            android:id="@+id/class_notice_title"
+            style="?attr/navbar_title"
+            android:text="@string/class_notification" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

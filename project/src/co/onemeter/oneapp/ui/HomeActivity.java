@@ -288,8 +288,12 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.img_home_classnotice:
+            	intent = new Intent(this, ClassNotificationActivity.class);
+                startActivity(intent);
                 break;
             case R.id.img_home_register:
+            	intent = new Intent(this, SelectClassActivity.class);
+                startActivity(intent);
                 break;
             case R.id.img_home_answerquestion:
                 //startActivity(new Intent(this,PhotoSendToActivity.class));

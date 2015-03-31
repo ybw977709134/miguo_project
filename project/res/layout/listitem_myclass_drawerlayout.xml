@@ -13,16 +13,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/icon_myclass_leftpage_r" 
+            android:layout_weight="1"
             android:paddingLeft="15dp"/>
+
         <TextView
             android:id="@+id/item_myclass_tv"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            
-            android:text="dummytext"
-            android:textColor="@color/black" 
             android:paddingLeft="10dp"
-            android:textSize="18sp"/>
+            android:text="dummytext"
+            android:textColor="@color/black"
+            android:layout_weight="10"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/myclass_item_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_section_select"
+            android:paddingRight="15dp"
+            android:layout_weight="1"
+            android:visibility="invisible"/>
     </LinearLayout>
 
 

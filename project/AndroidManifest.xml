@@ -603,6 +603,10 @@
 			      android:theme="@style/Theme.Blue_main"
 			      android:screenOrientation="portrait" >
 		</activity>
+		<activity android:name=".ui.ClassNotificationActivity"
+			      android:theme="@style/Theme.Blue_main"
+			      android:screenOrientation="portrait" >
+		</activity>
 		<activity
             android:name=".liveplayer.VideoPlayingActivity"
             android:configChanges="orientation|screenSize"
@@ -620,7 +624,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
-        
+        <activity
+            android:name="co.onemeter.oneapp.ui.SelectClassActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue_main" >
+        </activity>
 		<activity
             android:name="co.onemeter.oneapp.ui.LessonStatusActivity"
             android:screenOrientation="portrait"

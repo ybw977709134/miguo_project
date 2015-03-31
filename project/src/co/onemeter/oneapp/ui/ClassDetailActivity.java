@@ -528,6 +528,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		case R.id.btn_tea_stu_list:
 			Intent data = new Intent(this,ClassMembersActivity.class);
 			data.putExtra("schoolId", schoolId);
+			data.putExtra("classId", classId);
 			startActivity(data);
 			break;
 		default:

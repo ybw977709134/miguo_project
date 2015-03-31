@@ -142,7 +142,6 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		switch (v.getId()) {
 		case R.id.cancel:
 			finish();
-			closeSoftKeyboard();
         	closeInputBoard();
 			break;
 //		case R.id.save:
@@ -155,7 +154,6 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 //			break;
 		case R.id.lessoninfo_refresh:
 			getLessonInfo();
-			closeSoftKeyboard();
         	closeInputBoard();
 			break;
 		case R.id.lay_footer_add:

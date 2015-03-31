@@ -4705,7 +4705,7 @@ public class WowTalkWebServerIF {
 	 * @param schoolId
 	 * @return
 	 */
-	private Map<String, List<Buddy>> getSchoolMembers(String schoolId) {
+	public Map<String, List<Buddy>> getSchoolMembers(String schoolId) {
 		Map<String, List<Buddy>> result = new HashMap<>();
 
 		String strUID = sPrefUtil.getUid();

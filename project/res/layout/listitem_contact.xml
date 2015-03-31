@@ -82,8 +82,7 @@
                 android:layout_weight="1"
                 android:paddingRight="5dp"
                 android:gravity="bottom"
-                style="@style/contact_list_sub_text"
-                android:text="111111111111111111111"/>
+                style="@style/contact_list_sub_text"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

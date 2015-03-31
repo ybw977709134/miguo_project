@@ -323,6 +323,15 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 //					txt_auth_code.setText("");
 					if (txt_auth_code.getText().toString().length() > 0) {
 						field_clear_auth_code.setVisibility(View.VISIBLE);
+						 Handler hanlder = new Handler();
+	        		        hanlder.postDelayed(new Runnable() {
+	        					
+	        					@Override
+	        					public void run() {
+	        						mInputMethodManager.showSoftInput(txt_auth_code, InputMethodManager.RESULT_SHOWN);
+	        						mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+	        					}
+	        				}, 200);
 					}
 				} else {
 					field_clear_auth_code.setVisibility(View.GONE);
@@ -455,18 +464,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
         				textView_show_bind_email.setVisibility(View.VISIBLE);
         				textView_show_bind_email.setText("你输入的邮箱"+txt_bind_email.getText().toString());
 
-        				txt_auth_code.setFocusable(true);
-        				txt_auth_code.setFocusableInTouchMode(true);
-        				txt_auth_code.requestFocus();
-        		        Handler hanlder = new Handler();
-        		        hanlder.postDelayed(new Runnable() {
-        					
-        					@Override
-        					public void run() {
-        						mInputMethodManager.showSoftInput(txt_auth_code, InputMethodManager.RESULT_SHOWN);
-        						mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        					}
-        				}, 200);
+        		       
         				
         				if (mTimer != null) {
         					mTimer.cancel();
@@ -505,7 +503,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                         mMsgBox.show(null, getString(R.string.bind_email_failed));
                         break;
                 }
-                closeSoftKeyboard();
+
             }
         });
 		

@@ -322,7 +322,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
-					edtAccount.setText("");
+					if (edtAccount.getText().toString().length() > 0) {
+						fieldClear_account.setVisibility(View.VISIBLE);
+					}
 				} else {
 					fieldClear_account.setVisibility(View.GONE);
 				}
@@ -336,7 +338,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
-					edtPassword.setText("");
+					if (edtPassword.getText().toString().length() > 0) {
+						fieldClear_passWord.setVisibility(View.VISIBLE);
+					}
 				} else {
 					fieldClear_passWord.setVisibility(View.GONE);
 				}

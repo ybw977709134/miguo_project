@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="co.onemeter.oneapp"
-          android:versionCode="11"
-          android:versionName="2.7.5.0324" >
+          android:versionCode="12"
+          android:versionName="2.7.5.0331" >
 	<!-- 版本号规则：双周发布 x.x.5，单周测试 x.x.0 -->
 
 	<!-- 在 Android 2.3 上，PullToRefreshListView 产生 stack overflow 错误。 -->

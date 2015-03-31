@@ -25,13 +25,13 @@ public class MessagesAdapter extends BaseAdapter {
 	private Date today;
 	private Date sevenDaysAgo;
 	private int mBlockColor;
-    private ArrayList<ChatMessage> log_msg;
+    protected ArrayList<ChatMessage> log_msg;
 	LayoutInflater mInflater;
 	private Context mContext;
-	private Database mDbHelper;
+	protected Database mDbHelper;
     private PhotoDisplayHelper mPhotoDisplayHelper;
     private HashMap<String, String> chatMessageDisplayNameBuf = new HashMap<String, String>();
-    private HashSet<String> mDownloadingTargets = new HashSet<String>();
+    protected HashSet<String> mDownloadingTargets = new HashSet<String>();
 
 	public MessagesAdapter(Context aContext, ArrayList<ChatMessage> data) {
 		today = new Date();
@@ -109,7 +109,7 @@ public class MessagesAdapter extends BaseAdapter {
         
     }
 
-    private void fixBuddyDisplay(final ChatMessage msg, final TextView textView, final ImageView photoImageView) {
+    protected void fixBuddyDisplay(final ChatMessage msg, final TextView textView, final ImageView photoImageView) {
 //        if (msg.displayName != null && !msg.displayName.equals("")) {
 //            saveNameBuff(msg.chatUserName, msg.displayName, textView);
 //            return;
@@ -258,7 +258,7 @@ public class MessagesAdapter extends BaseAdapter {
         }
     }
 
-    private void fixGroupChatDisplayName(GroupChatRoom groupRoom,
+    protected void fixGroupChatDisplayName(GroupChatRoom groupRoom,
             final ChatMessage msg, final TextView textView) {
         if (chatMessageDisplayNameBuf.containsKey(msg.chatUserName)) {
             textView.setText(chatMessageDisplayNameBuf.get(msg.chatUserName));
@@ -494,7 +494,7 @@ public class MessagesAdapter extends BaseAdapter {
 		return lView;
 	}
 
-    private void showGroupChatMessages(ImageView photoImageView, TextView txtContact, ChatMessage message, GroupChatRoom g) {
+    protected void showGroupChatMessages(ImageView photoImageView, TextView txtContact, ChatMessage message, GroupChatRoom g) {
         //if it is a temp group, set contact as all members' name if the group_name hasn't been set;
         // otherwise, set as the display_name
         if(null != g && g.isTemporaryGroup) {

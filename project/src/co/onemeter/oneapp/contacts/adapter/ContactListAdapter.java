@@ -21,14 +21,14 @@ public class ContactListAdapter extends BaseAdapter implements Filterable {
 	private boolean _defaultSelected = false;
 	private int _totalSelectedNumber;
 	private String oldFirstChar;
-	private boolean mIsShowFirstChar = true;
+    protected boolean mIsShowFirstChar = true;
 
     // 总是以 mFilteredPersons 为有效数据源，如果没有 filter，则 mFilteredPersons == mAllPersons
-	private ArrayList<Person> mAllPersons;
-    private ArrayList<Person> mFilteredPersons;
+	protected ArrayList<Person> mAllPersons;
+    protected ArrayList<Person> mFilteredPersons;
 
     private Database mDbHelper;
-    private Filter mFilter;
+    protected Filter mFilter;
 
     public ContactListAdapter(Context context) {
 		this.context = context;

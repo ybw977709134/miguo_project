@@ -62,6 +62,22 @@ public class SendToActivity extends FragmentActivity implements View.OnClickList
         super.onResume();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.gc();
+            }
+        }).start();
+    }
+
     private void setImageView(){
         img_cursor = (ImageView) findViewById(R.id.img_cursor);
         DisplayMetrics dm = new DisplayMetrics();

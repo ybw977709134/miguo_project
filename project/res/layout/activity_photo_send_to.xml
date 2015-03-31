@@ -35,6 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:background="@color/background_light"
         android:paddingTop="@dimen/bottom_board_btn_top_margin"
         android:paddingBottom="2dp">
 

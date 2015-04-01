@@ -448,11 +448,12 @@ public class SettingActivity extends Activity implements OnClickListener {
                 ? savedInstanceState.getBoolean(EXTRA_APP_UPDATES_AVAILABLE)
                 : getIntent().getBooleanExtra(EXTRA_APP_UPDATES_AVAILABLE, false);
         
-//        if (mPrefUtil.getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
-//        	findViewById(R.id.imageView_tag_tea).setVisibility(View.VISIBLE);
-//        } else {
-//        	findViewById(R.id.imageView_tag_tea).setVisibility(View.GONE);
-//        }
+        if (mPrefUtil.getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+        	findViewById(R.id.imageView_tag_tea).setVisibility(View.VISIBLE);
+        } else {
+        	findViewById(R.id.imageView_tag_tea).setVisibility(View.GONE);
+        }
+        
         Log.d("--create setting");
         initView();
     }

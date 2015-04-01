@@ -641,7 +641,12 @@
             android:theme="@style/Theme.Blue_main" >
         </activity>
         <activity
-            android:name=".ui.LessonStatusActivity"
+            android:name="co.onemeter.oneapp.ui.SelectLessonActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue_main" >
+        </activity>
+		<activity
+            android:name="co.onemeter.oneapp.ui.LessonStatusActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>

@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="co.onemeter.oneapp.ui.TeacherInClassActivity"
+    android:background="@color/background_dark">
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        android:layout_height="50dp"
+        android:layout_width="fill_parent"
+        android:layout_alignParentTop="true"
+        style="?attr/navbar">
+        <ImageButton
+            android:id="@+id/title_back"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:layout_alignParentLeft="true"
+            android:background="@null"
+            android:src="@drawable/icon_back_selector"/>
+
+        <TextView
+            android:id="@+id/title_teacher_in_class"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            style="@style/page_title_dark"
+            android:text="发送到"/>
+    </RelativeLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/lv_teacher_in_class"
+        android:background="@color/background_light"
+        android:cacheColorHint="@null"
+
+        android:divider="@drawable/bg_section_divider_line_light"/>
+</LinearLayout>

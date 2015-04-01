@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,17 +23,25 @@ import android.widget.AdapterView.OnItemClickListener;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
+import co.onemeter.oneapp.utils.MediaUtils;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.androidquery.AQuery;
+import com.pzy.paint.DoodleActivity;
 
 import org.w3c.dom.Text;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.HorizontalListView;
+import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
+import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.DoubleClickedUtils;
+import org.wowtalk.ui.msg.InputBoardManager;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -458,7 +467,15 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 //			tvLength.setText(length + infos[6]);
 		}
 	}
-	
+
+    private final int REQ_TAKE_PHO = 2001;
+    private final int REQ_PICK_PHO_DOOLE = 2002;
+    private final int REQ_TAKE_PHO_DOOLE = 2003;
+    private final int REQ_SEND_DOODLE = 2004;
+
+
+    private MediaInputHelper mMediaHelper = new MediaInputHelper();
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -475,17 +492,12 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 //			String time = tvTime.getText().toString().substring(5);
 //			String length = tvLength.getText().toString().substring(5);	
 			if(currentTime < lessons.get(0).start_date){
-				Builder alertDialog = new AlertDialog.Builder(ClassDetailActivity.this);
+				MessageDialog alertDialog = new MessageDialog(ClassDetailActivity.this);
     			alertDialog.setTitle("提示");
+                alertDialog.setIsDouleBtn(false);
     			alertDialog.setMessage("现在没有课程正在直播");
-    			alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-    				
-    				@Override
-    				public void onClick(DialogInterface arg0, int arg1) {
-
-    				}
-    			});        			
-    			alertDialog.create().show();
+    			alertDialog.setOnLeftClickListener("确定", null);
+    			alertDialog.show();
 			}else{
 //				String[] times = time.split(":");
 //				String[] lengths = length.split(":");
@@ -531,48 +543,123 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			data.putExtra("classId", classId);
 			startActivity(data);
 			break;
+        case R.id.btn_photo_answering:
+            final BottomButtonBoard board = new BottomButtonBoard(this,v);
+            board.add(getString(R.string.image_take_photo),BottomButtonBoard.BUTTON_BLUE, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    board.dismiss();
+                    mMediaHelper.takePhoto(ClassDetailActivity.this, REQ_TAKE_PHO_DOOLE);
+                }
+            });
+            board.add(getString(R.string.image_provider_cover),BottomButtonBoard.BUTTON_BLUE, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    board.dismiss();
+                    mMediaHelper.pickPhoto(ClassDetailActivity.this, REQ_PICK_PHO_DOOLE);
+                }
+            });
+            board.addCancelBtn(getString(R.string.cancel));
+            board.show();
+            break;
+        case R.id.btn_homework_online:
+            MessageDialog dialog = new MessageDialog(this);
+            dialog.setIsDouleBtn(false);
+            dialog.setTitle("");
+            dialog.setMessage("请拍下作业,发送给老师");
+            dialog.setOnLeftClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                @Override
+                public void onclick(MessageDialog dialog) {
+                    dialog.dismiss();
+                    mMediaHelper.takePhoto(ClassDetailActivity.this, REQ_TAKE_PHO);
+                }
+            });
+            dialog.show();
+            break;
 		default:
 			break;
 		}
 	}
 
+    private String outputfilename;
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if(requestCode == 0 && resultCode == RESULT_OK){
-			final String term = getString(R.string.class_term);
-			final String grade = getString(R.string.class_grade);
-			final String subject = getString(R.string.class_subject);
+        if(resultCode == RESULT_OK){
+            switch (requestCode){
+                case 0:
+                    final String term = getString(R.string.class_term);
+                    final String grade = getString(R.string.class_grade);
+                    final String subject = getString(R.string.class_subject);
 //			final String date = getString(R.string.class_date);
 //			final String time = getString(R.string.class_time);
-			final String place = getString(R.string.class_place);
+                    final String place = getString(R.string.class_place);
 //			final String length = getString(R.string.class_length);
-			String reTerm = data.getStringExtra(ClassInfoEditActivity.TERM);
-			String reGrade = data.getStringExtra(ClassInfoEditActivity.GRADE);
-			String reSubject = data.getStringExtra(ClassInfoEditActivity.SUBJECT);
+                    String reTerm = data.getStringExtra(ClassInfoEditActivity.TERM);
+                    String reGrade = data.getStringExtra(ClassInfoEditActivity.GRADE);
+                    String reSubject = data.getStringExtra(ClassInfoEditActivity.SUBJECT);
 //			String reDate = data.getStringExtra(ClassInfoEditActivity.DATE);
 //			String reTime = data.getStringExtra(ClassInfoEditActivity.TIME);
-			String rePlace = data.getStringExtra(ClassInfoEditActivity.PLACE);
+                    String rePlace = data.getStringExtra(ClassInfoEditActivity.PLACE);
 //			String reLength = data.getStringExtra(ClassInfoEditActivity.LENGTH);
-			tvTerm.setText(term + reTerm);
-			tvGrade.setText(grade + reGrade);
-			tvSubject.setText(subject + reSubject);
+                    tvTerm.setText(term + reTerm);
+                    tvGrade.setText(grade + reGrade);
+                    tvSubject.setText(subject + reSubject);
 //			tvDate.setText(date + reDate);
 //			tvTime.setText(time + reTime);
-			tvPlace.setText(place + rePlace);
+                    tvPlace.setText(place + rePlace);
 //			tvLength.setText(length + reLength);
-			class_group.description = reTerm + Constants.COMMA + 
-					reGrade + Constants.COMMA + 
-					reSubject + Constants.COMMA +
-					rePlace;
-			
-			getClassInfo(classId,class_group);
-		
-		}else if(requestCode == 1001 && resultCode == RESULT_OK){
-			getSchoolClassInfo();
-		}
+                    class_group.description = reTerm + Constants.COMMA +
+                            reGrade + Constants.COMMA +
+                            reSubject + Constants.COMMA +
+                            rePlace;
+                    getClassInfo(classId,class_group);
+                    break;
+                case 1001:
+                    getSchoolClassInfo();
+                    break;
+                case REQ_TAKE_PHO:
+                    String[] photoPath = new String[2];
+                    boolean isSuccess = MediaUtils.handleImageResult(this,mMediaHelper,new Intent().setData(mMediaHelper.getLastImageUri()),photoPath);
+                    if(isSuccess){
+                        startActivity(new Intent(this,TeacherInClassActivity.class)
+                                .putExtra(TeacherInClassActivity.INTENT_PATH,photoPath)
+                                .putExtra(TeacherInClassActivity.INTENT_CLASSID, classId));
+                    }
+                    break;
+                case REQ_TAKE_PHO_DOOLE:
+                    goDoodle(new Intent().setData(mMediaHelper.getLastImageUri()));
+                    break;
+                case REQ_PICK_PHO_DOOLE:
+                    goDoodle(data);
+                    break;
+                case REQ_SEND_DOODLE:
+                    photoPath = new String[2];
+                    photoPath[0] = outputfilename;
+                    // generate thumbnail
+                    File f = MediaInputHelper.makeOutputMediaFile(MediaInputHelper.MEDIA_TYPE_THUMNAIL, ".jpg");
+                    if (f != null) {
+                        photoPath[1] = f.getAbsolutePath();
+                        MediaUtils.compressThumb(photoPath[0],photoPath[1]);
+                    }
+                    startActivity(new Intent(this,TeacherInClassActivity.class)
+                            .putExtra(TeacherInClassActivity.INTENT_PATH,photoPath)
+                            .putExtra(TeacherInClassActivity.INTENT_CLASSID, classId));
+                    break;
+            }
+        }
 	}
-	
+
+    private void goDoodle(Intent data){
+        String[] photoPath = new String[2];
+        boolean isSuccess = MediaUtils.handleImageResult(this,mMediaHelper,data,photoPath);
+        if(isSuccess){
+            outputfilename = Database.makeLocalFilePath(UUID.randomUUID().toString(), "jpg");
+            MediaUtils.gotoDooleForResult(this,photoPath[0],REQ_SEND_DOODLE,outputfilename);
+        }
+    }
+
 	private void showMore(View parentView) {
         final BottomButtonBoard bottomBoard = new BottomButtonBoard(this, parentView);
         // class live
@@ -598,7 +685,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                         	intent.putExtra("tvDate", reDate);
                             intent.putExtra("tvTime", reTime);
                         }
-                        
+
                         if(lessons!=null && !lessons.isEmpty()){
                             intent.putExtra("firstlesdate", lessons.get(0).start_date);
                         }
@@ -646,8 +733,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		intent.putExtra("enddate", enddate);
 		intent.putExtra("onResume", isOnResume);
 		startActivity(intent);
-
-		
 	}
 	
 	class TeachersAdapter extends BaseAdapter{

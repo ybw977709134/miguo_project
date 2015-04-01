@@ -12,13 +12,15 @@ import android.util.Pair;
 
 
 
+
+
+
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.wowtalk.Log;
-
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -6282,4 +6284,137 @@ public class WowTalkWebServerIF {
         }
         return isBelongs;
     }
+    
+    public List<Bulletins> fGetClassBulletin(String classId, long timestamp, int count){
+    	List<Bulletins> result = new ArrayList<Bulletins>();
+    	String strUID = sPrefUtil.getUid();
+        String strPwd = sPrefUtil.getPassword();
+        if (isAuthEmpty(strUID, strPwd)) {
+            return result;
+        }
+        
+        String action = "get_class_bulletin";
+        String postStr = "action=" + action
+                + "&uid=" + Utils.urlencodeUtf8(strUID)
+                + "&password=" + Utils.urlencodeUtf8(strPwd)
+                + "&class_id=" + Utils.urlencodeUtf8(classId);
+        if(timestamp != 0){
+        	postStr += "&older_than=" + timestamp;
+        }
+        if(count != 0){
+        	postStr += "&count=" + count;
+        }
+        Connect2 connect2 = new Connect2();
+        Element root = connect2.Post(postStr);
+        
+        int errno = ErrorCode.BAD_RESPONSE;
+		if (root != null) {
+			NodeList errorList = root.getElementsByTagName("err_no");
+			Element errorElement = (Element) errorList.item(0);
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				errno = 0;
+                Database db = new Database(mContext);
+
+                //List<Moment> momentIdFromServerList=new ArrayList<Moment>();
+
+				Element resultElement = Utils.getFirstElementByTagName(root, action); 
+				if(resultElement != null) {
+					NodeList bulletinNodes = resultElement.getElementsByTagName("bulletin");
+					if(bulletinNodes != null && bulletinNodes.getLength() > 0) {
+						for(int i = 0, n = bulletinNodes.getLength(); i < n; ++i) {
+							Element bulletinNode = (Element)bulletinNodes.item(i);
+							Bulletins b = XmlHelper.parseBulletins(bulletinNode,mContext,null);
+                            if (b != null && b.momentId != null) {
+                            	result.add(b);
+                            }
+						}
+
+//                        for(Moment aMoment : result) {
+//                            db.storeMoment(aMoment,null);
+//                        }
+					}
+				}
+			} else {
+				errno = Integer.parseInt(errorStr);
+			}
+		}
+        
+        
+    	return result;
+    }
+    
+    public int getMomentId(List<Moment> moment_list,String text){
+    	String uid = sPrefUtil.getUid();
+		String password = sPrefUtil.getPassword();
+		if(uid == null || password == null)
+			return ErrorCode.INVALID_ARGUMENT;
+		final String action = "add_moment";
+		String postStr = "action=" + action
+				+ "&uid=" + Utils.urlencodeUtf8(uid)
+				+ "&password=" + Utils.urlencodeUtf8(password)
+				+ "&text=" + Utils.urlencodeUtf8(text)
+				+ "&anonymous=" + 1;
+		
+		Connect2 connect2 = new Connect2();
+		Element root = connect2.Post(postStr);
+		int errno = ErrorCode.BAD_RESPONSE;
+		if (root != null) {
+			NodeList errorList = root.getElementsByTagName("err_no");
+			Element errorElement = (Element) errorList.item(0);
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				errno = 0;
+
+				Element resultElement = Utils.getFirstElementByTagName(root, action);
+				if (resultElement != null) {
+					Moment moment = XmlHelper
+							.parseMoment(resultElement);
+					moment_list.add(moment);
+					}
+		
+			} else {
+				errno = Integer.parseInt(errorStr);
+			}
+		}
+		return errno;
+
+    }
+    
+    public int addClassBulletin(String class_id,String moment_id){
+    	String uid = sPrefUtil.getUid();
+		String password = sPrefUtil.getPassword();
+		if(uid == null || password == null)
+			return ErrorCode.INVALID_ARGUMENT;
+		
+		final String action = "add_class_bulletin";
+		String postStr = "action=" + action
+				+ "&uid=" + Utils.urlencodeUtf8(uid)
+				+ "&password=" + Utils.urlencodeUtf8(password)
+				+ "&class_id=" + Utils.urlencodeUtf8(class_id)
+				+ "&moment_id=" + Utils.urlencodeUtf8(moment_id);
+		
+		Connect2 connect2 = new Connect2();
+		Element root = connect2.Post(postStr);
+		int errno = ErrorCode.BAD_RESPONSE;
+		if (root != null) {
+			NodeList errorList = root.getElementsByTagName("err_no");
+			Element errorElement = (Element) errorList.item(0);
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				errno = 0;
+
+				Element resultElement = Utils.getFirstElementByTagName(root, action);
+			
+		
+			} else {
+				errno = Integer.parseInt(errorStr);
+			}
+		}
+		return errno;
+    }
+    
 }

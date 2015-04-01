@@ -267,6 +267,106 @@ public class XmlHelper {
         return a;
     }
 
+    public static Bulletins parseBulletins(Element bulletinNode,Context context,String oldMomentId) {
+    	Bulletins b = new Bulletins();
+
+        Element uid = Utils.getFirstElementByTagName(
+        		bulletinNode, "uid");
+        
+        if(uid != null)
+        	b.uid = uid.getTextContent();
+            Log.i("-------uid-----" + uid.getTextContent());
+        
+       Element bulletinsId = Utils.getFirstElementByTagName(
+            		bulletinNode, "bulletin_id");
+       if(bulletinsId != null)
+       	b.bulletinId = Integer.parseInt(bulletinsId.getTextContent());
+         
+        Element moment = Utils.getFirstElementByTagName(
+        		bulletinNode, "moment");
+        if(moment != null)
+            b.momentId = moment.getTextContent();
+        else
+            return null;
+
+//        e = Utils.getFirstElementByTagName(momentNode, "uid");
+//        if(e != null)
+//            b.owner.userID = e.getTextContent();
+//
+//        e = Utils.getFirstElementByTagName(momentNode, "nickname");
+//        if(e != null)
+//            b.owner.nickName = e.getTextContent();
+
+        Element e = Utils.getFirstElementByTagName(
+       		 moment, "moment_id");
+        if(e != null)
+           b.momentId = e.getTextContent(); 
+
+        e = Utils.getFirstElementByTagName(
+       		moment, "longitude");
+        
+        e = Utils.getFirstElementByTagName(
+        		 moment, "latitude");
+        if(e != null)
+            b.latitude = Utils.tryParseFloat(e.getTextContent(), 0);
+
+        e = Utils.getFirstElementByTagName(
+        		moment, "longitude");
+        if(e != null)
+            b.longitude = Utils.tryParseFloat(e.getTextContent(), 0);
+
+        b.place = Utils.getFirstTextByTagName(moment, "place");
+
+        e = Utils.getFirstElementByTagName(
+        		moment, "text");
+        if(e != null)
+            b.text = e.getTextContent();
+
+        e = Utils.getFirstElementByTagName(
+        		moment, "timestamp");
+        if(e != null)
+            b.timestamp = Utils.tryParseLong(e.getTextContent(), 0);
+
+        e = Utils.getFirstElementByTagName(moment, "privacy_level");
+        if(e != null)
+            b.privacyLevel = Utils.tryParseInt(e.getTextContent(), 0);
+
+        e = Utils.getFirstElementByTagName(moment, "liked");
+        if(e != null)
+            b.likedByMe = "1".equals(e.getTextContent());
+
+        e = Utils.getFirstElementByTagName(moment, "tag");
+        if(e != null)
+            b.tag = e.getTextContent();
+
+        e = Utils.getFirstElementByTagName(moment, "deadline");
+        if(e != null) {
+            try {
+                b.surveyDeadLine = Long.parseLong(e.getTextContent());
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        Database db = new Database(context);
+        b.isFavorite=db.isMomentFavoriteLocal(TextUtils.isEmpty(oldMomentId)?b.momentId:oldMomentId);
+
+//        NodeList ml = bulletinNode.getElementsByTagName("multimedia");
+//        _parseMedias(ml, b);
+//
+//        NodeList reviewNodes = bulletinNode.getElementsByTagName("review");
+//        _parseReviews(reviewNodes, b);
+//
+//        NodeList optionNodes = bulletinNode.getElementsByTagName("option");
+//        _parseOptions(optionNodes, b);
+//
+//        e = Utils.getFirstElementByTagName(bulletinNode, "sharerange");
+//        if(null != e) {
+//            NodeList shareRangeNodes = e.getElementsByTagName("group_id");
+//            _parseShareRange(shareRangeNodes, b);
+//        }
+        return b;
+    }
     public static Moment parseMoment(String defaultOwnerUid, Element momentNode,Context context,String oldMomentId) {
         Moment b = new Moment();
 
@@ -1102,6 +1202,20 @@ public class XmlHelper {
         if(e != null)
         	info.end_time = Integer.parseInt(e.getTextContent());
         return info;
+    }
+    
+    public static Moment parseMoment(Element roomElement){
+    	Moment moment = new Moment();
+
+        Element e;
+        e = Utils.getFirstElementByTagName(roomElement, "moment_id");
+        if(e != null)
+        	moment.id = e.getTextContent();
+        e = Utils.getFirstElementByTagName(roomElement, "timestamp");
+        if(e != null)
+        	moment.timestamp = Integer.parseInt(e.getTextContent());
+        
+        return moment;
     }
     public static Classroom parseRoom(Element roomElement){
     	Classroom room = new Classroom();

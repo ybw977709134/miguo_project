@@ -666,6 +666,11 @@
             android:theme="@style/Theme.Blue_main" >
         </activity>
         <activity
+            android:name="co.onemeter.oneapp.ui.SendNotificationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue_main" >
+        </activity>
+        <activity
             android:name=".ui.TeacherCheckActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >

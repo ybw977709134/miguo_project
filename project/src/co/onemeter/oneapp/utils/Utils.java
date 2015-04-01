@@ -212,7 +212,11 @@ public class Utils {
   			}
   		return false;  		
   	} 
-  	
+  	public static String stampsToDateTime(long stamps){
+  		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+  		String date = sdf.format(new Date(stamps * 1000));
+  		return String.valueOf(date);
+  	}
   	public static String stampsToDate(long stamps){
   		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
   		String date = sdf.format(new Date(stamps * 1000));

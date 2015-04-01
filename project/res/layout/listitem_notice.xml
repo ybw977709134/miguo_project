@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:roundedImgView="http://schemas.android.com/apk/res/co.onemeter.oneapp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout 
+        android:layout_height="65dp"
+        android:layout_width="fill_parent"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:orientation="horizontal">
+        <FrameLayout     
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical">
+            <co.onemeter.oneapp.ui.CircleImageView
+                android:id="@+id/notice_photo"
+                android:layout_height="@dimen/contact_icon_size"
+                android:layout_width="@dimen/contact_icon_size"
+                roundedImgView:corner_radius="@dimen/rounded_img_view_cornor_radius"
+                roundedImgView:border_width="@dimen/rounded_img_view_border_width"
+                roundedImgView:border_color="@color/rounded_img_view_border_color"
+                roundedImgView:click_dim="false"
+				android:clickable="false"
+                android:src="@drawable/default_avatar_90"/>
+        </FrameLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="7dp"
+            android:orientation="vertical"
+            android:layout_weight="1" >
+
+            <TextView 
+                android:id="@+id/notice_name"
+                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                style="@style/contact_list_main_text"
+                android:textColor="@color/black"
+                android:text="qq@qq.com"/>
+            <TextView 
+                android:id="@+id/notice_time"
+                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:paddingRight="5dp"
+                android:gravity="bottom"
+                style="@style/contact_list_sub_text"
+                android:text="2015/04/01 14:00"/>
+        </LinearLayout>
+        <LinearLayout 
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:paddingTop="15dp">          
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/share_point_notice" 
+                android:layout_gravity="center_vertical"/>
+            <TextView 
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/moment_tag_notice"/>
+        </LinearLayout>
+        
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <TextView
+            android:id="@+id/textView_notice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:paddingLeft="10dp"
+            android:text="notice" />
+        
+    </LinearLayout>
+
+    
+
+</LinearLayout>

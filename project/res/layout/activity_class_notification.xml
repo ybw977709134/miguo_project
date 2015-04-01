@@ -1,8 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" 
-    android:background="@color/background_dark">
+    android:background="@color/background_dark"
+    android:orientation="vertical" >
+
     <RelativeLayout
         android:id="@+id/title_bar"
         style="?attr/navbar"
@@ -19,8 +20,36 @@
             android:id="@+id/class_notice_title"
             style="?attr/navbar_title"
             android:text="@string/class_notification" />
+        <ImageButton
+            android:id="@+id/btn_add"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:layout_alignParentRight="true"
+            android:background="@null"
+            android:src="@drawable/nav_add_selector"/>
 
     </RelativeLayout>
+    <RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center">
+		<TextView
+			android:id="@+id/btn_cat"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="10dp"
+			android:gravity="center"
+			android:drawablePadding="5dp"
+			android:drawableRight="@drawable/timeline_dropdown_mark_collapsed"
+			android:textColor="@color/text_gray32"
+			android:text="@string/contactinfo_department"/>
+	</RelativeLayout>
 
+    <ListView
+        android:id="@+id/listView_notice_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        android:cacheColorHint="#00000000">
+    </ListView>
 
 </LinearLayout>

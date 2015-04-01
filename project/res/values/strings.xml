@@ -772,7 +772,7 @@
 	<string name="moment_tag_survey">投票</string>
 	<string name="moment_vote_submit">提交</string>
 	<string name="moment_tag_video">视频</string>
-	<string name="moment_tag_videoStudy">视频教程</string>
+	<string name="moment_tag_videoStudy">视频</string>
     <string name="moment_survey_has_voted">您已经投过票了</string>
     <string name="new_moment_title">新建-%s</string>
     <string name="new_moment_preview">预览</string>
@@ -849,7 +849,7 @@
 	<string name="moment_add_question">问答</string>
 	<string name="moment_add_vote">投票</string>
 	<string name="moment_add_notice">通知</string>
-	<string name="moment_add_video">视频教程</string>
+	<string name="moment_add_video">视频</string>
 	<string name="event_filter2">活动状态</string>
 	<string name="event_filter1">报名状态</string>
 	<string name="event_filter1_all">所有活动</string>

@@ -122,9 +122,11 @@ public class TimelineTagbar {
         indicates[6] = view.findViewById(R.id.img_tag_vedio);
         
     	if (flag == 1) {//如果为学生，通知和视频不能显示
-    		view.findViewById(R.id.layout_timebar_notice).setVisibility(View.GONE);
+//    		view.findViewById(R.id.layout_timebar_notice).setVisibility(View.GONE);
         	view.findViewById(R.id.layout_timebar_video).setVisibility(View.GONE);
     	}
+    	view.findViewById(R.id.btn_tag_qa).setVisibility(View.GONE);
+    	view.findViewById(R.id.layout_timebar_notice).setVisibility(View.GONE);
 
     }
       

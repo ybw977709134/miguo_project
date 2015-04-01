@@ -104,6 +104,13 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
                 onSenderChanged(itemIdx);
                 break;
             case R.id.btn_cat:
+            	//0全部，1通知，2问答，3学习，4生活，5，投票，6视频
+            	//由于新需求的变化，无论是老师账号还是学生账号都去除掉通知和问答的栏目
+            	//改变后：0全部，1学习，2生活，3，投票，4视频
+            	if (itemIdx >= 1) {
+            		itemIdx += 2;
+            	}
+            	
                 onTagChanged(itemIdx);
                 break;
         }

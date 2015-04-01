@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<dimen name="home_icon_size">40dp</dimen>
-    <dimen name="myclass_picture_height">155dp</dimen>
+    <dimen name="myclass_picture_height">135dp</dimen>
 </resources>

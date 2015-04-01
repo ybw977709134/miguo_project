@@ -913,7 +913,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         
         txtLikeName.setVisibility(nlikers > 0 ? View.VISIBLE : View.GONE);
         reviewLayout.setVisibility(nlikers + nReviews > 0 ? View.VISIBLE : View.GONE);
-        reviewDivider.setVisibility(nlikers > 0 && nReviews > 0 ? View.VISIBLE : View.GONE);
+//        reviewDivider.setVisibility(nlikers > 0 && nReviews > 0 ? View.VISIBLE : View.GONE);
 
         // hide like and comment button if the moment is mine
 //        String myuid = mWeb.fGetMyUserIDFromLocal();

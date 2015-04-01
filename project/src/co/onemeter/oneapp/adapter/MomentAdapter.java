@@ -778,14 +778,18 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //        	holder.tvAnswer.setVisibility(View.GONE);
         }
         if(likeReview.size()>0){
-//        	holder.tvLike.setVisibility(View.VISIBLE);
         	//显示点赞的数量
             holder.tvLike.setText(""+likeReview.size());
+            if (moment.likedByMe) {
+            	holder.tvLike.setText(""+likeReview.size());
+            } else {
+            	holder.tvLike.setText(activity.getResources().getString(R.string.moments_like));
+            }
         }else{
-//        	holder.tvLike.setVisibility(View.GONE);
         	//显示点赞文本
             holder.tvLike.setText(activity.getResources().getString(R.string.moments_like));
         }
+        
 //        if (moment.allowReview) {
 //        	holder.btnAnswer.setBackgroundResource(R.drawable.share_icon_comment);
 //        } else {
@@ -1569,9 +1573,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
             if (!TextUtils.isEmpty(review.nickname)) {
                 textView.append(review.nickname, null,
-                        context.getResources().getColor(R.color.blue),
+                        context.getResources().getColor(R.color.blue_39),
                         0,
-                        context.getResources().getColor(R.color.text_gray3),
+                        context.getResources().getColor(R.color.black_24),
                         new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1580,9 +1584,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 });
             } else {
                 textView.append("(null)", null,
-                        context.getResources().getColor(R.color.blue),
+                        context.getResources().getColor(R.color.blue_39),
                         0,
-                        context.getResources().getColor(R.color.text_gray3),
+                        context.getResources().getColor(R.color.black_24),
                         null
                 );
             }
@@ -1625,9 +1629,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             SpannedTextView textView = (SpannedTextView) view.findViewById(R.id.comment);
             if (!TextUtils.isEmpty(review.nickname)) {
                 textView.append(review.nickname, null,
-                        context.getResources().getColor(R.color.blue),
+                        context.getResources().getColor(R.color.blue_39),
                         0,
-                        context.getResources().getColor(R.color.text_gray3),
+                        context.getResources().getColor(R.color.black_24),
                         new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1636,9 +1640,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 });
             } else {
                 textView.append("(null)", null,
-                        context.getResources().getColor(R.color.blue),
+                        context.getResources().getColor(R.color.blue_39),
                         0,
-                        context.getResources().getColor(R.color.text_gray3),
+                        context.getResources().getColor(R.color.black_24),
                         null
                 );
             }
@@ -1646,9 +1650,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 textView.append(" " + context.getResources().getString(R.string.moments_reply) + " ", null,
                         0, 0, 0, null);
                 textView.append(review.replyToNickname, null,
-                        context.getResources().getColor(R.color.blue),
+                        context.getResources().getColor(R.color.blue_39),
                         0,
-                        context.getResources().getColor(R.color.text_gray3),
+                        context.getResources().getColor(R.color.black_24),
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

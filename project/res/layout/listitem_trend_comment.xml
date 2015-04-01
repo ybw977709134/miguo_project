@@ -9,8 +9,9 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:text="这是哪里啊？"
-        android:textSize="16sp"
-        android:textColor="@color/default_subtext">
+		android:drawablePadding="5dp"
+        android:drawableLeft="@drawable/icon_share_list_comment_list"
+        android:textColor="@color/black_24">
     </co.onemeter.oneapp.ui.SpannedTextView>
 
 </LinearLayout>

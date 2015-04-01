@@ -24,8 +24,10 @@ import co.onemeter.oneapp.ui.widget.AutoScrollViewPager;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import org.wowtalk.*;
+import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.UpdatesInfo;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MediaInputHelper;
@@ -291,8 +293,15 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             	intent = new Intent(this, ClassNotificationActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.img_home_register:
-            	intent = new Intent(this, SelectClassActivity.class);
+            case R.id.img_home_register://签到请假
+            	//学生请假
+            	if (PrefUtil.getInstance(this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT) {
+            		intent = new Intent(this, StudentAbsenceActivity.class);
+            	} 
+            	//老师签到
+            	if (PrefUtil.getInstance(this).getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+            		intent = new Intent(this, TeacherSignActivity.class);
+            	}
                 startActivity(intent);
                 break;
             case R.id.img_home_answerquestion:

@@ -10,6 +10,7 @@ import org.wowtalk.ui.MessageBox;
 import com.androidquery.AQuery;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -35,11 +36,12 @@ public class SelectClassActivity extends Activity implements OnClickListener, On
 	private MessageBox msgbox;
 	private MyClassAdapter adapter;
 	private WowTalkWebServerIF talkwebserver;
+	private SelectClassActivity instance = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_select_class);
-		
+		instance = this;
 		initView();
 		getClassInfo();
 
@@ -150,6 +152,21 @@ public class SelectClassActivity extends Activity implements OnClickListener, On
 			long id) {
 		adapter.setCurrPosition(position);
 		
+		Intent data = new Intent();
+		data.putExtra("class_id", classrooms.get(position).getGUID());
+		data.putExtra("class_name", classrooms.get(position).groupNameOriginal);
+		setResult(RESULT_OK, data);
+		
+		instance.finish();
+		
+	}
+	
+	@Override
+	protected void onDestroy() {
+		if (instance != null) {
+			instance = null;
+		}
+		super.onDestroy();
 	}
 
 

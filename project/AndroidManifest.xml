@@ -622,6 +622,19 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
+        
+		<activity
+            android:name="co.onemeter.oneapp.ui.StudentAbsenceActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue_main" >
+        </activity>
+        
+		<activity
+            android:name="co.onemeter.oneapp.ui.TeacherSignActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue_main" >
+        </activity>
+        
         <activity
             android:name=".ui.SelectClassActivity"
             android:screenOrientation="portrait"

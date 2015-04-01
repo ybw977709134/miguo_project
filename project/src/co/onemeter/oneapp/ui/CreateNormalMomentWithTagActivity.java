@@ -28,9 +28,11 @@ import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
 import co.onemeter.utils.AsyncTaskExecutor;
 import junit.framework.Assert;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
 import org.wowtalk.ui.msg.InputBoardManager;
@@ -726,33 +728,46 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 break;
             case R.id.title_back:
             	//发布动态退出时的提示
-            	Builder builderBack = new AlertDialog.Builder(CreateNormalMomentWithTagActivity.this);
-            	builderBack.setTitle("提示");
-            	builderBack.setMessage("未完成发布，是否退出");
-            	builderBack.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface arg0, int arg1) {
-						releaseMediaFiles();
+//            	Builder builderBack = new AlertDialog.Builder(CreateNormalMomentWithTagActivity.this);
+//            	builderBack.setTitle("提示");
+//            	builderBack.setMessage("未完成发布，是否退出");
+//            	builderBack.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//					
+//					@Override
+//					public void onClick(DialogInterface arg0, int arg1) {
+//						releaseMediaFiles();
+//		                finish();
+//						
+//					}
+//				});
+//            	builderBack.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//					
+//					@Override
+//					public void onClick(DialogInterface arg0, int arg1) {
+//					}
+//				});
+//    			
+//            	builderBack.create().show();
+            	
+            	
+            	MessageDialog dialog = new MessageDialog(CreateNormalMomentWithTagActivity.this);
+                dialog.setTitle("");
+                dialog.setMessage("未完成发布，是否退出?");
+                dialog.setOnLeftClickListener("取消", null);
+                dialog.setOnRightClickListener("退出", new MessageDialog.MessageDialogClickListener() {
+                    @Override
+                    public void onclick(MessageDialog dialog) {
+                        dialog.dismiss();
+                        releaseMediaFiles();
 		                finish();
-						
-					}
-				});
-            	builderBack.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface arg0, int arg1) {
-					}
-				});
+                    }
+                });
+                dialog.show();
     			
-            	builderBack.create().show();
-    			
-//                releaseMediaFiles();
-//                finish();
+
                 break;
                 
             case R.id.title_moment_send:
-//            	Builder builder = new AlertDialog.Builder(CreateNormalMomentWithTagActivity.this);
             	if (!isContentValid()) {
             		Toast.makeText(CreateNormalMomentWithTagActivity.this, "你还没有填写任何信息", Toast.LENGTH_LONG).show();
             	} else {

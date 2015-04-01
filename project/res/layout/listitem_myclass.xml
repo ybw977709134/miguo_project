@@ -6,14 +6,12 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:paddingBottom="2dp"
-        android:paddingTop="2dp" >
+        android:layout_height="@dimen/myclass_picture_height">
 
         <ImageView
             android:id="@+id/item_myclass_imageview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:src="@drawable/class_bg_3" />
 
         <TextView

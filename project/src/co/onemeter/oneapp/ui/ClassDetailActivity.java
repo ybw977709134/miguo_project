@@ -1,20 +1,14 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v4.widget.DrawerLayout.LayoutParams;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -28,20 +22,13 @@ import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.androidquery.AQuery;
-import com.pzy.paint.DoodleActivity;
-
-import org.w3c.dom.Text;
 import org.wowtalk.api.*;
-import org.wowtalk.ui.HorizontalListView;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
-import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.DoubleClickedUtils;
-import org.wowtalk.ui.msg.InputBoardManager;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 

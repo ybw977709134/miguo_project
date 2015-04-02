@@ -88,8 +88,8 @@
                         android:paddingLeft="10dp"
                         android:textSize="18sp"
                         android:textColor="@color/black"
-                        android:text="班级"
-                        android:clickable="false"/>
+                        android:text="班级" />
+                    
                     <TextView
                         android:id="@+id/textView_class_name" 
                         android:layout_height="fill_parent"
@@ -176,7 +176,6 @@
                         android:gravity="center_vertical|right"
                         android:paddingRight="10dp"
                         android:drawableRight="@drawable/table_arrow"
-                        android:clickable="true"
                         android:textColor="@color/gray_40"
                         android:textSize="18sp"/>
                 </LinearLayout>

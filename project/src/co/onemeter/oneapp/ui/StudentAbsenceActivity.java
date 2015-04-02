@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -65,6 +66,20 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 		layout_student_absence.setFocusable(true);
 		layout_student_absence.setFocusableInTouchMode(true);
 		layout_student_absence.requestFocus();
+		
+		
+	}
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		 if(event.getAction() == MotionEvent.ACTION_DOWN){  
+		     if(getCurrentFocus()!=null && getCurrentFocus().getWindowToken()!=null){  
+		    	 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);  
+
+			        return imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);   
+		     }  
+		  }  
+		return super.onTouchEvent(event);
 	}
 
 	/**
@@ -73,6 +88,7 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 	private void initView() { 
 		
 		layout_student_absence = (RelativeLayout) findViewById(R.id.layout_student_absence);
+		
 		layout_student_absence.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
@@ -80,9 +96,11 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 				layout_student_absence.setFocusable(true);
 				layout_student_absence.setFocusableInTouchMode(true);
 				layout_student_absence.requestFocus();
+				
 				return false;
 			}
 		});
+		
 		
 		title_back = (ImageButton) findViewById(R.id.title_back);
 		textView_home_back = (TextView) findViewById(R.id.textView_home_back);
@@ -162,7 +180,7 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 		default:
 			break;
 		}
-		
+		 
 	}
 	
 	@Override

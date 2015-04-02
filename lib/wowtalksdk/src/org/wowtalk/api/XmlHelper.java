@@ -267,28 +267,28 @@ public class XmlHelper {
         return a;
     }
 
-    public static Bulletins parseBulletins(Element bulletinNode,Context context,String oldMomentId) {
-    	Bulletins b = new Bulletins();
-
-        Element uid = Utils.getFirstElementByTagName(
-        		bulletinNode, "uid");
-        
-        if(uid != null)
-        	b.uid = uid.getTextContent();
-            Log.i("-------uid-----" + uid.getTextContent());
-        
-       Element bulletinsId = Utils.getFirstElementByTagName(
-            		bulletinNode, "bulletin_id");
-       if(bulletinsId != null)
-       	b.bulletinId = Integer.parseInt(bulletinsId.getTextContent());
-         
-        Element moment = Utils.getFirstElementByTagName(
-        		bulletinNode, "moment");
-        if(moment != null)
-            b.momentId = moment.getTextContent();
-        else
-            return null;
-
+//    public static Bulletins parseBulletins(Element bulletinNode,Context context,String oldMomentId) {
+//    	Bulletins b = new Bulletins();
+//
+//        Element uid = Utils.getFirstElementByTagName(
+//        		bulletinNode, "uid");
+//        
+//        if(uid != null)
+//        	b.uid = uid.getTextContent();
+//            Log.i("-------uid-----" + uid.getTextContent());
+//        
+//       Element bulletinsId = Utils.getFirstElementByTagName(
+//            		bulletinNode, "bulletin_id");
+//       if(bulletinsId != null)
+//       	b.bulletinId = Integer.parseInt(bulletinsId.getTextContent());
+//         
+//        Element moment = Utils.getFirstElementByTagName(
+//        		bulletinNode, "moment");
+//        if(moment != null)
+//            b.momentId = moment.getTextContent();
+//        else
+//            return null;
+//
 //        e = Utils.getFirstElementByTagName(momentNode, "uid");
 //        if(e != null)
 //            b.owner.userID = e.getTextContent();
@@ -296,61 +296,61 @@ public class XmlHelper {
 //        e = Utils.getFirstElementByTagName(momentNode, "nickname");
 //        if(e != null)
 //            b.owner.nickName = e.getTextContent();
-
-        Element e = Utils.getFirstElementByTagName(
-       		 moment, "moment_id");
-        if(e != null)
-           b.momentId = e.getTextContent(); 
-
-        e = Utils.getFirstElementByTagName(
-       		moment, "longitude");
-        
-        e = Utils.getFirstElementByTagName(
-        		 moment, "latitude");
-        if(e != null)
-            b.latitude = Utils.tryParseFloat(e.getTextContent(), 0);
-
-        e = Utils.getFirstElementByTagName(
-        		moment, "longitude");
-        if(e != null)
-            b.longitude = Utils.tryParseFloat(e.getTextContent(), 0);
-
-        b.place = Utils.getFirstTextByTagName(moment, "place");
-
-        e = Utils.getFirstElementByTagName(
-        		moment, "text");
-        if(e != null)
-            b.text = e.getTextContent();
-
-        e = Utils.getFirstElementByTagName(
-        		moment, "timestamp");
-        if(e != null)
-            b.timestamp = Utils.tryParseLong(e.getTextContent(), 0);
-
-        e = Utils.getFirstElementByTagName(moment, "privacy_level");
-        if(e != null)
-            b.privacyLevel = Utils.tryParseInt(e.getTextContent(), 0);
-
-        e = Utils.getFirstElementByTagName(moment, "liked");
-        if(e != null)
-            b.likedByMe = "1".equals(e.getTextContent());
-
-        e = Utils.getFirstElementByTagName(moment, "tag");
-        if(e != null)
-            b.tag = e.getTextContent();
-
-        e = Utils.getFirstElementByTagName(moment, "deadline");
-        if(e != null) {
-            try {
-                b.surveyDeadLine = Long.parseLong(e.getTextContent());
-            } catch (NumberFormatException ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        Database db = new Database(context);
-        b.isFavorite=db.isMomentFavoriteLocal(TextUtils.isEmpty(oldMomentId)?b.momentId:oldMomentId);
-
+//
+//        Element e = Utils.getFirstElementByTagName(
+//       		 moment, "moment_id");
+//        if(e != null)
+//           b.momentId = e.getTextContent(); 
+//
+//        e = Utils.getFirstElementByTagName(
+//       		moment, "longitude");
+//        
+//        e = Utils.getFirstElementByTagName(
+//        		 moment, "latitude");
+//        if(e != null)
+//            b.latitude = Utils.tryParseFloat(e.getTextContent(), 0);
+//
+//        e = Utils.getFirstElementByTagName(
+//        		moment, "longitude");
+//        if(e != null)
+//            b.longitude = Utils.tryParseFloat(e.getTextContent(), 0);
+//
+//        b.place = Utils.getFirstTextByTagName(moment, "place");
+//
+//        e = Utils.getFirstElementByTagName(
+//        		moment, "text");
+//        if(e != null)
+//            b.text = e.getTextContent();
+//
+//        e = Utils.getFirstElementByTagName(
+//        		moment, "timestamp");
+//        if(e != null)
+//            b.timestamp = Utils.tryParseLong(e.getTextContent(), 0);
+//
+//        e = Utils.getFirstElementByTagName(moment, "privacy_level");
+//        if(e != null)
+//            b.privacyLevel = Utils.tryParseInt(e.getTextContent(), 0);
+//
+//        e = Utils.getFirstElementByTagName(moment, "liked");
+//        if(e != null)
+//            b.likedByMe = "1".equals(e.getTextContent());
+//
+//        e = Utils.getFirstElementByTagName(moment, "tag");
+//        if(e != null)
+//            b.tag = e.getTextContent();
+//
+//        e = Utils.getFirstElementByTagName(moment, "deadline");
+//        if(e != null) {
+//            try {
+//                b.surveyDeadLine = Long.parseLong(e.getTextContent());
+//            } catch (NumberFormatException ex) {
+//                ex.printStackTrace();
+//            }
+//        }
+//
+//        Database db = new Database(context);
+//        b.isFavorite=db.isMomentFavoriteLocal(TextUtils.isEmpty(oldMomentId)?b.momentId:oldMomentId);
+//
 //        NodeList ml = bulletinNode.getElementsByTagName("multimedia");
 //        _parseMedias(ml, b);
 //
@@ -365,8 +365,8 @@ public class XmlHelper {
 //            NodeList shareRangeNodes = e.getElementsByTagName("group_id");
 //            _parseShareRange(shareRangeNodes, b);
 //        }
-        return b;
-    }
+//        return b;
+//    }
     public static Moment parseMoment(String defaultOwnerUid, Element momentNode,Context context,String oldMomentId) {
         Moment b = new Moment();
 
@@ -1065,6 +1065,32 @@ public class XmlHelper {
             result.put(child.getNodeName(), child.getTextContent());
         }
         return result;
+    }
+    public static Bulletins parseBulletins(Element roomElement){
+    	Bulletins bulletins = new Bulletins();
+    	Element e;
+
+        e = Utils.getFirstElementByTagName(roomElement, "bulletin_id");
+        if(e != null)
+        	bulletins.bulletin_id = Integer.parseInt(e.getTextContent());
+        else{
+        	return null;
+        }
+
+        e = Utils.getFirstElementByTagName(roomElement, "class_id");
+        if(e != null)
+        	bulletins.class_id = e.getTextContent();
+
+        e = Utils.getFirstElementByTagName(roomElement, "moment_id");
+        if(e != null)
+        	bulletins.moment_id = e.getTextContent();
+        
+        e = Utils.getFirstElementByTagName(roomElement, "uid");
+        if(e != null)
+        	bulletins.uid = e.getTextContent();
+
+		return bulletins;
+    	
     }
     public static Camera parseCamera(Element roomElement){
     	Camera camera = new Camera();

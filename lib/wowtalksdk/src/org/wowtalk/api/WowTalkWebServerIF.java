@@ -16,6 +16,10 @@ import android.util.Pair;
 
 
 
+
+
+
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -3279,7 +3283,41 @@ public class WowTalkWebServerIF {
 		return errno;
 	}
 
+	public int delClassBulletin(int bulletin_id) {
+		int errno = ErrorCode.BAD_RESPONSE;
+		String uid = sPrefUtil.getUid();
+		String password = sPrefUtil.getPassword();
+		if (uid == null || password == null)
+			return errno;
 
+		final String action = "del_class_bulletin";
+		String postStr = "action=" + action + "&uid="
+				+ Utils.urlencodeUtf8(uid) + "&password="
+				+ Utils.urlencodeUtf8(password) + "&bulletin_id=" + bulletin_id;
+		Connect2 connect2 = new Connect2();
+		Element root = connect2.Post(postStr);
+
+		if (root != null) {
+			NodeList errorList = root.getElementsByTagName("err_no");
+			Element errorElement = (Element) errorList.item(0);
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				errno = ErrorCode.OK;
+
+				Element resultElement = Utils.getFirstElementByTagName(root,
+						action);
+				if (resultElement != null) {
+//					Element e = Utils.getFirstElementByTagName(resultElement,
+//							"err_no");
+//					errno = Integer.parseInt(e.getTextContent());
+				}
+			} else {
+				errno = Integer.parseInt(errorStr);
+			}
+		}
+		return errno;
+	}
 	/**
 	 * Get Buddy with phone_number 
 	 * 
@@ -6296,8 +6334,10 @@ public class WowTalkWebServerIF {
         String action = "get_class_bulletin";
         String postStr = "action=" + action
                 + "&uid=" + Utils.urlencodeUtf8(strUID)
-                + "&password=" + Utils.urlencodeUtf8(strPwd)
-                + "&class_id=" + Utils.urlencodeUtf8(classId);
+                + "&password=" + Utils.urlencodeUtf8(strPwd);
+        if(classId != null){
+        	postStr += "&class_id=" + classId;
+        }
         if(timestamp != 0){
         	postStr += "&older_than=" + timestamp;
         }
@@ -6314,29 +6354,42 @@ public class WowTalkWebServerIF {
 			String errorStr = errorElement.getFirstChild().getNodeValue();
 
 			if (errorStr.equals("0")) {
-				errno = 0;
-                Database db = new Database(mContext);
-
-                //List<Moment> momentIdFromServerList=new ArrayList<Moment>();
-
-				Element resultElement = Utils.getFirstElementByTagName(root, action); 
-				if(resultElement != null) {
-					NodeList bulletinNodes = resultElement.getElementsByTagName("bulletin");
-					if(bulletinNodes != null && bulletinNodes.getLength() > 0) {
-						for(int i = 0, n = bulletinNodes.getLength(); i < n; ++i) {
-							Element bulletinNode = (Element)bulletinNodes.item(i);
-							Bulletins b = XmlHelper.parseBulletins(bulletinNode,mContext,null);
-                            if (b != null && b.momentId != null) {
-                            	result.add(b);
+				errno = ErrorCode.OK;
+				Database db = new Database(mContext);
+		        List<Moment> momentIdFromServerList=new ArrayList<Moment>();
+				Element resultElement = Utils.getFirstElementByTagName(root,
+						action);
+				if (resultElement != null) {
+					NodeList bulletinNodes = resultElement
+							.getElementsByTagName("bulletin");
+					int len = bulletinNodes.getLength();
+					for (int i = 0; i < len; ++i) {
+						Node bulletinNodesNode = bulletinNodes.item(i);
+						if (bulletinNodesNode instanceof Element) {
+							Bulletins bulletin = XmlHelper
+									.parseBulletins((Element) bulletinNodesNode);
+							if(bulletin != null ){
+								result.add(bulletin);
+							}
+							
+						}
+					}
+					NodeList momentNodes = resultElement.getElementsByTagName("moment");
+					if(momentNodes != null && momentNodes.getLength() > 0) {
+						for(int i = 0, n = momentNodes.getLength(); i < n; ++i) {
+							Element momentNode = (Element)momentNodes.item(i);
+                            Moment b = XmlHelper.parseMoment(null, momentNode,mContext,null);
+                            if (b != null && b.id != null) {
+                                momentIdFromServerList.add(b);
                             }
 						}
 
-//                        for(Moment aMoment : result) {
-//                            db.storeMoment(aMoment,null);
-//                        }
+                        for(Moment aMoment : momentIdFromServerList) {
+                            db.storeMoment(aMoment,null);
+                        }
 					}
 				}
-			} else {
+			}  else {
 				errno = Integer.parseInt(errorStr);
 			}
 		}

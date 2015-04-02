@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@color/background_light"
+	android:weightSum="2">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:layout_weight="1" >
+		<TextView
+			android:id="@+id/btn_filter_class"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="10dp"
+			android:gravity="center"
+			android:drawablePadding="5dp"
+			android:drawableRight="@drawable/timeline_dropdown_mark_collapsed"
+			android:textColor="@color/text_gray1"
+			android:text="班级"/>
+	</RelativeLayout>
+</LinearLayout>

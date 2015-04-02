@@ -1,41 +1,46 @@
 package co.onemeter.oneapp.ui;
 
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Bulletins;
-import org.wowtalk.api.Classroom;
 import org.wowtalk.api.Database;
-import org.wowtalk.api.IHasPhoto;
-import org.wowtalk.api.LessonWebServerIF;
-import org.wowtalk.api.Moment;
-import org.wowtalk.api.MomentWebServerIF;
+import org.wowtalk.api.GroupChatRoom;
+import org.wowtalk.api.GroupMember;
+import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
+
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.ClassroomActivity.ClassroomAdapter.ViewHodler;
+import co.onemeter.oneapp.ui.ClassDetailActivity.MyClassAdapter;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
 
@@ -43,14 +48,19 @@ import co.onemeter.utils.AsyncTaskExecutor;
  * 班级通知页面。
  * Created by zz on 03/31/2015.
  */
-public class ClassNotificationActivity extends Activity implements OnClickListener, OnItemClickListener{
+public class ClassNotificationActivity extends Activity implements OnClickListener,OnItemLongClickListener, OnRefreshListener<ListView>, OnLastItemVisibleListener,MenuBar.OnDropdownMenuItemClickListener{
 	private ImageButton btn_notice_back;
 	private ImageButton btn_add;
-	private ListView listView_notice_show;
+//	private ListView listView_notice_show;
+	private PullToRefreshListView pullListView;
+	private ListView lvEvent;
+	
 	private List<Bulletins> bulletins;
 	private BulletinAdapter adapter;
 	private String classId;
-	private MessageBox msgbox;
+	private ClassFilterBar filterBar;
+	private List<GroupChatRoom> classrooms;
+	private String[] className = new String[]{};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,28 +68,45 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 		setContentView(R.layout.activity_class_notification);
 		
 		initView();
-		getClassBulletin();
+		getClassBulletin(classId);
+		getSchoolClassInfo();
 
 	}
 	
 	private void initView(){
 		btn_notice_back = (ImageButton) findViewById(R.id.btn_notice_back);
 		btn_add = (ImageButton) findViewById(R.id.btn_add);
-		listView_notice_show = (ListView) findViewById(R.id.listView_notice_show);
+		pullListView = (PullToRefreshListView) findViewById(R.id.listView_notice_show);
+		lvEvent = pullListView.getRefreshableView();
+		
 		btn_notice_back.setOnClickListener(this);
 		btn_add.setOnClickListener(this);
-		listView_notice_show.setOnItemClickListener(this);
+		
 		bulletins = new LinkedList<Bulletins>();
-		classId = "1678ff8f-2a41-438a-bb22-4f55530857f1";
-		msgbox = new MessageBox(this);
-
+		
+//		classId = "1678ff8f-2a41-438a-bb22-4f55530857f1";
+		lvEvent.setOnItemLongClickListener(this);
+		
+		if(PrefUtil.getInstance(ClassNotificationActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
+			btn_add.setVisibility(View.GONE);
+		}
+		
+		View c = findViewById(R.id.dialog_container);
+        c.setVisibility(View.INVISIBLE);
+        filterBar = new ClassFilterBar(this,c);
+        filterBar.setOnFilterChangedListener(this);
+        lvEvent.addHeaderView(filterBar.getView());
+		pullListView.setOnRefreshListener(this);
+        pullListView.setOnLastItemVisibleListener(this);
+        classrooms = new LinkedList<GroupChatRoom>();
+        filterBar.setStringArrayData(className);
 	}
-	private void getClassBulletin(){
-		msgbox.showWait();
+	private void getClassBulletin(final String classId){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
+				bulletins.clear();
 				WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(ClassNotificationActivity.this);
 				bulletins  = web.fGetClassBulletin(classId,0,0);
 				return null;
@@ -87,16 +114,56 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 			
 			@Override
 			protected void onPostExecute(Integer result) {
-				msgbox.dismissWait();
 				adapter = new BulletinAdapter(ClassNotificationActivity.this,bulletins);
-				listView_notice_show.setAdapter(adapter);
+				lvEvent.setAdapter(adapter);
 				adapter.notifyDataSetChanged();
-				
+				pullListView.onRefreshComplete();
 			}
 
 		});
 	}
+	
+	private void delClassBulletin(final int position){
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
+			@Override
+			protected Integer doInBackground(Void... params) {
+				int errno= WowTalkWebServerIF.getInstance(ClassNotificationActivity.this).delClassBulletin(bulletins.get(position).bulletin_id);				
+				return errno;
+			}
+			
+			@Override
+			protected void onPostExecute(Integer result) {
+				bulletins.clear();
+				getClassBulletin(classId);			
+			}
+
+		});
+	}
+	private void getSchoolClassInfo(){
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+
+			@Override
+			protected Integer doInBackground(Void... params) {
+				classrooms.clear();
+				classrooms.addAll(WowTalkWebServerIF.getInstance(ClassNotificationActivity.this).getSchoolClassRooms(null));
+				return null;
+			}
+			
+			@Override
+			protected void onPostExecute(Integer result) {
+				int length = classrooms.size();
+				className = new String[length + 1];
+				className[0] = "全部";
+				for(int i= 1;i < length+1;i++){
+					className[i] = classrooms.get(i-1).groupNameOriginal;					
+				}
+				filterBar.setStringArrayData(className);
+
+			}
+
+		});
+	}
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()){
@@ -105,6 +172,9 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 			break;
 		case R.id.btn_add:
 			Intent intent = new Intent(ClassNotificationActivity.this, SendNotificationActivity.class);
+			Bundle bundle=new Bundle();
+			bundle.putStringArray("className", className);
+			intent.putExtras(bundle);
 			startActivityForResult(intent, 1001);;
 			break;
 		}
@@ -115,15 +185,9 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode == Activity.RESULT_OK){
 			if(requestCode == 1001){
-				getClassBulletin();
+				getClassBulletin(classId);
 			}
 		}
-	}
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-
-		
 	}
 	
 	class BulletinAdapter extends BaseAdapter{
@@ -164,17 +228,31 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 				holder = (ViewHodler) convertView.getTag();
 			}
 			Bulletins b = bulletins.get(position);
-			holder.textView_notice.setText(b.text);
-			holder.notice_time.setText(String.valueOf(Utils.stampsToDateTime(b.timestamp)));
-//			Buddy buddy = new Buddy(b.uid);
+			if(b.uid != null){
 			Database dbHelper=new Database(context);
-            Buddy buddy=dbHelper.buddyWithUserID(b.uid);
-            IHasPhoto entity = buddy;
-			PhotoDisplayHelper.displayPhoto(context, holder.notice_photo,
-                    R.drawable.default_official_avatar_90, entity, true);
+//            Buddy buddy=dbHelper.buddyWithUserID(b.uid);
+            List<GroupMember> buddyList =  dbHelper.fetchGroupMembers(classId);
+            if(buddyList != null){
+            	for(GroupMember buddy : buddyList){
+            	if(buddy.getGUID().equals(b.uid)){
+            	    holder.notice_name.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
+            	    PhotoDisplayHelper.displayPhoto(context, holder.notice_photo,
+            	    		R.drawable.default_official_avatar_90, buddy, true);
+            	}
+            	
+            }
+            }
+            
+            
+            	
+    			String text = dbHelper.fetchMoment(b.moment_id).text;
+    			long timestamp = dbHelper.fetchMoment(b.moment_id).timestamp;
+    			holder.textView_notice.setText(text);
+    			holder.notice_time.setText(String.valueOf(Utils.stampsToDateTime(timestamp)));
+            }
+            
+            
 			
-//			String name =!TextUtils.isEmpty(buddy.alias)?buddy.alias:buddy.nickName;
-			holder.notice_name.setText(TextUtils.isEmpty(buddy.alias) ? buddy.nickName : buddy.alias);
 			return convertView;
 		}
 		class ViewHodler{
@@ -183,6 +261,84 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 			TextView notice_time;
 			TextView textView_notice;
 		}	
+		
+	}
+
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view,
+			final int position, long id) {
+		if(PrefUtil.getInstance(ClassNotificationActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER){
+			MessageDialog dialog = new MessageDialog(ClassNotificationActivity.this);
+            dialog.setTitle("");
+            dialog.setMessage("你确定要删除吗?");
+            dialog.setOnRightClickListener("取消", null);
+            
+            dialog.setOnLeftClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                @Override
+                public void onclick(MessageDialog dialog) {
+                    
+                    delClassBulletin(position-1);
+                    dialog.dismiss();
+                }
+            }
+            );
+            dialog.show();
+		}
+		 
+		
+		return true;
+	}
+	static class ClassFilterBar extends MenuBar {
+
+	    public String[] hosts = new String[]{};
+
+	    /**
+	     * @param context
+	     * @param dialogBackground 作为对话框下方的屏幕背景，一般为半透明的黑色。
+	     */
+	    public ClassFilterBar(Context context, View dialogBackground) {
+	        super(context, R.layout.class_filter,  new int[]{ R.id.btn_filter_class}, dialogBackground);
+	        setBackgroundColor(0xFFFFFFFF);
+	    }
+
+	    @Override
+	    protected String[] getSubItems(int itemId) {
+	        switch (itemId) {
+	            case R.id.btn_filter_class:
+	                return hosts;
+	        }
+	        return hosts;
+	    }
+
+	    public void setStringArrayData(String[] data){
+	        this.hosts = data;
+	    }
+	}
+	@Override
+	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+		getClassBulletin(classId);
+		
+	}
+
+	@Override
+	public void onLastItemVisible() {
+		
+	}
+
+	@Override
+	public void onDropdownMenuShow(int subMenuResId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDropdownMenuItemClick(int subMenuResId, int itemIdx) {
+		if(itemIdx == 0){
+			classId = null;
+		}else{
+			classId = classrooms.get(itemIdx-1).groupID;
+		}
+		getClassBulletin(classId);
 		
 	}
 

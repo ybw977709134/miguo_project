@@ -1,9 +1,9 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/background_dark"
     android:orientation="vertical" >
-
+    
     <RelativeLayout
         android:id="@+id/title_bar"
         style="?attr/navbar"
@@ -33,30 +33,41 @@
             android:clickable="true"
             android:text="@string/class_camera_ok" />
     </RelativeLayout>
-
+    <LinearLayout 
+        android:id="@+id/class_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:layout_below="@+id/title_bar"
+        android:orientation="horizontal"
+        android:gravity="center"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center" >
-
-        <TextView
-            android:id="@+id/btn_cat"
-            android:layout_width="wrap_content"
+        android:orientation="vertical" 
+        android:layout_below="@+id/class_filter"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+        
+        <EditText
+            android:id="@+id/edit_text_notice"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@drawable/bg_edittext_selector"
+            android:gravity="top"
+            android:hint="通知内容"/>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawablePadding="5dp"
-            android:drawableRight="@drawable/timeline_dropdown_mark_collapsed"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/contactinfo_department"
-            android:textColor="@color/text_gray32" />
+            android:gravity="center" >
+            <View
+                android:id="@+id/dialog_container"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#a0000000"
+                android:clickable="true"
+                android:layout_marginTop="0dp" >      
+            </View>
+        </LinearLayout>
     </RelativeLayout>
 
-    <EditText
-        android:id="@+id/edit_text_notice"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        
-        android:gravity="top"
-        android:hint="通知内容"/>
-
-</LinearLayout>
+</RelativeLayout>

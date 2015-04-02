@@ -6,9 +6,15 @@ import android.text.TextUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 课堂相关的功能。 Created by pzy on 12/21/14.
@@ -351,6 +357,7 @@ public class LessonWebServerIF {
 		}
 		return errno;
 	}
+	
 	public int getLesson(String class_id) {
 		String uid = mPrefUtil.getUid();
 		String password = mPrefUtil.getPassword();
@@ -401,6 +408,100 @@ public class LessonWebServerIF {
 		}
 		return errno;
 	}
+	
+	
+	
+	/**
+	 * 通过返回的list<map<>>类型值获得老师的id和姓名
+	 * @return list
+	 * @author hutianfeng
+	 * @date 2015/4/2
+	 */
+	public List<Map<String, Object>> getClassTeachers (String class_id) {
+		String uid = mPrefUtil.getUid();
+		String password = mPrefUtil.getPassword();
+		if (uid == null || password == null)
+			return null;
+		
+		String action = "get_class_teachers";
+		String postStr = "action=" + action
+				+ "&uid=" + Utils.urlencodeUtf8(uid)
+				+ "&password=" + Utils.urlencodeUtf8(password)
+				+ "&class_id="+ Utils.urlencodeUtf8(class_id);;
+		
+		Connect2 connect2 = new Connect2();
+		Connect2.SetTimeout(5000, 0);
+		
+		String xmlStr = connect2.getXmlString(postStr);
+		
+		//对获得的xml文件进行pull解析
+		XmlPullParserFactory factory;
+		try {
+			factory = XmlPullParserFactory.newInstance();
+			// 实例化一个xml pull解析对象
+			XmlPullParser pullParser = factory.newPullParser();
+			
+			// 将xml文件作为流传入到inputstream
+			//System.out.println(xmlStr);
+	        xmlStr=xmlStr.replaceAll("&amp;", "＆");
+	        xmlStr=xmlStr.replaceAll("&quot;", "\"");
+	        xmlStr=xmlStr.replaceAll("&nbsp;", " ");
+
+	        BufferedInputStream bis = new BufferedInputStream(
+	        		new ByteArrayInputStream( xmlStr.getBytes()));
+	        
+	     // xml解析对象接收输入流对象
+	        pullParser.setInput(bis, "utf-8");
+
+	        int event = pullParser.getEventType();
+	        List<Map<String, Object>> list = null;
+	        Map<String, Object> map = null;
+	        
+	        while (event != XmlPullParser.END_DOCUMENT) {
+	        	switch (event) {
+	        	
+	        	case XmlPullParser.START_DOCUMENT:
+	        	list = new ArrayList<>();
+	        	break;
+	        	
+	        	case XmlPullParser.START_TAG:
+	        	if ("teacher".equals(pullParser.getName())) {
+	        		map = new HashMap<String, Object>();
+	        	}
+	        	if (pullParser.getName().equals("uid")) {
+	        		map.put("teacher_id", pullParser.nextText());
+	        	}
+	        	
+	        	if (pullParser.getName().equals("wowtalk_id")) {
+	        		map.put("teacher_username", pullParser.nextText());
+	        	}
+	        	       	
+	        	if (pullParser.getName().equals("alias")) {
+	        		map.put("teacher_alias", pullParser.nextText());
+	        	}
+	       
+	        	break;
+	        	
+	        	case XmlPullParser.END_TAG:
+	        	if (pullParser.getName().equals("teacher")) {
+	        		list.add(map);
+	        	}
+	        	break;
+	        	
+	        	}
+	        	event = pullParser.next();
+	        
+	        }  
+	        return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	
+	
 	public int setCameraStatus(String school_id, String[] camera_id,int[] status) {
 		int errno = -1;
 		String uid = mPrefUtil.getUid();

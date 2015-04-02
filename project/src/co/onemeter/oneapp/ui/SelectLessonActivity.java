@@ -14,6 +14,7 @@ import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.ui.MessageBox;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -44,13 +45,15 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 	private CourseTableAdapter adapter;
 	private MessageBox mMsgBox;
 	private Database mDBHelper;
-	private String classId;
+	private String classId = null;;
+	
+	private SelectLessonActivity instance;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_select_lesson);
-		
+		instance = this;
 		initView();
 		getLessonInfo();
 
@@ -70,7 +73,7 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 		lvCourtable.setAdapter(adapter);
 		mMsgBox = new MessageBox(this);
 		mDBHelper = new Database(this);
-		classId = "1678ff8f-2a41-438a-bb22-4f55530857f1";
+		classId = getIntent().getStringExtra("classId");
 		lessons.addAll(mDBHelper.fetchLesson(classId));
 		Collections.sort(lessons, new LessonComparator());
 		adapter.notifyDataSetChanged();
@@ -94,6 +97,7 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 
 			});
 	}
+	
 	private void refreshLessonInfo(){
 		lessons.clear();
 		Database db = Database.open(SelectLessonActivity.this);
@@ -120,6 +124,13 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		adapter.setCurrPosition(position);
+		
+		Intent data = new Intent();
+		data.putExtra("lesson_id", lessons.get(position).lesson_id);
+		data.putExtra("lesson_name", lessons.get(position).title);
+		setResult(RESULT_OK, data);
+		
+		instance.finish();
 		
 	}
 	
@@ -149,59 +160,59 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			SimpleDateFormat sdf_time = new SimpleDateFormat("HH:mm");
+
 			ViewHodler holder = null;
 			if(null == convertView){
 				holder = new ViewHodler();
-				convertView = getLayoutInflater().inflate(R.layout.listitem_coursetable, parent, false);
-				holder.item_name = (TextView) convertView.findViewById(R.id.coursetable_item_name);
-				holder.item_time = (TextView) convertView.findViewById(R.id.coursetable_item_time);
-				holder.item_date = (TextView) convertView.findViewById(R.id.coursetable_item_date);
-				holder.item_msg = (TextView) convertView.findViewById(R.id.coursetable_item_msg);
-				holder.mylesson_item_icon =  (ImageView) convertView.findViewById(R.id.mylesson_item_icon);
+				convertView = getLayoutInflater().inflate(R.layout.item_select_lesson, parent, false);
+				
+				holder.textView_item_lesson_name = (TextView) convertView.findViewById(R.id.textView_item_lesson_name);
+				holder.imageView_item_lesson_icon =  (ImageView) convertView.findViewById(R.id.imageView_item_lesson_icon);
+				
 				convertView.setTag(holder);
+				
 			}else{
 				holder = (ViewHodler) convertView.getTag();
 			}
-			Lesson lesson = alessons.get(position);
-			holder.item_name.setText(lesson.title);
-			holder.item_name.setTextColor(getResources().getColor(R.color.gray));
-			if(currPosition == position){
-				holder.mylesson_item_icon.setVisibility(View.VISIBLE);
-			}else{
-				holder.mylesson_item_icon.setVisibility(View.INVISIBLE);
-			}
 			
-			long now = Utils.getDayStampMoveMillis();
-			long startdate = lesson.start_date;
-			long enddata = lesson.end_date;
-			long curTime = System.currentTimeMillis()/1000;
-			if(curTime > enddata){
-				holder.item_name.setTextColor(0xff8eb4e6);		
-			}else if(curTime > now && curTime <startdate){
-				holder.item_name.setTextColor(getResources().getColor(R.color.gray));
-			}else if(curTime > startdate && curTime < enddata){
-				holder.item_name.setTextColor(Color.RED);
+			Lesson lesson = alessons.get(position);
+			holder.textView_item_lesson_name.setText(lesson.title);
+			holder.textView_item_lesson_name.setTextColor(getResources().getColor(R.color.black_24));
+			
+			if(currPosition == position){
+				holder.imageView_item_lesson_icon.setVisibility(View.VISIBLE);
+			}else{
+				holder.imageView_item_lesson_icon.setVisibility(View.INVISIBLE);
 			}
-			holder.item_date.setText(sdf.format(new Date(startdate * 1000)));
-			holder.item_time.setText(sdf_time.format(new Date(startdate * 1000)) + " - " + sdf_time.format(new Date(enddata * 1000)));
-			holder.item_msg.setText("");
-			holder.item_msg.setVisibility(View.GONE);
+
 			return convertView;
 		}
 		class ViewHodler{
-			TextView item_name;
-			TextView item_date;
-			TextView item_time;
-			TextView item_msg;
-			ImageView mylesson_item_icon;
+			TextView textView_item_lesson_name;
+			ImageView imageView_item_lesson_icon;
 		}
 		public void setCurrPosition(int currPosition){
 			this.currPosition = currPosition;
 			notifyDataSetChanged();
 		}
 		
+		
+	}
+	
+	@Override
+	protected void onDestroy() {
+		if (instance != null) {
+			instance = null;
+		}
+		
+		if (lessons != null) {
+			lessons = null;
+		}
+		
+		if (mDBHelper != null) {
+			mDBHelper = null;
+		}
+		super.onDestroy();
 	}
 
 

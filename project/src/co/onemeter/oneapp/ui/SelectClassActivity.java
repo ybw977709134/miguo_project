@@ -75,6 +75,11 @@ public class SelectClassActivity extends Activity implements OnClickListener, On
 				msgbox.dismissWait();
 				adapter = new MyClassAdapter(classrooms);
 				listView_class_show.setAdapter(adapter);
+				
+				if (classrooms.size() == 0) {
+					msgbox.show(null, "你还没有进入任何班级");
+					msgbox.dismissDialog();
+				}
 			}
 
 		});
@@ -166,6 +171,15 @@ public class SelectClassActivity extends Activity implements OnClickListener, On
 		if (instance != null) {
 			instance = null;
 		}
+		
+		if (classrooms != null) {
+			classrooms = null;
+		}
+		
+		if (talkwebserver != null) {
+			talkwebserver = null;
+		}
+		
 		super.onDestroy();
 	}
 

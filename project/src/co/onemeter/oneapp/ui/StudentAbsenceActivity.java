@@ -1,5 +1,6 @@
 package co.onemeter.oneapp.ui;
 
+import org.wowtalk.api.ChatMessage;
 import org.wowtalk.ui.MessageDialog;
 
 import co.onemeter.oneapp.R;
@@ -53,7 +54,7 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 	public final static int REQ_ABSENCE_TEACHER = 3;//教师
 	
 	private String classID = null;
-	private String lessonID = null;
+	private int lessonID = 0;
 	private String teacherID = null;
 	
 	@Override
@@ -141,24 +142,33 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 			
 			if (classID == null) {
 				alert("请选择请假班级");
-			} else if (lessonID == null) {
+			} else if (lessonID == 0) {
 				alert("请选择请假课程");
 			} else if (teacherID == null){
 				alert("请选择请假教师");
+			} else if (editText_absence_reason.getText().toString().length() == 0) {
+				alert("请填写请假事由");
 			} else {
 				//向老师请假
+				String reason = textView_teacher_name.getText().toString()+"你好："+"/n"+editText_absence_reason.getText().toString();
+				ChatMessage message = new ChatMessage();
+				message.chatUserName = teacherID;
+				
+				
 			}
 			
 			break;
 			
 		case R.id.layout_absence_class://获取班级名和id
-			Intent intent = new Intent(this,SelectClassActivity.class);
-			startActivityForResult(intent, REQ_ABSENCE_CLASS);
+			Intent intentClass = new Intent(this,SelectClassActivity.class);
+			startActivityForResult(intentClass, REQ_ABSENCE_CLASS);
 			break;
 			
 		case R.id.layout_absence_lesson://获取课程名和id
 			if (classID != null) {
-				//跳转
+				Intent intentLesson = new Intent(this,SelectLessonActivity.class);
+				intentLesson.putExtra("classId", classID);
+				startActivityForResult(intentLesson, REQ_ABSENCE_LESSON);
 			} else {
 				alert("请选择请假班级");
 			}
@@ -168,15 +178,16 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 			
 			if (classID == null) {
 				alert("请选择请假班级");
-			} else if (lessonID == null) {
+			} else if (lessonID == 0) {
 				alert("请选择请假课程");
 			} else {
-				//跳转
+				Intent intentLesson = new Intent(this,SelectTeacherActivity.class);
+				intentLesson.putExtra("classId", classID);
+				startActivityForResult(intentLesson, REQ_ABSENCE_TEACHER);
 			}
 			
 			break;
 			
-
 		default:
 			break;
 		}
@@ -197,7 +208,7 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 			
 			if (requestCode == REQ_ABSENCE_LESSON) {//课程
 				if (data != null) {
-					lessonID = data.getStringExtra("lesson_id");
+					lessonID = data.getIntExtra("lesson_id", 0);
 					textView_lesson_name.setText(data.getStringExtra("lesson_name"));
 				} 
 			}
@@ -208,7 +219,6 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 					textView_teacher_name.setText(data.getStringExtra("teacher_name"));
 				} 
 			}
-			
 			
 			break;
 

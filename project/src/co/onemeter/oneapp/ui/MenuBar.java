@@ -142,7 +142,7 @@ public abstract class MenuBar {
                     public View getView(final int position, View convertView, ViewGroup parent) {
                         View v = super.getView(position, convertView, parent);
                         v.setBackgroundColor(backgroundColor);
-                        TextView tv = (TextView) v.findViewById(android.R.id.text1);
+                        final TextView tv = (TextView) v.findViewById(android.R.id.text1);
                         Drawable rightDrawable = selectedIdx == position
                                 ? getContext().getResources().getDrawable(R.drawable.icon_section_select)
                                 : null;

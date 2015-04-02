@@ -20,13 +20,13 @@
             style="?attr/navbar_title"
             android:text="@string/myclasses_title" />
 
-        <TextView
+        <co.onemeter.oneapp.ui.widget.PressedTextView
             android:id="@+id/class_live_class"
             style="?attr/navbar_txt_right"
             android:clickable="true"
             android:text="@string/class_live_class" />
 
-        <TextView
+        <co.onemeter.oneapp.ui.widget.PressedTextView
             android:id="@+id/more"
             style="?attr/navbar_txt_right"
             android:clickable="true"

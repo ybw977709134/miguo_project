@@ -280,7 +280,7 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
 			tryPlayOrStopVoice();
 			break;
 		case R.id.capture_voice_layout:
-			ImageButton imageButton = (ImageButton) findViewById(R.id.title_moment_send);
+			View imageButton = findViewById(R.id.title_moment_send);
 			if (!isCapturingVoice) {
 				if (startRecording()) {
 					isCapturingVoice = true;
@@ -289,14 +289,12 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
 							.setImageResource(R.drawable.timeline_record_a);
 					findViewById(R.id.capture_voice_layout)
 							.setBackgroundResource(R.drawable.text_field);
-					imageButton.setImageResource(R.drawable.nav_confirm_p);
 					imageButton.setEnabled(false);
 
 				}
 			} else {
 				stopRecording();
 				updateGotVoice();
-				imageButton.setImageResource(R.drawable.nav_confirm);
 				imageButton.setEnabled(true);
 			}
 			break;

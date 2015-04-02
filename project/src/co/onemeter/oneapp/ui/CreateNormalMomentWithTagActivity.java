@@ -691,7 +691,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 tryPlayOrStopVoice();
                 break;
             case R.id.capture_voice_layout:
-            	ImageButton imageButton = (ImageButton) findViewById(R.id.title_moment_send);
+            	View imageButton = findViewById(R.id.title_moment_send);
                 if(!isCapturingVoice) {
                     if(startRecording()) {
                         isCapturingVoice=true;
@@ -699,7 +699,6 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                         ivCaptureInnerInd.setImageResource(R.drawable.timeline_record_a);
                         findViewById(R.id.capture_voice_layout).setBackgroundResource(R.drawable.text_field);
                         //正在录音，不能发布
-                        imageButton.setImageResource(R.drawable.nav_confirm_p);
                         imageButton.setEnabled(false);
                         
                     }
@@ -707,7 +706,6 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                     stopRecording();
                     updateGotVoice();
                     //结束了录音，可以发布
-                    imageButton.setImageResource(R.drawable.nav_confirm);
                     imageButton.setEnabled(true);
 //                    isCapturingVoice=false;
 //

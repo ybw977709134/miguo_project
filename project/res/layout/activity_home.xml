@@ -24,24 +24,37 @@
             android:layout_centerInParent="true"
             android:text="@string/app_name"
             style="@style/page_title_dark"/>
-        <RelativeLayout
+        
+        
+        <RelativeLayout 
             android:layout_width="50dp"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical">
+        
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" >
+                     
             <ImageButton
                 android:id="@+id/btn_home_setting"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 style="@style/navbar_btn_left"
+                android:layout_gravity="center"
                 android:src="@drawable/sel_home_set"/>
-            <TextView
+            
+            <ImageView
                 android:id="@+id/new_update_info"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
-                android:background="@drawable/btn_home_classnotice"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:visibility="gone"/>
+                android:layout_gravity="right"
+                android:src="@drawable/btn_home_classnotice" />
+            
+        </FrameLayout>
+        
         </RelativeLayout>
+
     </RelativeLayout>
     <co.onemeter.oneapp.ui.widget.ViewpagerScrollView
 

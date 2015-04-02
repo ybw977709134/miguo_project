@@ -19,4 +19,5 @@ dest=./out/om_im_android_${omenv}_`date +%m%d`.apk
 gradle clean \
     && gradle assembleRelease \
     && cp $src $dest \
-    && echo output to $dest
+    && echo output to $dest \
+    && echo you may want to scp $dest dev01:/var/www/newapi/download/

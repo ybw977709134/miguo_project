@@ -89,7 +89,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		
 		initView();
 		if(classId != null){
-			getLessonInfo();
+			getLessonsFromServer();
 //			setClassInfo();
 			getClassInfo(classId,class_group);
 		}
@@ -195,7 +195,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				    classId = classrooms.get(position).groupID;
 				    myclasses_title.setText(classrooms.get(position).groupNameOriginal);
 				    layout_main_drawer.closeDrawer(layout_main_leftdrawer);
-				    getLessonInfo();
+				    getLessonsFromServer();
 //				    setClassInfo();
 				    if(TextUtils.isEmpty(classrooms.get(position).description)){
 				    	clearClassInfo();
@@ -232,20 +232,21 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			
 			@Override
 			public void onDrawerSlide(View arg0, float arg1) {
-//				getSchoolClassInfo();
+//				getSchoolClassFromServer();
 				
 			}
 			
 			@Override
 			public void onDrawerOpened(View arg0) {
-//				getSchoolClassInfo();
+				getSchoolClassFromServer();
 				
 			}
 			
 			@Override
 			public void onDrawerClosed(View arg0) {
-				// TODO Auto-generated method stub
-				
+                if(classrooms != null){
+                    classrooms.clear();
+                }
 			}
 		});
 		
@@ -259,7 +260,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		}
 		
 	}
-	private void getSchoolClassInfo(){
+	private void getSchoolClassFromServer(){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
@@ -277,7 +278,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 
 		});
 	}
-//	private void getSchoolClassInfo(){
+//	private void getSchoolClassFromServer(){
 //        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
 //
 //            protected void onPreExecute() {
@@ -328,7 +329,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 //            }
 //        });
 //	}
-	private void getLessonInfo(){
+	private void getLessonsFromServer(){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 				@Override
@@ -460,17 +461,27 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
     private final int REQ_TAKE_PHO_DOOLE = 2003;
     private final int REQ_SEND_DOODLE = 2004;
 
-
     private MediaInputHelper mMediaHelper = new MediaInputHelper();
+
+    boolean mIsOpen = false;
+
+    private void controlDrawer(){
+        if(mIsOpen){
+            layout_main_drawer.closeDrawer(layout_main_leftdrawer);
+        }else{
+            layout_main_drawer.openDrawer(layout_main_leftdrawer);
+            //getSchoolClassFromServer();
+        }
+        mIsOpen = !mIsOpen;
+    }
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 
 		case R.id.btn_myclass_addclass:
-			layout_main_drawer.openDrawer(layout_main_leftdrawer);
 			if(!DoubleClickedUtils.isFastDoubleClick()){
-				getSchoolClassInfo();
+                controlDrawer();
 			}
 			
 			break;
@@ -604,7 +615,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                     getClassInfo(classId,class_group);
                     break;
                 case 1001:
-                    getSchoolClassInfo();
+                    getSchoolClassFromServer();
                     break;
                 case REQ_TAKE_PHO:
                     String[] photoPath = new String[2];
@@ -728,11 +739,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		public TeachersAdapter(List<GroupMember> lists){
 			members = new ArrayList<GroupMember>();
 			for(GroupMember buddy:lists){
-				//android.util.Log.i("-->>", buddy.getAccountType() + "");
 				if(Buddy.ACCOUNT_TYPE_TEACHER == buddy.getAccountType()){
 					members.add(buddy);
-					android.util.Log.d("----:", buddy.userID);
-					
 				}
 			}
 		}
@@ -931,7 +939,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			ImageView item_myclass_imageview;
 			TextView item_myclass_textview;
 		}
-    	
     }
 
 }

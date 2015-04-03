@@ -7,10 +7,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
+import android.widget.ImageView;
 import co.onemeter.oneapp.ui.GlobalValue;
 import co.onemeter.oneapp.ui.IncallActivity;
 import co.onemeter.oneapp.ui.LoginActivity;
 import co.onemeter.oneapp.ui.StartActivity;
+
 import org.wowtalk.NetworkManager;
 import org.wowtalk.api.JapaneseHelper;
 import org.wowtalk.api.PrefUtil;
@@ -23,6 +25,7 @@ public class YuanquActivity extends Activity {
 	private SharedPreferences prefs;
 	private boolean flag;
 	
+	private ImageView imageView_splash;
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
@@ -33,6 +36,7 @@ public class YuanquActivity extends Activity {
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
+        imageView_splash = (ImageView) findViewById(R.id.imageView_splash);
         //把是否启动欢迎页的信息写入配置参数里面
         prefs = getSharedPreferences("onemeter_visit_log", Context.MODE_PRIVATE);
 		flag = prefs.getBoolean("visit", false);
@@ -171,13 +175,16 @@ public class YuanquActivity extends Activity {
 			Intent intent = new Intent();
 			if (_userIsLogin) {
 			    GlobalValue.IS_BOOT_FROM_LOGIN = false;
+			    imageView_splash.setBackgroundResource(R.drawable.splashscreen);
 				intent.setClass(YuanquActivity.this, StartActivity.class);
 			} else {
 			    GlobalValue.IS_BOOT_FROM_LOGIN = true;
 //				intent.setClass(YuanquActivity.this, LoginInvitedActivity.class);
 			    if (!flag) {//还未安装本软件，跳转到欢迎引导页
+			    	imageView_splash.setBackgroundResource(R.drawable.icon);
 			    	intent.setClass(YuanquActivity.this, WelcomeActivity.class);
 			    } else {
+			    	imageView_splash.setBackgroundResource(R.drawable.splashscreen);
 			    	intent.setClass(YuanquActivity.this, LoginActivity.class);
 			    }
 			    

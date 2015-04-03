@@ -2,20 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/slide2">
+    android:background="@color/white" >
     
     
-<!-- 
+
     <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="fill_parent"
+        android:id="@+id/imageView_splash"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/icon"
 	    android:scaleType="centerInside"/>
-	    
-	     -->
+
  
 </RelativeLayout>

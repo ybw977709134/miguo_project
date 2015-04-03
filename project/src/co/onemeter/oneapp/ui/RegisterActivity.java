@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -34,6 +35,7 @@ import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 public class RegisterActivity extends Activity implements OnClickListener{
 	
@@ -621,7 +623,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
                 userType = Buddy.ACCOUNT_TYPE_TEACHER;
                 textView_register_user_type.setText("老师");
                 textView_register_user_type.setTextColor(getResources().getColor(R.color.black));
-                
+                showTeacherTip();
             }
         });
         
@@ -642,7 +644,16 @@ public class RegisterActivity extends Activity implements OnClickListener{
         bottomBoard.addCancelBtn(getString(R.string.login_findPassWord_cancel));
         bottomBoard.show();
     }
-    
+
+    private void showTeacherTip(){
+        MessageDialog dialog = new MessageDialog(this);
+        dialog.setTitle("提示");
+        dialog.setTitleColor(Color.RED);
+        dialog.setMessage(R.string.register_user_prompt);
+        dialog.setMessageTextSize(15);
+        dialog.setIsDouleBtn(false);
+        dialog.show();
+    }
     
     @Override
     protected void onDestroy() {

@@ -51,6 +51,13 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
     private String mBtnLeftText = "确定";
     private String mBtnRightText = "取消";
 
+    private int mTitleColor = -1;
+    private int mMsgColor = -1;
+    private int mBtn_l_color = -1;
+    private int mBtn_r_color = -1;
+
+    private int mMessageTxtSize = -1;
+
     private boolean mIsDouleBtn = false;
 
     private int mSize = SIZE_NORMAL;
@@ -103,6 +110,10 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
 
 
         txt_title.setText(mTitle);
+        if(mTitleColor != -1){
+            android.util.Log.i("--color", "" + mTitleColor);
+            txt_title.setTextColor(mTitleColor);
+        }
         
         TextView txt_msg = (TextView) findViewById(R.id.txt_msg);
         if (!mIsDouleBtn){
@@ -113,9 +124,25 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
             txt_msg.setGravity(Gravity.CENTER);
         }
         txt_msg.setText(mMsg);
+        if(mMsgColor != -1){
+            txt_msg.setTextColor(mMsgColor);
+        }
+
         btn_ok.setText(mBtnLeftText);
         btn_cancel.setText(mBtnRightText);
         btn_single.setText(mBtnLeftText);
+
+        if(mBtn_l_color != -1){
+            btn_ok.setTextColor(mBtn_l_color);
+            btn_single.setTextColor(mBtn_l_color);
+        }
+        if(mBtn_r_color != -1){
+            btn_cancel.setTextColor(mBtn_r_color);
+        }
+
+        if(mMessageTxtSize != -1){
+            txt_msg.setTextSize(mMessageTxtSize);
+        }
     }
 
     public void setOnLeftClickListener(String txt, MessageDialogClickListener listener) {
@@ -127,6 +154,26 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
 
     public void setTitle(String title){
         this.mTitle = title;
+    }
+
+    public void setTitleColor(int color){
+        mTitleColor = color;
+    }
+
+    public void setMessageColor(int color){
+        mMsgColor = color;
+    }
+
+    public void setTextColorBtnLeftOrSingle(int color){
+        mBtn_l_color = color;
+    }
+
+    public void setTextColorBtnRight(int color){
+        mBtn_r_color = color;
+    }
+
+    public void setMessageTextSize(int size){
+        mMessageTxtSize = size;
     }
 
     public void setTitle(int strId){

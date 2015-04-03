@@ -39,6 +39,7 @@ public class SendNotificationActivity extends Activity implements OnClickListene
 	private String[] className = new String[]{};
 	private List<GroupChatRoom> classrooms;
 	private String[] classIds = new String[]{};
+	private String classDetail_classId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,6 @@ public class SendNotificationActivity extends Activity implements OnClickListene
 		
 		initView();
 		getSchoolClassInfo();
-
 	}
 	
 	private void initView(){
@@ -57,46 +57,47 @@ public class SendNotificationActivity extends Activity implements OnClickListene
 		btn_ok.setOnClickListener(this);
 		btn_notice_back.setOnClickListener(this);
 		listMoment = new LinkedList<Moment>();
-//		classId = "1678ff8f-2a41-438a-bb22-4f55530857f1";
 		className = getIntent().getExtras().getStringArray("className");
+		classDetail_classId = getIntent().getExtras().getString("classDetail_classId");	
 		classrooms = new LinkedList<GroupChatRoom>();
 		View c = findViewById(R.id.dialog_container);
         c.setVisibility(View.INVISIBLE);
         filterBar = new ClassFilterBar(this,c);
-        LinearLayout lay_class_filter = (LinearLayout) findViewById(R.id.class_filter);
-        View bar_view = filterBar.getView();
-        bar_view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        lay_class_filter.addView(bar_view);
+        LinearLayout lay_class_filter = (LinearLayout) findViewById(R.id.class_filter);       
+        if(classDetail_classId == null){
+        	View bar_view = filterBar.getView();
+            bar_view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            lay_class_filter.addView(bar_view);          
+		}else{
+			classId = classDetail_classId;
+		}      
         filterBar.setOnFilterChangedListener(this);
         filterBar.setStringArrayData(className);
 
 	}
-	private void getMomentId(final String classId){
+	private void getMomentId(final String classId,final String[] classIds){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
 				WowTalkWebServerIF.getInstance(SendNotificationActivity.this).getMomentId(listMoment,edit_text_notice.getText().toString());
 				return null;
-			}
-			
+			}			
 			@Override
 			protected void onPostExecute(Integer result) {	
 				momentId = listMoment.get(0).id;
-				sendNotice(classId);
-				
-			}
-			
+				sendNotice(classId,classIds);				
+			}		
 		});
 		
 	}
 	
-	private void sendNotice(final String classId){
+	private void sendNotice(final String classId,final String[] classIds){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				WowTalkWebServerIF.getInstance(SendNotificationActivity.this).addClassBulletin(classId, momentId);
+				WowTalkWebServerIF.getInstance(SendNotificationActivity.this).addClassBulletin(classId,classIds,momentId);
 				return null;
 			}
 			@Override
@@ -115,6 +116,16 @@ public class SendNotificationActivity extends Activity implements OnClickListene
 				classrooms.addAll(WowTalkWebServerIF.getInstance(SendNotificationActivity.this).getSchoolClassRooms(null));
 				return null;
 			}
+			@Override
+			protected void onPostExecute(Integer result) {
+				if(classId == null ){
+					int length = classrooms.size();
+					classIds = new String[length];
+					for(int i= 0;i < length;i++){
+					classIds[i] = classrooms.get(i).groupID;
+					}
+				}
+			}
 			
 
 		});
@@ -127,14 +138,13 @@ public class SendNotificationActivity extends Activity implements OnClickListene
 			break;
 		case R.id.btn_ok:
 			if(!TextUtils.isEmpty(edit_text_notice.getText().toString())){
-				getMomentId(classId);
+				getMomentId(classId,classIds);
 			}else{
 				MessageDialog dialog = new MessageDialog(SendNotificationActivity.this,false,MessageDialog.SIZE_NORMAL);
 	            dialog.setTitle("");
 	            dialog.setMessage("公告内容不能为空");
 	            dialog.show();
-			}
-			
+			}			
 			break;
 		}
 		
@@ -149,6 +159,11 @@ public class SendNotificationActivity extends Activity implements OnClickListene
 	@Override
 	public void onDropdownMenuItemClick(int subMenuResId, int itemIdx) {
 		if(itemIdx == 0){
+			int length = classrooms.size();
+			classIds = new String[length];
+			for(int i= 0;i < length;i++){
+				classIds[i] = classrooms.get(i).groupID;
+			}
 			classId = null;
 		}else{
 			classId = classrooms.get(itemIdx-1).groupID;

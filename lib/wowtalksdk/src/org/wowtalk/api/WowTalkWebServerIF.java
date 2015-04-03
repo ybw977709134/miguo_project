@@ -6436,7 +6436,7 @@ public class WowTalkWebServerIF {
 
     }
     
-    public int addClassBulletin(String class_id,String moment_id){
+    public int addClassBulletin(String class_id,String[] class_ids,String moment_id){
     	String uid = sPrefUtil.getUid();
 		String password = sPrefUtil.getPassword();
 		if(uid == null || password == null)
@@ -6445,10 +6445,20 @@ public class WowTalkWebServerIF {
 		final String action = "add_class_bulletin";
 		String postStr = "action=" + action
 				+ "&uid=" + Utils.urlencodeUtf8(uid)
-				+ "&password=" + Utils.urlencodeUtf8(password)
-				+ "&class_id=" + Utils.urlencodeUtf8(class_id)
-				+ "&moment_id=" + Utils.urlencodeUtf8(moment_id);
+				+ "&password=" + Utils.urlencodeUtf8(password);
+//				+ "&class_id=" + Utils.urlencodeUtf8(class_id)
+//				+ "&moment_id=" + Utils.urlencodeUtf8(moment_id);
+		if(class_id != null){
+			postStr += "&class_id=" + Utils.urlencodeUtf8(class_id);
+		}else{
+			for (String id : class_ids) {
+	            postStr += "&class_id[]=" + Utils.urlencodeUtf8(id);
+	        }
+		}
 		
+		if(moment_id != null){
+			postStr += "&moment_id=" + Utils.urlencodeUtf8(moment_id);
+		}
 		Connect2 connect2 = new Connect2();
 		Element root = connect2.Post(postStr);
 		int errno = ErrorCode.BAD_RESPONSE;

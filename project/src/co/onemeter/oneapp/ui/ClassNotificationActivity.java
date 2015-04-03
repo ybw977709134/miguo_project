@@ -1,8 +1,6 @@
 package co.onemeter.oneapp.ui;
 
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,7 +11,6 @@ import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.GroupMember;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -26,9 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -40,7 +35,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.ClassDetailActivity.MyClassAdapter;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
 
@@ -61,6 +55,9 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 	private ClassFilterBar filterBar;
 	private List<GroupChatRoom> classrooms;
 	private String[] className = new String[]{};
+	private String tag;
+	private String classDetail_classId;
+	private int count = 10;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +71,8 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 	}
 	
 	private void initView(){
+		tag = getIntent().getStringExtra(ClassDetailActivity.EXTRA_CLASS_DETAIL);
+		classDetail_classId = getIntent().getStringExtra("classId");
 		btn_notice_back = (ImageButton) findViewById(R.id.btn_notice_back);
 		btn_add = (ImageButton) findViewById(R.id.btn_add);
 		pullListView = (PullToRefreshListView) findViewById(R.id.listView_notice_show);
@@ -85,6 +84,9 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 		bulletins = new LinkedList<Bulletins>();
 		
 //		classId = "1678ff8f-2a41-438a-bb22-4f55530857f1";
+		if(classDetail_classId != null){
+			classId = classDetail_classId;
+		}
 		lvEvent.setOnItemLongClickListener(this);
 		
 		if(PrefUtil.getInstance(ClassNotificationActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
@@ -95,7 +97,10 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
         c.setVisibility(View.INVISIBLE);
         filterBar = new ClassFilterBar(this,c);
         filterBar.setOnFilterChangedListener(this);
-        lvEvent.addHeaderView(filterBar.getView());
+        if(tag == null){
+        	lvEvent.addHeaderView(filterBar.getView());
+        }
+        
 		pullListView.setOnRefreshListener(this);
         pullListView.setOnLastItemVisibleListener(this);
         classrooms = new LinkedList<GroupChatRoom>();
@@ -108,7 +113,7 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 			protected Integer doInBackground(Void... params) {
 				bulletins.clear();
 				WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(ClassNotificationActivity.this);
-				bulletins  = web.fGetClassBulletin(classId,0,0);
+				bulletins  = web.fGetClassBulletin(classId,0,count);
 				return null;
 			}
 			
@@ -174,6 +179,7 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 			Intent intent = new Intent(ClassNotificationActivity.this, SendNotificationActivity.class);
 			Bundle bundle=new Bundle();
 			bundle.putStringArray("className", className);
+			bundle.putString("classDetail_classId", classDetail_classId);
 			intent.putExtras(bundle);
 			startActivityForResult(intent, 1001);;
 			break;
@@ -231,6 +237,9 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 			if(b.uid != null){
 			Database dbHelper=new Database(context);
 //            Buddy buddy=dbHelper.buddyWithUserID(b.uid);
+			if(classId == null){
+				classId = b.class_id;
+			}
             List<GroupMember> buddyList =  dbHelper.fetchGroupMembers(classId);
             if(buddyList != null){
             	for(GroupMember buddy : buddyList){
@@ -277,7 +286,7 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
                 @Override
                 public void onclick(MessageDialog dialog) {
                     
-                    delClassBulletin(position-1);
+                    delClassBulletin(position-2);
                     dialog.dismiss();
                 }
             }
@@ -322,7 +331,8 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 
 	@Override
 	public void onLastItemVisible() {
-		
+//		count += 10;
+//		getClassBulletin(classId);
 	}
 
 	@Override

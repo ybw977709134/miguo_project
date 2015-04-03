@@ -27,6 +27,7 @@ import org.wowtalk.*;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.UpdatesInfo;
 import org.wowtalk.api.WowTalkWebServerIF;
@@ -55,7 +56,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     private static final int REQ_TAKE_PHO_DOODLE = 1003;
     private static final int REQ_SEND_DOODLE = 1004;
     private static final int REQ_PICK_PHOTO_DOOLE = 1005;
-
+    private static final int REQ_HOME = 1006;
 
     MessageBox msgbox;
 //    private static final int BIND_EMAIL_REQUEST_CODE = 1;
@@ -272,7 +273,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btn_add:
                 intent = new Intent(this,AddClassActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQ_HOME);
                 break;
             case R.id.img_home_growth_class:
                 intent = new Intent(this,TimelineActivity.class);
@@ -456,10 +457,30 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                     }
                     startActivity(new Intent(this,SendToActivity.class).putExtra(SendToActivity.INTENT_PAHT,photoPath));
                     break;
+                case REQ_HOME:
+                	refresh();
+                	break;
             }
         }
     }
-
+    private void refresh() {
+    	final List<GroupChatRoom> schools;
+    	schools = new Database(HomeActivity.this).fetchSchools();
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... voids) {
+            	schools.clear();
+            	int errno = WowTalkWebServerIF.getInstance(HomeActivity.this).getMySchoolsErrno(true, schools);
+            	return errno;
+            }
+            @Override
+            public void onPostExecute(Integer errno) {
+                if (errno == ErrorCode.OK) {
+                    new Database(HomeActivity.this).storeSchools(schools);
+                }
+            }
+        });
+    }
     private void updateUi() {
         if (appUpdatesAvailable) {
             changeNewUpdateFlagView(View.VISIBLE);

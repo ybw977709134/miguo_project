@@ -19,8 +19,10 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.AppStatusService.AppStatusBinder;
 import co.onemeter.oneapp.utils.WebServerEventPoller;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
@@ -32,6 +34,7 @@ import org.wowtalk.ui.MessageBox;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class StartActivity extends TabActivity
@@ -405,6 +408,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         networkFilter.addAction(ACTION_CONNECTIVITY_CHANGE);
 //        networkFilter.addAction(ACTION_WIFI_STATE_CHANGE);
         registerReceiver(mNetworkStateChangedReceiver, networkFilter);
+        refresh();
     }
 
     @Override
@@ -508,7 +512,25 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         super.onNewIntent(intent);
         tryHandleIncomeMsgNotification(intent);
     }
-
+    private void refresh() {
+    	final List<GroupChatRoom> schools;
+    	schools = new Database(StartActivity.this).fetchSchools();
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... voids) {
+            	schools.clear();
+            	int errno = WowTalkWebServerIF.getInstance(StartActivity.this).getMySchoolsErrno(true, schools);
+            	return errno;
+            }
+            @Override
+            public void onPostExecute(Integer errno) {
+                if (errno == ErrorCode.OK) {
+                	Log.d("-----------schools-------------", schools+"");
+                    new Database(StartActivity.this).storeSchools(schools);
+                }
+            }
+        });
+    }
     private void tryHandleIncomeMsgNotification(Intent intent) {
         try {
             if(null != intent) {

@@ -38,6 +38,7 @@ import java.util.*;
  * Created by yl on 21/12/2014.
  */
 public class ClassDetailActivity extends Activity implements OnClickListener, OnItemClickListener {
+	public static final String EXTRA_CLASS_DETAIL = "classDetail";
 	private AQuery query;
 	private WowTalkWebServerIF mWTWebSer;
 	private MessageBox msgBox;
@@ -557,6 +558,12 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
             
 			break;
 			
+		case R.id.btn_class_notice:
+			Intent result = new Intent(this, ClassNotificationActivity.class);
+			result.putExtra(EXTRA_CLASS_DETAIL,"classDetail");
+			result.putExtra("classId",classId);
+			startActivity(result);
+			break;
         case R.id.btn_photo_answering:
             final BottomButtonBoard board = new BottomButtonBoard(this,v);
             board.add(getString(R.string.image_take_photo),BottomButtonBoard.BUTTON_BLUE, new View.OnClickListener() {

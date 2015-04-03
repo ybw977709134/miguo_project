@@ -42,7 +42,7 @@
                 android:layout_weight="1"
                 style="@style/contact_list_main_text"
                 android:textColor="@color/black"
-                android:text="qq@qq.com"/>
+                android:textSize="17sp"/>
             <TextView 
                 android:id="@+id/notice_time"
                 android:layout_height="0dp"
@@ -65,7 +65,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/share_point_notice" 
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:paddingRight="3dp"/>
             <TextView 
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"

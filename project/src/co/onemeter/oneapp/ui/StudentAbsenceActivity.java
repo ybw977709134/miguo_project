@@ -1,9 +1,17 @@
 package co.onemeter.oneapp.ui;
 
+import java.util.Date;
+
 import org.wowtalk.api.ChatMessage;
+import org.wowtalk.api.Connect2;
+import org.wowtalk.api.Database;
+import org.wowtalk.api.PrefUtil;
+import org.wowtalk.api.WowTalkVoipIF;
+import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
 
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -57,13 +65,19 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 	private int lessonID = 0;
 	private String teacherID = null;
 	
+	
+	private PrefUtil mPref; 
+	private MessageBox messageBox;
+	private boolean isSendSuccess = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_student_absence);
-		initView();
 		
+		mPref = PrefUtil.getInstance(StudentAbsenceActivity.this);
+		messageBox = new MessageBox(this);
+		initView();
 		layout_student_absence.setFocusable(true);
 		layout_student_absence.setFocusableInTouchMode(true);
 		layout_student_absence.requestFocus();
@@ -87,6 +101,8 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 	 * 初始化各个控件
 	 */
 	private void initView() { 
+		
+		
 		
 		layout_student_absence = (RelativeLayout) findViewById(R.id.layout_student_absence);
 		
@@ -129,6 +145,19 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 		
 		
 	}
+	
+	/**
+	 * 获取发送消息时的时间
+	 * @return
+	 */
+	protected String getSentDate () {
+        // set the sentDate according to the UTC offset
+        long localDate = System.currentTimeMillis();
+        int offset = mPref.getUTCOffset();
+        long adjustedTime = localDate + offset * 1000L;
+        Date adjustedDate = new Date(adjustedTime);
+        return Database.chatMessage_dateToUTCString(adjustedDate);
+    }
 
 	@Override
 	public void onClick(View v) {
@@ -149,13 +178,46 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 			} else if (editText_absence_reason.getText().toString().length() == 0) {
 				alert("请填写请假事由");
 			} else {
+				
+				messageBox.showWaitImageSuccess("请假申请发送成功");
+				
 				//向老师请假
-				String reason = textView_teacher_name.getText().toString()+"你好："+"/n"+editText_absence_reason.getText().toString();
-				ChatMessage message = new ChatMessage();
+				String reason = "["+textView_lesson_name.getText().toString()+"请假]"+"\n"
+				+textView_teacher_name.getText().toString()+"你好："+"\n"
+						+editText_absence_reason.getText().toString();
+
+				
+				final ChatMessage message = new ChatMessage();
 				message.chatUserName = teacherID;
+
+				message.messageContent = reason;
+				message.msgType = ChatMessage.MSGTYPE_NORMAL_TXT_MESSAGE;
+				message.sentStatus = ChatMessage.SENTSTATUS_SENDING;
+				message.sentDate = getSentDate();
+				message.uniqueKey = Database.chatMessageSentDateToUniqueKey(message.sentDate);
+				message.ioType = ChatMessage.IOTYPE_OUTPUT;
 				
-				
-			}
+				message.primaryKey = new Database(StudentAbsenceActivity.this)
+			                            .storeNewChatMessage(message, false);
+
+			        new Thread(new Runnable() {
+			        	
+			            @Override
+			            public void run() {
+
+			            	WowTalkVoipIF.getInstance(StudentAbsenceActivity.this).fSendChatMessage(message);
+			            	
+			            	try {
+								Thread.sleep(2000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							StudentAbsenceActivity.this.finish();
+
+			            }
+			        }).start();
+
+		}
 			
 			break;
 			
@@ -225,6 +287,14 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 		default:
 			break;
 		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		if (mPref != null) {
+			mPref = null;
+		}
+		super.onDestroy();
 	}
 	
 	/**

@@ -365,7 +365,7 @@ public abstract class MessageComposerActivityBase extends Activity
 
 		onSendMessage(msg);
 	}
-
+	
     protected void resendTextMsgAsync(ChatMessage chatMessage) {
         onResendMessage(chatMessage);
     }

@@ -42,7 +42,7 @@ public class YuanquActivity extends Activity {
 		flag = prefs.getBoolean("visit", false);
 		
         Handler hdl = new Handler();
-		hdl.postDelayed(new splashHandler(), 1000);
+		hdl.postDelayed(new splashHandler(), 500);
 
         initJapaneseItaijiDictionary();
         initJapaneseKanwaDictionary();

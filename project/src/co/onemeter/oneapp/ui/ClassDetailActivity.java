@@ -22,6 +22,7 @@ import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.androidquery.AQuery;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
@@ -163,7 +164,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 //			teaAdapter = new TeachersAdapter(members);
 //			lvTeachers.setAdapter(teaAdapter);
 //		}
-		
+		if(Utils.isAccoTeacher(this)){
+            query.find(R.id.tv_holiday_apply).text("在线签到");
+        } 
 //		query.find(R.id.class_detail_title).text(intent.getStringExtra("classroomName"));
 		query.find(R.id.myclasses_title).text(intent.getStringExtra("classroomName"));
 //		query.find(R.id.title_back).clicked(this);
@@ -541,6 +544,19 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			data.putExtra("classId", classId);
 			startActivity(data);
 			break;
+			
+		case R.id.btn_holiday_apply:
+			
+			Intent applyIntent = null;
+			if(Utils.isAccoTeacher(this)){//老师签到
+				applyIntent = new Intent(this, TeacherSignActivity.class);
+	        } else {//学生请假
+	        	applyIntent = new Intent(this, StudentAbsenceActivity.class);
+	        }
+            startActivity(applyIntent);
+            
+			break;
+			
         case R.id.btn_photo_answering:
             final BottomButtonBoard board = new BottomButtonBoard(this,v);
             board.add(getString(R.string.image_take_photo),BottomButtonBoard.BUTTON_BLUE, new View.OnClickListener() {

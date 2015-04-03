@@ -972,5 +972,11 @@
 	<string name="upgrade_failed_md5sum">升级包校验失败</string>
 	<string name="upgrade_failed_download">升级包下载失败</string>
 	<string name="upgrade_failed_unknown">升级失败</string>
+	
+	
+	<string name="class_lesson_call_roll_online">在线点名</string>
+    <string name="class_lesson_absence">缺席</string>
+    <string name="class_lesson_askforleave">请假</string>
+    <string name="class_lesson_signin">签到</string>
 
 </resources>

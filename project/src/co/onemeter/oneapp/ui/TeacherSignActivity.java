@@ -1,7 +1,10 @@
 package co.onemeter.oneapp.ui;
 
+import org.wowtalk.ui.MessageDialog;
+
 import co.onemeter.oneapp.R;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,20 +27,20 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 		private TextView title_sure;
 		
 		//班级
-		private LinearLayout layout_absence_class;
+		private LinearLayout layout_sign_class;
 		private TextView textView_class_name;
 		
 		//课程
-		private LinearLayout layout_absence_lesson;
+		private LinearLayout layout_sign_lesson;
 		private TextView textView_lesson_name;
 		
-		
-		//请假事由
-		private EditText editText_absence_reason;
-		
-		
+
 		private String classID = null;
-		private String lessonID = null;
+		private int lessonID = 0;	
+		
+		public final static int REQ_SIGN_CLASS = 1;//班级
+		public final static int REQ_SIGN_LESSON = 2;//课程
+
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,21 +57,19 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 		textView_home_back = (TextView) findViewById(R.id.textView_home_back);
 		title_sure = (TextView) findViewById(R.id.title_sure);
 		
-		layout_absence_class = (LinearLayout) findViewById(R.id.layout_absence_class);
+		layout_sign_class = (LinearLayout) findViewById(R.id.layout_sign_class);
 		textView_class_name = (TextView) findViewById(R.id.textView_class_name);
 		
-		layout_absence_lesson = (LinearLayout) findViewById(R.id.layout_absence_lesson);
+		layout_sign_lesson = (LinearLayout) findViewById(R.id.layout_sign_lesson);
 		textView_lesson_name = (TextView) findViewById(R.id.textView_lesson_name);
-		
-		editText_absence_reason = (EditText) findViewById(R.id.editText_absence_reason);
 		
 		
 		title_back.setOnClickListener(this);
 		textView_home_back.setOnClickListener(this);
 		title_sure.setOnClickListener(this);
 		
-		layout_absence_class.setOnClickListener(this);
-		layout_absence_lesson.setOnClickListener(this);
+		layout_sign_class.setOnClickListener(this);
+		layout_sign_lesson.setOnClickListener(this);
 		
 		
 	}
@@ -82,22 +83,80 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 			finish();
 			break;
 			
-		case R.id.title_sure:
-			
+		case R.id.title_sure://确定
+			if (classID == null) {
+				alert("请选择请假班级");
+			} else if (lessonID == 0) {
+				alert("请选择请假课程");
+			} else {
+				
+				Intent intentSign = new Intent(this,RollCallOnlineActivity.class);
+				intentSign.putExtra("classId", classID);
+				intentSign.putExtra("lessonId", lessonID);
+				intentSign.putExtra("lesson_name", textView_lesson_name.getText().toString());
+				startActivity(intentSign);
+			}
 			break;
 			
-		case R.id.layout_absence_class://获取班级名和id
-			finish();
+		case R.id.layout_sign_class://获取班级名和id
+			Intent intentClass = new Intent(this,SelectClassActivity.class);
+			startActivityForResult(intentClass, REQ_SIGN_CLASS);
 			break;
 			
-		case R.id.layout_absence_lesson://获取课程名和id
-			finish();
+		case R.id.layout_sign_lesson://获取课程名和id
+			if (classID != null) {
+				Intent intentLesson = new Intent(this,SelectLessonActivity.class);
+				intentLesson.putExtra("classId", classID);
+				startActivityForResult(intentLesson, REQ_SIGN_LESSON);
+			} else {
+				alert("请选择请假班级");
+			}
 			break;
 
 		default:
 			break;
 		}
 		
+	}
+	
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (resultCode) {
+		case RESULT_OK:
+			if (requestCode == REQ_SIGN_CLASS) {//班级
+				if (data != null) {
+					classID = data.getStringExtra("class_id");
+					textView_class_name.setText(data.getStringExtra("class_name"));
+				} 
+			}
+			
+			if (requestCode == REQ_SIGN_LESSON) {//课程
+				if (data != null) {
+					lessonID = data.getIntExtra("lesson_id", 0);
+					textView_lesson_name.setText(data.getStringExtra("lesson_name"));
+				} 
+			}
+			
+
+			
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	
+	/**
+	 * 信息缺省提示框
+	 * @param message
+	 */
+	private void alert(String message){
+		MessageDialog dialog = new MessageDialog(TeacherSignActivity.this,false, MessageDialog.SIZE_NORMAL);
+        dialog.setMessage(message);
+        dialog.show();
 	}
 	
 	

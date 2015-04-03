@@ -216,7 +216,6 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 
 			            }
 			        }).start();
-
 		}
 			
 			break;

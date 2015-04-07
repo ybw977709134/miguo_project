@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -125,8 +126,24 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 			
 			@Override
 			protected void onPostExecute(Integer result) {
-				adapter = new MyClassAdapter(classrooms);
-                lvMyClass.setAdapter(adapter);
+                if(classrooms.isEmpty()){
+                    /*
+                        处理无班级内容
+                     */
+                    View emptyView = lvMyClass.getEmptyView();
+                    emptyView.setVisibility(View.GONE);
+                    RelativeLayout lay_main = (RelativeLayout) findViewById(R.id.lay_myclass_main);
+                    TextView textView = new TextView(MyClassesActivity.this);
+                    textView.setText(getString(R.string.class_not_bind));
+                    textView.setGravity(Gravity.CENTER);
+                    RelativeLayout.LayoutParams params =
+                            new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+                    textView.setLayoutParams(params);
+                    lay_main.addView(textView);
+                }else {
+                    adapter = new MyClassAdapter(classrooms);
+                    lvMyClass.setAdapter(adapter);
+                }
 			}
 
 		});

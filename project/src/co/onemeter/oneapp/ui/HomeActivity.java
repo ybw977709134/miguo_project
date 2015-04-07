@@ -55,6 +55,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     private static final int REQ_SEND_DOODLE = 1004;
     private static final int REQ_PICK_PHOTO_DOOLE = 1005;
     private static final int REQ_HOME = 1006;
+    private static final int REQ_ADD_CLASS = 1007;
 
     MessageBox msgbox;
 //    private static final int BIND_EMAIL_REQUEST_CODE = 1;
@@ -70,6 +71,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     private int mCurrentPagePosition = 1;//用于记录viewpager的当前位置
     private boolean mIsChanged = false;
     private boolean appUpdatesAvailable;
+    private List<GroupChatRoom> schools;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -236,8 +238,11 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.img_home_movable).setOnClickListener(this);
         findViewById(R.id.btn_home_setting).setOnClickListener(this);
         findViewById(R.id.btn_goto_myclass).setOnClickListener(this);
+        schools = new Database(HomeActivity.this).fetchSchools();
     }
-
+    private boolean isEmpty(){
+		return schools == null ||schools.isEmpty();
+	}
     @Override
     protected void onResume() {
         super.onResume();
@@ -328,9 +333,14 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
                 break;
             case R.id.btn_goto_myclass:
-            	intent = new Intent(HomeActivity.this, MyClassesActivity.class);
-                intent.putExtra(MyClassesActivity.TAG,true);
-                startActivity(intent);
+            	if(isEmpty()){
+            		intent = new Intent(HomeActivity.this, AddClassActivity.class);
+            	}else{
+            		intent = new Intent(HomeActivity.this, MyClassesActivity.class);
+            		intent.putExtra(MyClassesActivity.TAG,true);
+            		
+            	}
+            	startActivityForResult(intent, REQ_ADD_CLASS);
             	break;
             default:
                 break;
@@ -456,11 +466,13 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 case REQ_HOME:
                 	refresh();
                 	break;
+                case REQ_ADD_CLASS:
+                	refresh();
+                	break;
             }
         }
     }
     private void refresh() {
-    	final List<GroupChatRoom> schools;
     	schools = new Database(HomeActivity.this).fetchSchools();
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override

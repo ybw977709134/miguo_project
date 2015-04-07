@@ -122,6 +122,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
     private long lastNoNetRemindTime;
     private boolean mIsStartFromLogin;
     private boolean mHasBoundService;
+    private List<GroupChatRoom> schools;
 
 	public static final StartActivity instance() {
 		if (instance != null)
@@ -513,7 +514,6 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         tryHandleIncomeMsgNotification(intent);
     }
     private void refresh() {
-    	final List<GroupChatRoom> schools;
     	schools = new Database(StartActivity.this).fetchSchools();
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
@@ -525,12 +525,15 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
             @Override
             public void onPostExecute(Integer errno) {
                 if (errno == ErrorCode.OK) {
-                	Log.d("-----------schools-------------", schools+"");
                     new Database(StartActivity.this).storeSchools(schools);
                 }
             }
         });
     }
+    
+    private boolean isEmpty(){
+		return schools == null ||schools.isEmpty();
+	}
     private void tryHandleIncomeMsgNotification(Intent intent) {
         try {
             if(null != intent) {

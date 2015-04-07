@@ -493,7 +493,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			currentTime = System.currentTimeMillis()/1000;
 //			String time = tvTime.getText().toString().substring(5);
 //			String length = tvLength.getText().toString().substring(5);	
-			if(currentTime < lessons.get(0).start_date){
+			if(lessons != null){
 				MessageDialog alertDialog = new MessageDialog(ClassDetailActivity.this);
     			alertDialog.setTitle("提示");
                 alertDialog.setIsDouleBtn(false);
@@ -501,31 +501,41 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
     			alertDialog.setOnLeftClickListener("确定", null);
     			alertDialog.show();
 			}else{
-//				String[] times = time.split(":");
-//				String[] lengths = length.split(":");
-				String[] startTimes = start_time.split(":");
-				String[] endTimes = end_time.split(":");
-				startDateStamps =Integer.parseInt(startTimes[0])*3600 + Integer.parseInt(startTimes[1])*60;
-				endDateStamps =Integer.parseInt(endTimes[0])*3600 + Integer.parseInt(endTimes[1])*60;
-				
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				for(Lesson lesson:lessons){
-					String date = sdf.format(new Date(lesson.start_date * 1000));
-					String[] dates = date.split("-");
-					long timeStamps = Utils.getTimeStamp(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]), Integer.parseInt(dates[2]))/1000;
-					if(currentTime > (timeStamps + startDateStamps) && currentTime < (timeStamps + endDateStamps)){
-						lessonId = lesson.lesson_id;
-						lessonName = lesson.title;
+				if(currentTime < lessons.get(0).start_date){
+					MessageDialog alertDialog = new MessageDialog(ClassDetailActivity.this);
+	    			alertDialog.setTitle("提示");
+	                alertDialog.setIsDouleBtn(false);
+	    			alertDialog.setMessage("现在没有课程正在直播");
+	    			alertDialog.setOnLeftClickListener("确定", null);
+	    			alertDialog.show();
+				}else{
+//					String[] times = time.split(":");
+//					String[] lengths = length.split(":");
+					String[] startTimes = start_time.split(":");
+					String[] endTimes = end_time.split(":");
+					startDateStamps =Integer.parseInt(startTimes[0])*3600 + Integer.parseInt(startTimes[1])*60;
+					endDateStamps =Integer.parseInt(endTimes[0])*3600 + Integer.parseInt(endTimes[1])*60;
+					
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					for(Lesson lesson:lessons){
+						String date = sdf.format(new Date(lesson.start_date * 1000));
+						String[] dates = date.split("-");
+						long timeStamps = Utils.getTimeStamp(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]), Integer.parseInt(dates[2]))/1000;
+						if(currentTime > (timeStamps + startDateStamps) && currentTime < (timeStamps + endDateStamps)){
+							lessonId = lesson.lesson_id;
+							lessonName = lesson.title;
+							}
 						}
-					}
-				Intent intent = new Intent();
-				intent.putExtra("student_live", 1);
-				intent.putExtra("lessonId", lessonId);
-				intent.putExtra("lessonName", lessonName);
-				intent.putExtra("schoolId", schoolId);
-				intent.setClass(this, CameraActivity.class);
-				startActivity(intent);
-			}		
+					Intent intent = new Intent();
+					intent.putExtra("student_live", 1);
+					intent.putExtra("lessonId", lessonId);
+					intent.putExtra("lessonName", lessonName);
+					intent.putExtra("schoolId", schoolId);
+					intent.setClass(this, CameraActivity.class);
+					startActivity(intent);
+				}
+			}
+				
 
 			break;
 		case R.id.more:

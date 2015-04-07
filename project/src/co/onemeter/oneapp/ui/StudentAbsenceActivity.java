@@ -197,9 +197,10 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 				messageBox.showWaitImageSuccess("请假申请发送成功");
 				
 				//向老师请假
-				String reason = "["+textView_lesson_name.getText().toString()+"请假]"+"\n"
-				+textView_teacher_name.getText().toString()+"你好："+"\n"
-						+editText_absence_reason.getText().toString();
+				String reason = "[请假]"+textView_teacher_name.getText().toString()+"你好"+"\n"
+						+"班级： "+textView_class_name.getText().toString()+"\n"
+						+"课程： "+textView_lesson_name.getText().toString()+"\n"
+						+"事由： "+editText_absence_reason.getText().toString();
 
 				
 				final ChatMessage message = new ChatMessage();

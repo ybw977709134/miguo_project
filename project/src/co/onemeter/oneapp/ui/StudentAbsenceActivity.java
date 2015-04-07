@@ -22,6 +22,7 @@ import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -64,7 +65,7 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 	private String classID = null;
 	private int lessonID = 0;
 	private String teacherID = null;
-	
+	private String classId_intent = null; //通过intent传进的classId
 	
 	private PrefUtil mPref; 
 	private MessageBox messageBox;
@@ -81,8 +82,22 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 		layout_student_absence.setFocusable(true);
 		layout_student_absence.setFocusableInTouchMode(true);
 		layout_student_absence.requestFocus();
-		
-		
+
+        /**
+         * 处理来自ClassDetailActivity来的请假
+         */
+        classId_intent = getIntent().getStringExtra("classId");
+		if(classId_intent != null){
+            classID = classId_intent;
+            layout_absence_class.setVisibility(View.GONE);
+            findViewById(R.id.img_diliver_class_up).setVisibility(View.GONE);
+            findViewById(R.id.img_diliver_class_bottom).setVisibility(View.GONE);
+            ImageView img_divider = (ImageView) findViewById(R.id.img_diliver_lesson_up);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) img_divider.getLayoutParams();
+            params.topMargin = 0;
+            img_divider.setLayoutParams(params);
+            textView_home_back.setText(getString(R.string.back));
+        }
 	}
 	
 	@Override

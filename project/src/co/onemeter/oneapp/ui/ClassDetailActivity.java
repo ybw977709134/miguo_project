@@ -551,8 +551,10 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			Intent applyIntent = null;
 			if(Utils.isAccoTeacher(this)){//老师签到
 				applyIntent = new Intent(this, TeacherSignActivity.class);
+                applyIntent.putExtra("classId",classId);
 	        } else {//学生请假
 	        	applyIntent = new Intent(this, StudentAbsenceActivity.class);
+                applyIntent.putExtra("classId",classId);
 	        }
             startActivity(applyIntent);
             

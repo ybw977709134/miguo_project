@@ -19,7 +19,7 @@
             android:background="@null"
             android:src="@drawable/nav_back_selector"/>
         
-        <TextView 
+        <co.onemeter.oneapp.ui.widget.PressedTextView
 		    android:id="@+id/textView_home_back"
 		    android:layout_width="wrap_content"
 		    android:layout_height="match_parent"
@@ -39,7 +39,7 @@
             android:textSize="20sp"
             android:text="请假"/>
         
-        <TextView 
+        <co.onemeter.oneapp.ui.widget.PressedTextView
             android:id="@+id/title_apply"
             android:layout_height="50dp"
             android:layout_width="50dp"
@@ -69,6 +69,7 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/img_diliver_class_up"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:background="@drawable/bg_section_divider_line_dark"/>
@@ -102,13 +103,15 @@
                         android:textColor="@color/gray_40"
                         android:textSize="18sp"/>
                 </LinearLayout>
-                <ImageView 
+                <ImageView
+                    android:id="@+id/img_diliver_class_bottom"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:background="@drawable/bg_section_divider_line_dark"/>
                 
                 
-                <ImageView 
+                <ImageView
+                    android:id="@+id/img_diliver_lesson_up"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:layout_marginTop="20dp"

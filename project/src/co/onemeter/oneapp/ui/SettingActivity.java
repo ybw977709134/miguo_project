@@ -259,10 +259,9 @@ public class SettingActivity extends Activity implements OnClickListener {
      * 检查更新
      */
     private void checkForUpdates() {
-//        mMsgBox.showWait();
+    	mMsgBox.showWait();
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
-//            public UpdatesInfo updatesInfo = new UpdatesInfo();
-
+        	
             @Override
             protected Integer doInBackground(Void... voids) {
                 try {
@@ -280,68 +279,14 @@ public class SettingActivity extends Activity implements OnClickListener {
 
             @Override
             protected void onPostExecute(Integer errno) {
-//                mMsgBox.dismissWait();
+                mMsgBox.dismissWait();
                 if (ErrorCode.OK == errno) {
                     try {
                         int currVerCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-//                        String currVerName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
                         if (currVerCode >= updatesInfo.versionCode) {
                             appUpdatesAvailable = false;
-//                            mMsgBox.show(null, getString(R.string.settings_upgrade_is_uptodate));
-                            
                         } else {
                             appUpdatesAvailable = true;
-//                            StringBuilder sb = new StringBuilder();
-//                            sb.append(getString(R.string.settings_upgrade_curr_ver_is) + currVerName + "\n");
-//                            sb.append(getString(R.string.settings_upgrade_latest_ver_is) + updatesInfo.versionName + "\n");
-//                            if (0 < updatesInfo.changeLog.length) {
-//                                sb.append(getString(R.string.settings_upgrade_changelogs_are) + "\n");
-//                                for (int i = 0; i < updatesInfo.changeLog.length; ++i)
-//                                    sb.append("  " + (i + 1) + ". " + updatesInfo.changeLog[i] + "\n");
-//                            }
-//                           
-//                            //新的弹框显示，版本更新操作
-//                            MessageDialog dialog = new MessageDialog(SettingActivity.this);
-//                            dialog.setTitle(R.string.settings_upgrade_will_you_upgrade_now);
-//                            dialog.setMessage(sb.toString());
-//                            dialog.setOnRightClickListener(getResources().getString(R.string.cancel), null);
-//                            dialog.setOnLeftClickListener(getResources().getString(R.string.ok), new MessageDialog.MessageDialogClickListener() {
-//                                @Override
-//                                public void onclick(MessageDialog dialog) {
-//                                    dialog.dismiss();
-//                                    // upgrade method:
-//                                    // 0 - go to download web page
-//                                    // 1 - auto download apk and install it later
-//                                    // 2 - go to market
-//                                    final int method = 1;
-//
-//                                    if (method == 0) { // go to download web page
-//                                        startActivity(new Intent(
-//                                                Intent.ACTION_VIEW,
-//                                                Uri.parse("http://www.onemeter.co/dl/")));
-//                                    } else if (method == 1) {
-//                                        String destFilename = getExternalCacheDir()
-//                                                + "/om_im_" + updatesInfo.versionCode + ".apk";
-//                                        startService(new Intent(SettingActivity.this, AppUpgradeService.class)
-//                                                        .putExtra(AppUpgradeService.EXTRA_URL, updatesInfo.link)
-//                                                        .putExtra(AppUpgradeService.EXTRA_MD5SUM, updatesInfo.md5sum)
-//                                                        .putExtra(AppUpgradeService.EXTRA_DEST_FILENAME, destFilename)
-//                                        );
-//                                    } else { // go to market
-//                                        Intent intent = new Intent(Intent.ACTION_VIEW);
-//                                        intent.setData(Uri.parse("market://details?id=" + getPackageName()));
-//                                        if (getPackageManager().queryIntentActivities(intent, 0).size() != 0) {
-//                                            AppStatusService.setIsMonitoring(false);
-//                                            startActivity(intent);
-//                                        } else {
-//                                            mMsgBox.toast(R.string.settings_upgrade_no_market);
-//                                        }
-//                                    }
-//                                    
-//                                }
-//                            });
-//                            dialog.show();
-                            
                         }
 
                         updateUi();
@@ -383,8 +328,8 @@ public class SettingActivity extends Activity implements OnClickListener {
         MessageDialog dialog = new MessageDialog(SettingActivity.this);
         dialog.setTitle(R.string.settings_upgrade_will_you_upgrade_now);
         dialog.setMessage(sb.toString());
-        dialog.setOnRightClickListener(getResources().getString(R.string.cancel), null);
-        dialog.setOnLeftClickListener(getResources().getString(R.string.ok), new MessageDialog.MessageDialogClickListener() {
+        dialog.setOnLeftClickListener(getResources().getString(R.string.upgrade_cancel), null);
+        dialog.setOnRightClickListener(getResources().getString(R.string.upgrade_ok), new MessageDialog.MessageDialogClickListener() {
             @Override
             public void onclick(MessageDialog dialog) {
                 dialog.dismiss();

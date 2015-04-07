@@ -3,6 +3,7 @@ package org.wowtalk.ui;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -116,6 +117,8 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
         }
         
         TextView txt_msg = (TextView) findViewById(R.id.txt_msg);
+        txt_msg.setMovementMethod(ScrollingMovementMethod.getInstance());
+        
         if (!mIsDouleBtn){
              txt_msg.setGravity(Gravity.CENTER);
         }

@@ -265,8 +265,8 @@
 	<string name="settings_upgrade_curr_ver_is">当前版本：</string>
 	<string name="settings_upgrade_latest_ver_is">最新版本：</string>
 	<string name="settings_upgrade_changelogs_are">主要更新内容：</string>
-	<string name="settings_upgrade_will_you_upgrade_now">是否升级？</string>
-	<string name="settings_upgrade_will_you_cancel">是否取消升级？</string>
+	<string name="settings_upgrade_will_you_upgrade_now">是否更新？</string>
+	<string name="settings_upgrade_will_you_cancel">是否取消更新？</string>
     <string name="settings_upgrade_no_market">请从Google Play商店更新最新版本</string>
     <string name="settings_company_id">ID</string>
     <string name="manage_account_title">帐号管理</string>
@@ -972,6 +972,9 @@
 	<string name="upgrade_failed_md5sum">升级包校验失败</string>
 	<string name="upgrade_failed_download">升级包下载失败</string>
 	<string name="upgrade_failed_unknown">升级失败</string>
+	
+	<string name="upgrade_ok">立即更新</string>
+	<string name="upgrade_cancel">稍后更新</string>
 	
 	
 	<string name="class_lesson_call_roll_online">在线点名</string>

@@ -163,6 +163,7 @@
 							android:textColor="@color/white"
 							android:textSize="12sp"
 							android:clickable="true"
+							android:visibility="gone"
 							android:background="@drawable/icon_setting_update_new" />
 					
 						<TextView 

@@ -11,11 +11,11 @@
         android:layout_alignParentTop="true"
         style="?attr/navbar" >
     
-         <TextView 
+         <co.onemeter.oneapp.ui.widget.PressedTextView 
             android:id="@+id/title_back"
             android:layout_height="50dp"
             android:layout_width="50dp"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:gravity="center_vertical"
             android:textColor="@color/white"
             android:layout_alignParentLeft="true"
@@ -33,12 +33,12 @@
             android:textSize="20sp"
             android:textStyle="bold" />
         
-        <TextView 
+        <co.onemeter.oneapp.ui.widget.PressedTextView  
             android:id="@+id/title_confirm"
             android:layout_height="50dp"
             android:layout_width="50dp"
-            android:textSize="20sp"
-            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:gravity="center"
             android:textColor="@color/white"
             android:layout_alignParentRight="true"
             android:clickable="true"

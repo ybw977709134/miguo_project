@@ -18,17 +18,17 @@
             android:layout_width="20dp"
             android:layout_alignParentLeft="true"
             android:background="@null"
-            android:src="@drawable/nav_back_selector"/>
+            android:src="@drawable/icon_back_selector"/>
         
         <!-- 添加小伙伴的文本 -->
-        <TextView 
+        <co.onemeter.oneapp.ui.widget.PressedTextView 
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:id="@+id/textView_buddy_back"
             android:layout_toRightOf="@id/title_back"
             android:layout_centerVertical="true"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:clickable="true"
             android:onClick="clickButton"
             android:text="@string/tab_contacts"/>

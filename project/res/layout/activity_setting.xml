@@ -22,13 +22,13 @@
 			android:background="@null"
 			android:src="@drawable/icon_back_selector"/>
 		
-		<TextView 
+		<co.onemeter.oneapp.ui.widget.PressedTextView  
 		    android:id="@+id/textView_home_back"
 		    android:layout_width="wrap_content"
 		    android:layout_height="match_parent"
 		    android:layout_toRightOf="@id/title_back"
 		  	android:gravity="center_vertical"
-		  	android:textSize="20sp"
+		  	android:textSize="16sp"
 		  	android:clickable="true"
 		   	android:textColor="@color/white"
 		    android:text="首页" />

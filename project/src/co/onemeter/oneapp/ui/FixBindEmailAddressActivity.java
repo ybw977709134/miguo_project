@@ -56,7 +56,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 	
 	private Button btn_verification_code;//确认
 	
-	private static final int REBIND_EMAIL_REQUEST_CODE = 3;//修改绑定邮箱页面的请求码
+	public static final String FIX_BIND_EMAIL = "fix_bind_email";//修改绑定邮箱页面的请求码
 	
 	private MessageBox mMsgBox;
 	String bindEmail= null;
@@ -432,7 +432,6 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                         
                     default:
                         mMsgBox.show(null, "验证不通过");
-                        mMsgBox.dismissDialog();
                         break;
                 }
             }
@@ -458,62 +457,21 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
 
                 switch (result) {
                     case ErrorCode.OK://0 //解绑成功后方可跳转到重新绑定邮箱的界面       	
-//                    	mMsgBox.show(null, "解除绑定邮箱成功");
-//                    	mMsgBox.dismissDialog();
-//                    	
-//                    	new Thread(new Runnable() {
-//							
-//							@Override
-//							public void run() {
-//								try {
-//									Thread.sleep(3000);
-//								} catch (InterruptedException e) {
-//									e.printStackTrace();
-//								}
-//								Intent bindIntent = new Intent(FixBindEmailAddressActivity.this,BindEmailAddressActivity.class);
-//		                    	startActivity(bindIntent);
-//		                    	FixBindEmailAddressActivity.this.finish();
-//								
-//							}
-//						}).start();
-                    	
+            	
+                    	Toast.makeText(FixBindEmailAddressActivity.this, "原绑定邮箱已解绑", Toast.LENGTH_SHORT).show();
                     	Intent bindIntent = new Intent(FixBindEmailAddressActivity.this,BindEmailAddressActivity.class);
+                    	bindIntent.putExtra(FIX_BIND_EMAIL, true);
                     	startActivity(bindIntent);
                     	FixBindEmailAddressActivity.this.finish();
                     	
                         break;
                         
                     default:
-                        mMsgBox.show(null, "请检查网络");
-                        mMsgBox.dismissDialog();
+                    	Toast.makeText(FixBindEmailAddressActivity.this, "连接服务器失败,请检查网络", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
         });
 	}
-	
 
-	
-	/**
-     * 绑定邮箱成功后返回到设置界面，显示你已经绑定的邮箱
-     * @author hutianfeng
-     * @date 2015/3/5
-     */
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//    	super.onActivityResult(requestCode, resultCode, data);
-//    	if (resultCode == RESULT_OK) {
-//			switch (requestCode) {
-//			case REBIND_EMAIL_REQUEST_CODE://解除绑定，重新绑定邮箱成功后的处理结果
-//				Intent intent = new Intent();
-//		        setResult(RESULT_OK, intent);
-//				finish();
-//				break;
-//			
-//			default:
-//				break;
-//			}
-//    	}
-//    }
-	
 }

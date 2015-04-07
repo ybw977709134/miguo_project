@@ -547,9 +547,9 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                         dialog.show();
                         break;
                     	
-                    default://邮箱绑定失败
+                    default:
                         mMsgBox.show(null, "你输入的账号或邮箱有误，请重新输入");
-                        mMsgBox.dismissDialog();
+//                        mMsgBox.dismissDialog();
                         break;
                 }
             }
@@ -613,7 +613,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                         
                     default:
                         mMsgBox.show(null, "验证不通过");
-                        mMsgBox.dismissDialog();
+//                        mMsgBox.dismissDialog();
                         break;
                 }
             }
@@ -677,7 +677,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                     	
                     default://重置密码失败
                         mMsgBox.show(null, "重置密码失败");
-                        mMsgBox.dismissDialog();
+//                        mMsgBox.dismissDialog();
                         break;
                 }
             }

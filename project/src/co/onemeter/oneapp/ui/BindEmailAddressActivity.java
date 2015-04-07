@@ -135,11 +135,14 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
     	if (keyCode == KeyEvent.KEYCODE_BACK) {
-
+    		
 		if (pageFlag == BIND_EMAIL_PAGE) {//绑定邮箱起始页
   	
-			Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
-			startActivity(intent);
+			if (getIntent().getBooleanExtra(FixBindEmailAddressActivity.FIX_BIND_EMAIL, false)) {
+				Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
+				startActivity(intent);
+			}
+			
 			closeSoftKeyboard();
 			BindEmailAddressActivity.this.finish();
 		} else {
@@ -373,8 +376,10 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 		case R.id.textView_bindEmail_back:
 		case R.id.title_back:
 			if (pageFlag == BIND_EMAIL_PAGE) {
-    			Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
-				startActivity(intent);
+				if (getIntent().getBooleanExtra(FixBindEmailAddressActivity.FIX_BIND_EMAIL, false)) {
+					Intent intent = new Intent(BindEmailAddressActivity.this,AccountSettingActivity.class);
+					startActivity(intent);
+				}
 				closeSoftKeyboard();
 				BindEmailAddressActivity.this.finish();
 			} else {
@@ -464,8 +469,6 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
         				textView_show_bind_email.setVisibility(View.VISIBLE);
         				textView_show_bind_email.setText("你输入的邮箱"+txt_bind_email.getText().toString());
 
-        		       
-        				
         				if (mTimer != null) {
         					mTimer.cancel();
         				}
@@ -585,7 +588,6 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                         
                     default:
                         mMsgBox.show(null, getString(R.string.bind_email_failed));
-                        mMsgBox.dismissDialog();
                         break;
                 }
             }
@@ -611,14 +613,14 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
             protected void onPostExecute(Integer result) {
                
                 switch (result) {
-                    case ErrorCode.OK://0        	
-                    	mMsgBox.show(null, "绑定邮箱失败");
-                    	mMsgBox.dismissDialog();
+                    case ErrorCode.OK://0       
+//                    	Toast.makeText(BindEmailAddressActivity.this, "没有绑定邮箱", Toast.LENGTH_SHORT).show();
+//                    	mMsgBox.show(null, "绑定邮箱失败");
                         break;
                         
                     default:
-                        mMsgBox.show(null, "请检查网络");
-                        mMsgBox.dismissDialog();
+                    	Toast.makeText(BindEmailAddressActivity.this, "连接服务器失败,请检查网络", Toast.LENGTH_SHORT).show();
+//                        mMsgBox.show(null, "请检查网络");
                         break;
                 }
             }

@@ -10,7 +10,7 @@
         android:id="@+id/title_bar"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:background="@drawable/messages_bg_navbar" >
+        android:background="@drawable/bg_menubar_bule" >
 
         <ImageButton
             android:id="@+id/img_back"

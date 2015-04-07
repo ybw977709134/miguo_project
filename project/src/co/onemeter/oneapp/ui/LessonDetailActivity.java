@@ -26,6 +26,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,7 +62,8 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 //	private long classEndTimeStamps;
 	
 	private MessageBox msgbox;
-	
+	private ImageView bottom_camera_standard_list_divider;
+	private ImageView top_camera_standard_list_divider;
 	protected void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_lesson_detail);
@@ -93,6 +95,9 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		LinearLayout lay_second = (LinearLayout) q.find(R.id.les_lay_second).getView();
 		LinearLayout lay_third = (LinearLayout) q.find(R.id.les_lay_third).getView();
 		LinearLayout lay_camera = (LinearLayout) q.find(R.id.les_lay_camera).getView();
+		bottom_camera_standard_list_divider = (ImageView) findViewById(R.id.bottom_camera_standard_list_divider);
+		top_camera_standard_list_divider = (ImageView) findViewById(R.id.top_camera_standard_list_divider);
+		
 		
 		q.find(R.id.text_camera).textColor(getResources().getColor(R.color.text_gray4));
 		lay_camera.setEnabled(false);
@@ -121,8 +126,9 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			q.find(R.id.text_classroom_r).text("");
 		}else{
 			q.find(R.id.text_first_r).text(getString(R.string.class_wait_confirm));
-			lay_classroom.setVisibility(View.GONE);
 			lay_camera.setVisibility(View.GONE);
+			bottom_camera_standard_list_divider.setVisibility(View.GONE);
+			top_camera_standard_list_divider.setVisibility(View.GONE);
 		}
 		lay_first.setOnClickListener(this);
 		lay_second.setOnClickListener(this);
@@ -141,6 +147,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		lessoonDetails_camera = new ArrayList<Camera>();
 		text_classroom_name = (TextView) findViewById(R.id.text_classroom_name);
 		text_camera_num = (TextView) findViewById(R.id.text_camera_num);
+		
 		
 //		String[] classTimes = classTime.split(":");
 //		String[] classLengths = classLength.split(":");

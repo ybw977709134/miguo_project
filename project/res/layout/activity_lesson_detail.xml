@@ -318,6 +318,7 @@
 
         <ImageView
             style="@style/standard_list_divider"
+            android:id="@+id/top_camera_standard_list_divider"
             android:layout_marginTop="30dp" />
 
         <LinearLayout
@@ -368,7 +369,10 @@
             </LinearLayout>
         </LinearLayout>
 
-        <ImageView style="@style/standard_list_divider" />
+        <ImageView 
+            style="@style/standard_list_divider" 
+            android:id="@+id/bottom_camera_standard_list_divider" />
+        
     </LinearLayout>
 
 </LinearLayout>

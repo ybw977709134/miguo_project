@@ -25,7 +25,8 @@ echo version $curr_ver_code:$curr_ver_name
 src=./project/build/outputs/apk/project-release.apk
 dest=./out/om_im_android_${omenv}_`date +%m%d`.apk
 
-gradle assembleRelease \
+gradle clean \
+    && gradle assembleRelease \
     && cp $src $dest \
     && echo output to $dest
 

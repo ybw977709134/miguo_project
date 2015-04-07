@@ -68,7 +68,7 @@ public class HomeworkActivity extends Activity implements View.OnClickListener {
 							HomeworkActivity.this).getLessonHomework(lessonId);
 				}
 				catch (Exception e) {
-					return ErrorCode.BAD_RESPONSE;
+					return ErrorCode.OK;
 				}
 			}
 

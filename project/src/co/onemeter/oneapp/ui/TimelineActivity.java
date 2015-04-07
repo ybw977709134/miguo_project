@@ -482,7 +482,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         Database db = new Database(activity);
         Moment replyMoment=db.fetchMoment(momentId);
         if (myUserId.equals(replyTo.uid) || (null != replyMoment && replyMoment.owner.userID.equals(myUserId))) {
-            menu.add(activity.getString(R.string.contacts_local_delete), BottomButtonBoard.BUTTON_BLUE,
+            menu.add(activity.getString(R.string.contacts_local_delete), BottomButtonBoard.BUTTON_RED,
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

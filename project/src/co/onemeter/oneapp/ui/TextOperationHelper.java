@@ -51,16 +51,17 @@ public class TextOperationHelper {
                     }
                 });
         
-        mMenu.add(ctx.getString(R.string.contacts_local_delete),
-                BottomButtonBoard.BUTTON_BLUE,
-                new View.OnClickListener(){
-                    @Override
-                    public void onClick(View view) {
-                    	Database db = new Database(ctx);
-                    	db.deleteChatMessage(messageDetail);
-                    	mMenu.dismiss();
-                    }
-                });
+        //注释掉这个功能，好友圈中的删除功能在自身的类中做了判断
+//        mMenu.add(ctx.getString(R.string.contacts_local_delete),
+//                BottomButtonBoard.BUTTON_BLUE,
+//                new View.OnClickListener(){
+//                    @Override
+//                    public void onClick(View view) {
+//                    	Database db = new Database(ctx);
+//                    	db.deleteChatMessage(messageDetail);
+//                    	mMenu.dismiss();
+//                    }
+//                });
         
         if (phones != null && phones.length > 0) {
             for(final String phone : phones) {

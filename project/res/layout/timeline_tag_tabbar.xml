@@ -170,7 +170,7 @@
 			android:background="@color/barVote"/>
 	</RelativeLayout>
 	
-	<!-- 视频教程-->
+	<!-- 视频-->
 		<RelativeLayout
 		android:id="@+id/layout_timebar_video"
 		android:layout_width="match_parent"
@@ -186,11 +186,11 @@
 			android:gravity="center"
 			android:drawablePadding="5dp"
 			android:textColor="@color/text_gray1"
-			android:text="@string/moment_tag_videoStudy"/>
+			android:text="@string/moment_tag_videoStudy" />
 		<ImageView
 			android:id="@+id/img_tag_vedio"
 			android:layout_height="5dp"
-			android:layout_width="60dp"
+			android:layout_width="@dimen/moment_header_bottom_tag_indicator_min_width"
 			android:layout_centerHorizontal="true"
 			android:layout_alignParentBottom="true"
 			android:background="@color/barVideo"/>

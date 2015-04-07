@@ -257,6 +257,52 @@ public class LessonWebServerIF {
 		return errno;
 	}
 
+    public int addOrModifyStudentsRollcall(List<LessonPerformance> performances) {
+        String uid = mPrefUtil.getUid();
+        String password = mPrefUtil.getPassword();
+        if (uid == null || password == null)
+            return ErrorCode.NOT_LOGGED_IN;
+
+        if (performances.isEmpty())
+            return ErrorCode.OK;
+
+        final String action = "add_lesson_performance";
+        StringBuffer postStr = new StringBuffer("action=" + action + "&uid="
+                + Utils.urlencodeUtf8(uid) + "&password="
+                + Utils.urlencodeUtf8(password) + "&lesson_id="
+                + performances.get(0).lesson_id);
+        for (LessonPerformance p : performances) {
+            postStr.append("&student_id[]=")
+                    .append(Utils.urlencodeUtf8(p.student_id))
+                    .append("&property_id[]=")
+                    .append(p.property_id)
+                    .append("&property_value[]=")
+                    .append(p.property_value);
+        }
+
+        Connect2 connect2 = new Connect2();
+        Element root = connect2.Post(postStr.toString());
+
+        int errno = ErrorCode.BAD_RESPONSE;
+        if (root != null) {
+            NodeList errorList = root.getElementsByTagName("err_no");
+            Element errorElement = (Element) errorList.item(0);
+            String errorStr = errorElement.getFirstChild().getNodeValue();
+
+            if (errorStr.equals("0")) {
+                errno = ErrorCode.OK;
+
+                Database db = new Database(mContext);
+                for (LessonPerformance p : performances) {
+                    db.storeLessonPerformance(p);
+                }
+            } else {
+                errno = Integer.parseInt(errorStr);
+            }
+        }
+        return errno;
+    }
+
 	/**
 	 * 添加或更新对一节课的家长意见。
 	 * <p>
@@ -312,7 +358,7 @@ public class LessonWebServerIF {
 		}
 		return errno;
 	}
-	
+
 	public int getClassInfo(String class_id,List<ClassInfo> classInfos,GroupChatRoom result){
 		int errno = ErrorCode.BAD_RESPONSE;
 		String uid = mPrefUtil.getUid();

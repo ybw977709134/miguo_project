@@ -21,14 +21,14 @@
             android:src="@drawable/icon_back_selector"/>
         
         <!-- 添加找回密码页表头的文本 -->
-        <TextView 
+        <co.onemeter.oneapp.ui.widget.PressedTextView 
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:id="@+id/textView_find_password_back"
             android:gravity="center_vertical"
             android:textColor="@color/white"
 			android:layout_marginLeft="20dp"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:clickable="true"
             android:text="返回"/>	        
 

@@ -7,7 +7,8 @@
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:cacheColorHint="#00000000">
+        android:cacheColorHint="@null"
+        android:divider="@drawable/bg_section_divider_line_light">
     </ListView>
     
     <LinearLayout

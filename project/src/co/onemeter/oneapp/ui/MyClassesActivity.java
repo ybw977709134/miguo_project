@@ -396,8 +396,8 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 				holder = (ViewHolder) convertView.getTag();
 			}
 			holder.item_myclass_textview.setText((position + 1) + "." + classrooms.get(position).groupNameOriginal);
-			int groupId_2 = classrooms.get(position).groupID.charAt(2) - '0';
-			holder.item_myclass_imageview.setImageResource(imgbackgroud[groupId_2 % 3]);
+			//int groupId_2 = classrooms.get(position).groupID.charAt(2) - '0';
+			holder.item_myclass_imageview.setImageResource(imgbackgroud[position % 3]);
 			return convertView;
 		}
 		class ViewHolder{

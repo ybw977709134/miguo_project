@@ -66,6 +66,8 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 		private RelativeLayout layout_reset_password;
 		private EditText txt_new_password;//新密码
 		private EditText txt_confirm_new_password;//确认新密码
+		private ImageView field_clear_pwd;//清除密码
+		private ImageView field_clear_confirm;//清除确认密码
 		private ImageView imageview_show_password;//显示密码
 		private ImageView imageview_hint_password;//隐藏密码
 		private TextView textView_isshow_password;//显示密码文本提示
@@ -124,7 +126,13 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 	
 	@Override
 	protected void onDestroy() {
+		if (mTimer != null) {
+			mTimer.cancel();
+		}
 		
+		if (mInputMethodManager != null) {
+			mInputMethodManager = null;
+		}
 		super.onDestroy();
 	}
 	
@@ -155,6 +163,16 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
     	if (txt_auth_code.hasFocus()) {
     		mInputMethodManager.hideSoftInputFromWindow(txt_auth_code.getWindowToken() , 0);
     		Log.i("---find_txt_auth_code");
+    	}
+    	
+    	if (txt_new_password.hasFocus()) {
+    		mInputMethodManager.hideSoftInputFromWindow(txt_new_password.getWindowToken() , 0);
+    		Log.i("---find txt_new_password");
+    	}
+    	
+    	if (txt_confirm_new_password.hasFocus()) {
+    		mInputMethodManager.hideSoftInputFromWindow(txt_confirm_new_password.getWindowToken() , 0);
+    		Log.i("---find txt_confirm_new_password");
     	}
 		
     }
@@ -202,6 +220,9 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
     	layout_reset_password = (RelativeLayout) findViewById(R.id.layout_reset_password);
     	txt_new_password =  (EditText) findViewById(R.id.txt_new_password);
     	txt_confirm_new_password =  (EditText) findViewById(R.id.txt_confirm_new_password);
+    	field_clear_pwd = (ImageView) findViewById(R.id.field_clear_pwd);
+    	field_clear_confirm = (ImageView) findViewById(R.id.field_clear_confirm);
+    	
     	imageview_show_password = (ImageView) findViewById(R.id.imageview_show_password);
     	imageview_hint_password = (ImageView) findViewById(R.id.imageview_hint_password);
     	textView_isshow_password = (TextView) findViewById(R.id.textView_isshow_password);
@@ -211,6 +232,8 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
     	field_clear_auth_code.setOnClickListener(this);
     	btn_verification_auth_code.setOnClickListener(this);
     	btn_again_receive_auth_code.setOnClickListener(this);
+    	field_clear_pwd.setOnClickListener(this);
+    	field_clear_confirm.setOnClickListener(this);
     	imageview_show_password.setOnClickListener(this);
     	imageview_hint_password.setOnClickListener(this);
     	btn_newPassWord_ok.setOnClickListener(this);
@@ -351,6 +374,93 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 				
 			}
 		});
+    	
+    	
+    	txt_new_password.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (s.length() == 0) {
+					field_clear_pwd.setVisibility(View.GONE);
+					
+				} else {
+					field_clear_pwd.setVisibility(View.VISIBLE);
+				}
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
+    	
+    	
+    	txt_new_password.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+
+					if (txt_new_password.getText().toString().length() > 0 ) {
+						field_clear_pwd.setVisibility(View.VISIBLE);
+					}
+				} else {
+					field_clear_pwd.setVisibility(View.GONE);
+					mInputMethodManager.hideSoftInputFromWindow(txt_new_password.getWindowToken() , 0);
+				}
+				
+			}
+		});
+    	
+    	
+    	
+    	txt_confirm_new_password.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (s.length() == 0) {
+					field_clear_confirm.setVisibility(View.GONE);
+					
+				} else {
+					field_clear_confirm.setVisibility(View.VISIBLE);
+					
+				}
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
+    	
+    	
+    	txt_confirm_new_password.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+
+					if (txt_confirm_new_password.getText().toString().length() > 0 ) {
+						field_clear_confirm.setVisibility(View.VISIBLE);
+					}
+				} else {
+					field_clear_confirm.setVisibility(View.GONE);
+					mInputMethodManager.hideSoftInputFromWindow(txt_confirm_new_password.getWindowToken() , 0);
+				}
+				
+			}
+		});
+    	
 		
 		title_back.setOnClickListener(this);
 		textView_findPassword_back.setOnClickListener(this);
@@ -405,6 +515,14 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 			//60秒内不可点击  重新获取验证码
 			stopGetAccessCode();			
 		break;
+		
+		case R.id.field_clear_pwd:
+			txt_new_password.setText("");
+			break;
+			
+		case R.id.field_clear_confirm:
+			txt_confirm_new_password.setText("");
+			break;
 						
 		//显示密码
 		case R.id.imageview_show_password:

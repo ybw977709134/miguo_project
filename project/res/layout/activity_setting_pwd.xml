@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/layout_setting_password"
     android:background="@color/background_dark" >
     <RelativeLayout 
         android:id="@+id/title_bar"
@@ -12,10 +13,24 @@
         <ImageButton
             android:id="@+id/title_back"
             android:layout_height="50dp"
-            android:layout_width="50dp"
+            android:layout_width="20dp"
             android:layout_alignParentLeft="true"
             android:background="@null"
-            android:src="@drawable/nav_back_selector"/>
+            android:src="@drawable/icon_back_selector"/>
+        
+        <!-- 添加找回密码页表头的文本 -->
+        <co.onemeter.oneapp.ui.widget.PressedTextView 
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:id="@+id/textView_fixPassword_back"
+            android:layout_toRightOf="@id/title_back"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:clickable="true"
+            android:text="返回"/>
+        
+        <!--  
         <ImageButton
             android:id="@+id/title_confirm"
             android:layout_height="50dp"
@@ -23,6 +38,9 @@
             android:layout_alignParentRight="true"
             android:background="@null"
             android:src="@drawable/nav_confirm_selector"/>
+            
+            -->
+        
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -31,7 +49,7 @@
             android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:text="@string/set_password"/>
+            android:text="@string/settings_account_pwd"/>
     </RelativeLayout>
 	
     <ScrollView
@@ -42,63 +60,173 @@
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
             android:orientation="vertical">
+            
+            <!-- 在成功输入绑定邮箱和验证码后设置新密码和确认新密码 -->
+      <RelativeLayout
+        android:id="@+id/layout_reset_password"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
             <LinearLayout
-                android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:layout_margin="10dp"
-                android:background="@color/white"
-                android:orientation="vertical">
-	            <LinearLayout
-		            android:id="@+id/box_old"
-		            android:layout_height="wrap_content"
-		            android:layout_width="fill_parent"
-		            android:orientation="vertical">
-		            <EditText
-			            android:id="@+id/edt_old"
-			            android:layout_height="45dp"
-			            android:layout_width="fill_parent"
-			            android:paddingLeft="10dp"
-			            android:paddingRight="10dp"
-			            android:singleLine="true"
-			            android:inputType="textPassword"
-			            android:background="@null"
-			            android:hint="@string/input_old_login_password"/>
-		            <ImageView
-			            style="@style/standard_list_divider"/>
-	            </LinearLayout>
-                <EditText
-                	android:id="@+id/edt_pwd"
-                	android:layout_height="45dp"
-                	android:layout_width="fill_parent"
-                	android:paddingLeft="10dp"
-                	android:paddingRight="10dp"
-                	android:singleLine="true"
-                	android:inputType="textPassword"
-                	android:background="@null"
-                	android:hint="@string/input_login_password"/>
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_large"
+                android:orientation="vertical" >
+                
+                
                 <ImageView
-	                style="@style/standard_list_divider"/>
+                    style="@style/bg_section_divider_line_dark"
+                    android:layout_marginTop="20dp" />
+                
+				<RelativeLayout 
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:background="@color/white">
+				<!-- 旧密码 -->    
+                <EditText
+                    android:id="@+id/edt_old"
+                    style="@style/inputbox_borderless"
+                    android:imeOptions="actionDone"
+                    android:password="true"
+                    android:hint="@string/login_oldPassword"/>
+
+                 
+                <ImageButton
+        			android:id="@+id/field_clear_old"
+        			android:layout_height="19dp"
+        			android:layout_width="19dp"
+        			android:layout_alignRight="@+id/edt_old"
+        			android:layout_marginRight="5dp"
+        			android:layout_centerVertical="true"
+        			android:background="@drawable/icon_delete"
+        			android:visibility="gone" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    style="@style/bg_section_divider_line_dark"/>
+                
+                <ImageView
+                    style="@style/bg_section_divider_line_dark"
+                    android:layout_marginTop="20dp" />
+                
+				<RelativeLayout 
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:background="@color/white" >
+				<!-- 新密码 -->    
+                <EditText
+                    android:id="@+id/edt_pwd"
+                    style="@style/inputbox_borderless"
+                    android:imeOptions="actionDone"
+                    android:password="true"
+                    android:hint="@string/login_newPassword"/>
+
+                <ImageButton
+        			android:id="@+id/field_clear_pwd"
+        			android:layout_height="19dp"
+        			android:layout_width="19dp"
+        			android:layout_alignRight="@+id/edt_pwd"
+        			android:layout_marginRight="5dp"
+        			android:layout_centerVertical="true"
+        			android:background="@drawable/icon_delete"
+        			android:visibility="gone" />
+
+                </RelativeLayout>
+                
+				<ImageView
+                    style="@style/bg_section_divider_line_light" />
+                
+				<RelativeLayout 
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:background="@color/white" >
+				
+				<!-- 确认新密码 -->
                 <EditText
                     android:id="@+id/edt_confirm"
-                    android:layout_height="45dp"
-                    android:layout_width="fill_parent"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:singleLine="true"
-                    android:inputType="textPassword"
-                    android:background="@null"
-                    android:hint="@string/input_login_password_again"/>
+                    style="@style/inputbox_borderless"
+                    android:imeOptions="actionDone"
+                    android:password="true"
+                    android:hint="@string/login_confirm_password" />
+				 
+                <ImageButton
+        			android:id="@+id/field_clear_confirm"
+        			android:layout_height="19dp"
+        			android:layout_width="19dp"
+        			android:layout_alignRight="@+id/edt_confirm"
+        			android:layout_marginRight="5dp"
+        			android:layout_centerVertical="true"
+        			android:background="@drawable/icon_delete"
+        			android:visibility="gone" />
+                
+                
+                </RelativeLayout>
+
+                <ImageView
+                    style="@style/bg_section_divider_line_dark" />
             </LinearLayout>
-            <TextView
+            
+            <LinearLayout 
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
+                android:gravity="center_vertical" >
+                <!-- 是否显示密码 -->
+               <ImageView
+                   android:id="@+id/imageview_show_password" 
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_marginLeft="10dp"
+                   android:layout_marginRight="10dp"
+                   android:src="@drawable/btn_show_password_on"
+                   android:visibility="gone" />
+               
+               <ImageView
+                   android:id="@+id/imageview_hint_password" 
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_marginLeft="10dp"
+                   android:layout_marginRight="10dp"
+                   android:src="@drawable/btn_show_password_off" />
+                   
+               <TextView 
+                   android:id="@+id/textView_isshow_password"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textColor="@color/black_30"
+                   android:text="显示密码 "/>
+            </LinearLayout>
+            
+            <!-- 验证两次输入的密码是否一致 -->
+            <TextView
+                android:id="@+id/textView_verification_newPassword" 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="10dp"
-                android:gravity="center_horizontal"
-                android:textColor="@color/text_gray3"
-                android:textSize="15sp"
-                android:text="@string/settingpassword_prompt_limit"/>
+                android:gravity="center_vertical"
+                android:textColor="@color/red"
+                android:text="两次输入不一致"
+                android:visibility="gone" />
+            
+			<!-- 提交重新设置后的密码 -->
+            <Button
+                android:id="@+id/btn_newPassWord_ok"
+                style="@style/button_blue"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_small"
+                android:text="@string/login_newPassWord_ok" />
+
+        	</LinearLayout>
+    	</RelativeLayout>
+    	
         </LinearLayout>
     </ScrollView>
     

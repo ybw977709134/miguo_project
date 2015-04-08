@@ -459,6 +459,8 @@
     <string name="login_otherwise">或者</string>
     <string name="login_input_email">邮箱</string>
     <string name="login_input_verification">验证码</string>
+    
+    <string name="login_oldPassword">旧密码</string>
     <string name="login_newPassword">新密码</string>
     <string name="login_confirm_password">确认新密码</string>
     <string name="login_others">使用其它方式登录</string>

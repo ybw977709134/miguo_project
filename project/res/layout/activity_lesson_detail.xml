@@ -92,6 +92,7 @@
         </LinearLayout>
     </LinearLayout>
 
+    <!--  
     <LinearLayout
         android:id="@+id/les_lay_attendance"
         android:layout_width="match_parent"
@@ -141,8 +142,8 @@
                     android:padding="5dp" />
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
+    </LinearLayout>-->
+<ImageView style="@style/standard_list_divider" />
     <LinearLayout
         android:id="@+id/les_lay_first"
         android:layout_width="match_parent"
@@ -157,7 +158,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="5dp"
-            android:text="@string/class_lesson_situation"
+            android:text="@string/class_lesson_situation_table"
             android:textColor="@color/black"
             android:textSize="18sp" />
 
@@ -193,7 +194,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="5dp"
-            android:text="@string/class_homework"
+            android:text="@string/class_set_homework"
             android:textColor="@color/black"
             android:textSize="18sp" />
 

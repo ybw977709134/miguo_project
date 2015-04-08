@@ -117,8 +117,8 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 //			lay_camera.setEnabled(false);
 //		}
 		if(isTeacher()){
-			q.find(R.id.text_first).text(getString(R.string.class_lesson_situation));
-			q.find(R.id.text_second).text(getString(R.string.class_homework));
+			q.find(R.id.text_first).text(getString(R.string.class_lesson_situation_table));
+			q.find(R.id.text_second).text(getString(R.string.class_set_homework));
 			q.find(R.id.text_third).text(getString(R.string.class_parent_suggestion));
 			q.find(R.id.text_classroom).text(getString(R.string.class_lesson_classroom));
 			q.find(R.id.text_first_r).text("");

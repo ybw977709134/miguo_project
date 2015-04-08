@@ -917,9 +917,9 @@
     <string name="class_set_homework">布置作业</string>
     <string name="class_parent_suggestion">家长意见</string>
     <string name="class_lesson_situation">评价学生</string>
-    <string name="class_lesson_classroom">上课教室</string>
-    <string name="class_lesson_camera">摄像头管理</string>
-    <string name="class_lesson_knowledge">知识点发布</string>
+    <string name="class_lesson_classroom">教室</string>
+    <string name="class_lesson_camera">摄像头</string>
+    <string name="class_lesson_knowledge">教学大纲</string>
     <string name="class_lesson_attendance">在线点名</string>
     <string name="class_lesson_homework">答疑</string>
     <string name="class_lesson_select_classroom">可选教室</string>

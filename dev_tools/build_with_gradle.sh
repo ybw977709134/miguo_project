@@ -41,17 +41,17 @@ then
     scp dev01:/var/www/newapi/download/ver.xml $old_ver_xml
 
     echo '<?xml version="1.0" encoding="UTF-8"?>
-    <Smartphone xmlns="https://www.onemeter.co">
-      <header>
-        <err_no>0</err_no>
-        <s_version>
-          <server_version>1000</server_version>
-        </s_version>
-        <user_id>-1</user_id>
-      </header>
-      <body>
-        <check_for_updates>
-          <android>' > $ver_xml
+<Smartphone xmlns="https://www.onemeter.co">
+  <header>
+    <err_no>0</err_no>
+    <s_version>
+      <server_version>1000</server_version>
+    </s_version>
+    <user_id>-1</user_id>
+  </header>
+  <body>
+    <check_for_updates>
+      <android>' > $ver_xml
 
     echo "        <ver_code>$curr_ver_code</ver_code>" >> $ver_xml
     echo "        <ver_name>$curr_ver_name</ver_name>" >> $ver_xml
@@ -66,9 +66,9 @@ then
 
     echo '      </android>' >> $ver_xml
     sed -e '/<ios>/,/<\/ios>/!d' $old_ver_xml >> $ver_xml
-    echo '     </check_for_updates>
-      </body>
-    </Smartphone>' >> $ver_xml
+    echo '  </check_for_updates>
+  </body>
+</Smartphone>' >> $ver_xml
 
     scp $dest dev01:/var/www/newapi/download/
     scp $ver_xml dev01:/var/www/newapi/download/ver.xml

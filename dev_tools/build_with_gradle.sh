@@ -36,6 +36,10 @@ gradle clean \
 if [ $? -eq 0 ] && [ $omenv == 'dev01' ]
 then
     ver_xml=`mktemp`
+    old_ver_xml=`mktemp`
+
+    scp dev01:/var/www/newapi/download/ver.xml $old_ver_xml
+
     echo '<?xml version="1.0" encoding="UTF-8"?>
     <Smartphone xmlns="https://www.onemeter.co">
       <header>
@@ -60,20 +64,14 @@ then
 
     echo "        </change_log>" >> $ver_xml
 
-    echo '      </android>
-          <ios>
-            <ver_code>200</ver_code>
-            <ver_name>2.0.0.1</ver_name>
-            <md5sum>b037bfb6e71b5908a18ad24ea92e17ff</md5sum>
-              <change_log>
-                <li>测试一下更新</li>
-            </change_log>
-          </ios>
-        </check_for_updates>
+    echo '      </android>' >> $ver_xml
+    sed -e '/<ios>/,/<\/ios>/!d' $old_ver_xml >> $ver_xml
+    echo '     </check_for_updates>
       </body>
     </Smartphone>' >> $ver_xml
 
     scp $dest dev01:/var/www/newapi/download/
     scp $ver_xml dev01:/var/www/newapi/download/ver.xml
+    rm -f $old_ver_xml
     rm -f $ver_xml
 fi

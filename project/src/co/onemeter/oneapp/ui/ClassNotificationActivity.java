@@ -24,16 +24,21 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
@@ -42,7 +47,7 @@ import co.onemeter.utils.AsyncTaskExecutor;
  * 班级通知页面。
  * Created by zz on 03/31/2015.
  */
-public class ClassNotificationActivity extends Activity implements OnClickListener,OnItemLongClickListener, OnRefreshListener<ListView>, OnLastItemVisibleListener,MenuBar.OnDropdownMenuItemClickListener{
+public class ClassNotificationActivity extends Activity implements OnClickListener,OnItemLongClickListener, OnRefreshListener<ListView>, OnLastItemVisibleListener,MenuBar.OnDropdownMenuItemClickListener, OnScrollListener{
 	private ImageButton btn_notice_back;
 	private ImageButton btn_add;
 //	private ListView listView_notice_show;
@@ -58,6 +63,8 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 	private String tag;
 	private String classDetail_classId;
 	private int count = 10;
+	private long lastTimeStamp = 0;
+	private Database dbHelper;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +72,14 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 		setContentView(R.layout.activity_class_notification);
 		
 		initView();
-		getClassBulletin(classId);
+		bulletins.clear();
+		getClassBulletin(lastTimeStamp);
 		getSchoolClassInfo();
 
 	}
 	
 	private void initView(){
+		dbHelper = new Database(ClassNotificationActivity.this);
 		tag = getIntent().getStringExtra(ClassDetailActivity.EXTRA_CLASS_DETAIL);
 		classDetail_classId = getIntent().getStringExtra("classId");
 		btn_notice_back = (ImageButton) findViewById(R.id.btn_notice_back);
@@ -82,7 +91,8 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 		btn_add.setOnClickListener(this);
 		
 		bulletins = new LinkedList<Bulletins>();
-		
+		adapter = new BulletinAdapter(ClassNotificationActivity.this,bulletins);
+		lvEvent.setAdapter(adapter);
 //		classId = "1678ff8f-2a41-438a-bb22-4f55530857f1";
 		if(classDetail_classId != null){
 			classId = classDetail_classId;
@@ -103,24 +113,23 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
         
 		pullListView.setOnRefreshListener(this);
         pullListView.setOnLastItemVisibleListener(this);
+        pullListView.setOnScrollListener(this);
         classrooms = new LinkedList<GroupChatRoom>();
         filterBar.setStringArrayData(className);
 	}
-	private void getClassBulletin(final String classId){
+	private void getClassBulletin(final long time){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				bulletins.clear();
+//				bulletins.clear();
 				WowTalkWebServerIF web = WowTalkWebServerIF.getInstance(ClassNotificationActivity.this);
-				bulletins  = web.fGetClassBulletin(classId,0,count);
+				bulletins.addAll(web.fGetClassBulletin(classId,time,count));
 				return null;
 			}
 			
 			@Override
-			protected void onPostExecute(Integer result) {
-				adapter = new BulletinAdapter(ClassNotificationActivity.this,bulletins);
-				lvEvent.setAdapter(adapter);
+			protected void onPostExecute(Integer result) {			
 				adapter.notifyDataSetChanged();
 				pullListView.onRefreshComplete();
 			}
@@ -140,7 +149,7 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 			@Override
 			protected void onPostExecute(Integer result) {
 				bulletins.clear();
-				getClassBulletin(classId);			
+				getClassBulletin(0);			
 			}
 
 		});
@@ -191,7 +200,7 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode == Activity.RESULT_OK){
 			if(requestCode == 1001){
-				getClassBulletin(classId);
+				getClassBulletin(lastTimeStamp);
 			}
 		}
 	}
@@ -325,14 +334,14 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 	}
 	@Override
 	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-		getClassBulletin(classId);
+		bulletins.clear();
+		getClassBulletin(0);
 		
 	}
 
 	@Override
-	public void onLastItemVisible() {
-//		count += 10;
-//		getClassBulletin(classId);
+	public void onLastItemVisible() {	
+		
 	}
 
 	@Override
@@ -348,7 +357,28 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 		}else{
 			classId = classrooms.get(itemIdx-1).groupID;
 		}
-		getClassBulletin(classId);
+		bulletins.clear();
+		getClassBulletin(0);
+		
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		if(scrollState == OnScrollListener.SCROLL_STATE_IDLE){
+			if(view.getLastVisiblePosition() == view.getCount() - 1){
+				String momentId = bulletins.get(bulletins.size() - 1).moment_id;
+				lastTimeStamp = dbHelper.fetchMoment(momentId).timestamp;
+				getClassBulletin(lastTimeStamp);
+				
+			}
+		}
+		
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
 		
 	}
 

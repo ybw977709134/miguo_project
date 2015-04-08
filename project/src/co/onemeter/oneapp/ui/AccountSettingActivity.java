@@ -252,6 +252,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 		    }
 			
 			break;
+			
 		default:
 			mMsgBox.toast(R.string.not_implemented);
 			break;

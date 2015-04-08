@@ -19,17 +19,17 @@
             android:layout_width="20dp"
             android:layout_alignParentLeft="true"
             android:background="@null"
-            android:src="@drawable/nav_back_selector"/>
+            android:src="@drawable/icon_back_selector"/>
         
         <!-- 绑定邮箱页表头的文本 -->
-        <TextView 
+        <co.onemeter.oneapp.ui.widget.PressedTextView 
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:id="@+id/textView_bindEmail_back"
             android:layout_toRightOf="@id/title_back"
             android:layout_centerVertical="true"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:clickable="true"
             android:onClick="clickButton"
             android:text="返回"/>
@@ -46,7 +46,7 @@
         
 
         <!-- 取消 -->
-        <TextView
+        <co.onemeter.oneapp.ui.widget.PressedTextView
             android:id="@+id/textView_findPassword_cancel"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -55,7 +55,7 @@
             android:layout_marginRight="10dp"
             android:singleLine="true"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:clickable="true"
             android:onClick="clickButton"
             android:text="取消"/>

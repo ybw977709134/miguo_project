@@ -1063,6 +1063,62 @@ public class LessonWebServerIF {
 		return errno;
 	}
 
+    /**
+     * 获取课程的上课签到情况
+      * @param lessonId
+     * @return List
+     */
+    public List<LessonPerformance> getLessonRollCalls(int lessonId){
+    /*
+    action=get_lesson_performance&uid=823e3319-1f88-4d8b-9c20-2962e12f05b3&password=db84a80e08be1c8ba1e224289348181e&lesson_id=3&property_id=10
+     */
+        String uid = mPrefUtil.getUid();
+        String password = mPrefUtil.getPassword();
+        if (uid == null || password == null)
+            return null;
+
+        if(lessonId <= 0)
+            return null;
+
+        List<LessonPerformance> performances = new ArrayList<>();
+        final String action = "get_lesson_performance";
+        String postStr = "action=" + action + "&uid="
+                + Utils.urlencodeUtf8(uid) + "&password="
+                + Utils.urlencodeUtf8(password) + "&lesson_id=" + lessonId
+                + "property_id=10";
+
+        Connect2 connect2 = new Connect2();
+        Element root = connect2.Post(postStr);
+        if (root != null) {
+            NodeList errorList = root.getElementsByTagName("err_no");
+            Element errorElement = (Element) errorList.item(0);
+            String errorStr = errorElement.getFirstChild().getNodeValue();
+
+            if (errorStr.equals("0")) {
+                Element resultElement = Utils.getFirstElementByTagName(root, action);
+                if (resultElement != null) {
+                    Database db = new Database(mContext);
+                    NodeList performanceNodes = resultElement
+                            .getElementsByTagName("lesson_performance");
+                    for (int i = 0; i < performanceNodes.getLength(); ++i) {
+                        Node performanceNode = performanceNodes.item(i);
+                        if (performanceNode instanceof Element) {
+                            LessonPerformance performance = XmlHelper
+                                    .parseLessonPerformance((Element) performanceNode);
+                            if (performance != null) {
+                                performances.add(performance);
+                                db.storeLessonPerformance(performance);
+                            }
+                        }
+                    }
+                }
+            } else {
+                return null;
+            }
+        }
+        return performances;
+    }
+
 	public int getLessonPerformance(int lesson_id, String student_id) {
 		String uid = mPrefUtil.getUid();
 		String password = mPrefUtil.getPassword();

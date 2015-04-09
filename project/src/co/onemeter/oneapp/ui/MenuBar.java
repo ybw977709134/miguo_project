@@ -38,6 +38,8 @@ public abstract class MenuBar {
     OnDropdownMenuItemClickListener onFilterChangedListener;
     private int backgroundColor = Color.WHITE;
 
+    private static String sText;
+
     /**
      * @param dialogBackground 作为对话框下方的屏幕背景，一般为半透明的黑色。
      */
@@ -60,6 +62,9 @@ public abstract class MenuBar {
         for (int r : menuItemResIds) {
             q.find(r).clicked(clickListener);
         }
+        if(menuItemResIds.length == 1){
+            sText = q.find(menuItemResIds[0]).getText().toString();
+        }
     }
 
     protected abstract String[] getSubItems(int itemId);
@@ -81,6 +86,9 @@ public abstract class MenuBar {
     private void setCollapsedButtonSyle(TextView button) {
         button.setTextColor(context.getResources().getColor(R.color.text_gray32));
         setRightDrawable(button, R.drawable.icon_events_category_triangle_grey);
+        if(menuItemResIds.length == 1){
+            button.setText(sText);
+        }
     }
 
     private void setExpandedButtonSyle(TextView button) {
@@ -161,6 +169,7 @@ public abstract class MenuBar {
                                  *  we can use this to manually trigger onItemClick
                                  *  since it doesn't firing in popupWindow.setFocusable(false)
                                  */
+                                sText = tv.getText().toString();
                                 onItemClickListener.onItemClick(lv, v, position, getItemId(position));
 
                             }

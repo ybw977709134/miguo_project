@@ -1,0 +1,92 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:alpha="0.5" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="#ffffff" >
+        
+        <LinearLayout 
+            android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:orientation="vertical" >
+        	
+            <TextView 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="完成"/>
+            
+            <TextView 
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#000000"/>
+        	
+           <RelativeLayout 
+               android:layout_width="wrap_content"
+        	   android:layout_height="wrap_content"
+        	   android:layout_centerInParent="true">
+        		
+          <co.onemeter.oneapp.ui.widget.PickerView
+            android:id="@+id/year_pv"
+            android:layout_width="60dp"
+            android:layout_height="120dp" />
+
+        <TextView
+            android:id="@+id/year_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/year_pv"
+            android:text="年"
+            android:textColor="#ffaa33"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <co.onemeter.oneapp.ui.widget.PickerView
+            android:id="@+id/month_pv"
+            android:layout_width="60dp"
+            android:layout_height="120dp"
+            android:layout_toRightOf="@id/year_tv" />
+
+        <TextView
+            android:id="@+id/month_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/month_pv"
+            android:text="月"
+            android:textColor="#ffaa33"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <co.onemeter.oneapp.ui.widget.PickerView
+            android:id="@+id/day_pv"
+            android:layout_width="60dp"
+            android:layout_height="120dp"
+            android:layout_toRightOf="@id/month_tv" />
+
+        <TextView
+            android:id="@+id/day_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/day_pv"
+            android:text="日"
+            android:textColor="#ffaa33"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+               
+               
+           </RelativeLayout>
+
+        </LinearLayout>
+        
+        
+    </RelativeLayout>
+
+</RelativeLayout>

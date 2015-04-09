@@ -7,8 +7,10 @@ import java.util.List;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Bulletins;
 import org.wowtalk.api.Database;
+import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.GroupMember;
+import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageDialog;
@@ -65,6 +67,7 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 	private int count = 10;
 	private long lastTimeStamp = 0;
 	private Database dbHelper;
+	private String onrefresh_classId = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +76,7 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 		
 		initView();
 		bulletins.clear();
-		getClassBulletin(lastTimeStamp);
+		getClassBulletin(classId,lastTimeStamp);
 		getSchoolClassInfo();
 
 	}
@@ -117,7 +120,7 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
         classrooms = new LinkedList<GroupChatRoom>();
         filterBar.setStringArrayData(className);
 	}
-	private void getClassBulletin(final long time){
+	private void getClassBulletin(final String classId,final long time){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
@@ -148,8 +151,11 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 			
 			@Override
 			protected void onPostExecute(Integer result) {
+				if(classDetail_classId != null){
+					classId = classDetail_classId;
+				}
 				bulletins.clear();
-				getClassBulletin(0);			
+				getClassBulletin(classId,0);			
 			}
 
 		});
@@ -158,10 +164,15 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
-			protected Integer doInBackground(Void... params) {
-				classrooms.clear();
-				classrooms.addAll(WowTalkWebServerIF.getInstance(ClassNotificationActivity.this).getSchoolClassRooms(null));
-				return null;
+			protected Integer doInBackground(Void... params) {			
+				try {
+					classrooms.clear();
+					classrooms.addAll(WowTalkWebServerIF.getInstance(ClassNotificationActivity.this).getSchoolClassRooms(null));
+					return null;
+				}
+				catch (Exception e) {
+					return null;                                                                 
+				}
 			}
 			
 			@Override
@@ -200,7 +211,11 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode == Activity.RESULT_OK){
 			if(requestCode == 1001){
-				getClassBulletin(lastTimeStamp);
+				if(classDetail_classId != null){
+					classId = classDetail_classId;
+				}
+				bulletins.clear();
+				getClassBulletin(classId,lastTimeStamp);
 			}
 		}
 	}
@@ -294,8 +309,12 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
             dialog.setOnLeftClickListener("确定", new MessageDialog.MessageDialogClickListener() {
                 @Override
                 public void onclick(MessageDialog dialog) {
+                	if(classDetail_classId != null){
+                		delClassBulletin(position-1);
+                	}else{
+                		delClassBulletin(position-2);
+                	}
                     
-                    delClassBulletin(position-2);
                     dialog.dismiss();
                 }
             }
@@ -334,8 +353,11 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 	}
 	@Override
 	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+		if(classDetail_classId != null){
+			onrefresh_classId = classDetail_classId;
+		}
 		bulletins.clear();
-		getClassBulletin(0);
+		getClassBulletin(onrefresh_classId,0);
 		
 	}
 
@@ -358,7 +380,8 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 			classId = classrooms.get(itemIdx-1).groupID;
 		}
 		bulletins.clear();
-		getClassBulletin(0);
+		getClassBulletin(classId,0);
+		onrefresh_classId = classId;
 		
 	}
 
@@ -368,7 +391,7 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 			if(view.getLastVisiblePosition() == view.getCount() - 1){
 				String momentId = bulletins.get(bulletins.size() - 1).moment_id;
 				lastTimeStamp = dbHelper.fetchMoment(momentId).timestamp;
-				getClassBulletin(lastTimeStamp);
+				getClassBulletin(onrefresh_classId,lastTimeStamp);
 				
 			}
 		}

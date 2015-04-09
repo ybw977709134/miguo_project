@@ -18,6 +18,7 @@ import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
 import co.onemeter.oneapp.utils.LocationHelper;
+import co.onemeter.oneapp.utils.MomentDateShow;
 import co.onemeter.oneapp.utils.MyUrlSpanHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
 
@@ -848,12 +849,14 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         }
         txtName.setText(TextUtils.isEmpty(moment.owner.alias) ? moment.owner.nickName : moment.owner.alias);
         long time = Long.valueOf(moment.timestamp * 1000);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-        String strDate = format.format(time);
-        format = new SimpleDateFormat("HH:mm");
-        String strTime = format.format(time);
-        txtDate.setText(strDate);
-        txtTime.setText(strTime); 
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+//        String strDate = format.format(time);
+//        format = new SimpleDateFormat("HH:mm");
+//        String strTime = format.format(time);       
+//        txtDate.setText(strDate);
+//        txtTime.setText(strTime); 
+        
+        txtDate.setText(MomentDateShow.showMomentDate(time));
 
         PhotoDisplayHelper.displayPhoto(this, imgPhoto, R.drawable.default_avatar_90, moment.owner, true);
         if (moment.latitude == 0 && moment.longitude == 0) { // XXX compare double with int?!

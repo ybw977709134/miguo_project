@@ -19,6 +19,7 @@ import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.*;
 import co.onemeter.oneapp.utils.LocationHelper;
+import co.onemeter.oneapp.utils.MomentDateShow;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import org.wowtalk.api.*;
@@ -1298,9 +1299,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     }
 
     private void setTimeForAll(TextView txtTime, long time) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-        String strTime = format.format(time);
-        txtTime.setText(strTime);
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+//        String strTime = format.format(time);
+//        txtTime.setText(strTime);
+    	txtTime.setText(MomentDateShow.showMomentDate(time));
     }
 
 //    private void setTimeForOne(TextView txtDate, TextView txtTime, long time) {

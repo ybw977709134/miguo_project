@@ -725,7 +725,8 @@
         </activity>
         
         <activity
-            android:name=".ui.DatePickerActivity"
+            android:name=".ui.datepicker.DatePickerActivity"
+            android:theme="@style/MyActivityDialogStyle"
             android:screenOrientation="portrait">
         </activity>
     </application>

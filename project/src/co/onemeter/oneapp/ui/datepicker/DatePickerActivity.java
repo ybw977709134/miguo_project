@@ -9,7 +9,11 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.widget.PickerView;
 import co.onemeter.oneapp.ui.widget.PickerView.onSelectListener;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class DatePickerActivity extends Activity{
@@ -22,15 +26,38 @@ public class DatePickerActivity extends Activity{
 	List<String> months = new ArrayList<String>();
 	List<String> days = new ArrayList<String>();
 	
-	private int year;
-	private int month;
-	private int day;
+	private int year = 0000;
+	private int month = 00;
+	private int day = 00;
+	
+	private TextView textView_date_picker_ok;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_date_picker);
+		
+		textView_date_picker_ok = (TextView) findViewById(R.id.textView_date_picker_ok);
+		textView_date_picker_ok.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				Bundle bundle = new Bundle();
+				
+				bundle.putInt("year", year);
+				bundle.putInt("month", month);
+				bundle.putInt("day", day);
+				intent.putExtras(bundle);
+				
+				setResult(RESULT_OK, intent);
+				
+				DatePickerActivity.this.finish();
+				
+			}
+		});
+		
 		year_pv = (PickerView) findViewById(R.id.year_pv);//年
 		month_pv = (PickerView) findViewById(R.id.month_pv);
 		day_pv = (PickerView) findViewById(R.id.day_pv);
@@ -138,7 +165,6 @@ public class DatePickerActivity extends Activity{
 					}
 				}
 				day_pv.setData(days);
-//				day_pv.setSelected(0);
 			}
 		});
 		
@@ -159,8 +185,27 @@ public class DatePickerActivity extends Activity{
 		
 		
 		//初始化年月日的值，默认为总链表长度2分之1位置的值
-		year_pv.setSelected(100);
-		month_pv.setSelected(0);
-		day_pv.setSelected(0);
+		
+		
+		Bundle bundle = getIntent().getExtras();
+		
+		if (bundle == null) {
+			year_pv.setSelected(100);
+			month_pv.setSelected(0);
+			day_pv.setSelected(0);
+		} else {
+
+			year = bundle.getInt("year");
+			month = bundle.getInt("month")-1;
+			day = bundle.getInt("day");
+			
+			year_pv.setSelected(year-1900);
+			month_pv.setSelected(month);
+			day_pv.setSelected(day-1);
+			
+			
+			
+		}
+		
 	}
 }

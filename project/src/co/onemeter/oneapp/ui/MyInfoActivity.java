@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import android.widget.ImageView.ScaleType;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.ui.datepicker.DatePickerActivity;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.umeng.analytics.MobclickAgent;
@@ -63,6 +64,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 	public static final int REQ_INPUT_MOBILE = 9;
 	public static final int REQ_INPUT_EMAIL = 10;
 	public static final int REQ_INPUT_BRANCH_STORE = 11;
+	public static final int REQ_INPUT_BIRTHDAY = 12;//修改生日
 
     public final static int PHOTO_THUMBNAIL_WIDTH = 200;
     public final static int PHOTO_THUMBNAIL_HEIGHT = 200;
@@ -79,10 +81,16 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
     private String mDeptName;
 
 	final Calendar calendar = Calendar.getInstance();
-	private int mYear = calendar.get(Calendar.YEAR);
-	private int mMonth = calendar.get(Calendar.MONTH);
-	private int mDay = calendar.get(Calendar.DAY_OF_MONTH);
+//	private int mYear = calendar.get(Calendar.YEAR);
+//	private int mMonth = calendar.get(Calendar.MONTH);
+//	private int mDay = calendar.get(Calendar.DAY_OF_MONTH);
+	
+	private int mYear;
+	private int mMonth;
+	private int mDay;
+	
 	private Date birthdayDate;
+	
 	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
 		@SuppressWarnings("deprecation")
 		@Override
@@ -221,9 +229,28 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
             	startActivityForResult(intentSex, REQ_INPUT_SEX);
                 break;
             case R.id.person_age:
-            {
-                showDialog(1);
-            }
+//            {
+//                showDialog(1);
+//            }
+            Intent intentBirthday = new Intent(MyInfoActivity.this,DatePickerActivity.class);
+            
+            String bs = mPrefUtil.getMyBirthday();
+			if(!Utils.isNullOrEmpty(bs)) {//"0000-00-00"
+				if (!bs.equals("0000-00-00")) {//如果未设定生日日期显示系统的默认时间
+					mYear = Integer.valueOf(bs.substring(0, 4));
+					mMonth = Integer.valueOf(bs.substring(5, 7));
+					mDay = Integer.valueOf(bs.substring(8));
+					Bundle bundle = new Bundle();
+					bundle.putInt("year", mYear);
+					bundle.putInt("month", mMonth);
+					bundle.putInt("day", mDay);
+					intentBirthday.putExtras(bundle);	
+				} 
+			}
+			Log.i("--执行ActivityForResult");
+            
+        	startActivityForResult(intentBirthday, REQ_INPUT_BIRTHDAY); 
+            
             break;
             case R.id.boxArea:
             {
@@ -333,7 +360,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 			String bs = mPrefUtil.getMyBirthday();
 			if(!Utils.isNullOrEmpty(bs)) {//"0000-00-00"
 				if (bs.equals("0000-00-00")) {//如果未设定生日日期显示系统的默认时间
-					SimpleDateFormat   formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd");     
+//					SimpleDateFormat   formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd");     
 //					 Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间     
 //					String   str   =   formatter.format(curDate); 
 //					mYear = Integer.valueOf(str.substring(0, 4));
@@ -490,6 +517,30 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
 
             	break;
             	
+            	
+            case REQ_INPUT_BIRTHDAY://生日设定的返回值
+            	
+            	Bundle bundle = data.getExtras();
+            	
+            	if (bundle != null) {
+            		mYear = bundle.getInt("year");
+        			mMonth = bundle.getInt("month");
+        			mDay = bundle.getInt("day");
+        			
+
+        			birthdayDate = new Date();
+        			
+        			birthdayDate.setYear(mYear-1900);
+            		birthdayDate.setMonth(mMonth);
+            		birthdayDate.setDate(mDay);
+        			
+        			Log.i("--执行onactivity");
+
+        			updateMyBirthday(birthdayDate);
+            	}
+            	
+            	break;
+            	
             case REQ_INPUT_AREA:
                 updateMyArea(data.getExtras().getString("text"));
                 break;
@@ -605,6 +656,7 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
             @Override
             protected void onPostExecute(Integer result) {
                 displayPeronalInfo();
+                Log.i("--执行updateMyBirthday");
                 if (result == ErrorCode.OK) {
                     mProfileUpdated = true;
                 }

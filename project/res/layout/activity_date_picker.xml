@@ -1,24 +1,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#000000"
-    android:alpha="0.5" >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:background="@drawable/timeline_card_bg" >
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="#ffffff" >
+
         
         <LinearLayout 
             android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:orientation="vertical" >
         	
-            <TextView 
+            <co.onemeter.oneapp.ui.widget.PressedTextView 
+                android:id="@+id/textView_date_picker_ok"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right"
+                android:clickable="true"
                 android:text="完成"/>
             
             <TextView 
@@ -86,7 +84,5 @@
 
         </LinearLayout>
         
-        
-    </RelativeLayout>
 
 </RelativeLayout>

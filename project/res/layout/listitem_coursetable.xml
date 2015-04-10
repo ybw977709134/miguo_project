@@ -46,7 +46,7 @@
         <TextView
             android:id="@+id/coursetable_item_islive"
             android:layout_width="0dp"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:layout_height="wrap_content"
             android:gravity="center|right"
             android:textColor="@color/green"

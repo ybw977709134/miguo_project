@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v4.widget.DrawerLayout.LayoutParams;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -493,7 +494,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			currentTime = System.currentTimeMillis()/1000;
 //			String time = tvTime.getText().toString().substring(5);
 //			String length = tvLength.getText().toString().substring(5);	
-			if(lessons != null){
+			if(lessons == null){
 				MessageDialog alertDialog = new MessageDialog(ClassDetailActivity.this);
     			alertDialog.setTitle("提示");
                 alertDialog.setIsDouleBtn(false);
@@ -501,7 +502,22 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
     			alertDialog.setOnLeftClickListener("确定", null);
     			alertDialog.show();
 			}else{
-				if(currentTime < lessons.get(0).start_date){
+				Lesson lesson_Live = null;
+				for(Lesson lesson : lessons){
+					if(currentTime <lesson.end_date && currentTime >lesson.start_date){
+						lesson_Live = lesson;
+					}
+				}
+				if(lesson_Live == null){
+					MessageDialog alertDialog = new MessageDialog(ClassDetailActivity.this);
+	    			alertDialog.setTitle("提示");
+	                alertDialog.setIsDouleBtn(false);
+	    			alertDialog.setMessage("现在没有课程正在直播");
+	    			alertDialog.setOnLeftClickListener("确定", null);
+	    			alertDialog.show();
+	    			return ;
+				}
+				if(currentTime < lesson_Live.start_date){
 					MessageDialog alertDialog = new MessageDialog(ClassDetailActivity.this);
 	    			alertDialog.setTitle("提示");
 	                alertDialog.setIsDouleBtn(false);

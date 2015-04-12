@@ -160,6 +160,7 @@ public class SelectClassActivity extends Activity implements OnClickListener, On
 		Intent data = new Intent();
 		data.putExtra("class_id", classrooms.get(position).getGUID());
 		data.putExtra("class_name", classrooms.get(position).groupNameOriginal);
+		data.putExtra("school_id", classrooms.get(position).schoolID);
 		setResult(RESULT_OK, data);
 		
 		instance.finish();

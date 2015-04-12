@@ -185,6 +185,13 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		query.find(R.id.btn_photo_answering).clicked(this);
 		query.find(R.id.btn_homework_online).clicked(this);
 		
+		query.find(R.id.tv_class_notice).clicked(this);
+		query.find(R.id.tv_tea_stu_list).clicked(this);
+		query.find(R.id.tv_holiday_apply).clicked(this);
+		query.find(R.id.tv_apply_lesson).clicked(this);
+		query.find(R.id.tv_photo_answering).clicked(this);
+		query.find(R.id.tv_homework_online).clicked(this);
+		
 		lvLessonTable = (ListView) findViewById(R.id.lvLessonTable);
 		lvLessonTable.setAdapter(courseAdapter);
 		lvLessonTable.setOnItemClickListener(this);
@@ -566,17 +573,19 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			startActivityForResult(i, 1001);
 			break;
 		case R.id.btn_tea_stu_list:
+		case R.id.tv_tea_stu_list:
 			Intent data = new Intent(this,ClassMembersActivity.class);
 			data.putExtra("schoolId", schoolId);
 			data.putExtra("classId", classId);
 			startActivity(data);
 			break;
 			
-		case R.id.btn_holiday_apply:
-			
+		case R.id.btn_holiday_apply:	
+		case R.id.tv_holiday_apply:
 			Intent applyIntent = null;
 			if(Utils.isAccoTeacher(this)){//老师签到
 				applyIntent = new Intent(this, TeacherSignActivity.class);
+				applyIntent.putExtra("schoolId", schoolId);
                 applyIntent.putExtra("classId",classId);
 	        } else {//学生请假
 	        	applyIntent = new Intent(this, StudentAbsenceActivity.class);
@@ -587,12 +596,14 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			break;
 			
 		case R.id.btn_class_notice:
+		case R.id.tv_class_notice:
 			Intent result = new Intent(this, ClassNotificationActivity.class);
 			result.putExtra(EXTRA_CLASS_DETAIL,"classDetail");
 			result.putExtra("classId",classId);
 			startActivity(result);
 			break;
         case R.id.btn_photo_answering:
+        case R.id.tv_photo_answering:
             final BottomButtonBoard board = new BottomButtonBoard(this,v);
             board.add(getString(R.string.image_take_photo),BottomButtonBoard.BUTTON_BLUE, new View.OnClickListener() {
                 @Override
@@ -612,6 +623,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
             board.show();
             break;
         case R.id.btn_homework_online:
+        case R.id.tv_homework_online:
             MessageDialog dialog = new MessageDialog(this);
             dialog.setIsDouleBtn(false);
             dialog.setTitle("");
@@ -625,6 +637,20 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
             });
             dialog.show();
             break;
+        case R.id.btn_apply_lesson:
+        case R.id.tv_apply_lesson:
+        	MessageDialog dialog_apply_lesson = new MessageDialog(this);
+        	dialog_apply_lesson.setIsDouleBtn(false);
+        	dialog_apply_lesson.setTitle("");
+        	dialog_apply_lesson.setMessage("该功能尚未实现");
+        	dialog_apply_lesson.setOnLeftClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                @Override
+                public void onclick(MessageDialog dialog) {
+                    dialog.dismiss();
+                }
+            });
+        	dialog_apply_lesson.show();
+        	break;
 		default:
 			break;
 		}

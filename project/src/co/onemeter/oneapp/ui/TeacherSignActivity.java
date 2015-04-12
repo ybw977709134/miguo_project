@@ -37,7 +37,8 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 		
 
 		private String classID = null;
-    private String classId_intent = null;
+        private String classId_intent = null;
+        private String schoolID = null;
 		private int lessonID = 0;	
 		
 		public final static int REQ_SIGN_CLASS = 1;//班级
@@ -49,6 +50,7 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 		super.onCreate(savedInstanceState);	
 		setContentView(R.layout.activity_teacher_sign);
         classId_intent = getIntent().getStringExtra("classId");
+        schoolID = getIntent().getStringExtra("schoolId");
 		initView();
 	}
 	
@@ -100,6 +102,7 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
                 if(lessonID != 0){
                     Intent intentSign = new Intent(this,RollCallOnlineActivity.class);
                     intentSign.putExtra("classId", classId_intent);
+                    intentSign.putExtra("schoolId", schoolID); 
                     intentSign.putExtra("lessonId", lessonID);
                     intentSign.putExtra("lesson_name", textView_lesson_name.getText().toString());
                     startActivity(intentSign);
@@ -115,6 +118,7 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 				Intent intentSign = new Intent(this,RollCallOnlineActivity.class);
 				intentSign.putExtra("classId", classID);
 				intentSign.putExtra("lessonId", lessonID);
+                intentSign.putExtra("schoolId", schoolID);  
 				intentSign.putExtra("lesson_name", textView_lesson_name.getText().toString());
 				startActivity(intentSign);
 			}
@@ -156,6 +160,7 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 			if (requestCode == REQ_SIGN_CLASS) {//班级
 				if (data != null) {
 					classID = data.getStringExtra("class_id");
+					schoolID = data.getStringExtra("school_id");
 					textView_class_name.setText(data.getStringExtra("class_name"));
                     lessonID = 0;
                     textView_lesson_name.setText("");

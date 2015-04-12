@@ -1,10 +1,12 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.LessonPerformance;
 import org.wowtalk.api.LessonWebServerIF;
@@ -38,7 +41,7 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
     private String lesson_name;
     private int lessonId;
     private String classId;
-
+    private String schoolId;
     private ListView listView;
 
     private List<Map<String, Object>> classstudents = new ArrayList<Map<String,Object>>();
@@ -56,6 +59,7 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
         Intent data = getIntent();
         classId = data.getStringExtra("classId");
         lessonId = data.getIntExtra("lessonId", -1);
+        schoolId = data.getStringExtra("schoolId");
         lesson_name = data.getStringExtra("lesson_name");
 
         msgbox = new MessageBox(RollCallOnlineActivity.this);
@@ -106,7 +110,7 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                     }
                     sortPerformancesFromServer();//排序
                     msgbox.dismissWait();
-                    listView.setAdapter(new StuRollCallAdapter(classstudents));
+                    listView.setAdapter(new StuRollCallAdapter(RollCallOnlineActivity.this,classstudents));
 
                     //ScrollView嵌套ListView需要计算listview内容高度
                     ListViewUtils.setListViewHeightBasedOnChildren(listView);
@@ -244,10 +248,12 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
         private LayoutInflater inflater;
         private final int performence_property_id = 10;
         private List<Map<String, Object>> classstudents;
+        private Context mContext;
 
-        public StuRollCallAdapter(List<Map<String, Object>> classstudents){
+        public StuRollCallAdapter(Context mContext ,List<Map<String, Object>> classstudents){
             inflater = LayoutInflater.from(RollCallOnlineActivity.this);
             this.classstudents = classstudents;
+            this.mContext = mContext;
         }
 
         @Override
@@ -284,10 +290,12 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            holder.tv_name.setText(TextUtils.isEmpty(classstudents.get(position).get("student_alias").toString()) 
-            		? classstudents.get(position).get("student_username").toString()
-            		: classstudents.get(position).get("student_alias").toString());
-
+//            holder.tv_name.setText(TextUtils.isEmpty(classstudents.get(position).get("student_alias").toString()) 
+//            		? classstudents.get(position).get("student_username").toString()
+//            		: classstudents.get(position).get("student_alias").toString());
+            Database dbHelper=new Database(mContext);
+            String student_alias = dbHelper.fetchStudentAlias(schoolId, classstudents.get(position).get("student_id").toString());
+            holder.tv_name.setText(student_alias);
             //performancesFromServer服务器有数据则显示，并return
             if(!performancesFromServer.isEmpty()){
                 if(performancesFromServer.size() > position){

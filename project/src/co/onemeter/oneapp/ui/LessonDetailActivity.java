@@ -9,6 +9,7 @@ import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.Lesson;
 import org.wowtalk.api.LessonDetail;
+import org.wowtalk.api.LessonHomework;
 import org.wowtalk.api.LessonParentFeedback;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.Moment;
@@ -53,9 +54,11 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 	
 	private TextView text_classroom_name;
 	private TextView text_camera_num;
+	private TextView text_issecond;
 	
 	private List<LessonDetail> lessonDetails;
 	private List<Camera> lessoonDetails_camera;
+	private List<LessonHomework> lessoonDetails_homework;
 	
 	private long currentTime;
 //	private long classTimesStamps;
@@ -147,9 +150,10 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		}
 		lessonDetails = new ArrayList<LessonDetail>();
 		lessoonDetails_camera = new ArrayList<Camera>();
+		lessoonDetails_homework = new ArrayList<LessonHomework>();
 		text_classroom_name = (TextView) findViewById(R.id.text_classroom_name);
 		text_camera_num = (TextView) findViewById(R.id.text_camera_num);
-		
+		text_issecond = (TextView) findViewById(R.id.text_issecond);
 		
 //		String[] classTimes = classTime.split(":");
 //		String[] classLengths = classLength.split(":");
@@ -289,7 +293,8 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			@Override
 			protected Integer doInBackground(Void... params) {
 				lessoonDetails_camera.clear();
-				return LessonWebServerIF.getInstance(LessonDetailActivity.this).getLessonDetail(lessonId,lessonDetails,lessoonDetails_camera);
+				lessoonDetails_homework.clear();
+				return LessonWebServerIF.getInstance(LessonDetailActivity.this).getLessonDetail(lessonId,lessonDetails,lessoonDetails_camera,lessoonDetails_homework);
 			}
 			@Override
 			protected void onPostExecute(Integer result) {
@@ -315,7 +320,14 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 					}else{
 						text_camera_num.setText("打开"+count_on+"/"+count);
 						}
-					}				
+					}	
+					
+					
+					if(lessoonDetails_homework.get(0).title != null){
+						text_issecond.setText("已布置");
+					}else if(lessoonDetails_homework.get(0).title == null){
+						text_issecond.setText("未布置");
+					}
 				}
 				
 			}

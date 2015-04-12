@@ -169,7 +169,7 @@
             android:layout_weight="1"
             android:gravity="right"
             android:padding="5dp"
-            android:text="未点评" />
+            android:text="" />
 
         <TextView
             android:id="@+id/text_first_r"
@@ -205,7 +205,7 @@
             android:layout_weight="1"
             android:gravity="right"
             android:padding="5dp"
-            android:text="未布置" />
+            android:text="" />
 
         <TextView
             android:id="@+id/text_second_r"

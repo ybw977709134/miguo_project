@@ -756,7 +756,7 @@ public class LessonWebServerIF {
 		return status;
 	}
 	
-	public int getLessonDetail(int lesson_id,List<LessonDetail> lessonDetails,List<Camera> lessonDetails_camera){
+	public int getLessonDetail(int lesson_id,List<LessonDetail> lessonDetails,List<Camera> lessonDetails_camera,List<LessonHomework> lessoonDetails_homework){
 		String uid = mPrefUtil.getUid();
 		String password = mPrefUtil.getPassword();
 		if (uid == null || password == null)
@@ -807,6 +807,19 @@ public class LessonWebServerIF {
 							Camera detail_camera = XmlHelper
 									.parseCamera((Element) roomNode);
 							lessonDetails_camera.add(detail_camera);
+						}
+					}
+				}
+				if (resultElement != null) {
+					NodeList roomNodes = resultElement
+							.getElementsByTagName("homework");
+					int len = roomNodes.getLength();
+					for (int i = 0; i < len; ++i) {
+						Node roomNode = roomNodes.item(i);
+						if (roomNode instanceof Element) {
+							LessonHomework homework = XmlHelper
+									.parseHomework((Element) roomNode);
+							lessoonDetails_homework.add(homework);
 						}
 					}
 				}

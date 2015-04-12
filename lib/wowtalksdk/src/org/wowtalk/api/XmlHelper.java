@@ -1092,6 +1092,25 @@ public class XmlHelper {
 		return bulletins;
     	
     }
+    public static LessonHomework parseHomework(Element roomElement){
+    	LessonHomework homework = new LessonHomework();
+    	Element e;
+
+        e = Utils.getFirstElementByTagName(roomElement, "lesson_id");
+        if(e != null)
+        	homework.lesson_id = Integer.parseInt(e.getTextContent());
+
+        e = Utils.getFirstElementByTagName(roomElement, "homework_id");
+        if(e != null)
+        	homework.homework_id = Integer.parseInt(e.getTextContent());
+
+        e = Utils.getFirstElementByTagName(roomElement, "title");
+        if(e != null)
+        	homework.title = e.getTextContent();
+
+		return homework;
+    	
+    }
     public static Camera parseCamera(Element roomElement){
     	Camera camera = new Camera();
     	Element e;

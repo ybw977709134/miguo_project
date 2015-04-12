@@ -75,7 +75,7 @@
         <!-- Contact Page / list view -->
         <item name="android:textSize">14sp</item>
         <item name="android:singleLine">true</item>
-        <item name="android:textColor">@color/text_gray40</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
 	<style name="search_inputbox">

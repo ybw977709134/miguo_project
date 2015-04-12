@@ -180,7 +180,7 @@
 			    android:gravity="center"
 			    android:padding="10dp"
 			    android:textSize="17sp"
-			    android:textColor="@color/red"
+			    android:textColor="@color/red_30"
 			    android:background="@drawable/menu_view_middle_selector"
 			    android:clickable="true"
 			    android:text="@string/logout" />

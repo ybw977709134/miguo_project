@@ -33,6 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below ="@+id/title_bar"
+        android:divider="@drawable/bg_section_divider_line_dark"
         android:cacheColorHint="#00000000" >
 
     </ListView>

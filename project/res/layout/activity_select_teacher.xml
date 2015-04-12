@@ -42,6 +42,7 @@
         android:id="@+id/listView_teacher_show"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:divider="@drawable/bg_section_divider_line_dark"
         android:layout_below ="@+id/title_bar"
         android:cacheColorHint="#00000000" >
 

@@ -726,31 +726,11 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 break;
             case R.id.title_back:
             	//发布动态退出时的提示
-//            	Builder builderBack = new AlertDialog.Builder(CreateNormalMomentWithTagActivity.this);
-//            	builderBack.setTitle("提示");
-//            	builderBack.setMessage("未完成发布，是否退出");
-//            	builderBack.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//					
-//					@Override
-//					public void onClick(DialogInterface arg0, int arg1) {
-//						releaseMediaFiles();
-//		                finish();
-//						
-//					}
-//				});
-//            	builderBack.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//					
-//					@Override
-//					public void onClick(DialogInterface arg0, int arg1) {
-//					}
-//				});
-//    			
-//            	builderBack.create().show();
-            	
-            	
+
             	MessageDialog dialog = new MessageDialog(CreateNormalMomentWithTagActivity.this);
                 dialog.setTitle("");
                 dialog.setMessage("未完成发布，是否退出?");
+                dialog.setRightBold(true);
                 dialog.setOnLeftClickListener("取消", null);
                 dialog.setOnRightClickListener("退出", new MessageDialog.MessageDialogClickListener() {
                     @Override

@@ -96,8 +96,8 @@ public class DatePickerActivity extends Activity{
 			@Override
 			public void onSelect(String text)
 			{
-				Toast.makeText(DatePickerActivity.this, "选择了 " + text + " 年",
-						Toast.LENGTH_SHORT).show();
+//				Toast.makeText(DatePickerActivity.this, "选择了 " + text + " 年",
+//						Toast.LENGTH_SHORT).show();
 				year = Integer.valueOf(text);
 			}
 		});
@@ -109,8 +109,8 @@ public class DatePickerActivity extends Activity{
 			@Override
 			public void onSelect(String text)
 			{
-				Toast.makeText(DatePickerActivity.this, "选择了 " + text + " 月",
-						Toast.LENGTH_SHORT).show();
+//				Toast.makeText(DatePickerActivity.this, "选择了 " + text + " 月",
+//						Toast.LENGTH_SHORT).show();
 				
 				month = Integer.valueOf(text);
 				
@@ -183,8 +183,8 @@ public class DatePickerActivity extends Activity{
 			@Override
 			public void onSelect(String text)
 			{
-				Toast.makeText(DatePickerActivity.this, "选择了 " + text + " 日",
-						Toast.LENGTH_SHORT).show();
+//				Toast.makeText(DatePickerActivity.this, "选择了 " + text + " 日",
+//						Toast.LENGTH_SHORT).show();
 				
 				day = Integer.valueOf(text);
 			}

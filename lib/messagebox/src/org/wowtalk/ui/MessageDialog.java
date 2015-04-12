@@ -51,6 +51,10 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
     private String mMsg = "";
     private String mBtnLeftText = "确定";
     private String mBtnRightText = "取消";
+    
+    boolean leftFlag = false;
+    boolean rightFlag = false;
+    boolean singleFlag = false;
 
     private int mTitleColor = -1;
     private int mMsgColor = -1;
@@ -109,7 +113,6 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
         btn_cancel.setOnClickListener(this);
         btn_single.setOnClickListener(this);
 
-
         txt_title.setText(mTitle);
         if(mTitleColor != -1){
             android.util.Log.i("--color", "" + mTitleColor);
@@ -129,6 +132,18 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
         txt_msg.setText(mMsg);
         if(mMsgColor != -1){
             txt_msg.setTextColor(mMsgColor);
+        }
+        
+        if (leftFlag) {
+        	btn_ok.getPaint().setFakeBoldText(true);
+        }
+        
+        if (rightFlag) {
+        	btn_cancel.getPaint().setFakeBoldText(true);
+        }
+        
+        if (singleFlag) {
+        	btn_single.getPaint().setFakeBoldText(true);
         }
 
         btn_ok.setText(mBtnLeftText);
@@ -153,6 +168,19 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
         if(txt != null) {
             mBtnLeftText = txt;
         }
+    }
+    
+    //设置粗体、颜色、大小
+    public void setLeftBold(boolean flag){
+    	leftFlag = flag;
+    }
+    
+    public void setRightBold(boolean flag){
+    	rightFlag = flag;
+    }
+    
+    public void setSingleBold(boolean flag){
+    	singleFlag = flag;
     }
 
     public void setTitle(String title){

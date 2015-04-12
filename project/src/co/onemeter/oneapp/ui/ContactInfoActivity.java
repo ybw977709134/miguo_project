@@ -25,6 +25,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import java.util.ArrayList;
 
@@ -1089,22 +1090,25 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
                 @Override
                 public void onClick(View v) {
                     bottomBoard.dismiss();
-        			Builder builder = new AlertDialog.Builder(ContactInfoActivity.this);
-        			builder.setTitle("提示");
-        			builder.setMessage("你确定要删除好友吗?");
-        			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-        				
-        				@Override
-        				public void onClick(DialogInterface arg0, int arg1) {
-    						removeBuddy();
-    						startActivity(new Intent(ContactInfoActivity.this, StartActivity.class));
-    						Toast.makeText(ContactInfoActivity.this, "删除好友成功", Toast.LENGTH_SHORT).show();
-
-        				}
-        			});
-        			builder.setNegativeButton("取消", null);
         			
-        			builder.create().show();
+        			MessageDialog dialog = new MessageDialog(ContactInfoActivity.this);
+                    dialog.setTitle("");
+                    dialog.setMessage("你确定要删除好友吗?");
+                    dialog.setRightBold(true);
+                    dialog.setTextColorBtnRight(ContactInfoActivity.this.getResources().getColor(R.color.red));
+                    dialog.setOnLeftClickListener("取消", null);
+                    dialog.setOnRightClickListener("删除", new MessageDialog.MessageDialogClickListener() {
+                        @Override
+                        public void onclick(MessageDialog dialog) {
+                            dialog.dismiss();
+                            removeBuddy();
+    						startActivity(new Intent(ContactInfoActivity.this, StartActivity.class));
+//    						Toast.makeText(ContactInfoActivity.this, "删除好友成功", Toast.LENGTH_SHORT).show();
+                            
+                        }
+                    });
+                    dialog.show();
+        			
                 }
             });
         

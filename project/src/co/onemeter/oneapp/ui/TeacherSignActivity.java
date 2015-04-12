@@ -157,6 +157,8 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 				if (data != null) {
 					classID = data.getStringExtra("class_id");
 					textView_class_name.setText(data.getStringExtra("class_name"));
+                    lessonID = 0;
+                    textView_lesson_name.setText("");
 				} 
 			}
 			

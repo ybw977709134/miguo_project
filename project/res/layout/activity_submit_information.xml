@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white" >
+    android:background="@color/background_dark" >
 
     <RelativeLayout
         android:id="@+id/title_bar"
@@ -20,7 +20,7 @@
             style="?attr/navbar_title"
             android:text="@string/event_submitinfo" />
 
-        <TextView
+        <co.onemeter.oneapp.ui.widget.PressedTextView
             android:id="@+id/submit_right_button"
             style="?attr/navbar_txt_right"
             android:text="@string/confirm" />
@@ -31,9 +31,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title_bar"
-        android:background="@color/white"
         android:orientation="vertical"
-        android:paddingTop="100dp" >
+        android:paddingTop="50dp"
+        android:paddingBottom="50dp">
 
         <ImageView style="@style/standard_list_divider" />
 
@@ -42,11 +42,10 @@
             style="@style/inputbox_borderless"
             android:hint="@string/manage_account_user_name"
             android:imeOptions="actionNext"
-            android:textCursorDrawable="@color/green" />
+            android:background="@color/background_light"/>
 
         <ImageView
-            style="@style/standard_list_divider"
-            android:layout_marginLeft="@dimen/padding_medium" />
+            style="@style/standard_list_divider"/>
 
         <EditText
             android:id="@+id/submit_telephone"
@@ -54,16 +53,18 @@
             android:hint="@string/sys_notice_telephone"
             android:imeOptions="actionDone"
             android:inputType="number"
-            android:textCursorDrawable="@color/green" />
+            android:background="@color/background_light" />
+        <ImageView style="@style/standard_list_divider" />
     </LinearLayout>
 
     <Button
         android:id="@+id/submit_confirm"
-        style="@style/button_green"
+        style="@style/button_blue"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/relativeLayout1"
-        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:text="@string/confirm" />
 
 </RelativeLayout>

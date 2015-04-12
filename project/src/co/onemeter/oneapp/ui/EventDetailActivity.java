@@ -1,9 +1,6 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -21,6 +18,7 @@ import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -202,28 +200,21 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 
                 break;
             case R.id.right_button_down:
-            	Builder builder = new AlertDialog.Builder(EventDetailActivity.this);
-            	builder.setTitle(getString(R.string.contacts_QRcode_dialogtitle));
-            	builder.setMessage(getString(R.string.event_cancel_join_msg));
-            	builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						cancel_join_event();//取消报名
-						btn_right_down.setVisibility(View.GONE);
-		            	btn_right_up.setVisibility(View.VISIBLE);
-		            	Toast.makeText(EventDetailActivity.this, R.string.require_cancel_event_joined, Toast.LENGTH_SHORT).show();
-					}
-				});
-            	builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				});
-            	
-            	builder.create().show();//显示取消报名的对话框           	
-            
+                MessageDialog dialog = new MessageDialog(this);
+                dialog.setTitle(getString(R.string.contacts_QRcode_dialogtitle));
+                dialog.setMessage(getString(R.string.event_cancel_join_msg));
+                dialog.setOnLeftClickListener(getString(R.string.ok), new MessageDialog.MessageDialogClickListener() {
+                    @Override
+                    public void onclick(MessageDialog dialog) {
+                        dialog.dismiss();
+                        cancel_join_event();//取消报名
+                        btn_right_down.setVisibility(View.GONE);
+                        btn_right_up.setVisibility(View.VISIBLE);
+                        Toast.makeText(EventDetailActivity.this, R.string.require_cancel_event_joined, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dialog.setOnRightClickListener(getString(R.string.cancel),null);
+                dialog.show();
             	break;
             default:
                 break;

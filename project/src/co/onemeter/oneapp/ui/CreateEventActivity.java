@@ -20,6 +20,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.EventWebServerIF;
+import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WEvent;
 import org.wowtalk.api.WFile;
 import org.wowtalk.ui.MessageBox;
@@ -190,8 +191,6 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                                 }
                             });
                 }
-
-
                 return errno;
             }
 
@@ -200,6 +199,8 @@ public class CreateEventActivity extends Activity implements OnClickListener {
                 msgBox.dismissWait();
                 if (errno == ErrorCode.OK) {
                     //Log.i("--->>>create", wevent.is_get_member_info+"");
+                    wevent.owner_uid = PrefUtil.getInstance(CreateEventActivity.this).getUid();
+                    setResult(RESULT_OK,new Intent().putExtra("event",wevent));
                     finish();
                 } else {
                     Toast.makeText(context, R.string.operation_failed, Toast.LENGTH_SHORT).show();

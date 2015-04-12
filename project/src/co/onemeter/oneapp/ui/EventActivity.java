@@ -269,9 +269,9 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
     }
 
     public static final String EVENT_DETAIL_BUNDLE = "event_detail_id";
-    private final String GET_FINISHED_EVENT0 = "0";//只返回尚未开始的活动（升序）
-    private final String GET_FINISHED_EVENT1 = "1";//只返回已过期的活动（降序）
-    private final String GET_FINISHED_EVENT = "";//只返回进行中的活动（升序）
+    private final String GET_COMMING_EVENT_0 = "0";//只返回尚未开始的活动（升序）
+    private final String GET_FINISHED_EVENT_1 = "1";//只返回已过期的活动（降序）
+    private final String GET_ING_EVENT_2 = "2";//只返回进行中的活动（升序）
 
 	private ImageButton ibRight;
 	private ListView lvEvent;
@@ -292,9 +292,9 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
      */
     private int eventStateTag = 0;
     /*
-     * 用于标记报名状态
+     * 用于标记左侧筛选栏状态
      */
-    private int curSignUpTag = 0;
+    private int curFilterLeftTag = 0;
 
     private String outletEventId;
 
@@ -315,6 +315,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 		txtTitle = (TextView) findViewById(R.id.title_text);
 		pullListView = (PullToRefreshListView) findViewById(R.id.event_list);
 		lvEvent = pullListView.getRefreshableView();
+        //lvEvent.setEmptyView(findViewById(R.id.progressbar_event_loading));
         newEventPanel = findViewById(R.id.new_event_panel);
 
         // 只有已关联到学校的教师才可发布活动
@@ -355,8 +356,9 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         lvEvent.addHeaderView(tf.getView());
         pullListView.setOnRefreshListener(this);
         pullListView.setOnLastItemVisibleListener(this);
-        
-        downloadLatestEvents(GET_FINISHED_EVENT0,null);
+
+        //默认下载所有即将进行的活动
+        downloadLatestEvents(GET_COMMING_EVENT_0,null);
         hideNewEventPanel();
 
         AQuery q = new AQuery(this);
@@ -366,7 +368,6 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         q.find(R.id.vg_new_offline).clicked(this);
         q.find(R.id.new_event_panel).clicked(this);
 
-        // TODO control create moment button visibility according to user type.
 	}
 	
 	private void downloadLatestEvents(final String get_finished_event_only,final String max_startdate) {
@@ -408,14 +409,8 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         }).start();
     }
 
-    private void fixEventLocalPath() {
-        for(WEvent e : acts) {
-            WEventUiHelper.fixMediaLocalPath(e);
-        }
-    }
-	
-	private void fSetShownEvents() {
-		switch (curSignUpTag) {
+    private void fSetShownEvents() {
+        switch (curFilterLeftTag) {
             case 0:
                 acts = mDb.fetchAllEvents();
                 break;
@@ -443,34 +438,40 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         fixEventLocalPath();
 
         if(eventAdapter != null){
-	        if (curSignUpTag == 0) {
-	            eventAdapter.setDataSource(acts);
-	        } else if (curSignUpTag == 1) { // joined
-	            ArrayList<WEvent> filtered = new ArrayList<WEvent>();
-	            for (WEvent e : acts) {
-	                if (e.membership == WEvent.MEMBER_SHIP_JOINED) {
-	                    filtered.add(e);
-	                }
-	            }
-	            eventAdapter.setDataSource(filtered);
-	        } else if (curSignUpTag == 2) { // my
-	            ArrayList<WEvent> filtered = new ArrayList<WEvent>();
-	            String myUid = PrefUtil.getInstance(this).getUid();
-	            for (WEvent e : acts) {
-	                if (TextUtils.equals(myUid, e.owner_uid)) {
-	                    filtered.add(e);
-	                }
-	            }
-	            eventAdapter.setDataSource(filtered);
-	        }
+            if (curFilterLeftTag == 0) {
+                eventAdapter.setDataSource(acts);
+            } else if (curFilterLeftTag == 1) { // joined
+                ArrayList<WEvent> filtered = new ArrayList<WEvent>();
+                for (WEvent e : acts) {
+                    if (e.membership == WEvent.MEMBER_SHIP_JOINED) {
+                        filtered.add(e);
+                    }
+                }
+                eventAdapter.setDataSource(filtered);
+            } else if (curFilterLeftTag == 2) { // my
+                ArrayList<WEvent> filtered = new ArrayList<WEvent>();
+                String myUid = PrefUtil.getInstance(this).getUid();
+                for (WEvent e : acts) {
+                    if (TextUtils.equals(myUid, e.owner_uid)) {
+                        filtered.add(e);
+                    }
+                }
+                eventAdapter.setDataSource(filtered);
+            }
         }else{
-        	eventAdapter = new EventAdapter(EventActivity.this, acts);
-	        lvEvent.setAdapter(eventAdapter);
-			eventAdapter.notifyDataSetChanged();
+            eventAdapter = new EventAdapter(EventActivity.this, acts);
+            lvEvent.setAdapter(eventAdapter);
+            eventAdapter.notifyDataSetChanged();
         }
-		pullListView.onRefreshComplete();
-	}
-	
+        pullListView.onRefreshComplete();
+    }
+
+    private void fixEventLocalPath() {
+        for(WEvent e : acts) {
+            WEventUiHelper.fixMediaLocalPath(e);
+        }
+    }
+
 	private void fGointoASpecificEvent(WEvent wa) {
 		if (wa == null)
 			return;
@@ -517,11 +518,30 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Activity.RESULT_OK){
+            switch (requestCode){
+                case NEW_EVENT:
+                    WEvent event = data.getParcelableExtra("event");
+                    ArrayList<WEvent> events = new ArrayList<WEvent>();
+                    events.add(event);
+                    events.addAll(acts);
+                    eventAdapter.clear();
+                    eventAdapter.addAll(events);
+                    break;
+            }
+        }
+    }
+
+    private final static int NEW_EVENT = 100001;
+
     private void gotoCreateEvent(String cat) {
-        startActivity(new Intent(EventActivity.this, CreateEventActivity.class)
+        startActivityForResult(new Intent(EventActivity.this, CreateEventActivity.class)
                 .putExtra(CreateEventActivity.EXTRA_EVENT_CATEGORY, cat)
                 .putExtra(CreateEventActivity.EXTRA_PAGE_TITLE,
-                        WEventUiHelper.getEventCatetoryText(this, cat)));
+                        WEventUiHelper.getEventCatetoryText(this, cat)), NEW_EVENT);
     }
 
     private void toogleNewEventPanel() {
@@ -570,10 +590,6 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 		super.onResume();
         MobclickAgent.onResume(this);
 
-//        if(System.currentTimeMillis()-lastRefreshEventTime >= REFRESH_EVENT_INTERVAL) {
-//            downloadLatestEvents(GET_FINISHED_EVENT0,null);
-//        }
-
         // 活动对象的状态可能已经发生了变化（比如报名人数），
         // 因此从数据库中读取最新状态。
         if (eventAdapter != null && outletEventId != null) {
@@ -618,7 +634,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
     @Override
     public void onDropdownMenuItemClick(int subMenuResId, int itemIdx) {
         if (subMenuResId == R.id.btn_filter1) {
-        	curSignUpTag = itemIdx;
+        	curFilterLeftTag = itemIdx;
 //            if (itemIdx == 0) {
 //                eventAdapter.setDataSource(acts);
 //            } else if (itemIdx == 1) { // joined
@@ -640,21 +656,21 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 //                eventAdapter.setDataSource(filtered);
 //            }
             if (eventStateTag == 0) {
-            	downloadLatestEvents(GET_FINISHED_EVENT0,null);
+            	downloadLatestEvents(GET_COMMING_EVENT_0,null);
             } else if (eventStateTag == 1) { // on going
             	downloadLatestEvents(null,null);
             } else if (eventStateTag == 2) { // expired
-                downloadLatestEvents(GET_FINISHED_EVENT1,null);
+                downloadLatestEvents(GET_FINISHED_EVENT_1,null);
             }
             return;
         } else if (subMenuResId == R.id.btn_filter2) {
         	eventStateTag = itemIdx;
             if (itemIdx == 0) {
-            	downloadLatestEvents(GET_FINISHED_EVENT0,null);
+            	downloadLatestEvents(GET_COMMING_EVENT_0,null);
             } else if (itemIdx == 1) { // on going
             	downloadLatestEvents(null,null);
             } else if (itemIdx == 2) { // expired
-                downloadLatestEvents(GET_FINISHED_EVENT1,null);
+                downloadLatestEvents(GET_FINISHED_EVENT_1,null);
             }
             return;
         }
@@ -662,15 +678,13 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         Toast.makeText(this, subMenuResId + "/" + itemIdx, Toast.LENGTH_SHORT).show();
     }
 
-    private Spannable formatField(String label, String value)
-    {
+    private Spannable formatField(String label, String value){
         return formatField(label, value,
                 getResources().getColor(R.color.text_gray3),
                 getResources().getColor(R.color.text_gray2));
     }
 
-    private Spannable formatField(String label, String value, int color1, int color2)
-    {
+    private Spannable formatField(String label, String value, int color1, int color2){
         int start = 0;
         SpannableStringBuilder str = new SpannableStringBuilder(label == null ? "" : label);
         str.append(": ");
@@ -687,23 +701,23 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 
 	@Override
 	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-		if(curSignUpTag == 0){
+		if(curFilterLeftTag == 0){
 		switch (eventStateTag) {
-		//即将进行
-		case 0:
-			downloadLatestEvents(GET_FINISHED_EVENT0,null);
-			break;
-		//进行中
-		case 1:
-			downloadLatestEvents(null,null);
-			break;
-			
-		//已过期
-		case 2:
-			downloadLatestEvents(GET_FINISHED_EVENT1,null);
-			break;
-		default: break;
-		}
+            //即将进行
+            case 0:
+                downloadLatestEvents(GET_COMMING_EVENT_0,null);
+                break;
+            //进行中
+            case 1:
+                downloadLatestEvents(null,null);
+                break;
+
+            //已过期
+            case 2:
+                downloadLatestEvents(GET_FINISHED_EVENT_1,null);
+                break;
+            default: break;
+            }
 		}else{
 			new Handler().post(new Runnable() {
 				
@@ -716,7 +730,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 	}
 
 	//上啦加载更多
-	private void uploadmore(final String get_finished_event_only,final String max_startdate,final int position) {
+	private void upPullLoadmore(final String get_finished_event_only, final String max_startdate, final int position) {
 		new Thread(new Runnable() {
 
 			@Override
@@ -726,7 +740,7 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 					runOnUiThread(new Runnable(){
 						@Override
 						public void run() {
-							switch (curSignUpTag) {
+							switch (curFilterLeftTag) {
 					            case 0:
 					                acts = mDb.fetchAllEvents();
 					                break;
@@ -743,9 +757,6 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 
 				        fixEventLocalPath();
 				        eventAdapter.addAll(acts);
-//				        lvEvent.setAdapter(eventAdapter);
-//				        lvEvent.setSelection(position);
-//						eventAdapter.notifyDataSetChanged();
 						}
 					});
 				}
@@ -759,25 +770,25 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 		String time = null;
 		if(acts.size() > 0){
 			switch (eventStateTag) {
-		//即将进行
-		case 0:
-			time = acts.get(acts.size()-1).startTime.getTime() + "";
-			uploadmore(GET_FINISHED_EVENT0,time.substring(0, time.length()-3),acts.size());
-			break;
+                //即将进行
+                case 0:
+                    time = acts.get(acts.size()-1).startTime.getTime() + "";
+                    upPullLoadmore(GET_COMMING_EVENT_0, time.substring(0, time.length() - 3), acts.size());
+                    break;
 
-		//进行中
-		case 1:
-			time = acts.get(acts.size()-1).startTime.getTime() + "";
-			uploadmore(null,time.substring(0, time.length()-3),acts.size());
-			break;
-			
-		//已过期
-		case 2:
-			time = acts.get(acts.size() -1).startTime.getTime() + "";
-			uploadmore(GET_FINISHED_EVENT1,time.substring(0, time.length()-3),acts.size());
-			break;
-		default: break;
-		}
+                //进行中
+                case 1:
+                    time = acts.get(acts.size()-1).startTime.getTime() + "";
+                    upPullLoadmore(null, time.substring(0, time.length() - 3), acts.size());
+                    break;
+
+                //已过期
+                case 2:
+                    time = acts.get(acts.size() -1).startTime.getTime() + "";
+                    upPullLoadmore(GET_FINISHED_EVENT_1, time.substring(0, time.length() - 3), acts.size());
+                    break;
+                default: break;
+                }
 		}
 		
 	}

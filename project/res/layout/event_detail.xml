@@ -18,12 +18,12 @@
             style="?attr/navbar_title"
             android:text="@string/event_details"/>
 
-        <TextView
+        <co.onemeter.oneapp.ui.widget.PressedTextView
             android:id="@+id/right_button_up"
             android:text="@string/event_want_to_sing_up"
             style="?attr/navbar_txt_right"/>
         
-        <TextView
+        <co.onemeter.oneapp.ui.widget.PressedTextView
             android:id="@+id/right_button_down"
             android:text="@string/event_want_to_sing_down"
             style="?attr/navbar_txt_right"
@@ -35,6 +35,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:fadingEdge="none"
+        android:scrollbars="none"
         android:layout_below="@+id/title_bar" >
 
         <LinearLayout

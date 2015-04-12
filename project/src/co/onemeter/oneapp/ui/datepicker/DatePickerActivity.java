@@ -61,10 +61,7 @@ public class DatePickerActivity extends Activity{
 		year_pv = (PickerView) findViewById(R.id.year_pv);//年
 		month_pv = (PickerView) findViewById(R.id.month_pv);
 		day_pv = (PickerView) findViewById(R.id.day_pv);
-		
-		
-		
-		
+
 		SimpleDateFormat   formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd");     
 		Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间     
 		String   str   =   formatter.format(curDate); 
@@ -165,6 +162,16 @@ public class DatePickerActivity extends Activity{
 					}
 				}
 				day_pv.setData(days);
+				
+				//如果没有滚动天数，保持当前天数，当月份的天数小于当前天数，重置为01天
+				int curDay = day -1;
+				if (days.size() >= curDay) {
+					day_pv.setSelected(curDay);
+				} else {
+					day_pv.setSelected(0);
+				}
+				
+				month--;
 			}
 		});
 		
@@ -202,10 +209,23 @@ public class DatePickerActivity extends Activity{
 			year_pv.setSelected(year-1900);
 			month_pv.setSelected(month);
 			day_pv.setSelected(day-1);
-			
-			
-			
+		}
+	}
+	
+	
+	@Override
+	protected void onDestroy() {
+		if (year_pv != null) {
+			year_pv = null;
 		}
 		
+		if (month_pv != null) {
+			month_pv = null;
+		}
+		
+		if (day_pv != null) {
+			day_pv = null;
+		}
+		super.onDestroy();
 	}
 }

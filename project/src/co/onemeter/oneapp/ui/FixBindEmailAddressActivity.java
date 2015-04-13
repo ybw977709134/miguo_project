@@ -270,6 +270,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
              
              dialog.setMessage("你要取消修改绑定邮箱吗？");
              dialog.setOnLeftClickListener("继续修改", null);
+             dialog.setRightBold(true);
              dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
                  @Override
                  public void onclick(MessageDialog dialog) {

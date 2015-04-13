@@ -308,6 +308,12 @@ public class SettingActivity extends Activity implements OnClickListener {
      * @date 2015/3/30
      */
     private void showUpdateDialog() {
+
+        //防止nullpoitexception
+        if(updatesInfo.changeLog == null){
+            return;
+        }
+
     	String currVerName = null;
 		try {
 			currVerName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
@@ -318,6 +324,7 @@ public class SettingActivity extends Activity implements OnClickListener {
 		StringBuilder sb = new StringBuilder();
         sb.append(getString(R.string.settings_upgrade_curr_ver_is) + currVerName + "\n");
         sb.append(getString(R.string.settings_upgrade_latest_ver_is) + updatesInfo.versionName + "\n");
+
         if (0 < updatesInfo.changeLog.length) {
             sb.append(getString(R.string.settings_upgrade_changelogs_are) + "\n");
             for (int i = 0; i < updatesInfo.changeLog.length; ++i)

@@ -104,7 +104,8 @@
                     android:id="@+id/txt_bind_email"
                     style="@style/inputbox_borderless"
                     android:imeOptions="actionDone"
-                    android:hint="@string/login_input_email"/>
+                    android:hint="@string/login_input_email"
+                    android:textCursorDrawable="@drawable/cursor_color" />
                 <!-- 清除输入的绑定邮箱 -->
                 <ImageButton
         			android:id="@+id/field_clear_email"
@@ -196,7 +197,8 @@
                     android:id="@+id/txt_auth_code"
                     style="@style/inputbox_borderless"
                     android:imeOptions="actionDone"
-                    android:hint="@string/login_input_verification"/>
+                    android:hint="@string/login_input_verification"
+                    android:textCursorDrawable="@drawable/cursor_color"/>
                 
                 <!-- 验证码清除按钮 -->
                 <ImageButton

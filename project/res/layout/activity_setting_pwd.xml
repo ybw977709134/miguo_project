@@ -94,7 +94,8 @@
                     style="@style/inputbox_borderless"
                     android:imeOptions="actionDone"
                     android:password="true"
-                    android:hint="@string/login_oldPassword"/>
+                    android:hint="@string/login_oldPassword"
+                    android:textCursorDrawable="@drawable/cursor_color" />
 
                  
                 <ImageButton
@@ -126,7 +127,8 @@
                     style="@style/inputbox_borderless"
                     android:imeOptions="actionDone"
                     android:password="true"
-                    android:hint="@string/login_newPassword"/>
+                    android:hint="@string/login_newPassword"
+                    android:textCursorDrawable="@drawable/cursor_color" />
 
                 <ImageButton
         			android:id="@+id/field_clear_pwd"
@@ -154,7 +156,8 @@
                     style="@style/inputbox_borderless"
                     android:imeOptions="actionDone"
                     android:password="true"
-                    android:hint="@string/login_confirm_password" />
+                    android:hint="@string/login_confirm_password"
+                    android:textCursorDrawable="@drawable/cursor_color" />
 				 
                 <ImageButton
         			android:id="@+id/field_clear_confirm"

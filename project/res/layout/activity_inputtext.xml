@@ -76,7 +76,8 @@
                 android:inputType="textMultiLine"
                 android:paddingTop="5dp"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp" />
+                android:paddingRight="10dp"
+                android:textCursorDrawable="@drawable/cursor_color" />
             
             <!-- 清除文本 -->
                 <ImageButton

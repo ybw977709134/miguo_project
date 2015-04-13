@@ -91,7 +91,8 @@
                     android:id="@+id/txt_access_code"
                     style="@style/inputbox_borderless"
                     android:imeOptions="actionDone"
-                    android:hint="@string/login_input_verification"/>
+                    android:hint="@string/login_input_verification"
+                    android:textCursorDrawable="@drawable/cursor_color" />
                 <!-- 获取旧的绑定邮箱 验证码的按钮事件-->
 
                 <Button

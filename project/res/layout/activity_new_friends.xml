@@ -60,7 +60,7 @@
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
         android:layout_below="@+id/title_bar"
-        android:divider="@drawable/divider"
+        android:divider="@drawable/bg_section_divider_line_dark"
         android:cacheColorHint="@null"/>
 
     <ImageView

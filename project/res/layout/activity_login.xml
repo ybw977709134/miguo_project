@@ -59,7 +59,7 @@
 					android:imeOptions="actionNext"
 					android:hint="@string/userName_hint"
 					android:cursorVisible="true"
-					android:textCursorDrawable="@null"/>
+					android:textCursorDrawable="@drawable/cursor_color"/>
 				
 				<ImageButton
 						android:id="@+id/field_clear_account"
@@ -86,7 +86,7 @@
 						android:imeOptions="actionDone"
 						android:inputType="textPassword"
 						android:cursorVisible="true"
-						android:textCursorDrawable="@null"/>
+						android:textCursorDrawable="@drawable/cursor_color"/>
 					<ImageButton
 						android:id="@+id/field_clear_password"
 						android:layout_height="20dp"

@@ -91,7 +91,8 @@
 					style="@style/inputbox_borderless"
 					android:imeOptions="actionNext"
 					android:background="@color/white"
-					android:hint="@string/userName_hint"/>
+					android:hint="@string/userName_hint"
+					android:textCursorDrawable="@drawable/cursor_color" />
 				
 				<ImageButton
 						android:id="@+id/field_clear_account"
@@ -117,7 +118,8 @@
 						android:hint="@string/passWord_hint"
 						android:imeOptions="actionNext"
 						android:background="@color/white"
-						android:inputType="textPassword"/>
+						android:inputType="textPassword"
+						android:textCursorDrawable="@drawable/cursor_color" />
 					<ImageButton
 						android:id="@+id/field_clear_pwd"
 						android:layout_height="20dp"
@@ -142,7 +144,8 @@
 						android:hint="@string/input_password_again"
 						android:imeOptions="actionDone"
 						android:background="@color/white"
-						android:inputType="textPassword"/>
+						android:inputType="textPassword"
+						android:textCursorDrawable="@drawable/cursor_color" />
 					<ImageButton
 						android:id="@+id/field_clear_confirm"
 						android:layout_height="20dp"

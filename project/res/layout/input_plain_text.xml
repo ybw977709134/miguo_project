@@ -71,6 +71,7 @@
                 android:singleLine="true"
                 style="@style/inputbox_white"
                 android:imeOptions="actionDone"
+                android:textCursorDrawable="@drawable/cursor_color"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"/>
         

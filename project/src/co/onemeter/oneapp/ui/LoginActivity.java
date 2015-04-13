@@ -105,7 +105,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             tempAccount = (Account) object;
         }
         final Account oldAccount = tempAccount;
-
+        
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
             @Override
@@ -420,7 +420,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             }
         }
 
-        mMsgBox.showWait();
+        mMsgBox.showWaitProgressbar("登录中...");
 
         new Thread(new Runnable() {
 

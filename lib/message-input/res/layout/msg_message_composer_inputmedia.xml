@@ -36,7 +36,7 @@
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:contentDescription="@null"
-                        android:background="@drawable/chat_icon_voice"/>
+                        android:background="@drawable/icon_messages_more_voice"/>
 
                 <TextView
                         android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:contentDescription="@null"
-                        android:background="@drawable/chat_icon_photo"/>
+                        android:background="@drawable/icon_messages_more_pic_selector"/>
 
                 <TextView
                         android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
 			        android:layout_width="64dp"
 			        android:layout_height="64dp"
 			        android:contentDescription="@null"
-			        android:background="@drawable/chat_icon_video"/>
+			        android:background="@drawable/icon_messages_more_camera_selector"/>
 
 		        <TextView
 			        android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
 			        android:layout_width="64dp"
 			        android:layout_height="64dp"
 			        android:contentDescription="@null"
-			        android:background="@drawable/chat_icon_location"/>
+			        android:background="@drawable/icon_messages_more_location_selector"/>
 
 		        <TextView
 			        android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
 			        android:layout_width="64dp"
 			        android:layout_height="64dp"
 			        android:contentDescription="@null"
-			        android:background="@drawable/chat_icon_doodle"/>
+			        android:background="@drawable/icon_messages_more_pic_write_selector"/>
 
 		        <TextView
 			        android:layout_height="wrap_content"
@@ -163,7 +163,7 @@
 			        android:layout_width="64dp"
 			        android:layout_height="64dp"
 			        android:contentDescription="@null"
-			        android:background="@drawable/messages_icon_more_pictures_voice_text"/>
+			        android:background="@drawable/icon_messages_more_pic_voice_selector"/>
 
 		        <TextView
 			        android:layout_height="wrap_content"
@@ -187,7 +187,7 @@
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:contentDescription="@null"
-                        android:background="@drawable/chat_icon_call"/>
+                        android:background="@drawable/icon_messages_more_call_selector"/>
 
                 <TextView
                         android:layout_height="wrap_content"
@@ -211,7 +211,7 @@
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:contentDescription="@null"
-                        android:background="@drawable/chat_icon_videochat"/>
+                        android:background="@drawable/icon_messages_more_video_selector"/>
 
                 <TextView
                         android:layout_height="wrap_content"

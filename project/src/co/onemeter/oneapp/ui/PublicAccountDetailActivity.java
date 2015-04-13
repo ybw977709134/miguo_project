@@ -30,6 +30,7 @@ import org.wowtalk.ui.MessageBox;
 public class PublicAccountDetailActivity extends Activity implements View.OnClickListener {
 
     public static final String PERSON_DETAIL = "person_detail";
+    public static final String HAS_FOLLOWED = "hasfollowed";
 
     private ImageView imgThumbnail;
     private TextView txtFunctionDetail;
@@ -77,19 +78,21 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
 
     private void refreshView() {
         buddy = dbHelper.buddyWithUserID(person.getID());
-        if (buddy != null && buddy.getFriendShipWithMe() == Buddy.RELATIONSHIP_FRIEND_HERE) {
-            isFriend = true;
-            extraLayout.setVisibility(View.VISIBLE);
-            btnFollow.setText(getString(R.string.send_message));
+        //buddy != null && buddy.getFriendShipWithMe() == Buddy.RELATIONSHIP_FRIEND_HERE
+        if (isFriend) {
+            //extraLayout.setVisibility(View.VISIBLE);
+            extraLayout.setVisibility(View.GONE);
+            //btnFollow.setText(getString(R.string.send_message));
+            btnFollow.setText(getString(R.string.cancel_follow));
             btnFollow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MessageComposerActivity.launchToChatWithBuddy(PublicAccountDetailActivity.this,
-                            MessageComposerActivity.class, person.getID());
+//                    MessageComposerActivity.launchToChatWithBuddy(PublicAccountDetailActivity.this,
+//                            MessageComposerActivity.class, person.getID());
+                    cancelFollow();
                 }
             });
         } else {
-            isFriend = false;
             extraLayout.setVisibility(View.GONE);
             btnFollow.setText(getString(R.string.follow));
             btnFollow.setOnClickListener(new View.OnClickListener() {
@@ -125,9 +128,16 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
     }
 
     @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK,new Intent().putExtra(HAS_FOLLOWED, isFriend));
+        finish();
+    }
+
+    @Override
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.navbar_btn_left:
+                setResult(RESULT_OK,new Intent().putExtra(HAS_FOLLOWED, isFriend));
                 finish();
                 break;
             case R.id.btn_goto_moments:
@@ -171,28 +181,30 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
 
         dbHelper = new Database(this);
         mMsgBox = new MessageBox(this);
+        isFriend = getIntent().getBooleanExtra(HAS_FOLLOWED,false);
         person = getIntent().getParcelableExtra(PERSON_DETAIL);
         initView();
     }
 
-//    private void cancelFollow() {
-//        mMsgBox.showWait();
-//        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
-//            @Override
-//            protected Integer doInBackground(Void... params) {
-//                return WowTalkWebServerIF.getInstance(PublicAccountDetailActivity.this)
-//                        .fRemoveBuddy(buddy.userID);
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Integer result) {
-//                mMsgBox.dismissWait();
-//                if (result == ErrorCode.OK) {
-//                    finish();
-//                }
-//            }
-//        });
-//    }
+    private void cancelFollow() {
+        mMsgBox.showWait();
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return WowTalkWebServerIF.getInstance(PublicAccountDetailActivity.this)
+                        .fRemoveBuddy(buddy.userID);
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                mMsgBox.dismissWait();
+                if (result == ErrorCode.OK) {
+                    isFriend = false;
+                    refreshView();
+                }
+            }
+        });
+    }
 
     private void followBuddy() {
         mMsgBox.showWait();
@@ -207,12 +219,8 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
             protected void onPostExecute(Integer result) {
                 mMsgBox.dismissWait();
                 if (ErrorCode.OK == result) {
-                    PublicAccountDetailActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            refreshView();
-                        }
-                    });
+                     isFriend = true;
+                     refreshView();
                 }
             }
         });

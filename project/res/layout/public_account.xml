@@ -21,6 +21,7 @@
             <ImageButton
                 android:id="@+id/navbar_btn_right"
                 style="?attr/navbar_btn_right"
+                android:layout_width="50dp"
                 android:src="@drawable/nav_add_selector"/>
             <TextView
                 style="?attr/navbar_title"

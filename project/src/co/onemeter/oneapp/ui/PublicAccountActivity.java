@@ -7,9 +7,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.*;
+
+import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
+import java.util.ArrayList;
+
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.adapter.ContactListAdapter;
 
@@ -23,10 +28,12 @@ import co.onemeter.oneapp.contacts.adapter.ContactListAdapter;
 public class PublicAccountActivity extends Activity implements View.OnClickListener {
 
     private static final int REQ_ADD = 123;
+    private static final int REQ_HAS_FOLLOWED = 124;
     private ListView lvPublicAccount;
     private EditText edtSearch;
 
     private ContactListAdapter publicAccountAdapter;
+    private int mClickedPostiotn = -1;
 
     private TextWatcher textWatcher = new TextWatcher() {
 
@@ -60,13 +67,6 @@ public class PublicAccountActivity extends Activity implements View.OnClickListe
 
         q.find(R.id.navbar_btn_left).clicked(this);
         q.find(R.id.navbar_btn_right).clicked(this);
-
-        lvPublicAccount.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-        });
     }
 
     @Override
@@ -86,6 +86,8 @@ public class PublicAccountActivity extends Activity implements View.OnClickListe
         }
     }
 
+    private ArrayList<Person> publicAccounts = new ArrayList<Person>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,15 +97,17 @@ public class PublicAccountActivity extends Activity implements View.OnClickListe
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
         initView();
-        publicAccountAdapter = new ContactListAdapter(this,
-                ContactUtil.fFetchPublicAccountsAsPerson(this));
+        publicAccounts.addAll(ContactUtil.fFetchPublicAccountsAsPerson(this));
+        publicAccountAdapter = new ContactListAdapter(this,publicAccounts);
         lvPublicAccount.setAdapter(publicAccountAdapter);
         lvPublicAccount.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                startActivity(new Intent(PublicAccountActivity.this, PublicAccountDetailActivity.class)
+                mClickedPostiotn = position;
+                startActivityForResult(new Intent(PublicAccountActivity.this, PublicAccountDetailActivity.class)
                         .putExtra(PublicAccountDetailActivity.PERSON_DETAIL,
-                                publicAccountAdapter.getItem(position)));
+                                publicAccountAdapter.getItem(position))
+                        .putExtra(PublicAccountDetailActivity.HAS_FOLLOWED, true), REQ_HAS_FOLLOWED);
             }
         });
         ListHeightUtil.setListHeight(lvPublicAccount);
@@ -121,4 +125,27 @@ public class PublicAccountActivity extends Activity implements View.OnClickListe
         MobclickAgent.onPause(this);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            switch (requestCode){
+                case REQ_HAS_FOLLOWED:
+                    if(!data.getBooleanExtra(PublicAccountDetailActivity.HAS_FOLLOWED,true)){
+                        if(mClickedPostiotn != -1){
+                            publicAccounts.remove(mClickedPostiotn);
+                            publicAccountAdapter.notifyDataSetChanged();
+                            ListHeightUtil.setListHeight(lvPublicAccount);
+                        }
+                    }
+                    break;
+                case REQ_ADD:
+                    publicAccounts.clear();
+                    publicAccounts.addAll(ContactUtil.fFetchPublicAccountsAsPerson(this));
+                    publicAccountAdapter.notifyDataSetChanged();
+                    ListHeightUtil.setListHeight(lvPublicAccount);
+                    break;
+            }
+        }
+    }
 }

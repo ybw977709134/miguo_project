@@ -100,6 +100,7 @@ public class PublicSearchActivity extends Activity {
         btnTitleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_OK);
                 finish();
             }
         });
@@ -153,6 +154,12 @@ public class PublicSearchActivity extends Activity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        finish();
     }
 
     private void searchPublicAccount(final String searchContent) {

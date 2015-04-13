@@ -1239,7 +1239,8 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
             boolean saved = false;
             Bitmap thumb = null;
             if (isPhoto) {
-                thumb = BmpUtils.decodeFile(aFile.localPath, 200, 200, true);
+                Log.i("------thumb-----");
+                thumb = BmpUtils.decodeFile(aFile.localPath, 400, 400, true);
             } else {
                 thumb = BitmapFactory.decodeResource(getResources(), R.drawable.chat_icon_video);
             }

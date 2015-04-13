@@ -63,9 +63,11 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 	public final static int REQ_ABSENCE_TEACHER = 3;//教师
 	
 	private String classID = null;
+	private String schoolID = null;
 	private int lessonID = 0;
 	private String teacherID = null;
 	private String classId_intent = null; //通过intent传进的classId
+	private String schoolId_intent = null;
 	
 	private PrefUtil mPref; 
 	private MessageBox messageBox;
@@ -87,6 +89,7 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
          * 处理来自ClassDetailActivity来的请假
          */
         classId_intent = getIntent().getStringExtra("classId");
+        schoolId_intent = getIntent().getStringExtra("schoolId");
 		if(classId_intent != null){
             classID = classId_intent;
             layout_absence_class.setVisibility(View.GONE);
@@ -98,6 +101,9 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
             img_divider.setLayoutParams(params);
             textView_home_back.setText(getString(R.string.back));
         }
+		if(schoolId_intent != null){
+			schoolID = schoolId_intent;
+		}
 	}
 	
 	@Override
@@ -260,6 +266,7 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 			} else {
 				Intent intentLesson = new Intent(this,SelectTeacherActivity.class);
 				intentLesson.putExtra("classId", classID);
+				intentLesson.putExtra("school_id", schoolID);
 				startActivityForResult(intentLesson, REQ_ABSENCE_TEACHER);
 			}
 			
@@ -279,6 +286,7 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 			if (requestCode == REQ_ABSENCE_CLASS) {//班级
 				if (data != null) {
 					classID = data.getStringExtra("class_id");
+					schoolID = data.getStringExtra("school_id");
 					textView_class_name.setText(data.getStringExtra("class_name"));
 				} 
 			}

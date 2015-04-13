@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.wowtalk.api.Database;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.ui.MessageBox;
 
@@ -12,10 +13,12 @@ import com.androidquery.AQuery;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -42,6 +45,9 @@ public class SelectTeacherActivity extends Activity implements OnClickListener, 
 	private LessonWebServerIF lessonWebServer;
 	private SelectTeacherActivity instance = null;
 	private String class_id;
+	private String school_id;
+	private String teacherAlias;
+	private Database mdatabase;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +62,12 @@ public class SelectTeacherActivity extends Activity implements OnClickListener, 
 		AQuery q = new AQuery(this);
 		q.find(R.id.title_back).clicked(this);
 		q.find(R.id.teacher_refresh).clicked(this);
+		mdatabase = new Database(this);
 		listView_teacher_show = (ListView) findViewById(R.id.listView_teacher_show);
 		
 		msgbox = new MessageBox(this);
 		class_id = getIntent().getStringExtra("classId");
+		school_id = getIntent().getStringExtra("school_id");
 		lessonWebServer =  LessonWebServerIF.getInstance(SelectTeacherActivity.this);
 		classteachers = new ArrayList<Map<String,Object>>();
 		listView_teacher_show.setOnItemClickListener(this);
@@ -85,7 +93,7 @@ public class SelectTeacherActivity extends Activity implements OnClickListener, 
 					
 					classteachers.clear();
 					classteachers.addAll(result);
-					adapter = new MyClassTeacherAdapter (classteachers);
+					adapter = new MyClassTeacherAdapter (SelectTeacherActivity.this,classteachers);
 					listView_teacher_show.setAdapter(adapter);
 				}
 				
@@ -101,7 +109,7 @@ public class SelectTeacherActivity extends Activity implements OnClickListener, 
 			finish();
 			break;
 			
-		case R.id.class_refresh:
+		case R.id.teacher_refresh:
 			getClassTeacherInfo();
 			break;
 		}
@@ -111,7 +119,9 @@ public class SelectTeacherActivity extends Activity implements OnClickListener, 
 	class MyClassTeacherAdapter extends BaseAdapter{
     	private List<Map<String, Object>> classteachers;
     	private int currPosition = -1;
-    	public MyClassTeacherAdapter(List<Map<String, Object>> classteachers){
+    	private Context mContext;
+    	public MyClassTeacherAdapter(Context mContext,List<Map<String, Object>> classteachers){
+    		this.mContext = mContext;
     		this.classteachers = classteachers;
     	}
 
@@ -144,10 +154,12 @@ public class SelectTeacherActivity extends Activity implements OnClickListener, 
 			}else{
 				holder = (ViewHolder) convertView.getTag();
 			}
-			
-			holder.textView_item_teacher_name.setText( TextUtils.isEmpty(classteachers.get(position).get("teacher_alias").toString() ) 
-					? classteachers.get(position).get("teacher_alias").toString() 
-					: classteachers.get(position).get("teacher_username").toString() );
+			Database dbHelper=new Database(mContext);
+			String teacher_alias = dbHelper.fetchStudentAlias(school_id, classteachers.get(position).get("teacher_id").toString());
+			holder.textView_item_teacher_name.setText(teacher_alias);
+//			holder.textView_item_teacher_name.setText( TextUtils.isEmpty(classteachers.get(position).get("teacher_alias").toString() ) 
+//					? classteachers.get(position).get("teacher_alias").toString() 
+//					: classteachers.get(position).get("teacher_username").toString() );
 			
 			if(currPosition == position){
 				holder.imageView_item_teacher_icon.setVisibility(View.VISIBLE);
@@ -179,9 +191,11 @@ public class SelectTeacherActivity extends Activity implements OnClickListener, 
 		Intent data = new Intent();
 		data.putExtra("teacher_id", classteachers.get(position).get("teacher_id").toString());
 		
-		data.putExtra("teacher_name", TextUtils.isEmpty(classteachers.get(position).get("teacher_alias").toString() ) 
-				? classteachers.get(position).get("teacher_alias").toString() 
-				: classteachers.get(position).get("teacher_username").toString());
+//		data.putExtra("teacher_name", TextUtils.isEmpty(classteachers.get(position).get("teacher_alias").toString() ) 
+//				? classteachers.get(position).get("teacher_alias").toString() 
+//				: classteachers.get(position).get("teacher_username").toString());
+		teacherAlias = mdatabase.fetchStudentAlias(school_id, classteachers.get(position).get("teacher_id").toString());
+		data.putExtra("teacher_name", teacherAlias);
 		
 		setResult(RESULT_OK, data);
 		

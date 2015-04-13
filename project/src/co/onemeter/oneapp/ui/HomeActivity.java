@@ -226,7 +226,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     private void initView(){
         viewPager_home = (AutoScrollViewPager) findViewById(R.id.viewpager_home_headimages);
         group = (LinearLayout) findViewById(R.id.lay_dots);
-
+        schools = new Database(HomeActivity.this).fetchSchools();
         findViewById(R.id.img_home_event).setOnClickListener(this);
         findViewById(R.id.btn_add).setOnClickListener(this);
         findViewById(R.id.img_home_growth_class).setOnClickListener(this);
@@ -239,7 +239,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.img_home_movable).setOnClickListener(this);
         findViewById(R.id.btn_home_setting).setOnClickListener(this);
         findViewById(R.id.btn_goto_myclass).setOnClickListener(this);
-        schools = new Database(HomeActivity.this).fetchSchools();
+        
     }
     private boolean isEmpty(){
 		return schools == null ||schools.isEmpty();

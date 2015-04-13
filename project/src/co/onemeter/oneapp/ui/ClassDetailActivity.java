@@ -589,6 +589,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                 applyIntent.putExtra("classId",classId);
 	        } else {//学生请假
 	        	applyIntent = new Intent(this, StudentAbsenceActivity.class);
+	        	applyIntent.putExtra("schoolId", schoolId);
                 applyIntent.putExtra("classId",classId);
 	        }
             startActivity(applyIntent);

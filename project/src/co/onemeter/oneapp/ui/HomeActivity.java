@@ -173,6 +173,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                         MessageDialog dialog = new MessageDialog(HomeActivity.this);
                         dialog.setTitle("");
                         dialog.setMessage("请绑定邮箱，用于找回密码");
+                        dialog.setRightBold(true);
                         dialog.setOnLeftClickListener("以后再说", null);
                         dialog.setOnRightClickListener("去绑定", new MessageDialog.MessageDialogClickListener() {
                             @Override

@@ -403,8 +403,9 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			
 			 MessageDialog dialog = new MessageDialog(BindEmailAddressActivity.this);
              dialog.setMessage("你确定要取消绑定邮箱吗？");
-             dialog.setOnRightClickListener("取消", null);
-             dialog.setOnLeftClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+             dialog.setRightBold(true);
+             dialog.setOnLeftClickListener("继续绑定", null);
+             dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
                  @Override
                  public void onclick(MessageDialog dialog) {
                      dialog.dismiss();

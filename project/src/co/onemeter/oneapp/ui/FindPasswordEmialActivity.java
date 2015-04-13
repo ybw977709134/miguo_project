@@ -766,7 +766,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 							@Override
 							public void run() {
 								try {
-									Thread.sleep(3500);
+									Thread.sleep(3000);
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}

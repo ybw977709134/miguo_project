@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.*;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -147,7 +148,7 @@ public class MessageBox {
     }
     
     /**
-     * 显示图片和文本的弹框 (验证成功时)
+     * 显示图片和文本的弹框 (成功时)
      * @param message
      * @author hutianfeng
      * @date 2015/3/13
@@ -157,6 +158,116 @@ public class MessageBox {
         mWaitDlg = new Dialog(mContext, android.R.style.Theme_Translucent_NoTitleBar);
         View waitView = LayoutInflater.from(mContext).inflate(R.layout.msgbox_wait_image, null);
         mWatiTextView = (TextView) waitView.findViewById(R.id.wait_message);
+        if (TextUtils.isEmpty(message)) {
+            mWatiTextView.setVisibility(View.GONE);
+        } else {
+            mWatiTextView.setVisibility(View.VISIBLE);
+            mWatiTextView.setText(message);
+        }
+        mWaitDlg.setContentView(waitView);
+        Window window = mWaitDlg.getWindow();
+        window.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        if(android.os.Build.VERSION.SDK_INT >= 14) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            window.setDimAmount(0.5f);
+        }
+        mWaitDlg.setCanceledOnTouchOutside(false);
+        try {
+            mWaitDlg.show();
+        } catch (Exception e) {
+            // try to catch: android.view.WindowManager$BadTokenException
+            e.printStackTrace();
+        }
+    }
+    
+    
+    /**
+     * 显示图片和文本的弹框 (小图框，成功时)
+     * @param message
+     * @author hutianfeng
+     * @date 2015/4/13
+     */
+    public void showWaitImageSuccessSmall(String message) {
+        // 每次 showWait()时，都需要重新布局，否则会出现滚动条不转动的情况
+        mWaitDlg = new Dialog(mContext, android.R.style.Theme_Translucent_NoTitleBar);
+        View waitView = LayoutInflater.from(mContext).inflate(R.layout.msgbox_wait_image, null);
+        mWatiTextView = (TextView) waitView.findViewById(R.id.wait_message);
+        ((ImageView) waitView.findViewById(R.id.imageView_icon_success)).setImageResource(R.drawable.icon_success_small);
+        if (TextUtils.isEmpty(message)) {
+            mWatiTextView.setVisibility(View.GONE);
+        } else {
+            mWatiTextView.setVisibility(View.VISIBLE);
+            mWatiTextView.setText(message);
+        }
+        mWaitDlg.setContentView(waitView);
+        Window window = mWaitDlg.getWindow();
+        window.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        if(android.os.Build.VERSION.SDK_INT >= 14) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            window.setDimAmount(0.5f);
+        }
+        mWaitDlg.setCanceledOnTouchOutside(false);
+        try {
+            mWaitDlg.show();
+        } catch (Exception e) {
+            // try to catch: android.view.WindowManager$BadTokenException
+            e.printStackTrace();
+        }
+    }
+    
+    
+    /**
+     * 显示图片和文本的弹框 (警告时)
+     * @param message
+     * @author hutianfeng
+     * @date 2015/4/13
+     */
+    public void showWaitImageCaution(String message) {
+        // 每次 showWait()时，都需要重新布局，否则会出现滚动条不转动的情况
+        mWaitDlg = new Dialog(mContext, android.R.style.Theme_Translucent_NoTitleBar);
+        View waitView = LayoutInflater.from(mContext).inflate(R.layout.msgbox_wait_image, null);
+        mWatiTextView = (TextView) waitView.findViewById(R.id.wait_message);
+       ((ImageView) waitView.findViewById(R.id.imageView_icon_success)).setImageResource(R.drawable.icon_caution);
+        
+        
+        if (TextUtils.isEmpty(message)) {
+            mWatiTextView.setVisibility(View.GONE);
+        } else {
+            mWatiTextView.setVisibility(View.VISIBLE);
+            mWatiTextView.setText(message);
+        }
+        mWaitDlg.setContentView(waitView);
+        Window window = mWaitDlg.getWindow();
+        window.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        if(android.os.Build.VERSION.SDK_INT >= 14) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            window.setDimAmount(0.5f);
+        }
+        mWaitDlg.setCanceledOnTouchOutside(false);
+        try {
+            mWaitDlg.show();
+        } catch (Exception e) {
+            // try to catch: android.view.WindowManager$BadTokenException
+            e.printStackTrace();
+        }
+    }
+    
+    
+    /**
+     * 显示图片和文本的弹框 (失败时)
+     * @param message
+     * @author hutianfeng
+     * @date 2015/4/13
+     */
+    public void showWaitImageWorng(String message) {
+        // 每次 showWait()时，都需要重新布局，否则会出现滚动条不转动的情况
+        mWaitDlg = new Dialog(mContext, android.R.style.Theme_Translucent_NoTitleBar);
+        View waitView = LayoutInflater.from(mContext).inflate(R.layout.msgbox_wait_image, null);
+        mWatiTextView = (TextView) waitView.findViewById(R.id.wait_message);
+        ((ImageView) waitView.findViewById(R.id.imageView_icon_success)).setImageResource(R.drawable.icon_wrong);
         if (TextUtils.isEmpty(message)) {
             mWatiTextView.setVisibility(View.GONE);
         } else {

@@ -82,10 +82,10 @@ public class HybirdImageVoiceTextPreview extends Activity implements View.OnClic
             if (mediaPlayer != null) {
                 if (mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
-                    audioButton.setText(R.string.msg_audio_resume);
+                    audioButton.setText("继续");
                 } else {
                     mediaPlayer.start();
-                    audioButton.setText(R.string.msg_audio_pause);
+                    audioButton.setText("暂停");
                 }
             } else {
                 replayAudio();
@@ -140,12 +140,12 @@ public class HybirdImageVoiceTextPreview extends Activity implements View.OnClic
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
-                    audioButton.setText(R.string.msg_audio_restart);
+                    audioButton.setText("重听");
                 }
             });
 
             setAudioProgress(0);
-            audioButton.setText(R.string.msg_audio_pause);
+            audioButton.setText("暂停");
             mediaPlayer.start();
         } catch (IOException e) {
             e.printStackTrace();

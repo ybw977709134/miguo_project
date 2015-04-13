@@ -75,12 +75,13 @@
 				
 				<ImageView
 				style="@style/bg_section_divider_line_light"/>
+				
 				<LinearLayout
 					android:id="@+id/layout_bind_email"
 					android:layout_height="50dp"
 					android:layout_width="fill_parent"
 					android:orientation="horizontal"
-					android:background="@drawable/btn_white_selector"
+					android:background="@drawable/menu_view_middle_selector"
 					android:clickable="true">
 					<TextView
 						android:layout_height="fill_parent"
@@ -111,7 +112,7 @@
 					android:layout_height="50dp"
 					android:layout_width="fill_parent"
 					android:orientation="horizontal"
-					android:background="@drawable/btn_white_selector"
+					android:background="@drawable/menu_view_middle_selector"
 					android:visibility="gone"
 					android:clickable="true">
 					<TextView

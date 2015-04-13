@@ -164,6 +164,15 @@ public abstract class TimelineFragment extends ListFragment
         TimelineFragment.newReviewFlag = true;
         Database.removeDBTableChangeListener(momentReviewObserver);
     }
+    
+    
+    @Override
+    public void onDestroy() {
+    	if (adapter != null) {
+    		adapter.stopMedia();//消除掉位关闭的媒体文件
+    	}
+    	super.onDestroy();
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

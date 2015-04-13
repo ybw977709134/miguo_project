@@ -66,8 +66,9 @@
             android:id="@+id/btn_add"
             android:layout_height="wrap_content"
             android:layout_width="70dp"
-            android:background="@drawable/btn_blue_medium_selector"
+            android:background="@drawable/btn_blue_selector"
             android:textColor="@color/white"
+            android:padding="5dp"
             android:textSize="18sp"
             android:text="@string/add"
             android:layout_gravity="center_vertical"/>

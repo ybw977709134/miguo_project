@@ -11,10 +11,11 @@ perl -pi -e \
     project/AndroidManifest.xml
 
 # update build version name
+# version name := major.minor.ver_code.date
 buildVer=`date +%m%d`
 [ $omenv != 'product' ] && buildVer="$buildVer($omenv)"
 perl -pi -e \
-    "s/android:versionName=\"([0-9]+)\.([0-9]+)\.([0-9]+)\..*\"/android:versionName=\"\1.\2.\3.$buildVer\"/" \
+    "s/android:versionName=\"([0-9]+)\.([0-9]+)\.([0-9]+)\..*\"/android:versionName=\"\1.\2.$curr_ver_code.$buildVer\"/" \
     project/AndroidManifest.xml
 curr_ver_name=`grep android:versionName project/AndroidManifest.xml |awk -F '"' '{print $2}'`
 
@@ -23,7 +24,7 @@ echo OM_ENV: $OM_ENV
 echo version $curr_ver_code:$curr_ver_name
 
 src=./project/build/outputs/apk/project-release.apk
-dest=./out/om_im_android_${omenv}_`date +%m%d`.apk
+dest=./out/om_im_android_${omenv}_`date +%m%d`_${curr_ver_code}.apk
 
 gradle clean \
     && gradle assembleRelease \

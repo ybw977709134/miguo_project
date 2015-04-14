@@ -544,7 +544,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 						String date = sdf.format(new Date(lesson.start_date * 1000));
 						String[] dates = date.split("-");
 						long timeStamps = Utils.getTimeStamp(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]), Integer.parseInt(dates[2]))/1000;
-						if(currentTime > (timeStamps + startDateStamps) && currentTime < (timeStamps + endDateStamps)){
+						if(currentTime > lesson_Live.start_date && currentTime < lesson_Live.end_date){
 							lessonId = lesson.lesson_id;
 							lessonName = lesson.title;
 							}

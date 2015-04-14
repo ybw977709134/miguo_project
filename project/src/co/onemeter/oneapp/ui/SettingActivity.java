@@ -335,6 +335,7 @@ public class SettingActivity extends Activity implements OnClickListener {
         MessageDialog dialog = new MessageDialog(SettingActivity.this);
         dialog.setTitle(R.string.settings_upgrade_will_you_upgrade_now);
         dialog.setMessage(sb.toString());
+        dialog.setRightBold(true);
         dialog.setOnLeftClickListener(getResources().getString(R.string.upgrade_cancel), null);
         dialog.setOnRightClickListener(getResources().getString(R.string.upgrade_ok), new MessageDialog.MessageDialogClickListener() {
             @Override

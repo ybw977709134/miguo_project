@@ -12,6 +12,7 @@ import org.wowtalk.ui.MessageBox;
 
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.ui.datepicker.DatePickerActivity;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
 
@@ -33,6 +34,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -51,6 +53,12 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 	public static final String TIME = "time";
 	public static final String PLACE = "place";
 	public static final String LENGTH = "length";
+	
+	
+	public static final int REQ_START_DATE=1;//开始日期请求码
+	public static final int REQ_END_DATE=2;//结束日期请求码
+	public static final int REQ_START_TIME=3;//开始时间请求码
+	public static final int REQ_CLASS_TIME=4;//上课时长请求码
 
 	private String classId;
 
@@ -62,6 +70,23 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 	private TimePicker tpTime;
 	private TimePicker tpLength;
 	private EditText dtPlace;
+	
+	//开始日期
+	private LinearLayout layout_classinfo_edit_start_date;
+	private TextView textVIew_start_date;
+	
+	//结束日期
+	private LinearLayout layout_classinfo_edit_end_date;
+	private TextView textView_end_date;
+	
+	//开始时间
+	private LinearLayout layout_classinfo_edit_start_time;
+	private TextView textView_start_time;
+	
+	//上课时长
+	private LinearLayout layout_classinfo_edit_class_time;
+	private TextView textView_class_time;
+	
 
 	private Database mDBHelper;
 	private GroupChatRoom classroom;
@@ -118,19 +143,43 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 
 		//android.util.Log.i("-->>", classroom.groupID);
 
-		dtTerm = (EditText) findViewById(R.id.ed_lesinfo_term);
-		dtGrade = (EditText) findViewById(R.id.ed_lesinfo_grade);
-		dtSubject = (EditText) findViewById(R.id.ed_lesinfo_subject);
-		dpDate = (DatePicker) findViewById(R.id.datePicker_lesinfo_date);
-		dpEndDate = (DatePicker) findViewById(R.id.datePicker_lesinfo_enddate);
-		tpTime = (TimePicker) findViewById(R.id.timePicker_lesinfo_time);
-		tpLength = (TimePicker) findViewById(R.id.timePicker_lesinfo_length);
-		dtPlace = (EditText) findViewById(R.id.ed_lesinfo_place);
+		dtTerm = (EditText) findViewById(R.id.ed_lesinfo_term);//学期
+		dtGrade = (EditText) findViewById(R.id.ed_lesinfo_grade);//年级
+		dtSubject = (EditText) findViewById(R.id.ed_lesinfo_subject);//学科
+		
+		dpDate = (DatePicker) findViewById(R.id.datePicker_lesinfo_date);//开始日期
+		dpEndDate = (DatePicker) findViewById(R.id.datePicker_lesinfo_enddate);//结束日期
+		tpTime = (TimePicker) findViewById(R.id.timePicker_lesinfo_time);//开始上课时间
+		tpLength = (TimePicker) findViewById(R.id.timePicker_lesinfo_length);//上课时长
+		
+		dtPlace = (EditText) findViewById(R.id.ed_lesinfo_place);//地点
+		
 		layout_lesinfo_time = (LinearLayout) findViewById(R.id.layout_lesinfo_time);
 		layout_lesinfo_length = (LinearLayout) findViewById(R.id.layout_lesinfo_length);
 		tpTime.setIs24HourView(true);
+		
+		
         dpDate.setOnClickListener(this);
         dpEndDate.setOnClickListener(this);
+        
+        
+        layout_classinfo_edit_start_date = (LinearLayout) findViewById(R.id.layout_classinfo_edit_start_date);
+        textVIew_start_date = (TextView) findViewById(R.id.textVIew_start_date);
+        
+        layout_classinfo_edit_end_date = (LinearLayout) findViewById(R.id.layout_classinfo_edit_end_date);
+        textView_end_date = (TextView) findViewById(R.id.textView_end_date);
+        
+        layout_classinfo_edit_start_time = (LinearLayout) findViewById(R.id.layout_classinfo_edit_start_time);
+        textView_start_time = (TextView) findViewById(R.id.textView_start_time);
+        
+        layout_classinfo_edit_class_time = (LinearLayout) findViewById(R.id.layout_classinfo_edit_class_time);
+        textView_class_time = (TextView) findViewById(R.id.textView_class_time);
+        
+        layout_classinfo_edit_start_date.setOnClickListener(this);
+        layout_classinfo_edit_end_date.setOnClickListener(this);
+        layout_classinfo_edit_start_time.setOnClickListener(this);
+        layout_classinfo_edit_class_time.setOnClickListener(this);
+        
         
 		if(reDate !=null && !TextUtils.isEmpty(reDate)){
 			String[] dates = reDate.split(" - ");
@@ -140,16 +189,22 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 			String[] times = reTime.split(" - ");
 			String[] startTime = times[0].split(":");
 			String[] endTime = times[1].split(":");
+			
 			int timeLengthTag = (Integer.parseInt(endTime[0])*3600 + Integer.parseInt(endTime[1])*60 - 
 					Integer.parseInt(startTime[0])*3600 - Integer.parseInt(startTime[1])*60);
+			
 			int hourLength = timeLengthTag/3600;
 			int minuteLength = timeLengthTag % 3600 / 60;
+			
 			dpDate.init(Integer.parseInt(startDate[0]), Integer.parseInt(startDate[1]) - 1, Integer.parseInt(startDate[2]), null);
 	        dpEndDate.init(Integer.parseInt(endDate[0]), Integer.parseInt(endDate[1]) - 1, Integer.parseInt(endDate[2]), null);
+	        
 	        tpTime.setCurrentHour(Integer.parseInt(startTime[0]));
 	        tpTime.setCurrentMinute(Integer.parseInt(startTime[1]));
+	        
 	        tpLength.setCurrentHour(hourLength);
 	        tpLength.setCurrentMinute(minuteLength);
+	        
 	        if(String.valueOf(tpTime.getCurrentHour()) != null){
 	        	tpTime.setEnabled(false);
 	        	tpLength.setEnabled(false);
@@ -183,13 +238,10 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
                 closeInputBoard();
             }
         });
-		
+        
+
 			tpTime.setIs24HourView(true);
 			tpLength.setIs24HourView(true);
-//			if(minuteLength == 0){
-//				tpLength.setCurrentHour(0);
-//			    tpLength.setCurrentMinute(0);
-//			}
 			
 			
 			q.find(R.id.title).text(getString(R.string.class_info));
@@ -208,36 +260,6 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 					dtSubject.setText(infos[2]);
 					dtPlace.setText(infos[3]);
 					
-//					String[] trsdates = infos[3].split("-");
-//					if(trsdates.length == 3){
-//						dpDate.init(Integer.parseInt(trsdates[0]),Integer.parseInt(trsdates[1]) - 1 ,Integer.parseInt(trsdates[2]) , new DatePicker.OnDateChangedListener() {
-//                            @Override
-//                            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//                                closeInputBoard();
-//                            }
-//                        });
-//					}
-//					
-//					String[] trstime = infos[4].split(":");
-//					if(trstime.length == 2){
-//						tpTime.setCurrentHour(Integer.parseInt(trstime[0]));
-//						tpTime.setCurrentMinute(Integer.parseInt(trstime[1]));
-//					}
-//					String[] trslength = infos[6].split(":");
-//					if(trslength.length == 2){
-//						tpLength.setCurrentHour(Integer.parseInt(trslength[0]));
-//						tpLength.setCurrentMinute(Integer.parseInt(trslength[1]));
-//					}
-//					
-//					String[] trsenddates = infos[7].split("-");
-//					if(trsenddates.length == 3){
-//						dpEndDate.init(Integer.parseInt(trsenddates[0]),Integer.parseInt(trsenddates[1]) - 1 ,Integer.parseInt(trsenddates[2]) , new DatePicker.OnDateChangedListener() {
-//                            @Override
-//                            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//                                closeInputBoard();
-//                            }
-//                        });
-//					}
 				}else{
 					Date date = new Date();
 					tpTime.setCurrentHour(date.getHours());
@@ -270,6 +292,31 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		case R.id.cancel:
 			finish();
 			break;
+			
+		case R.id.layout_classinfo_edit_start_date://选择开始日期
+			Intent startDateIntent = new Intent(ClassInfoEditActivity.this,DatePickerActivity.class);
+			
+			startActivityForResult(startDateIntent, REQ_START_DATE);
+			break;
+			
+		case R.id.layout_classinfo_edit_end_date://选择结束日期
+			Intent endDateIntent = new Intent(ClassInfoEditActivity.this,DatePickerActivity.class);
+			
+			startActivityForResult(endDateIntent, REQ_END_DATE);
+			break;
+			
+		case R.id.layout_classinfo_edit_start_time://选择上课时间
+			Intent startTimeIntent = new Intent(ClassInfoEditActivity.this,DatePickerActivity.class);
+			
+			startActivityForResult(startTimeIntent, REQ_START_TIME);
+			break;
+			
+		case R.id.layout_classinfo_edit_class_time://选择上课时长
+			Intent classTimeIntent = new Intent(ClassInfoEditActivity.this,DatePickerActivity.class);
+			
+			startActivityForResult(classTimeIntent, REQ_CLASS_TIME);
+			break;
+			
 		case R.id.save:
 			modifyClassInfo(classId);
 			break;
@@ -291,8 +338,10 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		}
 		classroom.isEditable = true;
 		
+		
 		final Calendar resultTime = Calendar.getInstance();
 		final Calendar resultEndTime = Calendar.getInstance();
+		
 		//resultTime.setTimeZone(TimeZone.getTimeZone("GMT"));
 		resultTime.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth());
 		resultEndTime.set(dpEndDate.getYear(), dpEndDate.getMonth(), dpEndDate.getDayOfMonth());
@@ -314,23 +363,32 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		    return;
 		}
 		
+		//开始上课时间
 		final int hour = tpTime.getCurrentHour();
 		final int minite = tpTime.getCurrentMinute();
+		
+		//上课时长
 		final int hourLength = tpLength.getCurrentHour();
 		final int miniteLength = tpLength.getCurrentMinute();
+		
 		classroom.description = dtTerm.getText().toString() 
 				+ Constants.COMMA + dtGrade.getText().toString()
 				+ Constants.COMMA + dtSubject.getText().toString()
 				+ Constants.COMMA + dtPlace.getText().toString();
 		
-		final Calendar startDay = Calendar.getInstance();
-		final Calendar endDay = Calendar.getInstance();
+		//当天0点的时间
+		final Calendar startDay = Calendar.getInstance();//当天
+		final Calendar endDay = Calendar.getInstance();//结束
 		
 		long currentDayTimps = Utils.getDayStampMoveMillis();
-		int classTimps = hour * 3600 + minite * 60;
-		int classLengthTimps = hourLength * 3600 + miniteLength * 60;
-		final long startClassTimps = currentDayTimps + classTimps;
-		final long endClassTimps = startClassTimps + classLengthTimps;
+		
+		int classTimps = hour * 3600 + minite * 60;//上课时间
+		int classLengthTimps = hourLength * 3600 + miniteLength * 60;//上课时长时间戳
+		
+		final long startClassTimps = currentDayTimps + classTimps;//开始的时间戳
+		
+		final long endClassTimps = startClassTimps + classLengthTimps;//结束的时间戳
+		
 		startDay.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth());
 		endDay.set(dpEndDate.getYear(), dpEndDate.getMonth(), dpEndDate.getDayOfMonth());
 		
@@ -353,12 +411,8 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 					data.putExtra(TERM, dtTerm.getText().toString());
 					data.putExtra(GRADE, dtGrade.getText().toString());
 					data.putExtra(SUBJECT, dtSubject.getText().toString());
-//					data.putExtra(DATE, new SimpleDateFormat("yyyy-MM-dd").format(resultTime.getTimeInMillis()));
-//					data.putExtra(TIME, (hour < 10 ? ("0" + String.valueOf(hour)) : String.valueOf(hour)) + ":"
-//							+ (minite < 10 ? ("0" + String.valueOf(minite)) : String.valueOf(minite)));
 					data.putExtra(PLACE, dtPlace.getText().toString());
-//					data.putExtra(LENGTH, String.valueOf(hourLength) + ":"
-//							+ (miniteLength < 10 ? ("0" + String.valueOf(miniteLength)) : String.valueOf(miniteLength))) ;
+
 					setResult(RESULT_OK, data);
 					finish();
 				} else if (result == ErrorCode.ERR_OPERATION_DENIED) {
@@ -368,69 +422,39 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 			
 		});
 	}
-//    private void updateClassInfo() {
-//		if(classroom == null){
-//			mMsgBox.toast(R.string.class_err_denied, 500);
-//			return;
-//		}
-//		classroom.isEditable = true;
-//		
-//		final Calendar resultTime = Calendar.getInstance();
-//		//resultTime.setTimeZone(TimeZone.getTimeZone("GMT"));
-//		resultTime.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth());
-//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//		
-//		long firstlesTime = getIntent().getLongExtra("firstlesdate", -1);
-//		if(firstlesTime != -1){
-//		    if( firstlesTime < resultTime.getTimeInMillis() / 1000 ){
-//			    if(!mMsgBox.isWaitShowing()){
-//				    mMsgBox.toast("开班时间不得晚于课程时间！");
-//			    }
-//			    return;
-//		    }
-//		}
-//		
-//		final int hour = tpTime.getCurrentHour();
-//		final int minite = tpTime.getCurrentMinute();
-//		final int hourLength = tpLength.getCurrentHour();
-//		final int miniteLength = tpLength.getCurrentMinute();
-//		classroom.description = dtTerm.getText().toString() 
-//				+ Constants.COMMA + dtGrade.getText().toString()
-//				+ Constants.COMMA + dtSubject.getText().toString()
-//				+ Constants.COMMA + dtPlace.getText().toString();
-//				
-//		mMsgBox.showWait();
-//		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
-//			@Override
-//			protected Integer doInBackground(Void... params) {
-//				mDBHelper.updateGroupChatRoom(classroom);
-//				return WowTalkWebServerIF.getInstance(ClassInfoEditActivity.this).fGroupChat_UpdateInfo(classroom);
-//			}
-//
-//			@Override
-//			protected void onPostExecute(Integer result) {
-//				mMsgBox.dismissWait();
-//				if (result == ErrorCode.OK) {
-//					// update the display name of chatmessages.
-//					mDBHelper.updateChatMessageDisplayNameWithUser(classroom.groupID, classroom.groupNameOriginal);
-//					Intent data = new Intent();
-//					data.putExtra(TERM, dtTerm.getText().toString());
-//					data.putExtra(GRADE, dtGrade.getText().toString());
-//					data.putExtra(SUBJECT, dtSubject.getText().toString());
-////					data.putExtra(DATE, new SimpleDateFormat("yyyy-MM-dd").format(resultTime.getTimeInMillis()));
-////					data.putExtra(TIME, (hour < 10 ? ("0" + String.valueOf(hour)) : String.valueOf(hour)) + ":"
-////							+ (minite < 10 ? ("0" + String.valueOf(minite)) : String.valueOf(minite)));
-//					data.putExtra(PLACE, dtPlace.getText().toString());
-////					data.putExtra(LENGTH, String.valueOf(hourLength) + ":"
-////							+ (miniteLength < 10 ? ("0" + String.valueOf(miniteLength)) : String.valueOf(miniteLength))) ;
-//					setResult(RESULT_OK, data);
-//					finish();
-//				} else if (result == ErrorCode.ERR_OPERATION_DENIED) {
-//					mMsgBox.toast(R.string.class_err_denied, 500);
-//				}
-//			}
-//		});
-//	}
+	
+	
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		
+		if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+			case REQ_START_DATE://开始日期请求码
+				
+				break;
+				
+			case REQ_END_DATE://结束日期请求码
+				
+				break;
+				
+			case REQ_START_TIME://开始时间请求码
+	
+				break;
+				
+			case REQ_CLASS_TIME://上课时长请求码
+	
+				break;
+
+			default:
+				break;
+			}
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	
 	
 	@Override
 	protected void onDestroy() {

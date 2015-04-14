@@ -911,7 +911,7 @@
     <string name="class_parent_opinion_submitted">家长意见已提交</string>
     <string name="class_parent_opinion_not_submitted">家长意见未提交</string>
     <string name="more">更多</string>
-    <string name="class_edit_class_info">编辑课程信息</string>
+    <string name="class_edit_class_info">编辑班级信息</string>
     <string name="class_edit_cursetable_info">编辑课表</string>
     <string name="class_lesson_situation_table">课堂点评</string>
     <string name="class_set_homework">布置作业</string>
@@ -936,7 +936,7 @@
     <string name="class_very_very_good">棒极了</string>
     <string name="class_very_good">好</string>
     <string name="class_good">有待加强</string>
-	<string name="class_info">班级信息</string>
+	<string name="class_info">编辑班级</string>
 	<string name="class_coursetable_info">课表信息</string>
 	<string name="class_err_denied">操作未授权！</string>
 	<string name="class_add_lesson">添加课程</string>
@@ -976,7 +976,7 @@
 	<string name="upgrade_failed_unknown">升级失败</string>
 	
 	<string name="upgrade_ok">立即更新</string>
-	<string name="upgrade_cancel">稍后更新</string>
+	<string name="upgrade_cancel">暂不更新</string>
 	
 	
 	<string name="class_lesson_call_roll_online">在线点名</string>

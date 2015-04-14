@@ -11,44 +11,47 @@
         style="?attr/navbar"
         android:layout_width="fill_parent" >
 
-        <TextView
+        <co.onemeter.oneapp.ui.widget.PressedTextView
             android:id="@+id/cancel"
             style="?attr/navbar_btn_left"
             android:clickable="true"
             android:gravity="center"
             android:text="@string/contacts_search_cancel"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/title"
             style="?attr/navbar_title"
             android:text="dummy" />
 
-        <TextView
+        <co.onemeter.oneapp.ui.widget.PressedTextView
             android:id="@+id/save"
             style="?attr/navbar_txt_right"
             android:clickable="true"
             android:gravity="center"
             android:text="@string/save"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <ScrollView
         android:id="@+id/scrollView_classinfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/cancel"
-        android:layout_marginRight="17dp" >
+        android:scrollbars="none" >
 
         <LinearLayout
             android:id="@+id/lay_info_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/padding_medium" >
+            android:orientation="vertical" >
+            
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+            	android:padding="@dimen/padding_medium" >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -58,6 +61,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black_24"
+                    android:textSize="16sp"
                     android:text="@string/class_term" />
 
                 <EditText
@@ -82,6 +87,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black_24"
+                    android:textSize="16sp"
                     android:text="@string/class_grade" />
 
                 <EditText
@@ -106,6 +113,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black_24"
+                    android:textSize="16sp"
                     android:text="@string/class_subject" />
 
                 <EditText
@@ -121,11 +130,12 @@
                     android:maxLength="20" >
                 </EditText>
             </LinearLayout>
-
+		
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_small"
+                android:visibility="visible"
                 android:gravity="center_vertical" >
 
                 <TextView
@@ -138,10 +148,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
+            
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_small"
+                android:visibility="visible"
                 android:gravity="center_vertical" >
 
                 <TextView
@@ -159,6 +171,7 @@
                 android:id="@+id/layout_lesinfo_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="visible"
                 android:layout_marginTop="@dimen/padding_small"
                 android:gravity="center_vertical" >
 
@@ -178,6 +191,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_small"
+                android:visibility="visible"
                 android:gravity="center_vertical" >
 
                 <TextView
@@ -199,6 +213,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black_24"
+                    android:textSize="16sp"
                     android:text="@string/class_place" />
 
                 <EditText
@@ -214,6 +230,165 @@
                     android:maxLength="20" >
                 </EditText>
             </LinearLayout>
+            
+           </LinearLayout> 
+            
+           
+            
+            
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="vertical">
+            
+                <ImageView 
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_section_divider_line_dark"/>
+                <LinearLayout 
+                    android:id="@+id/layout_classinfo_edit_start_date" 
+                    android:layout_height="40dp"
+                    android:layout_width="fill_parent"
+                    android:orientation="horizontal"
+                    android:background="@color/white"
+                    android:clickable="true">
+                    <TextView 
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/black_24"
+                        android:text="开始日期"/>
+                    <TextView
+                        android:id="@+id/textVIew_start_date" 
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:gravity="center_vertical|right"
+                        android:paddingRight="10dp"
+                        android:drawableRight="@drawable/table_arrow"
+                        android:clickable="true"
+                        android:textColor="@color/gray_40"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+                <ImageView 
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/bg_section_divider_line_light"/> 
+                    
+                
+                <LinearLayout 
+                    android:id="@+id/layout_classinfo_edit_end_date" 
+                    android:layout_height="40dp"
+                    android:layout_width="fill_parent"
+                    android:orientation="horizontal"
+                    android:background="@color/white"
+                    android:clickable="true">
+                    <TextView 
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/black_24"
+                        android:text="结束日期"/>
+                    <TextView
+                        android:id="@+id/textView_end_date" 
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:gravity="center_vertical|right"
+                        android:paddingRight="10dp"
+                        android:drawableRight="@drawable/table_arrow"
+                        android:clickable="true"
+                        android:textColor="@color/gray_40"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+                <ImageView 
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/bg_section_divider_line_light"/>
+                
+                
+                <LinearLayout 
+                    android:id="@+id/layout_classinfo_edit_start_time" 
+                    android:layout_height="40dp"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:background="@color/white"
+                    android:clickable="true">
+                    <TextView 
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/black_24"
+                        android:text="上课时间"/>
+                    <TextView
+                        android:id="@+id/textView_start_time" 
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:gravity="center_vertical|right"
+                        android:paddingRight="10dp"
+                        android:drawableRight="@drawable/table_arrow"
+                        android:clickable="true"
+                        android:textColor="@color/gray_40"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+                <ImageView 
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/bg_section_divider_line_light"/>
+                
+                
+                
+                <LinearLayout 
+                    android:id="@+id/layout_classinfo_edit_class_time" 
+                    android:layout_height="40dp"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:background="@color/white"
+                    android:clickable="true">
+                    <TextView 
+                        android:layout_height="fill_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/black_24"
+                        android:text="上课时长"/>
+                    <TextView
+                        android:id="@+id/textView_class_time" 
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:gravity="center_vertical|right"
+                        android:paddingRight="10dp"
+                        android:drawableRight="@drawable/table_arrow"
+                        android:clickable="true"
+                        android:textColor="@color/gray_40"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+                <ImageView 
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/bg_section_divider_line_dark"/>
+                
+            </LinearLayout>
+            
+           
+            
+            
+            
         </LinearLayout>
     </ScrollView>
 

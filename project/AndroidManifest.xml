@@ -729,6 +729,13 @@
             android:theme="@style/MyActivityDialogStyle"
             android:screenOrientation="portrait">
         </activity>
+        
+        <activity
+            android:name=".ui.datepicker.TimerPickerActivity"
+            android:theme="@style/MyActivityDialogStyle"
+            android:screenOrientation="portrait">
+        </activity>
+        
     </application>
 
 </manifest>

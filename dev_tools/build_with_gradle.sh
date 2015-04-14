@@ -31,14 +31,21 @@ gradle clean \
     && echo output to $dest
 
 #
-# update server side upgrade configuration.
+# prepare for publishing
 #
-if [ $? -eq 0 ] && [ $omenv == 'dev01' ]
+if [ $? -eq 0 ]
 then
+    if [ $omenv == 'product' ]; then
+        host='websrv.onemeter.co'
+    else
+        host='dev01-websrv.onemeter.co'
+    fi
+
     ver_xml=`mktemp`
     old_ver_xml=`mktemp`
 
-    scp dev01:/var/www/newapi/download/ver.xml $old_ver_xml
+    echo download current upgrading configuration
+    scp root@$host:/var/www/newapi/download/ver.xml $old_ver_xml
 
     echo '<?xml version="1.0" encoding="UTF-8"?>
 <Smartphone xmlns="https://www.onemeter.co">
@@ -56,7 +63,7 @@ then
     echo "        <ver_code>$curr_ver_code</ver_code>" >> $ver_xml
     echo "        <ver_name>$curr_ver_name</ver_name>" >> $ver_xml
     echo "        <md5sum>`md5sum $dest|awk '{print $1}'`</md5sum>" >> $ver_xml
-    echo "        <link>http://dev01-websrv.onemeter.co/download/`basename $dest`</link>" >> $ver_xml
+    echo "        <link>http://$host/download/`basename $dest`</link>" >> $ver_xml
     echo "        <change_log>" >> $ver_xml
 
     git log --pretty='format:          <li>%h %s</li>' --no-merges \
@@ -71,12 +78,20 @@ then
   </body>
 </Smartphone>' >> $ver_xml
 
-    echo update configure file
+    echo '--------------------------------------'
     cat $ver_xml
+    echo '--------------------------------------'
+    echo updated upgrading configuration written to $ver_xml
 
-    scp $dest dev01:/var/www/newapi/download/
-    scp $ver_xml dev01:/var/www/newapi/download/ver.xml
-
-    rm -f $old_ver_xml
-    rm -f $ver_xml
+    if [ $omenv == 'dev01' ]
+    then
+        scp $dest root@$host:/var/www/newapi/download/
+        scp $ver_xml root@$host:/var/www/newapi/download/ver.xml
+        rm -f $old_ver_xml
+    else
+        echo ''
+        echo you may want to:
+        echo scp $dest root@$host:/var/www/newapi/download/
+        echo scp $ver_xml root@$host:/var/www/newapi/download/ver.xml
+    fi
 fi

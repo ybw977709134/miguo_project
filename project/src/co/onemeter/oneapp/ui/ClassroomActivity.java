@@ -134,14 +134,14 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 			protected void onPostExecute(Integer result) {
 				super.onPostExecute(result);
 				if(result == 1){
-					Toast.makeText(ClassroomActivity.this, "选择教室成功", Toast.LENGTH_LONG).show();
+					msgbox.showWaitImageSuccess("选择教室成功");
 					Intent intent = new Intent();
 //				    intent.putExtra("roomId", roomId);
 //				    intent.putExtra("roomName", roomName);
 				    setResult(RESULT_OK);
 				    finish();
 				}else if(result == 0){
-					Toast.makeText(ClassroomActivity.this, "该教室已被使用", Toast.LENGTH_LONG).show();
+					msgbox.showWaitImageCaution("该教室已被使用");
 				}
 			}
 			
@@ -161,11 +161,11 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 			protected void onPostExecute(Integer result) {
 				super.onPostExecute(result);
 				if(result == 1){
-					Toast.makeText(ClassroomActivity.this, "解除成功", Toast.LENGTH_LONG).show();
+					msgbox.showWaitImageSuccess("解除成功");
 				    setResult(RESULT_OK);
 				    finish();
 				}else if(result == 0){
-					Toast.makeText(ClassroomActivity.this, "还没有选择教室", Toast.LENGTH_LONG).show();
+					msgbox.showWaitImageCaution("还没有选择教室");
 				}
 			}
 			

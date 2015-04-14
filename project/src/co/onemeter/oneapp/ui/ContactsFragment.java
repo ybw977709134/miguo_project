@@ -538,7 +538,7 @@ public class ContactsFragment extends Fragment implements OnClickListener,
 
     @Override
     public int[] getOptionsMenuItemIcons(Context context) {
-        return new int[] { R.drawable.nav_refresh_selector, R.drawable.nav_add_selector};
+        return new int[] { R.drawable.nav_refresh_selector, R.drawable.sel_topbar_add_contact};
     }
 
     @Override

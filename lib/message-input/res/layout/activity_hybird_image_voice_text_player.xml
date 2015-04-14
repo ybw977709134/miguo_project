@@ -9,7 +9,7 @@
             android:layout_width="match_parent"
             android:layout_alignParentTop="true"
             android:focusableInTouchMode="true"
-            android:background="#ff0000"
+            android:background="@drawable/bg_menubar_bule"
             android:focusable="true">
 
         <ImageButton

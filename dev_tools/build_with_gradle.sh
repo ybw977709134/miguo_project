@@ -59,7 +59,8 @@ then
     echo "        <link>http://dev01-websrv.onemeter.co/download/`basename $dest`</link>" >> $ver_xml
     echo "        <change_log>" >> $ver_xml
 
-    git log --pretty='format:          <li>%h %s</li>' --no-merges origin/dev_as..HEAD >> $ver_xml
+    git log --pretty='format:          <li>%h %s</li>' --no-merges \
+        --since "`date -d '1 days ago' +%Y-%m-%d`" >> $ver_xml
     echo '' >> $ver_xml
 
     echo "        </change_log>" >> $ver_xml
@@ -70,8 +71,12 @@ then
   </body>
 </Smartphone>' >> $ver_xml
 
+    echo update configure file
+    cat $ver_xml
+
     scp $dest dev01:/var/www/newapi/download/
     scp $ver_xml dev01:/var/www/newapi/download/ver.xml
+
     rm -f $old_ver_xml
     rm -f $ver_xml
 fi

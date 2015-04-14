@@ -1,5 +1,12 @@
 #!/bin/bash
 # $1 = range start
 
-git log --pretty='format:%h (%an) %s' --no-merges $1..HEAD
+if [ $# == 1 ]
+then
+    range="$1..HEAD"
+else
+    range="--since=`date -d '1 days ago' +%Y-%m-%d`"
+fi
+
+git log --pretty='format:%h (%an) %s' --no-merges $range
 

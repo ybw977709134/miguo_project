@@ -8,6 +8,7 @@ import java.util.Map;
 import org.wowtalk.api.Classroom;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import com.androidquery.AQuery;
 
@@ -94,24 +95,20 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 			getClassroomInfo();
 			break;
 		case R.id.LinearLayout_release:
-			Builder alertDialog = new AlertDialog.Builder(ClassroomActivity.this);
-			alertDialog.setTitle("提示");
-			alertDialog.setMessage("确定要解除绑定教室吗？");
-			alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface arg0, int arg1) {
-					releaseClassroom();
-				}
-			});  
-			alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {			
-				@Override
-				public void onClick(DialogInterface arg0, int arg1) {
-					
-				}
-			});
-			alertDialog.create().show();
-			break;
+			MessageDialog dialog = new MessageDialog(ClassroomActivity.this);
+			dialog.setTitle("提示");
+			dialog.setMessage("确定要解除绑定教室吗？");
+            dialog.setRightBold(true);
+            dialog.setOnLeftClickListener("取消", null);
+            dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+            	@Override
+            	public void onclick(MessageDialog dialog) {
+            		releaseClassroom();
+            		
+                   }
+            	});
+            dialog.show();
+            break;
 		}
 		
 	}
@@ -136,10 +133,21 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 				if(result == 1){
 					msgbox.showWaitImageSuccess("选择教室成功");
 					Intent intent = new Intent();
-//				    intent.putExtra("roomId", roomId);
-//				    intent.putExtra("roomName", roomName);
 				    setResult(RESULT_OK);
-				    finish();
+				    new Thread(new Runnable() {
+						
+						@Override
+						public void run() {
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+                	
+							finish();
+							
+						}
+					}).start();
 				}else if(result == 0){
 					msgbox.showWaitImageCaution("该教室已被使用");
 				}
@@ -163,7 +171,22 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 				if(result == 1){
 					msgbox.showWaitImageSuccess("解除成功");
 				    setResult(RESULT_OK);
-				    finish();
+				    
+				    new Thread(new Runnable() {
+						
+						@Override
+						public void run() {
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+                	
+							finish();
+							
+						}
+					}).start();
+				    
 				}else if(result == 0){
 					msgbox.showWaitImageCaution("还没有选择教室");
 				}
@@ -189,11 +212,9 @@ public class ClassroomActivity extends Activity implements OnClickListener, OnIt
 				
 				if(classroom.isEmpty() || classroom == null){
 					classroom_empty.setVisibility(View.VISIBLE);
-//					LinearLayout_release.setVisibility(View.GONE);
 					listView_classroom_show.setVisibility(View.GONE);
 				}else{
 					classroom_empty.setVisibility(View.GONE);
-//					LinearLayout_release.setVisibility(View.VISIBLE);
 					listView_classroom_show.setVisibility(View.VISIBLE);
 				}
 				

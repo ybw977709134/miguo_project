@@ -10,6 +10,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -355,7 +356,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         }
 
 
-        setImageLayout(context, mImageResizer, photoFiles, holder.imageTable);
+        setImageLayout(context, moment,mImageResizer, photoFiles, holder.imageTable);
         showVoiceFile(voiceFile, holder.micLayout, holder.progress, holder.micButton, holder.micTime);
         if (moment.latitude == 0 && moment.longitude == 0) {
             holder.txtLoc.setVisibility(View.GONE);
@@ -1163,7 +1164,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     }
 
     public static void setImageLayout(
-            final Context context, final ImageResizer mImageResizer, final ArrayList<WFile> files, TableLayout table) {
+            final Context context, Moment moment, final ImageResizer mImageResizer, final ArrayList<WFile> files, TableLayout table) {
 
         if (files.isEmpty()) {
             table.setVisibility(View.GONE);
@@ -1200,13 +1201,47 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 final int photoIdx = i * columnNum + j;
                 RecyclingImageView imageView = new RecyclingImageView(context);
                 imageView.setClickDim(true);
-                tableRow.addView(imageView);
-                TableRow.LayoutParams params = (TableRow.LayoutParams) imageView.getLayoutParams();
-                params.height = DensityUtil.dip2px(context, 80);
-                params.width = DensityUtil.dip2px(context, 80);
-                params.setMargins(0, 0, DensityUtil.dip2px(context, 3), 0);
-                imageView.setLayoutParams(params);
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+                //对视频的item添加添加一个播放icon,并且一张图片以及是视频将长宽定义200*200
+                if(moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_VIDEO)){
+                    FrameLayout frameLayout = new FrameLayout(context);
+                    ImageView imgPlay = new ImageView(context);
+                    imgPlay.setImageResource(android.R.drawable.ic_media_play);
+
+                    frameLayout.addView(imageView);
+                    frameLayout.addView(imgPlay);
+                    tableRow.addView(frameLayout);
+
+                    FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) imageView.getLayoutParams();
+                    params.height = DensityUtil.dip2px(context, 200);
+                    params.width = DensityUtil.dip2px(context, 200);
+                    params.setMargins(0, 0, DensityUtil.dip2px(context, 3), 0);
+                    imageView.setLayoutParams(params);
+                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+                    FrameLayout.LayoutParams palyparams = (FrameLayout.LayoutParams) imgPlay.getLayoutParams();
+                    palyparams.gravity = Gravity.CENTER;
+                    palyparams.height = DensityUtil.dip2px(context, 50);
+                    palyparams.width = DensityUtil.dip2px(context, 50);
+                    palyparams.setMargins(0, 0, DensityUtil.dip2px(context, 3), 0);
+                    imgPlay.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    imgPlay.setLayoutParams(palyparams);
+                }else {
+                    tableRow.addView(imageView);
+
+                    TableRow.LayoutParams params = (TableRow.LayoutParams) imageView.getLayoutParams();
+                    if(photoNum == 1){
+                        params.height = DensityUtil.dip2px(context, 200);
+                        params.width = DensityUtil.dip2px(context, 200);
+                    }else {
+                        params.height = DensityUtil.dip2px(context, 80);
+                        params.width = DensityUtil.dip2px(context, 80);
+                    }
+                    params.setMargins(0, 0, DensityUtil.dip2px(context, 3), 0);
+                    imageView.setLayoutParams(params);
+                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                }
+
                 final String imageThumbnailPath = thumbnailPathList[photoIdx];
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override

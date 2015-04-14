@@ -908,7 +908,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 
 
         showVoiceFile(voiceFile);
-        MomentAdapter.setImageLayout(this, mImageResizer, photoFiles, imageTable);
+        MomentAdapter.setImageLayout(this, moment, mImageResizer, photoFiles, imageTable);
         int nlikers = MomentAdapter.setViewForLikeReview(this, txtLikeName, moment.reviews);
         int nReviews = MomentAdapter.setViewForCommentReview(this, commentLayout, moment.reviews, -1, moment, this);
         

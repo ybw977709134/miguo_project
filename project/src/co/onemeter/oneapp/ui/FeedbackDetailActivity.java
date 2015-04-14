@@ -313,7 +313,7 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
             }
         }
 
-        MomentAdapter.setImageLayout(this, mImageResizer, photoFiles, imageTable);
+        MomentAdapter.setImageLayout(this, moment,mImageResizer, photoFiles, imageTable);
         showVoiceFile(voiceFile);
     }
 

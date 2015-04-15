@@ -44,7 +44,8 @@
             android:divider="@drawable/divider"
             android:padding="@dimen/padding_medium" 
             android:background="@color/white"
-            android:cacheColorHint="#00000000">
+            android:cacheColorHint="#00000000"
+            android:scrollbars="none">
         </ListView>
 
 

@@ -69,4 +69,56 @@
 		<item name="radio">@style/standard_radio_green</item>
         <item name="button">@style/button_blue</item>
 	</style>
+
+    <!-- NoActionBar Theme-->
+    <style name="ThemeNoActionBar" parent="android:Theme.Holo.Light.NoActionBar">
+        <item name="backButton">@style/btn_back_black</item>
+        <item name="editButton">@style/btn_edit_black</item>
+        <item name="label">@style/label_black</item>
+        <item name="phoneButton">@style/btn_phone_black</item>
+        <item name="smsButton">@style/btn_sms_black</item>
+        <item name="contactButton">@style/btn_contact_black</item>
+        <item name="settingsButton">@style/btn_settings_black</item>
+        <item name="button">@style/button_blue</item>
+        <item name="inputbox">@style/inputbox_black</item>
+        <item name="selected">@style/selected_black</item>
+        <item name="unselected">@style/unselected_black</item>
+        <item name="addButton">@style/add_black</item>
+        <item name="deleteButton">@style/delete_black</item>
+        <item name="listButton">@style/list_black</item>
+        <item name="confirmButton">@style/confirm_black</item>
+        <item name="checked">@style/checked_black</item>
+        <item name="unchecked">@style/unchecked_black</item>
+    </style>
+
+    <style name="ThemeNoActionBar.White">
+        <item name="backButton">@style/btn_back_white</item>
+        <item name="editButton">@style/btn_edit_white</item>
+        <item name="label">@style/label_white</item>
+        <item name="phoneButton">@style/btn_phone_white</item>
+        <item name="smsButton">@style/btn_sms_white</item>
+        <item name="contactButton">@style/btn_contact_white</item>
+        <item name="settingsButton">@style/btn_settings_white</item>
+        <item name="button">@style/button_white</item>
+        <item name="inputbox">@style/inputbox_white</item>
+        <item name="selected">@style/selected_white</item>
+        <item name="unselected">@style/unselected_white</item>
+        <item name="addButton">@style/add_white</item>
+        <item name="deleteButton">@style/delete_white</item>
+        <item name="listButton">@style/list_white</item>
+        <item name="confirmButton">@style/confirm_white</item>
+        <item name="checked">@style/checked_white</item>
+        <item name="unchecked">@style/unchecked_white</item>
+        <item name="navbar_title">@style/page_title_dark</item>
+        <item name="navbar_btn_left">@style/navbar_btn_left</item>
+        <item name="navbar_btn_right">@style/navbar_btn_right</item>
+        <item name="navbar_txt_right">@style/navbar_txt_right</item>
+    </style>
+
+    <style name="ThemeNoActionBar.Blue_main" parent="ThemeNoActionBar.White">
+        <item name="navbar">@style/title_bar_blue_main</item>
+        <item name="radio">@style/standard_radio_green</item>
+        <item name="button">@style/button_blue</item>
+    </style>
+
 </resources>

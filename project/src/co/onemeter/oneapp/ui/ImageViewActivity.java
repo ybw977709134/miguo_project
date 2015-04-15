@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.scale_viewpager.PhotoView;
+import co.onemeter.oneapp.ui.scale_viewpager.PhotoViewAttacher;
 import co.onemeter.oneapp.ui.scale_viewpager.PhotoViewPager;
 import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.api.*;
@@ -41,7 +42,7 @@ import java.util.List;
  * Date: 3/25/13
  * Time: 11:13 AM
  */
-public class ImageViewActivity extends Activity implements View.OnClickListener {
+public class ImageViewActivity extends Activity implements View.OnClickListener, PhotoViewAttacher.OnViewTapListener {
 	private static final String EXTRA_IMGPOSITION="imgPosition";
     private static final String EXTRA_ISDUMMY = "imgdmmy";
 //	private static final String EXTRA_IMGPATH = "imgpath";
@@ -386,7 +387,7 @@ public class ImageViewActivity extends Activity implements View.OnClickListener 
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
         for (WFile file : files) {
-            ImageView iv = new PhotoView(this);
+            PhotoView iv = new PhotoView(this);
             iv.setLayoutParams(mParams);
 
 //            if (new File(file.localPath).exists())
@@ -395,6 +396,7 @@ public class ImageViewActivity extends Activity implements View.OnClickListener 
 //                iv.setImageDrawable(new BitmapDrawable(getResources(), file.localThumbnailPath));
 //            iv.setImageDrawable(getDrawableFromWFile(file));
             iv.setImageDrawable(null);
+            iv.setOnViewTapListener(this);
             mImageViews.add(iv);
 
             if(mPhotoEntity != null) {
@@ -485,7 +487,7 @@ public class ImageViewActivity extends Activity implements View.OnClickListener 
             f.setExt(aPair.getExt());
             files.add(f);
         }
-        launch(context, position, files,updateType, isMessageHistory);
+        launch(context, position, files, updateType, isMessageHistory);
     }
 
     /**
@@ -617,6 +619,11 @@ public class ImageViewActivity extends Activity implements View.OnClickListener 
         //return mediaStorageDir.getAbsolutePath() + "/" + timeStamp + rand + ".jpg";
         String photoName = orgPath.substring(orgPath.lastIndexOf("/")+1, orgPath.lastIndexOf("."));
         return mediaStorageDir.getAbsolutePath() + "/" + photoName + ".jpg";
+    }
+
+    @Override
+    public void onViewTap(View view, float x, float y) {
+        finish();
     }
 
     class MyViewPagerAdapter extends PagerAdapter {

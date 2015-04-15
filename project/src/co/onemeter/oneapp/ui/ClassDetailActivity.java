@@ -591,6 +591,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	        	applyIntent = new Intent(this, StudentAbsenceActivity.class);
 	        	applyIntent.putExtra("schoolId", schoolId);
                 applyIntent.putExtra("classId",classId);
+                applyIntent.putExtra("classname",myclasses_title.getText().toString());//班级名称需要传递
 	        }
             startActivity(applyIntent);
             

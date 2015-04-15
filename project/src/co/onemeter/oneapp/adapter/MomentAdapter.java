@@ -1173,8 +1173,15 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         table.removeAllViews();
         table.setVisibility(View.VISIBLE);
 
-        int photoNum = files.size();
+        //用于判断一张图片的时候图片显示的大一点
+        final int photosize = files.size();
+        int photoNum = files.size();//图片数量，此变量循环中会变化
         int columnNum = (int) Math.sqrt(photoNum - 1) + 1;
+
+        //三张图片将它们显示一行
+        if(photosize == 3){
+            columnNum = photosize;
+        }
         int rowNum = photoNum / columnNum + (photoNum % columnNum == 0 ? 0 : 1);
 
         final String[] thumbnailPathList = new String[photoNum];
@@ -1194,7 +1201,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             if (++i >= photoNum)
                 break;
         }
-
+        final boolean isVedio = moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_VIDEO);
         for (i = 0; i < rowNum; i++) {
             TableRow tableRow = new TableRow(context);
             for (int j  = 0; j < (photoNum <= columnNum ? photoNum : columnNum); j++) {
@@ -1203,7 +1210,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 imageView.setClickDim(true);
 
                 //对视频的item添加添加一个播放icon,并且一张图片以及是视频将长宽定义200*200
-                if(moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_VIDEO)){
+                if(isVedio){
                     FrameLayout frameLayout = new FrameLayout(context);
                     ImageView imgPlay = new ImageView(context);
                     imgPlay.setImageResource(android.R.drawable.ic_media_play);
@@ -1230,7 +1237,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                     tableRow.addView(imageView);
 
                     TableRow.LayoutParams params = (TableRow.LayoutParams) imageView.getLayoutParams();
-                    if(photoNum == 1){
+                    if(photosize == 1){
                         params.height = DensityUtil.dip2px(context, 200);
                         params.width = DensityUtil.dip2px(context, 200);
                     }else {

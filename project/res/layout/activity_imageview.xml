@@ -7,14 +7,28 @@
     <co.onemeter.oneapp.ui.scale_viewpager.PhotoViewPager
             android:id="@+id/mainViewPager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="@color/black_30"/>
+
+    <TextView
+        android:id="@+id/txtPhotoIdxIndicate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:singleLine="true"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
 
     <RelativeLayout
             android:id="@+id/title_bar"
             android:layout_height="@dimen/title_bar_height"
             android:layout_width="fill_parent"
             android:layout_alignParentTop="true"
-            android:background="@drawable/navbar_semi_trans">
+            android:background="@drawable/navbar_semi_trans"
+            android:visibility="gone">
 
         <Button
             android:id="@+id/btn_back"
@@ -23,7 +37,7 @@
             android:layout_centerVertical="true"
             android:background="@drawable/nav_back_selector"/>
 
-        <TextView
+        <!--<TextView
                 android:id="@+id/txtPhotoIdxIndicate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -31,7 +45,7 @@
                 android:singleLine="true"
                 android:textStyle="bold"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp" />-->
 
         <Button
                 android:layout_width="50dp"

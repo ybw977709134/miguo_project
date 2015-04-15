@@ -46,8 +46,6 @@ public class SelectTeacherActivity extends Activity implements OnClickListener, 
 	private SelectTeacherActivity instance = null;
 	private String class_id;
 	private String school_id;
-	private String teacherAlias;
-	private Database mdatabase;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +60,6 @@ public class SelectTeacherActivity extends Activity implements OnClickListener, 
 		AQuery q = new AQuery(this);
 		q.find(R.id.title_back).clicked(this);
 		q.find(R.id.teacher_refresh).clicked(this);
-		mdatabase = new Database(this);
 		listView_teacher_show = (ListView) findViewById(R.id.listView_teacher_show);
 		
 		msgbox = new MessageBox(this);
@@ -93,7 +90,7 @@ public class SelectTeacherActivity extends Activity implements OnClickListener, 
 					
 					classteachers.clear();
 					classteachers.addAll(result);
-					adapter = new MyClassTeacherAdapter (SelectTeacherActivity.this,classteachers);
+					adapter = new MyClassTeacherAdapter (classteachers);
 					listView_teacher_show.setAdapter(adapter);
 				}
 				
@@ -119,9 +116,7 @@ public class SelectTeacherActivity extends Activity implements OnClickListener, 
 	class MyClassTeacherAdapter extends BaseAdapter{
     	private List<Map<String, Object>> classteachers;
     	private int currPosition = -1;
-    	private Context mContext;
-    	public MyClassTeacherAdapter(Context mContext,List<Map<String, Object>> classteachers){
-    		this.mContext = mContext;
+    	public MyClassTeacherAdapter(List<Map<String, Object>> classteachers){
     		this.classteachers = classteachers;
     	}
 
@@ -154,13 +149,7 @@ public class SelectTeacherActivity extends Activity implements OnClickListener, 
 			}else{
 				holder = (ViewHolder) convertView.getTag();
 			}
-			Database dbHelper=new Database(mContext);
-			String teacher_alias = dbHelper.fetchStudentAlias(school_id, classteachers.get(position).get("teacher_id").toString());
-			holder.textView_item_teacher_name.setText(teacher_alias);
-//			holder.textView_item_teacher_name.setText( TextUtils.isEmpty(classteachers.get(position).get("teacher_alias").toString() ) 
-//					? classteachers.get(position).get("teacher_alias").toString() 
-//					: classteachers.get(position).get("teacher_username").toString() );
-			
+			holder.textView_item_teacher_name.setText(classteachers.get(position).get("teacher_alias").toString());
 			if(currPosition == position){
 				holder.imageView_item_teacher_icon.setVisibility(View.VISIBLE);
 			}else{
@@ -190,13 +179,7 @@ public class SelectTeacherActivity extends Activity implements OnClickListener, 
 		
 		Intent data = new Intent();
 		data.putExtra("teacher_id", classteachers.get(position).get("teacher_id").toString());
-		
-//		data.putExtra("teacher_name", TextUtils.isEmpty(classteachers.get(position).get("teacher_alias").toString() ) 
-//				? classteachers.get(position).get("teacher_alias").toString() 
-//				: classteachers.get(position).get("teacher_username").toString());
-		teacherAlias = mdatabase.fetchStudentAlias(school_id, classteachers.get(position).get("teacher_id").toString());
-		data.putExtra("teacher_name", teacherAlias);
-		
+		data.putExtra("teacher_name", classteachers.get(position).get("teacher_alias").toString());
 		setResult(RESULT_OK, data);
 		
 		instance.finish();

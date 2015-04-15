@@ -30,18 +30,20 @@
                 android:layout_marginTop="@dimen/padding_medium"
                 android:visibility="visible"
                 android:gravity="center"
+                android:background="@drawable/icon_share_list_vote_option"
                 android:orientation="horizontal">
+                
             <FrameLayout
                     android:layout_height="50dp"
                     android:layout_width="50dp"
-                    android:background="@color/blue"
+                    
                     android:layout_gravity="center_vertical">
                 <ImageView
                         android:id="@+id/btn_play"
                         android:layout_height="match_parent"
                         android:layout_width="match_parent"
                         android:layout_gravity="center"
-                        android:src="@drawable/timeline_player_play"
+                        android:src="@drawable/icon_messages_voice_selector"
                         android:clickable="false"/>
                 <ProgressBar
                         android:id="@+id/progress"
@@ -56,7 +58,7 @@
                     android:gravity="center"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:background="@drawable/timeline_player_bg_right"
+                    
                     android:textSize="25dp"
                     android:textColor="@color/voice_play_btn_bg"
                     android:text="00:00"/>

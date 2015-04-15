@@ -17,7 +17,7 @@
             <ImageButton
                 android:id="@+id/navbar_btn_left"
                 style="?attr/navbar_btn_left"
-                android:src="@drawable/nav_back_selector"/>
+                android:src="@drawable/icon_back_selector"/>
             <ImageButton
                 android:id="@+id/navbar_btn_right"
                 style="?attr/navbar_btn_right"

@@ -302,7 +302,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             public void onClick(View v) {
             	if (file != null) {//主要是为了在播放音频的情况下进入详情页，停止播放音频
             		mediaPlayerWraper.stop();
-            		holder.micButton.setImageResource(R.drawable.timeline_player_play);
+            		holder.micButton.setImageResource(R.drawable.icon_messages_voice_selector);
                     holder.micTime.setText(String.format(TimerTextView.VOICE_LEN_DEF_FORMAT, file.duration / 60, file.duration % 60));
 
             	}
@@ -1487,7 +1487,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         	mediaPlayerWraper.setWraperListener(new MediaPlayerWraper.MediaPlayerWraperListener() {
                 @Override
                 public void onPlayFail(String path) {
-                    micButton.setImageResource(R.drawable.timeline_player_play);
+                    micButton.setImageResource(R.drawable.icon_messages_voice_selector);
                     micTime.setText(String.format(TimerTextView.VOICE_LEN_DEF_FORMAT, file.duration / 60, file.duration % 60));
                 }
 
@@ -1498,7 +1498,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
                 @Override
                 public void onPlayComplete(String path) {
-                    micButton.setImageResource(R.drawable.timeline_player_play);
+                    micButton.setImageResource(R.drawable.icon_messages_voice_selector);
                     micTime.setText(String.format(TimerTextView.VOICE_LEN_DEF_FORMAT, file.duration / 60, file.duration % 60));
                 }
             });
@@ -1506,7 +1506,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             micButton.setImageResource(R.drawable.timeline_player_stop);
             mediaPlayerWraper.setPlayingTimeTV(micTime,true);
         } else {
-            micButton.setImageResource(R.drawable.timeline_player_play);
+            micButton.setImageResource(R.drawable.icon_messages_voice_selector);
             micTime.setText(String.format(TimerTextView.VOICE_LEN_DEF_FORMAT, file.duration / 60, file.duration % 60));
         }
 
@@ -1548,7 +1548,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                     startPlayingVoice(voiceLayout, micButton, micTime, localPath,file);
                     if(mediaPlayerWraper.getPlayingMediaPath() == null)
                     {
-                    	micButton.setImageResource(R.drawable.timeline_player_play);
+                    	micButton.setImageResource(R.drawable.icon_messages_voice_selector);
                     }
                 } else {
                     getVoiceFileFromServer(voiceLayout, micButton, micTime, progress, file);
@@ -1565,7 +1565,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             mediaPlayerWraper.setWraperListener(new MediaPlayerWraper.MediaPlayerWraperListener() {
                 @Override
                 public void onPlayFail(String path) {
-                    micButton.setImageResource(R.drawable.timeline_player_play);
+                    micButton.setImageResource(R.drawable.icon_messages_voice_selector);
                     micTime.setText(String.format(TimerTextView.VOICE_LEN_DEF_FORMAT, file.duration / 60, file.duration % 60));
                 }
 
@@ -1576,7 +1576,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
                 @Override
                 public void onPlayComplete(String path) {
-                    micButton.setImageResource(R.drawable.timeline_player_play);
+                    micButton.setImageResource(R.drawable.icon_messages_voice_selector);
                     micTime.setText(String.format(TimerTextView.VOICE_LEN_DEF_FORMAT, file.duration / 60, file.duration % 60));
                 }
             });

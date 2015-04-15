@@ -434,7 +434,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             btnPlay.setImageResource(R.drawable.timeline_player_stop);
             mediaPlayerWraper.setPlayingTimeTV(micTimer,true);
         } else {
-            btnPlay.setImageResource(R.drawable.timeline_player_play);
+            btnPlay.setImageResource(R.drawable.icon_messages_voice_selector);
             micTimer.setText(String.format(TimerTextView.VOICE_LEN_DEF_FORMAT, file.duration / 60, file.duration % 60));
         }
 //        if (!(mPlayer != null && mPlayer.isPlaying())) {
@@ -465,7 +465,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             mediaPlayerWraper.setWraperListener(new MediaPlayerWraper.MediaPlayerWraperListener() {
                 @Override
                 public void onPlayFail(String path) {
-                    btnPlay.setImageResource(R.drawable.timeline_player_play);
+                    btnPlay.setImageResource(R.drawable.icon_messages_voice_selector);
                 }
 
                 @Override
@@ -475,7 +475,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 
                 @Override
                 public void onPlayComplete(String path) {
-                    btnPlay.setImageResource(R.drawable.timeline_player_play);
+                    btnPlay.setImageResource(R.drawable.icon_messages_voice_selector);
                 }
             });
             mediaPlayerWraper.triggerPlayer(localPath,file.duration);

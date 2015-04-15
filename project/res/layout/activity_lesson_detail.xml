@@ -243,12 +243,19 @@
                     android:text="@string/class_parent_suggestion"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
-
+                <TextView
+                    android:id="@+id/text_suggusiton_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/textview_style_circle" 
+                    android:gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:visibility="invisible"/>
                 <TextView
                     android:id="@+id/text_third_r"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    
                     android:drawableRight="@drawable/icon_more_light"
                     android:gravity="right"
                     android:padding="5dp" />

@@ -756,7 +756,9 @@ public class LessonWebServerIF {
 		return status;
 	}
 	
-	public int getLessonDetail(int lesson_id,List<LessonDetail> lessonDetails,List<Camera> lessonDetails_camera,List<LessonHomework> lessoonDetails_homework){
+	public int getLessonDetail(int lesson_id,List<LessonDetail> lessonDetails,
+			List<Camera> lessonDetails_camera,List<LessonHomework> lessoonDetails_homework,
+			List<LessonPerformance> lessoonDetails_performance,List<LessonParentFeedback> lessoonDetails_parent_feedback){
 		String uid = mPrefUtil.getUid();
 		String password = mPrefUtil.getPassword();
 		if (uid == null || password == null)
@@ -766,7 +768,9 @@ public class LessonWebServerIF {
 		String postStr = "action=" + action + "&uid="
 				+ Utils.urlencodeUtf8(uid) + "&password="
 				+ Utils.urlencodeUtf8(password) + "&lesson_id="
-				+ lesson_id;
+				+ lesson_id + "&with_all_students_performances="
+				+ 1 +"&with_all_students_parent_feedbacks="
+				+ 1;
 
 		Connect2 connect2 = new Connect2();
 		Element root = connect2.Post(postStr);
@@ -820,6 +824,32 @@ public class LessonWebServerIF {
 							LessonHomework homework = XmlHelper
 									.parseHomework((Element) roomNode);
 							lessoonDetails_homework.add(homework);
+						}
+					}
+				}
+				if (resultElement != null) {
+					NodeList roomNodes = resultElement
+							.getElementsByTagName("performance");
+					int len = roomNodes.getLength();
+					for (int i = 0; i < len; ++i) {
+						Node roomNode = roomNodes.item(i);
+						if (roomNode instanceof Element) {
+							LessonPerformance performance = XmlHelper
+									.parseLessonPerformance((Element) roomNode);
+							lessoonDetails_performance.add(performance);
+						}
+					}
+				}
+				if (resultElement != null) {
+					NodeList roomNodes = resultElement
+							.getElementsByTagName("parent_feedback");
+					int len = roomNodes.getLength();
+					for (int i = 0; i < len; ++i) {
+						Node roomNode = roomNodes.item(i);
+						if (roomNode instanceof Element) {
+							LessonParentFeedback parentFeedback = XmlHelper
+									.parseLessonParentFeedback((Element) roomNode);
+							lessoonDetails_parent_feedback.add(parentFeedback);
 						}
 					}
 				}

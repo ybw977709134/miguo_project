@@ -11,6 +11,7 @@ import org.wowtalk.api.Lesson;
 import org.wowtalk.api.LessonDetail;
 import org.wowtalk.api.LessonHomework;
 import org.wowtalk.api.LessonParentFeedback;
+import org.wowtalk.api.LessonPerformance;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.Moment;
 import org.wowtalk.api.PrefUtil;
@@ -55,10 +56,15 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 	private TextView text_classroom_name;
 	private TextView text_camera_num;
 	private TextView text_issecond;
+	private TextView text_isfirst;
+	private TextView text_suggusiton_count;
+	private TextView text_third_r;
 	
 	private List<LessonDetail> lessonDetails;
 	private List<Camera> lessoonDetails_camera;
 	private List<LessonHomework> lessoonDetails_homework;
+	private List<LessonPerformance> lessoonDetails_performance;
+	private List<LessonParentFeedback> lessoonDetails_parent_feedback;
 	
 	private long currentTime;
 //	private long classTimesStamps;
@@ -128,7 +134,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			q.find(R.id.text_third_r).text("");
 			q.find(R.id.text_classroom_r).text("");
 		}else{
-			q.find(R.id.text_first_r).text(getString(R.string.class_wait_confirm));
+//			q.find(R.id.text_isfirst).text(getString(R.string.class_no_situation));
 			q.find(R.id.text_classroom).textColor(getResources().getColor(R.color.text_gray4));
 			lay_classroom.setEnabled(false);
 			lay_camera.setVisibility(View.GONE);
@@ -151,9 +157,15 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		lessonDetails = new ArrayList<LessonDetail>();
 		lessoonDetails_camera = new ArrayList<Camera>();
 		lessoonDetails_homework = new ArrayList<LessonHomework>();
+		lessoonDetails_performance = new ArrayList<LessonPerformance>();
+		lessoonDetails_parent_feedback = new ArrayList<LessonParentFeedback>();
+		
 		text_classroom_name = (TextView) findViewById(R.id.text_classroom_name);
 		text_camera_num = (TextView) findViewById(R.id.text_camera_num);
 		text_issecond = (TextView) findViewById(R.id.text_issecond);
+		text_isfirst = (TextView) findViewById(R.id.text_isfirst);
+		text_suggusiton_count = (TextView) findViewById(R.id.text_suggusiton_count);
+		text_third_r = (TextView) findViewById(R.id.text_third_r);
 		
 //		String[] classTimes = classTime.split(":");
 //		String[] classLengths = classLength.split(":");
@@ -294,7 +306,10 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			protected Integer doInBackground(Void... params) {
 				lessoonDetails_camera.clear();
 				lessoonDetails_homework.clear();
-				return LessonWebServerIF.getInstance(LessonDetailActivity.this).getLessonDetail(lessonId,lessonDetails,lessoonDetails_camera,lessoonDetails_homework);
+				lessoonDetails_performance.clear();
+				lessoonDetails_parent_feedback.clear();
+				return LessonWebServerIF.getInstance(LessonDetailActivity.this).getLessonDetail(lessonId,lessonDetails,
+						lessoonDetails_camera,lessoonDetails_homework,lessoonDetails_performance,lessoonDetails_parent_feedback);
 			}
 			@Override
 			protected void onPostExecute(Integer result) {
@@ -328,6 +343,40 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 					}else if(lessoonDetails_homework.get(0).title == null){
 						text_issecond.setText("未布置");
 					}
+					if(isTeacher()){
+						if(lessoonDetails_performance.get(0).student_id != null){
+							text_isfirst.setText(R.string.class_had_situation);
+						}else if(lessoonDetails_performance.get(0).student_id == null){
+							text_isfirst.setText(R.string.class_no_situation);
+						}
+						
+						if(lessoonDetails_parent_feedback.get(0).student_id != null){
+							text_suggusiton_count.setVisibility(View.VISIBLE);
+							
+							text_suggusiton_count.setText(String.valueOf(lessoonDetails_parent_feedback.size()));
+						}else{
+							text_suggusiton_count.setVisibility(View.GONE);
+							
+							text_third_r.setText(getString(R.string.class_parent_opinion_not_submitted));
+						}
+					}else{
+						String myUid = PrefUtil.getInstance(LessonDetailActivity.this).getUid();
+						String studentId = null;
+						for(LessonPerformance performance : lessoonDetails_performance){
+							if(performance.student_id !=null){
+								if(performance.student_id.equals(myUid)){
+								studentId = performance.student_id;
+								}
+							}
+							
+						}
+						if(studentId != null){
+							text_isfirst.setText(R.string.class_had_situation);
+						}else{
+							text_isfirst.setText(R.string.class_no_situation);
+						}
+					}
+					
 				}
 				
 			}

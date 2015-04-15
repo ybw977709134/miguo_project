@@ -145,6 +145,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         //登陆后跳转到此页面检测用户是否绑定了邮箱，绑定了，不提示，未绑定，弹框提示用户是否要绑定邮箱
         //如果用户未绑定邮箱，跳转到绑定邮箱界面
         checkBindEmail();
+        refresh();
     }
 
     private AsyncTask<Void, Integer, List<Map<String, Object>>> asyncTask_email_status;

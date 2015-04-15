@@ -115,10 +115,10 @@ public class TimerPickerActivity extends Activity{
 		} else {
 
 			hour = bundle.getInt("hour");
-			minute = bundle.getInt("minute")-1;
+			minute = bundle.getInt("minute");
 
-			hour_pv.setSelected(hour);
-			minute_pv.setSelected(minute);
+			hour_pv.setSelected(hour+12);
+			minute_pv.setSelected(minute-30);
 		}
 		
 	}

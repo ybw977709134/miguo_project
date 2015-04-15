@@ -13,6 +13,7 @@ import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.datepicker.DatePickerActivity;
+import co.onemeter.oneapp.ui.datepicker.TimerPickerActivity;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
 
@@ -39,7 +40,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 /**
- * 
+ * 大量的注释部分是利用自定义的日期选择控件，由于修改了activity的theme，3.0以上系统能都显示很友好的日期选择控件，暂时放弃使用自定义的日期选择控件
  * @author jacky
  *this activity is used for editting class' info
  */
@@ -55,11 +56,11 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 	public static final String LENGTH = "length";
 	
 	
-	public static final int REQ_START_DATE=1;//开始日期请求码
-	public static final int REQ_END_DATE=2;//结束日期请求码
-	public static final int REQ_START_TIME=3;//开始时间请求码
-	public static final int REQ_CLASS_TIME=4;//上课时长请求码
-
+//	public static final int REQ_START_DATE=1;//开始日期请求码
+//	public static final int REQ_END_DATE=2;//结束日期请求码
+//	public static final int REQ_START_TIME=3;//开始时间请求码
+//	public static final int REQ_CLASS_TIME=4;//上课时长请求码
+//
 	private String classId;
 
 	private EditText dtTerm;
@@ -70,22 +71,38 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 	private TimePicker tpTime;
 	private TimePicker tpLength;
 	private EditText dtPlace;
-	
-	//开始日期
-	private LinearLayout layout_classinfo_edit_start_date;
-	private TextView textVIew_start_date;
-	
-	//结束日期
-	private LinearLayout layout_classinfo_edit_end_date;
-	private TextView textView_end_date;
-	
-	//开始时间
-	private LinearLayout layout_classinfo_edit_start_time;
-	private TextView textView_start_time;
-	
-	//上课时长
-	private LinearLayout layout_classinfo_edit_class_time;
-	private TextView textView_class_time;
+//	
+//	//开始日期
+//	private LinearLayout layout_classinfo_edit_start_date;
+//	private TextView textVIew_start_date;
+//	
+//	//结束日期
+//	private LinearLayout layout_classinfo_edit_end_date;
+//	private TextView textView_end_date;
+//	
+//	//开始时间
+//	private LinearLayout layout_classinfo_edit_start_time;
+//	private TextView textView_start_time;
+//	
+//	//上课时长
+//	private LinearLayout layout_classinfo_edit_class_time;
+//	private TextView textView_class_time;
+//	
+//	
+//	private int start_date_year;
+//	private int start_date_month;
+//	private int start_date_day;
+//	
+//	
+//	private int end_date_year;
+//	private int end_date_month;
+//	private int end_date_day;
+//	
+//	private int start_time_hour = 0;
+//	private int start_time_minute = 0;
+//	
+//	private int class_time_hour = 0;
+//	private int class_time_minute = 0;
 	
 
 	private Database mDBHelper;
@@ -163,38 +180,72 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
         dpEndDate.setOnClickListener(this);
         
         
-        layout_classinfo_edit_start_date = (LinearLayout) findViewById(R.id.layout_classinfo_edit_start_date);
-        textVIew_start_date = (TextView) findViewById(R.id.textVIew_start_date);
+//        layout_classinfo_edit_start_date = (LinearLayout) findViewById(R.id.layout_classinfo_edit_start_date);
+//        textVIew_start_date = (TextView) findViewById(R.id.textVIew_start_date);
+//        
+//        layout_classinfo_edit_end_date = (LinearLayout) findViewById(R.id.layout_classinfo_edit_end_date);
+//        textView_end_date = (TextView) findViewById(R.id.textView_end_date);
+//        
+//        layout_classinfo_edit_start_time = (LinearLayout) findViewById(R.id.layout_classinfo_edit_start_time);
+//        textView_start_time = (TextView) findViewById(R.id.textView_start_time);
+//        
+//        layout_classinfo_edit_class_time = (LinearLayout) findViewById(R.id.layout_classinfo_edit_class_time);
+//        textView_class_time = (TextView) findViewById(R.id.textView_class_time);
+//        
+//        layout_classinfo_edit_start_date.setOnClickListener(this);
+//        layout_classinfo_edit_end_date.setOnClickListener(this);
+//        layout_classinfo_edit_start_time.setOnClickListener(this);
+//        layout_classinfo_edit_class_time.setOnClickListener(this);
         
-        layout_classinfo_edit_end_date = (LinearLayout) findViewById(R.id.layout_classinfo_edit_end_date);
-        textView_end_date = (TextView) findViewById(R.id.textView_end_date);
-        
-        layout_classinfo_edit_start_time = (LinearLayout) findViewById(R.id.layout_classinfo_edit_start_time);
-        textView_start_time = (TextView) findViewById(R.id.textView_start_time);
-        
-        layout_classinfo_edit_class_time = (LinearLayout) findViewById(R.id.layout_classinfo_edit_class_time);
-        textView_class_time = (TextView) findViewById(R.id.textView_class_time);
-        
-        layout_classinfo_edit_start_date.setOnClickListener(this);
-        layout_classinfo_edit_end_date.setOnClickListener(this);
-        layout_classinfo_edit_start_time.setOnClickListener(this);
-        layout_classinfo_edit_class_time.setOnClickListener(this);
-        
-        
+        //分解传过来的值
 		if(reDate !=null && !TextUtils.isEmpty(reDate)){
-			String[] dates = reDate.split(" - ");
-			String[] startDate = dates[0].split("-");
-			String[] endDate = dates[1].split("-");
+			String[] dates = reDate.split(" - ");//日期
+			String[] startDate = dates[0].split("-");//开始日期
+			String[] endDate = dates[1].split("-");//结束日期
 			
-			String[] times = reTime.split(" - ");
-			String[] startTime = times[0].split(":");
-			String[] endTime = times[1].split(":");
+			String[] times = reTime.split(" - ");//时间
+			String[] startTime = times[0].split(":");//上课时间
+			String[] endTime = times[1].split(":");//结束时间
 			
 			int timeLengthTag = (Integer.parseInt(endTime[0])*3600 + Integer.parseInt(endTime[1])*60 - 
-					Integer.parseInt(startTime[0])*3600 - Integer.parseInt(startTime[1])*60);
+					Integer.parseInt(startTime[0])*3600 - Integer.parseInt(startTime[1])*60);//结束-开始，上课时长的时间戳
 			
-			int hourLength = timeLengthTag/3600;
-			int minuteLength = timeLengthTag % 3600 / 60;
+			int hourLength = timeLengthTag/3600;//上课的小时
+			int minuteLength = timeLengthTag % 3600 / 60;//上课的分钟
+			
+			
+			
+//			start_date_year = Integer.parseInt(startDate[0]);
+//			start_date_month = Integer.parseInt(startDate[1]);
+//			start_date_day = Integer.parseInt(startDate[2]);
+//			
+//			String start_date = start_date_year + "年" + start_date_month + "月" + start_date_day + "日";
+//			textVIew_start_date.setText(start_date);
+//			
+//			end_date_year = Integer.parseInt(endDate[0]);
+//			end_date_month = Integer.parseInt(endDate[1]);
+//			end_date_day = Integer.parseInt(endDate[2]);
+//			
+//			String end_date = end_date_year + "年" + end_date_month + "月" + end_date_day + "日";
+//			textView_end_date.setText(end_date);
+//			
+//			start_time_hour = Integer.parseInt(startTime[0]);
+//			start_time_minute = Integer.parseInt(startTime[1]);
+//			
+//			String start_time = start_time_hour + "点" + start_time_minute + "分";
+//			textView_start_time.setText(start_time);
+//			
+//			class_time_hour = hourLength;
+//			class_time_minute = minuteLength;
+//			
+//			String class_time = start_time_minute + "点" + class_time_minute + "分";
+//			textView_class_time.setText(class_time);
+//			
+//			if (class_time_hour > 0) {
+//				layout_classinfo_edit_start_time.setVisibility(View.GONE);
+//		        layout_classinfo_edit_class_time.setVisibility(View.GONE);
+//			}
+			
 			
 			dpDate.init(Integer.parseInt(startDate[0]), Integer.parseInt(startDate[1]) - 1, Integer.parseInt(startDate[2]), null);
 	        dpEndDate.init(Integer.parseInt(endDate[0]), Integer.parseInt(endDate[1]) - 1, Integer.parseInt(endDate[2]), null);
@@ -213,6 +264,38 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 	        }
 	        
 		}else{
+			
+//			SimpleDateFormat   formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd");     
+//			Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间     
+//			String   str   =   formatter.format(curDate); 
+//			int curYear = Integer.valueOf(str.substring(0, 4));
+//			int curMonth = Integer.valueOf(str.substring(5, 7));
+//			int curDay = Integer.valueOf(str.substring(8));
+			
+			
+//			start_date_year = curYear;
+//			start_date_month = curMonth;
+//			start_date_day = curDay;		
+//			
+//			end_date_year = curYear;
+//			end_date_month = curMonth;
+//			end_date_day = curDay;	
+//			
+//			formatter = new SimpleDateFormat("HH-mm");
+//			String time = formatter.format(curDate); 
+//			int curHour = Integer.valueOf(time.substring(0, 2));
+//			int curMinute = Integer.valueOf(time.substring(3));
+//			
+//			start_time_hour = curHour;
+//			start_time_minute = curMinute;
+//			
+//			class_time_hour = 1;
+//			class_time_minute = 0;
+			
+			
+			
+			
+			
 			tpLength.setCurrentHour(1);
 	        tpLength.setCurrentMinute(0);
 		}
@@ -293,29 +376,51 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 			finish();
 			break;
 			
-		case R.id.layout_classinfo_edit_start_date://选择开始日期
-			Intent startDateIntent = new Intent(ClassInfoEditActivity.this,DatePickerActivity.class);
-			
-			startActivityForResult(startDateIntent, REQ_START_DATE);
-			break;
-			
-		case R.id.layout_classinfo_edit_end_date://选择结束日期
-			Intent endDateIntent = new Intent(ClassInfoEditActivity.this,DatePickerActivity.class);
-			
-			startActivityForResult(endDateIntent, REQ_END_DATE);
-			break;
-			
-		case R.id.layout_classinfo_edit_start_time://选择上课时间
-			Intent startTimeIntent = new Intent(ClassInfoEditActivity.this,DatePickerActivity.class);
-			
-			startActivityForResult(startTimeIntent, REQ_START_TIME);
-			break;
-			
-		case R.id.layout_classinfo_edit_class_time://选择上课时长
-			Intent classTimeIntent = new Intent(ClassInfoEditActivity.this,DatePickerActivity.class);
-			
-			startActivityForResult(classTimeIntent, REQ_CLASS_TIME);
-			break;
+//		case R.id.layout_classinfo_edit_start_date://选择开始日期
+//			Intent startDateIntent = new Intent(ClassInfoEditActivity.this,DatePickerActivity.class);
+//			
+//			Bundle startDate = new Bundle();
+//			startDate.putInt("year", start_date_year);
+//			startDate.putInt("month", start_date_month);
+//			startDate.putInt("day", start_date_day);
+//			startDateIntent.putExtras(startDate);
+//			
+//			startActivityForResult(startDateIntent, REQ_START_DATE);
+//			break;
+//			
+//		case R.id.layout_classinfo_edit_end_date://选择结束日期
+//			Intent endDateIntent = new Intent(ClassInfoEditActivity.this,DatePickerActivity.class);
+//			
+//			Bundle endDate = new Bundle();
+//			endDate.putInt("year", end_date_year);
+//			endDate.putInt("month", end_date_month);
+//			endDate.putInt("day", end_date_day);
+//			endDateIntent.putExtras(endDate);
+//			
+//			startActivityForResult(endDateIntent, REQ_END_DATE);
+//			break;
+//			
+//		case R.id.layout_classinfo_edit_start_time://选择上课时间
+//			Intent startTimeIntent = new Intent(ClassInfoEditActivity.this,TimerPickerActivity.class);
+//			
+//			Bundle startTime = new Bundle();
+//			startTime.putInt("hour", start_time_hour);
+//			startTime.putInt("minute", start_time_minute);
+//			startTimeIntent.putExtras(startTime);
+//			
+//			startActivityForResult(startTimeIntent, REQ_START_TIME);
+//			break;
+//			
+//		case R.id.layout_classinfo_edit_class_time://选择上课时长
+//			Intent classTimeIntent = new Intent(ClassInfoEditActivity.this,TimerPickerActivity.class);
+//			
+//			Bundle classTime = new Bundle();
+//			classTime.putInt("hour", class_time_hour);
+//			classTime.putInt("minute", class_time_minute);			
+//			classTimeIntent.putExtras(classTime);
+//			
+//			startActivityForResult(classTimeIntent, REQ_CLASS_TIME);
+//			break;
 			
 		case R.id.save:
 			modifyClassInfo(classId);
@@ -345,7 +450,13 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		//resultTime.setTimeZone(TimeZone.getTimeZone("GMT"));
 		resultTime.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth());
 		resultEndTime.set(dpEndDate.getYear(), dpEndDate.getMonth(), dpEndDate.getDayOfMonth());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//		
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		
+//		resultTime.set(start_date_year, start_date_month-1, start_date_day);
+//		resultEndTime.set(end_date_year, end_date_month-1, end_date_day);
+		
 		
 		long firstlesTime = getIntent().getLongExtra("firstlesdate", -1);
 		if(firstlesTime != -1){
@@ -392,6 +503,10 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		startDay.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth());
 		endDay.set(dpEndDate.getYear(), dpEndDate.getMonth(), dpEndDate.getDayOfMonth());
 		
+//		startDay.set(start_date_year, start_date_month-1, start_date_day);
+//		
+//		endDay.set(end_date_year, end_date_month-1, end_date_day);
+		
 		mMsgBox.showWait();
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
@@ -425,34 +540,68 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 	
 	
 	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
-		
-		if (resultCode == RESULT_OK) {
-			switch (requestCode) {
-			case REQ_START_DATE://开始日期请求码
-				
-				break;
-				
-			case REQ_END_DATE://结束日期请求码
-				
-				break;
-				
-			case REQ_START_TIME://开始时间请求码
-	
-				break;
-				
-			case REQ_CLASS_TIME://上课时长请求码
-	
-				break;
-
-			default:
-				break;
-			}
-		}
-		super.onActivityResult(requestCode, resultCode, data);
-	}
+//	@Override
+//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//		
+//		
+//		if (resultCode == RESULT_OK) {
+//			switch (requestCode) {
+//			case REQ_START_DATE://开始日期请求码
+//				
+//				Bundle start_date = data.getExtras();
+//            	if (start_date != null) {
+//            		start_date_year = start_date.getInt("year");
+//        			start_date_month = start_date.getInt("month")+1;
+//        			start_date_day = start_date.getInt("day");
+//
+//        			textVIew_start_date.setText(start_date_year + "年" + start_date_month + "月" + start_date_day + "日");
+//            	}
+//            	
+//				break;
+//				
+//			case REQ_END_DATE://结束日期请求码
+//				
+//				Bundle end_date = data.getExtras();
+//            	if (end_date != null) {
+//            		end_date_year = end_date.getInt("year");
+//        			end_date_month = end_date.getInt("month")+1;
+//        			end_date_day = end_date.getInt("day");
+//        			
+//        			textView_end_date.setText(end_date_year + "年" + end_date_month + "月" + end_date_day + "日");
+//            	}
+//            	
+//				break;
+//				
+//			case REQ_START_TIME://开始时间请求码
+//				
+//				Bundle start_time = data.getExtras();
+//            	if (start_time != null) {
+//            		start_time_hour = start_time.getInt("hour");
+//        			start_time_minute = start_time.getInt("minute");
+//        			
+//        			textView_start_time.setText(start_time_hour + "点" + start_time_minute + "分");
+//            	}
+//            	
+//				break;
+//				
+//			case REQ_CLASS_TIME://上课时长请求码
+//				
+//				Bundle class_time = data.getExtras();
+//            	if (class_time != null) {
+//            		class_time_hour = class_time.getInt("hour");
+//        			class_time_minute = class_time.getInt("minute");
+//        			
+//        			textView_class_time.setText(start_time_minute + "时" + class_time_minute + "分");
+//            	}
+//            	
+//				break;
+//
+//			default:
+//				break;
+//			}
+//		}
+//		super.onActivityResult(requestCode, resultCode, data);
+//	}
 
 	
 	
@@ -460,7 +609,10 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 	protected void onDestroy() {
 		super.onDestroy();
 //		mDBHelper.close();
-		mMsgBox = null;
+		if (mMsgBox != null) {
+			mMsgBox = null;
+		}
+		
 	}
 
     @Override

@@ -130,81 +130,7 @@
                     android:maxLength="20" >
                 </EditText>
             </LinearLayout>
-		
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_small"
-                android:visibility="visible"
-                android:gravity="center_vertical" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="开始日期：" />
-
-                <DatePicker
-                    android:id="@+id/datePicker_lesinfo_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
             
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_small"
-                android:visibility="visible"
-                android:gravity="center_vertical" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/class_enddate" />
-
-                <DatePicker
-                    android:id="@+id/datePicker_lesinfo_enddate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_lesinfo_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                android:layout_marginTop="@dimen/padding_small"
-                android:gravity="center_vertical" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/class_time" />
-
-                <TimePicker
-                    android:id="@+id/timePicker_lesinfo_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_lesinfo_length"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_small"
-                android:visibility="visible"
-                android:gravity="center_vertical" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/class_length" />
-
-                <TimePicker
-                    android:id="@+id/timePicker_lesinfo_length"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_40"
@@ -230,6 +156,88 @@
                     android:maxLength="20" >
                 </EditText>
             </LinearLayout>
+		
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_small"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_24"
+                    android:textSize="16sp"
+                    android:text="@string/class_startdate" />
+
+                <DatePicker
+                    android:id="@+id/datePicker_lesinfo_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@android:style/Widget.DatePicker" />
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_small"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_24"
+                    android:textSize="16sp"
+                    android:text="@string/class_enddate" />
+
+                <DatePicker
+                    android:id="@+id/datePicker_lesinfo_enddate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@android:style/Widget.DatePicker" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_lesinfo_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_small"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_24"
+                    android:textSize="16sp"
+                    android:text="@string/class_starttime" />
+
+                <TimePicker
+                    android:id="@+id/timePicker_lesinfo_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_lesinfo_length"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_small"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_24"
+                    android:textSize="16sp"
+                    android:text="@string/class_length" />
+
+                <TimePicker
+                    android:id="@+id/timePicker_lesinfo_length"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            
             
            </LinearLayout> 
             
@@ -271,7 +279,6 @@
                         android:gravity="center_vertical|right"
                         android:paddingRight="10dp"
                         android:drawableRight="@drawable/table_arrow"
-                        android:clickable="true"
                         android:textColor="@color/gray_40"
                         android:textSize="18sp"/>
                 </LinearLayout>
@@ -305,7 +312,6 @@
                         android:gravity="center_vertical|right"
                         android:paddingRight="10dp"
                         android:drawableRight="@drawable/table_arrow"
-                        android:clickable="true"
                         android:textColor="@color/gray_40"
                         android:textSize="18sp"/>
                 </LinearLayout>
@@ -339,7 +345,6 @@
                         android:gravity="center_vertical|right"
                         android:paddingRight="10dp"
                         android:drawableRight="@drawable/table_arrow"
-                        android:clickable="true"
                         android:textColor="@color/gray_40"
                         android:textSize="18sp"/>
                 </LinearLayout>
@@ -374,7 +379,6 @@
                         android:gravity="center_vertical|right"
                         android:paddingRight="10dp"
                         android:drawableRight="@drawable/table_arrow"
-                        android:clickable="true"
                         android:textColor="@color/gray_40"
                         android:textSize="18sp"/>
                 </LinearLayout>

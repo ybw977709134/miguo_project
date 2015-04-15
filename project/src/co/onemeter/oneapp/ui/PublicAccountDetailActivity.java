@@ -12,13 +12,16 @@ import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.androidquery.AQuery;
 import com.umeng.analytics.MobclickAgent;
+
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 /**
  * Created with IntelliJ IDEA.
@@ -89,7 +92,20 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
                 public void onClick(View v) {
 //                    MessageComposerActivity.launchToChatWithBuddy(PublicAccountDetailActivity.this,
 //                            MessageComposerActivity.class, person.getID());
-                    cancelFollow();
+                      
+                    MessageDialog dialog = new MessageDialog(PublicAccountDetailActivity.this);
+                    dialog.setTitle("");
+                    dialog.setMessage("不再关注“"+person.getName()+"”后将不再收到其下发的消息");
+                    dialog.setRightBold(true);
+                    dialog.setOnLeftClickListener("取消", null);
+                    dialog.setOnRightClickListener("不再关注", new MessageDialog.MessageDialogClickListener() {
+                        @Override
+                        public void onclick(MessageDialog dialog) {
+                            dialog.dismiss();
+                            cancelFollow();
+                        }
+                    });
+                    dialog.show();
                 }
             });
         } else {

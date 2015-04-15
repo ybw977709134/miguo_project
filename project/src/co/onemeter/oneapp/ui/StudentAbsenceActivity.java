@@ -57,7 +57,7 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 	
 	//请假事由
 	private EditText editText_absence_reason;
-	
+
 	public final static int REQ_ABSENCE_CLASS = 1;//班级
 	public final static int REQ_ABSENCE_LESSON = 2;//课程
 	public final static int REQ_ABSENCE_TEACHER = 3;//教师
@@ -93,6 +93,7 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 		if(classId_intent != null){
             classID = classId_intent;
             layout_absence_class.setVisibility(View.GONE);
+            textView_class_name.setText(getIntent().getStringExtra("classname"));
             findViewById(R.id.img_diliver_class_up).setVisibility(View.GONE);
             findViewById(R.id.img_diliver_class_bottom).setVisibility(View.GONE);
             ImageView img_divider = (ImageView) findViewById(R.id.img_diliver_lesson_up);

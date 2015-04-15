@@ -77,8 +77,22 @@ public class SelectClassActivity extends Activity implements OnClickListener, On
 				listView_class_show.setAdapter(adapter);
 				
 				if (classrooms.size() == 0) {
-					msgbox.show(null, "你还没有进入任何班级");
-					msgbox.dismissDialog();
+					msgbox.showWaitImageCaution("你还没有进入任何班级");
+//					msgbox.dismissDialog();
+					new Thread(new Runnable() {
+						
+						@Override
+						public void run() {
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+                	
+							finish();
+							
+						}
+					}).start();
 				}
 			}
 

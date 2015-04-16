@@ -771,12 +771,21 @@
     <string name="moment_tag_all">全部</string>
     <string name="moment_tag_qa">问答</string>
     <string name="moment_tag_notice">通知</string>
+    
 	<string name="moment_tag_study">学习</string>
 	<string name="moment_tag_life">生活</string>
 	<string name="moment_tag_survey">投票</string>
-	<string name="moment_vote_submit">提交</string>
+
+	<string name="moment_vote_submit">投票</string>
 	<string name="moment_tag_video">视频</string>
 	<string name="moment_tag_videoStudy">视频</string>
+	
+	<string name="moment_tag_public_notice">公众号通知</string>
+	<string name="moment_tag_public_survey">公众号投票</string>
+	<string name="moment_tag_public_study">公众号学习</string>
+	<string name="moment_tag_public_life">公众号生活</string>
+	<string name="moment_tag_public_video">公众号视频</string>
+	
     <string name="moment_survey_has_voted">您已经投过票了</string>
     <string name="new_moment_title">新建-%s</string>
     <string name="new_moment_preview">预览</string>

@@ -85,22 +85,24 @@ public class SurveyVotedDisplayAdapter implements LinearLayoutAsListAdapter {
 
 //        tvOptionDesc.setText(surveyOptions.get(position).optionDesc);
         //分别给对应的投票选项添加标志
-        String[] optionFlags = new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N",
-            	"O","P","Q","R","S","T","U","V","W","X","Y","Z"};
-        tvOptionDesc.setText(optionFlags[position] + ":"+surveyOptions.get(position).optionDesc);
+//        String[] optionFlags = new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N",
+//            	"O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+//        tvOptionDesc.setText(optionFlags[position] + ":"+surveyOptions.get(position).optionDesc);
+        
+        tvOptionDesc.setText(surveyOptions.get(position).optionDesc);
         int totalVotedCount=0;
         for(Moment.SurveyOption aOption : surveyOptions) {
             totalVotedCount += aOption.votedNum;
         }
         
         //对不同的投票选项设置不同的颜色背景
-        if (position % 3 == 0) {
-        	ivVotedDesc.setBackgroundResource(R.drawable.share_vote_1);
-        } else if (position % 3 == 1) {
-        	ivVotedDesc.setBackgroundResource(R.drawable.share_vote_2);
-        } else if (position % 3 == 2) {
-        	ivVotedDesc.setBackgroundResource(R.drawable.share_vote_3);
-        }
+//        if (position % 3 == 0) {
+//        	ivVotedDesc.setBackgroundResource(R.drawable.share_vote_1);
+//        } else if (position % 3 == 1) {
+//        	ivVotedDesc.setBackgroundResource(R.drawable.share_vote_2);
+//        } else if (position % 3 == 2) {
+//        	ivVotedDesc.setBackgroundResource(R.drawable.share_vote_3);
+//        }
         
         float factor = 1.0f * surveyOptions.get(position).votedNum / totalVotedCount;
         String ratio = surveyOptions.get(position).votedNum + "/" + totalVotedCount;

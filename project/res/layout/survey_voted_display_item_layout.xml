@@ -10,19 +10,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
-            android:textSize="20sp"
-            android:textColor="@color/black"/>
+            android:textSize="16sp"
+            android:textColor="@color/black_24"/>
 
     <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="15dp"
-            android:layout_marginLeft="5dp">
+            android:layout_height="15dp" >
         <ImageView
                 android:id="@+id/option_voted_iv_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
-                android:background="@drawable/share_vote_1"/>
+                android:background="@drawable/icon_share_list_vote_option"/>
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -38,7 +37,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_toLeftOf="@+id/voted_num"
                     android:textSize="12sp"
-                    android:textColor="@color/gray"/>
+                    android:textColor="@color/gray_40"/>
             <TextView
                     android:id="@+id/voted_num"
                     android:layout_width="wrap_content"

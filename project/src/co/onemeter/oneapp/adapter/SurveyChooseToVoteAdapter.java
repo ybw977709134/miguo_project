@@ -163,13 +163,13 @@ public class SurveyChooseToVoteAdapter implements LinearLayoutAsListAdapter {
         }
         
       //对不同的投票选项设置不同的颜色背景
-        if (position % 3 == 0) {
-        	ivVotedDesc.setBackgroundResource(R.drawable.share_vote_1);
-        } else if (position % 3 == 1) {
-        	ivVotedDesc.setBackgroundResource(R.drawable.share_vote_2);
-        } else if (position % 3 == 2) {
-        	ivVotedDesc.setBackgroundResource(R.drawable.share_vote_3);
-        }
+//        if (position % 3 == 0) {
+//        	ivVotedDesc.setBackgroundResource(R.drawable.share_vote_1);
+//        } else if (position % 3 == 1) {
+//        	ivVotedDesc.setBackgroundResource(R.drawable.share_vote_2);
+//        } else if (position % 3 == 2) {
+//        	ivVotedDesc.setBackgroundResource(R.drawable.share_vote_3);
+//        }
         
         float factor = 1.0f * surveyOptions.get(position).votedNum / totalVotedCount;
         String ratio = surveyOptions.get(position).votedNum + "/" + totalVotedCount;//投票的显示结果

@@ -79,7 +79,10 @@
             android:layout_below="@+id/textView1"
             android:textColor="@color/black"
             android:gravity="center_vertical"
-            android:text="@string/contacts_validate_detail"/>
+            android:background="@drawable/bg_edittext_selector"
+            android:text="@string/contacts_validate_detail"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
     </RelativeLayout>
     <!--
     <RelativeLayout

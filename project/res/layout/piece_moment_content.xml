@@ -30,12 +30,12 @@
                 android:layout_marginTop="@dimen/padding_medium"
                 android:visibility="visible"
                 android:gravity="center"
-                android:background="@drawable/icon_share_list_vote_option"
+                android:background="@drawable/btn_share_list_voice"
                 android:orientation="horizontal">
                 
             <FrameLayout
-                    android:layout_height="50dp"
-                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
                     
                     android:layout_gravity="center_vertical">
                 <ImageView
@@ -47,8 +47,8 @@
                         android:clickable="false"/>
                 <ProgressBar
                         android:id="@+id/progress"
-                        android:layout_height="fill_parent"
-                        android:layout_width="fill_parent"/>
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"/>
             </FrameLayout>
             <org.wowtalk.ui.msg.TimerTextView
                     android:id="@+id/mic_timer"

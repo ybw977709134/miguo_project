@@ -431,7 +431,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         final String localPath = PhotoDisplayHelper.makeLocalFilePath(file.fileid, file.getExt());
 
         if(localPath.equals(mediaPlayerWraper.getPlayingMediaPath())) {
-            btnPlay.setImageResource(R.drawable.timeline_player_stop);
+            btnPlay.setImageResource(R.drawable.icon_share_list_voice_stop_selector);
             mediaPlayerWraper.setPlayingTimeTV(micTimer,true);
         } else {
             btnPlay.setImageResource(R.drawable.icon_messages_voice_selector);
@@ -470,7 +470,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 
                 @Override
                 public void onPlayBegin(String path) {
-                    btnPlay.setImageResource(R.drawable.timeline_player_stop);
+                    btnPlay.setImageResource(R.drawable.icon_share_list_voice_stop_selector);
                 }
 
                 @Override

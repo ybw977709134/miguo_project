@@ -1493,7 +1493,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
                 @Override
                 public void onPlayBegin(String path) {
-                    micButton.setImageResource(R.drawable.timeline_player_stop);
+                    micButton.setImageResource(R.drawable.icon_share_list_voice_stop_selector);
                 }
 
                 @Override
@@ -1503,7 +1503,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 }
             });
         	mediaPlayerWraper.setTemMediaPath(localPath);
-            micButton.setImageResource(R.drawable.timeline_player_stop);
+            micButton.setImageResource(R.drawable.icon_share_list_voice_stop_selector);
             mediaPlayerWraper.setPlayingTimeTV(micTime,true);
         } else {
             micButton.setImageResource(R.drawable.icon_messages_voice_selector);
@@ -1571,7 +1571,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
                 @Override
                 public void onPlayBegin(String path) {
-                    micButton.setImageResource(R.drawable.timeline_player_stop);
+                    micButton.setImageResource(R.drawable.icon_share_list_voice_stop_selector);
                 }
 
                 @Override

@@ -13,7 +13,7 @@
             android:focusableInTouchMode="true"
             android:focusable="true">
 
-        <TextView
+        <co.onemeter.oneapp.ui.widget.PressedTextView
                 android:id="@+id/title_back"
                 android:layout_height="50dp"
                 android:layout_width="50dp"
@@ -22,7 +22,7 @@
                 android:textSize="16sp"
                 android:text="@string/moments_cancel" />
 
-        <TextView
+        <co.onemeter.oneapp.ui.widget.PressedTextView
                 android:id="@+id/title_moment_send"
                 android:layout_height="50dp"
                 android:layout_width="50dp"

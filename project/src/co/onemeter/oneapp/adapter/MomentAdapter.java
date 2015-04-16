@@ -1213,7 +1213,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 if(isVedio){
                     FrameLayout frameLayout = new FrameLayout(context);
                     ImageView imgPlay = new ImageView(context);
-                    imgPlay.setImageResource(android.R.drawable.ic_media_play);
+                    imgPlay.setImageResource(R.drawable.icon_share_list_video_play);
 
                     frameLayout.addView(imageView);
                     frameLayout.addView(imgPlay);

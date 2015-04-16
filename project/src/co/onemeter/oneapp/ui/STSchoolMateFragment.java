@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidquery.AQuery;
@@ -21,6 +22,7 @@ import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkWebServerIF;
 
+import java.util.Collection;
 import java.util.List;
 
 import co.onemeter.oneapp.R;
@@ -36,7 +38,7 @@ import co.onemeter.utils.AsyncTaskExecutor;
 public class STSchoolMateFragment extends Fragment implements AdapterView.OnItemClickListener{
     private String[] path;
 
-    GroupTreeAdapter adapter;
+    InnerGroupTreeAdapter adapter;
     List<GroupChatRoom> schools;
     int errno;
     AQuery aQuery;
@@ -86,7 +88,7 @@ public class STSchoolMateFragment extends Fragment implements AdapterView.OnItem
 
     private void updateUi() {
         if (!isEmpty()) {
-            adapter = new GroupTreeAdapter(getActivity(), schools);
+            adapter = new InnerGroupTreeAdapter(getActivity(), schools);
             aQuery.find(R.id.listview).adapter(adapter);
             aQuery.find(R.id.schoolmate_emptyview).visibility(View.GONE);
         } else {
@@ -118,6 +120,21 @@ public class STSchoolMateFragment extends Fragment implements AdapterView.OnItem
             }
         } catch (Exception e) {
 
+        }
+    }
+
+    private  class InnerGroupTreeAdapter extends GroupTreeAdapter {
+        Context context;
+        public InnerGroupTreeAdapter(Context context, Collection<GroupChatRoom> topLevelGroups) {
+            super(context,topLevelGroups);
+            this.context = context;
+        }
+
+        @Override
+        protected void setupClassRoomItemView(final int position,final ContactTreeNode node, View view) {
+            super.setupClassRoomItemView(position, node, view);
+            TextView btn_chat = (TextView) view.findViewById(R.id.btn_chat);
+            btn_chat.setVisibility(View.GONE);
         }
     }
 }

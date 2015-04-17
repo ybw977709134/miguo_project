@@ -151,8 +151,10 @@
                             </RelativeLayout>
 
                             <TextView
+                                android:id="@+id/txt_home_classnotice"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:clickable="true"
                                 android:text="班级通知"
                                 style="@style/home_txt_middle"/>
                         </LinearLayout>
@@ -186,8 +188,10 @@
                                 </LinearLayout>
                             </RelativeLayout>
                             <TextView
+                                android:id="@+id/txt_home_register"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:clickable="true"
                                 android:text="签到请假"
                                 style="@style/home_txt_middle"/>
                         </LinearLayout>
@@ -204,8 +208,10 @@
                                 android:id="@+id/btn_goto_myclass"
                                 />
                             <TextView
+                                android:id="@+id/txt_goto_myclass"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:clickable="true"
                                 android:text="课堂直播"
                                 style="@style/home_txt_middle"/>
                         </LinearLayout>
@@ -230,6 +236,8 @@
                                 android:src="@drawable/icon_home_answerquestion"
                                 />
                             <TextView
+                                android:id="@+id/txt_home_answerquestion"
+                                android:clickable="true"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="拍照答疑"
@@ -248,8 +256,10 @@
                                 android:src="@drawable/icon_home_homework"
                                 />
                             <TextView
+                                android:id="@+id/txt_home_homework"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:clickable="true"
                                 android:text="在线作业"
                                 style="@style/home_txt_middle"/>
                         </LinearLayout>
@@ -266,8 +276,10 @@
                                 android:src="@drawable/icon_home_chatroom"
                                 />
                             <TextView
+                                android:id="@+id/txt_home_chatroom"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:clickable="true"
                                 android:text="家长聊天室"
                                 style="@style/home_txt_middle"/>
                         </LinearLayout>

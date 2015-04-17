@@ -241,6 +241,13 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.btn_home_setting).setOnClickListener(this);
         findViewById(R.id.btn_goto_myclass).setOnClickListener(this);
         
+        findViewById(R.id.txt_home_classnotice).setOnClickListener(this);
+        findViewById(R.id.txt_home_register).setOnClickListener(this);
+        findViewById(R.id.txt_goto_myclass).setOnClickListener(this);
+        findViewById(R.id.txt_home_answerquestion).setOnClickListener(this);
+        findViewById(R.id.txt_home_homework).setOnClickListener(this);
+        findViewById(R.id.txt_home_chatroom).setOnClickListener(this);
+        
     }
     private boolean isEmpty(){
 		return schools == null ||schools.isEmpty();
@@ -294,10 +301,12 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.img_home_classnotice:
+            case R.id.txt_home_classnotice:
             	intent = new Intent(this, ClassNotificationActivity.class);
                 startActivity(intent);
                 break;
             case R.id.img_home_register://签到请假
+            case R.id.txt_home_register:
             	//学生请假
             	if (PrefUtil.getInstance(this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT) {
             		intent = new Intent(this, StudentAbsenceActivity.class);
@@ -309,17 +318,20 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.img_home_answerquestion:
+            case R.id.txt_home_answerquestion:
                 //startActivity(new Intent(this,PhotoSendToActivity.class));
                 //takePhoto(this,REQ_TAKE_PHO_DOODLE);
                 showTakeOrPickphoto(view);
                 break;
             case R.id.img_home_chatroom:
+            case R.id.txt_home_chatroom:
                 intent = new Intent(this,ParentChatroomActivity.class);
                 startActivity(intent);
                 break;
             case R.id.img_home_movable:
                 break;
             case R.id.img_home_homework:
+            case R.id.txt_home_homework:
                 MessageDialog dialog = new MessageDialog(this);
                 dialog.setIsDouleBtn(false);
                 dialog.setTitle("");
@@ -335,6 +347,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
                 break;
             case R.id.btn_goto_myclass:
+            case R.id.txt_goto_myclass:
             	if(isEmpty()){
             		intent = new Intent(HomeActivity.this, AddClassActivity.class);
             	}else{

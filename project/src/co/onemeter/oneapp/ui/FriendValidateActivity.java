@@ -66,10 +66,7 @@ public class FriendValidateActivity extends Activity implements OnClickListener{
 		case R.id.textView_validate_cancel:
 			finish();
 			break;
-		case R.id.textView_validate_send:
-			android.util.Log.d("--------------", buddyList+"");
-//			String messageContent = editText_validate_message.getText().toString();
-			
+		case R.id.textView_validate_send:			
 			if(buddyList2 != null){
 				buddy = buddyList2.get(0);
 			}else{

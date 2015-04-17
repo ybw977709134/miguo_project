@@ -432,82 +432,93 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
     public static void setTagdesc(final Context context,final Moment moment,ImageView iv,TextView tv,
                                   LinearLayout voteSurveyLayout,final LinearLayoutAsListView lvSurveyOptions,final ArrayList<String> choosed,final Button btnSurvey) {
     	
-//    	String mMyUid = PrefUtil.getInstance(context).getUid();
+    	
+
+    	Database dbHelper=new Database(context);
+    	Buddy buddy = null;
+    	if (null != moment.owner && !TextUtils.isEmpty(moment.owner.userID)) {
+          buddy=dbHelper.buddyWithUserID(moment.owner.userID);
+    	}
+    	
         if(TextUtils.isEmpty(moment.tag) || moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_LIFE)) {//生活
         	iv.setImageResource(R.drawable.share_point_life);
             tv.setText(R.string.moment_tag_life);
+            
+            if (buddy != null) {
+        		
+        		if (buddy.getAccountType() != Buddy.ACCOUNT_TYPE_TEACHER && buddy.getAccountType() != Buddy.ACCOUNT_TYPE_STUDENT) {
+        			tv.setText(R.string.moment_tag_public_life);
+        		} else {
+        			tv.setText(R.string.moment_tag_life);	
+        		}
+        	} else {
+        		tv.setText(R.string.moment_tag_life);
+        	}
+            
+            
         } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_QA)) {//问答
             iv.setImageResource(R.drawable.share_point_question);
             tv.setText(R.string.moment_tag_qa);
+            
         } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_NOTICE)) {//通知
         	iv.setImageResource(R.drawable.share_point_notice);
 
-            tv.setText(R.string.moment_tag_public_notice);
-            
-        	
-//        	if (null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && !moment.owner.userID.equals(mMyUid)) {
-//        		Buddy buddy = new Buddy(moment.owner.userID);
-//        		
-//        		if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_PUBLIC) {
-//        			tv.setText(R.string.moment_tag_public_notice);
-//        		} else {
-//        			tv.setText(R.string.moment_tag_notice);
-//        		}
-//        		
-//        	} else {
-//        		tv.setText(R.string.moment_tag_notice);
-//        	}
+        	if (buddy != null) {
+        		
+        		if (buddy.getAccountType() != Buddy.ACCOUNT_TYPE_TEACHER && buddy.getAccountType() != Buddy.ACCOUNT_TYPE_STUDENT) {
+        			tv.setText(R.string.moment_tag_public_notice);
+        		} else {
+        			tv.setText(R.string.moment_tag_notice);	
+        		}
+        	} else {
+        		tv.setText(R.string.moment_tag_notice);
+        	} 
         	
         } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE) || moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_SURVEY_MULTI)) {
             //投票
         	iv.setImageResource(R.drawable.share_point_vote);
-            tv.setText(R.string.moment_tag_survey);
-//            if (null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && !moment.owner.userID.equals(mMyUid)) {
-//        		Buddy buddy = new Buddy(moment.owner.userID);
-//        		
-//        		if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_PUBLIC) {
-//        			tv.setText(R.string.moment_tag_public_survey);
-//        		} else {
-//        			tv.setText(R.string.moment_tag_survey);
-//        		}
-//        		
-//        	} else {
-//        		tv.setText(R.string.moment_tag_survey);
-//        	}
+            
+            if (buddy != null) {
+        		
+        		if (buddy.getAccountType() != Buddy.ACCOUNT_TYPE_TEACHER && buddy.getAccountType() != Buddy.ACCOUNT_TYPE_STUDENT) {
+        			tv.setText(R.string.moment_tag_public_survey);
+        		} else {
+        			tv.setText(R.string.moment_tag_survey);
+        		}
+        		
+        	} else {
+        		tv.setText(R.string.moment_tag_survey);
+        	} 
             
         } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_STUDY)) {//学习
         	iv.setImageResource(R.drawable.share_point_study);
-            tv.setText(R.string.moment_tag_study);
-//            if (null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && !moment.owner.userID.equals(mMyUid)) {
-//        		Buddy buddy = new Buddy(moment.owner.userID);
-//        		
-//        		if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_PUBLIC) {
-//        			tv.setText(R.string.moment_tag_public_study);
-//        		} else {
-//        			tv.setText(R.string.moment_tag_study);
-//        		}
-//        		
-//        	} else {
-//        		tv.setText(R.string.moment_tag_study);
-//        	}
+
+            if (buddy != null) {
+        		
+        		if (buddy.getAccountType() != Buddy.ACCOUNT_TYPE_TEACHER && buddy.getAccountType() != Buddy.ACCOUNT_TYPE_STUDENT) {
+        			tv.setText(R.string.moment_tag_public_study);
+        		} else {
+        			tv.setText(R.string.moment_tag_study);
+        		}
+        		
+        	} else {
+        		tv.setText(R.string.moment_tag_study);
+        	} 
             
         } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_VIDEO)) {//视频
         	iv.setImageResource(R.drawable.share_point_video);
         	
-        	tv.setText(R.string.moment_tag_video);
             
-//            if (null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && !moment.owner.userID.equals(mMyUid)) {
-//        		Buddy buddy = new Buddy(moment.owner.userID);
-//        		
-//        		if (buddy.getAccountType() == Buddy.ACCOUNT_TYPE_PUBLIC) {
-//        			tv.setText(R.string.moment_tag_public_video);
-//        		}else {
-//        			tv.setText(R.string.moment_tag_video);
-//        		}
-//        		
-//        	}else {
-//        		tv.setText(R.string.moment_tag_video);
-//        	}
+            if (buddy != null) {
+        		
+        		if (buddy.getAccountType() != Buddy.ACCOUNT_TYPE_TEACHER && buddy.getAccountType() != Buddy.ACCOUNT_TYPE_STUDENT) {
+        			tv.setText(R.string.moment_tag_public_video);
+        		}else {
+        			tv.setText(R.string.moment_tag_video);
+        		}
+        	}
+        } else {
+        	tv.setText(R.string.moment_tag_video);
         }
 
         setSurveyInfo(context,moment,voteSurveyLayout,lvSurveyOptions,choosed,btnSurvey);

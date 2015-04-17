@@ -32,6 +32,7 @@ import org.wowtalk.Log;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 import org.wowtalk.ui.msg.*;
 import org.wowtalk.ui.msg.Utils;
 
@@ -1396,22 +1397,20 @@ public class MessageDetailAdapter extends BaseAdapter{
         }
 
         public void onClick(View v) {
-            new AlertDialog.Builder(mContext)
-            .setTitle(R.string.msg_resend_this_message)
-            .setMessage(R.string.msg_resend_this_message_msg)
-            .setPositiveButton(R.string.msg_ok,
-                    new DialogInterface.OnClickListener() {
-                public void onClick(
-                        DialogInterface dialog,
-                        int whichButton) {
+            MessageDialog dialog = new MessageDialog(mContext);
+            dialog.setTitle(R.string.msg_resend_this_message);
+            dialog.setMessage(R.string.msg_resend_this_message_msg);
+            dialog.setOnLeftClickListener(mContext.getString(R.string.ok),new MessageDialog.MessageDialogClickListener() {
+                @Override
+                public void onclick(MessageDialog dialog) {
+                    dialog.dismiss();
                     if(null != mMessageListener) {
                         mMessageListener.onResendMessage(mLogMsg.get(position));
                     }
-
                 }
-            })
-            .setNegativeButton(R.string.msg_cancel, null)
-            .show();
+            });
+            dialog.setOnRightClickListener(mContext.getString(R.string.cancel),null);
+            dialog.show();
         }
     }
 

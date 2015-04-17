@@ -507,8 +507,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             
         } else if (moment.tag.equals(Moment.SERVER_MOMENT_TAG_FOR_VIDEO)) {//视频
         	iv.setImageResource(R.drawable.share_point_video);
-        	
-            
+
             if (buddy != null) {
         		
         		if (buddy.getAccountType() != Buddy.ACCOUNT_TYPE_TEACHER && buddy.getAccountType() != Buddy.ACCOUNT_TYPE_STUDENT) {

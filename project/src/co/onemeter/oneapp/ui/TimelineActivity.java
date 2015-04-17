@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
 
@@ -398,6 +400,8 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                                             InputBoardManager.ChangeToOtherAppsListener changeAppsListener,
                                             View.OnClickListener onLikeClickListener) {
         InputBoardManager inputMgr = handler.getInputBoardMangager();
+        
+        
 
         Database db = new Database(activity);
         final Moment moment=db.fetchMoment(momentId);
@@ -423,6 +427,9 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
             return;
         }
 
+    	inputMgr.setSoftKeyboardVisibility(true);
+
+       
         String title;
         if (replyTo == null)
             title = String.format(activity.getString(R.string.moments_comment_hint),
@@ -437,6 +444,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
 //        inputMgr.extra().putInt(MomentDetailActivity.EXTRA_REPLY_TO_MOMENT_POS, momentPosition);
         inputMgr.extra().putString(MomentDetailActivity.EXTRA_REPLY_TO_MOMENT_ID, momentId);
         inputMgr.extra().putParcelable(MomentDetailActivity.EXTRA_REPLY_TO_REVIEW, replyTo);
+        
 //
         inputMgr.setLayoutForTimelineMoment(moment,onLikeClickListener);
     }
@@ -470,8 +478,25 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                    	
+                    	//把获得的数据传到输入框
                         replyToMoment_helper(momentPosition, momentId, replyTo, activity, handler,
                                 chageAppsListener, onLikeBtnClickListener);
+                        
+                       //使得输入框获得事件焦点
+                    	inputMgr.mTxtContent.setFocusable(true);
+                    	inputMgr.mTxtContent.setFocusableInTouchMode(true);
+                    	inputMgr.mTxtContent.requestFocus();
+                         
+                       Handler hanlder = new Handler();
+                       hanlder.postDelayed(new Runnable() {
+                   		@Override
+                   		public void run() {
+                   			InputMethodManager imm = (InputMethodManager)inputMgr.mTxtContent.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);  
+                   	        imm.showSoftInput(inputMgr.mTxtContent, 0);
+                   		}
+                   	}, 200);
+                       
                         menu.dismiss();
                     }
                 });

@@ -6,6 +6,7 @@ import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,7 @@ import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 /**
  * 添加课堂
@@ -94,20 +96,44 @@ public class AddClassActivity extends Activity implements View.OnClickListener {
             public void onPostExecute(Integer errno) {
                 msgbox.dismissWait();
                 if (errno == ErrorCode.OK) {
-//                    msgbox.toast(R.string.operation_done);
-        			Builder alertDialog = new AlertDialog.Builder(AddClassActivity.this);
-        			alertDialog.setTitle("提示");
-        			alertDialog.setMessage("添加新课堂成功！可以在校园内板块看到相应的更新");
-        			alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-        				
-        				@Override
-        				public void onClick(DialogInterface arg0, int arg1) {
-        					setResult(RESULT_OK);
-                            finish();
-                            closeSoftKeyboard();
-        				}
-        			});        			
-        			alertDialog.create().show();
+
+        			msgbox.showWaitImageSuccess("添加新课堂成功");
+        			
+        			closeSoftKeyboard();
+                    
+                    
+                    new Thread(new Runnable() {
+						
+						@Override
+						public void run() {
+							try {
+								Thread.sleep(3000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							setResult(RESULT_OK);
+		                    finish();
+						}
+					}).start();
+        			
+//        			 MessageDialog dialog = new MessageDialog(AddClassActivity.this);
+//                     dialog.setTitle("");
+//                     dialog.setMessage("添加新课堂成功！可以在校园内板块看到相应的更新");
+//                     dialog.setRightBold(true);
+//
+//                     dialog.setOnLeftClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+//                         @Override
+//                         public void onclick(MessageDialog dialog) {
+//                             dialog.dismiss();
+//                             setResult(RESULT_OK);
+//                             closeSoftKeyboard();
+//                             finish();
+//                             
+//                         }
+//                     });
+//                     dialog.show();
+        			
+        			
 
                 } else {
 //                    msgbox.toast(getString(R.string.operation_failed_with_errcode_msg,

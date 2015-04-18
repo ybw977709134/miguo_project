@@ -8,7 +8,7 @@ import android.os.Parcelable;
  */
 public class WFile implements Parcelable {
 
-    private static final String EXT_PATTERN = "^\\.?(jpe?g|png|mp4|m4a|aac|3gpp|avi|wav)$";
+    private static final String EXT_PATTERN = "^\\.?(jpe?g|png|mp4|m4a|aac|3gpp?|avi|wav)$";
 
     /**
      * File name extension.

@@ -1,6 +1,7 @@
 package co.onemeter.oneapp;
 
 import android.app.NotificationManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -104,9 +105,7 @@ public class AppUpgradeService extends android.app.Service {
                 if (expectedMd5sum.equals(actualMd5)) {
                     dismissNotice();
                     // install!
-                    startActivity(new Intent(Intent.ACTION_VIEW)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            .setDataAndType(Uri.fromFile(new File(filename)), "application/vnd.android.package-archive"));
+                    installApk(filename);
                 } else {
                     mBuilder.setOngoing(false);
                     updateNoticeMsg(getString(R.string.upgrade_failed_md5sum));
@@ -150,5 +149,23 @@ public class AppUpgradeService extends android.app.Service {
 
     private boolean isCancelled() {
         return false; // TODO
+    }
+
+    private void installApk(String apkPath) {
+        // try to invoke the package installer directly by explicitly setting Intent component,
+        // to avoid the "verify and install" alternative to perform this action.
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .setClassName("com.android.packageinstaller",
+                            "com.android.packageinstaller.PackageInstallerActivity")
+                    .setDataAndType(Uri.fromFile(new File(apkPath)),
+                            "application/vnd.android.package-archive"));
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .setDataAndType(Uri.fromFile(new File(apkPath)),
+                            "application/vnd.android.package-archive"));
+        }
     }
 }

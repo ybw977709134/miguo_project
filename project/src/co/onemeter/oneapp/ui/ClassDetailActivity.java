@@ -534,21 +534,25 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				}else{
 //					String[] times = time.split(":");
 //					String[] lengths = length.split(":");
-					String[] startTimes = start_time.split(":");
-					String[] endTimes = end_time.split(":");
-					startDateStamps =Integer.parseInt(startTimes[0])*3600 + Integer.parseInt(startTimes[1])*60;
-					endDateStamps =Integer.parseInt(endTimes[0])*3600 + Integer.parseInt(endTimes[1])*60;
+//					String[] startTimes = start_time.split(":");
+//					String[] endTimes = end_time.split(":");
+//					startDateStamps =Integer.parseInt(startTimes[0])*3600 + Integer.parseInt(startTimes[1])*60;
+//					endDateStamps =Integer.parseInt(endTimes[0])*3600 + Integer.parseInt(endTimes[1])*60;
 					
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-					for(Lesson lesson:lessons){
-						String date = sdf.format(new Date(lesson.start_date * 1000));
-						String[] dates = date.split("-");
+//					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//					for(Lesson lesson:lessons){
+//						String date = sdf.format(new Date(lesson.start_date * 1000));
+//						String[] dates = date.split("-");
 //						long timeStamps = Utils.getTimeStamp(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]), Integer.parseInt(dates[2]))/1000;
-						if(currentTime > lesson_Live.start_date && currentTime < lesson_Live.end_date){
-							lessonId = lesson_Live.lesson_id;
-							lessonName = lesson_Live.title;
-							}
-						}
+//						if(currentTime > lesson_Live.start_date && currentTime < lesson_Live.end_date){
+//							lessonId = lesson.lesson_id;
+//							lessonName = lesson.title;
+//							}
+//						}
+					if(currentTime > lesson_Live.start_date && currentTime < lesson_Live.end_date){
+						lessonId = lesson_Live.lesson_id;
+						lessonName = lesson_Live.title;
+					}
 					Intent intent = new Intent();
 					intent.putExtra("student_live", 1);
 					intent.putExtra("lessonId", lessonId);

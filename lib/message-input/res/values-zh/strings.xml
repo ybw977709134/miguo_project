@@ -11,8 +11,8 @@
     <string name="need_google_maps"></string>
     <string name="hold_to_speak">按住讲话</string>
     <string name="play">播放</string>
-    <string name="input_photo">相册</string>
-    <string name="input_video">相机</string>
+    <string name="input_photo">图片</string>
+    <string name="input_video">拍摄</string>
     <string name="input_location">位置</string>
     <string name="input_voice">语音</string>
     <string name="input_free_call">语音通话</string>

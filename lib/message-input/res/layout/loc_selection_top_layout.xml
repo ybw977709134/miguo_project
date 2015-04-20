@@ -6,7 +6,7 @@
         android:layout_height="50dp"
         android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
-        android:background="@drawable/messages_bg_navbar">
+        android:background="@drawable/btn_blue">
     <ImageButton
             android:id="@+id/btn_cancel"
             android:layout_height="50dp"

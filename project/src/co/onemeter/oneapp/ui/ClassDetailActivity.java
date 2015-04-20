@@ -543,10 +543,10 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 					for(Lesson lesson:lessons){
 						String date = sdf.format(new Date(lesson.start_date * 1000));
 						String[] dates = date.split("-");
-						long timeStamps = Utils.getTimeStamp(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]), Integer.parseInt(dates[2]))/1000;
+//						long timeStamps = Utils.getTimeStamp(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]), Integer.parseInt(dates[2]))/1000;
 						if(currentTime > lesson_Live.start_date && currentTime < lesson_Live.end_date){
-							lessonId = lesson.lesson_id;
-							lessonName = lesson.title;
+							lessonId = lesson_Live.lesson_id;
+							lessonName = lesson_Live.title;
 							}
 						}
 					Intent intent = new Intent();

@@ -1252,7 +1252,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         }
         int rowNum = photoNum / columnNum + (photoNum % columnNum == 0 ? 0 : 1);
 
-        final String[] thumbnailPathList = new String[photoNum];
+        final String[] thumbnailPathList = new String[photoNum];//根据图片的数量来初始化缩略路径数组
         int i = 0;
         for (WFile file : files) {
             // 如果是本地创建的动态，那么 localThumbnailPath 和 localPath 应该已经指向本地文件了，
@@ -1334,6 +1334,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                         }
                     }
                 });
+                
                 if (new File(imageThumbnailPath).exists()) {
                     mImageResizer.loadImage(imageThumbnailPath, imageView);
 //                    imageView.setImageDrawable(new BitmapDrawable(BitmapFactory.decodeFile(imageThumbnailPath)));

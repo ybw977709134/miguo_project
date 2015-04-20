@@ -104,6 +104,8 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     private ArrayList<String> surveyMomentSelectedItem=new ArrayList<String>();
 
     private TimelineActivity.OnMomentReviewDeleteListener onMomentReviewDeleteListener;
+    
+    private ImageCache.ImageCacheParams cacheParams;
 
     private final static int MSG_ID_MOMENT_DELETE_WITH_DELAY_FINISH=1;
     
@@ -784,10 +786,13 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         mPrefUtil = PrefUtil.getInstance(this);
         mMomentWeb = MomentWebServerIF.getInstance(this);
 
-        ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams(this, IMAGE_CACHE_DIR);
+//        ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams(this, IMAGE_CACHE_DIR);
+        
+        cacheParams = new ImageCache.ImageCacheParams(this, IMAGE_CACHE_DIR);
         mImageResizer = new ImageResizer(this, DensityUtil.dip2px(this, 100));
         mImageResizer.setLoadingImage(R.drawable.feed_default_pic);
-        mImageResizer.addImageCache(cacheParams);
+        
+//        mImageResizer.addImageCache(cacheParams);
 
         moment = getIntent().getParcelableExtra("moment");
         if(null == moment) {
@@ -798,6 +803,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
             return;
         }
         initView();
+        
         setupContent(moment);
 
         Database.addDBTableChangeListener(Database.TBL_MOMENT,momentObserver);
@@ -815,6 +821,13 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
+        
+        //把setupContent();方法中的加载图片的方法注释掉，图片放在最后加载，解决详情页查看图片返回缩略图不能显示问题
+        
+        mImageResizer.addImageCache(cacheParams);
+        MomentAdapter.setImageLayout(this, moment, mImageResizer, photoFiles, imageTable);
+        
+        
         mImageResizer.setExitTasksEarly(false);
         AppStatusService.setIsMonitoring(true);
     }
@@ -908,7 +921,9 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
 
 
         showVoiceFile(voiceFile);
-        MomentAdapter.setImageLayout(this, moment, mImageResizer, photoFiles, imageTable);
+        
+//        MomentAdapter.setImageLayout(this, moment, mImageResizer, photoFiles, imageTable);//加载好友圈中的图片
+        
         int nlikers = MomentAdapter.setViewForLikeReview(this, txtLikeName, moment.reviews);
         int nReviews = MomentAdapter.setViewForCommentReview(this, commentLayout, moment.reviews, -1, moment, this);
         

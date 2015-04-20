@@ -421,7 +421,7 @@ public class ImageViewActivity extends Activity implements View.OnClickListener,
             
             public void  onPageSelected (int position) {
                 mCurPhotoIdx = position;
-                tvPhotoIndexIndicator.setText((position + 1) + "/" + files.size());
+                tvPhotoIndexIndicator.setText((position + 1) + "/" + files.size());//图片位置
 
                 triggerPhotoDownload(position);
             }

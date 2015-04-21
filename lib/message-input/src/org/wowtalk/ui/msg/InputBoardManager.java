@@ -998,10 +998,10 @@ public class InputBoardManager implements Parcelable,
             ((ImageView)mRootView.findViewById(R.id.family_layout_top_img)).setImageResource(R.drawable.sms_fold_btn);
 
             layoutMediaWrapper.setVisibility(View.VISIBLE);
-            if(layoutMediaWrapper.getLayoutParams().height != mHeight_mediaPanel) {
-                layoutMediaWrapper.getLayoutParams().height = mHeight_mediaPanel;
-                layoutMediaWrapper.requestLayout();
-            }
+//            if(layoutMediaWrapper.getLayoutParams().height != mHeight_mediaPanel) {
+//                layoutMediaWrapper.getLayoutParams().height = mHeight_mediaPanel;
+//                layoutMediaWrapper.requestLayout();
+//            }
         } else {
             ((ImageView)mRootView.findViewById(R.id.family_layout_top_img)).setImageResource(R.drawable.sms_unfold_btn);
 

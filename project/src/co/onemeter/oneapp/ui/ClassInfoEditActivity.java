@@ -353,7 +353,7 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		if(TextUtils.isEmpty(str)&& !str.contains(Constants.COMMA)){
 			return null;
 		}
-		return str.split(Constants.COMMA);
+		return str.split(Constants.COMMA, -1); // 第二个参数传 -1, 保留空字段
 	}
 	
 	@Override

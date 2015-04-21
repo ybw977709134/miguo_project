@@ -323,7 +323,7 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 			dtPlace.addTextChangedListener(textwatcher);
 
 			if(!TextUtils.isEmpty(reDate)){
-				String[] infos = getStrsByComma(classroom.description);
+				String[] infos = ClassDetailActivity.getStrsByComma(classroom.description);
 				if(null != infos && infos.length == 4){
 					dtTerm.setText(infos[0]);
 					dtGrade.setText(infos[1]);
@@ -349,14 +349,7 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
         }
     }
 
-    private String[] getStrsByComma(String str){
-		if(TextUtils.isEmpty(str)&& !str.contains(Constants.COMMA)){
-			return null;
-		}
-		return str.split(Constants.COMMA, -1); // 第二个参数传 -1, 保留空字段
-	}
-	
-	@Override
+    @Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.cancel:

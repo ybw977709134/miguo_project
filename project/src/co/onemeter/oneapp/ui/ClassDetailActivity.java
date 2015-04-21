@@ -9,7 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v4.widget.DrawerLayout.LayoutParams;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -21,9 +20,7 @@ import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.MediaUtils;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
-
 import com.androidquery.AQuery;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
@@ -394,11 +391,11 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		courseAdapter.notifyDataSetChanged();
 	}
 	
-	private String[] getStrsByComma(String str){
+	public static String[] getStrsByComma(String str){
 		if(TextUtils.isEmpty(str)&& !str.contains(Constants.COMMA)){
 			return null;
 		}
-		return str.split(Constants.COMMA);
+        return str.split(Constants.COMMA, -1); // 第二个参数传 -1, 保留空字段
 	}
 	
 	private View footerView() {

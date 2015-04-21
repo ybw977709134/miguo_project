@@ -203,6 +203,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
    			//Builder builder = new AlertDialog.Builder(HomeActivity.this);
                dialog.setTitle("提示");
                dialog.setMessage("你确定要退出吗?");
+               dialog.setCancelable(false);
                dialog.setRightBold(true);
 //               dialog.setTextColorBtnRight(AccountSettingActivity.this.getResources().getColor(R.color.red));
                dialog.setOnLeftClickListener("取消", null);

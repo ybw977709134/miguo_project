@@ -270,6 +270,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
              
              dialog.setMessage("你要取消修改绑定邮箱吗？");
              dialog.setOnLeftClickListener("继续修改", null);
+             dialog.setCancelable(false);
              dialog.setRightBold(true);
              dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
                  @Override
@@ -361,6 +362,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                     	closeSoftKeyboard();
                     	MessageDialog dialog = new MessageDialog(FixBindEmailAddressActivity.this,false,MessageDialog.SIZE_NORMAL);
                         dialog.setTitle("");
+                        dialog.setCancelable(false);
                         dialog.setMessage("今天邮的箱验证次数已用完"+"\n"+"请明天再试。");                      
                         dialog.show();
                         break;
@@ -422,6 +424,7 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                     case ErrorCode.ACCESS_CODE_ERROR_OVER://24:验证码一天最多只能验证5次
                     	MessageDialog dialog = new MessageDialog(FixBindEmailAddressActivity.this,false,MessageDialog.SIZE_NORMAL);
                         dialog.setTitle("");
+                        dialog.setCancelable(false);
                         dialog.setMessage("今天邮箱验证次数已用完，请明天再试。");                      
                         dialog.show();
                         break;
@@ -432,7 +435,8 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                         break;
                         
                     default:
-                        mMsgBox.show(null, "验证不通过");
+//                        mMsgBox.show(null, "验证不通过");
+                        mMsgBox.showWaitImageCaution("验证不通过");
                         break;
                 }
             }

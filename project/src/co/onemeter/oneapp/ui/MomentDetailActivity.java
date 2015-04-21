@@ -589,28 +589,13 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     }
 
     private void confirmDeleteMoment() {
-    	
-//        new AlertDialog.Builder(this)
-//                .setTitle(R.string.contacts_local_delete)
-//                .setMessage(R.string.delete_moment)
-//                .setPositiveButton(R.string.msg_ok,
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(
-//                                    DialogInterface dialog,
-//                                    int whichButton) {
-//                                doDeleteMoment();
-//                            }
-//                        })
-//                .setNegativeButton(R.string.msg_cancel, null)
-//                .show();
-        
-        
+
         MessageDialog dialog = new MessageDialog(MomentDetailActivity.this);
         dialog.setTitle("");
         dialog.setMessage("删除这条分享？");
+        dialog.setCancelable(false);
         dialog.setTextColorBtnRight(MomentDetailActivity.this.getResources().getColor(R.color.red));
         dialog.setRightBold(true);
-//        dialog.getBtnCancel().setTextColor(getResources().getColor(R.color.red_30));
         dialog.setOnLeftClickListener("取消", null);
         dialog.setOnRightClickListener("删除", new MessageDialog.MessageDialogClickListener() {
             @Override

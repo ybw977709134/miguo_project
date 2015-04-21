@@ -661,6 +661,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                     case ErrorCode.ACCESS_CODE_ERROR_OVER://24:验证码一天最多只能验证5次
                     	MessageDialog dialog = new MessageDialog(FindPasswordEmialActivity.this,false,MessageDialog.SIZE_NORMAL);
                         dialog.setTitle("");
+                        dialog.setCancelable(false);
                         dialog.setMessage("今天邮的箱验证次数已用完"+"\n"+"请明天再试。");                      
                         dialog.show();
                         break;
@@ -725,6 +726,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                     case ErrorCode.ACCESS_CODE_ERROR_OVER://24:验证码一天最多只能验证5次
                     	MessageDialog dialog = new MessageDialog(FindPasswordEmialActivity.this,false,MessageDialog.SIZE_NORMAL);
                         dialog.setTitle("");
+                        dialog.setCancelable(false);
                         dialog.setMessage("今天邮箱验证次数已用完，请明天再试。");                      
                         dialog.show();
                         break;
@@ -794,7 +796,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                     	
                     	
                     default://重置密码失败
-                        mMsgBox.show(null, "重置密码失败");
+                        mMsgBox.showWaitImageWorng("密码重置失败");
 //                        mMsgBox.dismissDialog();
                         break;
                 }

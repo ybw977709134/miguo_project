@@ -91,11 +91,6 @@ public class RegisterActivity extends Activity implements OnClickListener{
 							e.printStackTrace();
 						}
 						
-//					startActivity(new Intent(RegisterActivity.this, LoginActivity.class)
-//						.putExtra(LoginActivity.EXTRA_USERNAME, args[0])
-//						.putExtra(LoginActivity.EXTRA_PASSWORD, args[1]));
-//					finish();
-						
 					}
 				}).start();
 				
@@ -104,13 +99,12 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			
 			case MSG_USER_ALREADY_EXIST:
 			{
-//              alert(getResources().getString(R.string.reg_failed_username_was_taken));
 				textView_verification_newPassword.setVisibility(View.VISIBLE);
 	        	textView_verification_newPassword.setText(getResources().getString(R.string.reg_failed_username_was_taken));
 			}
 			break;
+			
 			default:
-//                alert(getResources().getString(R.string.login_net_error));
                 textView_verification_newPassword.setVisibility(View.VISIBLE);
 	        	textView_verification_newPassword.setText(getResources().getString(R.string.login_net_error));
                 break;
@@ -324,21 +318,18 @@ public class RegisterActivity extends Activity implements OnClickListener{
          * 帐号验证
          */
         if (strUserName.length() <= 0) {//用户名不能为空
-//        	alert(getResources().getString(R.string.register_username_empty));
         	textView_verification_newPassword.setVisibility(View.VISIBLE);
         	textView_verification_newPassword.setText(getResources().getString(R.string.register_username_empty));
         	return;
         }
         
         if (strUserName.length() < 2) {//用户名不能小于2个字符
-//        	alert(getResources().getString(R.string.register_username_less));
         	textView_verification_newPassword.setVisibility(View.VISIBLE);
         	textView_verification_newPassword.setText(getResources().getString(R.string.register_username_less));
         	return;
         }
         
         if (strUserName.length() > 20) {//用户名不能大于20个字符
-//        	alert(getResources().getString(R.string.register_username_more));
         	textView_verification_newPassword.setVisibility(View.VISIBLE);
         	textView_verification_newPassword.setText(getResources().getString(R.string.register_username_more));
         	return;
@@ -348,21 +339,18 @@ public class RegisterActivity extends Activity implements OnClickListener{
          * 密码验证
          */
         if (strPassword.length() <= 0) {//密码不能为空
-//        	alert(getResources().getString(R.string.register_password_empty));
         	textView_verification_newPassword.setVisibility(View.VISIBLE);
         	textView_verification_newPassword.setText(getResources().getString(R.string.register_password_empty));
         	return;
         }
         
         if (strPassword.length() < 6) {//密码不能小于6个字符
-//        	alert(getResources().getString(R.string.register_password_less));
         	textView_verification_newPassword.setVisibility(View.VISIBLE);
         	textView_verification_newPassword.setText(getResources().getString(R.string.register_password_less));
         	return;
         }
         
         if (strPassword.length() > 20) {//密码不能大于20个字符
-//        	alert(getResources().getString(R.string.register_password_more));
         	textView_verification_newPassword.setVisibility(View.VISIBLE);
         	textView_verification_newPassword.setText(getResources().getString(R.string.register_password_more));
         	return;
@@ -372,21 +360,18 @@ public class RegisterActivity extends Activity implements OnClickListener{
          * 确认密码验证
          */
         if (strPwdConfirm.length() <= 0) {//确认密码不能为空
-//        	alert(getResources().getString(R.string.register_pwdConfrim_empty));
         	textView_verification_newPassword.setVisibility(View.VISIBLE);
         	textView_verification_newPassword.setText(getResources().getString(R.string.register_pwdConfrim_empty));
         	return;
         }
         
         if (strPwdConfirm.length() < 6) {//确认密码不能小于6个字符
-//        	alert(getResources().getString(R.string.register_pwdConfrim_less));
         	textView_verification_newPassword.setVisibility(View.VISIBLE);
         	textView_verification_newPassword.setText(getResources().getString(R.string.register_pwdConfrim_less));
         	return;
         }
         
         if (strPwdConfirm.length() > 20) {//确认密码不能大于20个字符
-//        	alert(getResources().getString(R.string.register_pwdConfrim_more));
         	textView_verification_newPassword.setVisibility(View.VISIBLE);
         	textView_verification_newPassword.setText(getResources().getString(R.string.register_pwdConfrim_more));
         	return;
@@ -394,21 +379,18 @@ public class RegisterActivity extends Activity implements OnClickListener{
         
         
         if (!Utils.verifyUsername(strUserName)) {//注册用户名的帐号错误
-//            alert(getResources().getString(R.string.setting_username_format_error));
             textView_verification_newPassword.setVisibility(View.VISIBLE);
         	textView_verification_newPassword.setText(getResources().getString(R.string.setting_username_format_error));
             return;
         }
 
         if (!Utils.verifyWowTalkPwd(strPassword)) {//密码格式错误
-//            alert(getResources().getString(R.string.settings_account_passwd_format_error));
             textView_verification_newPassword.setVisibility(View.VISIBLE);
         	textView_verification_newPassword.setText(getResources().getString(R.string.settings_account_passwd_format_error));
             return;
         }
         
         if (!Utils.verifyWowTalkPwd(strPwdConfirm)) {//确认密码格式错误
-//            alert(getResources().getString(R.string.settings_account_pwdConfrim_format_error));
             textView_verification_newPassword.setVisibility(View.VISIBLE);
         	textView_verification_newPassword.setText(getResources().getString(R.string.settings_account_pwdConfrim_format_error));
             return;
@@ -416,7 +398,6 @@ public class RegisterActivity extends Activity implements OnClickListener{
         
         //对账号类型的确认
         if (!(textView_register_user_type.getText().equals("老师")) && !(textView_register_user_type.getText().equals("学生"))) {
-//        	alert(getResources().getString(R.string.settings_account_type_select));
         	textView_verification_newPassword.setVisibility(View.VISIBLE);
         	textView_verification_newPassword.setText(getResources().getString(R.string.settings_account_type_select));
         	return;
@@ -465,7 +446,6 @@ public class RegisterActivity extends Activity implements OnClickListener{
 		if (edtPwd.getText().toString().equals(edtPwdConfirm.getText().toString())) {
 			return true;
 		} else {		
-//				alert(getResources().getString(R.string.register_pwd_must_fit));
 				textView_verification_newPassword.setVisibility(View.VISIBLE);
 	        	textView_verification_newPassword.setText(getResources().getString(R.string.register_pwd_must_fit));
 			return false;
@@ -505,7 +485,6 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			imageview_hint_password.setVisibility(View.VISIBLE);
 			edtPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 			edtPwdConfirm.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-//			textView_isshow_password.setText("隐藏密码");
 			break;
 						
 		//隐藏密码	
@@ -514,7 +493,6 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			imageview_hint_password.setVisibility(View.GONE);
 			edtPwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 			edtPwdConfirm.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-//			textView_isshow_password.setText("显示密码");
 			break;
 			
 		case R.id.create_button:
@@ -543,14 +521,8 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	 */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-    	// TODO Auto-generated method stub
-    	
-    	
-    	
+
     	  if(event.getAction() == MotionEvent.ACTION_DOWN){  
-//    		  if(getCurrentFocus()!=null && getCurrentFocus().getWindowToken()!=null){  
-//    			  mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);  
-//    			  }
     		  
     		//退出页面关起软键盘
     	    	if (edtAccount.hasFocus()) {
@@ -652,6 +624,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
         dialog.setMessage(R.string.register_user_prompt);
         dialog.setMessageTextSize(15);
         dialog.setIsDouleBtn(false);
+        dialog.setCancelable(false);
         dialog.show();
     }
     

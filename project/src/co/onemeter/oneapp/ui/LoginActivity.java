@@ -196,23 +196,24 @@ public class LoginActivity extends Activity implements OnClickListener {
 //                mMsgBox.dismissWait();
 //				finish();
 				break;
+				
 			case MSG_AUTO_REGISTER_SUCCESS:
                 handleSuccessLogin(true, msg.obj);
 				break;
+				
 			case MSG_AUTH:
                 mMsgBox.dismissWait();
 				alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_auth_error));
 				break;
+				
 			case MSG_USER_NOT_EXISTS:
                 mMsgBox.dismissWait();
-//				alert(R.string.login_user_not_exists);
 				alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_user_not_exists));
 				break;
+				
 			case MSG_LOGIN_FAILED:
                 mMsgBox.dismissWait();
-//				alert(R.string.login_unknown_error);
-//				alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_net_error));
-				mMsgBox.showWaitImageCaution(getString(R.string.login_net_error));
+                mMsgBox.showWaitImageCaution(getString(R.string.login_net_error));
 				
 				new Thread(new Runnable() {
 					
@@ -366,9 +367,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     public void onClick(View v) {
 		switch (v.getId()) {
+		
         case R.id.title_back:
             finish();
             break;
+            
 		case R.id.login_username:
 			login();
 			break;
@@ -385,17 +388,19 @@ public class LoginActivity extends Activity implements OnClickListener {
         case R.id.btn_signup:
             startActivity(new Intent(this, RegisterActivity.class));
             break;
+            
 		case R.id.forgotPassWord:
-//			fGotoFetchPwd();
-			//找回密码
-			showPopupMenu();
+			showPopupMenu();//找回密码
 			break;
+			
         case R.id.field_clear_account:
         	edtAccount.setText("");
             break;
+            
         case R.id.field_clear_password:
         	edtPassword.setText("");
         	break;
+        	
 		default:
             mMsgBox.toast(R.string.not_implemented);
 			break;
@@ -406,12 +411,10 @@ public class LoginActivity extends Activity implements OnClickListener {
         final String username = edtAccount.getText().toString().trim();
         final String pwdStr = edtPassword.getText().toString().trim();
         if (username.equals("")) {
-//          alert(R.string.login_user_cannot_be_null);
             alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_user_cannot_be_null));
             return;
         }
         if (pwdStr.equals("")) {
-//            alert(R.string.login_pwd_cannot_be_null);
             alert(LoginActivity.this,getResources().getString(R.string.login_unknown_error),getResources().getString(R.string.login_pwd_cannot_be_null));
             return;
         }
@@ -585,6 +588,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		 MessageDialog dialog = new MessageDialog(LoginActivity.this,false,MessageDialog.SIZE_NORMAL);
          dialog.setTitle(title);
          dialog.setMessage(message);
+         dialog.setCancelable(false);
          dialog.show();
         
 

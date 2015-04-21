@@ -403,6 +403,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 			
 			 MessageDialog dialog = new MessageDialog(BindEmailAddressActivity.this);
              dialog.setMessage("你确定要取消绑定邮箱吗？");
+             dialog.setCancelable(false);
              dialog.setRightBold(true);
              dialog.setOnLeftClickListener("继续绑定", null);
              dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
@@ -489,6 +490,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                     case ErrorCode.ACCESS_CODE_ERROR_OVER://24:验证码一天最多只能验证5次
                     	MessageDialog dialog = new MessageDialog(BindEmailAddressActivity.this,false,MessageDialog.SIZE_NORMAL);
                         dialog.setTitle("");
+                        dialog.setCancelable(false);
                         dialog.setMessage("今天邮的箱验证次数已用完"+"\n"+"请明天再试。");                      
                         dialog.show();
                         break;
@@ -504,7 +506,8 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                     	break;
                     	
                     default://邮箱绑定失败
-                        mMsgBox.show(null, getString(R.string.bind_email_failed));
+//                        mMsgBox.show(null, getString(R.string.bind_email_failed));
+                        mMsgBox.showWaitImageWorng( getString(R.string.bind_email_failed));
                         break;
                 }
 
@@ -588,7 +591,8 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
                         break;
                         
                     default:
-                        mMsgBox.show(null, getString(R.string.bind_email_failed));
+//                        mMsgBox.show(null, getString(R.string.bind_email_failed));
+                        mMsgBox.showWaitImageWorng( getString(R.string.bind_email_failed));
                         break;
                 }
             }
@@ -628,28 +632,4 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
         });
 	}
 	
-	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

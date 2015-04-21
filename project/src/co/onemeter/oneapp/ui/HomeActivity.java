@@ -16,21 +16,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import com.pzy.paint.DoodleActivity;
-
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.widget.AutoScrollViewPager;
 import co.onemeter.utils.AsyncTaskExecutor;
-
-import org.wowtalk.*;
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.UpdatesInfo;
-import org.wowtalk.api.WowTalkWebServerIF;
+import com.pzy.paint.DoodleActivity;
+import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
@@ -72,6 +62,8 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     private boolean mIsChanged = false;
     private boolean appUpdatesAvailable;
     private List<GroupChatRoom> schools;
+    private boolean isRequestingMyClasses = false;
+    private boolean isWaitingForMyClasses = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -349,18 +341,28 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btn_goto_myclass:
             case R.id.txt_goto_myclass:
-            	if(isEmpty()){
-            		intent = new Intent(HomeActivity.this, AddClassActivity.class);
-            	}else{
-            		intent = new Intent(HomeActivity.this, MyClassesActivity.class);
-            		intent.putExtra(MyClassesActivity.TAG,true);
-            		
-            	}
-            	startActivityForResult(intent, REQ_ADD_CLASS);
+                if (isRequestingMyClasses) {
+                    msgbox.showWait();
+                    isWaitingForMyClasses = true;
+                } else {
+                    gotoMyClasses();
+                }
             	break;
             default:
                 break;
         }
+    }
+
+    private void gotoMyClasses() {
+        Intent intent;
+        if (isEmpty()) {
+            intent = new Intent(HomeActivity.this, AddClassActivity.class);
+        } else {
+            intent = new Intent(HomeActivity.this, MyClassesActivity.class);
+            intent.putExtra(MyClassesActivity.TAG, true);
+
+        }
+        startActivityForResult(intent, REQ_ADD_CLASS);
     }
 
     private void showTakeOrPickphoto(View v){
@@ -494,14 +496,27 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             @Override
             protected Integer doInBackground(Void... voids) {
             	schools.clear();
-            	int errno = WowTalkWebServerIF.getInstance(HomeActivity.this).getMySchoolsErrno(true, schools);
+                isRequestingMyClasses = true;
+                int errno = WowTalkWebServerIF.getInstance(HomeActivity.this).getMySchoolsErrno(true, schools);
+                isRequestingMyClasses = false;
             	return errno;
             }
             @Override
             public void onPostExecute(Integer errno) {
                 if (errno == ErrorCode.OK) {
+                    if (msgbox.isWaitShowing())
+                        msgbox.dismissWait();
                     new Database(HomeActivity.this).storeSchools(schools);
+                    if (isWaitingForMyClasses) {
+                        gotoMyClasses();
+                    }
+                } else {
+                    if (msgbox.isWaitShowing()) {
+                        msgbox.dismissWait();
+                        msgbox.toast(R.string.operation_failed);
+                    }
                 }
+                isWaitingForMyClasses = false;
             }
         });
     }

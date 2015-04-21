@@ -1054,9 +1054,9 @@ public abstract class MessageComposerActivityBase extends Activity
     }
 
     protected void configInputBoardDrawable(InputBoardManager mgr) {
-        mgr.drawableResId().open = R.drawable.sms_add_btn;
-        mgr.drawableResId().close = R.drawable.sms_close_btn;
-        mgr.drawableResId().gotoEmotion = R.drawable.sms_kaomoji_btn;
+        mgr.drawableResId().open = R.drawable.icon_message_text_input_more_selector;
+        mgr.drawableResId().close = R.drawable.icon_message_text_input_keyboard_selector;
+        mgr.drawableResId().gotoEmotion = R.drawable.icon_message_text_input_emotion;
         mgr.drawableResId().keyboard = R.drawable.sms_keyboard;
         mgr.drawableResId().voiceNormal = R.drawable.btn_blue;
         mgr.drawableResId().voicePressed = R.drawable.btn_blue_p;

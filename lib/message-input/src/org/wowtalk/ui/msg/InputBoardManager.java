@@ -17,7 +17,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.PowerManager;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
@@ -410,6 +413,31 @@ public class InputBoardManager implements Parcelable,
         // 2, txt_content is clicked (OnFocusChange may not happen if it's already focused)
         mTxtContent.setOnClickListener(this);
         mTxtContent.setOnFocusChangeListener(this);
+
+        // 3, txt_content needs a textwatcher to listen some ui
+        mBtnSend.setEnabled(false);
+        mTxtContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.toString().length() > 0){
+                    mBtnSend.setEnabled(true);
+                    mBtnSend.setVisibility(View.VISIBLE);
+                }else {
+                    mBtnSend.setEnabled(false);
+                    mBtnSend.setVisibility(View.GONE);
+                }
+            }
+        });
 
         // hold-to-speak button
         btnSpeak.setOnTouchListener(new View.OnTouchListener(){

@@ -33,20 +33,23 @@
 
 				<Button
 					android:id="@+id/btn_toggle_media"
-					android:layout_width="@dimen/dimen_40"
-					android:layout_height="@dimen/dimen_40"
+					android:layout_width="25dp"
+					android:layout_height="25dp"
 					android:layout_centerVertical="true"
-					android:background="@drawable/sms_add_btn"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+					android:background="@drawable/icon_message_text_input_more"
 					android:padding="5dp" />
 
 				<Button
 					android:id="@+id/btn_toggle_emotion"
-					android:layout_width="@dimen/dimen_40"
-					android:layout_height="@dimen/dimen_40"
+					android:layout_width="25dp"
+					android:layout_height="25dp"
 					android:layout_centerVertical="true"
 					android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
 					android:layout_toRightOf="@+id/btn_toggle_media"
-					android:background="@drawable/sms_kaomoji_btn"
+					android:background="@drawable/icon_message_text_input_emotion"
 					android:padding="5dp" />
 
 				<RelativeLayout
@@ -70,7 +73,7 @@
 						android:layout_centerVertical="true"
 						android:layout_marginRight="5dp"
 						android:layout_toLeftOf="@+id/btn_send"
-                        android:minHeight="@dimen/dimen_40"
+                        android:minHeight="35dp"
                         android:maxHeight="200dp"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
@@ -84,7 +87,7 @@
 						android:layout_height="wrap_content"
 						android:layout_alignParentRight="true"
 						android:layout_centerVertical="true"
-                        android:minHeight="@dimen/dimen_40"
+                        android:minHeight="35dp"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
 						android:background="@drawable/msg_btn_blue_selector"
@@ -96,7 +99,7 @@
 				<Button
 					android:id="@+id/btn_speak"
 					android:layout_width="fill_parent"
-					android:layout_height="@dimen/dimen_40"
+					android:layout_height="35dp"
 					android:layout_marginLeft="5dp"
 					android:layout_toRightOf="@+id/btn_toggle_media"
                     android:layout_centerVertical="true"
@@ -108,7 +111,7 @@
 			</RelativeLayout>
             <ImageView
                     android:id="@+id/family_layout_top_img"
-                    android:layout_height="@dimen/dimen_50"
+                    android:layout_height="35dp"
                     android:layout_width="fill_parent"
                     android:src="@drawable/sms_unfold_btn"
                     android:scaleType="center"

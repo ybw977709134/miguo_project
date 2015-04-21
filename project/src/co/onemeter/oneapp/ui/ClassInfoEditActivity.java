@@ -1,24 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
-import org.wowtalk.api.Database;
-import org.wowtalk.api.ErrorCode;
-import org.wowtalk.api.GroupChatRoom;
-import org.wowtalk.api.WowTalkWebServerIF;
-import org.wowtalk.ui.MessageBox;
-
-import co.onemeter.oneapp.Constants;
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.datepicker.DatePickerActivity;
-import co.onemeter.oneapp.ui.datepicker.TimerPickerActivity;
-import co.onemeter.oneapp.utils.Utils;
-import co.onemeter.utils.AsyncTaskExecutor;
-
-import com.androidquery.AQuery;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -27,17 +8,23 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
+import android.widget.*;
+import co.onemeter.oneapp.Constants;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.Utils;
+import co.onemeter.utils.AsyncTaskExecutor;
+import com.androidquery.AQuery;
+import org.wowtalk.api.Database;
+import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.GroupChatRoom;
+import org.wowtalk.api.WowTalkWebServerIF;
+import org.wowtalk.ui.MessageBox;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * 大量的注释部分是利用自定义的日期选择控件，由于修改了activity的theme，3.0以上系统能都显示很友好的日期选择控件，暂时放弃使用自定义的日期选择控件
@@ -519,6 +506,7 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 			}
 			@Override
 			protected void onPostExecute(Integer result) {
+                mMsgBox.dismissWait();
 				if (result == ErrorCode.OK) {
 					// update the display name of chatmessages.
 					mDBHelper.updateChatMessageDisplayNameWithUser(classroom.groupID, classroom.groupNameOriginal);

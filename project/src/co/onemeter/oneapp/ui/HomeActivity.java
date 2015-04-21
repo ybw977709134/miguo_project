@@ -29,10 +29,7 @@ import org.wowtalk.ui.msg.InputBoardManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by pzy on 9/18/14.Modified by Jacky on 3/18/2015.
@@ -491,13 +488,16 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         }
     }
     private void refresh() {
-    	schools = new Database(HomeActivity.this).fetchSchools();
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... voids) {
-            	schools.clear();
                 isRequestingMyClasses = true;
-                int errno = WowTalkWebServerIF.getInstance(HomeActivity.this).getMySchoolsErrno(true, schools);
+                List<GroupChatRoom> result = new LinkedList<>();
+                int errno = WowTalkWebServerIF.getInstance(HomeActivity.this).getMySchoolsErrno(true, result);
+                if (errno == ErrorCode.OK) {
+                    schools.clear();
+                    schools.addAll(result);
+                }
                 isRequestingMyClasses = false;
             	return errno;
             }

@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
@@ -19,14 +18,11 @@ import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.TimePicker.OnTimeChangedListener;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
-
 import com.androidquery.AQuery;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.DoubleClickedUtils;
@@ -110,7 +106,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 		q.find(R.id.lessoninfo_refresh).clicked(this);
 
 		
-			String opentime = classroom.description.split(Constants.COMMA)[3];
+			String opentime = classroom.description.split(Constants.COMMA, -1)[3]; // String.split 第二个参数传 -1, 保留空字段
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			try {
 				time_openclass = sdf.parse(opentime).getTime();

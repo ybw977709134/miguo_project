@@ -283,10 +283,11 @@ public class GroupChatRoom extends TreeNode implements IHasPhoto{
             g.maxNumber = s.readInt();
             g.memberCount = s.readInt();
             g.memberList = new ArrayList<Buddy>();
+            s.readTypedList(g.memberList, Buddy.CREATOR);
             g.childGroups = new ArrayList<GroupChatRoom>();
+            s.readTypedList(g.childGroups, GroupChatRoom.CREATOR);
             g.isEditable = 1 == s.readInt();
             g.parentGroupId = s.readString();
-            s.readTypedList(g.memberList, Buddy.CREATOR);
             g.myNickHere = s.readString();
             g.photoUploadedTimestamp = s.readLong();
             g.place = s.readString();

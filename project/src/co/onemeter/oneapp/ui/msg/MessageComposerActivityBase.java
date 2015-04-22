@@ -1657,7 +1657,7 @@ public abstract class MessageComposerActivityBase extends Activity
 
     @Override
     public void onHeightChanged(int height) {
-        lv_message.setPadding(0, 0, 0, height);
+        lv_message.setPadding(0, 0, 0, 10 + height);
     }
 
     @Override

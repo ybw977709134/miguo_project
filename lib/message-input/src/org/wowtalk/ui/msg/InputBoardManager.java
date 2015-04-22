@@ -539,8 +539,21 @@ public class InputBoardManager implements Parcelable,
 		/*
 		 *  get UI components height
 		 */
-        DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
-        mHeight_mediaPanel = (int)(metrics.widthPixels / 1.5f);
+        //old mHeight_mediaPanel
+//        DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
+//        mHeight_mediaPanel = (int)(metrics.widthPixels / 1.5f);
+        //new mHeight_mediaPanel,by yuan
+        layoutMediaWrapper.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        if(mHeight_mediaPanel > 0) return;
+                        if(layoutMediaWrapper.getVisibility() == View.VISIBLE){
+                            mHeight_mediaPanel = layoutMediaWrapper.getHeight();
+                            setInputMode(FLAG_SHOW_MEDIA,false);
+                        }
+                    }
+                });
         layoutTextInnerWrapper.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener(){
                     @Override
@@ -552,7 +565,6 @@ public class InputBoardManager implements Parcelable,
                         }
                     }
                 });
-
         final ImageView ivFamilyTop=(ImageView)mRootView.findViewById(R.id.family_layout_top_img);
         ivFamilyTop.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener(){
@@ -697,6 +709,9 @@ public class InputBoardManager implements Parcelable,
         inputImage(REQ_INPUT_PHOTO_FOR_DOODLE);
     }
 
+    /**
+     * use AMAP to pick location
+     */
     private void inputLocation() {
 //        boolean googleMapExist= (ConnectionResult.SUCCESS==GooglePlayServicesUtil.isGooglePlayServicesAvailable(mContext));
 //
@@ -850,6 +865,7 @@ public class InputBoardManager implements Parcelable,
             break;
         case FLAG_SHOW_VOICE:
             // text vs voice
+            mTxtContent.clearFocus();
             View viewTextInvisible = layoutTextInnerWrapper.findViewById(R.id.layout_input_text);
             viewTextInvisible.setVisibility(View.INVISIBLE);
             btnSpeak.setVisibility(View.VISIBLE);
@@ -874,6 +890,7 @@ public class InputBoardManager implements Parcelable,
             });
             break;
         case FLAG_SHOW_PHOTO:
+            mTxtContent.clearFocus();
             mRunnableOnResize = new Runnable() {
                 @Override
                 public void run() {
@@ -955,6 +972,7 @@ public class InputBoardManager implements Parcelable,
                     mBtnEmotion.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View arg0) {
+                            mTxtContent.requestFocus();
                             setInputMode(FLAG_SHOW_TEXT, true);
                         }
                     });

@@ -26,7 +26,8 @@
         android:id="@+id/timerBg"
         android:layout_height="150dp"
         android:layout_width="fill_parent"
-        android:background="@color/libmsg_chat_right_font1">
+        android:background="@color/libmsg_chat_right_font1"
+        android:alpha="0.75">
         <org.wowtalk.ui.msg.TimerTextView
             android:id="@+id/txt_timer"
             android:layout_height="wrap_content"

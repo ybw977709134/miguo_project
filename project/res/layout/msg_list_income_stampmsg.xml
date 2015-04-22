@@ -80,8 +80,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="date"
-                android:textStyle="bold"
-                android:textColor="@color/sms_left_date"
+                android:textColor="@color/black"
                 android:textSize="@dimen/msg_fix_status_and_date" />
         </LinearLayout>
 

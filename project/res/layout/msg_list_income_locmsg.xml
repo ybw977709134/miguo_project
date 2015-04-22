@@ -59,7 +59,7 @@
             android:paddingRight="@dimen/msg_ballon_padding_h_size"
             android:paddingTop="@dimen/msg_ballon_padding_v_size"
             android:paddingBottom="@dimen/msg_ballon_padding_v_size"
-            android:background="@drawable/sms_left_balloon"
+            android:background="@drawable/bg_message_other_words"
             android:orientation="horizontal"
             android:clickable="true">
 
@@ -90,8 +90,7 @@
                 android:layout_toRightOf="@+id/layout_balloon"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="date"
-                android:textStyle="bold"
-                android:textColor="@color/sms_left_date"
+                android:textColor="@color/black"
                 android:textSize="@dimen/msg_fix_status_and_date" />
         </LinearLayout>
 

@@ -67,7 +67,7 @@
             android:paddingTop="@dimen/msg_ballon_padding_v_size"
             android:paddingBottom="@dimen/msg_ballon_padding_v_size"
 	        android:layout_below="@id/txt_contact_name"
-	        android:background="@drawable/sms_left_balloon"
+	        android:background="@drawable/bg_message_other_words"
 	        android:clickable="true">
 
 			<LinearLayout
@@ -79,7 +79,7 @@
 				<ImageView
 					android:layout_width="24dp"
 					android:layout_height="26dp"
-					android:background="@drawable/call_left" />
+					android:background="@drawable/icon_messages_call" />
 
 				<TextView
 					android:id="@+id/txt_time"
@@ -87,9 +87,8 @@
 					android:layout_height="wrap_content"
 					android:layout_gravity="center_vertical"
 					android:layout_marginLeft="5dp"
-					android:textColor="@color/blue"
-					android:textSize="16sp"
-					android:textStyle="bold" />
+					android:textColor="@color/black"
+					android:textSize="16sp" />
 			</LinearLayout>
 
 	        <LinearLayout
@@ -101,7 +100,7 @@
 	            <ImageView
 	                android:layout_width="24dp"
 	                android:layout_height="26dp"
-	                android:background="@drawable/call_missed" />
+	                android:background="@drawable/icon_messages_call_answer_no" />
 
 				<TextView
 					android:layout_width="wrap_content"
@@ -109,9 +108,8 @@
 					android:layout_gravity="center_vertical"
 					android:layout_marginLeft="5dp"
 					android:text="@string/call_missed"
-					android:textColor="@color/orange"
-					android:textSize="16sp"
-					android:textStyle="bold" />
+					android:textColor="@color/black"
+					android:textSize="16sp" />
 			</LinearLayout>
 		</RelativeLayout>
 
@@ -126,8 +124,7 @@
 		android:id="@+id/messagedetail_date"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:textStyle="bold"
-		android:textColor="@color/sms_left_date"
+		android:textColor="@color/black"
         android:textSize="@dimen/msg_fix_status_and_date"
 		android:text="date"
 		android:layout_toRightOf="@+id/relative01"

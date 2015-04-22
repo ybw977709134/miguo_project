@@ -21,11 +21,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.MyUrlSpanHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
 import junit.framework.Assert;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
@@ -237,6 +239,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtSentStatus = (TextView)lView.findViewById(R.id.txt_sentstatus);
                 holder.txtContactName = null;
                 holder.txtDuration = null;
+                holder.imgMissedCall = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = null;
                 holder.imgContactType = null;
@@ -255,6 +258,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtSentStatus = (TextView)lView.findViewById(R.id.txt_sentstatus);
                 holder.txtContactName = null;
                 holder.txtDuration = null;
+                holder.imgMissedCall = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = null;
                 holder.imgContactType = null;
@@ -273,6 +277,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtSentStatus = (TextView)lView.findViewById(R.id.txt_sentstatus);
                 holder.txtContactName = null;
                 holder.txtDuration = null;
+                holder.imgMissedCall = null;
                 holder.imgStampAnim = (AnimImage)lView.findViewById(R.id.img_thumbnail);
                 holder.imgContactPhoto = null;
                 holder.imgContactType = null;
@@ -291,6 +296,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtSentStatus = (TextView)lView.findViewById(R.id.txt_sentstatus);
                 holder.txtContactName = null;
                 holder.txtDuration = null;
+                holder.imgMissedCall = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = null;
                 holder.imgContactType = null;
@@ -309,6 +315,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtSentStatus = (TextView)lView.findViewById(R.id.txt_sentstatus);
                 holder.txtContactName = null;
                 holder.txtDuration = null;
+                holder.imgMissedCall = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = null;
                 holder.imgContactType = null;
@@ -327,6 +334,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtSentStatus = (TextView)lView.findViewById(R.id.txt_sentstatus);
                 holder.txtContactName = null;
                 holder.txtDuration = (TextView)lView.findViewById(R.id.txt_time);
+                holder.imgMissedCall = (ImageView) lView.findViewById(R.id.imageView_call_status);
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = null;
                 holder.imgContactType = null;
@@ -335,7 +343,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
                 holder.vgBalloon = lView.findViewById(R.id.layout_balloon);
                 holder.vgCall =  lView.findViewById(R.id.layout_call);
-                holder.vgMissedCall =  lView.findViewById(R.id.layout_callmissed);
+                holder.vgMissedCall =  null;
                 break;
             case CELL_TYPE_IN_LOC:
                 lView = inflater.inflate(R.layout.msg_list_income_locmsg, parent, false);
@@ -344,6 +352,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDate = (TextView) lView.findViewById(R.id.messagedetail_date);
                 holder.txtSentStatus = null;
                 holder.txtContactName = (TextView)lView.findViewById(R.id.txt_contact_name);
+                holder.imgMissedCall = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
                 holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
@@ -362,6 +371,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtSentStatus = null;
                 holder.txtContactName = (TextView)lView.findViewById(R.id.txt_contact_name);
                 holder.txtDuration = null;
+                holder.imgMissedCall = null;
                 holder.imgStampAnim = (AnimImage)lView.findViewById(R.id.img_thumbnail);
                 holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
                 holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
@@ -380,6 +390,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtSentStatus = null;
                 holder.txtContactName = (TextView)lView.findViewById(R.id.txt_contact_name);
                 holder.txtDuration = null;
+                holder.imgMissedCall = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
                 holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
@@ -398,6 +409,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtSentStatus = null;
                 holder.txtContactName = (TextView)lView.findViewById(R.id.txt_contact_name);
                 holder.txtDuration = (TextView)lView.findViewById(R.id.txt_time);
+                holder.imgMissedCall = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
                 holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
@@ -416,6 +428,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtSentStatus = null;
                 holder.txtContactName = (TextView)lView.findViewById(R.id.txt_contact_name);
                 holder.txtDuration = null;
+                holder.imgMissedCall = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
                 holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
@@ -434,6 +447,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtSentStatus = null;
                 holder.txtContactName = null;
                 holder.txtDuration = null;
+                holder.imgMissedCall = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = null;
                 holder.imgContactType = null;
@@ -452,6 +466,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtSentStatus = null;
                 holder.txtContactName = (TextView)lView.findViewById(R.id.txt_contact_name);
                 holder.txtDuration = null;
+                holder.imgMissedCall = null;
                 holder.imgStampAnim = null;
                 holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
                 holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
@@ -730,9 +745,15 @@ public class MessageDetailAdapter extends BaseAdapter{
         if (message.ioType.equals(ChatMessage.IOTYPE_OUTPUT)) {
             holder.vgCall.setOnClickListener(listener);
             if (message.msgType.equals(ChatMessage.MSGTYPE_CALL_LOG)) {
+            	
+            	 //正常通话状态，通话的图标显示为绿色图标 
+                holder.imgMissedCall.setImageResource(R.drawable.icon_messages_call);
                 holder.txtContent.setText(String.format("%02d:%02d",
                         Integer.valueOf(message.messageContent) / 60, Integer.valueOf(message.messageContent) % 60));
+                
             } else if (message.msgType.equals(ChatMessage.MSGTYPE_NORMAL_CALL_REJECTED)) {
+            	 //正常通话状态，通话的图标显示为红色图标 
+                holder.imgMissedCall.setImageResource(R.drawable.icon_messages_call_answer_no);
                 holder.txtContent.setText(mContext.getResources().getString(R.string.msg_cancelled_call));
             }
         }
@@ -892,9 +913,9 @@ public class MessageDetailAdapter extends BaseAdapter{
     private void setVoicePlayInfo_NotPlay(ChatMessage cm) {
         ViewHolder holder = msgViewHolderMap.get(cm.primaryKey);
         if(cm.ioType.equals(ChatMessage.IOTYPE_OUTPUT)) {
-            holder.imgMsgThumbnail.setImageResource(R.drawable.play_right);
+            holder.imgMsgThumbnail.setImageResource(R.drawable.icon_messages_voice);
         } else {
-            holder.imgMsgThumbnail.setImageResource(R.drawable.play_left);
+            holder.imgMsgThumbnail.setImageResource(R.drawable.icon_messages_voice);
         }
         holder.imgMsgThumbnail.setBackgroundResource(0);
 
@@ -1378,6 +1399,7 @@ public class MessageDetailAdapter extends BaseAdapter{
         TextView txtDate;
         TextView txtSentStatus;
         TextView txtDuration;
+        ImageView imgMissedCall;
         ImageView imgContactPhoto;
         ImageView imgContactType;
         ImageView imgMsgThumbnail;

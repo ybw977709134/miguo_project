@@ -27,7 +27,7 @@
         android:paddingRight="@dimen/msg_ballon_padding_h_size_add_angle"
         android:paddingTop="@dimen/msg_ballon_padding_v_size"
         android:paddingBottom="@dimen/msg_ballon_padding_v_size"
-        android:background="@drawable/sms_right_balloon"
+        android:background="@drawable/bg_message_my_words"
         android:orientation="horizontal"
         android:clickable="true">
 
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:text="status"
-            android:textColor="@color/sms_right_date"
+            android:textColor="@color/black"
             android:textSize="@dimen/msg_fix_status_and_date" />
 
         <TextView
@@ -77,8 +77,7 @@
             android:layout_gravity="right"
             android:gravity="center_vertical|center_horizontal"
             android:text="date"
-            android:textStyle="bold"
-            android:textColor="@color/sms_right_date"
+            android:textColor="@color/black"
             android:textSize="@dimen/msg_fix_status_and_date" />
 
         <ProgressBar

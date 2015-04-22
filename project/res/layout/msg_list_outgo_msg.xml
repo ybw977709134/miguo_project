@@ -28,11 +28,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="5dp"
-            android:paddingLeft="@dimen/msg_ballon_padding_h_size"
-            android:paddingRight="@dimen/msg_ballon_padding_h_size_add_angle"
-            android:paddingTop="@dimen/msg_ballon_padding_v_size"
-            android:paddingBottom="@dimen/msg_ballon_padding_v_size"
-            android:background="@drawable/sms_right_balloon"
+            android:background="@drawable/bg_message_my_words"
             android:orientation="horizontal"
             android:clickable="true">
 
@@ -40,8 +36,10 @@
                 android:id="@+id/messagedetail_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxWidth="150dp"
-                android:textColor="@color/text_gray2"
+                android:maxWidth="200dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/black"
                 android:autoLink="all"
                 android:textSize="16sp"
                 android:layout_centerVertical="true"/>
@@ -69,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:textColor="@color/sms_right_date"
+                android:textColor="@color/black"
                 android:text="status"
                 android:textSize="@dimen/msg_fix_status_and_date" />
 
@@ -79,9 +77,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:gravity="center_vertical|center_horizontal"
-                android:textColor="@color/sms_right_date"
+                android:textColor="@color/black"
                 android:text="date"
-                android:textStyle="bold"
                 android:textSize="@dimen/msg_fix_status_and_date" />
 
         </LinearLayout>

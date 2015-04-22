@@ -23,7 +23,7 @@
         android:layout_width="fill_parent"
         android:layout_below="@id/msg_date"
         android:textSize="@dimen/msg_fix_status_and_date"
-        android:textColor="@color/sms_gray"
+        android:textColor="@color/black"
         android:visibility="gone"
         android:gravity="center_horizontal"/>
 

@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:text="status"
-                android:textColor="@color/sms_right_date"
+                android:textColor="@color/black"
                 android:textSize="@dimen/msg_fix_status_and_date" />
 
             <TextView
@@ -71,8 +71,7 @@
                 android:layout_gravity="right"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="date"
-                android:textStyle="bold"
-                android:textColor="@color/sms_right_date"
+                android:textColor="@color/black"
                 android:textSize="@dimen/msg_fix_status_and_date" />
 
             <ProgressBar

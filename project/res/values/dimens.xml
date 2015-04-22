@@ -54,6 +54,7 @@
     <dimen name="msg_ballon_padding_h_size">5dp</dimen>
     <dimen name="msg_ballon_padding_v_size">5dp</dimen>
     <dimen name="msg_ballon_padding_h_size_add_angle">12dp</dimen>
+    <dimen name="msg_ballon_padding_size">10dp</dimen>
     <dimen name="moment_create_item_small_padding">3dp</dimen>
     <dimen name="moment_create_item_large_padding">10dp</dimen>
     <dimen name="moment_create_item_large_padding_offset">8dp</dimen>

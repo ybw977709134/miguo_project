@@ -976,6 +976,7 @@
     <string name="class_camera_ok">确定</string>
     <string name="class_camera_title">提示</string>
     <string name="class_camera_closed">该摄像头无法观看</string>
+    <string name="class_saveclassinfo_dialog">班级上课时间创建后无法再修改，老师可以通过排课时再选择临时更换上课时间</string>
     <string name="no_more_to_load">没有更多分享了，自己创建一条吧</string>
     <string name="capture_video">拍摄</string>
     <string name="contact_info_edit_remarkname">编辑备注名</string>

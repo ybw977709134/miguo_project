@@ -16,12 +16,15 @@ import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.androidquery.AQuery;
+
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -97,6 +100,7 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 	private MessageBox mMsgBox;
 	private LinearLayout layout_lesinfo_time;
 	private LinearLayout layout_lesinfo_length;
+	private String reDate;
 
 	
 	private TextWatcher textwatcher = new TextWatcher() {
@@ -131,7 +135,7 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 	private void initView() {
 		Intent intent = getIntent();
 		classroom = intent.getParcelableExtra("class");
-		String reDate = intent.getStringExtra("tvDate");
+		reDate = intent.getStringExtra("tvDate");
 		String reTime = intent.getStringExtra("tvTime");
 
 		if(TextUtils.isEmpty(reDate)){
@@ -141,7 +145,6 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		else{
 			classId = classroom.groupID;
 		}
-				
 		
 //		Log.d("-------------classroom---------------", classroom+"");
 
@@ -403,8 +406,27 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 //			break;
 			
 		case R.id.save:
-			modifyClassInfo(classId);
-			break;
+			if(TextUtils.isEmpty(reDate)){
+				MessageDialog dialog = new MessageDialog(ClassInfoEditActivity.this);
+				dialog.setTitle(R.string.tip);
+	            dialog.setMessage(R.string.class_saveclassinfo_dialog);
+	            dialog.setCancelable(false);
+	            dialog.setRightBold(true);
+	            dialog.setOnLeftClickListener("返回修改时间", null);
+	            dialog.setOnRightClickListener("确认创建班级", new MessageDialog.MessageDialogClickListener() {
+	            	@Override
+	            	public void onclick(MessageDialog dialog) {
+	            		dialog.dismiss();
+	                    modifyClassInfo(classId);
+	                    }
+	            	}
+	            );
+	            dialog.show();
+			}else{
+				modifyClassInfo(classId);
+			}
+			
+            break;
         case R.id.datePicker_lesinfo_date:
             closeInputBoard();
             break;

@@ -96,6 +96,7 @@
                 android:id="@+id/progressBar1"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
+                android:progressDrawable="@drawable/progress_color"
                 android:layout_height="4dp"
                 android:max="100"
                 android:progress="20" />

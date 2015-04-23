@@ -22,14 +22,23 @@
         android:layout_below="@+id/msg_date"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp">
-        <ImageView
+        <co.onemeter.oneapp.ui.CircleImageView
         	android:id="@+id/img_contact_thumbnail"
         	android:layout_width="fill_parent"
         	android:layout_height="fill_parent"
         	android:src="@drawable/default_avatar_90" />
+        
+        <ImageView
+	        android:id="@+id/imageView_tag_tea"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="right|top"
+	        android:src="@drawable/icon_avatar_teacher"
+	        android:visibility="gone" />
         <ImageView 
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
+            android:visibility="gone"
             android:background="@drawable/avatar_mask_40"/>
     </FrameLayout>
     
@@ -98,7 +107,6 @@
                 android:id="@+id/messagedetail_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/layout_balloon"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="date"
                 android:textColor="@color/black"
@@ -109,6 +117,7 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
+                android:progressDrawable="@drawable/progress_color"
                 android:max="100"
                 android:progress="20" />
         </LinearLayout>

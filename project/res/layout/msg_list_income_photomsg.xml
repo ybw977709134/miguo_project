@@ -23,7 +23,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp">
-        <ImageView
+        <co.onemeter.oneapp.ui.CircleImageView
         	android:id="@+id/img_contact_thumbnail"
         	android:layout_width="fill_parent"
         	android:layout_height="fill_parent"
@@ -38,6 +38,7 @@
         <ImageView
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
+            android:visibility="gone"
             android:background="@drawable/avatar_mask_40"/>
     </FrameLayout>
     
@@ -111,6 +112,7 @@
                 android:id="@+id/progressBar1"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
+                android:progressDrawable="@drawable/progress_color"
                 android:layout_height="4dp"
                 android:max="100"
                 android:progress="20" />

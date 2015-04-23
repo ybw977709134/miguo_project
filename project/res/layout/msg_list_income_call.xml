@@ -23,7 +23,7 @@
         android:layout_below="@+id/msg_date"
         android:layout_marginLeft="5dp">
  
-        <ImageView
+        <co.onemeter.oneapp.ui.CircleImageView
             android:id="@+id/img_contact_thumbnail"
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
@@ -41,6 +41,7 @@
         <ImageView
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
+            android:visibility="gone"
             android:background="@drawable/avatar_mask_40"/>
     </FrameLayout>
     <RelativeLayout

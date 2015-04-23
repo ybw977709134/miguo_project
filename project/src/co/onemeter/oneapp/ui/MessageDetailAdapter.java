@@ -241,8 +241,8 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = null;
                 holder.imgMissedCall = null;
                 holder.imgStampAnim = null;
-                holder.imgContactPhoto = null;
-                holder.imgContactType = null;
+                holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
+                holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
                 holder.imgMsgThumbnail = (ImageView)lView.findViewById(R.id.img_thumbnail);
                 holder.imgMarkFailed = (ImageView)lView.findViewById(R.id.imgMarkFailed);
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -260,8 +260,8 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = null;
                 holder.imgMissedCall = null;
                 holder.imgStampAnim = null;
-                holder.imgContactPhoto = null;
-                holder.imgContactType = null;
+                holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
+                holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
                 holder.imgMsgThumbnail = (ImageView)lView.findViewById(R.id.img_thumbnail);
                 holder.imgMarkFailed = (ImageView)lView.findViewById(R.id.imgMarkFailed);
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -279,8 +279,8 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = null;
                 holder.imgMissedCall = null;
                 holder.imgStampAnim = (AnimImage)lView.findViewById(R.id.img_thumbnail);
-                holder.imgContactPhoto = null;
-                holder.imgContactType = null;
+                holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
+                holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
                 holder.imgMsgThumbnail = null;
                 holder.imgMarkFailed = (ImageView)lView.findViewById(R.id.imgMarkFailed);
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -298,8 +298,8 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = null;
                 holder.imgMissedCall = null;
                 holder.imgStampAnim = null;
-                holder.imgContactPhoto = null;
-                holder.imgContactType = null;
+                holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
+                holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
                 holder.imgMsgThumbnail = (ImageView)lView.findViewById(R.id.img_thumbnail);
                 holder.imgMarkFailed = (ImageView)lView.findViewById(R.id.imgMarkFailed);
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -317,8 +317,8 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = null;
                 holder.imgMissedCall = null;
                 holder.imgStampAnim = null;
-                holder.imgContactPhoto = null;
-                holder.imgContactType = null;
+                holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
+                holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
                 holder.imgMsgThumbnail = (ImageView)lView.findViewById(R.id.img_thumbnail);
                 holder.imgMarkFailed = (ImageView)lView.findViewById(R.id.imgMarkFailed);
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -336,8 +336,8 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.txtDuration = (TextView)lView.findViewById(R.id.txt_time);
                 holder.imgMissedCall = (ImageView) lView.findViewById(R.id.imageView_call_status);
                 holder.imgStampAnim = null;
-                holder.imgContactPhoto = null;
-                holder.imgContactType = null;
+                holder.imgContactPhoto = (ImageView)lView.findViewById(R.id.img_contact_thumbnail);
+                holder.imgContactType = (ImageView) lView.findViewById(R.id.imageView_tag_tea);
                 holder.imgMsgThumbnail = (ImageView)lView.findViewById(R.id.img_thumbnail);
                 holder.imgMarkFailed = (ImageView)lView.findViewById(R.id.imgMarkFailed);
                 holder.progressbar = (ProgressBar)lView.findViewById(R.id.progressBar1);
@@ -484,21 +484,48 @@ public class MessageDetailAdapter extends BaseAdapter{
 
         msgViewHolderMap.put(message.primaryKey, holder);
 
-        if (null != holder.imgContactPhoto) {
-            final String buddyId = message.isGroupChatMessage ? message.groupChatSenderID : message.chatUserName;
-            holder.imgContactPhoto.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    co.onemeter.oneapp.ui.Log.d("click in messageComposer, buddy id is " + buddyId
-                            + ", message.isGroupChatMessage is " + message.isGroupChatMessage);
-                    ContactInfoActivity.launch(mContext,
-                            buddyId,
-                            ContactInfoActivity.BUDDY_TYPE_UNKNOWN);
-                }
-            });
-        }
+//        if (null != holder.imgContactPhoto) {
+//            final String buddyId = message.isGroupChatMessage ? message.groupChatSenderID : message.chatUserName;
+//            holder.imgContactPhoto.setOnClickListener(new OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    co.onemeter.oneapp.ui.Log.d("click in messageComposer, buddy id is " + buddyId
+//                            + ", message.isGroupChatMessage is " + message.isGroupChatMessage);
+//                    ContactInfoActivity.launch(mContext,
+//                            buddyId,
+//                            ContactInfoActivity.BUDDY_TYPE_UNKNOWN);
+//                }
+//            });
+//        }
 
         if (message.ioType.equals(ChatMessage.IOTYPE_OUTPUT)) {
+        	
+        	Buddy out_sender = new Buddy();
+        	PrefUtil mPrefUtil = PrefUtil.getInstance(mContext);
+        	
+        	// display photo
+            if (holder.imgContactPhoto != null) {
+
+            	
+            	out_sender.userID = mPrefUtil.getUid();
+            	out_sender.photoUploadedTimeStamp = mPrefUtil.getMyPhotoUploadedTimestamp();
+           
+                    holder.imgContactPhoto.setBackgroundDrawable(null);
+                    PhotoDisplayHelper.displayPhoto(mContext,
+                            holder.imgContactPhoto,
+                            R.drawable.default_avatar_90, out_sender, true);
+
+                }
+
+          //display accoutType flags
+            if (holder.imgContactType != null) {
+            	if (out_sender != null && mPrefUtil.getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {
+            		holder.imgContactType.setVisibility(View.VISIBLE);
+            	} else {
+            		holder.imgContactType.setVisibility(View.GONE);
+            	}
+            }
+        	
 
             if (message.sentStatus.equals(ChatMessage.SENTSTATUS_NOTSENT)) {
                 holder.imgMarkFailed.setVisibility(mIsShowHistory ? View.GONE: View.VISIBLE);
@@ -547,6 +574,20 @@ public class MessageDetailAdapter extends BaseAdapter{
                     message.extraObjects.put("imgMarkFailed", holder.imgMarkFailed);
                 }
             }
+        }  else {
+          if (null != holder.imgContactPhoto) {
+          final String buddyId = message.isGroupChatMessage ? message.groupChatSenderID : message.chatUserName;
+          holder.imgContactPhoto.setOnClickListener(new OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  co.onemeter.oneapp.ui.Log.d("click in messageComposer, buddy id is " + buddyId
+                          + ", message.isGroupChatMessage is " + message.isGroupChatMessage);
+                  ContactInfoActivity.launch(mContext,
+                          buddyId,
+                          ContactInfoActivity.BUDDY_TYPE_UNKNOWN);
+              }
+          });
+      }
         }
 
         Date sentDate = Database.chatMessage_UTCStringToDate(message.sentDate);

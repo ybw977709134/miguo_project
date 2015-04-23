@@ -21,6 +21,33 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/msg_date"
         android:layout_marginTop="10dp" >
+        
+        
+        <FrameLayout
+        android:id="@+id/frame_photo"
+        android:layout_height="40dp"
+        android:layout_width="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" >
+
+        <co.onemeter.oneapp.ui.CircleImageView
+            android:id="@+id/img_contact_thumbnail"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/default_avatar_90" />
+        <ImageView
+	        android:id="@+id/imageView_tag_tea"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="right|top"
+	        android:src="@drawable/icon_avatar_teacher"
+	        android:visibility="gone" />
+		<ImageView
+		    android:layout_height="match_parent"
+		    android:layout_width="match_parent"
+		    android:visibility="gone"
+		    android:background="@drawable/avatar_mask_40"/>
+    </FrameLayout>
 
         <LinearLayout
             android:id="@+id/layout_balloon"
@@ -30,7 +57,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="45dp"
             android:layout_marginTop="10dp"
             android:paddingLeft="@dimen/msg_ballon_padding_h_size"
             android:paddingRight="@dimen/msg_ballon_padding_h_size_add_angle"

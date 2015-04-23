@@ -134,7 +134,6 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         //登陆后跳转到此页面检测用户是否绑定了邮箱，绑定了，不提示，未绑定，弹框提示用户是否要绑定邮箱
         //如果用户未绑定邮箱，跳转到绑定邮箱界面
         checkBindEmail();
-        refresh();
     }
 
     private AsyncTask<Void, Integer, List<Map<String, Object>>> asyncTask_email_status;
@@ -239,9 +238,6 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.txt_home_chatroom).setOnClickListener(this);
         
     }
-    private boolean isEmpty(){
-		return schools == null ||schools.isEmpty();
-	}
     @Override
     protected void onResume() {
         super.onResume();
@@ -351,15 +347,18 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     }
 
     private void gotoMyClasses() {
-        Intent intent;
-        if (isEmpty()) {
-            intent = new Intent(HomeActivity.this, AddClassActivity.class);
-        } else {
-            intent = new Intent(HomeActivity.this, MyClassesActivity.class);
-            intent.putExtra(MyClassesActivity.TAG, true);
-
-        }
-        startActivityForResult(intent, REQ_ADD_CLASS);
+//        Intent intent;
+//        if (isEmpty()) {
+//            intent = new Intent(HomeActivity.this, AddClassActivity.class);
+//        } else {
+//            intent = new Intent(HomeActivity.this, MyClassesActivity.class);
+//            intent.putExtra(MyClassesActivity.TAG, true);
+//
+//        }
+//        startActivityForResult(intent, REQ_ADD_CLASS);
+    	Intent intent = new Intent(HomeActivity.this, MyClassesActivity.class);
+    	intent.putExtra(MyClassesActivity.TAG, true);
+    	startActivityForResult(intent, REQ_ADD_CLASS);
     }
 
     private void showTakeOrPickphoto(View v){

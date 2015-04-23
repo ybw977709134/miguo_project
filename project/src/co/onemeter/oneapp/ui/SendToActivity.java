@@ -1,6 +1,5 @@
 package co.onemeter.oneapp.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -37,8 +36,19 @@ public class SendToActivity extends FragmentActivity implements View.OnClickList
 
     private ArrayList<Fragment> mfragments;
 
+    /**
+     * 屏幕等分三分的宽度
+     */
     private int mPerLayWidth = 0;
+
+    /**
+     * img_cursor 的宽度
+     */
     private int mImgWidth = 0;
+
+    /**
+     * img_cursor 的高度
+     */
     private int mImgHeight = 0;
     //private int mCurrIndex = 0;
 
@@ -121,12 +131,15 @@ public class SendToActivity extends FragmentActivity implements View.OnClickList
         Bundle bundle = new Bundle();
         bundle.putStringArray(INTENT_PAHT,getIntent().getStringArrayExtra(INTENT_PAHT));
         Fragment fragment = null;
+        //最近联系fragment
         fragment = new STSmsFragment();
         fragment.setArguments(bundle);
         mfragments.add(fragment);
+        //通讯录fragment
         fragment = new STContactsFragment();
         fragment.setArguments(bundle);
         mfragments.add(fragment);
+        //校园里fragment
         fragment = new STSchoolMateFragment();
         fragment.setArguments(bundle);
         mfragments.add(fragment);
@@ -159,6 +172,10 @@ public class SendToActivity extends FragmentActivity implements View.OnClickList
         }
     }
 
+    /**
+     * 滑动viewpager改变相应的TextView
+     * @param index
+     */
     private void setTextView(int index){
         txt_one.setTextColor(color_black);
         txt_two.setTextColor(color_black);
@@ -177,6 +194,9 @@ public class SendToActivity extends FragmentActivity implements View.OnClickList
     }
 
 //    private boolean mScrolling = false;
+    /**
+     * viewpager的当前位置
+     */
       private int currentIndex = 0;
 //    private int mlastmargin = (mPerLayWidth - mImgWidth) / 2;
 
@@ -204,6 +224,9 @@ public class SendToActivity extends FragmentActivity implements View.OnClickList
 //            }
         }
 
+        /**
+         * 滑动添加友好的动画
+         */
         @Override
         public void onPageSelected(int position) {
             //mIsChanging = false;

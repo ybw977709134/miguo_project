@@ -20,6 +20,9 @@ import org.wowtalk.api.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * 此Activity只用于处理逻辑没有页面显示，详情见onCreate()方法。
+ */
 public class CallMainActivity extends Activity implements SensorEventListener, WowTalkUIMakeCallDelegate{
 	public static final String EXTRA_OUTGOING_CALL_TARGET_ID = "a";
 	public static final String EXTRA_OUTGOING_CALL_TARGET_DISPLAYNAME= "b";
@@ -43,7 +46,14 @@ public class CallMainActivity extends Activity implements SensorEventListener, W
 			finish();
 		};
 	};
-	
+
+    /**
+     * 跳转此Activity开启语音通话
+     * @param context
+     * @param _targetID
+     * @param _targetDisplayName
+     * @param initWithVideo 此参数判断是否是视频通话
+     */
 	public static final void startNewOutGoingCall(final Context context, final String _targetID, final String _targetDisplayName, boolean initWithVideo) {
 		doStartNewOutGoingCall(context, _targetID, _targetDisplayName, initWithVideo);
 	}
@@ -71,6 +81,11 @@ public class CallMainActivity extends Activity implements SensorEventListener, W
 		}
 	}
 
+    /**
+     * 根据ID显示对方的nickname or alias
+     * @param targetUID
+     * @return
+     */
     private String fixCallOutDiaplayName(String targetUID) {
         String displayName = "";
         Buddy buddy = new Database(CallMainActivity.this).buddyWithUserID(targetUID);
@@ -89,6 +104,7 @@ public class CallMainActivity extends Activity implements SensorEventListener, W
 
         instance = this;
         Connect2.setContext(this);
+        //让屏幕不休眠
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "YuanQu");
 		
@@ -118,6 +134,7 @@ public class CallMainActivity extends Activity implements SensorEventListener, W
         mUserDisplayName = getIntent().getStringExtra(EXTRA_OUTGOING_CALL_TARGET_DISPLAYNAME);
         mInitWithVideo = getIntent().getBooleanExtra(EXTRA_OUTGOING_CALL_INIT_WITH_VIDEO, false);
 
+        //IncallActivity语音通话页面
 		Intent intent = new Intent(this, IncallActivity.class);
         intent.putExtra(EXTRA_OUTGOING_CALL_TARGET_ID, mUserID);
         intent.putExtra(EXTRA_OUTGOING_CALL_TARGET_DISPLAYNAME, mUserDisplayName);

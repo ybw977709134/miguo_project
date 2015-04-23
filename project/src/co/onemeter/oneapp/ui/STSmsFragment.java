@@ -76,6 +76,9 @@ public class STSmsFragment extends Fragment implements AdapterView.OnItemClickLi
         }
     }
 
+    /**
+     * 需要重写MessagesAdapter的getView方法
+     */
     private class InnerMessageAdapter extends MessagesAdapter{
         Context context;
         LayoutInflater inflater;

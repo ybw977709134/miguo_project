@@ -4,15 +4,18 @@
     <RelativeLayout
         android:id="@+id/ptr_id_header"
         style="@style/ptr_header">
-        <ImageView
+        <!--<ImageView
             android:id="@+id/ptr_id_image"
-            style="@style/ptr_arrow"/>
+            style="@style/ptr_arrow"/>-->
         <ProgressBar
             android:id="@+id/ptr_id_spinner"
+            android:indeterminateDrawable="@drawable/progressbar_load"
+            android:layout_centerHorizontal="true"
             style="@style/ptr_spinner"/>
 
         <LinearLayout
             android:id="@+id/ptr_id_textwrapper"
+            android:visibility="gone"
             style="@style/ptr_textwrapper">
             <TextView
                 android:id="@+id/ptr_id_text"

@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -990,6 +991,13 @@ public abstract class MessageComposerActivityBase extends Activity
         log_msg = new ArrayList<ChatMessage>();
         myAdapter = new MessageDetailAdapter(this, log_msg, false, mHandler, mMessageDetailListener);
         lv_message.setAdapter(myAdapter);
+        lv_message.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                messageClicked();
+                return false;
+            }
+        });
 
         updateUiAboutCanSendMsg();
         if (mCanSendMsg != CAN_SEND_MSG_OK) {

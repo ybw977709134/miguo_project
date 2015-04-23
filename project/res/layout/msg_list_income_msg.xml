@@ -37,8 +37,8 @@
 	        android:src="@drawable/icon_avatar_teacher"
 	        android:visibility="gone" />
 		<ImageView
-		    android:layout_height="fill_parent"
-		    android:layout_width="fill_parent"
+		    android:layout_height="match_parent"
+		    android:layout_width="match_parent"
 		    android:background="@drawable/avatar_mask_40"/>
     </FrameLayout>
 
@@ -57,17 +57,12 @@
             android:text="name"
             android:textColor="@color/blue"
             android:textSize="13sp"
-            android:visibility="gone"
-            android:layout_toRightOf="@+id/frame_photo"
-            android:layout_alignTop="@+id/frame_photo"/>
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/relativeLayout2"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/frame_photo"
-            android:layout_below="@+id/txt_contact_name"
-            android:layout_toRightOf="@+id/frame_photo" >
+            android:layout_height="wrap_content" >
 
             <RelativeLayout
                 android:id="@+id/layout_balloon"
@@ -76,10 +71,10 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:paddingLeft="@dimen/msg_ballon_padding_h_size"
-        		android:paddingRight="@dimen/msg_ballon_padding_h_size_add_angle"
-        		android:paddingTop="@dimen/msg_ballon_padding_v_size"
-        		android:paddingBottom="@dimen/msg_ballon_padding_v_size"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
                 android:background="@drawable/bg_message_other_words"
                 android:clickable="true">
 
@@ -87,14 +82,15 @@
                     android:id="@+id/messagedetail_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginBottom="5dp"
                     android:maxWidth="200dp"
+                    android:paddingLeft="6dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="3dp"
+                    android:paddingBottom="3dp"
                     android:autoLink="all"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerInParent="true"/>
             </RelativeLayout>
 
             <LinearLayout
@@ -109,7 +105,6 @@
                     android:id="@+id/messagedetail_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/layout_balloon"
                     android:gravity="center_vertical|center_horizontal"
                     android:text="date"
                     android:textColor="@color/black"

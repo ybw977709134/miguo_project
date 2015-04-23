@@ -27,7 +27,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="5dp"
+            
+            android:padding="5dp"
+            
             android:background="@drawable/bg_message_my_words"
             android:orientation="horizontal"
             android:clickable="true">
@@ -37,12 +39,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxWidth="200dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:padding="3dp"
                 android:textColor="@color/black"
                 android:autoLink="all"
                 android:textSize="16sp"
-                android:layout_centerVertical="true"/>
+                android:layout_centerInParent="true"/>
         </RelativeLayout>
 
         <LinearLayout

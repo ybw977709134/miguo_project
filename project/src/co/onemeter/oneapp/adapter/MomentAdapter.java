@@ -352,9 +352,13 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         if (reviews == null || reviews.size() == 0) {
             holder.reviewLayout.setVisibility(View.GONE);
         } else {
-            holder.reviewLayout.setVisibility(View.GONE);
+            holder.reviewLayout.setVisibility(View.VISIBLE);
         }
-
+        //实现在好友圈外面显示点赞的人
+        int nlikers = setViewForLikeReview(context, holder.txtLikeNames, moment.reviews);
+        holder.txtLikeNames.setVisibility(nlikers > 0 ? View.VISIBLE : View.GONE);
+        
+        
 
         setImageLayout(context, moment,mImageResizer, photoFiles, holder.imageTable);
         showVoiceFile(voiceFile, holder.micLayout, holder.progress, holder.micButton, holder.micTime);

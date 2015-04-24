@@ -193,14 +193,18 @@
                             
                 </LinearLayout>
             </RelativeLayout>
-           
-            <!--  
+            
+            
+         <!--   
+              
 			<ImageView
                     android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
+                    android:layout_width="fill_parent" 
                     android:layout_marginTop="@dimen/padding_medium" 
-                    android:background="@drawable/timeline_card_bg_line" />
-                    -->
+                    android:background="@drawable/bg_section_divider_line_dark" />
+                    
+                    --> 
+                   
 			
             <include layout="@layout/piece_moment_content"/>
 

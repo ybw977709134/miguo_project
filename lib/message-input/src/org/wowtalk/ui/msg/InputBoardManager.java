@@ -439,7 +439,7 @@ public class InputBoardManager implements Parcelable,
             }
         });
 
-        // hold-to-speak button
+        // hold-to-speak button 处理按压在移动取消
         btnSpeak.setOnTouchListener(new View.OnTouchListener(){
 
 			/* NOTE:
@@ -728,6 +728,9 @@ public class InputBoardManager implements Parcelable,
         //}
     }
 
+    /**
+     * 设置点赞图片的状态
+     */
     private void setMomentLikeStatus() {
         if(null != mBtnEmotion && null != likeRelateMoment) {
             mBtnEmotion.setVisibility(View.VISIBLE);
@@ -748,15 +751,39 @@ public class InputBoardManager implements Parcelable,
         }
     }
 
+    /**
+     * 未赞的图片资源ID
+     */
     private int momentUnlikeDrawableResId;
+    /**
+     * 已赞的图片资源ID
+     */
     private int momentLikedDrawableResId;
+
+    /**
+     * 好友圈输入框设置点“赞”资源图片。
+     * @param unlike
+     * @param liked
+     */
     public void setMomentLikeDrawable(int unlike,int liked) {
         momentUnlikeDrawableResId=unlike;
         momentLikedDrawableResId=liked;
     }
 
+    /**
+     * 点“赞”Listener
+     */
     private View.OnClickListener likeMomentListener;
+    /**
+     * 传入的moment
+     */
     private Moment likeRelateMoment;
+
+    /**
+     * 为好友圈点赞按钮设置Listener并初始化点赞状态
+     * @param moment
+     * @param listener
+     */
     public void setLayoutForTimelineMoment(Moment moment,View.OnClickListener listener) {
         likeRelateMoment=moment;
         likeMomentListener=listener;
@@ -788,6 +815,10 @@ public class InputBoardManager implements Parcelable,
         tr2.addView(inputVoice,2);
     }
 
+    /**
+     * 获取多媒体面板的显示状态
+     * @return
+     */
     public int getMediaLayoutVisibility() {
         return layoutMediaWrapper.getVisibility();
     }
@@ -809,6 +840,9 @@ public class InputBoardManager implements Parcelable,
         mRunnableOnResize = null;
 
         switch (showFlags) {
+            /**
+             * show nothing
+             */
         case FLAG_SHOW_NONE:
             layoutTextWrapper.setVisibility(View.GONE);
             layoutMediaWrapper.setVisibility(View.GONE);
@@ -817,6 +851,9 @@ public class InputBoardManager implements Parcelable,
                 mResultHandler.onHeightChanged(0);
             setSoftKeyboardVisibility(false);
             break;
+            /**
+             * show text inputboard
+             */
         case FLAG_SHOW_TEXT:
             layoutTextWrapper.setVisibility(View.VISIBLE);
             // text vs voice
@@ -863,6 +900,9 @@ public class InputBoardManager implements Parcelable,
                 }
             });
             break;
+            /**
+             * show voice UI
+             */
         case FLAG_SHOW_VOICE:
             // text vs voice
             mTxtContent.clearFocus();
@@ -889,6 +929,9 @@ public class InputBoardManager implements Parcelable,
                 }
             });
             break;
+            /**
+             * show media photo...
+             */
         case FLAG_SHOW_PHOTO:
             mTxtContent.clearFocus();
             mRunnableOnResize = new Runnable() {
@@ -931,6 +974,9 @@ public class InputBoardManager implements Parcelable,
                 mRunnableOnResize.run();
             }
             break;
+            /**
+             * show emotion expression
+             */
         case FLAG_SHOW_STAMP:
             mRunnableOnResize = new Runnable(){
                 @Override
@@ -1181,6 +1227,10 @@ public class InputBoardManager implements Parcelable,
         return mDrawableResId;
     }
 
+    /**
+     * set keyboard's visibility
+     * @param visible
+     */
     public void setSoftKeyboardVisibility(boolean visible) {
         if (mTxtContent == null)
             return;
@@ -1533,6 +1583,9 @@ public class InputBoardManager implements Parcelable,
         }
     }
 
+    /**
+     * this methord is useless,in MessageComposerActivity reassignment
+     */
     private void configDefaultDrawable() {
         drawableResId().open = R.drawable.sms_add_btn;
         drawableResId().close = R.drawable.sms_close_btn;

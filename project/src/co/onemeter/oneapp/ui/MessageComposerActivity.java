@@ -105,6 +105,7 @@ public class MessageComposerActivity extends MessageComposerActivityBase {
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
+        //进入聊天页面直接发送图片，需要传入图片的原图和缩略图路径
         Intent intent = getIntent();
         boolean isSendMsg = intent.getBooleanExtra(LAUCH_WITH_SEND_MSG,false);
         if(isSendMsg){

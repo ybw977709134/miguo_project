@@ -100,10 +100,22 @@ public abstract class MessageComposerActivityBase extends Activity
 	private PullToRefreshListView lv_message;
 	private TextView txtTitle;
 
+    /**
+     * 对方ID
+     */
 	protected String _targetUID;
 	protected String _targetGlobalPhoneNumber;
+    /**
+     * 目标是否是常规群组
+     */
 	protected boolean _targetIsNormalGroup = false;
+    /**
+     * 目标是否是临时群组
+     */
 	protected boolean _targetIsTmpGroup = false;
+    /**
+     * 目标显示名
+     */
 	protected String _targetDisplayName = null;
 
     protected Database mDbHelper;
@@ -268,6 +280,9 @@ public abstract class MessageComposerActivityBase extends Activity
         });
     }
 
+    /**
+     * 获取更早的聊天消息
+     */
     private void loadEarlierMsgs() {
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, ArrayList<ChatMessage>>() {
             @Override
@@ -395,10 +410,19 @@ public abstract class MessageComposerActivityBase extends Activity
         onResendMessage(chatMessage);
     }
 
+    /**
+     * 发送表情消息
+     * @param stamp
+     */
     public void fSendStampMsg_async(Stamp stamp) {
         fSendStampMsg_async(stamp.getMessageContent());
     }
 
+    /**
+     * 发送位置消息
+     * @param lat
+     * @param lon
+     */
     protected void fSendLocMsg_async(final double lat, final double lon) {
         if(!Connect2.confirmSend2server()) {
             //...no handle now
@@ -529,6 +553,10 @@ public abstract class MessageComposerActivityBase extends Activity
         }).start();
     }
 
+    /**
+     * 获取发送时间，并格式化
+     * @return
+     */
     protected String getSentDate () {
         // set the sentDate according to the UTC offset
         long localDate = System.currentTimeMillis();
@@ -629,6 +657,14 @@ public abstract class MessageComposerActivityBase extends Activity
         }
     }
 
+    /**
+     * 发送图文音类型消息
+     * @param text
+     * @param imagePath
+     * @param imageThumbPath
+     * @param audioPath
+     * @param duration
+     */
 	protected void fSendHybird_async(final String text,
                                  String imagePath, String imageThumbPath,
                                  String audioPath, final int duration) {
@@ -1015,6 +1051,9 @@ public abstract class MessageComposerActivityBase extends Activity
         mInputMgr.setCanSendMsg(mCanSendMsg == CAN_SEND_MSG_OK);
     }
 
+    /**
+     * 请求服务器确认是否能够发信息给对方
+     */
     private void recheckIfCanSendMsg() {
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Boolean>() {
             @Override
@@ -1043,6 +1082,10 @@ public abstract class MessageComposerActivityBase extends Activity
         });
     }
 
+    /**
+     * 群组聊天需要刷新群组资料
+     * @param groupId
+     */
     private void refreshGroupInfo(final String groupId) {
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
@@ -1061,6 +1104,10 @@ public abstract class MessageComposerActivityBase extends Activity
         });
     }
 
+    /**
+     * 此处设置InputBoard的按钮资源文件
+     * @param mgr InputBoardManager
+     */
     protected void configInputBoardDrawable(InputBoardManager mgr) {
         mgr.drawableResId().open = R.drawable.icon_message_text_input_more_selector;
         mgr.drawableResId().close = R.drawable.icon_message_text_input_keyboard_selector;
@@ -1076,6 +1123,9 @@ public abstract class MessageComposerActivityBase extends Activity
 	protected void onRightNaviButtonClicked() {
 	}
 
+    /**
+     * 返回按钮按压处理的一些操作
+     */
     @Override
 	public void onBackPressed() {
         // back steps:
@@ -1113,6 +1163,10 @@ public abstract class MessageComposerActivityBase extends Activity
 		super.onDestroy();
 	}
 
+    /**
+     * override from Activity
+     * @param intent
+     */
 	@Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -1159,6 +1213,9 @@ public abstract class MessageComposerActivityBase extends Activity
         }.start();
     }
 
+    /**
+     * ChatMessage表的观察者，监听表数据变化，更新UI消息
+     */
     private IDBTableChangeListener chatmessageObserver = new IDBTableChangeListener() {
         public void onDBTableChanged(String tableName) {
             runOnUiThread(new Runnable() {
@@ -1197,6 +1254,7 @@ public abstract class MessageComposerActivityBase extends Activity
 		instance = this;
 
         super.onResume();
+        //启动AppStatusService监控
         AppStatusService.setIsMonitoring(true);
 
         if(lv_message == null) {
@@ -1214,6 +1272,7 @@ public abstract class MessageComposerActivityBase extends Activity
         if (mIsNoticeMessage) {
             Database.addDBTableChangeListener(Database.DUMMY_TBL_NOTICE_MAN_CHANGED, mNoticeManChangedObserver);
         }
+        //注册向外发送ChatMessage的广播
         registerReceiver(mOutgoMsgReceiver, new IntentFilter(GlobalSetting.OUTGO_MESSAGE_INTENT));
 	}
 
@@ -1230,6 +1289,7 @@ public abstract class MessageComposerActivityBase extends Activity
         if (mIsNoticeMessage) {
             Database.removeDBTableChangeListener(mNoticeManChangedObserver);
         }
+        //onPause（）需要注销广播
         unregisterReceiver(mOutgoMsgReceiver);
     }
 
@@ -1291,6 +1351,9 @@ public abstract class MessageComposerActivityBase extends Activity
         startHeightRelativeRunnable();
 	}
 
+    /**
+     * 停止相关语音，线程，数据库做一些操作
+     */
 	@Override
 	public void onStop() {
 		instance = null;
@@ -1312,6 +1375,9 @@ public abstract class MessageComposerActivityBase extends Activity
                 && mInputMgr.handleActivityResult(requestCode, resultCode, data)) {
             return;
         }
+        /**
+         * 处理图文音发送操作
+         */
         if (requestCode == REQ_HYBIRD) {
             if (resultCode == RESULT_OK) {
                 String[] path = data.getStringArrayExtra(HybirdMessageEditor.EXTRA_OUT_IMAGE_FILENAME);
@@ -1418,6 +1484,12 @@ public abstract class MessageComposerActivityBase extends Activity
 		});
 	}
 
+    /**
+     * 进入此页面，请使用launch方法
+     * @param context
+     * @param subclassType
+     * @param uid
+     */
     public static void launchToChatWithBuddy(Context context, Class<?> subclassType, String uid) {
         launchToChatWithBuddy(context, subclassType, uid, null);
     }
@@ -1619,6 +1691,9 @@ public abstract class MessageComposerActivityBase extends Activity
         context.startActivity(intent);
     }
 
+    /**
+     * 隐藏键盘
+     */
     protected void messageClicked() {
 	     //txt_content.clearFocus(); // cause a flicker on keyboard
 	     mInputMgr.setSoftKeyboardVisibility(false);
@@ -1629,6 +1704,9 @@ public abstract class MessageComposerActivityBase extends Activity
 		 return _targetDisplayName == null ? _targetGlobalPhoneNumber : _targetDisplayName;
 	 }
 
+    /**
+     * 滑动listview到底部
+     */
     private void scrollMsgListToBotomDelay() {
         mHandler.postDelayed(new Runnable(){
             @Override
@@ -1640,6 +1718,12 @@ public abstract class MessageComposerActivityBase extends Activity
         }, 300);
     }
 
+    /**
+     * 向外进行语音电话操作
+     * @param uid
+     * @param displayName
+     * @param initWithVideo
+     */
     protected void confirmOutgoingCall(final String uid,final String displayName,final boolean initWithVideo) {
         Buddy buddy=mDbHelper.buddyWithUserID(uid);
         String userName=TextUtils.isEmpty(buddy.alias)?buddy.nickName:buddy.alias;

@@ -16,7 +16,7 @@
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:background="@null"
-            android:src="@drawable/nav_back_selector" />
+            android:src="@drawable/icon_back_selector" />
 
         <TextView
             style="@style/page_title_dark"
@@ -25,18 +25,25 @@
             android:layout_centerInParent="true"
             android:text="@string/firends_add_pagetitle" />
     </RelativeLayout>
+    
+    
+    
+    
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/title_bar"
         android:orientation="vertical" >
+        
+        
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@drawable/table_white"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/white"
             android:orientation="vertical" >
 
             <TextView
@@ -46,21 +53,20 @@
                 android:clickable="true"
                 android:drawableLeft="@drawable/addcontacts_icon_search"
                 android:drawablePadding="10dp"
-                android:drawableRight="@drawable/table_arrow"
+                android:drawableRight="@drawable/icon_section_row_selector"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@string/contacts_search_buddy"
                 android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
             <!-- android:background="@drawable/group_list_bg_begin" -->
             <!-- android:clickable="true"/> -->
 
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/divider" />
+                android:background="@drawable/bg_section_divider_line_light" />
 
             <TextView
                 android:id="@+id/scan_qr_code"
@@ -69,20 +75,19 @@
                 android:clickable="true"
                 android:drawableLeft="@drawable/addcontacts_icon_scan"
                 android:drawablePadding="10dp"
-                android:drawableRight="@drawable/table_arrow"
+                android:drawableRight="@drawable/icon_section_row_selector"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@string/scan_qr_code"
                 android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
             <!-- android:background="@drawable/group_list_bg_body" -->
 
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/divider" />
+                android:background="@drawable/bg_section_divider_line_light" />
 
             <TextView
                 android:id="@+id/add_import"
@@ -90,7 +95,7 @@
                 android:layout_height="@dimen/table_cell_grouped_height"
                 android:clickable="true"
                 android:drawablePadding="10dp"
-                android:drawableRight="@drawable/table_arrow"
+                android:drawableRight="@drawable/icon_section_row_selector"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
@@ -124,17 +129,30 @@
                 android:visibility="gone"
                 android:background="@drawable/divider" />
         </LinearLayout>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         <LinearLayout android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@color/background_light">
 
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/divider" />
+                android:background="@drawable/bg_section_divider_line_light" />
 
             <TextView
                 android:id="@+id/add_create_group"
@@ -143,31 +161,31 @@
                 android:clickable="true"
                 android:drawableLeft="@drawable/addcontacts_icon_group"
                 android:drawablePadding="10dp"
-                android:drawableRight="@drawable/table_arrow"
+                android:drawableRight="@drawable/icon_section_row_selector"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@string/friends_add_create_group"
                 android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/divider" />
+                android:background="@drawable/bg_section_divider_line_light" />
         </LinearLayout>
         
         <LinearLayout android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@color/background_light">
 
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/divider" />
+                android:background="@drawable/bg_section_divider_line_light" />
 
             <TextView
                 android:id="@+id/add_offcial_account"
@@ -176,31 +194,30 @@
                 android:clickable="true"
                 android:drawableLeft="@drawable/addcontacts_icon_account"
                 android:drawablePadding="10dp"
-                android:drawableRight="@drawable/table_arrow"
+                android:drawableRight="@drawable/icon_section_row_selector"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@string/friends_add_official_account"
                 android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/divider" />
+                android:background="@drawable/bg_section_divider_line_light" />
         </LinearLayout>
         
         <LinearLayout android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
             android:background="@color/background_light">
 
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/divider" />
+                android:background="@drawable/bg_section_divider_line_light" />
 
             <TextView
                 android:id="@+id/add_tell_friends"
@@ -209,19 +226,18 @@
                 android:clickable="true"
                 android:drawableLeft="@drawable/addcontacts_icon_tellfriend"
                 android:drawablePadding="10dp"
-                android:drawableRight="@drawable/table_arrow"
+                android:drawableRight="@drawable/icon_section_row_selector"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@string/friends_tell_friends"
                 android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/divider" />
+                android:background="@drawable/bg_section_divider_line_light" />
         </LinearLayout>
 
         <TextView
@@ -233,7 +249,7 @@
             android:clickable="true"
             android:drawableLeft="@drawable/table_add_contact"
             android:drawablePadding="10dp"
-            android:drawableRight="@drawable/table_arrow"
+            android:drawableRight="@drawable/icon_section_row_selector"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
@@ -252,7 +268,7 @@
             android:clickable="true"
             android:drawableLeft="@drawable/table_official"
             android:drawablePadding="10dp"
-            android:drawableRight="@drawable/table_arrow"
+            android:drawableRight="@drawable/icon_section_row_selector"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"

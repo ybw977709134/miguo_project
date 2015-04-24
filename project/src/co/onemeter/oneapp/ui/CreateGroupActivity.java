@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -23,7 +25,6 @@ import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.FileUtils;
 import org.wowtalk.ui.msg.InputBoardManager;
-import org.wowtalk.ui.msg.RoundedImageView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,13 +43,13 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
 
     private TextView  titleText;
 	private ImageButton btnTitleBack;
-	private ImageButton btnTitleConfirm;
+	private TextView btnTitleConfirm;
 	private LinearLayout mReqFocusLayout;
 	private TextView txtGroupName;
 	private TextView txtPlace;
 	private TextView txtCategory;
 	private EditText edtIntroduce;
-    private RoundedImageView imgThumbnail;
+    private ImageView imgThumbnail;
 
     private RelativeLayout mPhoto;
 	private LinearLayout mGroupName;
@@ -85,11 +86,11 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
 	private void initView() {
         titleText = (TextView) findViewById(R.id.title_text);
 		btnTitleBack = (ImageButton) findViewById(R.id.title_back);
-		btnTitleConfirm = (ImageButton) findViewById(R.id.title_confirm);
+		btnTitleConfirm = (TextView) findViewById(R.id.title_confirm);
 		txtGroupName = (TextView) findViewById(R.id.txt_group_name);
 		txtPlace = (TextView) findViewById(R.id.txt_place);
 		txtCategory = (TextView) findViewById(R.id.txt_category);
-        imgThumbnail = (RoundedImageView) findViewById(R.id.img_photo);
+        imgThumbnail = (ImageView) findViewById(R.id.img_photo);
         mReqFocusLayout = (LinearLayout) findViewById(R.id.request_focus_layout);
 		mGroupName = (LinearLayout) findViewById(R.id.layout_group_name);
 		mPlace = (LinearLayout) findViewById(R.id.layout_place);
@@ -114,7 +115,8 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
 		mPlace.setOnClickListener(this);
 		mCategory.setOnClickListener(this);
         mPhoto.setOnClickListener(this);
-        imgThumbnail.setClickDim(true);
+        imgThumbnail.setOnClickListener(this);
+//        imgThumbnail.setClickDim(true);
 	}
 	
 	private void createGroup() {
@@ -244,8 +246,17 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
 	    // request focus, avoid the keyboard blocking the group introduction.
 	    mReqFocusLayout.requestFocus();
 	    mReqFocusLayout.requestFocusFromTouch();
+	    
+	    //为弹框做了新的UI判断
+	    ContextThemeWrapper themeWrapper;
+	    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+	    	themeWrapper = new ContextThemeWrapper(CreateGroupActivity.this, android.R.style.Theme_Holo_Light_Dialog);
+	    } else {
+	    	themeWrapper = new ContextThemeWrapper( this, android.R.style.Theme_Light );
+	    }
 
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		AlertDialog.Builder dialog = new AlertDialog.Builder(themeWrapper);
+		
 		final EditText editGroupName = new EditText(this);
 		editGroupName.setText(txtGroupName.getText());
 		dialog.setTitle(getResources().getString(R.string.contact_groupcreate_input_group_name)).setView(editGroupName)

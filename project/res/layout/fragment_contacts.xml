@@ -14,7 +14,8 @@
 		<ScrollView
 			android:layout_height="fill_parent"
 			android:layout_width="fill_parent"
-			android:id="@+id/main_scroll_view">
+			android:id="@+id/main_scroll_view"
+            android:scrollbars="none">
 
 			<LinearLayout
                 android:id="@+id/main_linear_layout"

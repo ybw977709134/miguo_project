@@ -39,11 +39,25 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class StartActivity extends TabActivity
 implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDelegate, OnTabChangeListener {
-	
+    /**
+     * 消息
+     */
 	public static final int TAB_SMS = 0;
+    /**
+     * 小伙伴
+     */
 	public static final int TAB_CONTACTS = 1;
+    /**
+     * 我的课堂
+     */
 	public static final int TAB_MyClass = 2;
+    /**
+     * 首页
+     */
 	public static final int TAB_HOME = 3;
+    /**
+     * 发现
+     */
 	public static final int TAB_Discov = 4;
 
     public static final String KEY_IS_START_FROM_LOGIN = "is_start_from_login";
@@ -134,6 +148,9 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 		return instance != null;
 	}
 
+    /**
+     * 绑定Service
+     */
     private ServiceConnection mAppStatusServiceConnection = new ServiceConnection() {
 
         @Override
@@ -200,6 +217,14 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         };
     };
 
+    /**
+     * 设置TabBar的图片，Intent...
+     * @param tag
+     * @param resLabel
+     * @param resIcon
+     * @param content
+     * @return
+     */
 	private TabHost.TabSpec buildTabSpec(String tag, String resLabel, int resIcon, Intent content) {
 		return this.mHost.newTabSpec(tag).setIndicator(resLabel, getResources().getDrawable(resIcon)).setContent(content);
 	}
@@ -239,7 +264,10 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 		mTabHome.setOnClickListener(this);
 		mTabSetting.setOnClickListener(this);
 	}
-	
+
+    /**
+     * 设置默认图片
+     */
 	private void setDefaultImageView() {
 		imgTabSms.setImageResource(R.drawable.tabbar_messages);
 		imgTabContacts.setImageResource(R.drawable.tabbar_contacts);
@@ -253,7 +281,11 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 		txtTabHome.setTextColor(getResources().getColor(R.color.gray));
 		txtTabDiscov.setTextColor(getResources().getColor(R.color.gray));
 	}
-	
+
+    /**
+     * 设置当前位置TabBar
+     * @param index
+     */
 	private void setTab(int index) {
 		setDefaultImageView();
         _selectedTabIndex = index;
@@ -381,6 +413,9 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         Connect2.setContext(this);
         setupApplication();
 
+        /**
+         * Connect2连接设置网络状态监听，未连接Toast提示
+         */
         Connect2.setOnNetworkStateChangeListener(new Connect2.NetworkStateIndListener() {
             @Override
             public void onNetworkStateInd(final boolean connected) {
@@ -435,6 +470,9 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         });
     }
 
+    /**
+     * 切换帐号observer
+     */
     private IDBTableChangeListener mSwitchAccountObserver = new IDBTableChangeListener() {
         public void onDBTableChanged(String tableName) {
             // 其他重启wowtalk_service在 ManageAccountsActivity中处理了
@@ -444,6 +482,9 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         }
     };
 
+    /**
+     * 消息observer
+     */
     private IDBTableChangeListener chatmessageObserver = new IDBTableChangeListener() {
         public void onDBTableChanged(String tableName) {
             runOnUiThread(new Runnable() {
@@ -455,6 +496,9 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         }
     };
 
+    /**
+     * 好友请求observer
+     */
     private IDBTableChangeListener pendingRequestObserver = new IDBTableChangeListener() {
         public void onDBTableChanged(String tableName) {
             runOnUiThread(new Runnable() {
@@ -466,6 +510,9 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         }
     };
 
+    /**
+     * 好友圈回复observer
+     */
     private IDBTableChangeListener momentReviewObserver = new IDBTableChangeListener() {
         public void onDBTableChanged(String tableName) {
             runOnUiThread(new Runnable() {
@@ -534,6 +581,11 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
     private boolean isEmpty(){
 		return schools == null ||schools.isEmpty();
 	}
+
+    /**
+     * 处理推送过来的消息Notification
+     * @param intent
+     */
     private void tryHandleIncomeMsgNotification(Intent intent) {
         try {
             if(null != intent) {
@@ -583,6 +635,12 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 		return false;
 	}
 
+
+    /**
+     * 双击back键退出
+     * @param event
+     * @return
+     */
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getKeyCode() ==   KeyEvent.KEYCODE_BACK
@@ -618,7 +676,11 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 //
 //		});
 //	}
-	
+
+    /**
+     * 初始化WowtalkService，important
+     * @param isRestart
+     */
     /* !!!important!! */
     private void setupWowtalkService(final boolean isRestart) {
         // set delegate
@@ -658,6 +720,11 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 	public void getActiveAppTypeChangeNotification(String arg0) {
 	}
 
+    /**
+     * 回调方法检查Client端与Sip服务器的连接状态
+     * @param registrationState
+     * @param stateName
+     */
     @Override
     public void registrationStateUpdate(RegistrationState registrationState, String stateName) {
         final String state = registrationState.toString();

@@ -191,6 +191,11 @@
 		android:layout_marginRight="10dp"
 		android:layout_marginLeft="10dp"
 		android:orientation="vertical">
+        
+	    <LinearLayout 
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" >
 
 		<co.onemeter.oneapp.ui.SpannedTextView
 			android:id="@+id/txt_like_names"
@@ -200,6 +205,15 @@
 			android:drawablePadding="5dp"
             android:drawableLeft="@drawable/icon_share_list_like_list"
 			android:textColor="@color/default_text" />
+		
+		<TextView 
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textColor="@color/default_text"
+		    android:text="觉得很赞" />
+		
+		
+		</LinearLayout>
 
 		<ImageView
 			android:id="@+id/reviewDivider"

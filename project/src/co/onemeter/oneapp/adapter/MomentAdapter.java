@@ -358,6 +358,13 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         int nlikers = setViewForLikeReview(context, holder.txtLikeNames, moment.reviews);
         holder.txtLikeNames.setVisibility(nlikers > 0 ? View.VISIBLE : View.GONE);
         
+//        if (nlikers > 0) {
+//        	holder.txtLikeNames.setText(holder.txtLikeNames.getText() + "觉得很赞");
+//        	holder.txtLikeNames.setVisibility(View.VISIBLE);
+//        } else {
+//        	holder.txtLikeNames.setVisibility(View.GONE);
+//        }
+        
         
 
         setImageLayout(context, moment,mImageResizer, photoFiles, holder.imageTable);

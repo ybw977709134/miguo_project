@@ -783,6 +783,7 @@ public class MessageDetailAdapter extends BaseAdapter{
             }
 
         };
+        
         if (message.ioType.equals(ChatMessage.IOTYPE_OUTPUT)) {
             holder.vgCall.setOnClickListener(listener);
             if (message.msgType.equals(ChatMessage.MSGTYPE_CALL_LOG)) {
@@ -791,13 +792,16 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.imgMissedCall.setImageResource(R.drawable.icon_messages_call);
                 holder.txtContent.setText(String.format("%02d:%02d",
                         Integer.valueOf(message.messageContent) / 60, Integer.valueOf(message.messageContent) % 60));
+                holder.txtContent.setTextColor(mContext.getResources().getColor(R.color.black));
                 
             } else if (message.msgType.equals(ChatMessage.MSGTYPE_NORMAL_CALL_REJECTED)) {
             	 //正常通话状态，通话的图标显示为红色图标 
                 holder.imgMissedCall.setImageResource(R.drawable.icon_messages_call_answer_no);
                 holder.txtContent.setText(mContext.getResources().getString(R.string.msg_cancelled_call));
+                holder.txtContent.setTextColor(mContext.getResources().getColor(R.color.red_30));
             }
         }
+        
         if (message.ioType.equals(ChatMessage.IOTYPE_INPUT_READED)) {
             holder.vgCall.setOnClickListener(listener);
             holder.vgMissedCall.setOnClickListener(listener);
@@ -812,6 +816,7 @@ public class MessageDetailAdapter extends BaseAdapter{
                 holder.vgMissedCall.setVisibility(View.VISIBLE);
             }
         }
+        
     }
 
     private void setViewForLocation(View lView, ViewHolder holder, ChatMessage message) {

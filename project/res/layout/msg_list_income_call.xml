@@ -75,12 +75,13 @@
 				android:id="@+id/layout_call"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:visibility="gone"
 				android:orientation="horizontal" >
-
+				
 				<ImageView
 					android:layout_width="24dp"
 					android:layout_height="26dp"
-					android:background="@drawable/icon_messages_call" />
+					android:src="@drawable/icon_messages_call" />
 
 				<TextView
 					android:id="@+id/txt_time"
@@ -101,7 +102,7 @@
 	            <ImageView
 	                android:layout_width="24dp"
 	                android:layout_height="26dp"
-	                android:background="@drawable/icon_messages_call_answer_no" />
+	                android:src="@drawable/icon_messages_call_answer_no" />
 
 				<TextView
 					android:layout_width="wrap_content"
@@ -109,7 +110,7 @@
 					android:layout_gravity="center_vertical"
 					android:layout_marginLeft="5dp"
 					android:text="@string/call_missed"
-					android:textColor="@color/black"
+					android:textColor="@color/red_30"
 					android:textSize="16sp" />
 			</LinearLayout>
 		</RelativeLayout>

@@ -64,7 +64,7 @@
                 android:id="@+id/imageView_call_status"
                 android:layout_height="26dp"
                 android:layout_width="24dp"
-                android:background="@drawable/icon_messages_call_answer_no"/>
+                android:src="@drawable/icon_messages_call_answer_no"/>
             <TextView 
                 android:id="@+id/txt_outgo"
                 android:layout_height="wrap_content"

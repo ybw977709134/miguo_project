@@ -113,8 +113,6 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
 
 	// 初始化 Moment 对象
 	private void initData(Bundle savedInstanceState) {
-		// source #1, Activity argument
-		moment = getIntent().getParcelableExtra(EXTRA_MOMENT);
 
 		if (savedInstanceState != null) {
 			if (moment == null)
@@ -568,11 +566,11 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
 
 	private void createParentFeedbackMoment() {
 
-		if (moment.text.length() > CreateNormalMomentWithTagActivity.MOMENTS_WORDS_OVER) {
+		if (etMomentMsgContent.getText().toString().length() > CreateNormalMomentWithTagActivity.MOMENTS_WORDS_OVER) {
 			mMsgBox.show(null, getString(R.string.moments_words_over_failed));
 			return;
 		}
-		if (Utils.isNullOrEmpty(moment.text)
+		if (Utils.isNullOrEmpty(etMomentMsgContent.getText().toString())
 				&& (listPhoto == null || listPhoto.isEmpty())
 				&& (mLastVoiceFile == null || !mLastVoiceFile.exists())) {
 			mMsgBox.show(
@@ -587,6 +585,7 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
 						protected Integer doInBackground(Void... params) {
 							moment.id = Moment.ID_PLACEHOLDER_PREFIX
 									+ System.currentTimeMillis();
+							moment.text = etMomentMsgContent.getText().toString();
 							moment.timestamp = getIntent().getLongExtra(CreateMomentActivity.EXTRA_KEY_MOMENT_MAX_TIMESTAMP, 0) + 1;
 							Log.w("local moment timestamp set to "
 									+ moment.timestamp);
@@ -665,7 +664,7 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
 			boolean saved = false;
 			Bitmap thumb = null;
 			if (isPhoto) {
-				thumb = BmpUtils.decodeFile(aFile.localPath, 200, 200, true);
+				thumb = BmpUtils.decodeFile(aFile.localPath, 400, 400, true);
 			} else {
 				thumb = BitmapFactory.decodeResource(getResources(),
 						R.drawable.chat_icon_video);

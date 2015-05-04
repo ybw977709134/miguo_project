@@ -259,6 +259,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 			holder.txtContent = (TextView) convertView.findViewById(R.id.txt_content);
             holder.imageTable = (TableLayout) convertView.findViewById(R.id.imageTable);
             holder.reviewLayout = (LinearLayout) convertView.findViewById(R.id.reviewLayout);
+            holder.layout_moment_like = (LinearLayout) convertView.findViewById(R.id.layout_moment_like);
 			holder.txtLikeNames = (SpannedTextView) convertView.findViewById(R.id.txt_like_names);
 			holder.mReview = (LinearLayout) convertView.findViewById(R.id.layout_review);
             holder.reviewDivider = (ImageView) convertView.findViewById(R.id.reviewDivider);
@@ -356,16 +357,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         }
         //实现在好友圈外面显示点赞的人
         int nlikers = setViewForLikeReview(context, holder.txtLikeNames, moment.reviews);
-        holder.txtLikeNames.setVisibility(nlikers > 0 ? View.VISIBLE : View.GONE);
-        
-//        if (nlikers > 0) {
-//        	holder.txtLikeNames.setText(holder.txtLikeNames.getText() + "觉得很赞");
-//        	holder.txtLikeNames.setVisibility(View.VISIBLE);
-//        } else {
-//        	holder.txtLikeNames.setVisibility(View.GONE);
-//        }
-        
-        
+//        holder.txtLikeNames.setVisibility(nlikers > 0 ? View.VISIBLE : View.GONE);
+        //通过布局去控制“觉得很赞”的显示效果
+        holder.layout_moment_like.setVisibility(nlikers > 0 ? View.VISIBLE : View.GONE);
+
 
         setImageLayout(context, moment,mImageResizer, photoFiles, holder.imageTable);
         showVoiceFile(voiceFile, holder.micLayout, holder.progress, holder.micButton, holder.micTime);
@@ -1101,6 +1096,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 		TextView txtContent;
         TableLayout imageTable;
         LinearLayout reviewLayout;
+        LinearLayout layout_moment_like;
 		SpannedTextView txtLikeNames;
         TextView txtLoc;
 		LinearLayout mReview;

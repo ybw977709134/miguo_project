@@ -9,7 +9,6 @@ dependencies {
     compile project(':lib:messagebox')
     compile project(':lib:DraggableListView')
     compile project(':lib:SimpleQRCodeLib')
-
     compile 'com.androidquery:android-query:0.26.7'
     compile 'com.amap.api:services:2.3.1'
     compile 'com.baidu:cyberplayer:1.0.0'
@@ -17,14 +16,13 @@ dependencies {
     compile 'de.greenrobot:eventbus:1.0.0'
     compile 'com.google:gson:2.1'
     compile 'com.umeng:sdk:1.0.0'
-
     compile 'com.android.support:support-v4:21.0.2'
     compile 'com.android.support:multidex:1.0.0'
 }
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "21.1.2"
+    buildToolsVersion '21.1.2'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7

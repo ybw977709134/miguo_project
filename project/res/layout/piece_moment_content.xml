@@ -192,7 +192,8 @@
 		android:layout_marginLeft="10dp"
 		android:orientation="vertical">
         
-	    <LinearLayout 
+	    <LinearLayout
+            android:id="@+id/layout_moment_like"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:orientation="horizontal" >

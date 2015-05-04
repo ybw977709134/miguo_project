@@ -71,6 +71,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     private TextView txtLoc; 
 
     private LinearLayout reviewLayout;
+    private LinearLayout layout_moment_like;
     private SpannedTextView txtLikeName;
     private ImageView reviewDivider;
     private LinearLayout commentLayout;
@@ -154,6 +155,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         micTimer = (TimerTextView) findViewById(R.id.mic_timer);
         txtLoc = (TextView) findViewById(R.id.txt_loc);
         reviewLayout = (LinearLayout) findViewById(R.id.reviewLayout);
+        layout_moment_like = (LinearLayout) findViewById(R.id.layout_moment_like);
         txtLikeName = (SpannedTextView) findViewById(R.id.txt_like_names);
         reviewDivider = (ImageView) findViewById(R.id.reviewDivider);
         commentLayout = (LinearLayout) findViewById(R.id.layout_review);
@@ -916,7 +918,8 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
         textView_commentdetail_like.setText(nlikers+"");
         textView_commentdetail_comment.setText(nReviews+"");
         
-        txtLikeName.setVisibility(nlikers > 0 ? View.VISIBLE : View.GONE);
+//        txtLikeName.setVisibility(nlikers > 0 ? View.VISIBLE : View.GONE);
+        layout_moment_like.setVisibility(nlikers > 0 ? View.VISIBLE : View.GONE);
         reviewLayout.setVisibility(nlikers + nReviews > 0 ? View.VISIBLE : View.GONE);
 //        reviewDivider.setVisibility(nlikers > 0 && nReviews > 0 ? View.VISIBLE : View.GONE);
 

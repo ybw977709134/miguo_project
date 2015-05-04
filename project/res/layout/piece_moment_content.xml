@@ -202,7 +202,6 @@
 			android:id="@+id/txt_like_names"
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
-			android:gravity="center_vertical"
 			android:drawablePadding="5dp"
             android:drawableLeft="@drawable/icon_share_list_like_list"
 			android:textColor="@color/default_text" />

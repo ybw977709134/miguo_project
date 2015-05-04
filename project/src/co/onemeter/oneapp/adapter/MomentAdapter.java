@@ -260,8 +260,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.imageTable = (TableLayout) convertView.findViewById(R.id.imageTable);
             holder.reviewLayout = (LinearLayout) convertView.findViewById(R.id.reviewLayout);
             holder.layout_moment_like = (LinearLayout) convertView.findViewById(R.id.layout_moment_like);
+            holder.commentLayout = (LinearLayout) convertView.findViewById(R.id.layout_review);
 			holder.txtLikeNames = (SpannedTextView) convertView.findViewById(R.id.txt_like_names);
-			holder.mReview = (LinearLayout) convertView.findViewById(R.id.layout_review);
+//			holder.mReview = (LinearLayout) convertView.findViewById(R.id.layout_review);
             holder.reviewDivider = (ImageView) convertView.findViewById(R.id.reviewDivider);
             holder.txtLoc = (TextView) convertView.findViewById(R.id.txt_loc);
 
@@ -278,7 +279,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.layoutLike = (LinearLayout) convertView.findViewById(R.id.layout_like);
             holder.layoutComment = (LinearLayout) convertView.findViewById(R.id.layout_comment);
             holder.layoutAnswer = (LinearLayout) convertView.findViewById(R.id.layout_answer);
-			holder.layoutReview = (LinearLayout) convertView.findViewById(R.id.layout_review);
+//			holder.layoutReview = (LinearLayout) convertView.findViewById(R.id.layout_review);
             holder.micLayout = (LinearLayout) convertView.findViewById(R.id.mic_layout);
             holder.progress = (ProgressBar) convertView.findViewById(R.id.progress);
             holder.micButton = (ImageView) convertView.findViewById(R.id.btn_play);
@@ -350,17 +351,21 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         }
 
         //always has no review layout int adapter,show in detail
-        if (reviews == null || reviews.size() == 0) {
-            holder.reviewLayout.setVisibility(View.GONE);
-        } else {
-            holder.reviewLayout.setVisibility(View.VISIBLE);
-        }
+//        if (reviews == null || reviews.size() == 0) {
+//            holder.reviewLayout.setVisibility(View.GONE);
+//        } else {
+//            holder.reviewLayout.setVisibility(View.VISIBLE);
+//        }
+
         //实现在好友圈外面显示点赞的人
         int nlikers = setViewForLikeReview(context, holder.txtLikeNames, moment.reviews);
 //        holder.txtLikeNames.setVisibility(nlikers > 0 ? View.VISIBLE : View.GONE);
         //通过布局去控制“觉得很赞”的显示效果
         holder.layout_moment_like.setVisibility(nlikers > 0 ? View.VISIBLE : View.GONE);
 
+
+        int nReviews = MomentAdapter.setViewForCommentReview(context, holder.commentLayout, moment.reviews, -1, moment, mReplyDelegate);
+        holder.reviewLayout.setVisibility(nlikers + nReviews > 0 ? View.VISIBLE : View.GONE);
 
         setImageLayout(context, moment,mImageResizer, photoFiles, holder.imageTable);
         showVoiceFile(voiceFile, holder.micLayout, holder.progress, holder.micButton, holder.micTime);
@@ -1097,9 +1102,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         TableLayout imageTable;
         LinearLayout reviewLayout;
         LinearLayout layout_moment_like;
+        LinearLayout commentLayout;
 		SpannedTextView txtLikeNames;
         TextView txtLoc;
-		LinearLayout mReview;
+//		LinearLayout mReview;
         ImageView reviewDivider;
 //        LinearLayout reviewButtons;
 		Button btnLike;
@@ -1119,7 +1125,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //        ImageView ivMomentFavorite;
 //        ImageView ivMomentOpEllipse;
 
-		LinearLayout layoutReview;
+//		LinearLayout layoutReview;
 
         LinearLayout micLayout;
         ProgressBar progress;

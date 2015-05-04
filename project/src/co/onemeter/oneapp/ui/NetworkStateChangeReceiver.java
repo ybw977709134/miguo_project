@@ -26,14 +26,18 @@ public class NetworkStateChangeReceiver extends NetworkManager {
 
         int setupStep = PrefUtil.getInstance(context).getSetupStep();
         if (setupStep == 2) {
-            if (WowTalkVoipIF.fGetMainActivity() == null) {
-                WowTalkVoipIF.fSetMainActivity(CallMainActivity.class);
-            }
-            if (WowTalkVoipIF.fGetChatMessageDelegate() == null) {
-            }
-            if (!WowTalkVoipIF.fIsWowTalkServiceReady()) {
-                WowTalkVoipIF.getInstance(context).fStartWowTalkService();
-                WowTalkVoipIF.fDisableRingingInSDK(true);
+            try {
+                if (WowTalkVoipIF.fGetMainActivity() == null) {
+                    WowTalkVoipIF.fSetMainActivity(CallMainActivity.class);
+                }
+                if (WowTalkVoipIF.fGetChatMessageDelegate() == null) {
+                }
+                if (!WowTalkVoipIF.fIsWowTalkServiceReady()) {
+                    WowTalkVoipIF.getInstance(context).fStartWowTalkService();
+                    WowTalkVoipIF.fDisableRingingInSDK(true);
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
             }
 
             new Thread(new Runnable() {

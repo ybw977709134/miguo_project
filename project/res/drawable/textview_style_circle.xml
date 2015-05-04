@@ -6,7 +6,7 @@
     <solid android:color= "@color/red" />
     <stroke
         android:width= "2dp"
-        android:color= "@color/white" />
+        android:color= "@color/red" />
     <size android:width= "25dp"
         android:height= "25dp" />
 </shape>

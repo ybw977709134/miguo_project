@@ -24,12 +24,12 @@
         android:layout_marginLeft="5dp"/>
     <TextView
         android:id="@+id/new_info"
-        android:layout_height="20dp"
-        android:layout_width="25dp"
+        android:layout_height="22dp"
+        android:layout_width="22dp"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/txt_name"
         android:layout_marginLeft="5dp"
-        android:background="@drawable/unread_count_bg"
+        android:background="@drawable/textview_style_circle"
         android:visibility="visible"
         android:gravity="center"
         android:textColor="@color/white"/>

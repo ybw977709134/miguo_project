@@ -63,7 +63,7 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 						else {
 						    themedContext = new ContextThemeWrapper( LessonStatusActivity.this, android.R.style.Theme_Light_NoTitleBar );
 						}
-						new AlertDialog.Builder(themedContext).setTitle("温馨提示").setMessage("老师还没有评分！").setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+						new AlertDialog.Builder(themedContext).setTitle("温馨提示").setMessage("老师还没有评分！").setCancelable(false).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
 							
 							@Override
 							public void onClick(DialogInterface dialog, int which) {

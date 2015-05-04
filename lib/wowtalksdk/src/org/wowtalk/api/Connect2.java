@@ -156,7 +156,7 @@ public class Connect2 {
 	        
 	        DefaultHttpClient client = getNewHttpClient();
 	        
-	        Log.i("postStr= ",params);
+	        Log.i("@", Thread.currentThread().getId()," postStr= ",params);
 	        StringEntity paramEntity = null;
 			try {
 				paramEntity = new StringEntity(params,HTTP.UTF_8);
@@ -247,7 +247,7 @@ public class Connect2 {
 	        DefaultHttpClient client = getNewHttpClient();
 	        
 	        // POST データの設定
-	        Log.i("postStr= ",params);
+            Log.i("@", Thread.currentThread().getId()," postStr= ",params);
 	        //StringEntity paramEntity = new StringEntity( params );
 	        StringEntity paramEntity = new StringEntity(params,HTTP.UTF_8);
 

@@ -93,13 +93,13 @@
 
     <TextView
         android:id="@+id/unreadMsg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_alignParentRight="true"
         android:layout_alignBottom="@+id/message_cell_content"
-        android:background="@drawable/unread_count_bg"
+        android:background="@drawable/textview_style_circle"
         android:gravity="center"
-        android:text="aaa"
+        android:text="1"
         android:textColor="@color/white"
         android:textSize="13sp"
         android:visibility="visible" />

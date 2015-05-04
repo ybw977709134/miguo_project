@@ -40,6 +40,7 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
         private String classId_intent = null;
         private String schoolID = null;
 		private int lessonID = 0;	
+		private long endDate;
 		
 		public final static int REQ_SIGN_CLASS = 1;//班级
 		public final static int REQ_SIGN_LESSON = 2;//课程
@@ -104,6 +105,7 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
                     intentSign.putExtra("classId", classId_intent);
                     intentSign.putExtra("schoolId", schoolID); 
                     intentSign.putExtra("lessonId", lessonID);
+                    intentSign.putExtra("end_date", endDate);
                     intentSign.putExtra("lesson_name", textView_lesson_name.getText().toString());
                     startActivity(intentSign);
                     return;
@@ -170,6 +172,7 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 			if (requestCode == REQ_SIGN_LESSON) {//课程
 				if (data != null) {
 					lessonID = data.getIntExtra("lesson_id", 0);
+					endDate = data.getLongExtra("end_date", -1);
 					textView_lesson_name.setText(data.getStringExtra("lesson_name"));
 				} 
 			}

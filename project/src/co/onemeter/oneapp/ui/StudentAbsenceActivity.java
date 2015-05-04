@@ -5,6 +5,7 @@ import java.util.Date;
 import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Connect2;
 import org.wowtalk.api.Database;
+import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkVoipIF;
 import org.wowtalk.ui.MessageBox;
@@ -72,6 +73,7 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 	private PrefUtil mPref; 
 	private MessageBox messageBox;
 	private boolean isSendSuccess = false;
+	private LessonWebServerIF lessonWebServer;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -80,6 +82,7 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 		
 		mPref = PrefUtil.getInstance(StudentAbsenceActivity.this);
 		messageBox = new MessageBox(this);
+		lessonWebServer = LessonWebServerIF.getInstance(StudentAbsenceActivity.this);
 		initView();
 		layout_student_absence.setFocusable(true);
 		layout_student_absence.setFocusableInTouchMode(true);
@@ -229,7 +232,7 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 			            public void run() {
 
 			            	WowTalkVoipIF.getInstance(StudentAbsenceActivity.this).fSendChatMessage(message);
-			            	
+			            	lessonWebServer.askForLeave(lessonID);
 			            	try {
 								Thread.sleep(2000);
 							} catch (InterruptedException e) {

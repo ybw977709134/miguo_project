@@ -280,6 +280,7 @@ public class LessonWebServerIF {
                     .append("&property_value[]=")
                     .append(p.property_value);
         }
+        postStr.append("&notify=1");
 
         Connect2 connect2 = new Connect2();
         Element root = connect2.Post(postStr.toString());

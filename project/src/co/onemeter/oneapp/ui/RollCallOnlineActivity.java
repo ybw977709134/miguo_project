@@ -221,24 +221,41 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                 ArrayList<LessonPerformance> performances_value0 = new ArrayList<LessonPerformance>();
                 ArrayList<LessonPerformance> performances_value1 = new ArrayList<LessonPerformance>();
                 ArrayList<LessonPerformance> performances_value2 = new ArrayList<LessonPerformance>();
-                ArrayList<LessonPerformance> performances_value3 = new ArrayList<LessonPerformance>();
-                for(LessonPerformance performance : performancesToPost){
-                    switch (performance.property_value){
-                        case 1:
-                            performances_value0.add(performance);
-                            break;
-                        case 2:
+//                Log.d("--------------performancesToPost.size()---------------", performancesToPost.size()+"");
+//                for(LessonPerformance performance : performancesToPost){
+//                	Log.d("-----------performance.property_value-----------", performance.property_value+"");
+//                	if(performance.property_value != 0){
+//                		switch (performance.property_value){
+//                        case 1:
+//                            performances_value0.add(performance);
+//                            break;
+//                        case 2:
+//                            performances_value1.add(performance);
+//                            break;
+//                        case 3:
+//                            performances_value2.add(performance);
+//                            break;
+//                        }
+//                	}
+//                    
+//                }
+                for(int i = performancesToPost.size()/2 ;i < performancesToPost.size();i++){
+                	LessonPerformance performance = performancesToPost.get(i);
+                	switch (performance.property_value){
+                	    case 1:
+                	    	performances_value0.add(performance);
+                		    break;
+                		case 2:
                             performances_value1.add(performance);
                             break;
                         case 3:
                             performances_value2.add(performance);
                             break;
-                        case -1:
-                        	performances_value3.add(performance);
-                        	break;
-                        	
-                    }
+
+                	}
+                		
                 }
+                
                 if(!performances_value0.isEmpty()){
                     resultCode = signWebServer.addOrModifyStudentsRollcall(performances_value0);
                 }
@@ -248,9 +265,7 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                 if(!performances_value2.isEmpty()){
                     resultCode = signWebServer.addOrModifyStudentsRollcall(performances_value2);
                 }
-                if(!performances_value3.isEmpty()){
-                    resultCode = signWebServer.addOrModifyStudentsRollcall(performances_value3);
-                }
+                
                 return resultCode;
             }
 

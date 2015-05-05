@@ -43,13 +43,17 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
     private String classId;
     private String schoolId;
     private ListView listView;
+    private long endDate;
 
-    private List<Map<String, Object>> classstudents = new ArrayList<Map<String,Object>>();
+//    private List<Map<String, Object>> classstudents = new ArrayList<Map<String,Object>>();
     private ArrayList<LessonPerformance> performancesToPost = new ArrayList<>();
-    private ArrayList<LessonPerformance> performancesFromServer = new ArrayList<>();
+//    private ArrayList<LessonPerformance> performancesFromServer = new ArrayList<>();
 
     private LessonWebServerIF signWebServer;
     private MessageBox msgbox;
+    private List<LessonPerformance> performances = new ArrayList<LessonPerformance>();
+    private StuRollCallAdapter adapter;
+    private long currentTime = System.currentTimeMillis()/1000;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +65,7 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
         lessonId = data.getIntExtra("lessonId", -1);
         schoolId = data.getStringExtra("schoolId");
         lesson_name = data.getStringExtra("lesson_name");
+        endDate = data.getLongExtra("end_date", -1);
 
         msgbox = new MessageBox(RollCallOnlineActivity.this);
         signWebServer = LessonWebServerIF.getInstance(RollCallOnlineActivity.this);
@@ -75,83 +80,93 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                List<LessonPerformance> performances = signWebServer.getLessonRollCalls(lessonId);
-                if(performances !=null && !performances.isEmpty()){
-                    performancesFromServer.addAll(performances);
-                }
+                performances = signWebServer.getLessonRollCalls(lessonId);
                 return null;
             }
 
             @Override
             protected void onPostExecute(Void result) {
-                getClassStudentInfo();
+            	adapter = new StuRollCallAdapter(RollCallOnlineActivity.this,performances);
+            	listView.setAdapter(adapter);
+            	ListViewUtils.setListViewHeightBasedOnChildren(listView);
+            	adapter.notifyDataSetChanged();
+            	
+            	for(LessonPerformance p : performances){
+            		if(p.property_value != -1){
+            			findViewById(R.id.btn_all_signin).setVisibility(View.GONE);
+            		}
+            	}
+//                getClassStudentInfo();
             }
         });
     }
     
-    private void getClassStudentInfo(){
+//    private void getClassStudentInfo(){
+//
+//        msgbox.showWait();
+//		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, List<Map<String, Object>>>() {
+//
+//            @Override
+//            protected List<Map<String, Object>> doInBackground(Void... params) {
+//                List<Map<String, Object>> reslut = signWebServer.getClassStudents(classId);
+//                return reslut;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(List<Map<String, Object>> result) {
+//                if (result != null) {
+//                    classstudents.clear();
+//                    classstudents.addAll(result);
+//                    if(performancesFromServer.isEmpty()){
+//                        findViewById(R.id.btn_all_signin).setVisibility(View.VISIBLE);
+//                    }
+//                    sortPerformancesFromServer();//排序
+//                    msgbox.dismissWait();
+//                    listView.setAdapter(new StuRollCallAdapter(RollCallOnlineActivity.this,classstudents));
+//
+//                    //ScrollView嵌套ListView需要计算listview内容高度
+//                    ListViewUtils.setListViewHeightBasedOnChildren(listView);
+//                }else{
+//                    msgbox.dismissWait();
+//                }
+//
+//            }
+//
+//        });
+//    }
 
-        msgbox.showWait();
-		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, List<Map<String, Object>>>() {
-
-            @Override
-            protected List<Map<String, Object>> doInBackground(Void... params) {
-                List<Map<String, Object>> reslut = signWebServer.getClassStudents(classId);
-                return reslut;
-            }
-
-            @Override
-            protected void onPostExecute(List<Map<String, Object>> result) {
-                if (result != null) {
-                    classstudents.clear();
-                    classstudents.addAll(result);
-                    if(performancesFromServer.isEmpty()){
-                        findViewById(R.id.btn_all_signin).setVisibility(View.VISIBLE);
-                    }
-                    sortPerformancesFromServer();//排序
-                    msgbox.dismissWait();
-                    listView.setAdapter(new StuRollCallAdapter(RollCallOnlineActivity.this,classstudents));
-
-                    //ScrollView嵌套ListView需要计算listview内容高度
-                    ListViewUtils.setListViewHeightBasedOnChildren(listView);
-                }else{
-                    msgbox.dismissWait();
-                }
-
-            }
-
-        });
-    }
-
-    /**
-     * 服务器返回的PerformanceList需要根据studentId排序
-     */
-    void sortPerformancesFromServer(){
-        ArrayList<LessonPerformance> performances = new ArrayList<>();
-        int stusize = classstudents.size();
-        int psize = performancesFromServer.size();
-        for (int i = 0;i < stusize;i ++){
-            for(int j = 0;j < psize;j ++){
-                LessonPerformance performance = performancesFromServer.get(j);
-                if(classstudents.get(i).get("student_id").equals(performance.student_id)){
-                    performances.add(performance);
-                }
-            }
-
-        }
-        performancesFromServer.clear();
-        performancesFromServer.addAll(performances);
-    }
+//    /**
+//     * 服务器返回的PerformanceList需要根据studentId排序
+//     */
+//    void sortPerformancesFromServer(){
+//        ArrayList<LessonPerformance> performances = new ArrayList<>();
+//        int stusize = classstudents.size();
+//        int psize = performancesFromServer.size();
+//        for (int i = 0;i < stusize;i ++){
+//            for(int j = 0;j < psize;j ++){
+//                LessonPerformance performance = performancesFromServer.get(j);
+//                if(classstudents.get(i).get("student_id").equals(performance.student_id)){
+//                    performances.add(performance);
+//                }
+//            }
+//
+//        }
+//        performancesFromServer.clear();
+//        performancesFromServer.addAll(performances);
+//    }
 
     void initView(){
         findViewById(R.id.roll_call_ok).setOnClickListener(this);
         findViewById(R.id.btn_all_signin).setOnClickListener(this);
-        findViewById(R.id.btn_all_signin).setVisibility(View.GONE);
+//        findViewById(R.id.btn_all_signin).setVisibility(View.GONE);
         listView = (ListView) findViewById(R.id.listView_roll_call);
 
         TextView txt_name = (TextView) findViewById(R.id.title_back);
         txt_name.setOnClickListener(this);
         txt_name.setText(lesson_name);
+        if(currentTime > endDate){
+        	findViewById(R.id.btn_all_signin).setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -161,10 +176,10 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                 finish();
                 break;
             case R.id.roll_call_ok://确认
-                if(performancesFromServer.size() > 0){
+                if(performances.size() > 0){
                     finish();
                 }
-                int stuSize = classstudents.size();
+                int stuSize = performances.size();
                 if(stuSize == 0){
                     return ;
                 }
@@ -173,7 +188,7 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                 }
                 break;
             case R.id.btn_all_signin://全部签到
-                if(classstudents.size() > 0){
+                if(performances.size() > 0){
                     setAllSignIn();
                 }
                 break;
@@ -181,7 +196,7 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
     }
 
     private void setAllSignIn(){
-        int size = classstudents.size();
+        int size = performances.size();
         for (int i = 0;i < size;i ++){
             int first = listView.getFirstVisiblePosition();
             int index = i - first;
@@ -206,6 +221,7 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                 ArrayList<LessonPerformance> performances_value0 = new ArrayList<LessonPerformance>();
                 ArrayList<LessonPerformance> performances_value1 = new ArrayList<LessonPerformance>();
                 ArrayList<LessonPerformance> performances_value2 = new ArrayList<LessonPerformance>();
+                ArrayList<LessonPerformance> performances_value3 = new ArrayList<LessonPerformance>();
                 for(LessonPerformance performance : performancesToPost){
                     switch (performance.property_value){
                         case 1:
@@ -217,6 +233,10 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                         case 3:
                             performances_value2.add(performance);
                             break;
+                        case -1:
+                        	performances_value3.add(performance);
+                        	break;
+                        	
                     }
                 }
                 if(!performances_value0.isEmpty()){
@@ -227,6 +247,9 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                 }
                 if(!performances_value2.isEmpty()){
                     resultCode = signWebServer.addOrModifyStudentsRollcall(performances_value2);
+                }
+                if(!performances_value3.isEmpty()){
+                    resultCode = signWebServer.addOrModifyStudentsRollcall(performances_value3);
                 }
                 return resultCode;
             }
@@ -247,26 +270,27 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
 
         private LayoutInflater inflater;
         private final int performence_property_id = 10;
-        private List<Map<String, Object>> classstudents;
+//        private List<Map<String, Object>> classstudents;
+        private List<LessonPerformance> performances;
         private Context mContext;
 
-        public StuRollCallAdapter(Context mContext ,List<Map<String, Object>> classstudents){
+        public StuRollCallAdapter(Context mContext ,List<LessonPerformance> performances){
             inflater = LayoutInflater.from(RollCallOnlineActivity.this);
-            this.classstudents = classstudents;
+            this.performances = performances;
             this.mContext = mContext;
         }
 
         @Override
         public int getCount() {
-            if(classstudents == null || classstudents.isEmpty()){
+            if(performances == null || performances.isEmpty()){
                 return 0;
             }
-            return classstudents.size();
+            return performances.size();
         }
 
         @Override
-        public Map<String, Object> getItem(int position) {
-            return classstudents.get(position);
+        public Object getItem(int position) {
+            return performances.get(position);
         }
 
         @Override
@@ -294,64 +318,75 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
 //            		? classstudents.get(position).get("student_username").toString()
 //            		: classstudents.get(position).get("student_alias").toString());
             Database dbHelper=new Database(mContext);
-            String student_alias = dbHelper.fetchStudentAlias(schoolId, classstudents.get(position).get("student_id").toString());
+            String student_alias = dbHelper.fetchStudentAlias(schoolId, performances.get(position).student_id);
             holder.tv_name.setText(student_alias);
+            long curTime = System.currentTimeMillis()/1000;
             //performancesFromServer服务器有数据则显示，并return
-            if(!performancesFromServer.isEmpty()){
-                if(performancesFromServer.size() > position){
-                    LessonPerformance lessonPerformance = performancesFromServer.get(position);
-                    switch (lessonPerformance.property_value){
-                        case 1:
-                            holder.radio0.setChecked(true);
-                            break;
-                        case 2:
-                            holder.radio1.setChecked(true);
-                            break;
-                        case 3:
-                            holder.radio2.setChecked(true);
-                            break;
-                    }
-                }
-
-                holder.rg_per.setEnabled(false);
+            if(curTime >= endDate){
+            	holder.rg_per.setEnabled(false);
                 holder.radio0.setEnabled(false);
                 holder.radio1.setEnabled(false);
                 holder.radio2.setEnabled(false);
                 return convertView;
+            }else{
+            	if(performances.get(position).property_value != -1){
+                    if(performances.size() > position){
+                        LessonPerformance lessonPerformance = performances.get(position);
+                        switch (lessonPerformance.property_value){
+                            case 1:
+                                holder.radio0.setChecked(true);
+                                break;
+                            case 2:
+                                holder.radio1.setChecked(true);
+                                break;
+                            case 3:
+                                holder.radio2.setChecked(true);
+                                break;
+                        }
+                    }
+
+                    holder.rg_per.setEnabled(false);
+                    holder.radio0.setEnabled(false);
+                    holder.radio1.setEnabled(false);
+                    holder.radio2.setEnabled(false);
+                    return convertView;
+                }
+            	holder.radio2.setChecked(true);
+                
+                final LessonPerformance performance = new LessonPerformance();
+                performance.property_value = 3;
+                performance.lesson_id = lessonId;
+                performance.student_id = performances.get(position).student_id;
+                performance.property_id = performence_property_id;
+                
+                holder.rg_per.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        switch (checkedId) {
+                            case R.id.radio0:
+                                performance.property_value = 1;
+                                break;
+                            case R.id.radio1:
+                                performance.property_value = 2;
+                                break;
+                            case R.id.radio2:
+                                performance.property_value = 3;
+                                break;
+                            default:
+                                performance.property_value = 3;
+                                break;
+                        }
+                        performancesToPost.remove(position);
+                        performancesToPost.add(performance);
+                    }
+                });
+                performancesToPost.add(performance);
+                return convertView;
             }
             
-            holder.radio2.setChecked(true);
             
-            final LessonPerformance performance = new LessonPerformance();
-            performance.property_value = 3;
-            performance.lesson_id = lessonId;
-            performance.student_id = classstudents.get(position).get("student_id").toString();
-            performance.property_id = performence_property_id;
             
-            holder.rg_per.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    switch (checkedId) {
-                        case R.id.radio0:
-                            performance.property_value = 1;
-                            break;
-                        case R.id.radio1:
-                            performance.property_value = 2;
-                            break;
-                        case R.id.radio2:
-                            performance.property_value = 3;
-                            break;
-                        default:
-                            performance.property_value = 3;
-                            break;
-                    }
-                    performancesToPost.remove(position);
-                    performancesToPost.add(position,performance);
-                }
-            });
-            performancesToPost.add(performance);
-            return convertView;
         }
 
         class ViewHolder{
@@ -366,8 +401,8 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
     
     @Override
     protected void onDestroy() {
-    	if (classstudents != null) {
-    		classstudents =null;
+    	if (performances != null) {
+    		performances =null;
     	}
     	if (signWebServer != null) {
     		signWebServer = null;

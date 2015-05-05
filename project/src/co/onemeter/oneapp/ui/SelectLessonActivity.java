@@ -128,6 +128,7 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 		Intent data = new Intent();
 		data.putExtra("lesson_id", lessons.get(position).lesson_id);
 		data.putExtra("lesson_name", lessons.get(position).title);
+		data.putExtra("end_date", lessons.get(position).end_date);
 		setResult(RESULT_OK, data);
 		
 		instance.finish();

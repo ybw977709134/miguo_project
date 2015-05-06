@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
@@ -22,7 +23,9 @@ import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.androidquery.AQuery;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.DoubleClickedUtils;
@@ -150,7 +153,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 //			break;
 		case R.id.lessoninfo_refresh:
 			getLessonInfo();
-        	closeInputBoard();
+        	closeInputBoard();     	
 			break;
 		case R.id.lay_footer_add:
 			if(!DoubleClickedUtils.isFastDoubleClick()){
@@ -247,6 +250,9 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
         times = reTime.split(" - ");
         classStartTimes = times[0].split(":");
         classEndTimes = times[1].split(":");
+        
+        String lastLessonDate = Utils.stampsToDate(lessons.get(lessons.size() -1 ).start_date);
+        String[] lastLessonDates = lastLessonDate.split("-");
 		if(!isAdd){
 			dialog.setTitle("修改课程");
 			view.findViewById(R.id.lay_lesson_name).setVisibility(View.VISIBLE);
@@ -263,6 +269,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
             edName.setText(lessons.get(position).title);
         }else{
         	dialog.setTitle("添加课程");
+        	datepicker.init(Integer.parseInt(lastLessonDates[0]), Integer.parseInt(lastLessonDates[1]), Integer.parseInt(lastLessonDates[2]), null);
 			starttimepicker.setCurrentHour(Integer.parseInt(classStartTimes[0]));
 			starttimepicker.setCurrentMinute(Integer.parseInt(classStartTimes[1]));
 			endtimepicker.setCurrentHour(Integer.parseInt(classEndTimes[0]));

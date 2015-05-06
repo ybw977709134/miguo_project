@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -157,7 +158,7 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		dpDate = (DatePicker) findViewById(R.id.datePicker_lesinfo_date);//开始日期
 		dpEndDate = (DatePicker) findViewById(R.id.datePicker_lesinfo_enddate);//结束日期
 		tpTime = (TimePicker) findViewById(R.id.timePicker_lesinfo_time);//开始上课时间
-		tpLength = (TimePicker) findViewById(R.id.timePicker_lesinfo_length);//上课时长
+		tpLength = (TimePicker) findViewById(R.id.timePicker_lesinfo_length);//结束上课时间
 		
 		dtPlace = (EditText) findViewById(R.id.ed_lesinfo_place);//地点
 		
@@ -197,11 +198,11 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 			String[] startTime = times[0].split(":");//上课时间
 			String[] endTime = times[1].split(":");//结束时间
 			
-			int timeLengthTag = (Integer.parseInt(endTime[0])*3600 + Integer.parseInt(endTime[1])*60 - 
-					Integer.parseInt(startTime[0])*3600 - Integer.parseInt(startTime[1])*60);//结束-开始，上课时长的时间戳
-			
-			int hourLength = timeLengthTag/3600;//上课的小时
-			int minuteLength = timeLengthTag % 3600 / 60;//上课的分钟
+//			int timeLengthTag = (Integer.parseInt(endTime[0])*3600 + Integer.parseInt(endTime[1])*60 - 
+//					Integer.parseInt(startTime[0])*3600 - Integer.parseInt(startTime[1])*60);//结束-开始，上课时长的时间戳
+//			
+//			int hourLength = timeLengthTag/3600;//上课的小时
+//			int minuteLength = timeLengthTag % 3600 / 60;//上课的分钟
 			
 			
 			
@@ -243,8 +244,8 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 	        tpTime.setCurrentHour(Integer.parseInt(startTime[0]));
 	        tpTime.setCurrentMinute(Integer.parseInt(startTime[1]));
 	        
-	        tpLength.setCurrentHour(hourLength);
-	        tpLength.setCurrentMinute(minuteLength);
+	        tpLength.setCurrentHour(Integer.parseInt(endTime[0]));
+	        tpLength.setCurrentMinute(Integer.parseInt(endTime[1]));
 	        
 	        if(String.valueOf(tpTime.getCurrentHour()) != null){
 	        	tpTime.setEnabled(false);
@@ -286,8 +287,8 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 			
 			
 			
-			tpLength.setCurrentHour(1);
-	        tpLength.setCurrentMinute(0);
+//			tpLength.setCurrentHour(1);
+//	        tpLength.setCurrentMinute(0);
 		}
 		
 		mMsgBox = new MessageBox(this);
@@ -460,9 +461,19 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 //		resultEndTime.set(end_date_year, end_date_month-1, end_date_day);
 		
 		
+		int classHour = tpTime.getCurrentHour();
+		int classMinute = tpTime.getCurrentMinute();
+		int classEndHour = tpLength.getCurrentHour();
+		int classEndMinute = tpLength.getCurrentMinute();
+		long classStamps = classHour*3600 + classMinute*60;
+		long classEndStamps = classEndHour*3600 + classEndMinute*60;
+		int classYear = dpDate.getYear();
+		int classMouth = dpDate.getMonth() + 1;
+		int classDay = dpDate.getDayOfMonth();
+		long classStartDayStamps = Utils.getTimeStamp(classYear, classMouth, classDay)/1000;
 		long firstlesTime = getIntent().getLongExtra("firstlesdate", -1);
 		if(firstlesTime != -1){
-		    if( firstlesTime < resultTime.getTimeInMillis() / 1000 ){
+		    if( (firstlesTime - classStamps) < classStartDayStamps){
 			    if(!mMsgBox.isWaitShowing()){
 				    mMsgBox.toast("开班时间不得晚于课程时间！");
 			    }
@@ -475,12 +486,18 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		    }
 		    return;
 		}
+		if(classEndStamps < classStamps){
+			if(!mMsgBox.isWaitShowing()){
+			    mMsgBox.toast("结束时间不得早于开始时间！");
+		    }
+		    return;
+		}
 		
 		//开始上课时间
 		final int hour = tpTime.getCurrentHour();
 		final int minite = tpTime.getCurrentMinute();
 		
-		//上课时长
+		//结束上课时间
 		final int hourLength = tpLength.getCurrentHour();
 		final int miniteLength = tpLength.getCurrentMinute();
 		
@@ -496,11 +513,12 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 		long currentDayTimps = Utils.getDayStampMoveMillis();
 		
 		int classTimps = hour * 3600 + minite * 60;//上课时间
-		int classLengthTimps = hourLength * 3600 + miniteLength * 60;//上课时长时间戳
+		int classEndTimps = hourLength * 3600 + miniteLength * 60;//上课结束时间
+//		int classLengthTimps = hourLength * 3600 + miniteLength * 60;//上课时长时间戳
 		
 		final long startClassTimps = currentDayTimps + classTimps;//开始的时间戳
 		
-		final long endClassTimps = startClassTimps + classLengthTimps;//结束的时间戳
+		final long endClassTimps = currentDayTimps + classEndTimps;//结束的时间戳
 		
 		startDay.set(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth());
 		endDay.set(dpEndDate.getYear(), dpEndDate.getMonth(), dpEndDate.getDayOfMonth());

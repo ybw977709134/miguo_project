@@ -233,7 +233,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black_24"
                     android:textSize="16sp"
-                    android:text="@string/class_length" />
+                    android:text="@string/class_endtime" />
 
                 <TimePicker
                     android:id="@+id/timePicker_lesinfo_length"

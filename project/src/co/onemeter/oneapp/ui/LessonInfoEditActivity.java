@@ -63,6 +63,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 	private String[] times;
 	private String[] classStartTimes;
 	private String[] classEndTimes;
+	private String[] lastLessonDates;
 	private int startHour;
 	private int startMinute;
 	private int endHour;
@@ -251,8 +252,10 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
         classStartTimes = times[0].split(":");
         classEndTimes = times[1].split(":");
         
-        String lastLessonDate = Utils.stampsToDate(lessons.get(lessons.size() -1 ).start_date);
-        String[] lastLessonDates = lastLessonDate.split("-");
+        if(lessons.size() != 0){
+        	String lastLessonDate = Utils.stampsToDate(lessons.get(lessons.size() -1 ).start_date);
+            lastLessonDates = lastLessonDate.split("-");
+        }
 		if(!isAdd){
 			dialog.setTitle("修改课程");
 			view.findViewById(R.id.lay_lesson_name).setVisibility(View.VISIBLE);
@@ -269,7 +272,9 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
             edName.setText(lessons.get(position).title);
         }else{
         	dialog.setTitle("添加课程");
-        	datepicker.init(Integer.parseInt(lastLessonDates[0]), Integer.parseInt(lastLessonDates[1]), Integer.parseInt(lastLessonDates[2]), null);
+        	if(lessons.size() != 0){
+        		datepicker.init(Integer.parseInt(lastLessonDates[0]), Integer.parseInt(lastLessonDates[1])-1, Integer.parseInt(lastLessonDates[2]), null);
+        	}       	
 			starttimepicker.setCurrentHour(Integer.parseInt(classStartTimes[0]));
 			starttimepicker.setCurrentMinute(Integer.parseInt(classStartTimes[1]));
 			endtimepicker.setCurrentHour(Integer.parseInt(classEndTimes[0]));

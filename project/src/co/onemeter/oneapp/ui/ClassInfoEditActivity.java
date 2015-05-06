@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -461,16 +460,9 @@ public class ClassInfoEditActivity extends Activity implements View.OnClickListe
 //		resultEndTime.set(end_date_year, end_date_month-1, end_date_day);
 		
 		
-		int classHour = tpTime.getCurrentHour();
-		int classMinute = tpTime.getCurrentMinute();
-		long classStamps = classHour*3600 + classMinute*60;
-		int classYear = dpDate.getYear();
-		int classMouth = dpDate.getMonth() + 1;
-		int classDay = dpDate.getDayOfMonth();
-		long classStartDayStamps = Utils.getTimeStamp(classYear, classMouth, classDay)/1000;
 		long firstlesTime = getIntent().getLongExtra("firstlesdate", -1);
 		if(firstlesTime != -1){
-		    if( (firstlesTime - classStamps) < classStartDayStamps){
+		    if( firstlesTime < resultTime.getTimeInMillis() / 1000 ){
 			    if(!mMsgBox.isWaitShowing()){
 				    mMsgBox.toast("开班时间不得晚于课程时间！");
 			    }

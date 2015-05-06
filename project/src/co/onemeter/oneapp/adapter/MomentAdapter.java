@@ -25,6 +25,7 @@ import co.onemeter.utils.AsyncTaskExecutor;
 
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 import org.wowtalk.ui.bitmapfun.ui.RecyclingImageView;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 import org.wowtalk.ui.msg.TimerTextView;
@@ -270,6 +271,8 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             holder.tvCommentCountInd=(TextView) convertView.findViewById(R.id.moment_comment_count_ind);
             holder.tvAnswerCountInd=(TextView) convertView.findViewById(R.id.moment_answer_count_ind);
 
+
+            holder.btn_comment_op = (ImageButton) convertView.findViewById(R.id.btn_comment_op);
             holder.btnLike = (Button) convertView.findViewById(R.id.btn_like);
 			holder.btnComment = (Button) convertView.findViewById(R.id.btn_comment);
             holder.btnAnswer = (Button) convertView.findViewById(R.id.btn_answer);
@@ -298,22 +301,24 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		final WFile file = voiceFile;
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            	if (file != null) {//主要是为了在播放音频的情况下进入详情页，停止播放音频
-            		mediaPlayerWraper.stop();
-            		holder.micButton.setImageResource(R.drawable.icon_messages_voice_selector);
-                    holder.micTime.setText(String.format(TimerTextView.VOICE_LEN_DEF_FORMAT, file.duration / 60, file.duration % 60));
+//		final WFile file = voiceFile;
+//        convertView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//            	if (file != null) {//主要是为了在播放音频的情况下进入详情页，停止播放音频
+//            		mediaPlayerWraper.stop();
+//            		holder.micButton.setImageResource(R.drawable.icon_messages_voice_selector);
+//                    holder.micTime.setText(String.format(TimerTextView.VOICE_LEN_DEF_FORMAT, file.duration / 60, file.duration % 60));
+//
+//            	}
+//                if (mReplyDelegate != null) {
+//                    mReplyDelegate.onMomentClicked(position, moment);
+//                }
+//
+//            }
+//        });
 
-            	}
-                if (mReplyDelegate != null) {
-                    mReplyDelegate.onMomentClicked(position, moment);
-                }
 
-            }
-        });
 
         setTagDescInfo(holder,moment);
         setupOpButtons(holder,moment,momentPos,likeReview,commentReview);
@@ -382,8 +387,88 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             });
         }
 
+        //在好友圈外面添加更多操作按钮
+
+        String myUid = PrefUtil.getInstance(context).getUid();
+        if(!TextUtils.isEmpty(myUid) && myUid.equals(moment.owner.userID)) {//是自己，可以对自己的动态操作//显示对动态操作按钮
+            holder.btn_comment_op.setVisibility(View.VISIBLE);
+        } else {//非自己，隐藏对动态的操作
+            holder.btn_comment_op.setVisibility(View.GONE);
+        }
+
+       holder.btn_comment_op.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               final BottomButtonBoard bottomBoard = new BottomButtonBoard(context,holder.btn_comment_op);
+
+               //删除
+                   bottomBoard.add(context.getString(R.string.delete_moment),
+                           BottomButtonBoard.BUTTON_RED, new View.OnClickListener() {
+                               @Override
+                               public void onClick(View view) {
+                                   bottomBoard.dismiss();
+                                   MessageDialog dialog = new MessageDialog(context);
+                                   dialog.setTitle("");
+                                   dialog.setMessage("删除这条分享？");
+                                   dialog.setCancelable(false);
+                                   dialog.setTextColorBtnRight(context.getResources().getColor(R.color.red));
+                                   dialog.setRightBold(true);
+                                   dialog.setOnLeftClickListener("取消", null);
+                                   dialog.setOnRightClickListener("删除", new MessageDialog.MessageDialogClickListener() {
+                                       @Override
+                                       public void onclick(MessageDialog dialog) {
+                                           dialog.dismiss();
+                                           doDeleteMoment(moment);
+                                       }
+                                   });
+                                   dialog.show();
+
+                               }
+                           });
+
+                //关闭
+               bottomBoard.addCancelBtn(context.getString(R.string.close));
+               bottomBoard.show();
+           }
+       });
+
+
+
+
 		return convertView;
 	}
+
+    /**
+     * 在动态外面删除动态
+     * @date 2015/5/6
+     * @author hutianfeng
+     */
+    private void doDeleteMoment(final Moment moment) {
+        mMsgBox.showWait();
+
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return MomentWebServerIF.getInstance(context).fDeleteMoment(moment.id);
+            }
+
+            @Override
+            protected void onPostExecute(Integer errno) {
+                if (ErrorCode.OK == errno) {
+
+                    if (dbHelper.deleteMoment(moment.id)) {
+//                        setResult(RESULT_OK, new Intent().putExtra(EXTRA_DELETED_MOMENT_ID, moment.id));
+                        mMsgBox.dismissWait();
+//                        finish();
+                    }
+
+                } else {
+                    mMsgBox.toast(R.string.operation_failed);
+                    mMsgBox.dismissWait();
+                }
+            }
+        });
+    }
 
 
 
@@ -1103,6 +1188,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         LinearLayout reviewLayout;
         LinearLayout layout_moment_like;
         LinearLayout commentLayout;
+        ImageButton btn_comment_op;
 		SpannedTextView txtLikeNames;
         TextView txtLoc;
 //		LinearLayout mReview;

@@ -1046,9 +1046,7 @@ public class MomentDetailActivity extends Activity implements View.OnClickListen
     	}, 200);
     	  
       }
-      
-      
-      
+
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -50,6 +51,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     private static final int REQ_CREATE_MOMENT = 124;
 
     private static TimelineActivity instance;
+    private static InputBoardManager inputMgr;
 
     private AllTimelineFragment allTimelineFragment;
     private MyTimelineFragment myTimelineFragment;
@@ -108,6 +110,14 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         }
 
         
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (inputMgr != null) {
+            inputMgr = null;
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -224,6 +234,26 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         }
     }
 
+    /**
+     * 通过控制返回键来控制对评论的的输入框的显示与隐藏
+     * @param keyCode
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (inputMgr.isShowing()) {
+                inputMgr.setSoftKeyboardVisibility(false);
+                inputMgr.hide();
+            } else {
+                finish();
+            }
+
+        }
+        return false;
+    }
+
     private void gotoCreateMoment(int tagIdx) {
         startActivityForResult(
                 new Intent(this, CreateNormalMomentWithTagActivity.class)
@@ -289,7 +319,6 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
      * @param context
      * @param uid
      * @param pageTitle
-     * @param myInfo
      */
     public static void launchForOwner(Context context, String uid, String pageTitle) {
         Intent intent = new Intent(context, TimelineActivity.class);
@@ -399,8 +428,8 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                                             InputBoardManager.InputResultHandler handler,
                                             InputBoardManager.ChangeToOtherAppsListener changeAppsListener,
                                             View.OnClickListener onLikeClickListener) {
-        InputBoardManager inputMgr = handler.getInputBoardMangager();
-        
+//        InputBoardManager inputMgr = handler.getInputBoardMangager();
+        inputMgr = handler.getInputBoardMangager();
         
 
         Database db = new Database(activity);
@@ -416,7 +445,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
 
             inputMgr.drawableResId().gotoEmotion = R.drawable.timeline_like_btn;
 //            inputMgr.drawableResId().gotoEmotion = R.drawable.sms_kaomoji_btn;
-            inputMgr.drawableResId().keyboard = R.drawable.sms_keyboard;
+//            inputMgr.drawableResId().keyboard = R.drawable.sms_keyboard;
             inputMgr.drawableResId().voiceNormal = R.drawable.sms_voice_btn;
             inputMgr.drawableResId().voicePressed = R.drawable.sms_voice_btn_p;
 
@@ -470,7 +499,8 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
 
         // 除了回复评论，还可以对评论的内容进行操作
 
-        final InputBoardManager inputMgr = handler.getInputBoardMangager();
+//        final InputBoardManager inputMgr = handler.getInputBoardMangager();
+        inputMgr = handler.getInputBoardMangager();
         if (inputMgr != null)
         	 inputMgr.setSoftKeyboardVisibility(false);
 

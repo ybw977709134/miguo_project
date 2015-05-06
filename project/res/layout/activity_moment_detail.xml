@@ -204,7 +204,7 @@
     </ScrollView>
     
     <ImageView
-         style="@style/bg_section_divider_line_dark"/>
+         style="@style/bg_section_divider_line_light"/>
 
 	<org.wowtalk.ui.msg.HeightAwareRelativeLayout
 		android:layout_width="fill_parent"

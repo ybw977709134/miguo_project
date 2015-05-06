@@ -1,11 +1,15 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ListFragment;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
@@ -15,6 +19,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
+import org.wowtalk.ui.msg.InputBoardManager;
+import org.wowtalk.ui.msg.Stamp;
 
 import java.util.ArrayList;
 
@@ -24,7 +30,7 @@ import java.util.ArrayList;
  */
 public abstract class TimelineFragment extends ListFragment
         implements MomentAdapter.MomentActionHandler, OnTimelineFilterChangedListener,
-        PullToRefreshListView.OnRefreshListener, MomentAdapter.LoadDelegate  {
+        PullToRefreshListView.OnRefreshListener, MomentAdapter.LoadDelegate, InputBoardManager.ChangeToOtherAppsListener, InputBoardManager.InputResultHandler {
     protected static final int PAGE_SIZE = 10;
     private static final int REQ_COMMENT = 123;
     private MomentAdapter adapter;
@@ -43,6 +49,18 @@ public abstract class TimelineFragment extends ListFragment
     //用于判断是自己还是好友时，动态是否显示新动态提醒
     public static boolean newReviewFlag = true;
 
+
+    public static final String EXTRA_REPLY_TO_MOMENT_ID = "reply_to_moment_id";
+    public static final String EXTRA_REPLY_TO_REVIEW = "reply_to_review_id";
+    private Moment moment;
+    private BottomButtonBoard mMenu;
+    private InputBoardManager mInputMgr;
+    private MessageBox mMsgBox;
+    private Database dbHelper;
+    private PrefUtil mPrefUtil;
+    private MomentWebServerIF mMomentWeb;
+    private TimelineActivity.OnMomentReviewDeleteListener onMomentReviewDeleteListener;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +68,27 @@ public abstract class TimelineFragment extends ListFragment
         if (savedInstanceState != null) {
             selectedTag = savedInstanceState.getInt("selectedTag");
         }
+
+        //弹框 进度初始化
+        mMsgBox = new MessageBox(getActivity());
+        dbHelper = new Database(getActivity());
+        mPrefUtil = PrefUtil.getInstance(getActivity());
+        mMomentWeb = MomentWebServerIF.getInstance(getActivity());
+        onMomentReviewDeleteListener=new TimelineActivity.OnMomentReviewDeleteListener() {
+            @Override
+            public void onMomentDelete(String momentId, Review review) {
+                momentReviewObserver.onDBTableChanged(Database.TBL_MOMENT);
+
+                if (mInputMgr != null) {
+                    mInputMgr.setLayoutForTimelineMoment(moment,new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            doLikeMoment_async(moment);
+                        }
+                    });
+                }
+            }
+        };
 
         // load moments
         setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag),-1));
@@ -184,7 +223,7 @@ public abstract class TimelineFragment extends ListFragment
             if (data != null) {
                 String changedMomentId = data.getStringExtra(MomentDetailActivity.EXTRA_CHANGED_MOMENT_ID);
                 if (changedMomentId != null) {
-                    Database dbHelper = new Database(getActivity());
+//                    Database dbHelper = new Database(getActivity());
                     for (int i = 0; i < adapter.getCount(); ++i) {
                         Moment m = adapter.getItem(i);
                         if (TextUtils.equals(changedMomentId, m.id)) {
@@ -266,27 +305,62 @@ public abstract class TimelineFragment extends ListFragment
                         } else {
                             moment.reviews.remove(r);
                         }
-                        Database dbHelper = new Database(getActivity());
+//                        Database dbHelper = new Database(getActivity());
                         dbHelper.storeMoment(moment, moment.id);
 //                        adapter.notifyDataSetChanged();
                     }
                 }
             }, moment.id);
         } else {
-        	
+
             //评论按钮进入详情页刷新
-        	Intent intent = new Intent(this.getActivity(), MomentDetailActivity.class).putExtra("moment", moment);
-        	intent.putExtra("button_reply", true);//通过评论按钮进入详情页，自动弹起输入软键盘，有标志值且为true        	
-        	String mMyUid = PrefUtil.getInstance(this.getActivity()).getUid();
-            if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
-                intent.putExtra("isowner", 1);//给自己多传一个标志值
+//        	Intent intent = new Intent(this.getActivity(), MomentDetailActivity.class).putExtra("moment", moment);
+//        	intent.putExtra("button_reply", true);//通过评论按钮进入详情页，自动弹起输入软键盘，有标志值且为true
+//        	String mMyUid = PrefUtil.getInstance(this.getActivity()).getUid();
+//            if(null != moment.owner && !TextUtils.isEmpty(moment.owner.userID) && moment.owner.userID.equals(mMyUid)) {
+//                intent.putExtra("isowner", 1);//给自己多传一个标志值
+//            }
+//
+//            startActivityForResult(intent,REQ_COMMENT);
+
+            //使得当前item的moment和外moment保持一致
+            this.moment =  moment;
+
+            if (mMenu == null)
+                mMenu = new BottomButtonBoard(getActivity(), getActivity().findViewById(android.R.id.content));
+            else
+                mMenu.clearView();
+
+            if (replyTo == null) {
+                TimelineActivity.replyToMoment_helper(-1, moment.id, replyTo, getActivity(),
+                        this, this, getLikeBtnClickListener(moment.id));
+            } else {
+                TimelineActivity.doWithReview(-1, moment.id, replyTo, mMenu, getActivity(), this,
+                        this, onMomentReviewDeleteListener, getLikeBtnClickListener(moment.id));
             }
-            
-            startActivityForResult(intent,REQ_COMMENT);
-            
+
+            //点击评论按钮，进入详情页自动弹起输入软键盘,而不是item
+            if (mInputMgr != null) {
+
+                mInputMgr.mTxtContent.setFocusable(true);
+                mInputMgr.mTxtContent.setFocusableInTouchMode(true);
+                mInputMgr.mTxtContent.requestFocus();
+
+                Handler hanlder = new Handler();
+                hanlder.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        InputMethodManager imm = (InputMethodManager) mInputMgr.mTxtContent.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(mInputMgr.mTxtContent, 0);
+                    }
+                }, 200);
+            }
+
+
         }
     }
-    
+
 
     /**
      * 点击非评论按钮进入详情页刷新
@@ -307,6 +381,25 @@ public abstract class TimelineFragment extends ListFragment
         // 用户可能在详情页点赞或评论，或删除动态，总之可那需要在 onActivityResult 中刷新UI
         startActivityForResult(intent, REQ_COMMENT);
     }
+
+
+    private View.OnClickListener getLikeBtnClickListener(final String momentId) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Moment m;
+                if (TextUtils.equals(moment.id, momentId)) {
+                    m = moment;
+                } else {
+                    m = dbHelper.fetchMoment(momentId);
+                }
+                if (null != m) {
+                    doLikeMoment_async(m);
+                }
+            }
+        };
+    }
+
 
     /**
      * Possible error:
@@ -332,8 +425,133 @@ public abstract class TimelineFragment extends ListFragment
     	
     	
     }
-    
-    
+
+    /**
+     * 输入法中点赞的刷新
+     * @param moment
+     */
+
+
+    private void doLikeMoment_async(final Moment moment) {
+        if (moment == null)
+            return;
+        if(moment.likedByMe) {
+            Review likeReview=null;
+            String mMyUid = mPrefUtil.getUid();
+            for(Review aReview : moment.reviews) {
+                if(Review.TYPE_LIKE == aReview.type && aReview.uid.equals(mMyUid)) {
+                    likeReview=aReview;
+                    break;
+                }
+            }
+
+            if(null != likeReview) {
+                TimelineActivity.deleteMomentReview(getActivity(),moment.id,likeReview,onMomentReviewDeleteListener);
+                moment.reviews.remove(likeReview);
+                dbHelper.storeMoment(moment, moment.id);
+//                setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, moment.id));
+
+            } else {
+                Log.e("delete like review null");
+            }
+            return;
+        }
+        final String momentId = moment.id;
+        final Review r = new Review();
+        r.id= "0";
+        r.type = Review.TYPE_LIKE;
+        r.uid = mPrefUtil.getUid();
+        r.nickname = mPrefUtil.getMyNickName();
+        r.read = true;
+
+        mMsgBox.showWait();
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return mMomentWeb.fReviewMoment(momentId, Review.TYPE_LIKE, null, null, r);
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                mMsgBox.dismissWait();
+                if (ErrorCode.OK == result) {
+                    moment.likedByMe = true;
+                    moment.reviews.add(r);
+                    addReviewToList(r);
+
+                    // clear inputted text
+                    if (mInputMgr != null) {
+                        mInputMgr.setLayoutForTimelineMoment(moment, getLikeBtnClickListener(momentId));
+                        mInputMgr.setInputText("");
+                    }
+
+                    dbHelper.storeMoment(moment, moment.id);
+                    //实现点赞异步刷新
+//                    setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, momentId));
+                } else {
+                    mMsgBox.toast(R.string.msg_operation_failed);
+                }
+            }
+        });
+    }
+
+    /**
+     * 输入法中对动态的评论
+     * @param moment
+     * @param replyToReviewId
+     * @param strComment
+     */
+
+    private void doReviewMoment_async(final Moment moment,
+                                      final String replyToReviewId,
+                                      final String strComment) {
+        if (moment == null) return;
+        final String moment_id = moment.id;
+        final Review r = new Review();
+        r.id = "0";
+        r.uid = mPrefUtil.getUid();
+        r.nickname = mPrefUtil.getMyNickName();
+        r.type = Review.TYPE_TEXT;
+        r.text = strComment;
+        r.replyToReviewId = replyToReviewId;
+        r.read = true;
+
+        mMsgBox.showWait();
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... params) {
+                try {
+                    return mMomentWeb.fReviewMoment(moment_id, Review.TYPE_TEXT,
+                            strComment, replyToReviewId, r);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    return ErrorCode.BAD_RESPONSE;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                mMsgBox.dismissWait();
+                if (result == ErrorCode.OK) {
+                    addReviewToList(r);
+
+                    // clear inputted text
+                    if (mInputMgr != null) {
+                        mInputMgr.setInputText("");
+                    }
+
+//                    moment.reviews.add(r);//执行这句会外面评论导致多一条的评论
+                    dbHelper.storeMoment(moment, moment.id);
+//                    setResult(RESULT_OK, new Intent().putExtra(EXTRA_CHANGED_MOMENT_ID, moment.id));//外面无需返回刷新
+                }
+            }
+        });
+    }
+
+    private void addReviewToList(Review r) {
+        moment.reviews.add(moment.reviews.size(), r);
+    }
     
 
     @Override
@@ -400,7 +618,117 @@ public abstract class TimelineFragment extends ListFragment
             break;
         }
         return tag;
-    }  
+    }
+
+    @Override
+    public void changeToOtherApps() {
+        AppStatusService.setIsMonitoring(false);
+    }
+
+    @Override
+    public void setInputBoardMangager(InputBoardManager m) {
+        mInputMgr = m;
+    }
+
+    @Override
+    public InputBoardManager getInputBoardMangager() {
+        return mInputMgr;
+    }
+
+    @Override
+    public void toastCannotSendMsg() {
+
+    }
+
+    @Override
+    public void onHeightChanged(int height) {
+
+    }
+
+    @Override
+    public void onTextInputted(String text) {
+        if (mInputMgr == null)
+            return;
+        if (TextUtils.isEmpty(text.trim())) {
+            mMsgBox.toast(R.string.comment_content_cannot_empty);
+            return;
+        }
+        if (text.length() > TimelineActivity.COMMENT_MOST_WORDS) {
+            mMsgBox.toast(String.format(getString(R.string.moments_comment_oom), TimelineActivity.COMMENT_MOST_WORDS));
+            return;
+        }
+        mInputMgr.setSoftKeyboardVisibility(false);
+//        mInputMgr.setSoftKeyboardVisibility(true);
+
+        String mid = mInputMgr.extra().getString(EXTRA_REPLY_TO_MOMENT_ID);
+        Review replyTo = mInputMgr.extra().getParcelable(EXTRA_REPLY_TO_REVIEW);
+        if (mid == null)
+            return;
+
+        Moment m;
+        if (TextUtils.equals(mid, moment.id)) {
+            m = moment;
+        } else {
+            m = dbHelper.fetchMoment(mid);
+        }
+        if (m == null)
+            return;
+        doReviewMoment_async(m,
+                replyTo == null ? null : replyTo.id,
+                text);
+//        mInputMgr.hide();
+    }
+
+    @Override
+    public void onVoiceInputted(String path, int duration) {
+        mMsgBox.show(null, getString(R.string.moments_voice_not_supported_in_review));
+    }
+
+    @Override
+    public void onStampInputted(Stamp s) {
+        mMsgBox.show(null, getString(R.string.moments_stamp_not_supported_in_review));
+    }
+
+    @Override
+    public void onPhotoInputted(String path, String thumbPath) {
+        mMsgBox.show(null, getString(R.string.moments_photo_not_supported_in_review));
+    }
+
+    @Override
+    public void onHybirdInputted(String text, String imagePath, String imageThumbPath, String voicePath, int voiceDuration) {
+        mMsgBox.show(null, getString(R.string.moments_hybird_not_supported_in_review));
+    }
+
+    @Override
+    public void onHybirdRequested() {
+        mMsgBox.show(null, getString(R.string.moments_hybird_not_supported_in_review));
+    }
+
+    @Override
+    public void onVideoInputted(String path, String thumbPath) {
+        mMsgBox.show(null, getString(R.string.moments_video_not_supported_in_review));
+    }
+
+    @Override
+    public void willRecordAudio() {
+
+    }
+
+    @Override
+    public void onLocationInputted(double latitude, double longitude, String address) {
+        mMsgBox.show(null, getString(R.string.moments_loc_not_supported_in_review));
+    }
+
+    @Override
+    public void onCallRequested() {
+
+    }
+
+    @Override
+    public void onVideoChatRequested() {
+
+    }
+
 
     /**
      * Params[0] should be max timestamp.

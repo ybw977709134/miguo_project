@@ -18,6 +18,8 @@
                 android:src="@color/color_e6e6e6"/>
         -->
 
+
+
         <LinearLayout
                 android:id="@+id/review_btn"
                 android:layout_height="match_parent"
@@ -26,8 +28,11 @@
                 android:layout_centerVertical="true"
                 
                 android:orientation="horizontal" >
+
+
+            <!-- 对动态的删除和分享等操作 -->
             <LinearLayout
-                    android:id="@+id/layout_more"
+                    android:id="@+id/layout_comment_op"
                     android:layout_width="0dp"
                     android:layout_weight="3"
                     android:layout_height="wrap_content"
@@ -36,14 +41,17 @@
                     android:gravity="left"
                     android:background="@color/transparent">
 
-                <Button
-                        android:id="@+id/btn_more"
+                <ImageButton
+                        android:id="@+id/btn_comment_op"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/tabbar_more_selector"
-                        android:visibility="gone"/>
+                        android:padding="5dp"
+                        android:visibility="gone"
+                        android:background="@drawable/icon_share_list_more_selector"
+                        />
             </LinearLayout>
+
             
             <!-- 问答 -->
             
@@ -74,6 +82,8 @@
                         android:textSize="@dimen/moment_op_txt_size"
                         android:textColor="@color/default_text"/>
             </LinearLayout>
+
+
              
             <!-- 评论 -->
             <LinearLayout

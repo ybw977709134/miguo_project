@@ -251,4 +251,13 @@
 			</LinearLayout>
 		</RelativeLayout>
 	</RelativeLayout>
+    <ImageView
+        style="@style/bg_section_divider_line_light"/>
+
+    <org.wowtalk.ui.msg.HeightAwareRelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/title_bar"
+        android:id="@+id/input_board_holder">
+    </org.wowtalk.ui.msg.HeightAwareRelativeLayout>
 </RelativeLayout>

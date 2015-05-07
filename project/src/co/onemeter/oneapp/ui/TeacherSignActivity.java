@@ -121,6 +121,7 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 				intentSign.putExtra("classId", classID);
 				intentSign.putExtra("lessonId", lessonID);
                 intentSign.putExtra("schoolId", schoolID);  
+                intentSign.putExtra("end_date", endDate);
 				intentSign.putExtra("lesson_name", textView_lesson_name.getText().toString());
 				startActivity(intentSign);
 			}

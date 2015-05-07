@@ -71,10 +71,15 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 							}
 						}).create().show();
 					}
+				}else{
+					if(stuPersFromNet.get(0).property_id == 10){
+						findViewById(R.id.btn_parent_confirm).setVisibility(View.VISIBLE);
+					}
+					if(!isTeacher){
+						findViewById(R.id.btn_parent_confirm).setVisibility(View.GONE);
+					}
 				}
-				if(!isTeacher){
-					findViewById(R.id.btn_parent_confirm).setVisibility(View.GONE);
-				}
+				
 			}else{
 				mMsgBox.toast(R.string.class_class_status_not_comfired);
 			}
@@ -215,7 +220,40 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 			}
 			holder.tv_per.setText(pers[position]);
 			if(!stuPersFromNet.isEmpty()){
-				if(position < stuPersFromNet.size()){
+				if(stuPersFromNet.get(0).property_id == 10){
+					if(!isTeacher){
+						holder.radio0.setChecked(false);
+						holder.radio1.setChecked(false);
+						holder.radio2.setChecked(false);
+					}
+					final LessonPerformance performance = new LessonPerformance();
+					performance.property_value = 1;
+					performance.lesson_id = lessonId;
+					performance.student_id = stuId;
+					performance.property_id = position + 1;
+					holder.rg_per.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+						
+						@Override
+						public void onCheckedChanged(RadioGroup group, int checkedId) {
+							switch (checkedId) {
+							case R.id.radio0:
+								performance.property_value = 1;
+								break;
+							case R.id.radio1:
+								performance.property_value = 2;
+								break;
+							case R.id.radio2:
+								performance.property_value = 3;
+								break;
+							default:
+								performance.property_value = 1;
+									break;
+							}
+						}
+					});
+					lesPersToPost.add(performance);
+				}else{
+					if(position < stuPersFromNet.size()){
 						int value = stuPersFromNet.get(position).property_value;
 						switch (value) {
 							case 1:
@@ -233,6 +271,8 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 				holder.radio0.setEnabled(false);
 				holder.radio1.setEnabled(false);
 				holder.radio2.setEnabled(false);
+				}
+				
 			}else{
 				if(!isTeacher){
 					holder.radio0.setChecked(false);

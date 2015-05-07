@@ -48,6 +48,7 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 	private String classId = null;;
 	
 	private SelectLessonActivity instance;
+	private long curTime;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +75,15 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 		mMsgBox = new MessageBox(this);
 		mDBHelper = new Database(this);
 		classId = getIntent().getStringExtra("classId");
-		lessons.addAll(mDBHelper.fetchLesson(classId));
-		Collections.sort(lessons, new LessonComparator());
-		adapter.notifyDataSetChanged();
+		curTime = System.currentTimeMillis()/1000;
+//		for(int i =0 ;i < mDBHelper.fetchLesson(classId).size();i++){
+//			if(curTime < mDBHelper.fetchLesson(classId).get(i).start_date){
+//				lessons.add(mDBHelper.fetchLesson(classId).get(i));
+//			}
+//		}
+////		lessons.addAll(mDBHelper.fetchLesson(classId));
+//		Collections.sort(lessons, new LessonComparator());
+//		adapter.notifyDataSetChanged();
 	}
 	
 	private void getLessonInfo(){
@@ -101,7 +108,12 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 	private void refreshLessonInfo(){
 		lessons.clear();
 		Database db = Database.open(SelectLessonActivity.this);
-		lessons.addAll(db.fetchLesson(classId));
+		for(int i =0 ;i < mDBHelper.fetchLesson(classId).size();i++){
+			if(curTime < mDBHelper.fetchLesson(classId).get(i).start_date){
+				lessons.add(mDBHelper.fetchLesson(classId).get(i));
+			}
+		}
+//		lessons.addAll(db.fetchLesson(classId));
 //		db.close();
 		Collections.sort(lessons, new LessonInfoEditActivity.LessonComparator());
 		adapter.notifyDataSetChanged();

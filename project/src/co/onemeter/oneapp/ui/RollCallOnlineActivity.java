@@ -345,26 +345,62 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                 return convertView;
             }else{
             	if(performances.get(position).property_value != -1){
-                    if(performances.size() > position){
-                        LessonPerformance lessonPerformance = performances.get(position);
-                        switch (lessonPerformance.property_value){
-                            case 1:
-                                holder.radio0.setChecked(true);
-                                break;
-                            case 2:
-                                holder.radio1.setChecked(true);
-                                break;
-                            case 3:
-                                holder.radio2.setChecked(true);
-                                break;
-                        }
-                    }
+            		if(performances.get(position).property_value == 4){
+            			holder.radio1.setChecked(true);
+                        
+                        final LessonPerformance performance = new LessonPerformance();
+                        performance.property_value = 3;
+                        performance.lesson_id = lessonId;
+                        performance.student_id = performances.get(position).student_id;
+                        performance.property_id = performence_property_id;
+                        
+                        holder.rg_per.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
-                    holder.rg_per.setEnabled(false);
-                    holder.radio0.setEnabled(false);
-                    holder.radio1.setEnabled(false);
-                    holder.radio2.setEnabled(false);
-                    return convertView;
+                            @Override
+                            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                                switch (checkedId) {
+                                    case R.id.radio0:
+                                        performance.property_value = 1;
+                                        break;
+                                    case R.id.radio1:
+                                        performance.property_value = 2;
+                                        break;
+                                    case R.id.radio2:
+                                        performance.property_value = 3;
+                                        break;
+                                    default:
+                                        performance.property_value = 3;
+                                        break;
+                                }
+                                performancesToPost.remove(position);
+                                performancesToPost.add(performance);
+                            }
+                        });
+                        performancesToPost.add(performance);
+                        return convertView;
+            		}else{
+            			if(performances.size() > position){
+                            LessonPerformance lessonPerformance = performances.get(position);
+                            switch (lessonPerformance.property_value){
+                                case 1:
+                                    holder.radio0.setChecked(true);
+                                    break;
+                                case 2:
+                                    holder.radio1.setChecked(true);
+                                    break;
+                                case 3:
+                                    holder.radio2.setChecked(true);
+                                    break;
+                            }
+                        }
+
+                        holder.rg_per.setEnabled(false);
+                        holder.radio0.setEnabled(false);
+                        holder.radio1.setEnabled(false);
+                        holder.radio2.setEnabled(false);
+                        return convertView;
+            		}
+                    
                 }
             	holder.radio2.setChecked(true);
                 

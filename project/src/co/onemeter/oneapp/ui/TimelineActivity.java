@@ -55,7 +55,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
 
     private AllTimelineFragment allTimelineFragment;
     private MyTimelineFragment myTimelineFragment;
-    private TimelineFragment currTimelineFragment;
+    private static TimelineFragment currTimelineFragment;
     private View newMomentPanel;
     private AQuery q = new AQuery(this);
     private String uid;
@@ -394,6 +394,16 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         });
     }
 
+    /**
+     * 删除自己的动态
+     * @date 2015/5/7
+     * @param deletedMomentId
+     */
+    public static void deleteMomentForOwner(String deletedMomentId){
+        currTimelineFragment.refreshDeleteAdapter(deletedMomentId);
+    }
+
+
     public static String getSelectedTagLocalDesc(Context context,int tagIdx) {
         String tag="";
         switch(tagIdx) {
@@ -440,16 +450,22 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                     (ViewGroup)activity.findViewById(R.id.input_board_holder),
                     handler, changeAppsListener);
             inputMgr.setIsWithMultimediaMethod(false);
-            inputMgr.drawableResId().open = R.drawable.sms_add_btn;
-            inputMgr.drawableResId().close = R.drawable.sms_close_btn;
+            inputMgr.setIsWithCallMethod(false);
+//            inputMgr.drawableResId().open = R.drawable.sms_add_btn;
+//            inputMgr.drawableResId().close = R.drawable.sms_close_btn;
 
-            inputMgr.drawableResId().gotoEmotion = R.drawable.timeline_like_btn;
+
+
+//            inputMgr.drawableResId().gotoEmotion = R.drawable.timeline_like_btn;
 //            inputMgr.drawableResId().gotoEmotion = R.drawable.sms_kaomoji_btn;
 //            inputMgr.drawableResId().keyboard = R.drawable.sms_keyboard;
-            inputMgr.drawableResId().voiceNormal = R.drawable.sms_voice_btn;
-            inputMgr.drawableResId().voicePressed = R.drawable.sms_voice_btn_p;
+//            inputMgr.drawableResId().voiceNormal = R.drawable.sms_voice_btn;
+//            inputMgr.drawableResId().voicePressed = R.drawable.sms_voice_btn_p;
 
-            inputMgr.setMomentLikeDrawable(R.drawable.timeline_like_btn,R.drawable.timeline_like_btn_a);
+//            inputMgr.setMomentLikeDrawable(R.drawable.timeline_like_btn,R.drawable.timeline_like_btn_a);
+
+//            inputMgr.layoutTextInnerWrapper.setVisibility(View.GONE);
+
             handler.setInputBoardMangager(inputMgr);
         }
         if (inputMgr == null) {
@@ -473,8 +489,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
 //        inputMgr.extra().putInt(MomentDetailActivity.EXTRA_REPLY_TO_MOMENT_POS, momentPosition);
         inputMgr.extra().putString(MomentDetailActivity.EXTRA_REPLY_TO_MOMENT_ID, momentId);
         inputMgr.extra().putParcelable(MomentDetailActivity.EXTRA_REPLY_TO_REVIEW, replyTo);
-        
-//
+
         inputMgr.setLayoutForTimelineMoment(moment,onLikeClickListener);
     }
 

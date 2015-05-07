@@ -8,5 +8,5 @@ else
     range="--since=`date -d '1 days ago' +%Y-%m-%d`"
 fi
 
-git log --pretty='format:%h (%an) %s' --no-merges $range
+git log --pretty='format:%h |%ar|%an|%s' --no-merges $range
 

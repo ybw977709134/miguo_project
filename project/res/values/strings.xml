@@ -336,6 +336,7 @@
     <string name="moment_publishing_noti_title">发布动态</string>
     <string name="moment_publishing_failed">动态发布失败</string>
     <string name="moment_publishing_click_to_retry">[触摸此处可以重新发布]</string>
+    <string name="moment_delete_failed">网络不给力，删除失败</string>
 
 	<!-- input & save photo -->
 

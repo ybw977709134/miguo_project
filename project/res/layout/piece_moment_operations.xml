@@ -47,6 +47,7 @@
                         android:layout_width="50dp"
                         android:layout_gravity="center_vertical"
                         android:background="@null"
+                        android:visibility="gone"
                         android:src="@drawable/icon_share_list_more_selector"
 
                         />

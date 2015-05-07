@@ -600,8 +600,8 @@ public class InputBoardManager implements Parcelable,
             layoutMediaWrapper.findViewById(R.id.layout_freecall).setVisibility(View.VISIBLE);
             layoutMediaWrapper.findViewById(R.id.layout_videochat).setVisibility(View.VISIBLE);
         } else {
-            layoutMediaWrapper.findViewById(R.id.layout_freecall).setVisibility(View.INVISIBLE);
-            layoutMediaWrapper.findViewById(R.id.layout_videochat).setVisibility(View.INVISIBLE);
+            layoutMediaWrapper.findViewById(R.id.layout_freecall).setVisibility(View.GONE);
+            layoutMediaWrapper.findViewById(R.id.layout_videochat).setVisibility(View.GONE);
         }
     }
 

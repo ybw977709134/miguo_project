@@ -465,7 +465,8 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                     }
 
                 } else {
-                    mMsgBox.toast(R.string.operation_failed);
+//                    mMsgBox.toast(R.string.operation_failed);
+                    mMsgBox.showWaitImageCaution(context.getString(R.string.moment_delete_failed));
                     mMsgBox.dismissWait();
                 }
             }

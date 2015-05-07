@@ -263,6 +263,26 @@ public abstract class TimelineFragment extends ListFragment
             }
         }
     }
+
+    /**
+     * 删除自己的动态
+     * 备注：该方法必须返回int型，可以避免数组角标跨界
+     * @date 2015/5/7
+     * @param deletedMomentId
+     */
+    public int refreshDeleteAdapter(String deletedMomentId){
+        if (deletedMomentId != null) {
+            for (int i = 0; i < adapter.getCount(); ++i) {
+                Moment m = adapter.getItem(i);
+                if (TextUtils.equals(deletedMomentId, m.id)) {
+                    adapter.remove(m);
+                    adapter.notifyDataSetChanged();
+                    return 0;
+                }
+            }
+        }
+        return 0;
+    }
     
     /**
      * 点赞和评论的局部刷新
@@ -676,7 +696,7 @@ public abstract class TimelineFragment extends ListFragment
         doReviewMoment_async(m,
                 replyTo == null ? null : replyTo.id,
                 text);
-//        mInputMgr.hide();
+        mInputMgr.hide();//评论完后自动关闭输入框
     }
 
     @Override

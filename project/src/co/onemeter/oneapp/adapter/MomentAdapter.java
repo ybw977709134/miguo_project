@@ -456,8 +456,10 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             protected void onPostExecute(Integer errno) {
                 if (ErrorCode.OK == errno) {
 
+                    Database dbHelper=new Database(context);
                     if (dbHelper.deleteMoment(moment.id)) {
 //                        setResult(RESULT_OK, new Intent().putExtra(EXTRA_DELETED_MOMENT_ID, moment.id));
+                        TimelineActivity.deleteMomentForOwner(moment.id);//刷新adapter
                         mMsgBox.dismissWait();
 //                        finish();
                     }

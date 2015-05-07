@@ -55,7 +55,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
 
     private AllTimelineFragment allTimelineFragment;
     private MyTimelineFragment myTimelineFragment;
-    private TimelineFragment currTimelineFragment;
+    private static TimelineFragment currTimelineFragment;
     private View newMomentPanel;
     private AQuery q = new AQuery(this);
     private String uid;
@@ -245,7 +245,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (inputMgr.isShowing()) {
                 inputMgr.setSoftKeyboardVisibility(false);
-                inputMgr.hide();
+//                inputMgr.hide();
             } else {
                 finish();
             }
@@ -393,6 +393,16 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
             }
         });
     }
+
+    /**
+     * 删除自己的动态
+     * @date 2015/5/7
+     * @param deletedMomentId
+     */
+    public static void deleteMomentForOwner(String deletedMomentId){
+        currTimelineFragment.refreshDeleteAdapter(deletedMomentId);
+    }
+
 
     public static String getSelectedTagLocalDesc(Context context,int tagIdx) {
         String tag="";

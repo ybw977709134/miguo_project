@@ -43,12 +43,12 @@
 
                 <ImageButton
                         android:id="@+id/btn_comment_op"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_width="50dp"
                         android:layout_gravity="center_vertical"
-                        android:padding="5dp"
-                        android:visibility="gone"
-                        android:background="@drawable/icon_share_list_more_selector"
+                        android:background="@null"
+                        android:src="@drawable/icon_share_list_more_selector"
+
                         />
             </LinearLayout>
 

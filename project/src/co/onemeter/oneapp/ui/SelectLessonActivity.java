@@ -7,10 +7,12 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.Lesson;
 import org.wowtalk.api.LessonWebServerIF;
+import org.wowtalk.api.PrefUtil;
 import org.wowtalk.ui.MessageBox;
 
 import android.app.Activity;
@@ -108,11 +110,16 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 	private void refreshLessonInfo(){
 		lessons.clear();
 		Database db = Database.open(SelectLessonActivity.this);
-		for(int i =0 ;i < mDBHelper.fetchLesson(classId).size();i++){
-			if(curTime < mDBHelper.fetchLesson(classId).get(i).start_date){
-				lessons.add(mDBHelper.fetchLesson(classId).get(i));
-			}
+		if(isTeacher()){
+			lessons.addAll(db.fetchLesson(classId));
+		}else{
+			for(int i =0 ;i < mDBHelper.fetchLesson(classId).size();i++){
+				if(curTime < mDBHelper.fetchLesson(classId).get(i).start_date){
+					lessons.add(mDBHelper.fetchLesson(classId).get(i));
+				}
+			}	
 		}
+		
 //		lessons.addAll(db.fetchLesson(classId));
 //		db.close();
 		Collections.sort(lessons, new LessonInfoEditActivity.LessonComparator());
@@ -147,7 +154,12 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 		
 	}
 	
-	
+	private boolean isTeacher(){
+		if(Buddy.ACCOUNT_TYPE_TEACHER == PrefUtil.getInstance(this).getMyAccountType()){
+			return true;
+		}
+		return false;
+	}
 	class CourseTableAdapter extends BaseAdapter{
 		private List<Lesson> alessons;
 		private int currPosition = -1;

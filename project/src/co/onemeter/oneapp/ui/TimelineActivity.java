@@ -472,7 +472,21 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
             return;
         }
 
-    	inputMgr.setSoftKeyboardVisibility(true);
+//    	inputMgr.setSoftKeyboardVisibility(true);
+
+        //使得输入框获得事件焦点
+        inputMgr.mTxtContent.setFocusable(true);
+        inputMgr.mTxtContent.setFocusableInTouchMode(true);
+        inputMgr.mTxtContent.requestFocus();
+
+        Handler hanlder = new Handler();
+        hanlder.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager imm = (InputMethodManager)inputMgr.mTxtContent.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(inputMgr.mTxtContent, 0);
+            }
+        }, 200);
 
        
         String title;
@@ -491,6 +505,10 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         inputMgr.extra().putParcelable(MomentDetailActivity.EXTRA_REPLY_TO_REVIEW, replyTo);
 
         inputMgr.setLayoutForTimelineMoment(moment,onLikeClickListener);
+
+
+
+
     }
 
     /**
@@ -519,6 +537,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         if (inputMgr != null)
         	 inputMgr.setSoftKeyboardVisibility(false);
 
+        //回复按钮
         menu.add(activity.getString(R.string.moments_reply), BottomButtonBoard.BUTTON_BLUE,
                 new View.OnClickListener() {
                     @Override
@@ -529,18 +548,18 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                                 chageAppsListener, onLikeBtnClickListener);
                         
                        //使得输入框获得事件焦点
-                    	inputMgr.mTxtContent.setFocusable(true);
-                    	inputMgr.mTxtContent.setFocusableInTouchMode(true);
-                    	inputMgr.mTxtContent.requestFocus();
-                         
-                       Handler hanlder = new Handler();
-                       hanlder.postDelayed(new Runnable() {
-                   		@Override
-                   		public void run() {
-                   			InputMethodManager imm = (InputMethodManager)inputMgr.mTxtContent.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);  
-                   	        imm.showSoftInput(inputMgr.mTxtContent, 0);
-                   		}
-                   	}, 200);
+//                    	inputMgr.mTxtContent.setFocusable(true);
+//                    	inputMgr.mTxtContent.setFocusableInTouchMode(true);
+//                    	inputMgr.mTxtContent.requestFocus();
+//
+//                       Handler hanlder = new Handler();
+//                       hanlder.postDelayed(new Runnable() {
+//                   		@Override
+//                   		public void run() {
+//                   			InputMethodManager imm = (InputMethodManager)inputMgr.mTxtContent.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                   	        imm.showSoftInput(inputMgr.mTxtContent, 0);
+//                   		}
+//                   	}, 200);
                        
                         menu.dismiss();
                     }
@@ -556,33 +575,8 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-//                            final MessageBox msgBox = new MessageBox(activity);
                             menu.dismiss();
                             deleteMomentReview(activity,momentId,replyTo,momentReviewDelListener);
-//                            msgBox.showWait();
-//                            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
-//                                @Override
-//                                protected Integer doInBackground(Void... params) {
-//                                    WowMomentWebServerIF mMomentWeb = WowMomentWebServerIF.getInstance(activity);
-//                                    return mMomentWeb.fDeleteMomentReview(momentId,replyTo);
-//                                }
-//
-//                                @Override
-//                                protected void onPostExecute(Integer errno) {
-//                                    msgBox.dismissWait();
-//
-//                                    if(errno == ErrorCode.OK) {
-//                                        if(null != momentReviewDelListener) {
-//                                            momentReviewDelListener.onMomentDelete(momentId,replyTo);
-//                                        }
-////                                        if(null != instance) {
-////                                            instance.deleteAReview(momentId,replyTo);
-////                                        }
-//                                    } else {
-//                                        msgBox.toast(R.string.msg_operation_failed);
-//                                    }
-//                                }
-//                            });
                         }
                     });
         }

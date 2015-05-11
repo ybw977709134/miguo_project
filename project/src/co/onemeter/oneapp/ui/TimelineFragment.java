@@ -331,7 +331,7 @@ public abstract class TimelineFragment extends ListFragment
                     }
                 }
             }, moment.id);
-        } else {
+        } else {//评论
 
             //评论按钮进入详情页刷新
 //        	Intent intent = new Intent(this.getActivity(), MomentDetailActivity.class).putExtra("moment", moment);
@@ -360,22 +360,22 @@ public abstract class TimelineFragment extends ListFragment
             }
 
             //点击评论按钮，进入详情页自动弹起输入软键盘,而不是item
-            if (mInputMgr != null) {
-
-                mInputMgr.mTxtContent.setFocusable(true);
-                mInputMgr.mTxtContent.setFocusableInTouchMode(true);
-                mInputMgr.mTxtContent.requestFocus();
-
-                Handler hanlder = new Handler();
-                hanlder.postDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        InputMethodManager imm = (InputMethodManager) mInputMgr.mTxtContent.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(mInputMgr.mTxtContent, 0);
-                    }
-                }, 200);
-            }
+//            if (mInputMgr != null) {
+//
+//                mInputMgr.mTxtContent.setFocusable(true);
+//                mInputMgr.mTxtContent.setFocusableInTouchMode(true);
+//                mInputMgr.mTxtContent.requestFocus();
+//
+//                Handler hanlder = new Handler();
+//                hanlder.postDelayed(new Runnable() {
+//
+//                    @Override
+//                    public void run() {
+//                        InputMethodManager imm = (InputMethodManager) mInputMgr.mTxtContent.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                        imm.showSoftInput(mInputMgr.mTxtContent, 0);
+//                    }
+//                }, 200);
+//            }
 
 
         }
@@ -496,7 +496,7 @@ public abstract class TimelineFragment extends ListFragment
                 mMsgBox.dismissWait();
                 if (ErrorCode.OK == result) {
                     moment.likedByMe = true;
-                    moment.reviews.add(r);
+//                    moment.reviews.add(r);执行这句会外面评论导致多一个点赞
                     addReviewToList(r);
 
                     // clear inputted text
@@ -678,7 +678,6 @@ public abstract class TimelineFragment extends ListFragment
             return;
         }
         mInputMgr.setSoftKeyboardVisibility(false);
-//        mInputMgr.setSoftKeyboardVisibility(true);
 
         String mid = mInputMgr.extra().getString(EXTRA_REPLY_TO_MOMENT_ID);
         Review replyTo = mInputMgr.extra().getParcelable(EXTRA_REPLY_TO_REVIEW);

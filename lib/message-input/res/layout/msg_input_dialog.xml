@@ -107,7 +107,7 @@
 					android:text="@string/hold_to_speak"
 					android:textColor="@color/libmsg_white"
 					android:textSize="18sp"
-					android:visibility="invisible" />
+					android:visibility="gone" />
 			</RelativeLayout>
             <ImageView
                     android:id="@+id/family_layout_top_img"

@@ -310,8 +310,8 @@ public class InputBoardManager implements Parcelable,
         mContainer = container;
         mResultHandler = handler;
         mChangeAppsListener = listener;
-        configDefaultDrawable();
-//        setupViews();
+//        configDefaultDrawable();
+        setupViews();
     }
 
     public void hide() {
@@ -859,11 +859,18 @@ public class InputBoardManager implements Parcelable,
             // text vs voice
             View viewTextVisible = layoutTextInnerWrapper.findViewById(R.id.layout_input_text);
             viewTextVisible.setVisibility(View.VISIBLE);
-            btnSpeak.setVisibility(View.INVISIBLE);
-            mBtnEmotion.setVisibility(View.VISIBLE);
+            btnSpeak.setVisibility(View.GONE);
 
-            setMultimediaPanelVisibility(View.INVISIBLE);
-            setEmotionPanelVisibility(View.INVISIBLE);
+//            mBtnEmotion.setVisibility(View.VISIBLE);
+            mBtnEmotion.setVisibility(View.GONE);
+            mBtnMedia.setVisibility(View.GONE);
+
+//            setMultimediaPanelVisibility(View.INVISIBLE);
+//            setEmotionPanelVisibility(View.INVISIBLE);
+
+            setMultimediaPanelVisibility(View.GONE);
+            setEmotionPanelVisibility(View.GONE);
+
             if(auto_keyboard)
                 setSoftKeyboardVisibility(true);
 
@@ -876,29 +883,29 @@ public class InputBoardManager implements Parcelable,
             }
 
             // next action: text -> multi media
-            mBtnMedia.setBackgroundResource(mDrawableResId.open);
-            mBtnMedia.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View arg0) {
-                    if (!mCanSendMsg) {
-                        mResultHandler.toastCannotSendMsg();
-                        return;
-                    }
-                    setInputMode(FLAG_SHOW_PHOTO);
-                }
-            });
-
-            mBtnEmotion.setBackgroundResource(mDrawableResId.gotoEmotion);
-            mBtnEmotion.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View arg0) {
-                    if (!mCanSendMsg) {
-                        mResultHandler.toastCannotSendMsg();
-                        return;
-                    }
-                    setInputMode(FLAG_SHOW_STAMP);
-                }
-            });
+//            mBtnMedia.setBackgroundResource(mDrawableResId.open);
+//            mBtnMedia.setOnClickListener(new View.OnClickListener(){
+//                @Override
+//                public void onClick(View arg0) {
+//                    if (!mCanSendMsg) {
+//                        mResultHandler.toastCannotSendMsg();
+//                        return;
+//                    }
+//                    setInputMode(FLAG_SHOW_PHOTO);
+//                }
+//            });
+//
+//            mBtnEmotion.setBackgroundResource(mDrawableResId.gotoEmotion);
+//            mBtnEmotion.setOnClickListener(new View.OnClickListener(){
+//                @Override
+//                public void onClick(View arg0) {
+//                    if (!mCanSendMsg) {
+//                        mResultHandler.toastCannotSendMsg();
+//                        return;
+//                    }
+//                    setInputMode(FLAG_SHOW_STAMP);
+//                }
+//            });
             break;
             /**
              * show voice UI
@@ -909,7 +916,7 @@ public class InputBoardManager implements Parcelable,
             View viewTextInvisible = layoutTextInnerWrapper.findViewById(R.id.layout_input_text);
             viewTextInvisible.setVisibility(View.INVISIBLE);
             btnSpeak.setVisibility(View.VISIBLE);
-            mBtnEmotion.setVisibility(View.INVISIBLE);
+            mBtnEmotion.setVisibility(View.GONE);
 
             btnSpeak.setText(R.string.msg_hold_to_speak);
             btnSpeak.setBackgroundResource(mDrawableResId.voiceNormal);

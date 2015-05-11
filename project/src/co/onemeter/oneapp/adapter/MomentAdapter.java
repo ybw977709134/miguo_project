@@ -1000,12 +1000,15 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 }
             }
         });
-        holder.btnAnswer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                holder.layoutAnswer.performClick();
-            }
-        });
+
+//        holder.btnAnswer.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                holder.layoutAnswer.performClick();
+//            }
+//        });
+
+
 //        holder.layoutAnswer.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

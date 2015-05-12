@@ -4746,7 +4746,7 @@ public class Database {
         }
     }
 
-    private boolean storeReviews(IHasReview e, boolean clearOldOnes) {
+    public boolean storeReviews(IHasReview e, boolean clearOldOnes) {
         if (isDBUnavailable()) {
             return false;
         }

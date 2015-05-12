@@ -10,6 +10,7 @@ import android.support.v4.app.ListFragment;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
@@ -79,7 +80,7 @@ public abstract class TimelineFragment extends ListFragment
             @Override
             public void onMomentDelete(String momentId, Review review) {
                 momentReviewObserver.onDBTableChanged(Database.TBL_MOMENT);
-
+//                momentObserver.onDBTableChanged(Database.TBL_MOMENT);
                 if (mInputMgr != null) {
                     mInputMgr.setLayoutForTimelineMoment(moment,new View.OnClickListener() {
                         @Override
@@ -836,7 +837,15 @@ public abstract class TimelineFragment extends ListFragment
         }
 
         if (moment != null) {
-            mDb.fetchMoment(moment.id);
+//            Toast.makeText(getActivity(),"掉用了",Toast.LENGTH_LONG).show();
+//            moment=mDb.fetchMoment(moment.id);
+//            LinearLayout commentLayout= (LinearLayout) getActivity().findViewById(R.id.layout_review);
+//            MomentAdapter.setViewForCommentReview(getActivity(), commentLayout, moment.reviews, -1, moment, this);
+
+//            mDb.storeMoment(moment, moment.id);
+            mDb.storeReviews(moment, true);
+
+
         }
 //        int newReviewsCount = mDb.fetchNewReviews(dummy);
         adapter.setNewReviewCount(newReviewsCount);

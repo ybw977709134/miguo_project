@@ -92,7 +92,7 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
             	adapter.notifyDataSetChanged();
             	
             	for(LessonPerformance p : performances){
-            		if(p.property_value != -1){
+            		if(p.property_value != -1 && p.property_value != 4){
             			findViewById(R.id.btn_all_signin).setVisibility(View.GONE);
             		}
             	}
@@ -240,7 +240,7 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
 //                    
 //                }
                 for(int i = performancesToPost.size()/2 ;i < performancesToPost.size();i++){
-                	LessonPerformance performance = performancesToPost.get(i);
+                	LessonPerformance performance = performancesToPost.get(i);               	
                 	switch (performance.property_value){
                 	    case 1:
                 	    	performances_value0.add(performance);
@@ -255,16 +255,21 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                 	}
                 		
                 }
+                try {
+                	if(!performances_value2.isEmpty()){
+                        resultCode = signWebServer.addOrModifyStudentsRollcall(performances_value2);
+                    }
+                	if(!performances_value0.isEmpty()){
+                        resultCode = signWebServer.addOrModifyStudentsRollcall(performances_value0);
+                    }
+                    if(!performances_value1.isEmpty()){
+                        resultCode = signWebServer.addOrModifyStudentsRollcall(performances_value1);
+                    }
+                    
+                }catch (Exception e) {
+                	return ErrorCode.OK;
+                }
                 
-                if(!performances_value0.isEmpty()){
-                    resultCode = signWebServer.addOrModifyStudentsRollcall(performances_value0);
-                }
-                if(!performances_value1.isEmpty()){
-                    resultCode = signWebServer.addOrModifyStudentsRollcall(performances_value1);
-                }
-                if(!performances_value2.isEmpty()){
-                    resultCode = signWebServer.addOrModifyStudentsRollcall(performances_value2);
-                }
                 
                 return resultCode;
             }
@@ -349,7 +354,7 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
             			holder.radio1.setChecked(true);
                         
                         final LessonPerformance performance = new LessonPerformance();
-                        performance.property_value = 3;
+                        performance.property_value = 2;
                         performance.lesson_id = lessonId;
                         performance.student_id = performances.get(position).student_id;
                         performance.property_id = performence_property_id;
@@ -369,7 +374,7 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                                         performance.property_value = 3;
                                         break;
                                     default:
-                                        performance.property_value = 3;
+                                        performance.property_value = 2;
                                         break;
                                 }
                                 performancesToPost.remove(position);

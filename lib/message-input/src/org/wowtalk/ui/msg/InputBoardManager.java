@@ -310,7 +310,7 @@ public class InputBoardManager implements Parcelable,
         mContainer = container;
         mResultHandler = handler;
         mChangeAppsListener = listener;
-//        configDefaultDrawable();
+        configDefaultDrawable();
         setupViews();
     }
 
@@ -733,12 +733,13 @@ public class InputBoardManager implements Parcelable,
      */
     private void setMomentLikeStatus() {
         if(null != mBtnEmotion && null != likeRelateMoment) {
-            mBtnEmotion.setVisibility(View.VISIBLE);
-            if(likeRelateMoment.likedByMe) {
-                mBtnEmotion.setBackgroundResource(momentLikedDrawableResId);
-            } else {
-                mBtnEmotion.setBackgroundResource(momentUnlikeDrawableResId);
-            }
+//            mBtnEmotion.setVisibility(View.VISIBLE);
+            mBtnEmotion.setVisibility(View.GONE);
+//            if(likeRelateMoment.likedByMe) {
+//                mBtnEmotion.setBackgroundResource(momentLikedDrawableResId);
+//            } else {
+//                mBtnEmotion.setBackgroundResource(momentUnlikeDrawableResId);
+//            }
 //            if(likeRelateMoment.likedByMe ||
 //                    Moment.SERVER_MOMENT_TAG_FOR_QA.equals(likeRelateMoment.tag) ||
 //                    Moment.SERVER_MOMENT_TAG_FOR_SURVEY_SINGLE.equals(likeRelateMoment.tag) ||
@@ -747,6 +748,9 @@ public class InputBoardManager implements Parcelable,
 //            } else {
 //                mBtnEmotion.setVisibility(View.VISIBLE);
 //            }
+            if (mBtnMedia != null) {//主要是隐藏好友圈外面可以点赞的布局
+                mBtnMedia.setVisibility(View.GONE);
+            }
             mBtnEmotion.setOnClickListener(likeMomentListener);
         }
     }
@@ -788,6 +792,7 @@ public class InputBoardManager implements Parcelable,
         likeRelateMoment=moment;
         likeMomentListener=listener;
 
+        //对其做了一些处理，在好友圈中只能进行文字的评论
         setMomentLikeStatus();
     }
 
@@ -861,12 +866,9 @@ public class InputBoardManager implements Parcelable,
             viewTextVisible.setVisibility(View.VISIBLE);
             btnSpeak.setVisibility(View.GONE);
 
-//            mBtnEmotion.setVisibility(View.VISIBLE);
-            mBtnEmotion.setVisibility(View.GONE);
-            mBtnMedia.setVisibility(View.GONE);
+            mBtnEmotion.setVisibility(View.VISIBLE);
+//            mBtnEmotion.setVisibility(View.GONE);
 
-//            setMultimediaPanelVisibility(View.INVISIBLE);
-//            setEmotionPanelVisibility(View.INVISIBLE);
 
             setMultimediaPanelVisibility(View.GONE);
             setEmotionPanelVisibility(View.GONE);
@@ -883,29 +885,29 @@ public class InputBoardManager implements Parcelable,
             }
 
             // next action: text -> multi media
-//            mBtnMedia.setBackgroundResource(mDrawableResId.open);
-//            mBtnMedia.setOnClickListener(new View.OnClickListener(){
-//                @Override
-//                public void onClick(View arg0) {
-//                    if (!mCanSendMsg) {
-//                        mResultHandler.toastCannotSendMsg();
-//                        return;
-//                    }
-//                    setInputMode(FLAG_SHOW_PHOTO);
-//                }
-//            });
-//
-//            mBtnEmotion.setBackgroundResource(mDrawableResId.gotoEmotion);
-//            mBtnEmotion.setOnClickListener(new View.OnClickListener(){
-//                @Override
-//                public void onClick(View arg0) {
-//                    if (!mCanSendMsg) {
-//                        mResultHandler.toastCannotSendMsg();
-//                        return;
-//                    }
-//                    setInputMode(FLAG_SHOW_STAMP);
-//                }
-//            });
+            mBtnMedia.setBackgroundResource(mDrawableResId.open);
+            mBtnMedia.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View arg0) {
+                    if (!mCanSendMsg) {
+                        mResultHandler.toastCannotSendMsg();
+                        return;
+                    }
+                    setInputMode(FLAG_SHOW_PHOTO);
+                }
+            });
+
+            mBtnEmotion.setBackgroundResource(mDrawableResId.gotoEmotion);
+            mBtnEmotion.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View arg0) {
+                    if (!mCanSendMsg) {
+                        mResultHandler.toastCannotSendMsg();
+                        return;
+                    }
+                    setInputMode(FLAG_SHOW_STAMP);
+                }
+            });
             break;
             /**
              * show voice UI
@@ -916,7 +918,7 @@ public class InputBoardManager implements Parcelable,
             View viewTextInvisible = layoutTextInnerWrapper.findViewById(R.id.layout_input_text);
             viewTextInvisible.setVisibility(View.INVISIBLE);
             btnSpeak.setVisibility(View.VISIBLE);
-            mBtnEmotion.setVisibility(View.GONE);
+            mBtnEmotion.setVisibility(View.VISIBLE);
 
             btnSpeak.setText(R.string.msg_hold_to_speak);
             btnSpeak.setBackgroundResource(mDrawableResId.voiceNormal);

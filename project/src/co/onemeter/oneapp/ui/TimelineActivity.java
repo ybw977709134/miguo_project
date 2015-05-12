@@ -438,6 +438,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                                             InputBoardManager.InputResultHandler handler,
                                             InputBoardManager.ChangeToOtherAppsListener changeAppsListener,
                                             View.OnClickListener onLikeClickListener) {
+
 //        InputBoardManager inputMgr = handler.getInputBoardMangager();
         inputMgr = handler.getInputBoardMangager();
         
@@ -474,7 +475,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
 
 //    	inputMgr.setSoftKeyboardVisibility(true);
 
-        //使得输入框获得事件焦点
+        //使得输入框获得事件焦点,自动弹起软件盘
         inputMgr.mTxtContent.setFocusable(true);
         inputMgr.mTxtContent.setFocusableInTouchMode(true);
         inputMgr.mTxtContent.requestFocus();
@@ -546,25 +547,12 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                     	//把获得的数据传到输入框
                         replyToMoment_helper(momentPosition, momentId, replyTo, activity, handler,
                                 chageAppsListener, onLikeBtnClickListener);
-                        
-                       //使得输入框获得事件焦点
-//                    	inputMgr.mTxtContent.setFocusable(true);
-//                    	inputMgr.mTxtContent.setFocusableInTouchMode(true);
-//                    	inputMgr.mTxtContent.requestFocus();
-//
-//                       Handler hanlder = new Handler();
-//                       hanlder.postDelayed(new Runnable() {
-//                   		@Override
-//                   		public void run() {
-//                   			InputMethodManager imm = (InputMethodManager)inputMgr.mTxtContent.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                   	        imm.showSoftInput(inputMgr.mTxtContent, 0);
-//                   		}
-//                   	}, 200);
-                       
+
                         menu.dismiss();
                     }
                 });
 
+        //自己的评论，自己可以对其进行删除操作
         //if review is made by me or moment is mine, add delete item
         String myUserId = PrefUtil.getInstance(activity).getUid();
 

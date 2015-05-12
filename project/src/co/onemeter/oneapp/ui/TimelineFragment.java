@@ -74,6 +74,7 @@ public abstract class TimelineFragment extends ListFragment
         dbHelper = new Database(getActivity());
         mPrefUtil = PrefUtil.getInstance(getActivity());
         mMomentWeb = MomentWebServerIF.getInstance(getActivity());
+
         onMomentReviewDeleteListener=new TimelineActivity.OnMomentReviewDeleteListener() {
             @Override
             public void onMomentDelete(String momentId, Review review) {
@@ -193,6 +194,8 @@ public abstract class TimelineFragment extends ListFragment
         }
         
         checkNewReviews();
+
+        Database.addDBTableChangeListener(Database.TBL_MOMENT,momentReviewObserver);
         Database.addDBTableChangeListener(Database.TBL_MOMENT_REVIEWS,momentReviewObserver);
     }
 
@@ -830,6 +833,10 @@ public abstract class TimelineFragment extends ListFragment
         int newReviewsCount = 0;
         if (TimelineFragment.newReviewFlag) {//自己   	
         	newReviewsCount = mDb.fetchNewReviews(dummy);
+        }
+
+        if (moment != null) {
+            mDb.fetchMoment(moment.id);
         }
 //        int newReviewsCount = mDb.fetchNewReviews(dummy);
         adapter.setNewReviewCount(newReviewsCount);

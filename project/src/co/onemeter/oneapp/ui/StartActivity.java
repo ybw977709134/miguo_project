@@ -1379,5 +1379,6 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
     @Override
     public void getSchoolStructureChangedNotification(String uid, String schoolId) {
         Log.i("getSchoolStructureChangedNotification: uid ", uid, ", school ", schoolId);
+        refresh();
     }
 }

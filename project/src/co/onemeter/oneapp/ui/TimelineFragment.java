@@ -10,7 +10,6 @@ import android.support.v4.app.ListFragment;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
@@ -198,6 +197,7 @@ public abstract class TimelineFragment extends ListFragment
 
         Database.addDBTableChangeListener(Database.TBL_MOMENT,momentReviewObserver);
         Database.addDBTableChangeListener(Database.TBL_MOMENT_REVIEWS,momentReviewObserver);
+
     }
 
     @Override
@@ -287,6 +287,27 @@ public abstract class TimelineFragment extends ListFragment
         }
         return 0;
     }
+
+
+//    public int refreshDeleteReview(String changedMomentId) {
+//        //Database dbHelper = new Database(getActivity());
+//
+//        if (changedMomentId != null) {
+//            for (int i = 0; i < adapter.getCount(); ++i) {
+//                Moment m = adapter.getItem(i);
+//                if (TextUtils.equals(changedMomentId, m.id)) {
+//                    Moment changedMoment = dbHelper.fetchMoment(changedMomentId);
+//                    adapter.remove(m);
+//                    adapter.insert(changedMoment, i);
+//                    adapter.notifyDataSetChanged();
+//                    return 0;
+//                }
+//            }
+//        }
+//        return 0;
+//
+//    }
+
     
     /**
      * 点赞和评论的局部刷新
@@ -818,6 +839,7 @@ public abstract class TimelineFragment extends ListFragment
     }
 
     private IDBTableChangeListener momentReviewObserver = new IDBTableChangeListener() {
+
         public void onDBTableChanged(String tableName) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -832,22 +854,16 @@ public abstract class TimelineFragment extends ListFragment
         Moment dummy = new Moment(null);
         Database mDb = new Database(getActivity());
         int newReviewsCount = 0;
-        if (TimelineFragment.newReviewFlag) {//自己   	
+        if (TimelineFragment.newReviewFlag) {//自己
         	newReviewsCount = mDb.fetchNewReviews(dummy);
         }
 
-        if (moment != null) {
-//            Toast.makeText(getActivity(),"掉用了",Toast.LENGTH_LONG).show();
-//            moment=mDb.fetchMoment(moment.id);
-//            LinearLayout commentLayout= (LinearLayout) getActivity().findViewById(R.id.layout_review);
-//            MomentAdapter.setViewForCommentReview(getActivity(), commentLayout, moment.reviews, -1, moment, this);
+        if (moment != null) { //删除自己的评论后自动刷新
 
-//            mDb.storeMoment(moment, moment.id);
-            mDb.storeReviews(moment, true);
-
-
+            fillListView(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag),countType), false);
         }
-//        int newReviewsCount = mDb.fetchNewReviews(dummy);
+
+
         adapter.setNewReviewCount(newReviewsCount);
         adapter.notifyDataSetChanged();
     }

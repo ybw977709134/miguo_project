@@ -121,6 +121,12 @@ public class InputPlainTextActivity extends Activity {
             Selection.setSelection(spanText, text.length());
         }
 
+        if (text.length() > 0){
+            field_clear.setVisibility(View.VISIBLE);
+        } else {
+            field_clear.setVisibility(View.GONE);
+        }
+
         edtValue.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {

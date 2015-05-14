@@ -15,13 +15,13 @@ perl -pi -e \
 buildVer=`date +%m%d`
 [ $omenv != 'product' ] && buildVer="$buildVer($omenv)"
 perl -pi -e \
-    "s/android:versionName=\"([0-9]+)\.([0-9]+)\.([0-9]+)\..*\"/android:versionName=\"\1.\2.$curr_ver_code.$buildVer\"/" \
+    "s/android:versionName=\"([0-9]+)\.([0-9]+)\.([0-9]+)\..*\"/android:versionName=\"\1.\2.\3.$buildVer\/$curr_ver_code\"/" \
     project/AndroidManifest.xml
 curr_ver_name=`grep android:versionName project/AndroidManifest.xml |awk -F '"' '{print $2}'`
 
 export OM_ENV=$omenv 
 echo OM_ENV: $OM_ENV
-echo version $curr_ver_code:$curr_ver_name
+echo version $curr_ver_code '=>' $curr_ver_name
 
 src=./project/build/outputs/apk/project-release.apk
 dest=./out/om_im_android_${omenv}_`date +%m%d`_${curr_ver_code}.apk

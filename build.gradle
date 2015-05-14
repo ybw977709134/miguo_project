@@ -7,3 +7,10 @@ buildscript {
         classpath 'com.android.tools.build:gradle:1.1.0'
     }
 }
+
+allprojects {
+    repositories {
+        maven { url System.getenv('HOME') + "/.m2/repository/" }
+    }
+}
+

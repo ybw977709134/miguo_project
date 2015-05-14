@@ -17,7 +17,7 @@
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:background="@null"
-            android:src="@drawable/nav_back_selector" />
+            android:src="@drawable/icon_back_selector" />
 
 	    <TextView
 		    android:id="@+id/title_text"
@@ -29,13 +29,16 @@
 		    android:text="dummy title"
 		    android:visibility="gone"/>
 
-        <ImageButton
+        <co.onemeter.oneapp.ui.widget.PressedTextView
             android:id="@+id/title_confirm"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
-            android:background="@null"
-            android:src="@drawable/nav_confirm_selector" />
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:clickable="true"
+            android:text="发布" />
 
     </RelativeLayout>
 
@@ -53,7 +56,8 @@
             <LinearLayout
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@color/white"
                 android:orientation="vertical">
                 <LinearLayout
@@ -78,12 +82,12 @@
                         android:layout_width="0dp"
                         android:layout_weight="2"
                         android:layout_gravity="center_vertical"
-                        android:drawableRight="@drawable/table_arrow"/>
+                        android:drawableRight="@drawable/icon_section_row_selector"/>
                 </LinearLayout>
                 <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
-                    android:background="@drawable/divider"/>
+                    android:background="@drawable/bg_section_divider_line_light"/>
                 <LinearLayout
                     android:id="@+id/layout_loc"
                     android:layout_height="@dimen/table_cell_white_height"
@@ -106,12 +110,12 @@
                         android:layout_width="0dp"
                         android:layout_weight="2"
                         android:layout_gravity="center_vertical"
-                        android:drawableRight="@drawable/table_arrow"/>
+                        android:drawableRight="@drawable/icon_section_row_selector"/>
                 </LinearLayout>
                 <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
-                    android:background="@drawable/divider"/>
+                    android:background="@drawable/bg_section_divider_line_light"/>
                 <LinearLayout
                     android:id="@+id/layout_telephone"
                     android:layout_height="@dimen/table_cell_white_height"
@@ -134,14 +138,15 @@
                         android:layout_width="0dp"
                         android:layout_weight="2"
                         android:layout_gravity="center_vertical"
-                        android:drawableRight="@drawable/table_arrow"/>
+                        android:drawableRight="@drawable/icon_section_row_selector"/>
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@color/white"
                 android:orientation="vertical">
                 <LinearLayout
@@ -167,13 +172,13 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        android:drawableRight="@drawable/table_arrow"
+                        android:drawableRight="@drawable/icon_section_row_selector"
                         android:drawablePadding="10dp"/>
                 </LinearLayout>
                 <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
-                    android:background="@drawable/divider"/>
+                    android:background="@drawable/bg_section_divider_line_light"/>
                 <LinearLayout
                     android:id="@+id/layout_endtime"
                     android:layout_height="@dimen/table_cell_white_height"
@@ -196,7 +201,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        android:drawableRight="@drawable/table_arrow"
+                        android:drawableRight="@drawable/icon_section_row_selector"
                         android:drawablePadding="10dp" />
                 </LinearLayout>
 
@@ -324,7 +329,8 @@
             <LinearLayout
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@color/white"
                 android:orientation="vertical">
                 <LinearLayout
@@ -349,14 +355,14 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-						android:drawableRight="@drawable/table_arrow"
+						android:drawableRight="@drawable/icon_section_row_selector"
 						android:text="@string/event_member_count_nolimit"
 						android:drawablePadding="10dp" />
                 </LinearLayout>
                 <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
-                    android:background="@drawable/divider"/>
+                    android:background="@drawable/bg_section_divider_line_light"/>
                 <RelativeLayout
 	                android:visibility="gone"
                     android:layout_height="@dimen/table_cell_white_height"
@@ -411,7 +417,7 @@
 	                android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
-                    android:background="@drawable/divider"/>
+                    android:background="@drawable/bg_section_divider_line_light"/>
                 <LinearLayout
                     android:id="@+id/layout_coins"
                     android:layout_height="@dimen/table_cell_white_height"
@@ -435,11 +441,15 @@
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
                         android:text="@string/event_join_coin_free"
-                        android:drawableRight="@drawable/table_arrow"
+                        android:drawableRight="@drawable/icon_section_row_selector"
                         android:drawablePadding="10dp" />
                 </LinearLayout>
 
+                <ImageView
 
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:background="@drawable/bg_section_divider_line_light"/>
             <LinearLayout
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
@@ -484,6 +494,12 @@
                 </LinearLayout>
             </LinearLayout>
 
+                <ImageView
+
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:background="@drawable/bg_section_divider_line_light"/>
+
             <EditText
                 android:id="@+id/edt_content"
                 android:layout_height="100dp"
@@ -493,6 +509,12 @@
                 style="@style/inputbox_white"
                 android:padding="10dp"
                 android:hint="@string/event_desc" />
+
+                <ImageView
+
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:background="@drawable/bg_section_divider_line_light"/>
             
             <LinearLayout
                     android:id="@+id/layout_isinfo"
@@ -522,7 +544,7 @@
                 <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
-                    android:background="@drawable/divider"/>
+                    android:background="@drawable/bg_section_divider_line_light"/>
                 <LinearLayout
                     android:id="@+id/layout_ispublic"
                     android:layout_width="fill_parent"

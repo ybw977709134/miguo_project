@@ -53,7 +53,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     private boolean mIsPublic = true;
 
     private ImageButton btnTitleBack;
-    private ImageButton btnTitleConfirm;
+    private TextView btnTitleConfirm;
     private ImageVideoInputWidget imageInputWidget;
     private TextView txtTitle;
     private TextView txtLoc;
@@ -94,7 +94,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
         imageInputWidget.setup(this, ImageVideoInputWidget.MediaType.Photo, REQ_INPUT_IMAGE);
 
         btnTitleBack = (ImageButton) findViewById(R.id.title_back);
-        btnTitleConfirm = (ImageButton) findViewById(R.id.title_confirm);
+        btnTitleConfirm = (TextView) findViewById(R.id.title_confirm);
 
         txtTitle = (TextView) findViewById(R.id.txt_title);
         txtLoc = (TextView) findViewById(R.id.txt_loc);
@@ -491,6 +491,7 @@ public class CreateEventActivity extends Activity implements OnClickListener {
     }
     
     private void changeIsInfo(boolean isInfo) {
+        mIsInfo = isInfo;
     	wevent.is_get_member_info = isInfo;
     	isBtnInfo.setBackgroundResource(isInfo ? R.drawable.icon_switch_on : R.drawable.icon_switch_off);
 	}

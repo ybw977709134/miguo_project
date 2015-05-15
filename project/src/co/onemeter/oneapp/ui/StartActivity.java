@@ -445,6 +445,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 //        networkFilter.addAction(ACTION_WIFI_STATE_CHANGE);
         registerReceiver(mNetworkStateChangedReceiver, networkFilter);
         refresh();
+
     }
 
     @Override
@@ -468,6 +469,8 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 //                }
             }
         });
+
+
     }
 
     /**

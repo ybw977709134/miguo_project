@@ -235,6 +235,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 			break;
 		case R.id.layout_password:
 			Intent passwordIntent = new Intent(AccountSettingActivity.this, SettingPasswordActivity.class);
+//            startActivity(passwordIntent);
 			startActivityForResult(passwordIntent, REQ_INPUT_PASSWORD);
 			break;
 		case R.id.layout_bind_phone:
@@ -247,10 +248,12 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 		    } else  {
 		    	if (bindEmail != null) {//绑定了邮箱，点击进入，修改邮箱的解绑界面
 		    		Intent fixEmailIntent = new Intent(AccountSettingActivity.this, FixBindEmailAddressActivity.class);
-		    		startActivityForResult(fixEmailIntent, FIX_BIND_EMAIL_REQUEST_CODE);
+                    startActivity(fixEmailIntent);
+//		    		startActivityForResult(fixEmailIntent, FIX_BIND_EMAIL_REQUEST_CODE);
 		    	} else {//未绑定邮箱进入绑定邮箱界面
 		    		Intent bindEmailIntent = new Intent(AccountSettingActivity.this, BindEmailAddressActivity.class);
-		    		startActivityForResult(bindEmailIntent, BIND_EMAIL_REQUEST_CODE);
+                    startActivity(bindEmailIntent);
+//		    		startActivityForResult(bindEmailIntent, BIND_EMAIL_REQUEST_CODE);
 		    	}
 		    }
 			
@@ -324,36 +327,41 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
     }
     
     /**
-     * 绑定邮箱成功后返回到设置界面，显示你已经绑定的邮箱
+     * 绑定邮箱成功后返回到设置界面，显示你已经绑定的邮箱(目前是为了解决修改密码出现的异常)
      * @author hutianfeng
      * @date 2015/3/5
      */
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//    	super.onActivityResult(requestCode, resultCode, data);
-//    	if (resultCode == RESULT_OK) {
-//			switch (requestCode) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	super.onActivityResult(requestCode, resultCode, data);
+    	if (resultCode == RESULT_OK) {
+			switch (requestCode) {
 //			case BIND_EMAIL_REQUEST_CODE://绑定邮箱成功后的处理结果
-//				
+//
 //				bindEmailStatus ();
 //				if (!TextUtils.isEmpty(bindEmail)) {
 //					mMsgBox.show(null, getString(R.string.bind_email_successed));
 //					mMsgBox.dismissDialog();
-//				} 
+//				}
 //				break;
-//				
+//
 //			case FIX_BIND_EMAIL_REQUEST_CODE://修改绑定邮箱后的处理结果
-//				
+//
 //				bindEmailStatus();
 //				if (!TextUtils.isEmpty(bindEmail)) {
 //					mMsgBox.show(null, getString(R.string.bind_email_successed));
 //					mMsgBox.dismissDialog();
 //				}
 //				break;
-//			default:
-//				break;
-//			}
-//    	}
-//    }
+
+
+            case REQ_INPUT_PASSWORD:
+                logout();
+                break;
+			default:
+				break;
+			}
+    	}
+    }
     
 }

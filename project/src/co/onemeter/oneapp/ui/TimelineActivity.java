@@ -243,7 +243,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (inputMgr.isShowing()) {
+            if (inputMgr != null && inputMgr.isShowing()) {
                 inputMgr.setSoftKeyboardVisibility(false);
                 inputMgr.hide();
             } else {

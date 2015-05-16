@@ -9,26 +9,16 @@ import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.os.PowerManager;
+import android.os.*;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
-
 import com.pzy.paint.BitmapPreviewActivity;
 import com.pzy.paint.DoodleActivity;
-
 import org.wowtalk.Log;
 import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Database;
@@ -286,10 +276,12 @@ public class InputBoardManager implements Parcelable,
 
     public void setIsWithMultimediaMethod(boolean isWithMultimediaMethod) {
         mIsWithMultimediaMethod = isWithMultimediaMethod;
+        hideOrShowSomeViews();
     }
 
     public void setIsWithCallMethod(boolean isWithCallMethod) {
         mIsWithCallMethod = isWithCallMethod;
+        hideOrShowSomeViews();
     }
 
     public void setCanSendMsg(boolean canSendMsg) {

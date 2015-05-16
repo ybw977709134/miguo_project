@@ -17,6 +17,7 @@ import android.text.TextWatcher;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.androidquery.AQuery;
 import com.pzy.paint.BitmapPreviewActivity;
 import com.pzy.paint.DoodleActivity;
 import org.wowtalk.Log;
@@ -154,7 +155,7 @@ public class InputBoardManager implements Parcelable,
      */
     private View layoutTextWrapper;
     public View layoutTextInnerWrapper;
-    private View layoutMediaWrapper;
+    private ViewGroup layoutMediaWrapper;
     private View layoutStampWrapper;
     public EditText mTxtContent;
     private View mBtnSend;
@@ -366,7 +367,7 @@ public class InputBoardManager implements Parcelable,
         layoutVoiceWrapper.setVisibility(View.GONE);       
 
         layoutStampWrapper = mRootView.findViewById(R.id.layoutStamp);
-        layoutMediaWrapper = mRootView.findViewById(R.id.layoutMedia);
+        layoutMediaWrapper = (ViewGroup) mRootView.findViewById(R.id.layoutMedia);
         layoutTextWrapper = mRootView.findViewById(R.id.layoutText);
         layoutTextInnerWrapper = layoutTextWrapper.findViewById(R.id.layoutTextInnerWrapper);
         mTxtContent = (EditText)layoutTextWrapper.findViewById(R.id.txt_content);
@@ -381,14 +382,7 @@ public class InputBoardManager implements Parcelable,
         mBtnSend.setOnClickListener(this);
         mBtnMedia.setOnClickListener(this);
         mBtnEmotion.setOnClickListener(this);
-        layoutMediaWrapper.findViewById(R.id.btn_input_pic).setOnClickListener(this);
-        layoutMediaWrapper.findViewById(R.id.btn_input_video).setOnClickListener(this);
-        layoutMediaWrapper.findViewById(R.id.btn_input_doodle).setOnClickListener(this);
-        layoutMediaWrapper.findViewById(R.id.btn_input_voice).setOnClickListener(this);
-        layoutMediaWrapper.findViewById(R.id.btn_free_call).setOnClickListener(this);
-        layoutMediaWrapper.findViewById(R.id.btn_video_chat).setOnClickListener(this);
-        layoutMediaWrapper.findViewById(R.id.btn_input_picvoice).setOnClickListener(this);
-        layoutMediaWrapper.findViewById(R.id.btn_input_loc).setOnClickListener(this);
+        setupMediaInputButtonsClickEventHandler();
 
         // check mic availability
 //        PackageManager pm = mContext.getPackageManager();
@@ -576,6 +570,19 @@ public class InputBoardManager implements Parcelable,
         return true;
     }
 
+    private void setupMediaInputButtonsClickEventHandler() {
+        AQuery q = new AQuery(layoutMediaWrapper);
+
+        q.find(R.id.btn_input_pic).clicked(this);
+        q.find(R.id.btn_input_video).clicked(this);
+        q.find(R.id.btn_input_doodle).clicked(this);
+        q.find(R.id.btn_input_voice).clicked(this);
+        q.find(R.id.btn_free_call).clicked(this);
+        q.find(R.id.btn_video_chat).clicked(this);
+        q.find(R.id.btn_input_picvoice).clicked(this);
+        q.find(R.id.btn_input_loc).clicked(this);
+    }
+
     /**
      * hide or show some views according to the flags,
      * such as mIsWithMultimediaMethod, mIsWithCallMethod
@@ -588,13 +595,17 @@ public class InputBoardManager implements Parcelable,
             mBtnMedia.setVisibility(View.GONE);
             mBtnEmotion.setVisibility(View.GONE);
         }
+
+        // 重新 inflate 面板，并设置点击事件
+        layoutMediaWrapper.removeAllViews();
         if (mIsWithCallMethod) {
-            layoutMediaWrapper.findViewById(R.id.layout_freecall).setVisibility(View.VISIBLE);
-            layoutMediaWrapper.findViewById(R.id.layout_videochat).setVisibility(View.VISIBLE);
+            LayoutInflater.from(mContext).inflate(R.layout.msg_message_composer_inputmedia,
+                    layoutMediaWrapper, true);
         } else {
-            layoutMediaWrapper.findViewById(R.id.layout_freecall).setVisibility(View.GONE);
-            layoutMediaWrapper.findViewById(R.id.layout_videochat).setVisibility(View.GONE);
+            LayoutInflater.from(mContext).inflate(R.layout.msg_message_composer_inputmedia_without_call,
+                    layoutMediaWrapper, true);
         }
+        setupMediaInputButtonsClickEventHandler();
     }
 
     @Override

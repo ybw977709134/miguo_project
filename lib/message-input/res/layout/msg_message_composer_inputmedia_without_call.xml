@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:src="@color/libmsg_color_bfbfbf"/>
+
+    <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tablelayout_height"
+            android:orientation="horizontal"
+            android:background="@color/libmsg_white"
+            android:padding="@dimen/multimedia_btn_margin">
+
+        <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" >
+
+            <LinearLayout
+                    android:id="@+id/media_layout_input_voice_item"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                <ImageButton
+                        android:id="@+id/btn_input_voice"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:contentDescription="@null"
+                        android:background="@drawable/icon_messages_more_voice_selector"/>
+
+                <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:singleLine="true"
+                        android:textSize="@dimen/msg_composer_media_txt_ind_size"
+                        android:textColor="@color/ligmsg_composer_media_txt_color"
+                        android:text="@string/input_voice"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:id="@+id/media_layout_input_pic_item"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                <ImageButton
+                        android:id="@+id/btn_input_pic"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:contentDescription="@null"
+                        android:background="@drawable/icon_messages_more_pic_selector"/>
+
+                <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:singleLine="true"
+                        android:textSize="@dimen/msg_composer_media_txt_ind_size"
+                        android:textColor="@color/ligmsg_composer_media_txt_color"
+                        android:text="@string/input_photo"/>
+            </LinearLayout>
+
+	        <LinearLayout
+		        android:id="@+id/media_layout_input_video_item"
+		        android:layout_height="match_parent"
+		        android:layout_width="0dp"
+		        android:layout_weight="1"
+		        android:gravity="center"
+		        android:orientation="vertical">
+
+		        <ImageButton
+			        android:id="@+id/btn_input_video"
+			        android:layout_width="64dp"
+			        android:layout_height="64dp"
+			        android:contentDescription="@null"
+			        android:background="@drawable/icon_messages_more_camera_selector"/>
+
+		        <TextView
+			        android:layout_height="wrap_content"
+			        android:layout_width="wrap_content"
+			        android:singleLine="true"
+			        android:textSize="@dimen/msg_composer_media_txt_ind_size"
+			        android:textColor="@color/ligmsg_composer_media_txt_color"
+			        android:text="@string/input_video"/>
+	        </LinearLayout>
+
+        </TableRow>
+
+        <TableRow
+                android:id="@+id/tableRow2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:visibility="visible">
+
+            <LinearLayout
+                android:id="@+id/media_layout_input_loc_item"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/btn_input_loc"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:contentDescription="@null"
+                    android:background="@drawable/icon_messages_more_location_selector"/>
+
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:singleLine="true"
+                    android:textSize="@dimen/msg_composer_media_txt_ind_size"
+                    android:textColor="@color/ligmsg_composer_media_txt_color"
+                    android:text="@string/input_location"/>
+            </LinearLayout>
+	        <LinearLayout
+		        android:id="@+id/media_layout_doodle_item"
+		        android:layout_height="match_parent"
+		        android:layout_width="0dp"
+		        android:layout_weight="1"
+		        android:gravity="center"
+		        android:orientation="vertical">
+
+		        <ImageButton
+			        android:id="@+id/btn_input_doodle"
+			        android:layout_width="64dp"
+			        android:layout_height="64dp"
+			        android:contentDescription="@null"
+			        android:background="@drawable/icon_messages_more_pic_write_selector"/>
+
+		        <TextView
+			        android:layout_height="wrap_content"
+			        android:layout_width="wrap_content"
+			        android:singleLine="true"
+			        android:textSize="@dimen/msg_composer_media_txt_ind_size"
+			        android:textColor="@color/ligmsg_composer_media_txt_color"
+			        android:text="@string/input_doodle"/>
+	        </LinearLayout>
+	        <LinearLayout
+		        android:id="@+id/media_layout_picvoice_item"
+		        android:layout_height="match_parent"
+		        android:layout_width="0dp"
+		        android:layout_weight="1"
+		        android:gravity="center"
+		        android:orientation="vertical">
+
+		        <ImageButton
+			        android:id="@+id/btn_input_picvoice"
+			        android:layout_width="64dp"
+			        android:layout_height="64dp"
+			        android:contentDescription="@null"
+			        android:background="@drawable/icon_messages_more_pic_voice_selector"/>
+
+		        <TextView
+			        android:layout_height="wrap_content"
+			        android:layout_width="wrap_content"
+			        android:singleLine="true"
+			        android:textSize="@dimen/msg_composer_media_txt_ind_size"
+			        android:textColor="@color/ligmsg_composer_media_txt_color"
+			        android:text="@string/input_picvoice"/>
+	        </LinearLayout>
+
+        </TableRow>
+
+    </TableLayout>
+</LinearLayout>

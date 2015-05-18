@@ -82,5 +82,16 @@
         <item>slide1</item>
         <item>slide2</item>
     </string-array>
-
+    <!-- 评语模板 -->
+	<string-array name="commentsTemplate">
+		<item>祝贺你每次都是五星！</item>
+		<item>喜欢你的认真劲儿！</item>
+		<item>我发现你的成绩又提高了！</item>
+		<item>这一次做的不错，再努力些就会更棒！</item>
+		<item>字迹美观，页面整洁！</item>
+		<item>这么端正的作业，一定下了很大功夫！</item>
+		<item>作业挺多，你依然能写这么好，这就叫坚持！</item>
+		<item>认真写了吗？我喜欢你上次的作业！</item>
+		<item>你的朋友们快超过你啦，还不努力？！</item>
+	</string-array>
 </resources>

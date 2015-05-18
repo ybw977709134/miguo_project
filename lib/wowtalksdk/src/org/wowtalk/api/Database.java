@@ -47,6 +47,7 @@ public class Database {
     public static final String TBL_LESSON_PERFORMANCE = "lesson_performance";
     public static final String TBL_LESSON_HOMEWORK = "lesson_homework";
     public static final String TBL_LESSON_PARENT_FEEDBACK = "lesson_parent_feedback";
+    public static final String TBL_LESSON_ADD_HOMEWORK = "lesson_add_homework";
     /** 学生在特定学校的备注名称。*/
     public static final String TBL_STUDENT_ALIAS = "student_alias";
     @Deprecated
@@ -6327,6 +6328,13 @@ public class Database {
         values.put("moment_id", feedback.moment_id);
         return database.insertWithOnConflict(TBL_LESSON_PARENT_FEEDBACK, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
+    public long storeLessonAddHomework(LessonAddHomework homework) {
+        ContentValues values = new ContentValues();
+        values.put("homework_id", homework.homework_id);
+        values.put("lesson_id", homework.lesson_id);
+        values.put("moment_id", homework.moment_id);
+        return database.insertWithOnConflict(TBL_LESSON_ADD_HOMEWORK, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+    }
 
     /**
      * @param class_id null 则清除所有课程的。
@@ -6431,6 +6439,21 @@ public class Database {
             feedback.student_id = studentId;
             feedback.moment_id = cur.getInt(++i);
             result = feedback;
+        }
+        return result;
+    }
+    public LessonAddHomework fetchLessonAddHomework(int lessonId) {
+    	LessonAddHomework result = null;
+        Cursor cur = database.query(TBL_LESSON_ADD_HOMEWORK,
+                new String[] { "moment_id" },
+                "lesson_id=?", new String[] { Integer.toString(lessonId)},
+                null, null, null);
+        if (cur.moveToFirst()) {
+            LessonAddHomework addHomework = new LessonAddHomework();
+            int i = -1;
+            addHomework.lesson_id = lessonId;
+            addHomework.moment_id = cur.getInt(++i);
+            result = addHomework;
         }
         return result;
     }
@@ -6637,7 +6660,7 @@ public class Database {
 
 class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME_PRE = GlobalSetting.DATABASE_NAME;
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
     public int flagIndex;
 
 	private static final String DATABASE_CREATE_TBL_CHATMESSAGES = "CREATE TABLE IF NOT EXISTS `chatmessages` "
@@ -6945,6 +6968,13 @@ class DatabaseHelper extends SQLiteOpenHelper {
                     + "student_id TEXT NOT NULL,"
                     + "moment_id INTEGER NOT NULL"
                     + ");";
+                    
+    private static final String DATABASE_CREATE_TBL_LESSON_ADD_HOMEWORK =
+    		"CREATE TABLE IF NOT EXISTS " + Database.TBL_LESSON_ADD_HOMEWORK + " ("
+                    + "homework_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "lesson_id INTEGER NOT NULL,"
+                    + "moment_id INTEGER NOT NULL"
+                    + ");";                 
 
     private static final String DATABASE_CREATE_TBL_STUDENT_ALIAS =
             "CREATE TABLE IF NOT EXISTS " + Database.TBL_STUDENT_ALIAS + " ("
@@ -7015,6 +7045,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(DATABASE_CREATE_TBL_LESSON_PERFORMANCE);
         database.execSQL(DATABASE_CREATE_TBL_LESSON_HOMEWORK);
         database.execSQL(DATABASE_CREATE_TBL_LESSON_PARENT_FEEDBACK);
+        database.execSQL(DATABASE_CREATE_TBL_LESSON_ADD_HOMEWORK);
         database.execSQL(DATABASE_CREATE_TBL_STUDENT_ALIAS);
         database.execSQL(DATABASE_CREATE_TBL_SAVE_LAST_MESSAGE);
 
@@ -7134,6 +7165,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
         }
         if(oldVersion == 11){
         	database.execSQL("ALTER TABLE lesson ADD COLUMN live INTEGER;");
+        }
+        if(oldVersion == 12){
+        	database.execSQL(DATABASE_CREATE_TBL_LESSON_ADD_HOMEWORK);
+        	
         }
     }
 }

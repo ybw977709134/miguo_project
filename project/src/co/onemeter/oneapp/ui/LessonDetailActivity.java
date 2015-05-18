@@ -237,7 +237,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 				}else{
 					Moment moment = mDbHelper.fetchMoment(feedback.moment_id + "");
 					if(moment != null){
-						FeedbackDetailActivity.launch(LessonDetailActivity.this,moment,PrefUtil.getInstance(this).getUserName());
+						FeedbackDetailActivity.launch(LessonDetailActivity.this,moment,PrefUtil.getInstance(this).getUserName(),null);
 					}else{
 						new MessageBox(this).toast(R.string.class_parent_opinion_not_submitted,500);
 					}

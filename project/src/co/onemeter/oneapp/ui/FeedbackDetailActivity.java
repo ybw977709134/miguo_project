@@ -43,6 +43,7 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
     private TextView txtTime;
     private TextView txtDate;
     private TextView txtContent;
+    private TextView title_name;
 
     private LinearLayout micLayout;
     private ImageView btnPlay;
@@ -68,6 +69,7 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
         txtName = (TextView) findViewById(R.id.txt_name);
         txtTime = (TextView) findViewById(R.id.txt_time);
         txtDate = (TextView) findViewById(R.id.txt_date);
+        title_name = (TextView) findViewById(R.id.title_name);
         micLayout = (LinearLayout) findViewById(R.id.mic_layout);
         btnPlay = (ImageView) findViewById(R.id.btn_play);
         progressBar = (ProgressBar) findViewById(R.id.progress);
@@ -269,10 +271,13 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
             return;
         }
         String name = getIntent().getStringExtra("name");
+        String tag = getIntent().getStringExtra("tag");
         if(!TextUtils.isEmpty(name)){
         	txtName.setText(name);
         }
-        
+        if(!TextUtils.isEmpty(tag)){
+        	title_name.setText(tag);
+        }
         long time = Long.valueOf(moment.timestamp * 1000);
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         String strDate = format.format(time);
@@ -322,10 +327,11 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
      * @param context
      * @param moment
      */
-    public static void launch(Context context, Moment moment,String name) {
+    public static void launch(Context context, Moment moment,String name,String tag) {
         Intent intent = new Intent(context, FeedbackDetailActivity.class);
         intent.putExtra("name", name);
         intent.putExtra("moment", moment);
+        intent.putExtra("tag", tag);
         context.startActivity(intent);
     }
     

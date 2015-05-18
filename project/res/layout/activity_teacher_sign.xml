@@ -30,6 +30,7 @@
 		    android:text="首页" />
         
         <TextView
+            android:id="@+id/title_name"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_centerInParent="true"

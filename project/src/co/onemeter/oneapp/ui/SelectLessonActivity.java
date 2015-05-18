@@ -47,7 +47,8 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 	private CourseTableAdapter adapter;
 	private MessageBox mMsgBox;
 	private Database mDBHelper;
-	private String classId = null;;
+	private String classId = null;
+	private String homeworkTag = null;
 	
 	private SelectLessonActivity instance;
 	private long curTime;
@@ -77,6 +78,7 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 		mMsgBox = new MessageBox(this);
 		mDBHelper = new Database(this);
 		classId = getIntent().getStringExtra("classId");
+		homeworkTag = getIntent().getStringExtra("homework");
 		curTime = System.currentTimeMillis()/1000;
 //		for(int i =0 ;i < mDBHelper.fetchLesson(classId).size();i++){
 //			if(curTime < mDBHelper.fetchLesson(classId).get(i).start_date){
@@ -192,6 +194,7 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 				convertView = getLayoutInflater().inflate(R.layout.item_select_lesson, parent, false);
 				
 				holder.textView_item_lesson_name = (TextView) convertView.findViewById(R.id.textView_item_lesson_name);
+				holder.textView_item_lesson_date = (TextView) convertView.findViewById(R.id.textView_item_lesson_date);
 				holder.imageView_item_lesson_icon =  (ImageView) convertView.findViewById(R.id.imageView_item_lesson_icon);
 				
 				convertView.setTag(holder);
@@ -201,8 +204,16 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 			}
 			
 			Lesson lesson = alessons.get(position);
+			long startdate = lesson.start_date;
+			
 			holder.textView_item_lesson_name.setText(lesson.title);
 			holder.textView_item_lesson_name.setTextColor(getResources().getColor(R.color.black_24));
+			if(homeworkTag != null){
+				if(homeworkTag.equals("homework")){
+					holder.textView_item_lesson_date.setVisibility(View.VISIBLE);
+					holder.textView_item_lesson_date.setText(Utils.stampsToDate(startdate));
+				}
+			}
 			
 			if(currPosition == position){
 				holder.imageView_item_lesson_icon.setVisibility(View.VISIBLE);
@@ -214,6 +225,7 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 		}
 		class ViewHodler{
 			TextView textView_item_lesson_name;
+			TextView textView_item_lesson_date;
 			ImageView imageView_item_lesson_icon;
 		}
 		public void setCurrPosition(int currPosition){

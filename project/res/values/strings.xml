@@ -932,6 +932,7 @@
     <string name="class_lesson_camera">摄像头</string>
     <string name="class_lesson_knowledge">教学大纲</string>
     <string name="class_lesson_attendance">在线点名</string>
+    <string name="class_lesson_instruction">补充说明</string>
     <string name="class_lesson_homework">答疑</string>
     <string name="class_lesson_select_classroom">可选教室</string>
     <string name="class_lesson_select_class">选择班级</string>

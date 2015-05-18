@@ -22,44 +22,89 @@
             style="?attr/navbar_title"
             android:text="@string/class_homework" />
     </RelativeLayout>
-
-    <!--
+    
+    
+    
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" >
-
-            <ImageView
-                android:layout_width="fill_parent"
+            <TextView
+                android:id="@+id/tv_class_name"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:textSize="18sp" />
+            <TextView
+                android:id="@+id/tv_lesson_name"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_medium"
-                android:src="@drawable/class_bg_1" />
-
+                android:gravity="center"
+                android:textSize="16sp"/>
             <ImageView
-                android:layout_width="fill_parent"
+                android:id="@+id/divider_teachersign_class_up"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_medium"
-                android:src="@drawable/class_bg_2" />
-
+                android:layout_width="fill_parent"
+                android:background="@drawable/bg_section_divider_line_dark"/>
+            <LinearLayout
+                android:id="@+id/layout_sign_class"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:clickable="true"
+                android:orientation="horizontal" >
+                
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:clickable="false"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="@string/class_set_homework"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+                
+                <TextView
+                    android:id="@+id/textView_class_name"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2"
+                    android:drawableRight="@drawable/table_arrow"
+                    android:gravity="center_vertical|right"
+                    android:paddingRight="10dp"
+                    android:singleLine="true"
+                    android:textColor="@color/gray_40"
+                    android:textSize="18sp" />
+            </LinearLayout>
             <ImageView
-                android:layout_width="fill_parent"
+                android:id="@+id/divider_teachersign_class_bottom"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_medium"
-                android:src="@drawable/class_bg_3" />
-        </LinearLayout>
-    </ScrollView>
-    -->
-
+                android:layout_width="fill_parent"
+                android:background="@drawable/bg_section_divider_line_dark"/>
+            <ListView
+                android:id="@+id/lv_homework"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@drawable/divider"
+                android:cacheColorHint="#00000000">
+                
+            </ListView>
+            
+        </LinearLayout>  
+        </ScrollView>
+    <!--
     <ListView
         android:id="@+id/lv_homework"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@drawable/divider"
         android:cacheColorHint="#00000000">
-    </ListView>
+    </ListView>-->
+
+    
 
 </LinearLayout>

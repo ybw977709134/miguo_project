@@ -1260,6 +1260,50 @@ public class LessonWebServerIF {
 		}
 		return errno;
 	}
+	
+	public int addLessonHomework(LessonAddHomework addhomework,Moment moment){
+		String uid = mPrefUtil.getUid();
+		String password = mPrefUtil.getPassword();
+		if (uid == null || password == null)
+			return ErrorCode.NOT_LOGGED_IN;
+
+		if (moment != null && TextUtils.isEmpty(moment.id)) {
+			int errno = MomentWebServerIF.getInstance(mContext).fAddMoment(
+					moment, true);
+			if (errno != ErrorCode.OK) {
+				return errno;
+			}
+		}
+
+		if (moment != null)
+			addhomework.moment_id = Integer.parseInt(moment.id);
+
+		final String action = "add_lesson_homework";
+		String postStr = "action=" + action + "&uid="
+				+ Utils.urlencodeUtf8(uid) + "&password="
+				+ Utils.urlencodeUtf8(password) + "&lesson_id="
+				+ addhomework.lesson_id 
+				+ "&moment_id=" + addhomework.moment_id;
+
+		Connect2 connect2 = new Connect2();
+		Element root = connect2.Post(postStr);
+
+		int errno = ErrorCode.BAD_RESPONSE;
+		if (root != null) {
+			NodeList errorList = root.getElementsByTagName("err_no");
+			Element errorElement = (Element) errorList.item(0);
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				errno = ErrorCode.OK;
+				Database db = new Database(mContext);
+				db.storeLessonAddHomework(addhomework);
+			} else {
+				errno = Integer.parseInt(errorStr);
+			}
+		}
+		return errno;
+	}
 
 	public int deleteLesson(String lesson_id) {
 		String uid = mPrefUtil.getUid();
@@ -1279,4 +1323,41 @@ public class LessonWebServerIF {
 		}
 		return errno;
 	}
+	
+	public int getMomentId(List<Moment> moment_list){
+    	String uid = mPrefUtil.getUid();
+		String password = mPrefUtil.getPassword();
+		if(uid == null || password == null)
+			return ErrorCode.INVALID_ARGUMENT;
+		final String action = "add_moment";
+		String postStr = "action=" + action
+				+ "&uid=" + Utils.urlencodeUtf8(uid)
+				+ "&password=" + Utils.urlencodeUtf8(password)
+				+ "&anonymous=" + 1;
+		
+		Connect2 connect2 = new Connect2();
+		Element root = connect2.Post(postStr);
+		int errno = ErrorCode.BAD_RESPONSE;
+		if (root != null) {
+			NodeList errorList = root.getElementsByTagName("err_no");
+			Element errorElement = (Element) errorList.item(0);
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				errno = 0;
+
+				Element resultElement = Utils.getFirstElementByTagName(root, action);
+				if (resultElement != null) {
+					Moment moment = XmlHelper
+							.parseMoment(resultElement);
+					moment_list.add(moment);
+					}
+		
+			} else {
+				errno = Integer.parseInt(errorStr);
+			}
+		}
+		return errno;
+
+    }
 }

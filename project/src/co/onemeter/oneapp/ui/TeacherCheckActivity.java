@@ -186,7 +186,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 								LessonParentFeedback feedback = db.fetchLessonParentFeedback(lessonId, performances.get(pos).student_id);
 								Moment moment = db.fetchMoment(feedback.moment_id + "");
 								if(moment != null){
-									FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment,db.fetchStudentAlias(schoolId, performances.get(pos).student_id));
+									FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment,db.fetchStudentAlias(schoolId, performances.get(pos).student_id),null);
 									mHandler.sendEmptyMessage(errno);
 								}else{
 									mHandler.sendEmptyMessage(errno);
@@ -202,7 +202,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 			}else{
 				Moment moment = db.fetchMoment(feedback0.moment_id + "");
 				if(moment != null){
-					FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment,db.fetchStudentAlias(schoolId, performances.get(position).student_id));
+					FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment,db.fetchStudentAlias(schoolId, performances.get(position).student_id),null);
 					mHandler.sendEmptyMessage(ErrorCode.OK);
 				}else{
 					mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);

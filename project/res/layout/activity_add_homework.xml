@@ -1,0 +1,124 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background_dark"
+    android:orientation="vertical" >
+    
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        style="?attr/navbar"
+        android:layout_alignParentTop="true" >
+
+        <ImageButton
+            android:id="@+id/btn_notice_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:src="@drawable/nav_back_selector" />
+
+        <TextView
+            android:id="@+id/class_notice_title"
+            style="?attr/navbar_title"
+            android:text="@string/class_set_homework" />
+
+        <TextView
+            android:id="@+id/btn_ok"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:background="@null"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:clickable="true"
+            android:text="@string/class_camera_ok" />
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/title_bar"
+        android:layout_margin="10dp"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+            
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/divider" />    
+            <!-- image -->
+
+            <HorizontalScrollView
+                android:id="@+id/hsv_img_list"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/create_normal_moment_with_tag_def_img_size"
+                android:background="@color/white"
+                android:scrollbars="none" >
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="@dimen/moment_create_item_small_padding"
+                    android:paddingRight="@dimen/moment_create_item_small_padding"
+                    android:paddingTop="5dp" >
+
+                    <LinearLayout
+                        android:id="@+id/added_images_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginRight="@dimen/moment_create_item_small_padding"
+                        android:orientation="horizontal" />
+
+                    <LinearLayout
+                        android:id="@+id/trigger_add_img_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@id/added_images_layout"
+                        android:orientation="horizontal" >
+                        
+                        <ImageView
+                            android:layout_width="@dimen/create_normal_moment_with_tag_def_img_size"
+                            android:layout_height="@dimen/create_normal_moment_with_tag_def_img_size"
+                            android:layout_gravity="center_vertical"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/share_new_add_photo" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </HorizontalScrollView>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/divider" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/divider" />
+            
+             <!-- msg -->
+
+            <EditText
+                android:id="@+id/edt_moment_content"
+                android:layout_width="fill_parent"
+                android:layout_height="120dp"
+                android:background="@drawable/table_white"
+                android:gravity="top"
+                android:hint="@string/class_lesson_instruction"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/divider" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

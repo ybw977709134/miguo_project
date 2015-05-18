@@ -1,7 +1,12 @@
 package co.onemeter.oneapp.ui;
 
+import org.wowtalk.api.Database;
+import org.wowtalk.api.LessonAddHomework;
+import org.wowtalk.api.Moment;
+import org.wowtalk.api.PrefUtil;
 import org.wowtalk.ui.MessageDialog;
 
+import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import android.app.Activity;
 import android.content.Intent;
@@ -26,6 +31,7 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 		private ImageButton title_back;
 		private TextView textView_home_back;
 		private TextView title_sure;
+		private TextView title_name;
 		
 		//班级
 		private LinearLayout layout_sign_class;
@@ -38,7 +44,9 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 
 		private String classID = null;
         private String classId_intent = null;
+        private String className_intent = null;
         private String schoolID = null;
+        private String homeworkTag = null;
 		private int lessonID = 0;	
 		private long endDate;
 		
@@ -51,7 +59,9 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 		super.onCreate(savedInstanceState);	
 		setContentView(R.layout.activity_teacher_sign);
         classId_intent = getIntent().getStringExtra("classId");
+        className_intent = getIntent().getStringExtra("classname");
         schoolID = getIntent().getStringExtra("schoolId");
+        homeworkTag = getIntent().getStringExtra("homework");
 		initView();
 	}
 	
@@ -62,13 +72,18 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 		title_back = (ImageButton) findViewById(R.id.title_back);
 		textView_home_back = (TextView) findViewById(R.id.textView_home_back);
 		title_sure = (TextView) findViewById(R.id.title_sure);
+		title_name = (TextView) findViewById(R.id.title_name);
 		
 		layout_sign_class = (LinearLayout) findViewById(R.id.layout_sign_class);
 		textView_class_name = (TextView) findViewById(R.id.textView_class_name);
 		
 		layout_sign_lesson = (LinearLayout) findViewById(R.id.layout_sign_lesson);
 		textView_lesson_name = (TextView) findViewById(R.id.textView_lesson_name);
-		
+		if(homeworkTag != null){
+			if(homeworkTag.equals("homework")){
+				title_name.setText(R.string.class_homework);
+			}
+		}
 		
 		title_back.setOnClickListener(this);
 		textView_home_back.setOnClickListener(this);
@@ -92,6 +107,7 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 	
 	@Override
 	public void onClick(View v) {
+		
 		switch (v.getId()) {
 		case R.id.title_back:
 		case R.id.textView_home_back:
@@ -101,6 +117,19 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 		case R.id.title_sure://确定
             if(classId_intent != null){
                 if(lessonID != 0){
+                	if(homeworkTag != null){
+            			if(homeworkTag.equals("homework")){
+            				Intent homeworkIntent = new Intent(this, HomeworkActivity.class);
+            				homeworkIntent.putExtra(Constants.LESSONID, lessonID);
+            				homeworkIntent.putExtra("lesson_name", textView_lesson_name.getText().toString());
+            				   
+            				if(className_intent != null){
+            					homeworkIntent.putExtra("class_name", className_intent);
+            				}
+            				startActivity(homeworkIntent);
+            				return;
+            			}
+            		}
                     Intent intentSign = new Intent(this,RollCallOnlineActivity.class);
                     intentSign.putExtra("classId", classId_intent);
                     intentSign.putExtra("schoolId", schoolID); 
@@ -116,14 +145,24 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 			} else if (lessonID == 0) {
 				alert("请选择请假课程");
 			} else {
-				
-				Intent intentSign = new Intent(this,RollCallOnlineActivity.class);
-				intentSign.putExtra("classId", classID);
-				intentSign.putExtra("lessonId", lessonID);
-                intentSign.putExtra("schoolId", schoolID);  
+				if(homeworkTag != null){
+        			if(homeworkTag.equals("homework")){
+        				Intent homeworkIntent = new Intent(this, HomeworkActivity.class);
+            			homeworkIntent.putExtra(Constants.LESSONID, lessonID);
+            			homeworkIntent.putExtra("lesson_name", textView_lesson_name.getText().toString());
+            			homeworkIntent.putExtra("class_name", textView_class_name.getText().toString());
+            			startActivity(homeworkIntent);    				
+        				return;
+        			}
+        		}
+                Intent intentSign = new Intent(this,RollCallOnlineActivity.class);
+                intentSign.putExtra("classId", classID);
+                intentSign.putExtra("schoolId", schoolID); 
+                intentSign.putExtra("lessonId", lessonID);
                 intentSign.putExtra("end_date", endDate);
-				intentSign.putExtra("lesson_name", textView_lesson_name.getText().toString());
-				startActivity(intentSign);
+                intentSign.putExtra("lesson_name", textView_lesson_name.getText().toString());
+                startActivity(intentSign);
+                return;
 			}
 			break;
 			
@@ -136,12 +175,14 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
             if(classId_intent != null){
                 Intent intentLesson = new Intent(this,SelectLessonActivity.class);
                 intentLesson.putExtra("classId", classId_intent);
+                intentLesson.putExtra("homework", homeworkTag);
                 startActivityForResult(intentLesson, REQ_SIGN_LESSON);
                 return;
             }
 			if (classID != null) {
 				Intent intentLesson = new Intent(this,SelectLessonActivity.class);
 				intentLesson.putExtra("classId", classID);
+				intentLesson.putExtra("homework", homeworkTag);
 				startActivityForResult(intentLesson, REQ_SIGN_LESSON);
 			} else {
 				alert("请选择请假班级");

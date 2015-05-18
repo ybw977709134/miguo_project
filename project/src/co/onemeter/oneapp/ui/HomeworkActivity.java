@@ -4,94 +4,134 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
+import android.widget.AdapterView.OnItemClickListener;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.ui.ClassroomActivity.ClassroomAdapter.ViewHodler;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.androidquery.AQuery;
 
 import org.w3c.dom.Text;
+import org.wowtalk.api.Classroom;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.HomeworkState;
+import org.wowtalk.api.LessonAddHomework;
 import org.wowtalk.api.LessonHomework;
 import org.wowtalk.api.LessonWebServerIF;
+import org.wowtalk.api.Moment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 家庭作业作业页面.
  * Created by pzy on 11/10/14. Modified by yl on 23/12/2014
  */
-public class HomeworkActivity extends Activity implements View.OnClickListener {
+public class HomeworkActivity extends Activity implements OnClickListener, OnItemClickListener{
+	private TextView tv_class_name;
+	private TextView tv_lesson_name;
 	private int lessonId;
-	private List<LessonHomework> lessonHomeworkz;
-	private List<String> homeworktitles;
+//	private List<LessonHomework> lessonHomeworkz;
+	private List<Map<String, Object>> homeworkStates;
+	private HomeworkStateAdapter adapter;
+//	private List<String> homeworktitles;
 	private AQuery q;
-	private HomeWorkArrayAdater adapter;
-
+//	private HomeWorkArrayAdater adapter;
+//
 	private ListView lvHomework;
+	private Database mDb;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_homework);
 		initView();
+		getHomeworkState(lessonId);
 	}
 
 	private void initView() {
 		lessonId = getIntent().getIntExtra(Constants.LESSONID, 0);
-
 		lvHomework = (ListView) findViewById(R.id.lv_homework);
 		q = new AQuery(this);
+		mDb = new Database(this);
 		q.find(R.id.title_back).clicked(this);
+		q.find(R.id.layout_sign_class).clicked(this);
 
-		homeworktitles = new ArrayList<String>();
-		getLessonHomework(lessonId);
+//		homeworktitles = new ArrayList<String>();
+		homeworkStates = new ArrayList<Map<String, Object>>();
+//		getLessonHomework(lessonId);
+		tv_class_name = (TextView) findViewById(R.id.tv_class_name);
+		tv_lesson_name = (TextView) findViewById(R.id.tv_lesson_name);
+		tv_class_name.setText(getIntent().getStringExtra("class_name"));
+		tv_lesson_name.setText(getIntent().getStringExtra("lesson_name"));
+		lvHomework.setOnItemClickListener(this);
+		
 	}
 
-	private void getLessonHomework(final int lessonId) {
-		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
-
+	private void getHomeworkState(final int lessonId){
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, List<Map<String, Object>>>() {
 			@Override
-			protected Integer doInBackground(Void... params) {
-				try {
-					return LessonWebServerIF.getInstance(
-							HomeworkActivity.this).getLessonHomework(lessonId);
+			protected List<Map<String, Object>> doInBackground(Void... params) {
+//				List<Map<String, Object>> result= LessonWebServerIF.getInstance(HomeworkActivity.this).get_homework_state(lessonId);
+				return null;
 				}
-				catch (Exception e) {
-					return ErrorCode.OK;
-				}
+			protected void onPostExecute(List<Map<String, Object>> result) {
+//				homeworkStates.clear();
+//				homeworkStates.addAll(result);
+//				Log.d("---------------", homeworkStates.get(0).get("stu_name").toString());			
 			}
-
-			protected void onPostExecute(Integer result) {
-                if(result == ErrorCode.OK){
-                    Database db = Database.getInstance(HomeworkActivity.this);
-                    lessonHomeworkz = db.fetchLessonHomework(lessonId);
-                    for (int i = 0; i < lessonHomeworkz.size(); i++) {
-                        homeworktitles.add(i + 1 + "." + lessonHomeworkz.get(i).title);
-                    }
-                    adapter = new HomeWorkArrayAdater(HomeworkActivity.this, homeworktitles);
-                    if (Utils.isAccoTeacher(HomeworkActivity.this)) {
-                        lvHomework.addFooterView(footerView());
-                    }
-                    lvHomework.setAdapter(adapter);
-                }
-
-
-			}
-
-			;
+			
 		});
 	}
+//	private void getLessonHomework(final int lessonId) {
+//		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+//
+//			@Override
+//			protected Integer doInBackground(Void... params) {
+//				try {
+//					return LessonWebServerIF.getInstance(
+//							HomeworkActivity.this).getLessonHomework(lessonId);
+//				}
+//				catch (Exception e) {
+//					return ErrorCode.OK;
+//				}
+//			}
+//
+//			protected void onPostExecute(Integer result) {
+//                if(result == ErrorCode.OK){
+//                    Database db = Database.getInstance(HomeworkActivity.this);
+//                    lessonHomeworkz = db.fetchLessonHomework(lessonId);
+//                    for (int i = 0; i < lessonHomeworkz.size(); i++) {
+//                        homeworktitles.add(i + 1 + "." + lessonHomeworkz.get(i).title);
+//                    }
+//                    adapter = new HomeWorkArrayAdater(HomeworkActivity.this, homeworktitles);
+//                    if (Utils.isAccoTeacher(HomeworkActivity.this)) {
+//                        lvHomework.addFooterView(footerView());
+//                    }
+//                    lvHomework.setAdapter(adapter);
+//                }
+//
+//
+//			}
+//
+//			;
+//		});
+//	}
 
 	@Override
 	public void onClick(View view) {
@@ -99,134 +139,194 @@ public class HomeworkActivity extends Activity implements View.OnClickListener {
 		case R.id.title_back:
 			onBackPressed();
 			break;
-
+			
+		case R.id.layout_sign_class:
+			LessonAddHomework addHomework = mDb.fetchLessonAddHomework(lessonId);
+			if(addHomework == null){
+				Intent i = new Intent(HomeworkActivity.this, AddHomeworkActivity.class);
+				i.putExtra("lessonId",lessonId);
+				startActivity(i);
+			}else{
+				Moment moment = mDb.fetchMoment(addHomework.moment_id + "");
+				FeedbackDetailActivity.launch(HomeworkActivity.this,moment,null,"在线作业");
+			}
+			
+			break;
 		case R.id.lay_footer_add:
-			showAddHomeworkDialog();
+//			showAddHomeworkDialog();
 			break;
 		default:
 			break;
 		}
 	}
 
-	private void showAddHomeworkDialog() {
-        ContextThemeWrapper themeWrapper = null;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
-            themeWrapper = new ContextThemeWrapper(this,android.R.style.Theme_Holo_Light_Dialog);
-        }else{
-            themeWrapper = new ContextThemeWrapper(this,android.R.style.Theme_Light);
-        }
-		AlertDialog.Builder dialog = new AlertDialog.Builder(themeWrapper);
-		View view = getLayoutInflater().inflate(R.layout.lay_add_lesson, null);
-		final EditText edName = (EditText) view.findViewById(R.id.ed_dialog_time);
-		edName.setMinLines(3);
-		view.findViewById(R.id.lay_dialog_date).setVisibility(View.GONE);
-		TextView tv =  (TextView)view.findViewById(R.id.txt_dialog_first);
-		tv.setText(getString(R.string.class_add_homework));
-		dialog.setView(view);
-		dialog.setTitle(getString(R.string.class_add_homework))
-				.setPositiveButton(getString(R.string.confirm),
-						new DialogInterface.OnClickListener() {
+//	private void showAddHomeworkDialog() {
+//        ContextThemeWrapper themeWrapper = null;
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+//            themeWrapper = new ContextThemeWrapper(this,android.R.style.Theme_Holo_Light_Dialog);
+//        }else{
+//            themeWrapper = new ContextThemeWrapper(this,android.R.style.Theme_Light);
+//        }
+//		AlertDialog.Builder dialog = new AlertDialog.Builder(themeWrapper);
+//		View view = getLayoutInflater().inflate(R.layout.lay_add_lesson, null);
+//		final EditText edName = (EditText) view.findViewById(R.id.ed_dialog_time);
+//		edName.setMinLines(3);
+//		view.findViewById(R.id.lay_dialog_date).setVisibility(View.GONE);
+//		TextView tv =  (TextView)view.findViewById(R.id.txt_dialog_first);
+//		tv.setText(getString(R.string.class_add_homework));
+//		dialog.setView(view);
+//		dialog.setTitle(getString(R.string.class_add_homework))
+//				.setPositiveButton(getString(R.string.confirm),
+//						new DialogInterface.OnClickListener() {
+//
+//							@Override
+//							public void onClick(DialogInterface dialog,
+//									int which) {
+//								LessonHomework homework = new LessonHomework();
+//								homework.lesson_id = lessonId;
+//								homework.title = edName.getText().toString();
+//								addPostHomework(homework);
+//							}
+//						}).setNegativeButton(getString(R.string.cancel), null)
+//				.create();
+//		dialog.show();
+//	}
+//
+//	private void addPostHomework(final LessonHomework homework) {
+//		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+//
+//			@Override
+//			protected Integer doInBackground(Void... params) {
+//				return LessonWebServerIF.getInstance(HomeworkActivity.this)
+//						.addOrModifyLessonHomework(homework);
+//			}
+//
+//			protected void onPostExecute(Integer result) {
+//				if (ErrorCode.OK == result) {
+//					homeworktitles.clear();
+//					lessonHomeworkz.clear();
+//					lessonHomeworkz.addAll(Database.getInstance(HomeworkActivity.this).fetchLessonHomework(lessonId));
+//					for (int i = 0; i < lessonHomeworkz.size(); i++) {
+//						homeworktitles.add(i + 1 + "." + lessonHomeworkz.get(i).title);
+//					}
+//					adapter.notifyDataSetChanged();
+//				}
+//			}
+//
+//			;
+//
+//		});
+//	}
+//
+//	private View footerView() {
+//		View view = getLayoutInflater().inflate(R.layout.lay_lv_footer, null);
+//		TextView txt_footer = (TextView) view.findViewById(R.id.txt_footer_add);
+//		txt_footer.setText(getString(R.string.class_add_homework));
+//		LinearLayout layout = (LinearLayout) view
+//				.findViewById(R.id.lay_footer_add);
+//		layout.setOnClickListener(this);
+//		return view;
+//	}
+//
+//    class HomeWorkArrayAdater extends BaseAdapter{
+//
+//        private Context mContext;
+//        private List<String> mStrings;
+//        public HomeWorkArrayAdater(Context context, List<String> strings) {
+//            //super(context,android.R.layout.simple_list_item_1,android.R.id.text1,strings);
+//            mContext = context;
+//            mStrings = strings;
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return mStrings.size();
+//        }
+//
+//        @Override
+//        public Object getItem(int position) {
+//            return mStrings.get(position);
+//        }
+//
+//        @Override
+//        public long getItemId(int position) {
+//            return position;
+//        }
+//
+//        /**
+//         * 将textview字体颜色设为黑色
+//         * @param position
+//         * @param convertView
+//         * @param parent
+//         * @return
+//         */
+//        @Override
+//        public View getView(int position, View convertView, ViewGroup parent) {
+//            ViewHolder holder = null;
+//            if(holder == null){
+//                holder = new ViewHolder();
+//                convertView = LayoutInflater.from(mContext).inflate(android.R.layout.simple_list_item_1,parent,false);
+//                holder.textView = (TextView)convertView.findViewById(android.R.id.text1);
+//                convertView.setTag(holder);
+//            }else{
+//                holder = (ViewHolder)convertView.getTag();
+//            }
+//            holder.textView.setText(mStrings.get(position));
+//            holder.textView.setTextColor(0xff000000);
+//            holder.textView.setTextSize(15);
+//            return convertView;
+//        }
+//
+//        private class ViewHolder{
+//            TextView textView;
+//        }
+//    }
+	class HomeworkStateAdapter extends BaseAdapter{
+		private List<HomeworkState> homeworkStates;
+		public HomeworkStateAdapter(List<HomeworkState> homeworkStates){
+			this.homeworkStates = homeworkStates;
+		}
+		@Override
+		public int getCount() {
+			return homeworkStates.size();
+		}
 
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								LessonHomework homework = new LessonHomework();
-								homework.lesson_id = lessonId;
-								homework.title = edName.getText().toString();
-								addPostHomework(homework);
-							}
-						}).setNegativeButton(getString(R.string.cancel), null)
-				.create();
-		dialog.show();
-	}
+		@Override
+		public Object getItem(int position) {
+			return homeworkStates.get(position);
+		}
 
-	private void addPostHomework(final LessonHomework homework) {
-		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
 
-			@Override
-			protected Integer doInBackground(Void... params) {
-				return LessonWebServerIF.getInstance(HomeworkActivity.this)
-						.addOrModifyLessonHomework(homework);
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHodler holder = null;
+			if(null == convertView){
+				holder = new ViewHodler();
+				convertView = getLayoutInflater().inflate(R.layout.listitem_homework_state, parent, false);
+				holder.tv_student_name = (TextView) convertView.findViewById(R.id.tv_student_name);
+				holder.tv_homework_state = (TextView) convertView.findViewById(R.id.tv_homework_state);
+				convertView.setTag(holder);
+			}else{
+				holder = (ViewHodler) convertView.getTag();
 			}
-
-			protected void onPostExecute(Integer result) {
-				if (ErrorCode.OK == result) {
-					homeworktitles.clear();
-					lessonHomeworkz.clear();
-					lessonHomeworkz.addAll(Database.getInstance(HomeworkActivity.this).fetchLessonHomework(lessonId));
-					for (int i = 0; i < lessonHomeworkz.size(); i++) {
-						homeworktitles.add(i + 1 + "." + lessonHomeworkz.get(i).title);
-					}
-					adapter.notifyDataSetChanged();
-				}
-			}
-
-			;
-
-		});
+//			Classroom cl = homeworkStates.get(position);
+//			holder.classroom_item_name.setText(cl.room_name+" - "+cl.room_num);
+//			holder.classroom_item_icon.setVisibility(View.INVISIBLE);			
+			return convertView;
+		}
+		class ViewHodler{
+			TextView tv_student_name;
+			TextView tv_homework_state;
+		}		
+		
 	}
 
-	private View footerView() {
-		View view = getLayoutInflater().inflate(R.layout.lay_lv_footer, null);
-		TextView txt_footer = (TextView) view.findViewById(R.id.txt_footer_add);
-		txt_footer.setText(getString(R.string.class_add_homework));
-		LinearLayout layout = (LinearLayout) view
-				.findViewById(R.id.lay_footer_add);
-		layout.setOnClickListener(this);
-		return view;
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		
 	}
-
-    class HomeWorkArrayAdater extends BaseAdapter{
-
-        private Context mContext;
-        private List<String> mStrings;
-        public HomeWorkArrayAdater(Context context, List<String> strings) {
-            //super(context,android.R.layout.simple_list_item_1,android.R.id.text1,strings);
-            mContext = context;
-            mStrings = strings;
-        }
-
-        @Override
-        public int getCount() {
-            return mStrings.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return mStrings.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        /**
-         * 将textview字体颜色设为黑色
-         * @param position
-         * @param convertView
-         * @param parent
-         * @return
-         */
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder = null;
-            if(holder == null){
-                holder = new ViewHolder();
-                convertView = LayoutInflater.from(mContext).inflate(android.R.layout.simple_list_item_1,parent,false);
-                holder.textView = (TextView)convertView.findViewById(android.R.id.text1);
-                convertView.setTag(holder);
-            }else{
-                holder = (ViewHolder)convertView.getTag();
-            }
-            holder.textView.setText(mStrings.get(position));
-            holder.textView.setTextColor(0xff000000);
-            holder.textView.setTextSize(15);
-            return convertView;
-        }
-
-        private class ViewHolder{
-            TextView textView;
-        }
-    }
 }

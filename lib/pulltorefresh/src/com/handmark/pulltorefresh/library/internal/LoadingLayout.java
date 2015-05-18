@@ -109,7 +109,10 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		}
 
 		if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderBackground)) {
-			Drawable background = attrs.getDrawable(R.styleable.PullToRefresh_ptrHeaderBackground);
+//			Drawable background = attrs.getDrawable(R.styleable.PullToRefresh_ptrHeaderBackground);
+
+            Drawable background = context.getResources().getDrawable(R.drawable.bg_freshlistview);
+
 			if (null != background) {
 				ViewCompat.setBackground(this, background);
 			}
@@ -262,14 +265,17 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		if (null != mHeaderText) {
 			mHeaderText.setText(mPullLabel);
 		}
-		mHeaderImage.setVisibility(View.VISIBLE);
 
-		if (mUseIntrinsicAnimation) {
-			((AnimationDrawable) mHeaderImage.getDrawable()).stop();
-		} else {
-			// Now call the callback
-			resetImpl();
-		}
+
+        //现在要使得乐趣活动的加载图片不显示
+//		mHeaderImage.setVisibility(View.VISIBLE);
+//
+//		if (mUseIntrinsicAnimation) {
+//			((AnimationDrawable) mHeaderImage.getDrawable()).stop();
+//		} else {
+//			// Now call the callback
+//			resetImpl();
+//		}
 
 		if (null != mSubHeaderText) {
 			if (TextUtils.isEmpty(mSubHeaderText.getText())) {
@@ -318,9 +324,15 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		if (View.INVISIBLE == mHeaderProgress.getVisibility()) {
 			mHeaderProgress.setVisibility(View.VISIBLE);
 		}
-		if (View.INVISIBLE == mHeaderImage.getVisibility()) {
-			mHeaderImage.setVisibility(View.VISIBLE);
-		}
+//		if (View.INVISIBLE == mHeaderImage.getVisibility()) {
+//			mHeaderImage.setVisibility(View.VISIBLE);
+//		}
+
+        //使得乐趣活动中的刷新夹在动画消失不和进度条动画重合
+        if (View.INVISIBLE == mHeaderImage.getVisibility()) {
+            mHeaderImage.setVisibility(View.GONE);
+        }
+
 		if (View.INVISIBLE == mSubHeaderText.getVisibility()) {
 			mSubHeaderText.setVisibility(View.VISIBLE);
 		}

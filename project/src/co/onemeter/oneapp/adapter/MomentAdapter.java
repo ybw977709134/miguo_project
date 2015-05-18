@@ -301,6 +301,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
+        //item进入详情页的监听事件
 //		final WFile file = voiceFile;
 //        convertView.setOnClickListener(new View.OnClickListener() {
 //            @Override

@@ -14,7 +14,7 @@
         <ImageButton
             android:id="@+id/title_back"
             android:layout_height="50dp"
-            android:layout_width="30dp"
+            android:layout_width="50dp"
             android:layout_alignParentLeft="true"
             android:background="@null"
             android:src="@drawable/icon_back_selector"/> 

@@ -1,4 +1,7 @@
 #!/bin/bash
+# usage
+#   sh dev_tools/build_with_gradle.sh [omenv]
+# where omenv = dev01 | product
 
 omenv='dev01'
 [ $# -gt 0 ] && omenv=$1

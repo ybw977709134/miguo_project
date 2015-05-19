@@ -38,7 +38,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:indeterminateDrawable="@drawable/progressbar_load"
+                android:indeterminateDrawable="@drawable/progressbar_rotate"
                 android:max="10000"/>
 
         </FrameLayout>

@@ -111,7 +111,7 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderBackground)) {
 //			Drawable background = attrs.getDrawable(R.styleable.PullToRefresh_ptrHeaderBackground);
 
-            Drawable background = context.getResources().getDrawable(R.drawable.bg_freshlistview);
+            Drawable background = context.getResources().getDrawable(R.drawable.bg_freshlist);
 
 			if (null != background) {
 				ViewCompat.setBackground(this, background);

@@ -1324,40 +1324,111 @@ public class LessonWebServerIF {
 		return errno;
 	}
 	
-	public int getMomentId(List<Moment> moment_list){
-    	String uid = mPrefUtil.getUid();
+	public List<Map<String, Object>> get_homework_state (int lesson_id) {
+		String uid = mPrefUtil.getUid();
 		String password = mPrefUtil.getPassword();
-		if(uid == null || password == null)
-			return ErrorCode.INVALID_ARGUMENT;
-		final String action = "add_moment";
+		if (uid == null || password == null)
+			return null;
+		
+		String action = "get_homework_state";
 		String postStr = "action=" + action
 				+ "&uid=" + Utils.urlencodeUtf8(uid)
 				+ "&password=" + Utils.urlencodeUtf8(password)
-				+ "&anonymous=" + 1;
+				+ "&lesson_id="+ lesson_id;
 		
 		Connect2 connect2 = new Connect2();
-		Element root = connect2.Post(postStr);
-		int errno = ErrorCode.BAD_RESPONSE;
-		if (root != null) {
-			NodeList errorList = root.getElementsByTagName("err_no");
-			Element errorElement = (Element) errorList.item(0);
-			String errorStr = errorElement.getFirstChild().getNodeValue();
-
-			if (errorStr.equals("0")) {
-				errno = 0;
-
-				Element resultElement = Utils.getFirstElementByTagName(root, action);
-				if (resultElement != null) {
-					Moment moment = XmlHelper
-							.parseMoment(resultElement);
-					moment_list.add(moment);
-					}
+		Connect2.SetTimeout(5000, 0);
 		
-			} else {
-				errno = Integer.parseInt(errorStr);
-			}
-		}
-		return errno;
+		String xmlStr = connect2.getXmlString(postStr);
+		
+		//对获得的xml文件进行pull解析
+		XmlPullParserFactory factory;
+		try {
+			factory = XmlPullParserFactory.newInstance();
+			// 实例化一个xml pull解析对象
+			XmlPullParser pullParser = factory.newPullParser();
+			
+			// 将xml文件作为流传入到inputstream
+			//System.out.println(xmlStr);
+	        xmlStr=xmlStr.replaceAll("&amp;", "＆");
+	        xmlStr=xmlStr.replaceAll("&quot;", "\"");
+	        xmlStr=xmlStr.replaceAll("&nbsp;", " ");
 
-    }
+	        BufferedInputStream bis = new BufferedInputStream(
+	        		new ByteArrayInputStream( xmlStr.getBytes()));
+	        
+	     // xml解析对象接收输入流对象
+	        pullParser.setInput(bis, "utf-8");
+
+	        int event = pullParser.getEventType();
+//	        List<List<Map<String, Object>>> listALL = null;
+	        List<Map<String, Object>> list = null;
+	        Map<String, Object> map = null;
+	        String homework_id = null;
+	        
+	        while (event != XmlPullParser.END_DOCUMENT) {
+	        	switch (event) {
+	        	
+	        	case XmlPullParser.START_DOCUMENT:
+//	        		listALL = new ArrayList<List<Map<String, Object>>>();
+	        		list = new ArrayList<Map<String,Object>>();
+	        		
+	        	
+	        	break;
+	        	
+	        	case XmlPullParser.START_TAG:
+		        	if ("homework".equals(pullParser.getName())) {
+		        		list = new ArrayList<Map<String, Object>>();
+		        	}
+
+		        	if ("homework_id".equals(pullParser.getName())) {
+		        		map = new HashMap<String, Object>();
+		        		homework_id = pullParser.nextText();
+		        		map.put("homework_id", homework_id);
+
+		        	}
+		        	
+		        	if ("student".equals(pullParser.getName())) {
+		        		if (homework_id == null) {
+		        			map = new HashMap<String, Object>();
+		        		}
+		        		homework_id = null;
+		        	}
+
+		        	if (pullParser.getName().equals("uid")) {
+		        		map.put("stu_uid", pullParser.nextText());
+		        	}
+		        	
+		        	if (pullParser.getName().equals("name")) {
+		        		map.put("stu_name", pullParser.nextText());
+		        	}
+		        	       	
+		        	if (pullParser.getName().equals("state")) {
+		        		map.put("stu_state", pullParser.nextText());
+		        	}
+		        	
+	        	break;
+	        	
+	        	case XmlPullParser.END_TAG:
+	        	
+	        	if (pullParser.getName().equals("student")) {
+	        		list.add(map);
+	        	}
+//	        	if (pullParser.getName().equals("homework")) {
+//	        		listALL.add(list);
+//	        	}
+	        	break;
+	        	
+	        	}
+	        	event = pullParser.next();
+	        
+	        }  
+	        return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
 }

@@ -19,6 +19,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.ClassroomActivity.ClassroomAdapter.ViewHodler;
+import co.onemeter.oneapp.utils.ListViewUtils;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
 
@@ -33,6 +34,7 @@ import org.wowtalk.api.LessonAddHomework;
 import org.wowtalk.api.LessonHomework;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.Moment;
+import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +45,10 @@ import java.util.Map;
  * Created by pzy on 11/10/14. Modified by yl on 23/12/2014
  */
 public class HomeworkActivity extends Activity implements OnClickListener, OnItemClickListener{
+	private static final int REQ_PARENT_ADDHOMEWORK = 100;
 	private TextView tv_class_name;
 	private TextView tv_lesson_name;
+	private TextView tv_addhomework_state;
 	private int lessonId;
 //	private List<LessonHomework> lessonHomeworkz;
 	private List<Map<String, Object>> homeworkStates;
@@ -55,6 +59,8 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 //
 	private ListView lvHomework;
 	private Database mDb;
+	private LessonAddHomework addHomework ;
+	private MessageBox msgbox;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -69,31 +75,43 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		lvHomework = (ListView) findViewById(R.id.lv_homework);
 		q = new AQuery(this);
 		mDb = new Database(this);
+		msgbox = new MessageBox(this);
 		q.find(R.id.title_back).clicked(this);
 		q.find(R.id.layout_sign_class).clicked(this);
 
-//		homeworktitles = new ArrayList<String>();
 		homeworkStates = new ArrayList<Map<String, Object>>();
-//		getLessonHomework(lessonId);
 		tv_class_name = (TextView) findViewById(R.id.tv_class_name);
 		tv_lesson_name = (TextView) findViewById(R.id.tv_lesson_name);
 		tv_class_name.setText(getIntent().getStringExtra("class_name"));
 		tv_lesson_name.setText(getIntent().getStringExtra("lesson_name"));
+		tv_addhomework_state = (TextView) findViewById(R.id.tv_addhomework_state);
 		lvHomework.setOnItemClickListener(this);
 		
+		addHomework = mDb.fetchLessonAddHomework(lessonId);
+		if(addHomework == null){
+			tv_addhomework_state.setText("未布置");
+		}else{
+			tv_addhomework_state.setText("已布置");
+		}
 	}
 
 	private void getHomeworkState(final int lessonId){
+		msgbox.showWait();
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, List<Map<String, Object>>>() {
 			@Override
 			protected List<Map<String, Object>> doInBackground(Void... params) {
-//				List<Map<String, Object>> result= LessonWebServerIF.getInstance(HomeworkActivity.this).get_homework_state(lessonId);
-				return null;
-				}
+				List<Map<String, Object>> result= LessonWebServerIF.getInstance(HomeworkActivity.this).get_homework_state(lessonId);
+				return result;
+			}
 			protected void onPostExecute(List<Map<String, Object>> result) {
-//				homeworkStates.clear();
-//				homeworkStates.addAll(result);
-//				Log.d("---------------", homeworkStates.get(0).get("stu_name").toString());			
+				msgbox.dismissWait();
+				homeworkStates.clear();
+				homeworkStates.addAll(result);
+				adapter = new HomeworkStateAdapter(homeworkStates);
+				adapter.notifyDataSetChanged();
+				lvHomework.setAdapter(adapter);
+				ListViewUtils.setListViewHeightBasedOnChildren(lvHomework);
+				
 			}
 			
 		});
@@ -140,15 +158,14 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			onBackPressed();
 			break;
 			
-		case R.id.layout_sign_class:
-			LessonAddHomework addHomework = mDb.fetchLessonAddHomework(lessonId);
+		case R.id.layout_sign_class:	
 			if(addHomework == null){
 				Intent i = new Intent(HomeworkActivity.this, AddHomeworkActivity.class);
 				i.putExtra("lessonId",lessonId);
-				startActivity(i);
+				startActivityForResult(i, REQ_PARENT_ADDHOMEWORK);
 			}else{
 				Moment moment = mDb.fetchMoment(addHomework.moment_id + "");
-				FeedbackDetailActivity.launch(HomeworkActivity.this,moment,null,"在线作业");
+				FeedbackDetailActivity.launch(HomeworkActivity.this,moment,null,"布置作业");
 			}
 			
 			break;
@@ -160,6 +177,15 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		}
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(resultCode == Activity.RESULT_OK){
+			if(requestCode == REQ_PARENT_ADDHOMEWORK){
+				getHomeworkState(lessonId);
+				tv_addhomework_state.setText("已布置");
+			}
+		}
+	}
 //	private void showAddHomeworkDialog() {
 //        ContextThemeWrapper themeWrapper = null;
 //        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
@@ -282,8 +308,8 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 //        }
 //    }
 	class HomeworkStateAdapter extends BaseAdapter{
-		private List<HomeworkState> homeworkStates;
-		public HomeworkStateAdapter(List<HomeworkState> homeworkStates){
+		private List<Map<String, Object>> homeworkStates;
+		public HomeworkStateAdapter(List<Map<String, Object>> homeworkStates){
 			this.homeworkStates = homeworkStates;
 		}
 		@Override
@@ -315,7 +341,18 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			}
 //			Classroom cl = homeworkStates.get(position);
 //			holder.classroom_item_name.setText(cl.room_name+" - "+cl.room_num);
-//			holder.classroom_item_icon.setVisibility(View.INVISIBLE);			
+//			holder.classroom_item_icon.setVisibility(View.INVISIBLE);		
+			int state = Integer.parseInt(String.valueOf(homeworkStates.get(position).get("stu_state")));
+			String stateStr = null;
+			if(state == 0){
+				stateStr = "提醒交作业";
+			}else if(state == 1){
+				stateStr = "新提交";
+			}else if(state == 2){
+				stateStr = "已批改";
+			}
+			holder.tv_student_name.setText(String.valueOf(homeworkStates.get(position).get("stu_name")));
+			holder.tv_homework_state.setText(stateStr);
 			return convertView;
 		}
 		class ViewHodler{
@@ -327,6 +364,6 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		
+		Log.d("-------------homeworkStates--------------", homeworkStates.get(0).get("homework_id")+"");
 	}
 }

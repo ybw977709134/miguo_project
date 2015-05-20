@@ -49,6 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent">
                 <LinearLayout
+                    android:id="@+id/linearLayout_date_time"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:layout_alignParentLeft="true"

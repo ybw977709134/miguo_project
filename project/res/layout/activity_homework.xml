@@ -20,7 +20,7 @@
 
         <TextView
             style="?attr/navbar_title"
-            android:text="@string/class_homework" />
+            android:text="@string/class_homework_list" />
     </RelativeLayout>
     
     
@@ -48,7 +48,8 @@
                 android:id="@+id/divider_teachersign_class_up"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:background="@drawable/bg_section_divider_line_dark"/>
+                android:background="@drawable/bg_section_divider_line_dark"
+                android:layout_marginTop="5dp"/>
             <LinearLayout
                 android:id="@+id/layout_sign_class"
                 android:layout_width="fill_parent"
@@ -60,7 +61,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="2.5"
                     android:clickable="false"
                     android:gravity="center_vertical"
                     android:paddingLeft="10dp"
@@ -69,10 +70,19 @@
                     android:textSize="18sp" />
                 
                 <TextView
+                    android:id="@+id/tv_addhomework_state"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:padding="5dp"
+                    android:text="" />
+                
+                <TextView
                     android:id="@+id/textView_class_name"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
-                    android:layout_weight="2"
+                    android:layout_weight="0.3"
                     android:drawableRight="@drawable/table_arrow"
                     android:gravity="center_vertical|right"
                     android:paddingRight="10dp"
@@ -85,13 +95,15 @@
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:background="@drawable/bg_section_divider_line_dark"/>
+
             <ListView
                 android:id="@+id/lv_homework"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:divider="@drawable/divider"
-                android:cacheColorHint="#00000000">
-                
+                android:cacheColorHint="#00000000"
+                android:divider="@drawable/divider" 
+                android:scrollbars="none"
+                android:layout_marginTop="25dp">
             </ListView>
             
         </LinearLayout>  

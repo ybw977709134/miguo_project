@@ -46,6 +46,7 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
     private TextView title_name;
 
     private LinearLayout micLayout;
+    private LinearLayout linearLayout_date_time;
     private ImageView btnPlay;
     private ProgressBar progressBar;
     private TimerTextView micTimer;
@@ -70,6 +71,7 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
         txtTime = (TextView) findViewById(R.id.txt_time);
         txtDate = (TextView) findViewById(R.id.txt_date);
         title_name = (TextView) findViewById(R.id.title_name);
+        linearLayout_date_time = (LinearLayout) findViewById(R.id.linearLayout_date_time);
         micLayout = (LinearLayout) findViewById(R.id.mic_layout);
         btnPlay = (ImageView) findViewById(R.id.btn_play);
         progressBar = (ProgressBar) findViewById(R.id.progress);
@@ -277,6 +279,7 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
         }
         if(!TextUtils.isEmpty(tag)){
         	title_name.setText(tag);
+        	linearLayout_date_time.setVisibility(View.GONE);
         }
         long time = Long.valueOf(moment.timestamp * 1000);
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");

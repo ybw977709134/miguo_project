@@ -70,7 +70,7 @@ then
     echo "        <link>http://$host/download/`basename $dest`</link>" >> $ver_xml
     echo "        <change_log>" >> $ver_xml
 
-    git log --pretty='format:          <li>%h %s</li>' --no-merges \
+    git log --pretty='format:          <li><![CDATA[%h %s]]></li>' --no-merges \
         --since "`date -d '1 days ago' +%Y-%m-%d`" >> $ver_xml
     echo '' >> $ver_xml
 

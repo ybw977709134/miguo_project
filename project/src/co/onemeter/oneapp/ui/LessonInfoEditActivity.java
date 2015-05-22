@@ -466,6 +466,7 @@ public class LessonInfoEditActivity extends Activity implements OnClickListener,
 					adapter.notifyDataSetChanged();
 				}else if(ErrorCode.ERR_DUPLICATE_LESSONS_ON_SAME_DAY == result){
 					mMsgBox.toast(R.string.class_time_had);
+					getLessonInfo();
 				}else{
 					mMsgBox.toast(R.string.class_time_conflict);
 				}

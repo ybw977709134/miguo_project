@@ -1509,8 +1509,9 @@ public class LessonWebServerIF {
 
                         if ("moment".equals(pullParser.getName())) {
                             flagMoment = 1;//老师发布的活动
-                            if (flag == 2) {
-                                flagMoment = 2;//学生发布的活动
+
+                            if (flag == 4) {//切换到学生
+                                flag = 5;
                             }
                         }
 
@@ -1546,7 +1547,7 @@ public class LessonWebServerIF {
                                 getLessonHomework.teacherMoment.moment_id = Integer.valueOf(pullParser.nextText());
                             }
 
-                            if (flag == 3) {//学生多媒体moment_id
+                            if (flag == 3) {//多媒体moment_id
                                 homeWorkMultimedia.moment_id = Integer.valueOf(pullParser.nextText());
                             }
 
@@ -1554,7 +1555,7 @@ public class LessonWebServerIF {
                                 homeWorkResult.moment_id = Integer.valueOf(pullParser.nextText());
                             }
 
-                            if (flagMoment == 2) {
+                            if (flag== 5) {
                                 homeWorkResult.stuMoment.moment_id = Integer.valueOf(pullParser.nextText());
                             }
                         }
@@ -1683,46 +1684,37 @@ public class LessonWebServerIF {
 
 
                         if (pullParser.getName().equals("multimedia_content_id")) {
-                            if (flagMedia == 1) {//老师
                                 homeWorkMultimedia.multimedia_content_id = Integer.valueOf(pullParser.nextText());
-                            }
                         }
 
                         if (pullParser.getName().equals("multimedia_content_type")) {
-                            if (flagMedia == 1) {//老师
                                 homeWorkMultimedia.multimedia_content_type = pullParser.nextText();
-                            }
                         }
 
 
                         if (pullParser.getName().equals("multimedia_content_path")) {
-                            if (flagMedia == 1) {//老师
                                 homeWorkMultimedia.multimedia_content_path = pullParser.nextText();
-                            }
                         }
 
 
                         if (pullParser.getName().equals("duration")) {
-                            if (flagMedia == 1) {//老师
                                 homeWorkMultimedia.duration = Integer.valueOf(pullParser.nextText());
-                            }
                         }
 
 
                         if (pullParser.getName().equals("multimedia_thumbnail_path")) {
-                            if (flagMedia == 1) {//老师
                                 homeWorkMultimedia.multimedia_thumbnail_path = pullParser.nextText();
-                            }
                         }
 
 
                         if ("homework_results".equals(pullParser.getName())) {
-
+                            flagMedia = 2;
                         }
 
 
                         if ("homework_result".equals(pullParser.getName())) {
                             homeWorkResult = new HomeWorkResult();
+                            flag = 4;
                         }
 
 
@@ -1786,6 +1778,7 @@ public class LessonWebServerIF {
                             }
                         }
 
+
                         if (pullParser.getName().equals("multimedias")) {
                             if (flagMedia == 1) {
                                 getLessonHomework.teacherMoment.homeWorkMultimedias.add(homeWorkMultimedia);
@@ -1796,32 +1789,26 @@ public class LessonWebServerIF {
                             }
                         }
 
-                        if (pullParser.getName().equals("moment")) {
-                            if (flagMoment == 1) {
-                                flag = 4;
-                                flagMoment = 2;
-                                flagMedia = 2;
-                            }
-                        }
-
 
                         if (pullParser.getName().equals("homework_review")) {
                             homeWorkResult.homeWorkReview = homeWorkReview;
+                            flagReview = 0;
                         }
-
 
                         if (pullParser.getName().equals("homework_result")) {
                             getLessonHomework.stuResultList.add(homeWorkResult);
+                            //结束一个学生的作业答复情况，应该重置多媒体对象和批改作业结果的对象
+                            homeWorkMultimedia = null;//多媒体对象
+                            homeWorkReview = null;//老师批改结果
                         }
-
 
                         if (pullParser.getName().equals("homework_results")) {
                             flag = 1;
                             flagMedia = 1;
                             flagMoment = 1;
                             flagReview = 0;
-                        }
 
+                        }
 
                         break;
 

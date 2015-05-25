@@ -1448,7 +1448,7 @@ public class LessonWebServerIF {
         String postStr = "action=" + action
                 + "&uid=" + Utils.urlencodeUtf8(uid)
                 + "&password=" + Utils.urlencodeUtf8(password)
-                + "&class_id="+ lesson_id;
+                + "&lesson_id="+ lesson_id;
 
         Connect2 connect2 = new Connect2();
         Connect2.SetTimeout(5000, 0);
@@ -1476,26 +1476,21 @@ public class LessonWebServerIF {
 
             int event = pullParser.getEventType();
 
+            List<HomeWorkResult> stuResultList = null;
+            List<HomeWorkMultimedia> homeWorkMultimedias = null;
+            HomeWorkMoment teacherMoment = null;//老师布置活动
+            HomeWorkMoment stuMoment = null;//学生布置活动
 
             HomeWorkMultimedia homeWorkMultimedia = null;//多媒体对象
             HomeWorkResult homeWorkResult = null;//学生做题结果
             HomeWorkReview homeWorkReview = null;//老师批改结果
+
             /**
-             * 1-最外层，2-老师的外层，3-学生外层，4-学生内层
-             * */
-            int flag = 0;//控制最外层
-            /**
-             * 1-老师，2-学生
+             * 1-老师moment_id，2-老师moment的老师moment_id，3-老师多媒体moment_id
+             * 4-学生moment_id，5-学生moment的老师moment_id，6-学生多媒体moment_id
              * */
             int flagMoment = 0;
-            /**
-             * 1-老师发布的多媒体，2-学生发布的多媒体
-             * */
-            int flagMedia = 0;//多媒体
-            /**
-             * 0-老师没有批改作业，1-老师批改了作业
-             * */
-            int flagReview = 0;//批改
+
 
             while (event != XmlPullParser.END_DOCUMENT) {
                 switch (event) {
@@ -1503,182 +1498,199 @@ public class LessonWebServerIF {
                     case XmlPullParser.START_TAG:
 
                         if ("homework".equals(pullParser.getName())) {
-                             flag = 1;//最外层
+                            flagMoment = 1;//最外层
                         }
 
 
                         if ("moment".equals(pullParser.getName())) {
-                            flagMoment = 1;//老师发布的活动
 
-                            if (flag == 4) {//切换到学生
-                                flag = 5;
+                            if (flagMoment == 1) {
+                                flagMoment = 2;
+                                teacherMoment = new HomeWorkMoment();
                             }
+
+                            if (flagMoment == 4) {
+                                flagMoment = 5;
+                                stuMoment = new HomeWorkMoment();
+                            }
+
+                            homeWorkMultimedias = new ArrayList<HomeWorkMultimedia>();
                         }
 
 
+
                         if (pullParser.getName().equals("id")) {
-                            if (flag == 1) {//最外层id
+                            if (flagMoment == 1) {//最外层id
                                 getLessonHomework.id = Integer.valueOf(pullParser.nextText());
                             }
 
-                            if (flag == 4) {//homeWorkResult的id
+                            if (flagMoment == 4) {//homeWorkResult的id
                                 homeWorkResult.id = Integer.valueOf(pullParser.nextText());
                             }
 
-                            if (flagReview == 1) {
+                            if (flagMoment == 6) {
                                 homeWorkReview.id = Integer.valueOf(pullParser.nextText());
                             }
                         }
 
 
                         if (pullParser.getName().equals("lesson_id")) {
-                            if (flag == 1) {
+                            if (flagMoment == 1) {
                                 getLessonHomework.id = Integer.valueOf(pullParser.nextText());
                             }
                         }
 
 
                         if (pullParser.getName().equals("moment_id")) {
-                            if (flag == 1) {//最外层momnet_id
+
+                            if (flagMoment == 1) {
                                 getLessonHomework.id = Integer.valueOf(pullParser.nextText());
                             }
 
-                            if (flag == 2) {//老师momnet_id
-                                getLessonHomework.teacherMoment.moment_id = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment == 2) {
+                                teacherMoment.moment_id = Integer.valueOf(pullParser.nextText());
                             }
 
-                            if (flag == 3) {//多媒体moment_id
+                            if (flagMoment == 3) {
                                 homeWorkMultimedia.moment_id = Integer.valueOf(pullParser.nextText());
                             }
 
-                            if (flag == 4) {//学生多媒体moment_id
+                            if (flagMoment == 4) {
                                 homeWorkResult.moment_id = Integer.valueOf(pullParser.nextText());
                             }
 
-                            if (flag== 5) {
-                                homeWorkResult.stuMoment.moment_id = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment == 5) {
+                                stuMoment.moment_id = Integer.valueOf(pullParser.nextText());
                             }
+
+                            if (flagMoment == 6) {
+                                homeWorkMultimedia.moment_id = Integer.valueOf(pullParser.nextText());
+                            }
+
                         }
 
                         /**
                          * 以下是moment段*/
                         if (pullParser.getName().equals("owner_id")) {
-                            if (flagMoment == 1) {//老师
-                                getLessonHomework.teacherMoment.owner_id = pullParser.nextText();
+                            if (flagMoment == 2) {//老师
+                                teacherMoment.owner_id = pullParser.nextText();
                             }
 
-                            if (flagMoment == 2) {//学生
-                                homeWorkResult.stuMoment.owner_id = pullParser.nextText();
+                            if (flagMoment == 5) {//学生
+                                stuMoment.owner_id = pullParser.nextText();
                             }
                         }
 
 
                         if (pullParser.getName().equals("insert_timestamp")) {
-                            if (flagMoment == 1) {//老师
-                                getLessonHomework.teacherMoment.insert_timestamp = Long.valueOf(pullParser.nextText());
+                            if (flagMoment == 2) {//老师
+                                teacherMoment.insert_timestamp = Long.valueOf(pullParser.nextText());
                             }
 
-                            if (flagMoment == 2) {//学生
-                                homeWorkResult.stuMoment.insert_timestamp = Long.valueOf(pullParser.nextText());
+                            if (flagMoment == 5) {//学生
+                                stuMoment.insert_timestamp = Long.valueOf(pullParser.nextText());
                             }
                         }
 
 
                         if (pullParser.getName().equals("insert_latitude")) {
-                            if (flagMoment == 1) {//老师
-                                getLessonHomework.teacherMoment.insert_latitude = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment == 2) {//老师
+                                teacherMoment.insert_latitude = Integer.valueOf(pullParser.nextText());
                             }
 
-                            if (flagMoment == 2) {//学生
-                                homeWorkResult.stuMoment.insert_latitude = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment == 5) {//学生
+                                stuMoment.insert_latitude = Integer.valueOf(pullParser.nextText());
                             }
                         }
 
 
                         if (pullParser.getName().equals("insert_longitude")) {
-                            if (flagMoment == 1) {//老师
-                                getLessonHomework.teacherMoment.insert_longitude = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment == 2) {//老师
+                                teacherMoment.insert_longitude = Integer.valueOf(pullParser.nextText());
                             }
 
-                            if (flagMoment == 2) {//学生
-                                homeWorkResult.stuMoment.insert_longitude = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment == 5) {//学生
+                                stuMoment.insert_longitude = Integer.valueOf(pullParser.nextText());
                             }
                         }
 
 
                         if (pullParser.getName().equals("text_content")) {
-                            if (flagMoment == 1) {//老师
-                                getLessonHomework.teacherMoment.text_content = pullParser.nextText();
+                            if (flagMoment == 2) {//老师
+                                teacherMoment.text_content = pullParser.nextText();
                             }
 
-                            if (flagMoment == 2) {//学生
-                                homeWorkResult.stuMoment.text_content = pullParser.nextText();
+                            if (flagMoment == 5) {//学生
+                                stuMoment.text_content = pullParser.nextText();
                             }
                         }
 
-
                         if (pullParser.getName().equals("privacy_level")) {
-                            if (flagMoment == 1) {//老师
-                                getLessonHomework.teacherMoment.privacy_level = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment == 2) {//老师
+                                teacherMoment.privacy_level = Integer.valueOf(pullParser.nextText());
                             }
 
-                            if (flagMoment == 2) {//学生
-                                homeWorkResult.stuMoment.privacy_level = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment == 5) {//学生
+                                stuMoment.privacy_level = Integer.valueOf(pullParser.nextText());
                             }
                         }
 
 
                         if (pullParser.getName().equals("allow_review")) {
-                            if (flagMoment == 1) {//老师
-                                getLessonHomework.teacherMoment.allow_review = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment == 2) {//老师
+                                teacherMoment.allow_review = Integer.valueOf(pullParser.nextText());
                             }
 
-                            if (flagMoment == 2) {//学生
-                                homeWorkResult.stuMoment.allow_review = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment == 5) {//学生
+                                stuMoment.allow_review = Integer.valueOf(pullParser.nextText());
                             }
                         }
 
 
                         if (pullParser.getName().equals("tag")) {
-                            if (flagMoment == 1) {//老师
-                                getLessonHomework.teacherMoment.tag = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment == 2) {//老师
+                                teacherMoment.tag = Integer.valueOf(pullParser.nextText());
                             }
 
-                            if (flagMoment == 2) {//学生
-                                homeWorkResult.stuMoment.tag = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment == 5) {//学生
+                                stuMoment.tag = Integer.valueOf(pullParser.nextText());
                             }
                         }
 
 
                         if (pullParser.getName().equals("deadline")) {
-                            if (flagMoment == 1) {//老师
-                                getLessonHomework.teacherMoment.deadline = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment == 2) {//老师
+                                teacherMoment.deadline = Integer.valueOf(pullParser.nextText());
                             }
 
-                            if (flagMoment == 2) {//学生
-                                homeWorkResult.stuMoment.deadline = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment ==5) {//学生
+                                stuMoment.deadline = Integer.valueOf(pullParser.nextText());
                             }
                         }
 
 
                         if (pullParser.getName().equals("delete")) {
-                            if (flagMoment == 1) {//老师
-                                getLessonHomework.teacherMoment.delete = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment == 2) {//老师
+                                teacherMoment.delete = Integer.valueOf(pullParser.nextText());
                             }
 
-                            if (flagMoment == 2) {//学生
-                                homeWorkResult.stuMoment.delete = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment == 5) {//学生
+                                stuMoment.delete = Integer.valueOf(pullParser.nextText());
                             }
                         }
 
 
 
                         if ("multimedias".equals(pullParser.getName())) {
-                            flag = 3;
-                            flagMedia = 1;//老师发布的活动
+
                             if (flagMoment == 2) {
-                                flagMedia = 2;
+                                flagMoment = 3;
                             }
+
+                            if (flagMoment == 5) {
+                                flagMoment = 6;
+                            }
+
                             homeWorkMultimedia = new HomeWorkMultimedia();
                         }
 
@@ -1708,13 +1720,15 @@ public class LessonWebServerIF {
 
 
                         if ("homework_results".equals(pullParser.getName())) {
-                            flagMedia = 2;
+                            stuResultList = new ArrayList<HomeWorkResult>();
                         }
 
 
                         if ("homework_result".equals(pullParser.getName())) {
+
+                            flagMoment = 4;
                             homeWorkResult = new HomeWorkResult();
-                            flag = 4;
+
                         }
 
 
@@ -1725,18 +1739,18 @@ public class LessonWebServerIF {
 
                         if (pullParser.getName().equals("homework_id")) {
 
-                            if (flag == 1) {
-                                getLessonHomework.homework_id = Integer.valueOf(pullParser.nextText());
+                            if (flagMoment == 4){
+                                homeWorkResult.homework_id = Integer.valueOf(pullParser.nextText());
                             }
 
-                            if (flag == 4){
-                                homeWorkResult.homework_id = Integer.valueOf(pullParser.nextText());
+
+                            if (flagMoment == 6) {
+                                getLessonHomework.homework_id = Integer.valueOf(pullParser.nextText());
                             }
                         }
 
 
                         if ("homework_review".equals(pullParser.getName())) {
-                            flagReview = 1;
                             homeWorkReview = new HomeWorkReview();
                         }
 
@@ -1771,42 +1785,39 @@ public class LessonWebServerIF {
 
                     case XmlPullParser.END_TAG:
 
-                        //切换角色
-                        if (pullParser.getName().equals("moment_id")) {
-                            if (flag == 1) {
-                                flag =2;
-                            }
-                        }
-
 
                         if (pullParser.getName().equals("multimedias")) {
-                            if (flagMedia == 1) {
-                                getLessonHomework.teacherMoment.homeWorkMultimedias.add(homeWorkMultimedia);
+
+                                homeWorkMultimedias.add(homeWorkMultimedia);
+                        }
+
+                        if (pullParser.getName().equals("moment")) {
+
+                            if (flagMoment == 3) {//老师的布置的作业结束
+                                teacherMoment.homeWorkMultimedias = homeWorkMultimedias;
+                                getLessonHomework.teacherMoment = teacherMoment;
                             }
 
-                            if (flagMedia == 2) {
-                                homeWorkResult.stuMoment.homeWorkMultimedias.add(homeWorkMultimedia);
+                            if (flagMoment == 6) {//老师的布置的作业结束
+                                stuMoment.homeWorkMultimedias = homeWorkMultimedias;
+
                             }
+
                         }
 
 
                         if (pullParser.getName().equals("homework_review")) {
                             homeWorkResult.homeWorkReview = homeWorkReview;
-                            flagReview = 0;
                         }
 
                         if (pullParser.getName().equals("homework_result")) {
-                            getLessonHomework.stuResultList.add(homeWorkResult);
-                            //结束一个学生的作业答复情况，应该重置多媒体对象和批改作业结果的对象
-                            homeWorkMultimedia = null;//多媒体对象
-                            homeWorkReview = null;//老师批改结果
+                            stuResultList.add(homeWorkResult);
+
                         }
 
                         if (pullParser.getName().equals("homework_results")) {
-                            flag = 1;
-                            flagMedia = 1;
-                            flagMoment = 1;
-                            flagReview = 0;
+
+                            getLessonHomework.stuResultList = stuResultList;
 
                         }
 
@@ -1814,7 +1825,6 @@ public class LessonWebServerIF {
 
                 }
                 event = pullParser.next();
-
             }
             return 1;
         } catch (Exception e) {

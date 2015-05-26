@@ -3,6 +3,7 @@ package org.wowtalk.api;
 import android.R.integer;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -1262,10 +1263,13 @@ public class LessonWebServerIF {
 	}
 	
 	public int addLessonHomework(LessonAddHomework addhomework,Moment moment){
+	    int homeworkid = 0;
+	    int error_no = -1;
 		String uid = mPrefUtil.getUid();
 		String password = mPrefUtil.getPassword();
 		if (uid == null || password == null)
 			return ErrorCode.NOT_LOGGED_IN;
+
 
 		if (moment != null && TextUtils.isEmpty(moment.id)) {
 			int errno = MomentWebServerIF.getInstance(mContext).fAddMoment(
@@ -1287,20 +1291,83 @@ public class LessonWebServerIF {
 
 		Connect2 connect2 = new Connect2();
 		Element root = connect2.Post(postStr);
+		
+        String xmlStr = connect2.getXmlString(postStr);
+		
+		//对获得的xml文件进行pull解析
+		XmlPullParserFactory factory;
+		try {
+			factory = XmlPullParserFactory.newInstance();
+			// 实例化一个xml pull解析对象
+			XmlPullParser pullParser = factory.newPullParser();
+			
+			// 将xml文件作为流传入到inputstream
+			//System.out.println(xmlStr);
+	        xmlStr=xmlStr.replaceAll("&amp;", "＆");
+	        xmlStr=xmlStr.replaceAll("&quot;", "\"");
+	        xmlStr=xmlStr.replaceAll("&nbsp;", " ");
 
+	        BufferedInputStream bis = new BufferedInputStream(
+	        		new ByteArrayInputStream( xmlStr.getBytes()));
+	        
+	     // xml解析对象接收输入流对象
+	        pullParser.setInput(bis, "utf-8");
+	        int event = pullParser.getEventType();
+	      
+
+	        
+	        while (event != XmlPullParser.END_DOCUMENT) {
+	        	switch (event) {
+	        	
+	        	case XmlPullParser.START_DOCUMENT:        		
+	        			
+	        	break;
+	        	
+	        	case XmlPullParser.START_TAG:
+	        		
+	        		if ("err_no".equals(pullParser.getName())) {
+		        		error_no = Integer.valueOf(pullParser.nextText());
+		        	}
+	        		
+		        	if ("id".equals(pullParser.getName())) {
+		        		homeworkid = Integer.valueOf(pullParser.nextText());
+		        	}
+		        	
+	        	break;
+	        	
+	        	case XmlPullParser.END_TAG:
+	        	break;
+	        	
+	        	}
+	        	event = pullParser.next();
+	        	
+	        
+	        }  
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+//     	int errno = ErrorCode.BAD_RESPONSE;
+//		if (root != null) {
+//			NodeList errorList = root.getElementsByTagName("err_no");
+//			Element errorElement = (Element) errorList.item(0);
+//			String errorStr = errorElement.getFirstChild().getNodeValue();
+//
+//			if (errorStr.equals("0")) {
+//				errno = ErrorCode.OK;
+//				Database db = new Database(mContext);
+//				db.storeLessonAddHomework(addhomework,homeworkid);
+//			} else {
+//				errno = Integer.parseInt(errorStr);
+//			}
+//		}
 		int errno = ErrorCode.BAD_RESPONSE;
-		if (root != null) {
-			NodeList errorList = root.getElementsByTagName("err_no");
-			Element errorElement = (Element) errorList.item(0);
-			String errorStr = errorElement.getFirstChild().getNodeValue();
-
-			if (errorStr.equals("0")) {
-				errno = ErrorCode.OK;
-				Database db = new Database(mContext);
-				db.storeLessonAddHomework(addhomework);
-			} else {
-				errno = Integer.parseInt(errorStr);
-			}
+		if(error_no == 0){
+			errno = ErrorCode.OK;
+			Database db = new Database(mContext);
+			db.storeLessonAddHomework(addhomework,homeworkid);
+		}else{
+			errno = error_no;
 		}
 		return errno;
 	}
@@ -1364,13 +1431,19 @@ public class LessonWebServerIF {
 //	        List<List<Map<String, Object>>> listALL = null;
 	        List<Map<String, Object>> list = null;
 	        Map<String, Object> map = null;
-	        String homework_id = null;
+//	        String homework_id = null;
+	        int flag = 0;
 	        
 	        while (event != XmlPullParser.END_DOCUMENT) {
+	        	int i = 1;
+
+	        	i++;
 	        	switch (event) {
+	        	
 	        	
 	        	case XmlPullParser.START_DOCUMENT:
 //	        		listALL = new ArrayList<List<Map<String, Object>>>();
+	        		
 	        		list = new ArrayList<Map<String,Object>>();
 	        		
 	        	
@@ -1378,21 +1451,23 @@ public class LessonWebServerIF {
 	        	
 	        	case XmlPullParser.START_TAG:
 		        	if ("homework".equals(pullParser.getName())) {
-		        		list = new ArrayList<Map<String, Object>>();
+//		        		list = new ArrayList<Map<String, Object>>();
+		        		flag = 1;
 		        	}
 
 		        	if ("homework_id".equals(pullParser.getName())) {
-		        		map = new HashMap<String, Object>();
-		        		homework_id = pullParser.nextText();
-		        		map.put("homework_id", homework_id);
-
+		        		if(flag == 1){
+		        			map = new HashMap<String, Object>();	
+		        		    map.put("homework_id",  Integer.valueOf(pullParser.nextText()));
+		        		}
+		        		
 		        	}
 		        	
 		        	if ("student".equals(pullParser.getName())) {
-		        		if (homework_id == null) {
+		        		if (flag == 2) {
 		        			map = new HashMap<String, Object>();
 		        		}
-		        		homework_id = null;
+
 		        	}
 
 		        	if (pullParser.getName().equals("uid")) {
@@ -1412,7 +1487,11 @@ public class LessonWebServerIF {
 	        	case XmlPullParser.END_TAG:
 	        	
 	        	if (pullParser.getName().equals("student")) {
+	        		
 	        		list.add(map);
+	        		if (flag == 1) {
+	        			flag = 2;
+	        		}
 	        	}
 //	        	if (pullParser.getName().equals("homework")) {
 //	        		listALL.add(list);
@@ -1536,7 +1615,7 @@ public class LessonWebServerIF {
 
                         if (pullParser.getName().equals("lesson_id")) {
                             if (flagMoment == 1) {
-                                getLessonHomework.id = Integer.valueOf(pullParser.nextText());
+                                getLessonHomework.lesson_id = Integer.valueOf(pullParser.nextText());
                             }
                         }
 
@@ -1544,7 +1623,7 @@ public class LessonWebServerIF {
                         if (pullParser.getName().equals("moment_id")) {
 
                             if (flagMoment == 1) {
-                                getLessonHomework.id = Integer.valueOf(pullParser.nextText());
+                                getLessonHomework.moment_id = Integer.valueOf(pullParser.nextText());
                             }
 
                             if (flagMoment == 2) {
@@ -1834,4 +1913,33 @@ public class LessonWebServerIF {
         return 0;
     }
 
+    public int delHomework(int homework_id){
+		int status = -1;
+		String uid = mPrefUtil.getUid();
+		String password = mPrefUtil.getPassword();
+		if (uid == null || password == null)
+			return status;
+
+		final String action = "del_lesson_homework";
+		String postStr = "action=" + action + "&uid="
+				+ Utils.urlencodeUtf8(uid) + "&password="
+				+ Utils.urlencodeUtf8(password) + "&homework_id=" + homework_id;
+		Connect2 connect2 = new Connect2();
+		Element root = connect2.Post(postStr);
+
+		int errno = ErrorCode.BAD_RESPONSE;
+		if (root != null) {
+			NodeList errorList = root.getElementsByTagName("err_no");
+			Element errorElement = (Element) errorList.item(0);
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				errno = ErrorCode.OK;
+			} else {
+				errno = Integer.parseInt(errorStr);
+			}
+		}
+		return status;
+		
+	}
 }

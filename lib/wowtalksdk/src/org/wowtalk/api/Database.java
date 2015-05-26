@@ -6328,9 +6328,9 @@ public class Database {
         values.put("moment_id", feedback.moment_id);
         return database.insertWithOnConflict(TBL_LESSON_PARENT_FEEDBACK, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
-    public long storeLessonAddHomework(LessonAddHomework homework) {
+    public long storeLessonAddHomework(LessonAddHomework homework,int homework_id) {
         ContentValues values = new ContentValues();
-        values.put("homework_id", homework.homework_id);
+        values.put("homework_id", homework_id);
         values.put("lesson_id", homework.lesson_id);
         values.put("moment_id", homework.moment_id);
         return database.insertWithOnConflict(TBL_LESSON_ADD_HOMEWORK, null, values, SQLiteDatabase.CONFLICT_REPLACE);

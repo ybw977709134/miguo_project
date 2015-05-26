@@ -72,6 +72,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 	private ArrayList<CreateMomentActivity.WMediaFile> listPhoto;
 	private LinkedList<BitmapDrawable> bmpDrawableList=new LinkedList<BitmapDrawable>();
 	private Moment moment;
+	private LinearLayout addedImgLayout;
 	public static final String EXTRA_MOMENT = "moment";
 	private HorizontalScrollView hsvImgList;
 	private Database mDb;
@@ -108,6 +109,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 		title_back = (ImageButton) findViewById(R.id.btn_notice_back);
 		listMoment = new LinkedList<Moment>();
 		lessonId = getIntent().getIntExtra(Constants.LESSONID, 0);
+		addedImgLayout = (LinearLayout) findViewById(R.id.added_images_layout);
 		trigger_add_img_layout = (LinearLayout) findViewById(R.id.trigger_add_img_layout);
 		edt_moment_content = (EditText) findViewById(R.id.edt_moment_content);
 		hsvImgList=(HorizontalScrollView) findViewById(R.id.hsv_img_list);
@@ -143,23 +145,6 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 		
 	}
 
-
-//	private void getMomentId(){
-//		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
-//
-//			@Override
-//			protected Integer doInBackground(Void... params) {
-//				LessonWebServerIF.getInstance(AddHomeworkActivity.this).getMomentId(listMoment);
-//				return null;
-//			}			
-//			@Override
-//			protected void onPostExecute(Integer result) {	
-//				momentId = listMoment.get(0).id;
-//			}		
-//		});
-//		
-//	}
-	
 	private void addLessonHomework(final int lessonId,final Moment moment){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>(){
 
@@ -500,7 +485,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
             Assert.assertTrue(!listPhoto.isEmpty());
             addMedia2moment(listPhoto.get(listPhoto.size() - 1));
 
-            final View view = LayoutInflater.from(this).inflate(R.layout.listitem_moment_image, trigger_add_img_layout, false);
+            final View view = LayoutInflater.from(this).inflate(R.layout.listitem_moment_image, addedImgLayout, false);
             final ImageView imgPhoto = (ImageView) view.findViewById(R.id.img_photo);
             imgPhoto.setImageDrawable(new BitmapDrawable(getResources(),
             		listPhoto.get(listPhoto.size() - 1).localThumbnailPath));
@@ -518,12 +503,12 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 //            LinearLayout.LayoutParams viewLayoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
 //            viewLayoutParams.setMargins(0,0,DensityUtil.dip2px(CreateNormalMomentWithTagActivity.this, 10), 0);
             view.setTag(listPhoto.get(listPhoto.size() - 1));
-            trigger_add_img_layout.addView(view, 0);
+            addedImgLayout.addView(view, 0);
 //            ViewGroup.LayoutParams params = addedImgLayout.getLayoutParams();
 //            params.width += imgPhoto.getLayoutParams().width;
 //            addedImgLayout.setLayoutParams(params);
         } else {
-        	trigger_add_img_layout.removeAllViews();
+        	addedImgLayout.removeAllViews();
             recycleStoredBitmapDrawable();
             for(CreateMomentActivity.WMediaFile aPhoto : listPhoto) {
                 removePhotoFromMoment(aPhoto);
@@ -534,7 +519,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
             for (int i = 0; i < fileNum; i++) {
                 addMedia2moment(listPhoto.get(i));
 
-                final View view = LayoutInflater.from(this).inflate(R.layout.listitem_moment_image, trigger_add_img_layout, false);
+                final View view = LayoutInflater.from(this).inflate(R.layout.listitem_moment_image, addedImgLayout, false);
                 final ImageView imgPhoto = (ImageView) view.findViewById(R.id.img_photo);
                 imgPhoto.setImageDrawable(new BitmapDrawable(getResources(),
                 		listPhoto.get(i).localThumbnailPath));
@@ -552,7 +537,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 //                LinearLayout.LayoutParams viewLayoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
 //                viewLayoutParams.setMargins(0, 0, DensityUtil.dip2px(CreateNormalMomentWithTagActivity.this, 10), 0);
                 view.setTag(listPhoto.get(i));
-                trigger_add_img_layout.addView(view,0);
+                addedImgLayout.addView(view,0);
 //                ViewGroup.LayoutParams params = addedImgLayout.getLayoutParams();
 //                params.width += imgPhoto.getLayoutParams().width;
 //                addedImgLayout.setLayoutParams(params);

@@ -3615,6 +3615,26 @@ public class WowTalkWebServerIF {
                 tag, outputFilepath, cancelFlag);
     }
 
+	/**
+	 * 从文件服务器下载文件。
+	 *
+	 * @param fileID 文件 ID，比如 1418191129_59390F8C-4C30-49FA-939E-325DC7FEBFE5
+	 * @param fileDir 文件所在目录，一般会把不同功能模块中的图片放在不同目录，参见
+	 * <ul>
+	 *   <li>{@link GlobalSetting#S3_MOMENT_FILE_DIR}</li>
+	 *   <li>{@link GlobalSetting#S3_EVENT_FILE_DIR}</li>
+	 *   <li>{@link GlobalSetting#S3_PROFILE_PHOTO_DIR}</li>
+	 *   <li>...</li>
+	 * </ul>
+	 * @param delegate 回调，获得下载进度、下载结果。
+	 *                 <p>下载中，{@link NetworkIFDelegate#setProgress(int, int)} 的第二个参数是进度百分比；   </p>
+	 *                 <p>成功后，{@link NetworkIFDelegate#didFinishNetworkIFCommunication(int, byte[])} 的第二个参数是 file ID；</p>
+	 *                 <p>失败后，{@link NetworkIFDelegate#didFailNetworkIFCommunication(int, byte[])} 的第二个参数是错误提示。</p>
+	 * @param tag 这个参数会原样传递给 delegate 里的回调方法（作为它的第一个参数），以便一个 delegate 对象跟踪多个文件下载任务。
+	 *            如果一个 delegate 对象只跟踪一个下载文件，此参数传 0 即可
+	 * @param outputFilepath 指定下载文件的输出路径
+	 * @param cancelFlag 用于在下载过程中取消下载，目前此参数无效果
+	 */
 	public void fGetFileFromServer(String fileID, String fileDir, NetworkIFDelegate delegate,
 			int tag, String outputFilepath, CancelFlag cancelFlag) {
 		if(fGetPseudoFileFromServer(fileID, delegate, tag, outputFilepath))

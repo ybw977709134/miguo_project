@@ -7,6 +7,13 @@
     （请注意其中的 ANDROID_HOME 环境变量，它表示 Android SDK 根目录）
 
     mvn install:install-file \
+            -Dfile=project/libs/mint-4.2.jar \
+            -DgroupId=com.splunk.mint \
+            -DartifactId=mint \
+            -Dversion=4.2 \
+            -Dpackaging=jar
+
+    mvn install:install-file \
             -Dfile=project/libs/AMap_Services_V2.3.1.jar \
             -DgroupId=com.amap.api \
             -DartifactId=services \

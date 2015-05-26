@@ -12,7 +12,7 @@ import co.onemeter.oneapp.ui.GlobalValue;
 import co.onemeter.oneapp.ui.IncallActivity;
 import co.onemeter.oneapp.ui.LoginActivity;
 import co.onemeter.oneapp.ui.StartActivity;
-
+import com.splunk.mint.Mint;
 import org.wowtalk.NetworkManager;
 import org.wowtalk.api.JapaneseHelper;
 import org.wowtalk.api.PrefUtil;
@@ -28,9 +28,17 @@ public class YuanquActivity extends Activity {
 	private ImageView imageView_splash;
 	protected void onCreate(Bundle savedInstanceState) {
 
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+        super.onCreate(savedInstanceState);
 
+        // Mint 错误捕捉
+        //
+        // 帐号信息
+        // 用户名 panzhiyong@onemeter.co
+        // 密码 oEBH5z84
+        // https://mint.splunk.com
+        Mint.initAndStartSession(this, "579f6a2f");
+
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.yuanqu);
 
         // fix problem on displaying gradient bmp

@@ -1000,4 +1000,9 @@
     <string name="class_lesson_askforleave">请假</string>
     <string name="class_lesson_signin">签到</string>
     <string name="class_not_bind">还未绑定班级！快去绑定吧！</string>
+    <string name="title_activity_home_work_evaluate">HomeWorkEvaluate</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_home_work_template">HomeWorkTemplate</string>
 </resources>

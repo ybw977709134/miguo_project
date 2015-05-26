@@ -76,7 +76,7 @@
             android:name="UMENG_APPKEY"
             android:value="5281ab3456240b5632024ab8" />
 
-<!--  WowTalkService 在 x86 上不能运行。 -->
+        <!-- WowTalkService 在 x86 上不能运行。 -->
         <service
             android:name="org.wowtalk.WowTalkService"
             android:label="WowTalk Notification Center" />
@@ -622,44 +622,38 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
-        
-		<activity
-            android:name="co.onemeter.oneapp.ui.StudentAbsenceActivity"
+        <activity
+            android:name=".ui.StudentAbsenceActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
-        
-		<activity
-            android:name="co.onemeter.oneapp.ui.TeacherSignActivity"
+        <activity
+            android:name=".ui.TeacherSignActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
-        
         <activity
             android:name=".ui.SelectClassActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
         <activity
-            android:name="co.onemeter.oneapp.ui.SelectLessonActivity"
+            android:name=".ui.SelectLessonActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
-        
         <activity
-            android:name="co.onemeter.oneapp.ui.SelectTeacherActivity"
+            android:name=".ui.SelectTeacherActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
-
-         <activity
+        <activity
             android:name=".ui.RollCallOnlineActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Blue_main">
-        </activity> 
-        
-		<activity
-            android:name="co.onemeter.oneapp.ui.LessonStatusActivity"
+            android:theme="@style/Theme.Blue_main" >
+        </activity>
+        <activity
+            android:name=".ui.LessonStatusActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
@@ -673,7 +667,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
-        
         <activity
             android:name=".ui.LessonInfoEditActivity"
             android:screenOrientation="portrait"
@@ -685,13 +678,12 @@
             android:theme="@style/ThemeNoActionBar.Blue_main" >
         </activity>
         <activity
-            android:name="co.onemeter.oneapp.ui.SendNotificationActivity"
+            android:name=".ui.SendNotificationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
-        
         <activity
-            android:name="co.onemeter.oneapp.ui.AddHomeworkActivity"
+            android:name=".ui.AddHomeworkActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
@@ -733,21 +725,28 @@
         <activity
             android:name=".ui.TeacherInClassActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Blue_main">
+            android:theme="@style/Theme.Blue_main" >
         </activity>
-        
         <activity
             android:name=".ui.datepicker.DatePickerActivity"
-            android:theme="@style/MyActivityDialogStyle"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/MyActivityDialogStyle" >
         </activity>
-        
         <activity
             android:name=".ui.datepicker.TimerPickerActivity"
-            android:theme="@style/MyActivityDialogStyle"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/MyActivityDialogStyle" >
         </activity>
-        
+        <activity
+            android:name=".ui.widget.HomeWorkEvaluate"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue_main" >
+        </activity>
+        <activity
+            android:name=".ui.widget.HomeWorkTemplate"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue_main" >
+        </activity>
     </application>
 
 </manifest>

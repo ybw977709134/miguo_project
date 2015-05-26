@@ -436,5 +436,12 @@
 		<item name="android:windowContentOverlay">@null</item>
 		<item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
 		<item name="android:backgroundDimEnabled">true</item>
-	</style> 
+	</style>
+
+    <style name="homeworkRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/homework_ratiing_bar</item>
+        <item name="android:minHeight">30dp</item>
+        <item name="android:maxHeight">30dp</item>
+    </style>
+
 </resources>

@@ -18,7 +18,6 @@ import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
 
-import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
@@ -435,14 +434,12 @@ public class CreateGroupActivity extends Activity implements OnClickListener, In
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
         AppStatusService.setIsMonitoring(true);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 
     @Override

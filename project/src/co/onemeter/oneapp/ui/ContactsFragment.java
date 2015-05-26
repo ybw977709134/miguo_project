@@ -26,7 +26,6 @@ import co.onemeter.oneapp.contacts.util.ContactUtil;
 import co.onemeter.oneapp.utils.WebServerEventPoller;
 import co.onemeter.utils.AsyncTaskExecutor;
 
-import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
@@ -451,7 +450,6 @@ public class ContactsFragment extends Fragment implements OnClickListener,
     public void onResume() {
 		super.onResume();
         theActiveInstance = this;
-        MobclickAgent.onResume(getActivity());
 
         getMyGroupsFromLocal();
         getMyBuddyListFromLocal();
@@ -473,7 +471,6 @@ public class ContactsFragment extends Fragment implements OnClickListener,
     public void onPause() {
         super.onPause();
         theActiveInstance = null;
-        MobclickAgent.onPause(getActivity());
 
         Database.removeDBTableChangeListener(contactBuddyObserver);
         Database.removeDBTableChangeListener(contactGroupObserver);

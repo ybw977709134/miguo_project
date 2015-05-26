@@ -25,7 +25,6 @@ import android.widget.TextView;
 import co.onemeter.oneapp.R;
 
 import com.androidquery.AQuery;
-import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.ui.MessageBox;
 
@@ -246,7 +245,6 @@ public class InputPlainTextActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
@@ -258,7 +256,6 @@ public class InputPlainTextActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
     
 }

@@ -10,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import co.onemeter.oneapp.utils.ThemeHelper;
 
-import com.umeng.analytics.MobclickAgent;
 import com.zxing.activity.CaptureActivity;
 
 import org.wowtalk.ui.MessageBox;
@@ -156,12 +155,10 @@ public class ContactAddActivity extends Activity implements OnClickListener{
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 }

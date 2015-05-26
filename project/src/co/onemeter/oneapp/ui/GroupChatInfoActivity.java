@@ -20,7 +20,6 @@ import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
 
-import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
@@ -595,14 +594,12 @@ public class GroupChatInfoActivity extends Activity implements OnClickListener{
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
      // refreshMemberGrid();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 
     @SuppressWarnings("unchecked")

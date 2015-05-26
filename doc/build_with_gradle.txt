@@ -49,13 +49,6 @@
             -Dpackaging=jar
 
     mvn install:install-file \
-            -Dfile=project/libs/umeng_sdk.jar \
-            -DgroupId=com.umeng \
-            -DartifactId=sdk \
-            -Dversion=1.0.0 \
-            -Dpackaging=jar
-
-    mvn install:install-file \
             -Dfile=project/libs/android-query.0.26.7.jar \
             -DgroupId=com.androidquery \
             -DartifactId=android-query \

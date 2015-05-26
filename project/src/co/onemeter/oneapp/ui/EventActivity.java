@@ -25,7 +25,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.Log;
 import org.wowtalk.api.*;
 
@@ -588,7 +587,6 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 	@Override
 	protected void onResume() {
 		super.onResume();
-        MobclickAgent.onResume(this);
 
         // 活动对象的状态可能已经发生了变化（比如报名人数），
         // 因此从数据库中读取最新状态。
@@ -609,7 +607,6 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 	@Override
 	protected void onPause() {
 		super.onPause();
-        MobclickAgent.onPause(this);
 	}
 
     @Override

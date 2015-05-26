@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.ui.MessageBox;
@@ -98,13 +97,11 @@ public class AboutPage extends Activity implements OnClickListener{
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
         AppStatusService.setIsMonitoring(true);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 }

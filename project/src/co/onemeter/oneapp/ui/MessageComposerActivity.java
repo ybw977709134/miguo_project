@@ -8,7 +8,6 @@ import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
 import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
 
-import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ChatMessage;
@@ -144,14 +143,12 @@ public class MessageComposerActivity extends MessageComposerActivityBase {
         }
         fRefreshUserInfo();
 
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         isOnStackTop = false;
-        MobclickAgent.onPause(this);
     }
 
     @Override

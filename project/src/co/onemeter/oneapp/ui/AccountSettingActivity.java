@@ -24,7 +24,6 @@ import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
 
-import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.PrefUtil;
@@ -283,7 +282,6 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
         fetchData();
         bindEmailStatus ();
 //        queryBindings();
@@ -293,7 +291,6 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
     
     /**

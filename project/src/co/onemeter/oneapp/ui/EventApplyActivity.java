@@ -3,7 +3,6 @@ package co.onemeter.oneapp.ui;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.TextView;
-import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.EventWebServerIF;
 import co.onemeter.oneapp.R;
@@ -136,13 +135,11 @@ public class EventApplyActivity extends Activity implements OnClickListener{
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 
 }

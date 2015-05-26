@@ -15,7 +15,6 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.datepicker.DatePickerActivity;
 import co.onemeter.utils.AsyncTaskExecutor;
 
-import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
@@ -413,7 +412,6 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
         AppStatusService.setIsMonitoring(true);
         showProgressBar(true);
     }
@@ -436,7 +434,6 @@ public class MyInfoActivity extends Activity implements OnClickListener, InputBo
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 	
 	@Override

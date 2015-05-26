@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
-import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GlobalSetting;
 import org.wowtalk.api.NetworkIFDelegate;
@@ -54,7 +53,6 @@ public class AlbumCoverChangeActivity extends Activity implements OnClickListene
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
         AppStatusService.setIsMonitoring(true);
     }
 

@@ -15,7 +15,6 @@ dependencies {
     compile 'com.baidu.lightapp.plugin.videoplayer:coreplayer:1.0.0'
     compile 'de.greenrobot:eventbus:1.0.0'
     compile 'com.google:gson:2.1'
-    compile 'com.umeng:sdk:1.0.0'
     compile 'com.android.support:support-v4:21.0.2'
     compile 'com.android.support:multidex:1.0.0'
     compile "com.splunk.mint:mint:4.2"

@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
-import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.RoundedImageView;
@@ -460,7 +459,6 @@ public class NewFriendsActivity extends Activity implements AdapterView.OnItemCl
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
 
         // clear notification for this activity, if any
         NotificationManager notiManager = (NotificationManager)

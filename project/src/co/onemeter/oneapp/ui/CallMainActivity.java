@@ -14,7 +14,6 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.text.TextUtils;
 
-import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 
 import java.util.Timer;
@@ -145,13 +144,11 @@ public class CallMainActivity extends Activity implements SensorEventListener, W
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 	
 	@Override

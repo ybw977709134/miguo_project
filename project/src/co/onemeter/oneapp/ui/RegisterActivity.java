@@ -29,7 +29,6 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.Utils;
 
 import com.androidquery.AQuery;
-import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ErrorCode;
@@ -540,7 +539,6 @@ public class RegisterActivity extends Activity implements OnClickListener{
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
@@ -554,7 +552,6 @@ public class RegisterActivity extends Activity implements OnClickListener{
     		mInputMethodManager.hideSoftInputFromWindow(edtPwdConfirm.getWindowToken() , 0); 
     	}
         super.onPause();
-        MobclickAgent.onPause(this);
     }
     
     private void alert(String strTip){

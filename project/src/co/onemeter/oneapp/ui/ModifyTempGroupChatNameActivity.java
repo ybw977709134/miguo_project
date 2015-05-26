@@ -13,7 +13,6 @@ import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
 
-import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
@@ -136,12 +135,10 @@ public class ModifyTempGroupChatNameActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 }

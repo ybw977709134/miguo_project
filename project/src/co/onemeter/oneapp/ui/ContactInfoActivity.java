@@ -21,7 +21,6 @@ import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.androidquery.AQuery;
-import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
@@ -758,13 +757,11 @@ public class ContactInfoActivity extends Activity implements OnClickListener{
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 
     private void chatWith(String uid, String phoneNumber) {

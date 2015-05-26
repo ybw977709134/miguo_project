@@ -11,7 +11,6 @@ import android.widget.*;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
 import com.androidquery.AQuery;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 
@@ -116,13 +115,11 @@ public class PublicAccountActivity extends Activity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 
     @Override

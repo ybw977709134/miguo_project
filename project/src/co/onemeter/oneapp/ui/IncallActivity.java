@@ -20,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
-import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.component.*;
@@ -837,7 +836,6 @@ public class IncallActivity extends Activity implements OnClickListener,
 	@Override
 	protected void onResume() {
 		super.onResume();
-        MobclickAgent.onResume(this);
 		WowTalkVoipIF.fStartProximitySensorForActivity(this);
 		bIsStartingVideo = false;
 
@@ -857,7 +855,6 @@ public class IncallActivity extends Activity implements OnClickListener,
 	@Override
 	protected void onPause() {
 		super.onPause();
-        MobclickAgent.onPause(this);
 		WowTalkVoipIF.fStopProximitySensorForActivity(this);
 	}
 

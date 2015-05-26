@@ -14,7 +14,6 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.utils.LocationHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
-import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 
@@ -583,13 +582,11 @@ public class NearbyActivity extends Activity implements OnClickListener {
     @Override
     protected void onResume() {
         super.onPause();
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 
 }

@@ -20,8 +20,6 @@ import co.onemeter.oneapp.ui.AppStatusService.AppStatusBinder;
 import co.onemeter.oneapp.utils.WebServerEventPoller;
 import co.onemeter.utils.AsyncTaskExecutor;
 
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.update.UmengUpdateAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -392,8 +390,6 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         getWindow().setFormat(PixelFormat.RGBA_8888);
 
         setContentView(R.layout.tabmaster);
-        UmengUpdateAgent.setUpdateOnlyWifi(false);
-        UmengUpdateAgent.update(this);
         PinyinHelper.instance().init(this, R.raw.pinyin);
 
         mWeb = WowTalkWebServerIF.getInstance(this);
@@ -540,7 +536,6 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         GlobalValue.screenW = displayMetrics.widthPixels;
         GlobalValue.screenH = displayMetrics.heightPixels;
 
-        MobclickAgent.onResume(this);
 
         fRefreshTabBadge_contact();
 
@@ -618,7 +613,6 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
     protected void onPause() {
         super.onPause();
         isOnStackTop = false;
-        MobclickAgent.onPause(this);
 
         Database.removeDBTableChangeListener(mSwitchAccountObserver);
         Database.removeDBTableChangeListener(chatmessageObserver);

@@ -21,7 +21,6 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MessagesAdapter;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
-import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 
 import java.util.ArrayList;
@@ -475,7 +474,6 @@ public class SmsActivity extends Activity implements OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
 
 //        updateContentView(true);
         isResumed=true;
@@ -525,7 +523,6 @@ public class SmsActivity extends Activity implements OnClickListener {
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 
     @Override

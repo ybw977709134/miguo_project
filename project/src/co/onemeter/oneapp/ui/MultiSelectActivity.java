@@ -25,7 +25,6 @@ import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.contacts.util.ContactUtil;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
-import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.RoundedImageView;
@@ -496,14 +495,12 @@ public class MultiSelectActivity extends Activity implements OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
         Database.addDBTableChangeListener(Database.DUMMY_TBL_FINISH_LOAD_CONTACTS,mFinishLoadBuddiesObserver);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
         Database.removeDBTableChangeListener(mFinishLoadBuddiesObserver);
     }
 

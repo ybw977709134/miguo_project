@@ -13,7 +13,6 @@ import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
-import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
@@ -280,7 +279,6 @@ public class PickTempGroupActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
 
         getTemporaryGroupFromLocal();
         if (null == groupAdapter) {
@@ -304,7 +302,6 @@ public class PickTempGroupActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
         Database.removeDBTableChangeListener(mFinishLoadMembersObserver);
     }
 }

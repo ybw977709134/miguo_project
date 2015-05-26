@@ -18,7 +18,6 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.LocationHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
-import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
@@ -728,14 +727,12 @@ public class CreateMomentActivity extends Activity implements OnClickListener, I
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
         AppStatusService.setIsMonitoring(true);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
 
         stopMicVoice();
     }

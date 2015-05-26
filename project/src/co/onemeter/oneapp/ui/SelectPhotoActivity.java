@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import co.onemeter.oneapp.utils.ThemeHelper;
-import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.ui.RecyclingImageView;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
@@ -278,14 +277,12 @@ public class SelectPhotoActivity extends Activity implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
         mImageFetcher.setExitTasksEarly(false);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
         mImageFetcher.setPauseWork(false);
         mImageFetcher.setExitTasksEarly(true);
         mImageFetcher.flushCache();

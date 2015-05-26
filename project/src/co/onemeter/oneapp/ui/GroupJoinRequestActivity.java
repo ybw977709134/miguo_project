@@ -22,7 +22,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.umeng.analytics.MobclickAgent;
 
 public class GroupJoinRequestActivity extends Activity implements View.OnClickListener {
     public static final String INTENT_DATA_ACCEPT = "accept";
@@ -173,12 +172,10 @@ public class GroupJoinRequestActivity extends Activity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 }

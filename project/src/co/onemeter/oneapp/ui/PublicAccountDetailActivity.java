@@ -14,7 +14,6 @@ import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.androidquery.AQuery;
-import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
@@ -245,12 +244,10 @@ public class PublicAccountDetailActivity extends Activity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 }

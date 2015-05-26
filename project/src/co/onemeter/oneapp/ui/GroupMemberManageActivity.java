@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
-import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.RoundedImageView;
@@ -486,14 +485,12 @@ public class GroupMemberManageActivity extends Activity implements View.OnClickL
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
         Database.addDBTableChangeListener(Database.TBL_PENDING_REQUESTS,mPendingRequestObserver);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
         Database.removeDBTableChangeListener(mPendingRequestObserver);
     }
 

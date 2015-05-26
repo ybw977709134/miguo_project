@@ -29,7 +29,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.umeng.analytics.MobclickAgent;
 
 public class ProviderAlbumCoverActivity extends Activity {
 
@@ -93,7 +92,6 @@ public class ProviderAlbumCoverActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
         AppStatusService.setIsMonitoring(true);
     }
 

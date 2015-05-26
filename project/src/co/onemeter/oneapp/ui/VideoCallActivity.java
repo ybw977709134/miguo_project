@@ -14,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import co.onemeter.oneapp.R;
-import com.umeng.analytics.MobclickAgent;
 import org.wowtalk.CallManager;
 import org.wowtalk.WowTalkManager;
 import org.wowtalk.WowTalkOnCallStateChangedListener;
@@ -198,7 +197,6 @@ public class VideoCallActivity extends Activity implements WowTalkOnCallStateCha
 	
 	protected void onResume() {
 		super.onResume();
-        MobclickAgent.onResume(this);
 		if (mVideoViewReady != null) {
 			((GLSurfaceView) mVideoViewReady).onResume();
 		}
@@ -245,7 +243,6 @@ public class VideoCallActivity extends Activity implements WowTalkOnCallStateCha
 	
 	protected void onPause() {
 		super.onPause();
-        MobclickAgent.onPause(this);
 		btnEnd.onClick(null);
 	}
 	

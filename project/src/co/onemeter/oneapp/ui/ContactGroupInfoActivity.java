@@ -23,7 +23,6 @@ import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.androidquery.AQuery;
-import com.umeng.analytics.MobclickAgent;
 
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
@@ -562,7 +561,6 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
 	@Override
 	protected void onResume() {
 		super.onResume();
-        MobclickAgent.onResume(this);
 
 //        refreshMemberGrid();
         setTitleSettingImage();
@@ -576,7 +574,6 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
 
         Database.removeDBTableChangeListener(buddiesObserver);
         Database.removeDBTableChangeListener(groupMembersObserver);

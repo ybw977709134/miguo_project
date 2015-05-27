@@ -1,12 +1,8 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -18,9 +14,6 @@ import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageDialog;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
-import org.wowtalk.ui.msg.TimerTextView;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -124,7 +117,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			@Override
 			protected void onPostExecute(Integer result) {
 				if(result == -1){
-					setResult(0);
+					setResult(RESULT_OK);
 					finish();
 				}
 

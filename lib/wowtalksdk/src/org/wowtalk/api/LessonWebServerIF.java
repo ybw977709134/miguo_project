@@ -1263,8 +1263,7 @@ public class LessonWebServerIF {
 	}
 	
 	public int addLessonHomework(LessonAddHomework addhomework,Moment moment){
-	    int homeworkid = 0;
-	    int error_no = -1;
+	    int homeworkID = 0;
 		String uid = mPrefUtil.getUid();
 		String password = mPrefUtil.getPassword();
 		if (uid == null || password == null)
@@ -1292,83 +1291,86 @@ public class LessonWebServerIF {
 		Connect2 connect2 = new Connect2();
 		Element root = connect2.Post(postStr);
 		
-        String xmlStr = connect2.getXmlString(postStr);
-		
-		//对获得的xml文件进行pull解析
-		XmlPullParserFactory factory;
-		try {
-			factory = XmlPullParserFactory.newInstance();
-			// 实例化一个xml pull解析对象
-			XmlPullParser pullParser = factory.newPullParser();
-			
-			// 将xml文件作为流传入到inputstream
-			//System.out.println(xmlStr);
-	        xmlStr=xmlStr.replaceAll("&amp;", "＆");
-	        xmlStr=xmlStr.replaceAll("&quot;", "\"");
-	        xmlStr=xmlStr.replaceAll("&nbsp;", " ");
-
-	        BufferedInputStream bis = new BufferedInputStream(
-	        		new ByteArrayInputStream( xmlStr.getBytes()));
-	        
-	     // xml解析对象接收输入流对象
-	        pullParser.setInput(bis, "utf-8");
-	        int event = pullParser.getEventType();
-	      
-
-	        
-	        while (event != XmlPullParser.END_DOCUMENT) {
-	        	switch (event) {
-	        	
-	        	case XmlPullParser.START_DOCUMENT:        		
-	        			
-	        	break;
-	        	
-	        	case XmlPullParser.START_TAG:
-	        		
-	        		if ("err_no".equals(pullParser.getName())) {
-		        		error_no = Integer.valueOf(pullParser.nextText());
-		        	}
-	        		
-		        	if ("id".equals(pullParser.getName())) {
-		        		homeworkid = Integer.valueOf(pullParser.nextText());
-		        	}
-		        	
-	        	break;
-	        	
-	        	case XmlPullParser.END_TAG:
-	        	break;
-	        	
-	        	}
-	        	event = pullParser.next();
-	        	
-	        
-	        }  
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-//     	int errno = ErrorCode.BAD_RESPONSE;
-//		if (root != null) {
-//			NodeList errorList = root.getElementsByTagName("err_no");
-//			Element errorElement = (Element) errorList.item(0);
-//			String errorStr = errorElement.getFirstChild().getNodeValue();
+//        String xmlStr = connect2.getXmlString(postStr);
+//		
+//		//对获得的xml文件进行pull解析
+//		XmlPullParserFactory factory;
+//		try {
+//			factory = XmlPullParserFactory.newInstance();
+//			// 实例化一个xml pull解析对象
+//			XmlPullParser pullParser = factory.newPullParser();
+//			
+//			// 将xml文件作为流传入到inputstream
+//			//System.out.println(xmlStr);
+//	        xmlStr=xmlStr.replaceAll("&amp;", "＆");
+//	        xmlStr=xmlStr.replaceAll("&quot;", "\"");
+//	        xmlStr=xmlStr.replaceAll("&nbsp;", " ");
 //
-//			if (errorStr.equals("0")) {
-//				errno = ErrorCode.OK;
-//				Database db = new Database(mContext);
-//				db.storeLessonAddHomework(addhomework,homeworkid);
-//			} else {
-//				errno = Integer.parseInt(errorStr);
-//			}
+//	        BufferedInputStream bis = new BufferedInputStream(
+//	        		new ByteArrayInputStream( xmlStr.getBytes()));
+//	        
+//	     // xml解析对象接收输入流对象
+//	        pullParser.setInput(bis, "utf-8");
+//	        int event = pullParser.getEventType();
+//	      
+//
+//	        
+//	        while (event != XmlPullParser.END_DOCUMENT) {
+//	        	switch (event) {
+//	        	
+//	        	case XmlPullParser.START_DOCUMENT:        		
+//	        			
+//	        	break;
+//	        	
+//	        	case XmlPullParser.START_TAG:
+//	        		
+//	        		if ("err_no".equals(pullParser.getName())) {
+//		        		error_no = Integer.valueOf(pullParser.nextText());
+//		        	}
+//	        		
+//		        	if ("id".equals(pullParser.getName())) {
+//		        		homeworkid = Integer.valueOf(pullParser.nextText());
+//		        	}
+//		        	
+//	        	break;
+//	        	
+//	        	case XmlPullParser.END_TAG:
+//	        	break;
+//	        	
+//	        	}
+//	        	event = pullParser.next();
+//	        	
+//	        
+//	        }  
+//		} catch (Exception e) {
+//			e.printStackTrace();
 //		}
-		int errno = ErrorCode.BAD_RESPONSE;
-		if(error_no == 0){
-			errno = ErrorCode.OK;
-			Database db = new Database(mContext);
-			db.storeLessonAddHomework(addhomework,homeworkid);
-		}else{
-			errno = error_no;
+		
+     	int errno = ErrorCode.BAD_RESPONSE;
+		if (root != null) {
+			NodeList errorList = root.getElementsByTagName("err_no");
+			Element errorElement = (Element) errorList.item(0);
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				errno = ErrorCode.OK;
+				Element e = Utils.getFirstElementByTagName(root, "id");
+				if (null != e)
+					homeworkID = Utils.tryParseInt(e.getTextContent(), 0);
+				Database db = new Database(mContext);
+				db.storeLessonAddHomework(addhomework,homeworkID);
+			} else {
+				errno = Integer.parseInt(errorStr);
+			}
 		}
+//		int errno = ErrorCode.BAD_RESPONSE;
+//		if(error_no == 0){
+//			errno = ErrorCode.OK;
+//			Database db = new Database(mContext);
+//			db.storeLessonAddHomework(addhomework,homeworkid);
+//		}else{
+//			errno = error_no;
+//		}
 		return errno;
 	}
 
@@ -1430,6 +1432,7 @@ public class LessonWebServerIF {
 	        int event = pullParser.getEventType();
 //	        List<List<Map<String, Object>>> listALL = null;
 	        List<Map<String, Object>> list = null;
+	        List<Map<String, Object>> resultList = null;
 	        Map<String, Object> map = null;
 //	        String homework_id = null;
 	        int flag = 0;
@@ -1502,6 +1505,10 @@ public class LessonWebServerIF {
 	        	event = pullParser.next();
 	        
 	        }  
+//	        resultList = new ArrayList<Map<String,Object>>();
+//	        for(int i = 0;i < list.size()/2;i++){
+//	        	resultList.add(list.get(i));
+//	        }
 	        return list;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1927,6 +1934,7 @@ public class LessonWebServerIF {
 		Connect2 connect2 = new Connect2();
 		Element root = connect2.Post(postStr);
 
+		Database db = new Database(mContext);
 		int errno = ErrorCode.BAD_RESPONSE;
 		if (root != null) {
 			NodeList errorList = root.getElementsByTagName("err_no");
@@ -1935,6 +1943,7 @@ public class LessonWebServerIF {
 
 			if (errorStr.equals("0")) {
 				errno = ErrorCode.OK;
+				db.deleteLessonHomework(homework_id);
 			} else {
 				errno = Integer.parseInt(errorStr);
 			}

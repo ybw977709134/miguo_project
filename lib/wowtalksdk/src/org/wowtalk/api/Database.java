@@ -6336,6 +6336,9 @@ public class Database {
         return database.insertWithOnConflict(TBL_LESSON_ADD_HOMEWORK, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
+    public long deleteLessonHomework(int homework_id){
+    	return database.delete(TBL_LESSON_ADD_HOMEWORK, "homework_id=?", new String[] { String.valueOf(homework_id) });
+    }
     /**
      * @param class_id null 则清除所有课程的。
      * @return

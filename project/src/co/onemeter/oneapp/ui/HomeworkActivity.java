@@ -14,12 +14,14 @@ import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ListViewUtils;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import com.androidquery.AQuery;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.LessonAddHomework;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.Moment;
 import org.wowtalk.ui.MessageBox;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,18 +37,13 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 	private TextView tv_lesson_name;
 	private TextView tv_addhomework_state;
 	private int lessonId;
-//	private List<LessonHomework> lessonHomeworkz;
 	private List<Map<String, Object>> homeworkStates;
 	private HomeworkStateAdapter adapter;
-//	private List<String> homeworktitles;
 	private AQuery q;
-//	private HomeWorkArrayAdater adapter;
-//
 	private ListView lvHomework;
 	private Database mDb;
 	private LessonAddHomework addHomework ;
 	private MessageBox msgbox;
-	private int homeworkId;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -83,24 +80,46 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			protected List<Map<String, Object>> doInBackground(Void... params) {
 				
 				List<Map<String, Object>> result= LessonWebServerIF.getInstance(HomeworkActivity.this).get_homework_state(lessonId);
-				Log.d("---------------result.size---------------", result.size()+"");
 				return result;
 			}
 			protected void onPostExecute(List<Map<String, Object>> result) {
 				msgbox.dismissWait();
-				homeworkStates.clear();
-				homeworkStates.addAll(result);
-				adapter = new HomeworkStateAdapter(homeworkStates);
-				adapter.notifyDataSetChanged();
-				lvHomework.setAdapter(adapter);
-				ListViewUtils.setListViewHeightBasedOnChildren(lvHomework);
-				Log.d("---------------homeworkStates.size---------------", homeworkStates.size()+"");
-				if(homeworkStates.size() == 0){
-					tv_addhomework_state.setText("未布置");
-				}else{
-					tv_addhomework_state.setText("已布置");
+//				if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
+////					for(int i = 0;i < result.size();i++){
+////						if(PrefUtil.getInstance(HomeworkActivity.this).getUid().equals(result.get(i).get("stu_uid")) ){
+////							homeworkStates.clear();
+////							homeworkStates.add(result.get(i));
+////							
+////						}
+////						Log.d("------------uid--------------", result.get(i).get("stu_uid")+"");
+////					}
+////					Log.d("------------uid--------------", String.valueOf(result.get(0).get("stu_uid")));
+//
+//					adapter = new HomeworkStateAdapter(homeworkStates);
+//					adapter.notifyDataSetChanged();
+//					lvHomework.setAdapter(adapter);
+//					ListViewUtils.setListViewHeightBasedOnChildren(lvHomework);
+//					if(homeworkStates.size() == 0){
+//						tv_addhomework_state.setText("未布置");
+//					}else{
+//						tv_addhomework_state.setText("已布置");
+//					}
+//					
+//				}else{
+					homeworkStates.clear();	
+					homeworkStates.addAll(result);
+					adapter = new HomeworkStateAdapter(homeworkStates);
+					adapter.notifyDataSetChanged();
+					lvHomework.setAdapter(adapter);
+					ListViewUtils.setListViewHeightBasedOnChildren(lvHomework);
+					if(homeworkStates.size() == 0){
+						tv_addhomework_state.setText("未布置");
+					}else{
+						tv_addhomework_state.setText("已布置");
+					}
 				}
-			}
+				
+//			}
 			
 		});
 	}
@@ -123,7 +142,6 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 				i.putExtra("moment", moment);
 		        i.putExtra("lessonId",lessonId);
 		        startActivityForResult(i, REQ_PARENT_DELHOMEWORK);
-//				LessonHomeworkActivity.launch(HomeworkActivity.this,moment,lessonId);
 			}
 			
 			break;
@@ -139,10 +157,8 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode == Activity.RESULT_OK){
 			if(requestCode == REQ_PARENT_ADDHOMEWORK){
-//				getHomeworkState(lessonId);
 				tv_addhomework_state.setText("已布置");
 			}else if(requestCode == REQ_PARENT_DELHOMEWORK){
-				getHomeworkState(lessonId);
 				tv_addhomework_state.setText("未布置");
 			}
 		}

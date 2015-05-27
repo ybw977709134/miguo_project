@@ -735,12 +735,12 @@
             android:theme="@style/MyActivityDialogStyle" >
         </activity>
         <activity
-            android:name=".ui.widget.HomeWorkEvaluate"
+            android:name=".ui.HomeWorkEvaluate"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
         <activity
-            android:name=".ui.widget.HomeWorkTemplate"
+            android:name=".ui.HomeWorkTemplate"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>

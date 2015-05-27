@@ -1942,4 +1942,61 @@ public class LessonWebServerIF {
 		return status;
 		
 	}
+
+
+    /**
+     * 老师添加对作业的评论
+     * Created by hutianfeng on 2015/5/27
+     * @param rank1
+     * @param rank2
+     * @param rank3
+     * @param text
+     * @return
+     */
+    public int addHomeworkReview(int rank1, int rank2, int rank3, String text) {
+        int errno = -1;
+        String uid = mPrefUtil.getUid();
+        String password = mPrefUtil.getPassword();
+        if (uid == null || password == null)
+            return errno;
+
+        final String action = "add_homework_review";
+        String postStr = "action=" + action +
+                "&uid=" + Utils.urlencodeUtf8(uid) +
+                "&password=" + Utils.urlencodeUtf8(password) +
+                "&rank1=" + rank1 +
+                "&rank2=" + rank2 +
+                "&rank3=" + rank3 +
+                "&school_id=" + Utils.urlencodeUtf8(text);
+
+        errno = _doRequestWithoutResponse(postStr);
+
+        return errno;
+
+    }
+
+    /**
+     * 删除老师对作业的评论
+     * Created by hutianfeng on 2015/5/27
+     * @param homeworkresult_id
+     * @return
+     */
+    public int delHomeworkReview(int homeworkresult_id) {
+        int errno = -1;
+        String uid = mPrefUtil.getUid();
+        String password = mPrefUtil.getPassword();
+        if (uid == null || password == null)
+            return errno;
+
+        final String action = "del_homework_review";
+        String postStr = "action=" + action +
+                "&uid=" + Utils.urlencodeUtf8(uid) +
+                "&password=" + Utils.urlencodeUtf8(password) +
+                "&homeworkresult_id=" + homeworkresult_id;
+
+        errno = _doRequestWithoutResponse(postStr);
+
+        return errno;
+    }
+
 }

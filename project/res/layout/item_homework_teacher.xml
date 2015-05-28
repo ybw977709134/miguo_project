@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- 学生答复作业 -->
+
+        <LinearLayout
+            android:id="@+id/layout_homework_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 学生答复时间 -->
+            <TextView
+                android:id="@+id/date_homework_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <!-- 设置背景色 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@drawable/bg_message_other_words"
+                android:layout_marginRight="30dp"
+                android:orientation="vertical" >
+
+                <!-- 展示图片 -->
+                <TableLayout
+                    android:id="@+id/imageTable"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="@dimen/padding_medium"/>
+
+                <!-- 作业标题 -->
+                <TextView
+                    android:id="@+id/textView_homework_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:text="作业标题"/>
+
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+
+
+
+
+        <!-- 老师批改作业 -->
+
+        <LinearLayout
+            android:id="@+id/layout_homework_review"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+
+            <TextView
+                android:id="@+id/date_homework_review"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <!-- 背景色/星级评分 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@drawable/bg_message_my_words"
+                android:layout_marginLeft="30dp"
+                android:orientation="vertical" >
+
+                <!-- 完整性 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:text="完整性"/>
+
+                    <RatingBar
+                        android:id="@+id/ratingBar_confirm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/homeworkRatingBar"
+                        android:layout_marginRight="20dp"
+                        android:layout_alignParentRight="true"
+                        android:numStars="5"
+                        android:stepSize="1" />
+
+                </RelativeLayout>
+
+
+                <!-- 及时性 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:text="及时性 "/>
+
+                    <RatingBar
+                        android:id="@+id/ratingBar_timely"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/homeworkRatingBar"
+                        android:layout_marginRight="20dp"
+                        android:layout_alignParentRight="true"
+                        android:numStars="5"
+                        android:stepSize="1" />
+
+                </RelativeLayout>
+
+
+                <!-- 准确性 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:text="准确性"/>
+
+                    <RatingBar
+                        android:id="@+id/ratingBar_exact"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/homeworkRatingBar"
+                        android:layout_marginRight="20dp"
+                        android:layout_alignParentRight="true"
+                        android:numStars="5"
+                        android:stepSize="1" />
+
+                </RelativeLayout>
+
+
+
+                <TextView
+                    android:id="@+id/textView_homework_review"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:text="老师评语"/>
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+        </LinearLayout>
+
+</LinearLayout>

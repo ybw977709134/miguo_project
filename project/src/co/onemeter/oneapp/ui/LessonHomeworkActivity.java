@@ -37,6 +37,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
     private WFile voiceFile;
     private ArrayList<WFile> photoFiles;
     private MediaPlayerWraper mediaPlayerWraper;
+    private int flag;
     
 
     
@@ -63,6 +64,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 //        homework_id = getIntent().getStringExtra("homeworkId");
 //        Log.d("--------------homework_id--------------", homework_id);
         lessonId = getIntent().getIntExtra("lessonId", -1);
+        flag = getIntent().getIntExtra("flag", -1);
         if(null == moment) {
             finish();
             return;
@@ -80,6 +82,9 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 		imageTable = (TableLayout) findViewById(R.id.imageTable);
 		getLessonHomework = new GetLessonHomework();
 		
+		if(flag == 1){
+			tv_del.setVisibility(View.GONE);
+		}
 		title_back.setOnClickListener(this);
 		tv_del.setOnClickListener(this);
 	}

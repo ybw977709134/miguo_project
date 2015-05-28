@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,10 +17,16 @@ import co.onemeter.oneapp.utils.ListViewUtils;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.androidquery.AQuery;
+
+import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
+import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.GetLessonHomework;
 import org.wowtalk.api.LessonAddHomework;
+import org.wowtalk.api.LessonParentFeedback;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.Moment;
+import org.wowtalk.api.PrefUtil;
 import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;
@@ -33,9 +40,11 @@ import java.util.Map;
 public class HomeworkActivity extends Activity implements OnClickListener, OnItemClickListener{
 	private static final int REQ_PARENT_ADDHOMEWORK = 100;
 	private static final int REQ_PARENT_DELHOMEWORK = 1001;
+	private static final int REQ_STUDENT_SIGNUP = 1002;
 	private TextView tv_class_name;
 	private TextView tv_lesson_name;
 	private TextView tv_addhomework_state;
+	private TextView tv_signup_homework_state;
 	private int lessonId;
 	private List<Map<String, Object>> homeworkStates;
 	private HomeworkStateAdapter adapter;
@@ -44,15 +53,34 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 	private Database mDb;
 	private LessonAddHomework addHomework ;
 	private MessageBox msgbox;
+	private int homework_id;
+	
+	private GetLessonHomework getLessonHomework;
+	
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_homework);
 		initView();
-		getHomeworkState(lessonId);
+		if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
+			getHomeworkState_student(lessonId);
+		}else if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER){
+			getHomeworkState(lessonId);
+		}
+		
 	}
-
+	private Handler mHandler = new Handler(){
+		public void handleMessage(android.os.Message msg) {
+			if(msg.what != ErrorCode.INVALID_ARGUMENT){
+				msgbox.dismissWait();
+				msgbox.toast(R.string.class_parent_opinion_not_submitted,500);
+			}else {
+				msgbox.dismissWait();
+			}
+		};
+	};
 	private void initView() {
 		lessonId = getIntent().getIntExtra(Constants.LESSONID, 0);
 		lvHomework = (ListView) findViewById(R.id.lv_homework);
@@ -61,6 +89,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		msgbox = new MessageBox(this);
 		q.find(R.id.title_back).clicked(this);
 		q.find(R.id.layout_sign_class).clicked(this);
+		q.find(R.id.layout_signup_homework).clicked(this);
 
 		homeworkStates = new ArrayList<Map<String, Object>>();
 		tv_class_name = (TextView) findViewById(R.id.tv_class_name);
@@ -68,11 +97,49 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		tv_class_name.setText(getIntent().getStringExtra("class_name"));
 		tv_lesson_name.setText(getIntent().getStringExtra("lesson_name"));
 		tv_addhomework_state = (TextView) findViewById(R.id.tv_addhomework_state);
+		tv_signup_homework_state = (TextView) findViewById(R.id.tv_signup_homework_state);
 		lvHomework.setOnItemClickListener(this);
-		
+		getLessonHomework = new GetLessonHomework();
 		addHomework = mDb.fetchLessonAddHomework(lessonId);
+		if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
+			lvHomework.setVisibility(View.GONE);
+			q.find(R.id.layout_signup_homework).visibility(View.VISIBLE);
+		}else{
+			lvHomework.setVisibility(View.VISIBLE);
+			q.find(R.id.layout_signup_homework).visibility(View.GONE);
+			q.find(R.id.divider_signup_homework).visibility(View.GONE);
+		}
 	}
 
+	private void getHomeworkState_student(final int lessonId){
+		msgbox.showWait();
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+
+			@Override
+			protected Integer doInBackground(Void... params) {
+				int status= LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework);		
+				return status;
+			}
+			
+			@Override
+			protected void onPostExecute(Integer result) {
+				msgbox.dismissWait();
+				if(result == 1){
+					homework_id = getLessonHomework.id;
+					if(homework_id == 0){
+						tv_addhomework_state.setText("未布置");
+					}else if(homework_id != 0){
+						tv_addhomework_state.setText("已布置");
+					}
+					
+					
+				}
+				
+			}
+			
+		});
+		
+	}
 	private void getHomeworkState(final int lessonId){
 		msgbox.showWait();
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, List<Map<String, Object>>>() {
@@ -84,40 +151,18 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			}
 			protected void onPostExecute(List<Map<String, Object>> result) {
 				msgbox.dismissWait();
-//				if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
-////					for(int i = 0;i < result.size();i++){
-////						if(PrefUtil.getInstance(HomeworkActivity.this).getUid().equals(result.get(i).get("stu_uid")) ){
-////							homeworkStates.clear();
-////							homeworkStates.add(result.get(i));
-////							
-////						}
-////						Log.d("------------uid--------------", result.get(i).get("stu_uid")+"");
-////					}
-////					Log.d("------------uid--------------", String.valueOf(result.get(0).get("stu_uid")));
-//
-//					adapter = new HomeworkStateAdapter(homeworkStates);
-//					adapter.notifyDataSetChanged();
-//					lvHomework.setAdapter(adapter);
-//					ListViewUtils.setListViewHeightBasedOnChildren(lvHomework);
-//					if(homeworkStates.size() == 0){
-//						tv_addhomework_state.setText("未布置");
-//					}else{
-//						tv_addhomework_state.setText("已布置");
-//					}
-//					
-//				}else{
-					homeworkStates.clear();	
-					homeworkStates.addAll(result);
-					adapter = new HomeworkStateAdapter(homeworkStates);
-					adapter.notifyDataSetChanged();
-					lvHomework.setAdapter(adapter);
-					ListViewUtils.setListViewHeightBasedOnChildren(lvHomework);
-					if(homeworkStates.size() == 0){
-						tv_addhomework_state.setText("未布置");
-					}else{
-						tv_addhomework_state.setText("已布置");
-					}
+				homeworkStates.clear();	
+				homeworkStates.addAll(result);
+				adapter = new HomeworkStateAdapter(homeworkStates);
+				adapter.notifyDataSetChanged();
+				lvHomework.setAdapter(adapter);
+				ListViewUtils.setListViewHeightBasedOnChildren(lvHomework);
+				if(homeworkStates.size() == 0){
+					tv_addhomework_state.setText("未布置");
+				}else{
+					tv_addhomework_state.setText("已布置");
 				}
+			}
 				
 //			}
 			
@@ -132,18 +177,58 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			break;
 			
 		case R.id.layout_sign_class:	
-			if(homeworkStates.size() == 0){
-				Intent i = new Intent(HomeworkActivity.this, AddHomeworkActivity.class);
-				i.putExtra("lessonId",lessonId);
-				startActivityForResult(i, REQ_PARENT_ADDHOMEWORK);
+			if(isTeacher()){
+				if(homeworkStates.size() == 0){
+					Intent i = new Intent(HomeworkActivity.this, AddHomeworkActivity.class);
+					i.putExtra("lessonId",lessonId);
+					startActivityForResult(i, REQ_PARENT_ADDHOMEWORK);
+				}else{
+					Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);
+					Moment moment = mDb.fetchMoment(addHomework.moment_id + "");
+					i.putExtra("moment", moment);
+			        i.putExtra("lessonId",lessonId);
+			        startActivityForResult(i, REQ_PARENT_DELHOMEWORK);
+				}
 			}else{
-				Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);
-				Moment moment = mDb.fetchMoment(addHomework.moment_id + "");
-				i.putExtra("moment", moment);
-		        i.putExtra("lessonId",lessonId);
-		        startActivityForResult(i, REQ_PARENT_DELHOMEWORK);
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						int errno;
+						try {
+							errno = LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework);
+							if(errno == ErrorCode.INVALID_ARGUMENT){						
+								Moment moment = mDb.fetchMoment(String.valueOf(getLessonHomework.moment_id));
+								if(moment != null){
+									Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);
+									i.putExtra("moment", moment);
+							        i.putExtra("lessonId",lessonId);
+							        i.putExtra("flag", 1);
+									startActivity(i);
+									mHandler.sendEmptyMessage(errno);
+								}else{
+									mHandler.sendEmptyMessage(errno);
+								}
+							}else{
+								mHandler.sendEmptyMessage(errno);
+							}
+						} catch (Exception e) {
+							mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);
+						}
+					}
+				}).start();
 			}
 			
+			
+			break;
+		case R.id.layout_signup_homework:
+			if(homework_id == 0){
+				Toast.makeText(this, "还未布置作业", Toast.LENGTH_SHORT).show();
+			}else{
+				Intent i = new Intent(HomeworkActivity.this, SignHomeworkResultkActivity.class);
+				i.putExtra("homework_id", homework_id);
+				startActivityForResult(i, REQ_STUDENT_SIGNUP);
+			}
 			break;
 		case R.id.lay_footer_add:
 //			showAddHomeworkDialog();
@@ -214,9 +299,15 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		}		
 		
 	}
-
+	private boolean isTeacher(){
+		if(Buddy.ACCOUNT_TYPE_TEACHER == PrefUtil.getInstance(this).getMyAccountType()){
+			return true;
+		}
+		return false;
+	}
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		Log.d("-------------homeworkStates--------------", homeworkStates.get(0).get("homework_id")+"");
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		Log.d("-------------homeworkStates--------------", homeworkStates.get(position).get("stu_state")+"");
 	}
 }

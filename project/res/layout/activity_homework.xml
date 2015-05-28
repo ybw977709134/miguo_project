@@ -95,6 +95,56 @@
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:background="@drawable/bg_section_divider_line_dark"/>
+            <ImageView
+                android:id="@+id/divider_signup_homework"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/bg_section_divider_line_dark"/>
+            <LinearLayout
+                android:id="@+id/layout_signup_homework"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+                
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.5"
+                    android:clickable="false"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="@string/class_signup"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+                
+                <TextView
+                    android:id="@+id/tv_signup_homework_state"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:padding="5dp"
+                    android:text="" />
+                
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.3"
+                    android:drawableRight="@drawable/table_arrow"
+                    android:gravity="center_vertical|right"
+                    android:paddingRight="10dp"
+                    android:singleLine="true"
+                    android:textColor="@color/gray_40"
+                    android:textSize="18sp" />
+            </LinearLayout>
+            <ImageView
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:background="@drawable/bg_section_divider_line_dark"/>
 
             <ListView
                 android:id="@+id/lv_homework"

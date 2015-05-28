@@ -52,7 +52,7 @@ import co.onemeter.utils.AsyncTaskExecutor;
  * 布置作业
  * Created by zz on 05/15/2015.
  */
-public class AddHomeworkActivity extends Activity implements OnClickListener, ChangeToOtherAppsListener{
+public class SignHomeworkResultkActivity extends Activity implements OnClickListener, ChangeToOtherAppsListener{
 	private List<Moment> listMoment;
 	private String momentId = null;
 	private int lessonId;
@@ -72,6 +72,8 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 	public static final int TOTAL_PHOTO_ALLOWED = 6;
 	private final static int ACTIVITY_REQ_ID_PICK_PHOTO_FROM_CAMERA = 1;
 	private final static int ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY = 2;
+	private TextView tv_class_notice_title;
+	private int homework_id;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +101,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 	}
 	private void initView(Bundle savedInstanceState) {
 		title_back = (ImageButton) findViewById(R.id.btn_notice_back);
+		tv_class_notice_title = (TextView) findViewById(R.id.class_notice_title);
 		listMoment = new LinkedList<Moment>();
 		lessonId = getIntent().getIntExtra(Constants.LESSONID, 0);
 		addedImgLayout = (LinearLayout) findViewById(R.id.added_images_layout);
@@ -111,7 +114,8 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 		title_back.setOnClickListener(this);
 		mDb = new Database(this);
 		mMsgBox = new MessageBox(this);
-		
+		tv_class_notice_title.setText(R.string.class_signup);
+		homework_id = getIntent().getIntExtra("homework_id", 0);
 		if (null != moment) {
 			try {
 				if (!TextUtils.isEmpty(moment.text)) {
@@ -165,18 +169,15 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 					@Override
 					public void run() {
 						int errno = MomentWebServerIF.getInstance(
-								AddHomeworkActivity.this)
+								SignHomeworkResultkActivity.this)
 								.fAddMoment(moment, true);
-						LessonAddHomework addhomework = new LessonAddHomework();
-						addhomework.lesson_id = lessonId;
-
 						int errno2 = LessonWebServerIF.getInstance(
-								AddHomeworkActivity.this)
-								.addLessonHomework(addhomework, moment);
+								SignHomeworkResultkActivity.this)
+								.signupHomeworkResult(homework_id, moment);
 						if (errno == ErrorCode.OK
 								&& errno2 == ErrorCode.OK) {
 							Intent intent = new Intent(
-									AddHomeworkActivity.this,
+									SignHomeworkResultkActivity.this,
 									PublishMomentService.class);
 							intent.putExtra(
 									PublishMomentService.EXTRA_MOMENT,
@@ -211,10 +212,10 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
                     public void onClick(View v) {
                         bottomBoard.dismiss();
                         if (listPhoto.size() >= CreateMomentActivity.TOTAL_PHOTO_ALLOWED) {
-                            mMsgBox.toast(String.format(AddHomeworkActivity.this.getString(R.string.settings_account_moment_take_photos_oom), CreateMomentActivity.TOTAL_PHOTO_ALLOWED));
+                            mMsgBox.toast(String.format(SignHomeworkResultkActivity.this.getString(R.string.settings_account_moment_take_photos_oom), CreateMomentActivity.TOTAL_PHOTO_ALLOWED));
                             return;
                         }
-                        mediaHelper.takePhoto(AddHomeworkActivity.this, ACTIVITY_REQ_ID_PICK_PHOTO_FROM_CAMERA);
+                        mediaHelper.takePhoto(SignHomeworkResultkActivity.this, ACTIVITY_REQ_ID_PICK_PHOTO_FROM_CAMERA);
                     }
                 });
         bottomBoard.add(getString(R.string.image_pick_from_local), BottomButtonBoard.BUTTON_BLUE,
@@ -223,7 +224,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
                     public void onClick(View v) {
                         bottomBoard.dismiss();
                         if (listPhoto.size() >= TOTAL_PHOTO_ALLOWED) {
-                            mMsgBox.toast(String.format(AddHomeworkActivity.this.getString(R.string.settings_account_moment_take_photos_oom), CreateMomentActivity.TOTAL_PHOTO_ALLOWED));
+                            mMsgBox.toast(String.format(SignHomeworkResultkActivity.this.getString(R.string.settings_account_moment_take_photos_oom), CreateMomentActivity.TOTAL_PHOTO_ALLOWED));
                             return;
                         }
                         int i = 0;
@@ -232,9 +233,9 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
                                 i++;
                             }
                         }
-                        Intent intent = new Intent(AddHomeworkActivity.this, SelectPhotoActivity.class);
+                        Intent intent = new Intent(SignHomeworkResultkActivity.this, SelectPhotoActivity.class);
                         intent.putExtra("num", TOTAL_PHOTO_ALLOWED - i);
-                        ThemeHelper.putExtraCurrThemeResId(intent, AddHomeworkActivity.this);
+                        ThemeHelper.putExtraCurrThemeResId(intent, SignHomeworkResultkActivity.this);
                         ArrayList<String> listPath = new ArrayList<String>();
                         for (CreateMomentActivity.WMediaFile photo : listPhoto) {
                             if (photo.isFromGallery) {
@@ -349,7 +350,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
                     @Override
                     protected Boolean doInBackground(Intent... params) {
                         String[] path = new String[2];
-                        boolean handleImageRet = mediaHelper.handleImageResult(AddHomeworkActivity.this, params[0],
+                        boolean handleImageRet = mediaHelper.handleImageResult(SignHomeworkResultkActivity.this, params[0],
                                 CreateMomentActivity.PHOTO_SEND_WIDTH, CreateMomentActivity.PHOTO_SEND_HEIGHT,
                                 0, 0,
                                 path);

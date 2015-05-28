@@ -48,6 +48,7 @@ public class Database {
     public static final String TBL_LESSON_HOMEWORK = "lesson_homework";
     public static final String TBL_LESSON_PARENT_FEEDBACK = "lesson_parent_feedback";
     public static final String TBL_LESSON_ADD_HOMEWORK = "lesson_add_homework";
+    public static final String TBL_LESSON_ADD_HOMEWORK_RESULT = "lesson_add_homework_result";
     /** 学生在特定学校的备注名称。*/
     public static final String TBL_STUDENT_ALIAS = "student_alias";
     @Deprecated
@@ -6335,6 +6336,14 @@ public class Database {
         values.put("moment_id", homework.moment_id);
         return database.insertWithOnConflict(TBL_LESSON_ADD_HOMEWORK, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
+    public long storeLessonAddHomeworkResult(LessonAddHomeworkResult result) {
+        ContentValues values = new ContentValues();
+        values.put("homeworkResult_id", result.homeworkResult_id);
+        values.put("homework_id", result.homework_id);
+        values.put("moment_id", result.moment_id);
+        values.put("student_id", result.student_id);
+        return database.insertWithOnConflict(TBL_LESSON_ADD_HOMEWORK_RESULT, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+    }
 
     public long deleteLessonHomework(int homework_id){
     	return database.delete(TBL_LESSON_ADD_HOMEWORK, "homework_id=?", new String[] { String.valueOf(homework_id) });
@@ -6428,7 +6437,22 @@ public class Database {
         }
         return result;
     }
-
+    public LessonAddHomeworkResult fetchLessonAddHomeworkResult(int homework_id,String studentId){
+    	LessonAddHomeworkResult result = null;
+        Cursor cur = database.query(TBL_LESSON_ADD_HOMEWORK_RESULT,
+            new String[] { "moment_id" },
+            "homework_id=? AND student_id=?", new String[] { Integer.toString(homework_id), studentId },
+            null, null, null);
+        if (cur.moveToFirst()) {
+        	LessonAddHomeworkResult homeworkResult = new LessonAddHomeworkResult();
+            int i = -1;
+            homeworkResult.homework_id = homework_id;
+            homeworkResult.student_id = studentId;
+            homeworkResult.moment_id = cur.getInt(++i);
+            result = homeworkResult;
+            }
+        return result;
+    }
     public LessonParentFeedback fetchLessonParentFeedback(int lessonId, String studentId) {
         LessonParentFeedback result = null;
         Cursor cur = database.query(TBL_LESSON_PARENT_FEEDBACK,
@@ -6663,7 +6687,7 @@ public class Database {
 
 class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME_PRE = GlobalSetting.DATABASE_NAME;
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 14;
     public int flagIndex;
 
 	private static final String DATABASE_CREATE_TBL_CHATMESSAGES = "CREATE TABLE IF NOT EXISTS `chatmessages` "
@@ -6979,6 +7003,14 @@ class DatabaseHelper extends SQLiteOpenHelper {
                     + "moment_id INTEGER NOT NULL"
                     + ");";                 
 
+    private static final String DATABASE_CREATE_TBL_LESSON_ADD_HOMEWORK_RESULT =
+            "CREATE TABLE IF NOT EXISTS " + Database.TBL_LESSON_ADD_HOMEWORK_RESULT + " ("
+                    + "homeworkResult_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "homework_id INTEGER NOT NULL,"
+                    + "student_id TEXT NOT NULL,"
+                    + "moment_id INTEGER NOT NULL"
+                    + ");";
+    
     private static final String DATABASE_CREATE_TBL_STUDENT_ALIAS =
             "CREATE TABLE IF NOT EXISTS " + Database.TBL_STUDENT_ALIAS + " ("
                     + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -7049,6 +7081,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(DATABASE_CREATE_TBL_LESSON_HOMEWORK);
         database.execSQL(DATABASE_CREATE_TBL_LESSON_PARENT_FEEDBACK);
         database.execSQL(DATABASE_CREATE_TBL_LESSON_ADD_HOMEWORK);
+        database.execSQL(DATABASE_CREATE_TBL_LESSON_ADD_HOMEWORK_RESULT);
         database.execSQL(DATABASE_CREATE_TBL_STUDENT_ALIAS);
         database.execSQL(DATABASE_CREATE_TBL_SAVE_LAST_MESSAGE);
 
@@ -7171,6 +7204,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
         }
         if(oldVersion == 12){
         	database.execSQL(DATABASE_CREATE_TBL_LESSON_ADD_HOMEWORK);
+        	
+        }
+        if(oldVersion == 13){
+        	database.execSQL(DATABASE_CREATE_TBL_LESSON_ADD_HOMEWORK_RESULT);
         	
         }
     }

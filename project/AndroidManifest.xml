@@ -665,6 +665,11 @@
             android:theme="@style/Theme.Blue_main" >
         </activity>
         <activity
+            android:name=".ui.SignHomeworkResultkActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue_main" >
+        </activity>
+        <activity
             android:name=".ui.LessonInfoEditActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeNoActionBar.Blue_main" >

@@ -24,6 +24,7 @@ import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
 import org.wowtalk.ui.msg.InputBoardManager.ChangeToOtherAppsListener;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -139,7 +140,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 
 	private void addLessonHomework(final int lessonId,final Moment moment){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>(){
-
+			
 			@Override
 			protected Integer doInBackground(Void... params) {
 				moment.id = Moment.ID_PLACEHOLDER_PREFIX
@@ -192,8 +193,22 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 			}			
 			@Override
 			protected void onPostExecute(Integer result) {	
-				mMsgBox.dismissWait();
-				finish();
+				mMsgBox.showWaitImageSuccess("作业布置成功");
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						try {
+							Thread.sleep(3000);
+							finish();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+				}).start();
+				
 			}
 			
 		});

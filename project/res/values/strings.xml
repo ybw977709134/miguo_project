@@ -938,6 +938,7 @@
     <string name="class_lesson_select_class">选择班级</string>
     <string name="class_lesson_select_lesson">选择课程</string>
     <string name="class_lesson_select_teacher">选择老师</string>
+    <string name="class_lesson_no_homework">该门课未布置作业</string>
     <string name="class_homework">在线作业</string>
     <string name="class_signup">提交作业</string>
     <string name="class_homework_list">作业列表</string>

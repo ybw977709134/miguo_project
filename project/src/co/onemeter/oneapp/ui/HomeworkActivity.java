@@ -23,7 +23,6 @@ import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GetLessonHomework;
 import org.wowtalk.api.LessonAddHomework;
-import org.wowtalk.api.LessonParentFeedback;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.Moment;
 import org.wowtalk.api.PrefUtil;
@@ -35,12 +34,13 @@ import java.util.Map;
 
 /**
  * 家庭作业作业页面.
- * Created by pzy on 11/10/14. Modified by yl on 23/12/2014
+ * Created by pzy on 11/10/14. Modified by yl on 23/12/2014 Modified by zz on 10/05/2015
  */
 public class HomeworkActivity extends Activity implements OnClickListener, OnItemClickListener{
 	private static final int REQ_PARENT_ADDHOMEWORK = 100;
 	private static final int REQ_PARENT_DELHOMEWORK = 1001;
 	private static final int REQ_STUDENT_SIGNUP = 1002;
+	private static final int REQ_PARENT_DELHOMEWORKRESULT = 1003;
 	private TextView tv_class_name;
 	private TextView tv_lesson_name;
 	private TextView tv_addhomework_state;
@@ -56,6 +56,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 	private int homework_id;
 	
 	private GetLessonHomework getLessonHomework;
+	private String studentId = null;
 	
 	
 
@@ -75,7 +76,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		public void handleMessage(android.os.Message msg) {
 			if(msg.what != ErrorCode.INVALID_ARGUMENT){
 				msgbox.dismissWait();
-				msgbox.toast(R.string.class_parent_opinion_not_submitted,500);
+				msgbox.toast(R.string.class_lesson_no_homework,500);
 			}else {
 				msgbox.dismissWait();
 			}
@@ -99,6 +100,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		tv_addhomework_state = (TextView) findViewById(R.id.tv_addhomework_state);
 		tv_signup_homework_state = (TextView) findViewById(R.id.tv_signup_homework_state);
 		lvHomework.setOnItemClickListener(this);
+		studentId = PrefUtil.getInstance(this).getUid();
 		getLessonHomework = new GetLessonHomework();
 		addHomework = mDb.fetchLessonAddHomework(lessonId);
 		if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
@@ -109,6 +111,8 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			q.find(R.id.layout_signup_homework).visibility(View.GONE);
 			q.find(R.id.divider_signup_homework).visibility(View.GONE);
 		}
+		adapter = new HomeworkStateAdapter(homeworkStates);
+		lvHomework.setAdapter(adapter);
 	}
 
 	private void getHomeworkState_student(final int lessonId){
@@ -117,7 +121,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				int status= LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework);		
+				int status= LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework);	
 				return status;
 			}
 			
@@ -126,13 +130,9 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 				msgbox.dismissWait();
 				if(result == 1){
 					homework_id = getLessonHomework.id;
-					if(homework_id == 0){
-						tv_addhomework_state.setText("未布置");
-					}else if(homework_id != 0){
-						tv_addhomework_state.setText("已布置");
-					}
-					
-					
+					tv_addhomework_state.setText("已布置");
+				}else if(result == 0){
+					tv_addhomework_state.setText("未布置");
 				}
 				
 			}
@@ -144,8 +144,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		msgbox.showWait();
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, List<Map<String, Object>>>() {
 			@Override
-			protected List<Map<String, Object>> doInBackground(Void... params) {
-				
+			protected List<Map<String, Object>> doInBackground(Void... params) {			
 				List<Map<String, Object>> result= LessonWebServerIF.getInstance(HomeworkActivity.this).get_homework_state(lessonId);
 				return result;
 			}
@@ -153,18 +152,14 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 				msgbox.dismissWait();
 				homeworkStates.clear();	
 				homeworkStates.addAll(result);
-				adapter = new HomeworkStateAdapter(homeworkStates);
-				adapter.notifyDataSetChanged();
-				lvHomework.setAdapter(adapter);
-				ListViewUtils.setListViewHeightBasedOnChildren(lvHomework);
 				if(homeworkStates.size() == 0){
 					tv_addhomework_state.setText("未布置");
 				}else{
 					tv_addhomework_state.setText("已布置");
 				}
-			}
 				
-//			}
+				ListViewUtils.setListViewHeightBasedOnChildren(lvHomework);
+			}
 			
 		});
 	}
@@ -225,9 +220,28 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			if(homework_id == 0){
 				Toast.makeText(this, "还未布置作业", Toast.LENGTH_SHORT).show();
 			}else{
-				Intent i = new Intent(HomeworkActivity.this, SignHomeworkResultkActivity.class);
-				i.putExtra("homework_id", homework_id);
-				startActivityForResult(i, REQ_STUDENT_SIGNUP);
+				int momentId = 0;
+				int homeworkResult_id = 0;
+				for(int j = 0;j < getLessonHomework.stuResultList.size();j++){
+					if(studentId.equals(getLessonHomework.stuResultList.get(j).student_id)){
+						momentId = getLessonHomework.stuResultList.get(j).moment_id;
+						homeworkResult_id = getLessonHomework.stuResultList.get(j).id;
+					}
+				}
+				if(momentId == 0){
+					Intent i = new Intent(HomeworkActivity.this, SignHomeworkResultkActivity.class);
+					i.putExtra("homework_id", homework_id);
+					startActivityForResult(i, REQ_STUDENT_SIGNUP);
+				}else{				
+					Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);				
+					Moment moment = mDb.fetchMoment(momentId + "");
+					i.putExtra("moment", moment);
+			        i.putExtra("lessonId",lessonId);
+			        i.putExtra("homeworkResult_id",homeworkResult_id);
+			        i.putExtra("flag", 2);
+			        startActivityForResult(i, REQ_PARENT_DELHOMEWORKRESULT);
+				}
+				
 			}
 			break;
 		case R.id.lay_footer_add:
@@ -242,9 +256,13 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode == Activity.RESULT_OK){
 			if(requestCode == REQ_PARENT_ADDHOMEWORK){
-				tv_addhomework_state.setText("已布置");
+				getHomeworkState(lessonId);
 			}else if(requestCode == REQ_PARENT_DELHOMEWORK){
-				tv_addhomework_state.setText("未布置");
+				getHomeworkState(lessonId);
+			}else if(requestCode == REQ_STUDENT_SIGNUP){
+				tv_signup_homework_state.setText("已提交");
+			}else if(requestCode == REQ_PARENT_DELHOMEWORKRESULT){
+				tv_signup_homework_state.setText("未提交");
 			}
 		}
 	}
@@ -284,8 +302,11 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			String stateStr = null;
 			if(state == 0){
 				stateStr = "提醒交作业";
+				holder.tv_homework_state.setBackgroundResource(R.drawable.btn_small_valid);
+				holder.tv_homework_state.setTextColor(0xff8eb4e6);
 			}else if(state == 1){
 				stateStr = "新提交";
+				holder.tv_homework_state.setTextColor(0xff8eb4e6);
 			}else if(state == 2){
 				stateStr = "已批改";
 			}

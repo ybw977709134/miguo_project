@@ -54,20 +54,37 @@
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
             android:paddingLeft="10dp"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:background="@drawable/timeline_card_bg">
-            <TableLayout
-                android:id="@+id/imageTable"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="@dimen/padding_medium"/>
+            <LinearLayout
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <TableLayout
+                    android:id="@+id/imageTable"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="@dimen/padding_medium"/>
+                <TextView
+                    android:id="@+id/txt_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="all"
+                    android:text="这里的天空超级蓝啊！"
+                    style="@style/moment_body"/>
+            </LinearLayout>
             <TextView
-                android:id="@+id/txt_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:autoLink="all"
-                android:text="这里的天空超级蓝啊！"
-                style="@style/moment_body"/>
+                android:id="@+id/tv_modify_homework"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center_vertical"
+                android:drawableRight="@drawable/table_arrow"
+                android:textColor="@color/black_30"
+                android:clickable="true"
+                android:layout_weight="1"/>
         </LinearLayout>
         
         </ScrollView>

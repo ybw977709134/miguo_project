@@ -6336,17 +6336,20 @@ public class Database {
         values.put("moment_id", homework.moment_id);
         return database.insertWithOnConflict(TBL_LESSON_ADD_HOMEWORK, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
-    public long storeLessonAddHomeworkResult(LessonAddHomeworkResult result) {
+    public long storeLessonAddHomeworkResult(int homeworkResult_id,int homework_id,int moment_id,String student_id) {
         ContentValues values = new ContentValues();
-        values.put("homeworkResult_id", result.homeworkResult_id);
-        values.put("homework_id", result.homework_id);
-        values.put("moment_id", result.moment_id);
-        values.put("student_id", result.student_id);
+        values.put("homeworkResult_id", homeworkResult_id);
+        values.put("homework_id", homework_id);
+        values.put("moment_id", moment_id);
+        values.put("student_id", student_id);
         return database.insertWithOnConflict(TBL_LESSON_ADD_HOMEWORK_RESULT, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public long deleteLessonHomework(int homework_id){
     	return database.delete(TBL_LESSON_ADD_HOMEWORK, "homework_id=?", new String[] { String.valueOf(homework_id) });
+    }
+    public long deleteLessonHomeworkResult(int homeworkResult_id){
+    	return database.delete(TBL_LESSON_ADD_HOMEWORK_RESULT, "homeworkResult_id=?", new String[] { String.valueOf(homeworkResult_id) });
     }
     /**
      * @param class_id null 则清除所有课程的。
@@ -6437,16 +6440,15 @@ public class Database {
         }
         return result;
     }
-    public LessonAddHomeworkResult fetchLessonAddHomeworkResult(int homework_id,String studentId){
+    public LessonAddHomeworkResult fetchLessonAddHomeworkResult(String studentId){
     	LessonAddHomeworkResult result = null;
         Cursor cur = database.query(TBL_LESSON_ADD_HOMEWORK_RESULT,
             new String[] { "moment_id" },
-            "homework_id=? AND student_id=?", new String[] { Integer.toString(homework_id), studentId },
+            "student_id=?", new String[] { studentId },
             null, null, null);
         if (cur.moveToFirst()) {
         	LessonAddHomeworkResult homeworkResult = new LessonAddHomeworkResult();
             int i = -1;
-            homeworkResult.homework_id = homework_id;
             homeworkResult.student_id = studentId;
             homeworkResult.moment_id = cur.getInt(++i);
             result = homeworkResult;

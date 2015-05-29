@@ -3,6 +3,7 @@ package co.onemeter.oneapp.ui;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -14,12 +15,14 @@ import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageDialog;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
+
 import java.util.ArrayList;
 
 /**
  * Created with Eclipse.
  * User: zz
  * Date: 19-5-15
+ * 查看老师布置的作业和学生提交的作业
  */
 public class LessonHomeworkActivity extends Activity implements OnClickListener{
 	private static final String IMAGE_CACHE_DIR = "image";
@@ -38,6 +41,9 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
     private ArrayList<WFile> photoFiles;
     private MediaPlayerWraper mediaPlayerWraper;
     private int flag;
+    private TextView tv_title_name;
+    private int homeworkResult_id;
+    private TextView tv_modify_homework;
     
 
     
@@ -51,18 +57,13 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
         
         mediaPlayerWraper= new MediaPlayerWraper(this);
 
-//      mMsgBox = new MessageBox(this);
-//      dbHelper = Database.open(this);
-//      mMomentWeb = MomentWebServerIF.getInstance(this);
-
         ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams(this, IMAGE_CACHE_DIR);
         mImageResizer = new ImageResizer(this, DensityUtil.dip2px(this, 100));
         mImageResizer.setLoadingImage(R.drawable.feed_default_pic);
         mImageResizer.addImageCache(cacheParams);
 
         moment = getIntent().getParcelableExtra("moment");
-//        homework_id = getIntent().getStringExtra("homeworkId");
-//        Log.d("--------------homework_id--------------", homework_id);
+        homeworkResult_id = getIntent().getIntExtra("homeworkResult_id", -1);
         lessonId = getIntent().getIntExtra("lessonId", -1);
         flag = getIntent().getIntExtra("flag", -1);
         if(null == moment) {
@@ -78,15 +79,23 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 		title_back = (ImageButton) findViewById(R.id.title_back);
 		tv_del = (TextView) findViewById(R.id.tv_del);
 		txt_content = (TextView) findViewById(R.id.txt_content);
+		tv_title_name = (TextView) findViewById(R.id.title_name);
+		tv_modify_homework = (TextView) findViewById(R.id.tv_modify_homework);
 		
 		imageTable = (TableLayout) findViewById(R.id.imageTable);
 		getLessonHomework = new GetLessonHomework();
 		
 		if(flag == 1){
 			tv_del.setVisibility(View.GONE);
+			tv_modify_homework.setVisibility(View.GONE);
+		}
+		if(flag == 2){
+			tv_title_name.setText(R.string.class_signup);
+			tv_modify_homework.setVisibility(View.GONE);
 		}
 		title_back.setOnClickListener(this);
 		tv_del.setOnClickListener(this);
+		tv_modify_homework.setOnClickListener(this);
 	}
 	private void getLessonHomework(){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
@@ -101,8 +110,6 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			protected void onPostExecute(Integer result) {
 				if(result == 1){
 					homework_id = getLessonHomework.id;
-//					Log.d("------------------------------------------", getLessonHomework.teacherMoment.homeWorkMultimedias.get(0).multimedia_thumbnail_path);
-//					Log.d("------------------------------------------", getLessonHomework.teacherMoment.homeWorkMultimedias.get(0).multimedia_content_path);
 				}
 				
 			}
@@ -122,6 +129,26 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			@Override
 			protected void onPostExecute(Integer result) {
 				if(result == -1){
+					setResult(RESULT_OK);
+					finish();
+				}
+
+			}
+			
+		});
+	}
+	private void delLessonHomeworkResult(){
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+
+			@Override
+			protected Integer doInBackground(Void... params) {
+				int status= LessonWebServerIF.getInstance(LessonHomeworkActivity.this).delHomeworkResult(homeworkResult_id);
+				return status;
+			}
+			
+			@Override
+			protected void onPostExecute(Integer result) {
+				if(result == ErrorCode.OK){
 					setResult(RESULT_OK);
 					finish();
 				}
@@ -187,29 +214,57 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			onBackPressed();
 			break;
 		case R.id.tv_del:
-			MessageDialog dialog = new MessageDialog(LessonHomeworkActivity.this);
-            dialog.setTitle("提示");
-            dialog.setMessage("你确定要删除该作业吗?");
-            dialog.setCancelable(false);
-            dialog.setRightBold(true);
-            dialog.setOnLeftClickListener("取消", null);
-               
-               dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
-                   @Override
-                   public void onclick(MessageDialog dialog) {
-                	   dialog.dismiss();
-                	   delLessonHomework();                
-                   }
-               }
-               );
-               dialog.show();
+			if(isTeacher()){
+				MessageDialog dialog = new MessageDialog(LessonHomeworkActivity.this);
+	            dialog.setTitle("提示");
+	            dialog.setMessage("你确定要删除该作业吗?");
+	            dialog.setCancelable(false);
+	            dialog.setRightBold(true);
+	            dialog.setOnLeftClickListener("取消", null);
+	               
+	               dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+	                   @Override
+	                   public void onclick(MessageDialog dialog) {
+	                	   dialog.dismiss();
+	                	   delLessonHomework();                
+	                   }
+	               }
+	               );
+	               dialog.show();
+			}else{
+				MessageDialog dialog = new MessageDialog(LessonHomeworkActivity.this);
+	            dialog.setTitle("提示");
+	            dialog.setMessage("你确定要删除该作业吗?");
+	            dialog.setCancelable(false);
+	            dialog.setRightBold(true);
+	            dialog.setOnLeftClickListener("取消", null);
+	               
+	               dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+	                   @Override
+	                   public void onclick(MessageDialog dialog) {
+	                	   dialog.dismiss();
+	                	   delLessonHomeworkResult();              
+	                   }
+	               }
+	               );
+	               dialog.show();
+			}
+			
+			break;
+		case R.id.tv_modify_homework:
+			Log.d("------------------------", "modify");
 			break;
 		default:
 			break;
 		}
 	}
 	
-	
+	private boolean isTeacher(){
+		if(Buddy.ACCOUNT_TYPE_TEACHER == PrefUtil.getInstance(this).getMyAccountType()){
+			return true;
+		}
+		return false;
+	}
 //	/**
 //     * 跳转到此页面
 //     * @param context

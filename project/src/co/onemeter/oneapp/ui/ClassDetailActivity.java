@@ -627,24 +627,24 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
             break;
         case R.id.btn_homework_online:
         case R.id.tv_homework_online:
-        	Intent homeworkIntent = new Intent(this, TeacherSignActivity.class);
-        	homeworkIntent.putExtra("schoolId", schoolId);
-        	homeworkIntent.putExtra("classId",classId);
-        	homeworkIntent.putExtra("homework", "homework");
-        	homeworkIntent.putExtra("classname",myclasses_title.getText().toString());
-        	startActivity(homeworkIntent);
-//            MessageDialog dialog = new MessageDialog(this);
-//            dialog.setIsDouleBtn(false);
-//            dialog.setTitle("");
-//            dialog.setMessage("请拍下作业,发送给老师");
-//            dialog.setOnLeftClickListener("确定", new MessageDialog.MessageDialogClickListener() {
-//                @Override
-//                public void onclick(MessageDialog dialog) {
-//                    dialog.dismiss();
-//                    mMediaHelper.takePhoto(ClassDetailActivity.this, REQ_TAKE_PHO);
-//                }
-//            });
-//            dialog.show();
+//        	Intent homeworkIntent = new Intent(this, TeacherSignActivity.class);
+//        	homeworkIntent.putExtra("schoolId", schoolId);
+//        	homeworkIntent.putExtra("classId",classId);
+//        	homeworkIntent.putExtra("homework", "homework");
+//        	homeworkIntent.putExtra("classname",myclasses_title.getText().toString());
+//        	startActivity(homeworkIntent);
+            MessageDialog dialog = new MessageDialog(this);
+            dialog.setIsDouleBtn(false);
+            dialog.setTitle("");
+            dialog.setMessage("请拍下作业,发送给老师");
+            dialog.setOnLeftClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                @Override
+                public void onclick(MessageDialog dialog) {
+                    dialog.dismiss();
+                    mMediaHelper.takePhoto(ClassDetailActivity.this, REQ_TAKE_PHO);
+                }
+            });
+            dialog.show();
             break;
         case R.id.btn_apply_lesson:
         case R.id.tv_apply_lesson:

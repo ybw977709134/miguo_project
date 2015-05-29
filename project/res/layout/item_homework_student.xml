@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- 学生答复作业 -->
 
+        <!-- 学生答复作业 -->
         <LinearLayout
             android:id="@+id/layout_homework_comment"
             android:layout_width="match_parent"
@@ -22,7 +23,6 @@
                 android:id="@+id/date_homework_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-
 
             <!-- 设置背景色 -->
             <LinearLayout
@@ -37,8 +37,7 @@
                 <TableLayout
                     android:id="@+id/imageTable"
                     android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:layout_marginTop="@dimen/padding_medium"/>
+                    android:layout_width="wrap_content" />
 
                 <!-- 作业标题 -->
                 <TextView
@@ -48,15 +47,10 @@
                     android:textSize="20sp"
                     android:textColor="@color/black"
                     android:text="作业标题"/>
-
-
-
             </LinearLayout>
 
 
         </LinearLayout>
-
-
 
 
 
@@ -69,12 +63,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-
             <TextView
                 android:id="@+id/date_homework_review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-
 
             <!-- 背景色/星级评分 -->
             <LinearLayout
@@ -179,18 +171,10 @@
                     android:textColor="@color/black"
                     android:text="老师评语"/>
 
-
-
             </LinearLayout>
 
 
         </LinearLayout>
-
-
-
-
-
-
 
 
 

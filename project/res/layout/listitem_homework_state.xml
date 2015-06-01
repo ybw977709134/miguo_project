@@ -35,7 +35,7 @@
             android:layout_weight="0.2"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:drawableRight="@drawable/table_arrow"
+            android:drawableRight="@drawable/icon_home_movablebar"
             android:textColor="@color/black_30"
             android:text="" />
     </LinearLayout>

@@ -318,21 +318,21 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.img_home_homework:
             case R.id.txt_home_homework:
-                MessageDialog dialog = new MessageDialog(this);
-                dialog.setIsDouleBtn(false);
-                dialog.setTitle("");
-                dialog.setMessage("请拍下作业,发送给老师");
-                dialog.setOnLeftClickListener("确定",new MessageDialog.MessageDialogClickListener() {
-                    @Override
-                    public void onclick(MessageDialog dialog) {
-                        dialog.dismiss();
-                        takePhoto(HomeActivity.this, REQ_TAKE_PHO);
-                    }
-                });
-                dialog.show();
-//            	intent = new Intent(this, TeacherSignActivity.class);
-//            	intent.putExtra("homework", "homework");
-//            	startActivity(intent);
+//                MessageDialog dialog = new MessageDialog(this);
+//                dialog.setIsDouleBtn(false);
+//                dialog.setTitle("");
+//                dialog.setMessage("请拍下作业,发送给老师");
+//                dialog.setOnLeftClickListener("确定",new MessageDialog.MessageDialogClickListener() {
+//                    @Override
+//                    public void onclick(MessageDialog dialog) {
+//                        dialog.dismiss();
+//                        takePhoto(HomeActivity.this, REQ_TAKE_PHO);
+//                    }
+//                });
+//                dialog.show();
+            	intent = new Intent(this, TeacherSignActivity.class);
+            	intent.putExtra("homework", "homework");
+            	startActivity(intent);
 
                 break;
             case R.id.btn_goto_myclass:

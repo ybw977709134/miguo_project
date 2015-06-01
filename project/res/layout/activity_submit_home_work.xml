@@ -33,6 +33,7 @@
             android:textColor="@color/white"
             android:text="返回" />
 
+        <!-- 学生提交作业， 老师作业 -->
         <TextView
             android:id="@+id/contact_current_group"
             android:layout_width="wrap_content"
@@ -42,10 +43,12 @@
 
     </RelativeLayout>
 
-    <ListView
+    <com.handmark.pulltorefresh.widget.PullToRefreshListView
         android:id="@+id/listView_submit"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
+        android:layout_height="match_parent"
+        android:cacheColorHint="@null"
+        android:dividerHeight="0dp"
+        android:fadingEdge="none" />
 
 </LinearLayout>

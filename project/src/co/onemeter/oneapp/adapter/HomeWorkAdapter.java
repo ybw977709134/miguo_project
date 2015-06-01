@@ -11,6 +11,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import org.wowtalk.api.Buddy;
+import org.wowtalk.api.Database;
 import org.wowtalk.api.HomeWorkResult;
 import org.wowtalk.api.Moment;
 import org.wowtalk.api.PrefUtil;
@@ -32,12 +33,14 @@ public class HomeWorkAdapter extends BaseAdapter{
     private List<HomeWorkResult> stuResultList;
 
     private ImageResizer mImageResizer;//处理图片
+    private Database mDb;
 
 
     public HomeWorkAdapter (Context context,List<HomeWorkResult> stuResultList,ImageResizer mImageResizer) {
         this.context = context;
         this.stuResultList = stuResultList;
         this.mImageResizer = mImageResizer;
+        this.mDb = new Database(context);
     }
 
     @Override
@@ -59,14 +62,12 @@ public class HomeWorkAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
 
         //还没有初始化
-        Moment moment = new Moment();
+        Moment moment = mDb.fetchMoment(String.valueOf(stuResultList.get(position).moment_id));
 
         ArrayList<WFile> photoFiles = new ArrayList<WFile>();
-        WFile voiceFile = null;
+
         for (WFile file : moment.multimedias) {
-            if (file.isAudioByExt()) {
-                voiceFile = file;
-            } else {
+            if (!file.isAudioByExt()) {
                 photoFiles.add(file);
             }
         }
@@ -100,11 +101,22 @@ public class HomeWorkAdapter extends BaseAdapter{
         }
 
         holder.date_homework_comment.setText(stuResultList.get(position).stuMoment.insert_timestamp+"");
+
         //下载图片
-        MomentAdapter.setImageLayout(context, moment,mImageResizer, photoFiles, holder.imageTable);
+        if (photoFiles.size() == 0) {
+            holder.imageTable.setVisibility(View.GONE);
+        } else {
+            holder.imageTable.setVisibility(View.VISIBLE);
+            MomentAdapter.setImageLayout(context, moment,mImageResizer, photoFiles, holder.imageTable);
+        }
 
-
-        holder.textView_homework_title.setText(stuResultList.get(position).stuMoment.text_content);
+        //老师布置作业的标题
+        if (holder.textView_homework_title.getText().length() == 0) {
+            holder.textView_homework_title.setVisibility(View.GONE);
+        } else {
+            holder.textView_homework_title.setVisibility(View.VISIBLE);
+            holder.textView_homework_title.setText(stuResultList.get(position).stuMoment.text_content);
+        }
 
         //判断老师是否评论了作业
         if (stuResultList.get(position).homeWorkReview == null) {
@@ -116,16 +128,18 @@ public class HomeWorkAdapter extends BaseAdapter{
             holder.ratingBar_confirm.setRating(stuResultList.get(position).homeWorkReview.rank1);
             holder.ratingBar_timely.setRating(stuResultList.get(position).homeWorkReview.rank2);
             holder.ratingBar_exact.setRating(stuResultList.get(position).homeWorkReview.rank3);
-            holder.textView_homework_review.setText(stuResultList.get(position).homeWorkReview.text);
+
+            if (holder.textView_homework_review.getText().length() == 0) {
+                holder.textView_homework_review.setVisibility(View.GONE);
+            } else {
+                holder.textView_homework_review.setVisibility(View.VISIBLE);
+                holder.textView_homework_review.setText(stuResultList.get(position).homeWorkReview.text);
+            }
         }
-
-
-
 
         return convertView;
     }
 }
-
 
 class ViewHolder{
     //作业

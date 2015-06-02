@@ -102,8 +102,9 @@ public class OssClient {
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("User-Agent", "Android");
 			conn.setDoOutput(true);
-			conn.setFixedLengthStreamingMode((int)(
-					postDataPart1.length  + fileLength + postDataPart3.length));
+			conn.setChunkedStreamingMode(0);
+//			conn.setFixedLengthStreamingMode((int)(
+//					postDataPart1.length  + fileLength + postDataPart3.length));
 			conn.connect();
 
 			// send post data

@@ -1474,6 +1474,9 @@ public class LessonWebServerIF {
 		        	if (pullParser.getName().equals("state")) {
 		        		map.put("stu_state", pullParser.nextText());
 		        	}
+		        	if (pullParser.getName().equals("homework_result_id")) {
+		        		map.put("result_id", pullParser.nextText());
+		        	}
 		        	
 	        	break;
 	        	
@@ -1630,6 +1633,7 @@ public class LessonWebServerIF {
 
                             if (flagMoment == 5) {
                                 stuMoment.moment_id = Integer.valueOf(pullParser.nextText());
+                               
                             }
 
                             if (flagMoment == 6) {
@@ -1880,6 +1884,8 @@ public class LessonWebServerIF {
                         }
 
                         if (pullParser.getName().equals("homework_result")) {
+                        	homeWorkResult.stuMoment = stuMoment;
+                        	 MomentWebServerIF.getInstance(mContext).fGetMomentById(stuMoment.moment_id); 
                             stuResultList.add(homeWorkResult);
 
                         }
@@ -1895,7 +1901,7 @@ public class LessonWebServerIF {
                 }
                 event = pullParser.next();
             }
-            MomentWebServerIF.getInstance(mContext).fGetMomentById(teacherMoment.moment_id);
+            MomentWebServerIF.getInstance(mContext).fGetMomentById(teacherMoment.moment_id);    
             return 1;
         } catch (Exception e) {
             e.printStackTrace();
@@ -1977,7 +1983,7 @@ public class LessonWebServerIF {
      * @param text
      * @return
      */
-    public int addHomeworkReview(int rank1, int rank2, int rank3, String text) {
+    public int addHomeworkReview(int homeworkresult_id,int rank1, int rank2, int rank3, String text) {
         int errno = -1;
         String uid = mPrefUtil.getUid();
         String password = mPrefUtil.getPassword();
@@ -1988,10 +1994,11 @@ public class LessonWebServerIF {
         String postStr = "action=" + action +
                 "&uid=" + Utils.urlencodeUtf8(uid) +
                 "&password=" + Utils.urlencodeUtf8(password) +
+                "&homeworkresult_id=" + homeworkresult_id +
                 "&rank1=" + rank1 +
                 "&rank2=" + rank2 +
                 "&rank3=" + rank3 +
-                "&school_id=" + Utils.urlencodeUtf8(text);
+                "&text=" + Utils.urlencodeUtf8(text);
 
         errno = _doRequestWithoutResponse(postStr);
 

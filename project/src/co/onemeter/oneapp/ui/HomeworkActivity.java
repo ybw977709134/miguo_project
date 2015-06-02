@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -121,7 +120,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				int status= LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework);	
+				int status= LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework);
 				return status;
 			}
 			
@@ -233,14 +232,19 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 					i.putExtra("homework_id", homework_id);
 					startActivityForResult(i, REQ_STUDENT_SIGNUP);
 				}else{				
-					Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);				
-					Moment moment = mDb.fetchMoment(momentId + "");
-					i.putExtra("moment", moment);
-			        i.putExtra("lessonId",lessonId);
-			        i.putExtra("homeworkResult_id",homeworkResult_id);
-			        i.putExtra("flag", 2);
-			        startActivityForResult(i, REQ_PARENT_DELHOMEWORKRESULT);
+//					Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);				
+//					Moment moment = mDb.fetchMoment(momentId + "");
+//					i.putExtra("moment", moment);
+//			        i.putExtra("lessonId",lessonId);
+//			        i.putExtra("homeworkResult_id",homeworkResult_id);
+//			        i.putExtra("flag", 2);
+//			        startActivityForResult(i, REQ_PARENT_DELHOMEWORKRESULT);
+					Intent i = new Intent(HomeworkActivity.this, SubmitHomeWorkActivity.class);
+					i.putExtra("lessonId",lessonId);
+					i.putExtra("student_uid",studentId);		
+					startActivity(i);
 				}
+				
 				
 			}
 			break;
@@ -329,6 +333,12 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		Log.d("-------------homeworkStates--------------", homeworkStates.get(position).get("stu_state")+"");
+		if(Integer.parseInt(String.valueOf(homeworkStates.get(position).get("stu_state"))) == 1){
+			Intent i = new Intent(HomeworkActivity.this, SubmitHomeWorkActivity.class);
+			i.putExtra("lessonId",lessonId);
+			i.putExtra("student_uid",String.valueOf(homeworkStates.get(position).get("stu_uid")));		
+			i.putExtra("result_id", Integer.parseInt(String.valueOf(homeworkStates.get(position).get("result_id"))));
+			startActivity(i);
+		}
 	}
 }

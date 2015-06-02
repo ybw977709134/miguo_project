@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
+import org.wowtalk.api.GetLessonHomework;
 import org.wowtalk.api.HomeWorkResult;
 import org.wowtalk.api.Moment;
 import org.wowtalk.api.PrefUtil;
@@ -34,13 +35,15 @@ public class HomeWorkAdapter extends BaseAdapter{
 
     private ImageResizer mImageResizer;//处理图片
     private Database mDb;
+    private GetLessonHomework getLessonHomework; 
 
 
-    public HomeWorkAdapter (Context context,List<HomeWorkResult> stuResultList,ImageResizer mImageResizer) {
+    public HomeWorkAdapter (Context context,List<HomeWorkResult> stuResultList,ImageResizer mImageResizer,GetLessonHomework getLessonHomework) {
         this.context = context;
         this.stuResultList = stuResultList;
         this.mImageResizer = mImageResizer;
         this.mDb = new Database(context);
+        this.getLessonHomework = getLessonHomework;
     }
 
     @Override
@@ -59,18 +62,25 @@ public class HomeWorkAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         //还没有初始化
-        Moment moment = mDb.fetchMoment(String.valueOf(stuResultList.get(position).moment_id));
+//        Moment moment = mDb.fetchMoment(String.valueOf(stuResultList.get(position).moment_id));
+    	
+    	
+    	Moment moment = mDb.fetchMoment(String.valueOf(stuResultList.get(position).moment_id));
+			
 
         ArrayList<WFile> photoFiles = new ArrayList<WFile>();
 
-        for (WFile file : moment.multimedias) {
-            if (!file.isAudioByExt()) {
-                photoFiles.add(file);
+        if (moment != null && moment.multimedias != null && !moment.multimedias.isEmpty()) {
+        	for (WFile file : moment.multimedias) {
+                if (!file.isAudioByExt()) {
+                    photoFiles.add(file);
+                }
             }
         }
+        
 
         ViewHolder holder= null;
         if (convertView == null) {
@@ -161,3 +171,4 @@ class ViewHolder{
 
 
 }
+

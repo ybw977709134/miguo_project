@@ -36,7 +36,8 @@ public class YuanquActivity extends Activity {
         // 用户名 panzhiyong@onemeter.co
         // 密码 oEBH5z84
         // https://mint.splunk.com
-        Mint.initAndStartSession(this, "579f6a2f");
+        if (!BuildConfig.DEBUG)
+            Mint.initAndStartSession(this, "579f6a2f");
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.yuanqu);

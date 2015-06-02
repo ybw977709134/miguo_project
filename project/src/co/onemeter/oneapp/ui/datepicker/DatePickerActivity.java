@@ -59,8 +59,8 @@ public class DatePickerActivity extends Activity{
 		});
 		
 		year_pv = (PickerView) findViewById(R.id.year_pv);//年
-		month_pv = (PickerView) findViewById(R.id.month_pv);
-		day_pv = (PickerView) findViewById(R.id.day_pv);
+		month_pv = (PickerView) findViewById(R.id.month_pv);//月
+		day_pv = (PickerView) findViewById(R.id.day_pv);//日
 
 		SimpleDateFormat   formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd");     
 		Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间     
@@ -197,6 +197,12 @@ public class DatePickerActivity extends Activity{
 		Bundle bundle = getIntent().getExtras();
 		
 		if (bundle == null) {
+
+            //初始化生日
+            year = 2000;
+            month = 00;
+            day = 01;
+
 			year_pv.setSelected(100);
 			month_pv.setSelected(0);
 			day_pv.setSelected(0);

@@ -3,7 +3,6 @@ package co.onemeter.oneapp.utils;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.widget.Toast;
 import co.onemeter.oneapp.BuildConfig;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.contacts.model.Person;
@@ -11,7 +10,6 @@ import co.onemeter.oneapp.ui.Log;
 import co.onemeter.oneapp.ui.MessageComposerActivity;
 import co.onemeter.oneapp.ui.StartActivity;
 import co.onemeter.utils.AsyncTaskExecutor;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.api.*;
@@ -42,7 +40,7 @@ public class ChatMessageHandler {
         public void onDisplayNameAsynchrouslyFixed(ChatMessage m);
     }
 
-    private static final String LOG_TAG = "WowTalk/ChatMessageHandler";
+    private static final String LOG_TAG = "ChatMessageHandler";
 
     /**
      * 系统消息来自这个 uid.

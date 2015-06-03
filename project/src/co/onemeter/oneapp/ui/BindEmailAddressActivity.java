@@ -281,7 +281,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 					if (txt_bind_email.getText().toString().length() > 0) {
 						field_clear_email.setVisibility(View.VISIBLE);
 					}
-					
+
 				} else {
 					field_clear_email.setVisibility(View.GONE);
 					mInputMethodManager.hideSoftInputFromWindow(txt_bind_email.getWindowToken() , 0);
@@ -291,7 +291,7 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 		});
     	
     	//输入验证码时，清除图片按钮的控制
-    	txt_auth_code.addTextChangedListener(new TextWatcher() {
+        txt_auth_code.addTextChangedListener(new TextWatcher() {
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -326,15 +326,15 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 //					txt_auth_code.setText("");
 					if (txt_auth_code.getText().toString().length() > 0) {
 						field_clear_auth_code.setVisibility(View.VISIBLE);
-						 Handler hanlder = new Handler();
-	        		        hanlder.postDelayed(new Runnable() {
-	        					
-	        					@Override
-	        					public void run() {
-	        						mInputMethodManager.showSoftInput(txt_auth_code, InputMethodManager.RESULT_SHOWN);
-	        						mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-	        					}
-	        				}, 200);
+//						 Handler hanlder = new Handler();
+//	        		        hanlder.postDelayed(new Runnable() {
+//
+//	        					@Override
+//	        					public void run() {
+//	        						mInputMethodManager.showSoftInput(txt_auth_code, InputMethodManager.RESULT_SHOWN);
+//	        						mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+//	        					}
+//	        				}, 200);
 					}
 				} else {
 					field_clear_auth_code.setVisibility(View.GONE);
@@ -423,6 +423,17 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
 		case R.id.btn_verification_email:
 			mInputMethodManager.hideSoftInputFromWindow(txt_bind_email.getWindowToken() , 0);
 			bindEmailAddress(txt_bind_email.getText().toString());
+
+            Handler hanlder = new Handler();
+            hanlder.postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    mInputMethodManager.showSoftInput(txt_auth_code, InputMethodManager.RESULT_SHOWN);
+                    mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                }
+            }, 200);
+
 			break;
 			
 		//验证验证码	
@@ -470,6 +481,10 @@ public class BindEmailAddressActivity extends Activity implements OnClickListene
         				layout_verification_email.setVisibility(View.GONE);
         				textView_show_bind_email.setVisibility(View.VISIBLE);
         				textView_show_bind_email.setText("你输入的邮箱"+txt_bind_email.getText().toString());
+
+//                        txt_auth_code.setFocusable(true);
+//                        txt_auth_code.setFocusableInTouchMode(true);
+//                        txt_auth_code.requestFocus();
 
         				if (mTimer != null) {
         					mTimer.cancel();

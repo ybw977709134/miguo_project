@@ -1287,6 +1287,11 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         // TODO Auto-generated method stub
     }
 
+    /**
+     * Handle message with type {@link ChatMessage#MSGTYPE_MOMENT}.
+     * @param uid
+     * @param msgLiteralWithoutType
+     */
     @Override
     public void getMomentRelateNotificaiton(String uid, String msgLiteralWithoutType) {
         Log.i("getMomentRelateNotificaiton", uid, " ", msgLiteralWithoutType);

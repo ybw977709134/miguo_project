@@ -5754,7 +5754,7 @@ public class Database {
 
         // 如果评论的目标不是我，则把它设置为已读，以免UI提示未读评论。
         String myUid = PrefUtil.getInstance(context).getUid();
-        if (!TextUtils.equals(attachedTo.getOwnerUid(), myUid)) {
+        if (!TextUtils.equals(attachedTo.getOwnerUid(), myUid) && !TextUtils.equals(r.replyToUid, myUid)) {
             r.read = true;
         }
 

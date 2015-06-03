@@ -1,8 +1,10 @@
 package co.onemeter.oneapp.ui;
 
-import android.app.*;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TabActivity;
 import android.content.*;
-import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.os.*;
 import android.text.TextUtils;
@@ -19,8 +21,6 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.AppStatusService.AppStatusBinder;
 import co.onemeter.oneapp.utils.WebServerEventPoller;
 import co.onemeter.utils.AsyncTaskExecutor;
-
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
@@ -813,55 +813,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 	
 	@Override
 	public void getChatMessage(ChatMessage msg) {
-
-        /* ********
-         * It does nothing, which will be dealt in IncomeMessageIntentReceiver#onReceive
-         * ********
-         */
-
-//		Log.i("getChatMessage:(id:", msg.chatUserName + ",displayname:"
-//                + msg.displayName + ",groupSenderID:" + msg.groupChatSenderID
-//                + "):" + msg.messageContent);
-
-//        SoundPoolManager.playSoundFromRaw(this,R.raw.new_msg_incoming);
-
-//        boolean isHumanReadable = new ChatMessageHandler(this).handle(msg, true,
-//                new ChatMessageHandler.CompleteListener() {
-//                    @Override
-//                    public void onDisplayNameAsynchrouslyFixed(ChatMessage m) {
-//                        // 这个消息可能已经显示在会话界面了，而且显示的用户名称可能是"unknown"，所以
-//                        // 需要刷新一下。
-////                        if (_selectedTabIndex == TAB_SMS
-////                                && SmsActivity.isInstanciated()
-////                                && !MessageComposerActivity.isInstanciated()) {
-////                            SmsActivity.instance().fRefetchTableData();
-////                        }
-//                    }
-//                });
-
-//		if (_selectedTabIndex == TAB_SMS
-//				&& SmsActivity.isInstanciated()
-//				&& !MessageComposerActivity.isInstanciated()) {
-//		    if (isHumanReadable) {
-//                SmsActivity.instance().addChatMessage(msg);
-//	        } else {
-//                SmsActivity.instance().fRefetchTableData();
-//            }
-//		}
-
-		// if message log show and it is with that user ,reload that view too
-//		if (MessageComposerActivity.isInstanciated()
-//				&& MessageComposerActivity.instance().targetUID()
-//						.equals(msg.chatUserName)) {
-////			Log.i("getChatMessage",
-////                    "MessageComposerActivity exist for the same user,refresh it too!");
-////			MessageComposerActivity.instance().fProcessNewIncomeMsg(msg);
-//		} else {
-////		    if (isHumanReadable){
-////		        GlobalValue.unreadMsgCount++;
-////		        fRefreshTabBadge_unreadMsg();
-////		    }
-//		}
+        // nothing to do, new message is processed in IncomeMessageIntentReceiver#onReceive
 	}
 
     /**

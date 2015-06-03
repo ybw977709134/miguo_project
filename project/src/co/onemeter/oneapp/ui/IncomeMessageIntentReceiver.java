@@ -32,13 +32,6 @@ public class IncomeMessageIntentReceiver extends BroadcastReceiver {
 		this.context = context;
         Connect2.setContext(context);
 
-        /* @Deprecated
-         * 这里主要用来为新消息显示通知，针对新消息的业务逻辑请在
-         *  WowTalkUIChatMessageDelegate.getChatMessage()
-         * 中处理。
-         */
-        // 原先是通知提示和业务逻辑分开的，但会调同一个handle方法
-        // 现在在此处处理通知提示和业务逻辑
 		Bundle bundle = intent.getExtras();
 		if (bundle != null) {
             final Database database=new Database(context);

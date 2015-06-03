@@ -209,12 +209,25 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 				intent.putExtra("classId", classId);
 				intent.putExtra("schoolId", schoolId);
 				intent.putExtra("lvFlag", 0);
+				startActivity(intent);
 			}else{
-				intent.putExtra(Constants.STUID, mPre.getUid());
-				intent.putExtra(LessonStatusActivity.FALG, false);
-				intent.setClass(this, LessonStatusActivity.class);
+				int property_value = 0;
+				for(LessonPerformance performance :lessoonDetails_performance){
+					if(performance.student_id.equals(mPre.getUid())){
+						property_value = performance.property_value;
+					}
+				}
+				if(property_value == 2){
+					msgbox.toast("学生已经请假，不能查看课堂点评");
+				}else{
+					intent.putExtra(Constants.STUID, mPre.getUid());
+					intent.putExtra(LessonStatusActivity.FALG, false);
+					intent.setClass(this, LessonStatusActivity.class);
+					startActivity(intent);
+				}
+				
 			}
-			startActivity(intent);
+
 			break;
 		case R.id.les_lay_second:
 			intent.setClass(this, HomeworkActivity.class);
@@ -229,20 +242,31 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 				intent.putExtra("lvFlag", 1);
 				startActivity(intent);
 			}else{
-				LessonParentFeedback feedback = mDbHelper.fetchLessonParentFeedback(lessonId, mPre.getUid());
-				if(feedback == null){
-					intent.putExtra(Constants.STUID, mPre.getUid());
-					intent.putExtra(LessonStatusActivity.FALG, false);
-					intent.setClass(this, LessonParentFeedbackActivity.class);
-					startActivityForResult(intent,REQ_PARENT_FEEDBACK);
-				}else{
-					Moment moment = mDbHelper.fetchMoment(feedback.moment_id + "");
-					if(moment != null){
-						FeedbackDetailActivity.launch(LessonDetailActivity.this,moment,PrefUtil.getInstance(this).getUserName(),null);
-					}else{
-						new MessageBox(this).toast(R.string.class_parent_opinion_not_submitted,500);
+				int property_value = 0;
+				for(LessonPerformance performance :lessoonDetails_performance){
+					if(performance.student_id.equals(mPre.getUid())){
+						property_value = performance.property_value;
 					}
 				}
+				if(property_value == 2){
+					msgbox.toast("学生已经请假，不能提交家长意见");
+				}else{
+					LessonParentFeedback feedback = mDbHelper.fetchLessonParentFeedback(lessonId, mPre.getUid());
+					if(feedback == null){
+						intent.putExtra(Constants.STUID, mPre.getUid());
+						intent.putExtra(LessonStatusActivity.FALG, false);
+						intent.setClass(this, LessonParentFeedbackActivity.class);
+						startActivityForResult(intent,REQ_PARENT_FEEDBACK);
+					}else{
+						Moment moment = mDbHelper.fetchMoment(feedback.moment_id + "");
+						if(moment != null){
+							FeedbackDetailActivity.launch(LessonDetailActivity.this,moment,PrefUtil.getInstance(this).getUserName(),null);
+						}else{
+							new MessageBox(this).toast(R.string.class_parent_opinion_not_submitted,500);
+						}
+					}
+				}
+				
 			}
 			break;
 			

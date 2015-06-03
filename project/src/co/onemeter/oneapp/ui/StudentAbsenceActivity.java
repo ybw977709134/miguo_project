@@ -203,45 +203,59 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 			} else if (editText_absence_reason.getText().toString().length() == 0) {
 				alert("请填写请假事由");
 			} else {
-				
-				messageBox.showWaitImageSuccess("请假申请发送成功");
-				
-				//向老师请假
-				String reason = "[请假]"+textView_teacher_name.getText().toString()+"你好"+"\n"
-						+"班级： "+textView_class_name.getText().toString()+"\n"
-						+"课程： "+textView_lesson_name.getText().toString()+"\n"
-						+"事由： "+editText_absence_reason.getText().toString();
+				MessageDialog dialog = new MessageDialog(StudentAbsenceActivity.this);
+                dialog.setTitle("提示");
+                dialog.setMessage("你确定发送请假申请吗?");
+                dialog.setCancelable(false);
+                dialog.setRightBold(true);
+                dialog.setOnLeftClickListener("取消", null);
+                
+                dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                    @Override
+                    public void onclick(MessageDialog dialog) {
+                        dialog.dismiss();
+                        messageBox.showWaitImageSuccess("请假申请发送成功");
+        				
+        				//向老师请假
+        				String reason = "[请假]"+textView_teacher_name.getText().toString()+"你好"+"\n"
+        						+"班级： "+textView_class_name.getText().toString()+"\n"
+        						+"课程： "+textView_lesson_name.getText().toString()+"\n"
+        						+"事由： "+editText_absence_reason.getText().toString();
 
-				
-				final ChatMessage message = new ChatMessage();
-				message.chatUserName = teacherID;
+        				
+        				final ChatMessage message = new ChatMessage();
+        				message.chatUserName = teacherID;
 
-				message.messageContent = reason;
-				message.msgType = ChatMessage.MSGTYPE_NORMAL_TXT_MESSAGE;
-				message.sentStatus = ChatMessage.SENTSTATUS_SENDING;
-				message.sentDate = getSentDate();
-				message.uniqueKey = Database.chatMessageSentDateToUniqueKey(message.sentDate);
-				message.ioType = ChatMessage.IOTYPE_OUTPUT;
-				
-				message.primaryKey = new Database(StudentAbsenceActivity.this)
-			                            .storeNewChatMessage(message, false);
+        				message.messageContent = reason;
+        				message.msgType = ChatMessage.MSGTYPE_NORMAL_TXT_MESSAGE;
+        				message.sentStatus = ChatMessage.SENTSTATUS_SENDING;
+        				message.sentDate = getSentDate();
+        				message.uniqueKey = Database.chatMessageSentDateToUniqueKey(message.sentDate);
+        				message.ioType = ChatMessage.IOTYPE_OUTPUT;
+        				
+        				message.primaryKey = new Database(StudentAbsenceActivity.this)
+        			                            .storeNewChatMessage(message, false);
 
-			        new Thread(new Runnable() {
-			        	
-			            @Override
-			            public void run() {
+        			        new Thread(new Runnable() {
+        			        	
+        			            @Override
+        			            public void run() {
 
-			            	WowTalkVoipIF.getInstance(StudentAbsenceActivity.this).fSendChatMessage(message);
-			            	lessonWebServer.askForLeave(lessonID);
-			            	try {
-								Thread.sleep(2000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-							StudentAbsenceActivity.this.finish();
+        			            	WowTalkVoipIF.getInstance(StudentAbsenceActivity.this).fSendChatMessage(message);
+        			            	lessonWebServer.askForLeave(lessonID);
+        			            	try {
+        								Thread.sleep(2000);
+        							} catch (InterruptedException e) {
+        								e.printStackTrace();
+        							}
+        							StudentAbsenceActivity.this.finish();
 
-			            }
-			        }).start();
+        			            }
+        			        }).start();
+                    }
+                }
+                );
+                dialog.show();		
 		}
 			
 			break;

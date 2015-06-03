@@ -22,6 +22,7 @@ import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.LessonPerformance;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -169,16 +170,32 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                 finish();
                 break;
             case R.id.roll_call_ok://确认
-                if(performancesFromServer.size() > 0){
-                    finish();
+            	MessageDialog dialog = new MessageDialog(RollCallOnlineActivity.this);
+                dialog.setTitle("提示");
+                dialog.setMessage("你确定这次考勤吗?");
+                dialog.setCancelable(false);
+                dialog.setRightBold(true);
+                dialog.setOnLeftClickListener("取消", null);
+                
+                dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                    @Override
+                    public void onclick(MessageDialog dialog) {
+                        dialog.dismiss();
+                        if(performancesFromServer.size() > 0){
+                            finish();
+                        }
+                        int stuSize = classstudents.size();
+                        if(stuSize == 0){
+                            return ;
+                        }
+                        if(performancesToPost.size() > 0 && performancesToPost != null){
+                            postRollCallByPropertyValue();
+                        }
+                    }
                 }
-                int stuSize = classstudents.size();
-                if(stuSize == 0){
-                    return ;
-                }
-                if(performancesToPost.size() > 0 && performancesToPost != null){
-                    postRollCallByPropertyValue();
-                }
+                );
+                dialog.show();
+                
                 break;
             case R.id.btn_all_signin://全部签到
                 if(classstudents.size() > 0){

@@ -116,7 +116,7 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 			lessons.addAll(db.fetchLesson(classId));
 		}else{
 			for(int i =0 ;i < mDBHelper.fetchLesson(classId).size();i++){
-				if(curTime < mDBHelper.fetchLesson(classId).get(i).start_date){
+				if(curTime < mDBHelper.fetchLesson(classId).get(i).end_date){
 					lessons.add(mDBHelper.fetchLesson(classId).get(i));
 				}
 			}	

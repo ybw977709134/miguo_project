@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.Utils;
 
 /**
  * 用于加载作业信息
@@ -110,7 +111,9 @@ public class HomeWorkAdapter extends BaseAdapter{
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.date_homework_comment.setText(stuResultList.get(position).stuMoment.insert_timestamp+"");
+        long date_comment = stuResultList.get(position).stuMoment.insert_timestamp;
+        String date_comment_str = Utils.stampsToDateTime(date_comment);
+        holder.date_homework_comment.setText(date_comment_str);
 
         //下载图片
         if (photoFiles.size() == 0) {
@@ -134,7 +137,7 @@ public class HomeWorkAdapter extends BaseAdapter{
         } else {
             holder.layout_homework_review.setVisibility(View.VISIBLE);
             //批改时间
-            holder.date_homework_review.setText(System.currentTimeMillis()+"");
+//            holder.date_homework_review.setText(System.currentTimeMillis()+"");
             holder.ratingBar_confirm.setRating(stuResultList.get(position).homeWorkReview.rank1);
             holder.ratingBar_timely.setRating(stuResultList.get(position).homeWorkReview.rank2);
             holder.ratingBar_exact.setRating(stuResultList.get(position).homeWorkReview.rank3);

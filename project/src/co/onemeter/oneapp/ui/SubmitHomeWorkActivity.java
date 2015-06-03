@@ -44,6 +44,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
 
     private int lessonId;//需要传进来
     private int result_id;
+    private String student_uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
      * 初始化数据
      */
     private void initView () {
+    	student_uid = getIntent().getStringExtra("student_uid");
     	lessonId = getIntent().getIntExtra(Constants.LESSONID, 0);
     	result_id = getIntent().getIntExtra("result_id", 0);
         title_back = (ImageButton) findViewById(R.id.title_back);
@@ -107,7 +109,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
 
             @Override
             protected Integer doInBackground(Void... params) {
-                int status = LessonWebServerIF.getInstance(SubmitHomeWorkActivity.this).getLessonHomeWork(lessonId, getLessonHomework);
+                int status = LessonWebServerIF.getInstance(SubmitHomeWorkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,student_uid);
                 return status;
             }
 
@@ -129,8 +131,6 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
 
     private View buildHeader() {
         Button btn=new Button(this);
-
-
         if (PrefUtil.getInstance(SubmitHomeWorkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {//老师
             btn.setText("去评分!");
         } else {

@@ -22,7 +22,10 @@
             <TextView
                 android:id="@+id/date_homework_comment"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content" 
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="zzz"/>
 
             <!-- 设置背景色 -->
             <LinearLayout

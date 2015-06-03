@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -65,7 +66,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		setContentView(R.layout.activity_homework);
 		initView();
 		if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
-			getHomeworkState_student(lessonId);
+			getHomeworkState_student(lessonId,studentId);
 		}else if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER){
 			getHomeworkState(lessonId);
 		}
@@ -114,13 +115,13 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		lvHomework.setAdapter(adapter);
 	}
 
-	private void getHomeworkState_student(final int lessonId){
+	private void getHomeworkState_student(final int lessonId,final String studentId){
 		msgbox.showWait();
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				int status= LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework);
+				int status= LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,studentId);
 				return status;
 			}
 			
@@ -128,9 +129,11 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			protected void onPostExecute(Integer result) {
 				msgbox.dismissWait();
 				if(result == 1){
+					android.util.Log.d("----------------getLessonHomework-----------------", String.valueOf(getLessonHomework));
 					homework_id = getLessonHomework.id;
 					tv_addhomework_state.setText("已布置");
 				}else if(result == 0){
+					android.util.Log.d("-------------------未布置--------------------", "未布置");
 					tv_addhomework_state.setText("未布置");
 				}
 				
@@ -181,6 +184,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 					Moment moment = mDb.fetchMoment(addHomework.moment_id + "");
 					i.putExtra("moment", moment);
 			        i.putExtra("lessonId",lessonId);
+			        i.putExtra("studentId", String.valueOf(homeworkStates.get(0).get("stu_uid")));
 			        startActivityForResult(i, REQ_PARENT_DELHOMEWORK);
 				}
 			}else{
@@ -190,13 +194,14 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 					public void run() {
 						int errno;
 						try {
-							errno = LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework);
+							errno = LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,studentId);
 							if(errno == ErrorCode.INVALID_ARGUMENT){						
 								Moment moment = mDb.fetchMoment(String.valueOf(getLessonHomework.moment_id));
 								if(moment != null){
 									Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);
 									i.putExtra("moment", moment);
 							        i.putExtra("lessonId",lessonId);
+							        i.putExtra("studentId", studentId);
 							        i.putExtra("flag", 1);
 									startActivity(i);
 									mHandler.sendEmptyMessage(errno);
@@ -333,7 +338,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		if(Integer.parseInt(String.valueOf(homeworkStates.get(position).get("stu_state"))) == 1){
+		if(Integer.parseInt(String.valueOf(homeworkStates.get(position).get("stu_state"))) != 0){
 			Intent i = new Intent(HomeworkActivity.this, SubmitHomeWorkActivity.class);
 			i.putExtra("lessonId",lessonId);
 			i.putExtra("student_uid",String.valueOf(homeworkStates.get(position).get("stu_uid")));		

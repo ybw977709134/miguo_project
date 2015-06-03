@@ -44,6 +44,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
     private TextView tv_title_name;
     private int homeworkResult_id;
     private TextView tv_modify_homework;
+    private String studentId;
     
 
     
@@ -65,6 +66,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
         moment = getIntent().getParcelableExtra("moment");
         homeworkResult_id = getIntent().getIntExtra("homeworkResult_id", -1);
         lessonId = getIntent().getIntExtra("lessonId", -1);
+        studentId = getIntent().getStringExtra("studentId");
         flag = getIntent().getIntExtra("flag", -1);
         if(null == moment) {
             finish();
@@ -102,7 +104,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				int status= LessonWebServerIF.getInstance(LessonHomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework);
+				int status= LessonWebServerIF.getInstance(LessonHomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,studentId);
 				return status;
 			}
 			

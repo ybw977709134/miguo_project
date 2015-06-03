@@ -1508,7 +1508,7 @@ public class LessonWebServerIF {
      * Created by hutianfeng on 2015/5/21
      * @param lesson_id
      */
-    public int getLessonHomeWork(int lesson_id,GetLessonHomework getLessonHomework){
+    public int getLessonHomeWork(int lesson_id,GetLessonHomework getLessonHomework,String student_id){
 
         String uid = mPrefUtil.getUid();
         String password = mPrefUtil.getPassword();
@@ -1520,7 +1520,8 @@ public class LessonWebServerIF {
         String postStr = "action=" + action
                 + "&uid=" + Utils.urlencodeUtf8(uid)
                 + "&password=" + Utils.urlencodeUtf8(password)
-                + "&lesson_id="+ lesson_id;
+                + "&lesson_id="+ lesson_id
+                + "&student_id=" + Utils.urlencodeUtf8(student_id);
 
         Connect2 connect2 = new Connect2();
         Connect2.SetTimeout(5000, 0);

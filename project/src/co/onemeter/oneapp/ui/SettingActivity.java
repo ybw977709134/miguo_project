@@ -351,13 +351,17 @@ public class SettingActivity extends Activity implements OnClickListener {
                             Intent.ACTION_VIEW,
                             Uri.parse("http://www.onemeter.co/dl/")));
                 } else if (method == 1) {
-                    String destFilename = getExternalCacheDir()
-                            + "/om_im_" + updatesInfo.versionCode + ".apk";
-                    startService(new Intent(SettingActivity.this, AppUpgradeService.class)
-                                    .putExtra(AppUpgradeService.EXTRA_URL, updatesInfo.link)
-                                    .putExtra(AppUpgradeService.EXTRA_MD5SUM, updatesInfo.md5sum)
-                                    .putExtra(AppUpgradeService.EXTRA_DEST_FILENAME, destFilename)
-                    );
+                    if (!AppUpgradeService.isRunning()) {
+                        String destFilename = getExternalCacheDir()
+                                + "/om_im_" + updatesInfo.versionCode + ".apk";
+                        startService(new Intent(SettingActivity.this, AppUpgradeService.class)
+                                        .putExtra(AppUpgradeService.EXTRA_URL, updatesInfo.link)
+                                        .putExtra(AppUpgradeService.EXTRA_MD5SUM, updatesInfo.md5sum)
+                                        .putExtra(AppUpgradeService.EXTRA_DEST_FILENAME, destFilename)
+                        );
+                    } else {
+                        new MessageBox(SettingActivity.this).toast(R.string.upgrade_downloading);
+                    }
                 } else { // go to market
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse("market://details?id=" + getPackageName()));

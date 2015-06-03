@@ -28,9 +28,18 @@ public class AppUpgradeService extends android.app.Service {
     public static final String EXTRA_DEST_FILENAME = "dest_filename";
     public static final String EXTRA_MD5SUM = "md5sum";
 
+    /**
+     * The single instance is running?
+     */
+    private static boolean running = false;
+
     int notiId; // unique
     NotificationManager mNotifyManager;
     NotificationCompat.Builder mBuilder;
+
+    public static boolean isRunning() {
+        return running;
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -39,7 +48,10 @@ public class AppUpgradeService extends android.app.Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        handleCommand(intent);
+        if (!running) {
+            running = true;
+            handleCommand(intent);
+        }
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
         return START_STICKY;
@@ -120,6 +132,8 @@ public class AppUpgradeService extends android.app.Service {
             e.printStackTrace();
             mBuilder.setOngoing(false);
             updateNoticeMsg(getString(R.string.upgrade_failed_unknown));
+        } finally {
+            running = false;
         }
     }
 

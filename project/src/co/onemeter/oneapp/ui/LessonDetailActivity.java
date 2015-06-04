@@ -217,8 +217,8 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 						property_value = performance.property_value;
 					}
 				}
-				if(property_value == 2){
-					msgbox.toast("学生已经请假，不能查看课堂点评");
+				if(property_value == 2 || property_value == 1){
+					msgbox.toast("学生没有出席这节课，不能查看课堂点评");
 				}else{
 					intent.putExtra(Constants.STUID, mPre.getUid());
 					intent.putExtra(LessonStatusActivity.FALG, false);
@@ -248,8 +248,8 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 						property_value = performance.property_value;
 					}
 				}
-				if(property_value == 2){
-					msgbox.toast("学生已经请假，不能提交家长意见");
+				if(property_value == 2 || property_value == 1){
+					msgbox.toast("学生没有出席这节课，不能提交家长意见");
 				}else{
 					LessonParentFeedback feedback = mDbHelper.fetchLessonParentFeedback(lessonId, mPre.getUid());
 					if(feedback == null){

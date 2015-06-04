@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.utils.ListViewUtils;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import org.wowtalk.api.*;
@@ -39,9 +37,6 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 	private int lvFlag;
 	private String classId;
 	private String schoolId;
-	
-//	private List<GroupMember> members;
-//	private List<GroupMember> stus;
 	private List<LessonPerformance> performances;
 	private List<LessonPerformance> performancesNoAbsenceStu;
 	private Database mdbHelper;
@@ -85,7 +80,6 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 			lessonId = intent.getIntExtra(Constants.LESSONID, 0);
 			classId = intent.getStringExtra("classId");
 			schoolId = intent.getStringExtra("schoolId");
-//			schoolId = mdbHelper.fetchSchoolIdByClassId(classId);
 			if(lvFlag == LESSITUATION){
 				txtTitle.setText(R.string.class_lesson_situation_table);
 			}else if(lvFlag == PARENTSUG){
@@ -94,42 +88,6 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 		}
 		performances = new ArrayList<LessonPerformance>();
 		performancesNoAbsenceStu = new ArrayList<LessonPerformance>();
-//		stus = new ArrayList<GroupMember>();
-		
-//		members = mdbHelper.fetchGroupMembers(classId);
-//		if(members == null || members.isEmpty()){
-//			AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
-//
-//				@Override
-//				protected Integer doInBackground(Void... params) {
-//					return (Integer) WowTalkWebServerIF.getInstance(TeacherCheckActivity.this).fGroupChat_GetMembers(classId).get("code");
-//				}
-//
-//				protected void onPostExecute(Integer result) {
-//					if (ErrorCode.OK == result) {
-//						members = mdbHelper.fetchGroupMembers(classId);
-//						for (GroupMember m : members) {
-//							if (m.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT) {
-//								m.alias =  mdbHelper.fetchStudentAlias(schoolId, m.userID);
-//								stus.add(m);
-//							}
-//						}
-//						adapter = new StuAdapter(stus);
-//						lvStu.setAdapter(adapter);
-//					}
-//				};
-//
-//			});
-//		}else{
-//			for (GroupMember m: members) {
-//				if(m.getAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
-//					m.alias =  mdbHelper.fetchStudentAlias(schoolId, m.userID);
-//					stus.add(m);
-//				}
-//			}
-//			adapter = new StuAdapter(stus);
-//			lvStu.setAdapter(adapter);
-//		}
 		
 		lvStu.setOnItemClickListener(this);
 		titleBack.setOnClickListener(this);
@@ -168,8 +126,6 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 			intent.setClass(this, LessonStatusActivity.class);
 			startActivity(intent);
 		}else if(lvFlag == PARENTSUG){
-//			intent.putExtra(LessonStatusActivity.FALG, true);
-//			intent.setClass(this, LessonParentFeedbackActivity.class);
 			final int pos = position;
 			mMsgBox.showWait();
 			final Database db = new Database(TeacherCheckActivity.this);
@@ -181,12 +137,12 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 					public void run() {
 						int errno;
 						try {
-							errno = LessonWebServerIF.getInstance(TeacherCheckActivity.this).getLessonParentFeedback(lessonId, performances.get(pos).student_id);
+							errno = LessonWebServerIF.getInstance(TeacherCheckActivity.this).getLessonParentFeedback(lessonId, performancesNoAbsenceStu.get(pos).student_id);
 							if(errno == ErrorCode.OK){
-								LessonParentFeedback feedback = db.fetchLessonParentFeedback(lessonId, performances.get(pos).student_id);
+								LessonParentFeedback feedback = db.fetchLessonParentFeedback(lessonId, performancesNoAbsenceStu.get(pos).student_id);
 								Moment moment = db.fetchMoment(feedback.moment_id + "");
 								if(moment != null){
-									FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment,db.fetchStudentAlias(schoolId, performances.get(pos).student_id),null);
+									FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment,db.fetchStudentAlias(schoolId, performancesNoAbsenceStu.get(pos).student_id),null);
 									mHandler.sendEmptyMessage(errno);
 								}else{
 									mHandler.sendEmptyMessage(errno);
@@ -202,7 +158,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 			}else{
 				Moment moment = db.fetchMoment(feedback0.moment_id + "");
 				if(moment != null){
-					FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment,db.fetchStudentAlias(schoolId, performances.get(position).student_id),null);
+					FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment,db.fetchStudentAlias(schoolId, performancesNoAbsenceStu.get(position).student_id),null);
 					mHandler.sendEmptyMessage(ErrorCode.OK);
 				}else{
 					mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);
@@ -268,13 +224,7 @@ class StuAdapter extends BaseAdapter{
 			Database dbHelper=new Database(mContext);
             String student_alias = dbHelper.fetchStudentAlias(schoolId, performances.get(position).student_id);
             holder.name.setText(student_alias);
-//			GroupMember member = members.get(position);
-//			if(!TextUtils.isEmpty(member.alias)){
-//				holder.name.setText(member.alias);
-//			}else{
-//				holder.name.setText(member.nickName);
-//			}
-//			holder.msg.setText("");
+
 			return convertView;
 		}
 		

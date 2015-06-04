@@ -93,13 +93,17 @@ public class AppUpgradeService extends android.app.Service {
             byte data[] = new byte[1024];
             long total = 0;
             int count;
+            int lastProgress = 0;
             while (!isCancelled() && (count = input.read(data)) != -1) {
                 total += count;
 
                 // publishing the progress....
                 int progress = ((int) (total * 100 / fileLength));
-                mBuilder.setProgress(100, progress, false);
-                mNotifyManager.notify(notiId, mBuilder.build());
+                if (progress > lastProgress) {
+                  mBuilder.setProgress(100, progress, false);
+                  mNotifyManager.notify(notiId, mBuilder.build());
+                  lastProgress = progress;
+                }
 
                 output.write(data, 0, count);
             }

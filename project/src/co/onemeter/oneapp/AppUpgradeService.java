@@ -97,9 +97,10 @@ public class AppUpgradeService extends android.app.Service {
             while (!isCancelled() && (count = input.read(data)) != -1) {
                 total += count;
 
-                // publishing the progress....
+                // publishing the progress... but not too frequently, as 
+                // that will significantly affect UI performance.
                 int progress = ((int) (total * 100 / fileLength));
-                if (progress > lastProgress) {
+                if (progress > lastProgress + 5) {
                   mBuilder.setProgress(100, progress, false);
                   mNotifyManager.notify(notiId, mBuilder.build());
                   lastProgress = progress;

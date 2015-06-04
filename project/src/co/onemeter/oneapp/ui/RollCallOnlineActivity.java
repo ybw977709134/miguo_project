@@ -348,6 +348,20 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
             long curTime = System.currentTimeMillis()/1000;
             if(!performancesFromServer.isEmpty()){
             	if(curTime >= endDate){
+            		if(performancesFromServer.size() > position){
+                        LessonPerformance lessonPerformance = performancesFromServer.get(position);
+                        switch (lessonPerformance.property_value){
+                            case 1:
+                                holder.radio0.setChecked(true);
+                                break;
+                            case 2:
+                                holder.radio1.setChecked(true);
+                                break;
+                            case 3:
+                                holder.radio2.setChecked(true);
+                                break;
+                        }
+                    }
                 	holder.rg_per.setEnabled(false);
                     holder.radio0.setEnabled(false);
                     holder.radio1.setEnabled(false);

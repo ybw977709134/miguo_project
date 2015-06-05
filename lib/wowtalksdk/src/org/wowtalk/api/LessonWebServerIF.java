@@ -1115,41 +1115,40 @@ public class LessonWebServerIF {
      * @return List
      */
 	public int askForLeave(int lessonId){
-		int performance_id = -1;
+		int errno = -1;
 		String uid = mPrefUtil.getUid();
 		String password = mPrefUtil.getPassword();
 		if (uid == null || password == null)
-			return performance_id;
+			return errno;
 
 		final String action = "ask_for_leave";
 		String postStr = "action=" + action + "&uid="
 				+ Utils.urlencodeUtf8(uid) + "&password="
 				+ Utils.urlencodeUtf8(password)
 				+ "&lesson_id=" + lessonId;
-		Connect2 connect2 = new Connect2();
-		Element root = connect2.Post(postStr);
 
-		int errno = ErrorCode.BAD_RESPONSE;
-		if (root != null) {
-			NodeList errorList = root.getElementsByTagName("err_no");
-			Element errorElement = (Element) errorList.item(0);
-			String errorStr = errorElement.getFirstChild().getNodeValue();
-
-			if (errorStr.equals("0")) {
-				errno = ErrorCode.OK;
-
-				Element resultElement = Utils.getFirstElementByTagName(root,
-						action);
-				if (resultElement != null) {
-					Element e = Utils.getFirstElementByTagName(resultElement,
-							"performance_id");
-					performance_id = Integer.parseInt(e.getTextContent());
-				}
-			} else {
-				errno = Integer.parseInt(errorStr);
-			}
-		}
-		return performance_id;
+		errno = _doRequestWithoutResponse(postStr);
+//		int errno = ErrorCode.BAD_RESPONSE;
+//		if (root != null) {
+//			NodeList errorList = root.getElementsByTagName("err_no");
+//			Element errorElement = (Element) errorList.item(0);
+//			String errorStr = errorElement.getFirstChild().getNodeValue();
+//
+//			if (errorStr.equals("0")) {
+//				errno = ErrorCode.OK;
+//
+//				Element resultElement = Utils.getFirstElementByTagName(root,
+//						action);
+//				if (resultElement != null) {
+//					Element e = Utils.getFirstElementByTagName(resultElement,
+//							"performance_id");
+//					performance_id = Integer.parseInt(e.getTextContent());
+//				}
+//			} else {
+//				errno = Integer.parseInt(errorStr);
+//			}
+//		}
+		return errno;
 	}
     /**
      * 获取课程的上课签到情况

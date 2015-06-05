@@ -13,9 +13,12 @@ import org.wowtalk.ui.MessageDialog;
 
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
+import co.onemeter.utils.AsyncTaskExecutor;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -214,44 +217,73 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
                     @Override
                     public void onclick(MessageDialog dialog) {
                         dialog.dismiss();
-                        messageBox.showWaitImageSuccess("请假申请发送成功");
+                        
         				
-        				//向老师请假
-        				String reason = "[请假]"+textView_teacher_name.getText().toString()+"你好"+"\n"
-        						+"班级： "+textView_class_name.getText().toString()+"\n"
-        						+"课程： "+textView_lesson_name.getText().toString()+"\n"
-        						+"事由： "+editText_absence_reason.getText().toString();
-
         				
-        				final ChatMessage message = new ChatMessage();
-        				message.chatUserName = teacherID;
 
-        				message.messageContent = reason;
-        				message.msgType = ChatMessage.MSGTYPE_NORMAL_TXT_MESSAGE;
-        				message.sentStatus = ChatMessage.SENTSTATUS_SENDING;
-        				message.sentDate = getSentDate();
-        				message.uniqueKey = Database.chatMessageSentDateToUniqueKey(message.sentDate);
-        				message.ioType = ChatMessage.IOTYPE_OUTPUT;
-        				
-        				message.primaryKey = new Database(StudentAbsenceActivity.this)
-        			                            .storeNewChatMessage(message, false);
+//        			        new Thread(new Runnable() {
+//        			        	
+//        			            @Override
+//        			            public void run() {
+//
+//        			            	WowTalkVoipIF.getInstance(StudentAbsenceActivity.this).fSendChatMessage(message);
+//        			            	lessonWebServer.askForLeave(lessonID);
+//        			            	try {
+//        								Thread.sleep(2000);
+//        							} catch (InterruptedException e) {
+//        								e.printStackTrace();
+//        							}
+//        							StudentAbsenceActivity.this.finish();
+//
+//        			            }
+//        			        }).start();
+        				AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
-        			        new Thread(new Runnable() {
-        			        	
-        			            @Override
-        			            public void run() {
+        					@Override
+        					protected Integer doInBackground(Void... params) {
+        						
+        						int status= lessonWebServer.askForLeave(lessonID);		
+        						return status;
+        					}
+        					
+        					@Override
+        					protected void onPostExecute(Integer result) {
+        						super.onPostExecute(result);
+        						if(result == 0){
+        							messageBox.showWaitImageSuccess("请假申请发送成功");
+        							//向老师请假
+        	        				String reason = "[请假]"+textView_teacher_name.getText().toString()+"你好"+"\n"
+        	        						+"班级： "+textView_class_name.getText().toString()+"\n"
+        	        						+"课程： "+textView_lesson_name.getText().toString()+"\n"
+        	        						+"事由： "+editText_absence_reason.getText().toString();
 
-        			            	WowTalkVoipIF.getInstance(StudentAbsenceActivity.this).fSendChatMessage(message);
-        			            	lessonWebServer.askForLeave(lessonID);
-        			            	try {
+        	        				
+        	        				final ChatMessage message = new ChatMessage();
+        	        				message.chatUserName = teacherID;
+
+        	        				message.messageContent = reason;
+        	        				message.msgType = ChatMessage.MSGTYPE_NORMAL_TXT_MESSAGE;
+        	        				message.sentStatus = ChatMessage.SENTSTATUS_SENDING;
+        	        				message.sentDate = getSentDate();
+        	        				message.uniqueKey = Database.chatMessageSentDateToUniqueKey(message.sentDate);
+        	        				message.ioType = ChatMessage.IOTYPE_OUTPUT;
+        	        				
+        	        				message.primaryKey = new Database(StudentAbsenceActivity.this)
+        	        			                            .storeNewChatMessage(message, false);
+    			            		WowTalkVoipIF.getInstance(StudentAbsenceActivity.this).fSendChatMessage(message);
+    			            		try {
         								Thread.sleep(2000);
         							} catch (InterruptedException e) {
         								e.printStackTrace();
         							}
         							StudentAbsenceActivity.this.finish();
-
-        			            }
-        			        }).start();
+    			            	}else{
+    			            		messageBox.showWaitImageCaution("不能重复请假");
+    			            		
+    			            	}
+        					}
+        					
+        				});      
                     }
                 }
                 );

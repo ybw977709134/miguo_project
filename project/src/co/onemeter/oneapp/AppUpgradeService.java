@@ -84,12 +84,14 @@ public class AppUpgradeService extends android.app.Service {
 
             URL url = new URL(apkUrl);
             URLConnection connection = url.openConnection();
+            connection.setConnectTimeout(30000);
+            connection.setReadTimeout(30000);
             connection.connect();
             // this will be useful so that you can show a typical 0-100% progress bar
             int fileLength = connection.getContentLength();
 
             // download the file
-            InputStream input = new BufferedInputStream(url.openStream());
+            InputStream input = new BufferedInputStream(connection.getInputStream());
             OutputStream output = new FileOutputStream(filename);
 
             byte data[] = new byte[1024];

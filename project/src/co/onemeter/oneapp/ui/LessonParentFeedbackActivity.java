@@ -30,9 +30,11 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
 import org.wowtalk.ui.msg.InputBoardManager;
@@ -328,7 +330,23 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
 				Toast.makeText(LessonParentFeedbackActivity.this, "你还没有填写任何信息",
 						Toast.LENGTH_LONG).show();
 			} else {
-				createParentFeedbackMoment();
+				MessageDialog dialog = new MessageDialog(LessonParentFeedbackActivity.this);
+                dialog.setTitle("提示");
+                dialog.setMessage("你确定提交这次家长意见吗?");
+                dialog.setCancelable(false);
+                dialog.setRightBold(true);
+                dialog.setOnLeftClickListener("取消", null);
+                
+                dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                    @Override
+                    public void onclick(MessageDialog dialog) {
+                        dialog.dismiss();
+                        createParentFeedbackMoment();
+                    }
+                }
+                );
+                dialog.show();
+				
 			}
 			break;
 		case R.id.share_range_layout:

@@ -16,11 +16,13 @@ import android.widget.*;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.LessonPerformance;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,7 +130,23 @@ public class LessonStatusActivity extends Activity implements OnClickListener{
 		switch (v.getId()) {
 		case R.id.btn_parent_confirm:
 			if(isTeacher){
-				submitStuPerformance();
+				MessageDialog dialog = new MessageDialog(LessonStatusActivity.this);
+                dialog.setTitle("提示");
+                dialog.setMessage("你确定提交这次课堂点评吗?");
+                dialog.setCancelable(false);
+                dialog.setRightBold(true);
+                dialog.setOnLeftClickListener("取消", null);
+                
+                dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                    @Override
+                    public void onclick(MessageDialog dialog) {
+                        dialog.dismiss();
+                        submitStuPerformance();
+                    }
+                }
+                );
+                dialog.show();
+				
 			}else{
 				
 			}

@@ -48,10 +48,7 @@ public class AppUpgradeService extends android.app.Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (!running) {
-            running = true;
-            handleCommand(intent);
-        }
+        handleCommand(intent);
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
         return START_STICKY;
@@ -69,6 +66,11 @@ public class AppUpgradeService extends android.app.Service {
     }
 
     private void handleCommand_uploadMomentFiles(Intent intent) {
+        if (running) {
+            return;
+        }
+        running = true;
+
         final String apkUrl = intent.getStringExtra(EXTRA_URL);
         final String filename = intent.getStringExtra(EXTRA_DEST_FILENAME);
         final String expectedMd5sum = intent.getStringExtra(EXTRA_MD5SUM);

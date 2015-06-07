@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -21,13 +22,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.MyUrlSpanHelper;
+import co.onemeter.oneapp.utils.School;
 import co.onemeter.utils.AsyncTaskExecutor;
 import junit.framework.Assert;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
@@ -697,9 +697,38 @@ public class MessageDetailAdapter extends BaseAdapter{
             } else {
                 if(sender != null) {
                     holder.imgContactPhoto.setBackgroundDrawable(null);
-                    PhotoDisplayHelper.displayPhoto(mContext,
-                            holder.imgContactPhoto,
-                            R.drawable.default_avatar_90, sender, true);
+                    if (School.isSchoolId(mContext, sender.userID)) {
+                        final ViewHolder finalHolder = holder;
+                        final Buddy finalSender = sender;
+                        AsyncTaskExecutor.executeShortNetworkTask(
+                                new School.FetchDisplayInfoTask(mContext) {
+                                    @Override
+                                    protected void onPreExecute() {
+                                        finalHolder.imgContactPhoto.setTag(finalSender.userID);
+                                        finalHolder.imgContactPhoto.setImageResource(R.drawable.default_group_avatar_90);
+                                    }
+
+                                    @Override
+                                    protected void onPostExecute(Map<String, String> info) {
+                                        if (info != null) {
+                                            if (finalSender.userID.equals(finalHolder.imgContactPhoto.getTag())) {
+                                                String localPath = info.get("localPath");
+                                                if (localPath != null) {
+                                                    BitmapDrawable drawable = new BitmapDrawable(mContext.getResources(),
+                                                            localPath);
+                                                    if (drawable.getBitmap() != null) {
+                                                        finalHolder.imgContactPhoto.setImageDrawable(drawable);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }, sender.userID);
+                    } else {
+                        PhotoDisplayHelper.displayPhoto(mContext,
+                                holder.imgContactPhoto,
+                                R.drawable.default_avatar_90, sender, true);
+                    }
                 }
             }
             

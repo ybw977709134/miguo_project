@@ -29,7 +29,9 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import javax.security.auth.login.LoginException;
 import java.io.*;
+import java.security.InvalidParameterException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -4949,6 +4951,60 @@ public class WowTalkWebServerIF {
 		
 		
 		return errno;
+	}
+
+	/**
+	 * 获取学校头像在文件服务器上的绝对路径。
+	 * @param schoolId
+	 * @return
+	 */
+	public Map<String, String> getSchoolAvatarPath(String schoolId) {
+		Map<String, String> result = new HashMap<>();
+
+		String strUID = sPrefUtil.getUid();
+		String strPwd = sPrefUtil.getPassword();
+
+		if (isAuthEmpty(strUID, strPwd)) {
+			throw new IllegalStateException("not logged-in");
+		}
+
+		String action = "get_school_info";
+		String postStr = "action=" + action
+				+ "&uid=" + Utils.urlencodeUtf8(strUID)
+				+ "&password=" + Utils.urlencodeUtf8(strPwd)
+				+ "&school_id=" + schoolId;
+
+		Connect2 connect2 = new Connect2();
+		connect2.SetTimeout(15000, 15000);
+		Element root = connect2.Post(postStr);
+		if (root != null) {
+
+			// err_no要素のリストを取得
+			NodeList errorList = root.getElementsByTagName("err_no");
+			// error要素を取得
+			Element errorElement = (Element) errorList.item(0);
+			// error要素の最初の子ノード（テキストノード）の値を取得
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				Database dbHelper = new Database(mContext);
+
+				{
+					NodeList nodes = root.getElementsByTagName("name");
+					if (nodes.getLength() > 0) {
+						result.put("name", nodes.item(0).getFirstChild().getNodeValue());
+					}
+				}
+
+				{
+					NodeList nodes = root.getElementsByTagName("avatar");
+					if (nodes.getLength() > 0) {
+						result.put("avatar", nodes.item(0).getFirstChild().getNodeValue());
+					}
+				}
+			}
+		}
+		return result;
 	}
 
 	/**

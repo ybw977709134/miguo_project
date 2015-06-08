@@ -21,6 +21,7 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.AppStatusService.AppStatusBinder;
 import co.onemeter.oneapp.utils.WebServerEventPoller;
 import co.onemeter.utils.AsyncTaskExecutor;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
@@ -396,6 +397,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         mDb = new Database(this);
         mPrefUtil = PrefUtil.getInstance(this);
         mMsgbBox = new MessageBox(this);
+        IncomeMessageIntentReceiver.closeNoticeMessage();
 
 		initView();
 		setupIntent();
@@ -552,6 +554,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         fRefreshTabBadge_contact();
 
         WebServerEventPoller.instance(this).invoke();
+        IncomeMessageIntentReceiver.closeNoticeMessage();
 	}
 
     protected void onNewIntent(Intent intent) {

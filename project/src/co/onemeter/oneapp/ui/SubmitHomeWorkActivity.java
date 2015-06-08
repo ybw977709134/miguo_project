@@ -45,6 +45,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
     private int lessonId;//需要传进来
     private int result_id;
     private String student_uid;
+    private String stu_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
      */
     private void initView () {
     	student_uid = getIntent().getStringExtra("student_uid");
+    	stu_name = getIntent().getStringExtra("stu_name");
     	lessonId = getIntent().getIntExtra(Constants.LESSONID, 0);
     	result_id = getIntent().getIntExtra("result_id", 0);
         title_back = (ImageButton) findViewById(R.id.title_back);
@@ -109,7 +111,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
 
             @Override
             protected Integer doInBackground(Void... params) {
-                int status = LessonWebServerIF.getInstance(SubmitHomeWorkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,student_uid);
+                int status = LessonWebServerIF.getInstance(SubmitHomeWorkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,student_uid,2);
                 return status;
             }
 
@@ -143,6 +145,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
                     //跳转到老师评分
                     Intent intent = new Intent(SubmitHomeWorkActivity.this,HomeWorkEvaluate.class);
                     intent.putExtra("homeworkresult_id", result_id);
+                    intent.putExtra("stu_name", stu_name);
                     //传一些参数
                     startActivityForResult(intent, REQ_PARENT_ADDHOMEWORKREVIEW);
                 } else {

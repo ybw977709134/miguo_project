@@ -41,6 +41,7 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
     
     private MessageBox mMsgBox;
     private int homeworkresult_id;
+    private String stu_name;
 
 
     @Override
@@ -53,6 +54,7 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 
     private void initView() {
     	homeworkresult_id = getIntent().getIntExtra("homeworkresult_id", 0);
+    	stu_name = getIntent().getStringExtra("stu_name");
     	mMsgBox = new MessageBox(this);
         title_back = (ImageButton) findViewById(R.id.title_back);
         textView_homework_back = (TextView) findViewById(R.id.textView_homework_back);
@@ -65,7 +67,7 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
         btn_comment = (Button) findViewById(R.id.btn_comment);
         editText_comment = (EditText) findViewById(R.id.editText_comment);
 
-
+        textView_homework_back.setText(stu_name);
         editText_comment.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

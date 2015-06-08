@@ -104,7 +104,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				int status= LessonWebServerIF.getInstance(LessonHomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,studentId);
+				int status= LessonWebServerIF.getInstance(LessonHomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,studentId,2);
 				return status;
 			}
 			

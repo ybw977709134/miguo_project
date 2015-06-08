@@ -1507,7 +1507,7 @@ public class LessonWebServerIF {
      * Created by hutianfeng on 2015/5/21
      * @param lesson_id
      */
-    public int getLessonHomeWork(int lesson_id,GetLessonHomework getLessonHomework,String student_id){
+    public int getLessonHomeWork(int lesson_id,GetLessonHomework getLessonHomework,String student_id,int tag){
 
         String uid = mPrefUtil.getUid();
         String password = mPrefUtil.getPassword();
@@ -1885,7 +1885,12 @@ public class LessonWebServerIF {
 
                         if (pullParser.getName().equals("homework_result")) {
                         	homeWorkResult.stuMoment = stuMoment;
-                        	 MomentWebServerIF.getInstance(mContext).fGetMomentById(stuMoment.moment_id); 
+                        	if(tag == 1){
+                        		 
+                        	}else if(tag == 2){
+                        		MomentWebServerIF.getInstance(mContext).fGetMomentById(stuMoment.moment_id);
+                        	}
+                        	 
                             stuResultList.add(homeWorkResult);
 
                         }

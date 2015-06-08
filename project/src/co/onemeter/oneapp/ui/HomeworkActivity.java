@@ -121,7 +121,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				int status= LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,studentId);
+				int status= LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,studentId,1);
 				return status;
 			}
 			
@@ -129,11 +129,9 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			protected void onPostExecute(Integer result) {
 				msgbox.dismissWait();
 				if(result == 1){
-					android.util.Log.d("----------------getLessonHomework-----------------", String.valueOf(getLessonHomework));
 					homework_id = getLessonHomework.id;
 					tv_addhomework_state.setText("已布置");
 				}else if(result == 0){
-					android.util.Log.d("-------------------未布置--------------------", "未布置");
 					tv_addhomework_state.setText("未布置");
 				}
 				
@@ -194,7 +192,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 					public void run() {
 						int errno;
 						try {
-							errno = LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,studentId);
+							errno = LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,studentId,1);
 							if(errno == ErrorCode.INVALID_ARGUMENT){						
 								Moment moment = mDb.fetchMoment(String.valueOf(getLessonHomework.moment_id));
 								if(moment != null){
@@ -343,6 +341,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			i.putExtra("lessonId",lessonId);
 			i.putExtra("student_uid",String.valueOf(homeworkStates.get(position).get("stu_uid")));		
 			i.putExtra("result_id", Integer.parseInt(String.valueOf(homeworkStates.get(position).get("result_id"))));
+			i.putExtra("stu_name",String.valueOf(homeworkStates.get(position).get("stu_name")));	
 			startActivity(i);
 		}
 	}

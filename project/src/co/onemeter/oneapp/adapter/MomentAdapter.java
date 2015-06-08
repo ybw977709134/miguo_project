@@ -1813,7 +1813,11 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
         if(0 == cnt) {
             textView.clear();
+        } else {
+            textView.append("觉得很赞", null,
+                    0, 0, 0, null);
         }
+
         return cnt;
     }
 

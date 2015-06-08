@@ -502,7 +502,7 @@
     <string name="input_new_password_again">请再次输入新密码</string>
     <string name="account_setting_text">请保管好自己的密码，忘记密码时请向内部管理员咨询处理</string>
     <string name="invite">邀请</string>
-    <string name="symbol_comma">，</string>
+    <string name="symbol_comma">、</string>
     <string name="symbol_colon">：</string>
     <string name="not_binded">未绑定</string>
     <string name="bind_email">绑定邮箱</string>

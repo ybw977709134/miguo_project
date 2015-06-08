@@ -142,7 +142,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
         //注销掉对发送按钮的服务监听
 //        rightBtnStatusRunnable=new TimeElapseReportRunnable();
 //        rightBtnStatusRunnable.setElapseReportListener(new TimeElapseReportRunnable.TimeElapseReportListener() {
-//            @Override
+//            @OverrideEXTRA_KEY_MOMENT_TAG_ID
 //            public void reportElapse(final long elapsed) {
 //                runOnUiThread(new Runnable() {
 //                    @Override
@@ -293,12 +293,12 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 //                moment.latitude = location.getLatitude();
 //                moment.longitude = location.getLongitude();
 //            }
-//
+
 //            tvPickLocationTxtInd.setText(String.format(getString(R.string.event_place),strAddress));
 //            ivPickLocationImgInd.setImageResource(R.drawable.timeline_location_a);
 //            findViewById(R.id.pick_location_layout).setBackgroundResource(R.drawable.text_field);
 //            findViewById(R.id.pick_location_delete).setVisibility(View.VISIBLE);
-//
+
 //            isGettingLocation=false;
         }
 
@@ -441,11 +441,13 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
             }
         }
 
-        if(TimelineActivity.TAG_NOTICE_IDX == tagType || tagType == TimelineActivity.TAG_VIDEO_IDX) {
-            findViewById(R.id.location_layout).setVisibility(View.VISIBLE);
-        } else {
-            findViewById(R.id.location_layout).setVisibility(View.GONE);
-        }
+//        if(TimelineActivity.TAG_NOTICE_IDX == tagType || tagType == TimelineActivity.TAG_VIDEO_IDX) {
+//            findViewById(R.id.location_layout).setVisibility(View.VISIBLE);
+//        } else {
+//            findViewById(R.id.location_layout).setVisibility(View.GONE);
+//        }
+
+
         //if survey,set survey visible
         if(TimelineActivity.TAG_SURVEY_IDX == tagType) {
             findViewById(R.id.survey_layout).setVisibility(View.VISIBLE);

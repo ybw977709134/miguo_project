@@ -1,7 +1,6 @@
 package co.onemeter.oneapp.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.Log;
 import co.onemeter.oneapp.ui.PhotoDisplayHelper;
-import co.onemeter.oneapp.utils.School;
 import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
@@ -359,36 +357,7 @@ public class MessagesAdapter extends BaseAdapter {
 		}
 
         photoImageView.setBackgroundDrawable(null);
-        if (School.isSchoolId(mContext, message.chatUserName)) { // school notification
-            AsyncTaskExecutor.executeShortNetworkTask(
-                    new School.FetchDisplayInfoTask(mContext) {
-                        @Override
-                        protected void onPreExecute() {
-                            txtContact.setTag(message.chatUserName);
-                            photoImageView.setTag(message.chatUserName);
-                            txtContact.setText("学校通知");
-                            photoImageView.setImageResource(R.drawable.default_group_avatar_90);
-                        }
-
-                        @Override
-                        protected void onPostExecute(Map<String, String> info) {
-                            if (info != null) {
-                                if (message.chatUserName.equals(txtContact.getTag())) {
-                                    txtContact.setText(info.get("name"));
-
-                                    String localPath = info.get("localPath");
-                                    if (localPath != null) {
-                                        BitmapDrawable drawable = new BitmapDrawable(mContext.getResources(),
-                                                localPath);
-                                        if (drawable.getBitmap() != null) {
-                                            photoImageView.setImageDrawable(drawable);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }, message.chatUserName);
-        } else if(message.isGroupChatMessage) { // group
+        if(message.isGroupChatMessage) {
             final GroupChatRoom g = mDbHelper.fetchGroupChatRoom(message.chatUserName);
             if (null != g) {
                 showGroupChatMessages(photoImageView, txtContact, message, g);
@@ -417,7 +386,7 @@ public class MessagesAdapter extends BaseAdapter {
             }
             imageView_tag_tea.setVisibility(View.GONE);
 
-        } else { // buddy
+        } else {
             fixBuddyDisplay(message, txtContact, photoImageView);
             Buddy buddy = mDbHelper.buddyWithUserID(message.chatUserName);
             IHasPhoto entity = buddy;

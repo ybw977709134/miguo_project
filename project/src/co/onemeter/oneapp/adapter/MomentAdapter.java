@@ -933,6 +933,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //        } else {
 //        	holder.btnComment.setBackgroundResource(R.drawable.profile_btn_message_p);
 //        }
+
         if(commentReview.size()>0){
         	holder.btnComment.setBackgroundResource(R.drawable.timeline_comment_a);
 //        	holder.btnAnswer.setBackgroundResource(R.drawable.timeline_comment_a);
@@ -950,11 +951,11 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         if(likeReview.size()>0){
         	//显示点赞的数量
             holder.tvLike.setText(""+likeReview.size());
-            if (moment.likedByMe) {
-            	holder.tvLike.setText(""+likeReview.size());
-            } else {
-            	holder.tvLike.setText(activity.getResources().getString(R.string.moments_like));
-            }
+//            if (moment.likedByMe) {
+//            	holder.tvLike.setText(""+likeReview.size());
+//            } else {
+//            	holder.tvLike.setText(activity.getResources().getString(R.string.moments_like));
+//            }
         }else{
         	//显示点赞文本
             holder.tvLike.setText(activity.getResources().getString(R.string.moments_like));

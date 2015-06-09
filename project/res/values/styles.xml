@@ -440,8 +440,8 @@
 
     <style name="homeworkRatingBar" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/homework_ratiing_bar</item>
-        <item name="android:minHeight">30dp</item>
-        <item name="android:maxHeight">30dp</item>
+        <item name="android:minHeight">20dp</item>
+        <item name="android:maxHeight">20dp</item>
     </style>
 
 </resources>

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background_light"
@@ -14,29 +14,30 @@
 
         <TextView
             android:id="@+id/tv_student_name"
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:textColor="@color/black_24"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:text="TextView" />
         <TextView
             android:id="@+id/tv_homework_state"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
             android:padding="5dp"
+            android:textSize="16sp"
             android:text="" />
         <TextView
             android:id="@+id/tv_student_msg"
-            android:layout_width="0dp"
-            android:layout_weight="0.2"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:drawableRight="@drawable/icon_home_movablebar"
             android:textColor="@color/black_30"
+            android:textSize="16sp"
             android:text="" />
-    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

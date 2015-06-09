@@ -310,6 +310,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			if(state == 0){
 				stateStr = "提醒交作业";
 				holder.tv_homework_state.setBackgroundResource(R.drawable.btn_small_valid);
+                holder.tv_homework_state.setPadding(2,2,2,2);
 				holder.tv_homework_state.setTextColor(0xff8eb4e6);
 			}else if(state == 1){
 				stateStr = "新提交";

@@ -142,6 +142,11 @@ public class HomeWorkAdapter extends BaseAdapter{
             holder.ratingBar_timely.setRating(stuResultList.get(position).homeWorkReview.rank2);
             holder.ratingBar_exact.setRating(stuResultList.get(position).homeWorkReview.rank3);
 
+            holder.ratingBar_confirm.setIsIndicator(true);
+            holder.ratingBar_timely.setIsIndicator(true);
+            holder.ratingBar_exact.setIsIndicator(true);
+
+
             if (holder.textView_homework_review.getText().length() == 0) {
                 holder.textView_homework_review.setVisibility(View.GONE);
             } else {
@@ -168,10 +173,6 @@ class ViewHolder{
     RatingBar ratingBar_timely;//及时性
     RatingBar ratingBar_exact;//准确性
     TextView textView_homework_review;//老师评语
-
-
-
-
 
 }
 

@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_centerVertical="true"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:text="完整性"/>
 
         <RatingBar
@@ -103,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_centerVertical="true"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:text="及时性 "/>
 
         <RatingBar
@@ -132,7 +132,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_centerVertical="true"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:text="准确性"/>
 
         <RatingBar

@@ -31,6 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/bg_message_other_words"
                 android:layout_marginRight="30dp"
                 android:orientation="vertical" >
@@ -82,6 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/bg_message_my_words"
                 android:layout_marginLeft="30dp"
                 android:orientation="vertical" >
@@ -97,7 +99,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textColor="@color/black"
                         android:text="完整性"/>
 
@@ -125,7 +127,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textColor="@color/black"
                         android:text="及时性 "/>
 
@@ -153,7 +155,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textColor="@color/black"
                         android:text="准确性"/>
 

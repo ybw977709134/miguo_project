@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Parcel;
 import android.text.TextUtils;
 import org.wowtalk.api.Buddy;
+import org.wowtalk.api.GlobalSetting;
 import org.wowtalk.api.GroupChatRoom;
 import org.wowtalk.api.IHasPhoto;
 
@@ -108,6 +109,16 @@ public class ContactTreeNode implements IHasPhoto {
         if (buddy != null)
             return buddy.getGUID();
         return null;
+    }
+
+    @Override
+    public String getRemotePhotoPath() {
+        return GlobalSetting.S3_PROFILE_PHOTO_DIR + getGUID();
+    }
+
+    @Override
+    public String getRemoteThumbnailPath() {
+        return GlobalSetting.S3_PROFILE_THUMBNAIL_DIR + getGUID();
     }
 
     @Override

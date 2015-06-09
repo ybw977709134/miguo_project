@@ -4,15 +4,12 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
-
-import org.wowtalk.api.Buddy;
-import org.wowtalk.api.IHasPhoto;
-import org.wowtalk.api.Utils;
-
-import com.baidu.cyberplayer.utils.bu;
-
 import co.onemeter.oneapp.ui.ContactInfoActivity;
 import co.onemeter.oneapp.ui.StartActivity;
+import org.wowtalk.api.Buddy;
+import org.wowtalk.api.GlobalSetting;
+import org.wowtalk.api.IHasPhoto;
+import org.wowtalk.api.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -396,7 +393,17 @@ public class Person implements IHasPhoto, Parcelable{
         return ID;
     }
 
-    @Override
+	@Override
+	public String getRemotePhotoPath() {
+		return GlobalSetting.S3_PROFILE_PHOTO_DIR + getGUID();
+	}
+
+	@Override
+	public String getRemoteThumbnailPath() {
+		return GlobalSetting.S3_PROFILE_THUMBNAIL_DIR + getGUID();
+	}
+
+	@Override
     public void setPhotoUploadedTimestamp(long value) {
         photoUploadedTimestamp = value;
     }

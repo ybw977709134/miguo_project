@@ -604,6 +604,16 @@ public class XmlHelper {
         if(e != null) {
             result.alias = e.getTextContent();
         }
+
+        e = Utils.getFirstElementByTagName(buddyElement, "photo_filepath");
+        if(e != null) {
+            result.remotePhotoPath = e.getTextContent();
+        }
+
+        e = Utils.getFirstElementByTagName(buddyElement, "thumbnail_filepath");
+        if(e != null) {
+            result.remoteThumbnailPath = e.getTextContent();
+        }
     }
 
     public static void parseGroup(Element ge, GroupChatRoom result) {

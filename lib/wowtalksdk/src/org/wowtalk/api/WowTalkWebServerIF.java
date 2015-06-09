@@ -1341,7 +1341,6 @@ public class WowTalkWebServerIF {
 	 * <li>fGetMy*() get my info;</li>
 	 * <li>fUpdateMyProfile() set my info;</li>
 	 * <li>fPostMyPhoto(), fPostMyThumbnail() set my avatar；</li>
-	 * <li>fGetPhotoForUserID() get my avatar；</li>
 	 * </ul>
 	 */
 	public int fRegister(String wowtalk_id, String password, int userType, Buddy result) {
@@ -3452,94 +3451,7 @@ public class WowTalkWebServerIF {
 	}
 
 
-
-	/**
-	 * Get photo for uid from server 指定したユーザidの画像をゲット
-	 * 
-	 * @param userID
-	 * 
-	 * @param delegate
-	 *            Photo data will be sent as data to following delegate void
-	 *            didFinishNetworkIFCommunication(int tag,Object data);
-	 * 
-	 * @param tag
-	 */
-	public void fGetPhotoForUserID(String userID, NetworkIFDelegate delegate,
-			int tag){
-		this.fGetPhotoForUserID(userID, delegate, tag, null);
-	}
-
-	/**
-	 * <p>Get photo for uid from server.</p>
-	 * 
-	 * @param userID
-	 * 
-	 * @param NetworkIFDelegate
-	 *            Photo data will be sent as data to following delegate void
-	 *            didFinishNetworkIFCommunication(int tag,Object data);
-	 * 
-	 * @param tag
-	 * @param outputFilepath
-	 */
-	public void fGetPhotoForUserID(String userID, NetworkIFDelegate delegate,
-			int tag,String outputFilepath) {
-		if (userID == null || userID.equals("")) {
-			Log.w("fGetPhotoForUserID: UserID invalid");
-			return;
-		}
-		RemoteFileService.download(mContext,
-				outputFilepath,
-				GlobalSetting.S3_PROFILE_PHOTO_DIR,
-				userID,
-				delegate,
-				tag);
-	}
-
-	/**
-	 * Get thumbnail for uid from server 指定したユーザidの画像Thumbnailをゲット
-	 * 
-	 * @param userID
-	 * 
-	 * @param NetworkIFDelegate
-	 *            Thumbnail data will be sent as data to following delegate void
-	 *            didFinishNetworkIFCommunication(int tag,Object data);
-	 * 
-	 * @param tag
-	 * 
-	 */
-	public void fGetThumbnailForUserID(String userID,
-			NetworkIFDelegate delegate, int tag){
-		this.fGetThumbnailForUserID(userID, delegate, tag, null);
-	}
-
-	/**
-	 * Get thumbnail for uid from server 
-	 * 
-	 * @param userID
-	 * 
-	 * @param NetworkIFDelegate
-	 *            Thumbnail data will be sent as data to following delegate void
-	 *            didFinishNetworkIFCommunication(int tag,Object data);
-	 * 
-	 * @param tag
-	 * @param outputFilepath
-	 */
-	public void fGetThumbnailForUserID(String userID,
-			NetworkIFDelegate delegate, int tag,String outputFilepath) {
-		if (userID == null || userID.equals("")) {
-			Log.w("fGetPhotoForUserID: UserID invalid");
-			return;
-		}
-
-		RemoteFileService.download(mContext,
-				outputFilepath,
-				GlobalSetting.S3_PROFILE_THUMBNAIL_DIR,
-				userID,
-				delegate,
-				tag);
-	}
-
-    public void fPostGroupPhoto(String groupid, String filePath, NetworkIFDelegate delegate,
+	public void fPostGroupPhoto(String groupid, String filePath, NetworkIFDelegate delegate,
                                 boolean isThumbnail, int tag) {
         fPostGroupPhoto(groupid, filePath, delegate, isThumbnail, tag, false);
     }

@@ -473,6 +473,8 @@ public class Database {
             values.put("photo_upload_timestamp", ident.photoUploadedTimeStamp);
             values.put("photo_filepath", ident.pathOfPhoto);
             values.put("thumbnail_filepath", ident.pathOfThumbNail);
+            values.put("remote_photo_path", ident.remotePhotoPath);
+            values.put("remote_thumbnail_path", ident.remoteThumbnailPath);
             values.put("need_to_download_photo", ident.needToDownloadPhoto ? 1 : 0);
             values.put("need_to_download_thumbnail",
                     ident.needToDownloadThumbnail ? 1 : 0);
@@ -758,6 +760,7 @@ public class Database {
                         + "`app_ver`,`friendship`,`photo_upload_timestamp`,`photo_filepath`,`thumbnail_filepath`,`need_to_download_photo`,`need_to_download_thumbnail`,"
                         + "`buddies`.`uid` as `exist_flag`,"
                         + "`wowtalkid`,`email`,`area`,`job_title`,`employee_id`,`sort_key`,`account_type`, "
+                        + "remote_photo_path, remote_thumbnail_path,"
                         + "`will_block_msg`,`will_block_msg_notification`,`hidden`,`favorite`,`alias`,`favorite`.`target_id`"
                         + "FROM `buddydetail`"
                         + "LEFT JOIN `buddies` ON `buddydetail`.`uid`= `buddies`.`uid` "
@@ -794,6 +797,8 @@ public class Database {
             result.employeeId = cursor.getString(++i);
             result.sortKey = cursor.getString(++i);
             result.setAccountType(cursor.getInt(++i));
+            result.remotePhotoPath = cursor.getString(++i);
+            result.remoteThumbnailPath = cursor.getString(++i);
             result.willBlockMsg = cursor.getInt(++i) == 1;
             result.willBlockNotification = cursor.getInt(++i) == 1;
             result.hidden = cursor.getInt(++i) == 1;
@@ -6689,7 +6694,7 @@ public class Database {
 
 class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME_PRE = GlobalSetting.DATABASE_NAME;
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 15;
     public int flagIndex;
 
 	private static final String DATABASE_CREATE_TBL_CHATMESSAGES = "CREATE TABLE IF NOT EXISTS `chatmessages` "
@@ -6782,8 +6787,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
             + " `album_cover_ext` TEXT,"
 			+ " `album_cover_upload_timestamp` INTEGER,"
 			+ " `photo_upload_timestamp` INTEGER,"
-			+ " `photo_filepath` TEXT,"
-			+ " `thumbnail_filepath` TEXT,"
+			+ " `photo_filepath` TEXT," // local
+			+ " `thumbnail_filepath` TEXT," // local
+            + " `remote_photo_path` TEXT," // remote
+            + " `remote_thumbnail_path` TEXT," // remote
 			+ " `need_to_download_photo` INTEGER,"
 			+ " `need_to_download_thumbnail` INTEGER); ";
 
@@ -7203,14 +7210,20 @@ class DatabaseHelper extends SQLiteOpenHelper {
         }
         if(oldVersion == 11){
         	database.execSQL("ALTER TABLE lesson ADD COLUMN live INTEGER;");
+            ++oldVersion;
         }
         if(oldVersion == 12){
         	database.execSQL(DATABASE_CREATE_TBL_LESSON_ADD_HOMEWORK);
-        	
+            ++oldVersion;
         }
         if(oldVersion == 13){
         	database.execSQL(DATABASE_CREATE_TBL_LESSON_ADD_HOMEWORK_RESULT);
-        	
+            ++oldVersion;
+        }
+
+        if (oldVersion == 14) {
+            database.execSQL("alter table " + Database.TBL_BUDDY_DETAIL + " add column remote_photo_path text;");
+            database.execSQL("alter table " + Database.TBL_BUDDY_DETAIL + " add column remote_thumbnail_path text;");
         }
     }
 }

@@ -42,6 +42,8 @@ public class Buddy implements IHasPhoto, Parcelable {
     public static final int ACCOUNT_TYPE_STUDENT = 1;
     /** User type: Teacher. */
     public static final int ACCOUNT_TYPE_TEACHER = 2;
+    /** 虚拟的buddy：学校。 学校也会发消息给用户。*/
+    public static final int ACCOUNT_TYPE_SCHOOL = 3;
     /** User type: Unknown(not initialized). */
     public static final int ACCOUNT_TYPE_NULL = 9;
     /** 虚拟的buddy：群组。因为某些情况下也可以把群组视为联系人，比如在显示头像时。 */
@@ -170,7 +172,16 @@ public class Buddy implements IHasPhoto, Parcelable {
 	 * File path where the profile photo is stored in local
 	 */
 	public String pathOfPhoto;  //ローカル
-	
+
+    /**
+     * File path where the thumbnail photo is stored in local
+     */
+    public String remoteThumbnailPath;//ローカル
+    /**
+     * File path where the profile photo is stored in local
+     */
+    public String remotePhotoPath;  //ローカル
+
 	/**
 	 * Flag that help to indicate buddy 
 	 *    that might have account deleted but we still have some information in local db
@@ -323,6 +334,22 @@ public class Buddy implements IHasPhoto, Parcelable {
 		return userID;
 	}
 
+    @Override
+    public String getRemotePhotoPath() {
+        if (accountType == ACCOUNT_TYPE_SCHOOL) {
+            return remotePhotoPath;
+        }
+        return GlobalSetting.S3_PROFILE_PHOTO_DIR + getGUID();
+    }
+
+    @Override
+    public String getRemoteThumbnailPath() {
+        if (accountType == ACCOUNT_TYPE_SCHOOL) {
+            return remoteThumbnailPath;
+        }
+        return GlobalSetting.S3_PROFILE_THUMBNAIL_DIR + getGUID();
+    }
+
 	@Override
 	public long getPhotoUploadedTimestamp() {
 		return photoUploadedTimeStamp;
@@ -373,6 +400,8 @@ public class Buddy implements IHasPhoto, Parcelable {
         dest.writeString(nickName);
         dest.writeString(pathOfPhoto);
         dest.writeString(pathOfThumbNail);
+        dest.writeString(remotePhotoPath);
+        dest.writeString(remoteThumbnailPath);
         dest.writeString(phoneNumber);
         dest.writeLong(photoUploadedTimeStamp);
         dest.writeString(plainPassword);
@@ -416,6 +445,8 @@ public class Buddy implements IHasPhoto, Parcelable {
         b.nickName = s.readString();
         b.pathOfPhoto = s.readString();
         b.pathOfThumbNail = s.readString();
+        b.remotePhotoPath = s.readString();
+        b.remoteThumbnailPath = s.readString();
         b.phoneNumber = s.readString();
         b.photoUploadedTimeStamp = s.readLong();
         b.plainPassword = s.readString();
@@ -477,7 +508,8 @@ public class Buddy implements IHasPhoto, Parcelable {
     public void setAccountType(int accountType) {
         if (accountType == ACCOUNT_TYPE_STUDENT
                 || accountType == ACCOUNT_TYPE_PUBLIC
-                || accountType == ACCOUNT_TYPE_TEACHER) {
+                || accountType == ACCOUNT_TYPE_TEACHER
+                || accountType == ACCOUNT_TYPE_SCHOOL) {
             this.accountType = accountType;
         } else {
             this.accountType = ACCOUNT_TYPE_NULL;

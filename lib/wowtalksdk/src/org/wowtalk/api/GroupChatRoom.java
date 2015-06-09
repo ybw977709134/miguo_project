@@ -169,7 +169,17 @@ public class GroupChatRoom extends TreeNode implements IHasPhoto{
 		return groupID;
 	}
 
-	@Override
+    @Override
+    public String getRemotePhotoPath() {
+        return GlobalSetting.S3_PROFILE_PHOTO_DIR + getGUID();
+    }
+
+    @Override
+    public String getRemoteThumbnailPath() {
+        return GlobalSetting.S3_PROFILE_THUMBNAIL_DIR + getGUID();
+    }
+
+    @Override
 	public long getPhotoUploadedTimestamp() {
 		return photoUploadedTimestamp;
 	}

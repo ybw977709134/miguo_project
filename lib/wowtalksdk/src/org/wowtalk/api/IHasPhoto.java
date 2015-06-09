@@ -6,11 +6,13 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 public interface IHasPhoto extends Parcelable {
-	public int getAccountType();
-	public String getGUID();
-	public void setPhotoUploadedTimestamp(long value);
-	public long getPhotoUploadedTimestamp();
+	int getAccountType();
+	String getGUID();
+	String getRemotePhotoPath();
+	String getRemoteThumbnailPath();
+	void setPhotoUploadedTimestamp(long value);
+	long getPhotoUploadedTimestamp();
 
-    public boolean isHybrid();
-    public ArrayList<IHasPhoto> getHybrid(Context context);
+    boolean isHybrid();
+    ArrayList<IHasPhoto> getHybrid(Context context);
 }

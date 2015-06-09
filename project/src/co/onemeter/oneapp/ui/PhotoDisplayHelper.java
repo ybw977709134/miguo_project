@@ -220,8 +220,7 @@ public class PhotoDisplayHelper extends ImageWorker {
                         }
                     }
                     if (needDownload) {
-                        WowTalkWebServerIF.getInstance(mContext).fGetThumbnailForUserID(
-                                target.getGUID(),
+                        RemoteFileService.download(mContext, path, "", target.getRemoteThumbnailPath(),
                                 new NetworkIFDelegate() {
                                     @Override
                                     public void didFinishNetworkIFCommunication(int i, byte[] bytes) {
@@ -234,8 +233,7 @@ public class PhotoDisplayHelper extends ImageWorker {
                                     @Override
                                     public void setProgress(int i, int i2) {
                                     }
-                                }
-                                , 0, path);
+                                }, 0);
                         bmp = BmpUtils.decodeFile(path, p.width, p.height);
                         if (null != bmp) {
                             bmpArr[bmpCnt++] = bmp;
@@ -509,12 +507,21 @@ public class PhotoDisplayHelper extends ImageWorker {
                     }
 
                 };
-                if (thumbnail)
-                    WowTalkWebServerIF.getInstance(context).fGetThumbnailForUserID(
-                            buddy.getGUID(), nd, 0, path);
-                else
-                    WowTalkWebServerIF.getInstance(context).fGetPhotoForUserID(
-                            buddy.getGUID(), nd, 0, path);
+                if (thumbnail) {
+                    RemoteFileService.download(context,
+                            path,
+                            "",
+                            buddy.getRemoteThumbnailPath(),
+                            nd,
+                            0);
+                } else {
+                    RemoteFileService.download(context,
+                            path,
+                            "",
+                            buddy.getRemotePhotoPath(),
+                            nd,
+                            0);
+                }
                 return null;
             }
 

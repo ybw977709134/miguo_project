@@ -376,10 +376,10 @@ public class MessagesAdapter extends BaseAdapter {
                                 if (message.chatUserName.equals(txtContact.getTag())) {
                                     txtContact.setText(info.get("name"));
 
-                                    String localPath = info.get("localPath");
-                                    if (localPath != null) {
+                                    String localAvatar = info.get("localAvatar");
+                                    if (localAvatar != null) {
                                         BitmapDrawable drawable = new BitmapDrawable(mContext.getResources(),
-                                                localPath);
+                                                localAvatar);
                                         if (drawable.getBitmap() != null) {
                                             photoImageView.setImageDrawable(drawable);
                                         }

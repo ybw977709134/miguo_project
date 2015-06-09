@@ -6,15 +6,32 @@ import android.content.res.AssetManager;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Pair;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.wowtalk.Log;
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import javax.security.auth.login.LoginException;
 import java.io.*;
+import java.security.InvalidParameterException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -4937,11 +4954,11 @@ public class WowTalkWebServerIF {
 	}
 
 	/**
-	 * 获取学校的名称和头像。
+	 * 获取学校头像在文件服务器上的绝对路径。
 	 * @param schoolId
-	 * @return map { name : 学校名称, avatar : 头像在文件服务器上的绝对路径 }
+	 * @return
 	 */
-	public Map<String, String> getSchoolInfo(String schoolId) {
+	public Map<String, String> getSchoolAvatarPath(String schoolId) {
 		Map<String, String> result = new HashMap<>();
 
 		String strUID = sPrefUtil.getUid();

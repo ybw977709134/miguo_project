@@ -712,10 +712,10 @@ public class MessageDetailAdapter extends BaseAdapter{
                                     protected void onPostExecute(Map<String, String> info) {
                                         if (info != null) {
                                             if (finalSender.userID.equals(finalHolder.imgContactPhoto.getTag())) {
-                                                String localAvatar = info.get("localAvatar");
-                                                if (localAvatar != null) {
+                                                String localPath = info.get("localPath");
+                                                if (localPath != null) {
                                                     BitmapDrawable drawable = new BitmapDrawable(mContext.getResources(),
-                                                            localAvatar);
+                                                            localPath);
                                                     if (drawable.getBitmap() != null) {
                                                         finalHolder.imgContactPhoto.setImageDrawable(drawable);
                                                     }

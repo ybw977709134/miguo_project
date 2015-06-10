@@ -1,7 +1,10 @@
 package co.onemeter.oneapp.ui.msg;
 
 import android.app.Activity;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,12 +22,11 @@ import android.widget.TextView;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.ui.*;
 import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
+import co.onemeter.oneapp.utils.TimeHelper;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
 import co.onemeter.utils.AsyncTaskExecutor;
-
 import com.handmark.pulltorefresh.widget.PullToRefreshListView;
 import com.handmark.pulltorefresh.widget.PullToRefreshListView.OnRefreshListener;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
@@ -34,7 +36,6 @@ import org.wowtalk.ui.msg.InputBoardManager;
 import org.wowtalk.ui.msg.Stamp;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -447,7 +448,7 @@ public abstract class MessageComposerActivityBase extends Activity
         msg.messageContent = json.toString();
         msg.msgType = ChatMessage.MSGTYPE_LOCATION;
         msg.sentStatus = ChatMessage.SENTSTATUS_SENDING;
-        msg.sentDate = getSentDate();
+        msg.sentDate = TimeHelper.getTimeForMessage(this);
         msg.uniqueKey = Database.chatMessageSentDateToUniqueKey(msg.sentDate);
         msg.ioType = ChatMessage.IOTYPE_OUTPUT;
         msg.primaryKey = new Database(MessageComposerActivityBase.this)
@@ -515,7 +516,7 @@ public abstract class MessageComposerActivityBase extends Activity
      */
     protected void onSendMessage(final ChatMessage msg) {
         msg.sentStatus = ChatMessage.SENTSTATUS_SENDING;
-        msg.sentDate = getSentDate();
+        msg.sentDate = TimeHelper.getTimeForMessage(this);
         msg.uniqueKey = Database.chatMessageSentDateToUniqueKey(msg.sentDate);
         msg.ioType = ChatMessage.IOTYPE_OUTPUT;
         msg.primaryKey = new Database(MessageComposerActivityBase.this)
@@ -551,19 +552,6 @@ public abstract class MessageComposerActivityBase extends Activity
                 }
             }
         }).start();
-    }
-
-    /**
-     * 获取发送时间，并格式化
-     * @return
-     */
-    protected String getSentDate () {
-        // set the sentDate according to the UTC offset
-        long localDate = System.currentTimeMillis();
-        int offset = mPref.getUTCOffset();
-        long adjustedTime = localDate + offset * 1000L;
-        Date adjustedDate = new Date(adjustedTime);
-        return Database.chatMessage_dateToUTCString(adjustedDate);
     }
 
     @Override
@@ -633,7 +621,7 @@ public abstract class MessageComposerActivityBase extends Activity
         // WowTalkVoipIF.fSendChatMessage() would set these fields, but we need them now.
         msg.ioType = ChatMessage.IOTYPE_OUTPUT;
         msg.sentStatus = ChatMessage.SENTSTATUS_SENDING;
-        msg.sentDate = getSentDate();
+        msg.sentDate = TimeHelper.getTimeForMessage(this);
         msg.uniqueKey = Database.chatMessageSentDateToUniqueKey(msg.sentDate);
 
         // postMultimediaAndSend() will set the mediaFileId and duration, but we need it now.
@@ -703,7 +691,7 @@ public abstract class MessageComposerActivityBase extends Activity
 		// WowTalkVoipIF.fSendChatMessage() would set these fields, but we need them now.
 		msg.ioType = ChatMessage.IOTYPE_OUTPUT;
 		msg.sentStatus = ChatMessage.SENTSTATUS_SENDING;
-		msg.sentDate = getSentDate();
+		msg.sentDate = TimeHelper.getTimeForMessage(this);
 		msg.uniqueKey = Database.chatMessageSentDateToUniqueKey(msg.sentDate);
 
         // 多媒体文件时，先存入数据库，此时缺少消息对应的详细content，此处只是为了本地能够显示，后面发送成功后会更新这条数据

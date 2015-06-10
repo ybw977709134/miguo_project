@@ -1,35 +1,21 @@
 package co.onemeter.oneapp.ui;
 
-import java.util.Date;
-
-import org.wowtalk.api.ChatMessage;
-import org.wowtalk.api.Connect2;
-import org.wowtalk.api.Database;
-import org.wowtalk.api.LessonWebServerIF;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.api.WowTalkVoipIF;
-import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.MessageDialog;
-
-import co.onemeter.oneapp.R;
-import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
-import co.onemeter.utils.AsyncTaskExecutor;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
+import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.TimeHelper;
+import co.onemeter.utils.AsyncTaskExecutor;
+import org.wowtalk.api.*;
+import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 /**
  * 学生请假
@@ -73,7 +59,6 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 	private String classId_intent = null; //通过intent传进的classId
 	private String schoolId_intent = null;
 	
-	private PrefUtil mPref; 
 	private MessageBox messageBox;
 	private boolean isSendSuccess = false;
 	private LessonWebServerIF lessonWebServer;
@@ -83,7 +68,6 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_student_absence);
 		
-		mPref = PrefUtil.getInstance(StudentAbsenceActivity.this);
 		messageBox = new MessageBox(this);
 		lessonWebServer = LessonWebServerIF.getInstance(StudentAbsenceActivity.this);
 		initView();
@@ -173,19 +157,6 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 		
 		
 	}
-	
-	/**
-	 * 获取发送消息时的时间
-	 * @return
-	 */
-	protected String getSentDate () {
-        // set the sentDate according to the UTC offset
-        long localDate = System.currentTimeMillis();
-        int offset = mPref.getUTCOffset();
-        long adjustedTime = localDate + offset * 1000L;
-        Date adjustedDate = new Date(adjustedTime);
-        return Database.chatMessage_dateToUTCString(adjustedDate);
-    }
 
 	@Override
 	public void onClick(View v) {
@@ -264,7 +235,7 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
         	        				message.messageContent = reason;
         	        				message.msgType = ChatMessage.MSGTYPE_NORMAL_TXT_MESSAGE;
         	        				message.sentStatus = ChatMessage.SENTSTATUS_SENDING;
-        	        				message.sentDate = getSentDate();
+        	        				message.sentDate = TimeHelper.getTimeForMessage(StudentAbsenceActivity.this);
         	        				message.uniqueKey = Database.chatMessageSentDateToUniqueKey(message.sentDate);
         	        				message.ioType = ChatMessage.IOTYPE_OUTPUT;
         	        				
@@ -364,9 +335,6 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 	
 	@Override
 	protected void onDestroy() {
-		if (mPref != null) {
-			mPref = null;
-		}
 		super.onDestroy();
 	}
 	

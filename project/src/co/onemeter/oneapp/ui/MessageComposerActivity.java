@@ -7,8 +7,7 @@ import android.text.TextUtils;
 import co.onemeter.oneapp.contacts.model.Person;
 import co.onemeter.oneapp.ui.MessageDetailAdapter.MessageDetailListener;
 import co.onemeter.oneapp.ui.msg.MessageComposerActivityBase;
-
-
+import co.onemeter.oneapp.utils.TimeHelper;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Database;
@@ -75,7 +74,7 @@ public class MessageComposerActivity extends MessageComposerActivityBase {
                 public void run() {
                     // 重新发送的消息，只需要修改sentStatus／sentStatus属性即可
                     msg2Resend.sentStatus = ChatMessage.SENTSTATUS_SENDING;
-                    msg2Resend.sentDate = getSentDate();
+                    msg2Resend.sentDate = TimeHelper.getTimeForMessage(MessageComposerActivity.this);
                     msg2Resend.uniqueKey = Database.chatMessageSentDateToUniqueKey(msg2Resend.sentDate);
                     new Database(MessageComposerActivity.this).updateChatMessage(msg2Resend);
                     if (ChatMessage.MSGTYPE_NORMAL_TXT_MESSAGE.equals(msg2Resend.msgType)) {

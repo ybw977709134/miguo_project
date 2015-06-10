@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.TimeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
@@ -614,11 +615,7 @@ public class IncallActivity extends Activity implements OnClickListener,
 			chatMsg = null;
 		}
 		chatMsg = new ChatMessage();
-        // set the sentDate according to the UTC offset
-        long localDate = System.currentTimeMillis();
-        int offset = PrefUtil.getInstance(this).getUTCOffset();
-        long adjustedTime = localDate + offset * 1000L;
-        chatMsg.sentDate = Database.chatMessage_dateToUTCString(new Date(adjustedTime));
+        chatMsg.sentDate = TimeHelper.getTimeForMessage(this);
         chatMsg.chatUserName = username;
         chatMsg.displayName = displayName;
         if (direction.equals(WowTalkVoipIF.IO_IN)) {

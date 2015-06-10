@@ -754,6 +754,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
+
+        <receiver
+            android:name=".ui.SystemTimeChangedReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

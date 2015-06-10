@@ -12,6 +12,7 @@ import co.onemeter.oneapp.ui.GlobalValue;
 import co.onemeter.oneapp.ui.IncallActivity;
 import co.onemeter.oneapp.ui.LoginActivity;
 import co.onemeter.oneapp.ui.StartActivity;
+import co.onemeter.oneapp.utils.TimeHelper;
 import com.splunk.mint.Mint;
 import org.wowtalk.NetworkManager;
 import org.wowtalk.api.JapaneseHelper;
@@ -59,11 +60,8 @@ public class YuanquActivity extends Activity {
 
         fixVoipState();
 
-        // run test
-//        Test.testOptGroup(this);
-//        Test.testOptBuddy(this);
-//        Test.testGetPendingBuddyRequests(this);
-	}
+        TimeHelper.syncTime(this);
+    }
 
     private void fixVoipState() {
         boolean _userIsLogin = PrefUtil.getInstance(YuanquActivity.this).isLogined();

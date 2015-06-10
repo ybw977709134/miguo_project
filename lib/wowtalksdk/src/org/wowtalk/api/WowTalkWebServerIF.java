@@ -5601,17 +5601,8 @@ public class WowTalkWebServerIF {
 	 *             when it is called before user name is correctly set
 	 */
 	public int fAdjustUTCTimeWithServer() {
-        String strUID = sPrefUtil.getUid();
-        String strPwd = sPrefUtil.getPassword();
 
-        if (isAuthEmpty(strUID, strPwd)) {
-//			throw new RuntimeException(
-//					"fAdjustUTCTimeWithServer: UserID and Password not set");
-            return ErrorCode.INVALID_ARGUMENT;
-		}
-
-		String postStr = "action=get_server_utc_timestamp&uid=" + Utils.urlencodeUtf8(strUID)
-				+ "&password=" + Utils.urlencodeUtf8(strPwd);
+		String postStr = "action=get_server_utc_timestamp";
 
 		Connect2 connect2 = new Connect2();
 		Element root = connect2.Post(postStr);

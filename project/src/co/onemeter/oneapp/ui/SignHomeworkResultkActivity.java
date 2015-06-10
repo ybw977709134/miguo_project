@@ -21,6 +21,7 @@ import org.wowtalk.api.MomentWebServerIF;
 import org.wowtalk.api.WFile;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
 import org.wowtalk.ui.msg.InputBoardManager.ChangeToOtherAppsListener;
@@ -194,11 +195,29 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
 			@Override
 			protected void onPostExecute(Integer result) {	
 				mMsgBox.dismissWait();
-				finish();
+
+                //布置作业添加提示弹框
+                MessageDialog dialog = new MessageDialog(SignHomeworkResultkActivity.this);
+                dialog.setTitle("提示");
+                dialog.setMessage("你确定要提交作业吗?");
+                dialog.setCancelable(false);
+                dialog.setRightBold(true);
+                dialog.setOnLeftClickListener("取消",null);
+                dialog.setOnRightClickListener("确定",new MessageDialog.MessageDialogClickListener() {
+                    @Override
+                    public void onclick(MessageDialog dialog) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+
+                dialog.show();
 			}
 			
 		});
 	}
+
+
 	private void hideIME() {
 		final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(edt_moment_content.getWindowToken(), 0);

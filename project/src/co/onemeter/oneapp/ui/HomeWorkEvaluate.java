@@ -120,10 +120,10 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 			protected void onPostExecute(Integer result) {
 				super.onPostExecute(result);
 				if(result == 1){
-					mMsgBox.showWaitImageSuccess("作业提交失败");
+					mMsgBox.showWaitImageSuccess("评分失败");
 				}else if(result == 0){
 					setResult(RESULT_OK);
-					mMsgBox.showWaitImageSuccess("作业提交成功");
+					mMsgBox.showWaitImageSuccess("评分成功");
 					new Thread(new Runnable() {
 						
 						@Override

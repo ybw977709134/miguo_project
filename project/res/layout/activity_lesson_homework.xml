@@ -53,23 +53,25 @@
         <LinearLayout
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
-            android:paddingLeft="10dp"
+
             android:orientation="horizontal"
             android:background="@drawable/timeline_card_bg">
             <LinearLayout
                 android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
+                android:padding="5dp"
                 android:orientation="vertical"
                 android:layout_weight="1">
                 <TableLayout
                     android:id="@+id/imageTable"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:layout_marginTop="@dimen/padding_medium"/>
+                    />
                 <TextView
                     android:id="@+id/txt_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:autoLink="all"
                     android:text="这里的天空超级蓝啊！"
                     style="@style/moment_body"/>

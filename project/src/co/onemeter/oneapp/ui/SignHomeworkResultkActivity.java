@@ -230,8 +230,8 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
                     @Override
                     public void onClick(View v) {
                         bottomBoard.dismiss();
-                        if (listPhoto.size() >= CreateMomentActivity.TOTAL_PHOTO_ALLOWED) {
-                            mMsgBox.toast(String.format(SignHomeworkResultkActivity.this.getString(R.string.settings_account_moment_take_photos_oom), CreateMomentActivity.TOTAL_PHOTO_ALLOWED));
+                        if (listPhoto.size() >= TOTAL_PHOTO_ALLOWED) {
+                            mMsgBox.toast(String.format(SignHomeworkResultkActivity.this.getString(R.string.settings_account_moment_take_photos_oom), TOTAL_PHOTO_ALLOWED));
                             return;
                         }
                         mediaHelper.takePhoto(SignHomeworkResultkActivity.this, ACTIVITY_REQ_ID_PICK_PHOTO_FROM_CAMERA);
@@ -243,7 +243,7 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
                     public void onClick(View v) {
                         bottomBoard.dismiss();
                         if (listPhoto.size() >= TOTAL_PHOTO_ALLOWED) {
-                            mMsgBox.toast(String.format(SignHomeworkResultkActivity.this.getString(R.string.settings_account_moment_take_photos_oom), CreateMomentActivity.TOTAL_PHOTO_ALLOWED));
+                            mMsgBox.toast(String.format(SignHomeworkResultkActivity.this.getString(R.string.settings_account_moment_take_photos_oom), TOTAL_PHOTO_ALLOWED));
                             return;
                         }
                         int i = 0;

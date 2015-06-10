@@ -520,6 +520,7 @@ public class MessageBox {
         }
         text.setText(msg);
         mToast.show();
+        dismissToast();
     }
 
     public void dismissToast() {
@@ -527,7 +528,12 @@ public class MessageBox {
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    _dismissToast();
+                    try {
+                        Thread.sleep(2000);
+                        _dismissToast();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         } else {

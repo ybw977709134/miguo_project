@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -113,7 +114,18 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 		lessons.clear();
 		Database db = Database.open(SelectLessonActivity.this);
 		if(isTeacher()){
-			lessons.addAll(db.fetchLesson(classId));
+			if(homeworkTag != null){
+				if(homeworkTag.equals("homework")){
+					for(int i =0 ;i < mDBHelper.fetchLesson(classId).size();i++){
+						if(curTime < mDBHelper.fetchLesson(classId).get(i).end_date){
+							lessons.add(mDBHelper.fetchLesson(classId).get(i));
+						}
+					}
+				}
+			}else{
+				lessons.addAll(db.fetchLesson(classId));
+			}
+			
 		}else{
 			for(int i =0 ;i < mDBHelper.fetchLesson(classId).size();i++){
 				if(curTime < mDBHelper.fetchLesson(classId).get(i).end_date){

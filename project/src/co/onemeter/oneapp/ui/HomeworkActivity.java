@@ -179,6 +179,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 					startActivityForResult(i, REQ_PARENT_ADDHOMEWORK);
 				}else{
 					Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);
+					addHomework = mDb.fetchLessonAddHomework(lessonId);
 					Moment moment = mDb.fetchMoment(addHomework.moment_id + "");
 					i.putExtra("moment", moment);
 			        i.putExtra("lessonId",lessonId);

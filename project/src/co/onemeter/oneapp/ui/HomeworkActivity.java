@@ -14,11 +14,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ListViewUtils;
+import co.onemeter.oneapp.utils.TimeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import com.androidquery.AQuery;
 
 import org.wowtalk.api.Buddy;
+import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GetLessonHomework;
@@ -26,6 +28,7 @@ import org.wowtalk.api.LessonAddHomework;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.Moment;
 import org.wowtalk.api.PrefUtil;
+import org.wowtalk.api.WowTalkVoipIF;
 import org.wowtalk.ui.MessageBox;
 
 import java.util.ArrayList;
@@ -345,6 +348,27 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			i.putExtra("result_id", Integer.parseInt(String.valueOf(homeworkStates.get(position).get("result_id"))));
 			i.putExtra("stu_name",String.valueOf(homeworkStates.get(position).get("stu_name")));	
 			startActivity(i);
+		}else{
+			String uid = String.valueOf(homeworkStates.get(position).get("stu_uid"));
+			String name = String.valueOf(homeworkStates.get(position).get("stu_name"));
+			
+			String reason = "[作业提醒]"+name+"你好,"+tv_lesson_name.getText().toString()+"的作业请尽快提交。";
+
+			
+			final ChatMessage message = new ChatMessage();
+			message.chatUserName = uid;
+
+			message.messageContent = reason;
+			message.msgType = ChatMessage.MSGTYPE_NORMAL_TXT_MESSAGE;
+			message.sentStatus = ChatMessage.SENTSTATUS_SENDING;
+			message.sentDate = TimeHelper.getTimeForMessage(HomeworkActivity.this);
+			message.uniqueKey = Database.chatMessageSentDateToUniqueKey(message.sentDate);
+			message.ioType = ChatMessage.IOTYPE_OUTPUT;
+			
+			message.primaryKey = new Database(HomeworkActivity.this)
+		                            .storeNewChatMessage(message, false);
+    		WowTalkVoipIF.getInstance(HomeworkActivity.this).fSendChatMessage(message);
+    		Toast.makeText(this, "提醒提交作业成功", Toast.LENGTH_SHORT).show();
 		}
 	}
 }

@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,7 +70,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
 
         listView_submit = (ListView) findViewById(R.id.listView_submit);
 //        listView_fresh = listView_submit.getRefreshableView();
-//        listView_fresh.addFooterView(buildHeader());//为listview的后面添加button
+        listView_submit.addFooterView(buildHeader());//为listview的后面添加button
         
         getLessonHomework = new GetLessonHomework();
         stuResultList = new ArrayList<HomeWorkResult>();
@@ -81,7 +83,6 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
         }
 
         listView_submit.setAdapter(adapter);
-        listView_submit.addFooterView(buildHeader());
 
 //        listView_submit.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
 //            @Override
@@ -132,9 +133,13 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
 
 
     private View buildHeader() {
-        Button btn=new Button(this);
+        Button btn=null;
+//        Button btn = new Button(this);
+        View view = LayoutInflater.from(SubmitHomeWorkActivity.this).inflate(R.layout.item_custom_button,null);
+        btn = (Button) view.findViewById(R.id.custom_button);
+
         if (PrefUtil.getInstance(SubmitHomeWorkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {//老师
-            btn.setText("去评分!");
+            btn.setText("去评分");
         } else {
             btn.setText("修改作业");
         }
@@ -155,7 +160,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
             }
         });
 
-        return(btn);
+        return(view);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

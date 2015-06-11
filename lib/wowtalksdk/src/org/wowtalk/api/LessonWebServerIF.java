@@ -1362,6 +1362,53 @@ public class LessonWebServerIF {
 
 		return errno;
 	}
+	public int modifyLessonHomework(LessonAddHomework addhomework,Moment moment){
+		String uid = mPrefUtil.getUid();
+		String password = mPrefUtil.getPassword();
+		if (uid == null || password == null)
+			return ErrorCode.NOT_LOGGED_IN;
+
+
+		if (moment != null && TextUtils.isEmpty(moment.id)) {
+			int errno = MomentWebServerIF.getInstance(mContext).fAddMoment(
+					moment, true);
+			if (errno != ErrorCode.OK) {
+				return errno;
+			}
+		}
+
+		if (moment != null)
+			addhomework.moment_id = Integer.parseInt(moment.id);
+
+		final String action = "modify_lesson_homework";
+		String postStr = "action=" + action + "&uid="
+				+ Utils.urlencodeUtf8(uid) + "&password="
+				+ Utils.urlencodeUtf8(password) + "&homework_id="
+				+ addhomework.homework_id 
+				+ "&moment_id=" + addhomework.moment_id;
+
+		Connect2 connect2 = new Connect2();
+		Element root = connect2.Post(postStr);
+		
+     	int errno = ErrorCode.BAD_RESPONSE;
+		if (root != null) {
+			NodeList errorList = root.getElementsByTagName("err_no");
+			Element errorElement = (Element) errorList.item(0);
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				errno = ErrorCode.OK;			
+				Database db = new Database(mContext);
+			    
+				db.deleteLessonHomework(addhomework.homework_id);
+				db.storeLessonAddHomework(addhomework,addhomework.homework_id);
+			} else {
+				errno = Integer.parseInt(errorStr);
+			}
+		}
+
+		return errno;
+	}
 
 	public int deleteLesson(String lesson_id) {
 		String uid = mPrefUtil.getUid();

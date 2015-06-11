@@ -1,6 +1,8 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,6 +47,12 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
     private int homeworkResult_id;
     private TextView tv_modify_homework;
     private String studentId;
+    private class FPhoto {
+        String path;
+        boolean isSelected = false;
+    }
+    private ArrayList<FPhoto> listFPhoto;
+    private static LessonHomeworkActivity instance;
     
 
     
@@ -55,6 +63,8 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
         
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
+        
+        instance = this;
         
         mediaPlayerWraper= new MediaPlayerWraper(this);
 
@@ -77,6 +87,13 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
         getLessonHomework();
     }
 
+    public static LessonHomeworkActivity getInstance(){
+    	if(instance != null){
+    		return instance;
+    	}
+    	return null;
+    	 
+    }
 	private void initView() {
 		title_back = (ImageButton) findViewById(R.id.title_back);
 		tv_del = (TextView) findViewById(R.id.tv_del);
@@ -110,7 +127,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			
 			@Override
 			protected void onPostExecute(Integer result) {
-				if(result == 1){
+				if(result == 0){
 					homework_id = getLessonHomework.id;
 				}
 				
@@ -182,6 +199,9 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 
         mImageResizer.closeCache();
         mediaPlayerWraper.stop();
+        if(instance != null){
+        	instance = null;
+        }
     }
     
     private void setupContent(final Moment moment) {
@@ -254,13 +274,21 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			
 			break;
 		case R.id.tv_modify_homework:
-			Log.d("------------------------", "modify");
+			Intent intent = new Intent(LessonHomeworkActivity.this, AddHomeworkActivity.class);
+			intent.putExtra("text", txt_content.getText().toString());
+			intent.putExtra("lessonId", lessonId);
+			intent.putExtra("homework_id", homework_id);
+			startActivity(intent);
 			break;
 		default:
 			break;
 		}
 	}
 	
+	private void getPhotos(){
+		listFPhoto = new ArrayList<FPhoto>();
+		ContentResolver contentResolver = getContentResolver();
+	}
 	private boolean isTeacher(){
 		if(Buddy.ACCOUNT_TYPE_TEACHER == PrefUtil.getInstance(this).getMyAccountType()){
 			return true;

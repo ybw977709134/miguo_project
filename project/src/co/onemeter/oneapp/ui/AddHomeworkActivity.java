@@ -34,6 +34,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -73,6 +74,8 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 	public static final int TOTAL_PHOTO_ALLOWED = 6;
 	private final static int ACTIVITY_REQ_ID_PICK_PHOTO_FROM_CAMERA = 1;
 	private final static int ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY = 2;
+	private String strContent;
+	private int modify_homework_id;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +104,8 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 	private void initView(Bundle savedInstanceState) {
 		title_back = (ImageButton) findViewById(R.id.btn_notice_back);
 		listMoment = new LinkedList<Moment>();
+		strContent = getIntent().getStringExtra("text");
+		modify_homework_id = getIntent().getIntExtra("homework_id", -1);
 		lessonId = getIntent().getIntExtra(Constants.LESSONID, 0);
 		addedImgLayout = (LinearLayout) findViewById(R.id.added_images_layout);
 		trigger_add_img_layout = (LinearLayout) findViewById(R.id.trigger_add_img_layout);
@@ -136,8 +141,91 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 			}
 		}
 		
+		if(strContent != null){
+			edt_moment_content.setText(strContent);
+		}
+		
 	}
+	private void modifyLessonHomework(final int lessonId,final int homework_id,final Moment moment){
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>(){
+			
+			@Override
+			protected Integer doInBackground(Void... params) {
+				moment.id = Moment.ID_PLACEHOLDER_PREFIX
+						+ System.currentTimeMillis();
+				moment.text = edt_moment_content.getText().toString();
+				moment.timestamp = getIntent().getLongExtra(CreateMomentActivity.EXTRA_KEY_MOMENT_MAX_TIMESTAMP, 0) + 1;
+//				Log.w("local moment timestamp set to "
+//						+ moment.timestamp);
+				if (null == moment.owner)
+					moment.owner = new Buddy();
+				moment.owner.userID = Moment.ANONYMOUS_UID;
+				moment.likedByMe = false;
+				mDb.storeMoment(moment, null);
+				for (WFile f : moment.multimedias) {
+					mDb.storeMultimedia(moment, f);
+				}
 
+//				Intent data = new Intent();
+//				setResult(RESULT_OK, data);
+
+				// upload to server
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						int errno = MomentWebServerIF.getInstance(
+								AddHomeworkActivity.this)
+								.fAddMoment(moment, true);
+						LessonAddHomework addhomework = new LessonAddHomework();
+						addhomework.lesson_id = lessonId;
+						addhomework.homework_id = homework_id;
+
+						int errno2 = LessonWebServerIF.getInstance(
+								AddHomeworkActivity.this)
+								.modifyLessonHomework(addhomework, moment);
+						if (errno == ErrorCode.OK
+								&& errno2 == ErrorCode.OK) {
+							Intent intent = new Intent(
+									AddHomeworkActivity.this,
+									PublishMomentService.class);
+							intent.putExtra(
+									PublishMomentService.EXTRA_MOMENT,
+									moment);
+							intent.putExtra(
+									PublishMomentService.EXTRA_ANONYMOUS,
+									true);
+							startService(intent);
+						}
+					}
+				}).start();
+				return 0;
+			}			
+			@Override
+			protected void onPostExecute(Integer result) {	
+				mMsgBox.showWaitImageSuccess("布置作业修改成功");
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						try {
+							Thread.sleep(3000);
+							AddHomeworkActivity.this.finish();
+							if(LessonHomeworkActivity.getInstance() != null){
+								LessonHomeworkActivity.getInstance().finish();
+							}
+							
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+				}).start();
+				
+			}
+			
+		});
+	}
 	private void addLessonHomework(final int lessonId,final Moment moment){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>(){
 			
@@ -274,7 +362,12 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 			showPickImgSelector();
 			break;
 		case R.id.btn_ok:
-			addLessonHomework(lessonId, moment);
+			if(strContent != null){
+				modifyLessonHomework(lessonId,modify_homework_id, moment);
+			}else{
+				addLessonHomework(lessonId, moment);
+			}
+			
 			break;
 		default:
 			break;

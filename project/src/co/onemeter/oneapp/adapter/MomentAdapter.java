@@ -392,7 +392,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
         String myUid = PrefUtil.getInstance(context).getUid();
         if(!TextUtils.isEmpty(myUid) && myUid.equals(moment.owner.userID)) {//是自己，可以对自己的动态操作//显示对动态操作按钮
-            holder.btn_comment_op.setVisibility(View.VISIBLE);
+            holder.btn_comment_op.setVisibility(View.VISIBLE  );
         } else {//非自己，隐藏对动态的操作
             holder.btn_comment_op.setVisibility(View.GONE);
         }
@@ -960,6 +960,9 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
         	//显示点赞文本
             holder.tvLike.setText(activity.getResources().getString(R.string.moments_like));
         }
+
+        holder.btnLike.setEnabled(true);
+        holder.layoutLike.setEnabled(true);
         
 //        if (moment.allowReview) {
 //        	holder.btnAnswer.setBackgroundResource(R.drawable.share_icon_comment);
@@ -983,6 +986,8 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             @Override
             public void onClick(View v) {
                 if (mReplyDelegate != null) {
+                    holder.btnLike.setEnabled(false);
+                    holder.layoutLike.setEnabled(false);
                     mReplyDelegate.replyToMoment(position, moment, null, true);
                 }
 

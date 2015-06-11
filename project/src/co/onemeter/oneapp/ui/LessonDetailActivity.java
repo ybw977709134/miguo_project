@@ -212,19 +212,22 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 				startActivity(intent);
 			}else{
 				int property_value = 0;
-				for(LessonPerformance performance :lessoonDetails_performance){
-					if(performance.student_id.equals(mPre.getUid())){
-						property_value = performance.property_value;
+				if(lessoonDetails_performance.size() > 1){
+					for(LessonPerformance performance :lessoonDetails_performance){
+						if(performance.student_id.equals(mPre.getUid())){
+							property_value = performance.property_value;
+						}
+					}
+					if(property_value == 2 || property_value == 1){
+						msgbox.toast("学生没有出席这节课，不能查看课堂点评");
+					}else{
+						intent.putExtra(Constants.STUID, mPre.getUid());
+						intent.putExtra(LessonStatusActivity.FALG, false);
+						intent.setClass(this, LessonStatusActivity.class);
+						startActivity(intent);
 					}
 				}
-				if(property_value == 2 || property_value == 1){
-					msgbox.toast("学生没有出席这节课，不能查看课堂点评");
-				}else{
-					intent.putExtra(Constants.STUID, mPre.getUid());
-					intent.putExtra(LessonStatusActivity.FALG, false);
-					intent.setClass(this, LessonStatusActivity.class);
-					startActivity(intent);
-				}
+				
 				
 			}
 
@@ -243,29 +246,32 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 				startActivity(intent);
 			}else{
 				int property_value = 0;
-				for(LessonPerformance performance :lessoonDetails_performance){
-					if(performance.student_id.equals(mPre.getUid())){
-						property_value = performance.property_value;
+				if(lessoonDetails_performance.size() > 1){
+					for(LessonPerformance performance :lessoonDetails_performance){
+						if(performance.student_id.equals(mPre.getUid())){
+							property_value = performance.property_value;
+						}
 					}
-				}
-				if(property_value == 2 || property_value == 1){
-					msgbox.toast("学生没有出席这节课，不能提交家长意见");
-				}else{
-					LessonParentFeedback feedback = mDbHelper.fetchLessonParentFeedback(lessonId, mPre.getUid());
-					if(feedback == null){
-						intent.putExtra(Constants.STUID, mPre.getUid());
-						intent.putExtra(LessonStatusActivity.FALG, false);
-						intent.setClass(this, LessonParentFeedbackActivity.class);
-						startActivityForResult(intent,REQ_PARENT_FEEDBACK);
+					if(property_value == 2 || property_value == 1){
+						msgbox.toast("学生没有出席这节课，不能提交家长意见");
 					}else{
-						Moment moment = mDbHelper.fetchMoment(feedback.moment_id + "");
-						if(moment != null){
-							FeedbackDetailActivity.launch(LessonDetailActivity.this,moment,PrefUtil.getInstance(this).getUserName(),null);
+						LessonParentFeedback feedback = mDbHelper.fetchLessonParentFeedback(lessonId, mPre.getUid());
+						if(feedback == null){
+							intent.putExtra(Constants.STUID, mPre.getUid());
+							intent.putExtra(LessonStatusActivity.FALG, false);
+							intent.setClass(this, LessonParentFeedbackActivity.class);
+							startActivityForResult(intent,REQ_PARENT_FEEDBACK);
 						}else{
-							new MessageBox(this).toast(R.string.class_parent_opinion_not_submitted,500);
+							Moment moment = mDbHelper.fetchMoment(feedback.moment_id + "");
+							if(moment != null){
+								FeedbackDetailActivity.launch(LessonDetailActivity.this,moment,PrefUtil.getInstance(this).getUserName(),null);
+							}else{
+								new MessageBox(this).toast(R.string.class_parent_opinion_not_submitted,500);
+							}
 						}
 					}
 				}
+				
 				
 			}
 			break;

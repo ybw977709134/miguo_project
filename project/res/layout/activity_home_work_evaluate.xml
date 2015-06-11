@@ -211,6 +211,7 @@
             android:gravity="top"
             android:singleLine="false"
             android:maxLines="3"
+            android:maxLength="20"
             android:padding="20dp"
             android:background="@null"
             android:textColorHint="@color/gray_40"

@@ -35,9 +35,9 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 
 
     //星星评分对应的数值
-    private int confirmNum;
-    private int timelyNum;
-    private int exactNum;
+    private int confirmNum = 0;
+    private int timelyNum = 0;
+    private int exactNum = 0;
     
     private MessageBox mMsgBox;
     private int homeworkresult_id;
@@ -76,14 +76,8 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 20) {
-                    Toast.makeText(HomeWorkEvaluate.this,"评语不能超过20字",Toast.LENGTH_SHORT).show();
-                    editText_comment.setFocusable(false);
-                    editText_comment.setFocusableInTouchMode(false);
-                } else {
-                    editText_comment.setFocusable(false);
-                    editText_comment.setFocusableInTouchMode(false);
-                    editText_comment.requestFocus();
+                if (s.length() >= 20) {
+                    Toast.makeText(HomeWorkEvaluate.this,"评语不能超过20字",Toast.LENGTH_SHORT).show();                    
                 }
 
             }
@@ -120,17 +114,14 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 			protected void onPostExecute(Integer result) {
 				super.onPostExecute(result);
 				if(result == 1){
-					mMsgBox.showWaitImageSuccess("评分失败");
-				}else if(result == 0){
-					setResult(RESULT_OK);
-					mMsgBox.showWaitImageSuccess("评分成功");
+					mMsgBox.showWaitImageWorng("评分失败");
 					new Thread(new Runnable() {
 						
 						@Override
 						public void run() {
 							try {
-								Thread.sleep(3000);
-								finish();
+								Thread.sleep(2000);
+								mMsgBox.dismissWait();
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -138,6 +129,42 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 							
 						}
 					}).start();
+				}else if(result == 0){
+					if(confirmNum == 0 && timelyNum == 0 && exactNum == 0){
+						mMsgBox.showWaitImageCaution("还没有评分,不能提交");
+						new Thread(new Runnable() {
+							
+							@Override
+							public void run() {
+								try {
+									Thread.sleep(2000);
+									mMsgBox.dismissWait();
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
+							}
+						}).start();
+					}else{
+						setResult(RESULT_OK);
+						mMsgBox.showWaitImageSuccess("评分成功");
+						new Thread(new Runnable() {
+							
+							@Override
+							public void run() {
+								try {
+									Thread.sleep(3000);
+									finish();
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
+							}
+						}).start();
+					}
+					
 				}
 			}
 			

@@ -348,25 +348,94 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
             long curTime = System.currentTimeMillis()/1000;
             if(!performancesFromServer.isEmpty()){
             	if(curTime >= endDate){
-            		if(performancesFromServer.size() > position){
-                        LessonPerformance lessonPerformance = performancesFromServer.get(position);
-                        switch (lessonPerformance.property_value){
-                            case 1:
-                                holder.radio0.setChecked(true);
-                                break;
-                            case 2:
-                                holder.radio1.setChecked(true);
-                                break;
-                            case 3:
-                                holder.radio2.setChecked(true);
-                                break;
+            		if(performancesFromServer.get(position).property_value == -1){
+            			holder.radio2.setChecked(true);
+                        
+                        final LessonPerformance performance = new LessonPerformance();
+                        performance.property_value = 3;
+                        performance.lesson_id = lessonId;
+                        performance.student_id = classstudents.get(position).get("student_id").toString();
+                        performance.property_id = performence_property_id;
+                        
+                        holder.rg_per.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+                            @Override
+                            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                                switch (checkedId) {
+                                    case R.id.radio0:
+                                        performance.property_value = 1;
+                                        break;
+                                    case R.id.radio1:
+                                        performance.property_value = 2;
+                                        break;
+                                    case R.id.radio2:
+                                        performance.property_value = 3;
+                                        break;
+                                    default:
+                                        performance.property_value = 3;
+                                        break;
+                                }
+                                performancesToPost.remove(position);
+                                performancesToPost.add(position,performance);
+                            }
+                        });
+                        performancesToPost.add(performance);
+                        return convertView;
+            		}else if(performancesFromServer.get(position).property_value == 4){
+            			holder.radio1.setChecked(true);
+                        
+                        final LessonPerformance performance = new LessonPerformance();
+                        performance.property_value = 2;
+                        performance.lesson_id = lessonId;
+                        performance.student_id = classstudents.get(position).get("student_id").toString();
+                        performance.property_id = performence_property_id;
+                        
+                        holder.rg_per.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+                            @Override
+                            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                                switch (checkedId) {
+                                    case R.id.radio0:
+                                        performance.property_value = 1;
+                                        break;
+                                    case R.id.radio1:
+                                        performance.property_value = 2;
+                                        break;
+                                    case R.id.radio2:
+                                        performance.property_value = 3;
+                                        break;
+                                    default:
+                                        performance.property_value = 2;
+                                        break;
+                                }
+                                performancesToPost.remove(position);
+                                performancesToPost.add(position,performance);
+                            }
+                        });
+                        performancesToPost.add(performance);
+                        return convertView;
+            		}else{
+            			if(performancesFromServer.size() > position){
+                            LessonPerformance lessonPerformance = performancesFromServer.get(position);
+                            switch (lessonPerformance.property_value){
+                                case 1:
+                                    holder.radio0.setChecked(true);
+                                    break;
+                                case 2:
+                                    holder.radio1.setChecked(true);
+                                    break;
+                                case 3:
+                                    holder.radio2.setChecked(true);
+                                    break;
+                            }
                         }
-                    }
-                	holder.rg_per.setEnabled(false);
-                    holder.radio0.setEnabled(false);
-                    holder.radio1.setEnabled(false);
-                    holder.radio2.setEnabled(false);
-                    return convertView;
+                    	holder.rg_per.setEnabled(false);
+                        holder.radio0.setEnabled(false);
+                        holder.radio1.setEnabled(false);
+                        holder.radio2.setEnabled(false);
+                        return convertView;
+            		}
+            		
                 }else{
                 	//performancesFromServer服务器有数据则显示，并return
                     if(performancesFromServer.get(position).property_value != -1){

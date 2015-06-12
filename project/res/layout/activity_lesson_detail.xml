@@ -20,7 +20,7 @@
                 android:layout_height="50dp"
                 android:layout_alignParentLeft="true"
                 android:background="@null"
-                android:src="@drawable/nav_back_selector" />
+                android:src="@drawable/icon_back_selector" />
 
             <TextView
                 android:id="@+id/tv_back"
@@ -48,7 +48,7 @@
     </RelativeLayout>
 
     <ImageView
-        style="@style/standard_list_divider"
+        style="@style/bg_section_divider_line_light"
         android:layout_marginTop="30dp" />
 
     <LinearLayout
@@ -143,7 +143,7 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>-->
-<ImageView style="@style/standard_list_divider" />
+<ImageView style="@style/bg_section_divider_line_light" />
     <LinearLayout
         android:id="@+id/les_lay_first"
         android:layout_width="match_parent"
@@ -263,10 +263,10 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ImageView style="@style/standard_list_divider" />
+    <ImageView style="@style/bg_section_divider_line_light" />
 
     <ImageView
-        style="@style/standard_list_divider"
+        style="@style/bg_section_divider_line_light"
         android:layout_marginTop="30dp" />
 
     <LinearLayout
@@ -322,10 +322,10 @@
             </LinearLayout>
         </LinearLayout>
 
-        <ImageView style="@style/standard_list_divider" />
+        <ImageView style="@style/bg_section_divider_line_light" />
 
         <ImageView
-            style="@style/standard_list_divider"
+            style="@style/bg_section_divider_line_light"
             android:id="@+id/top_camera_standard_list_divider"
             android:layout_marginTop="30dp" />
 
@@ -378,7 +378,7 @@
         </LinearLayout>
 
         <ImageView 
-            style="@style/standard_list_divider" 
+            style="@style/bg_section_divider_line_light"
             android:id="@+id/bottom_camera_standard_list_divider" />
         
     </LinearLayout>

@@ -60,6 +60,8 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 	
 	private GetLessonHomework getLessonHomework;
 	private String studentId = null;
+
+    private MessageBox messageBox;
 	
 	
 
@@ -67,6 +69,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_homework);
+        messageBox = new MessageBox(this);
 		initView();
 		if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
 			getHomeworkState_student(lessonId,studentId);
@@ -368,7 +371,8 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			message.primaryKey = new Database(HomeworkActivity.this)
 		                            .storeNewChatMessage(message, false);
     		WowTalkVoipIF.getInstance(HomeworkActivity.this).fSendChatMessage(message);
-    		Toast.makeText(this, "提醒提交作业成功", Toast.LENGTH_SHORT).show();
+//    		Toast.makeText(this, "提醒提交作业成功", Toast.LENGTH_SHORT).show();
+            messageBox.toast("作业提醒已发出");
 		}
 	}
 }

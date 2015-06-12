@@ -520,7 +520,7 @@ public class MessageBox {
         }
         text.setText(msg);
         mToast.show();
-        dismissToast();
+//        dismissToast();
     }
 
     public void dismissToast() {

@@ -16,7 +16,7 @@
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:background="@null"
-            android:src="@drawable/nav_back_selector" />
+            android:src="@drawable/icon_back_selector" />
 
         <TextView
             style="?attr/navbar_title"
@@ -37,18 +37,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center"
+                android:textColor="@color/black"
                 android:textSize="18sp" />
             <TextView
                 android:id="@+id/tv_lesson_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textColor="@color/black"
                 android:textSize="16sp"/>
             <ImageView
                 android:id="@+id/divider_teachersign_class_up"
                 android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:background="@drawable/bg_section_divider_line_dark"
+                android:layout_width="match_parent"
+                android:background="@drawable/bg_section_divider_line_light"
                 android:layout_marginTop="5dp"/>
             <LinearLayout
                 android:id="@+id/layout_sign_class"
@@ -76,6 +78,7 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="" />
                 
                 <TextView
@@ -94,13 +97,13 @@
                 android:id="@+id/divider_teachersign_class_bottom"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:background="@drawable/bg_section_divider_line_dark"/>
+                android:background="@drawable/bg_section_divider_line_light"/>
             <ImageView
                 android:id="@+id/divider_signup_homework"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:layout_marginTop="25dp"
-                android:background="@drawable/bg_section_divider_line_dark"/>
+                android:background="@drawable/bg_section_divider_line_light"/>
             <LinearLayout
                 android:id="@+id/layout_signup_homework"
                 android:layout_width="fill_parent"
@@ -128,6 +131,7 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="" />
                 
                 <TextView
@@ -138,20 +142,20 @@
                     android:gravity="center_vertical|right"
                     android:paddingRight="10dp"
                     android:singleLine="true"
-                    android:textColor="@color/gray_40"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
             </LinearLayout>
             <ImageView
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:background="@drawable/bg_section_divider_line_dark"/>
+                android:background="@drawable/bg_section_divider_line_light"/>
 
             <ListView
                 android:id="@+id/lv_homework"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:cacheColorHint="#00000000"
-                android:divider="@drawable/divider" 
+                android:divider="@drawable/bg_section_divider_line_light"
                 android:scrollbars="none"
                 android:layout_marginTop="25dp">
             </ListView>

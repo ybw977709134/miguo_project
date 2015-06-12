@@ -15,7 +15,7 @@
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:background="@null"
-            android:src="@drawable/nav_back_selector" />
+            android:src="@drawable/icon_back_selector" />
 
         <TextView
             android:id="@+id/lesson_title"

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.GetLessonHomework;
 import org.wowtalk.api.HomeWorkResult;
@@ -48,6 +50,8 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
     private int result_id;
     private String student_uid;
     private String stu_name;
+    private int homework_id;
+    private static SubmitHomeWorkActivity instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +60,20 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
 
         initView();
     }
+    
+    public static SubmitHomeWorkActivity getInstance(){
+    	if(instance != null){
+    		return instance;
+    	}
+    	return null;
+    	
+    }
 
     /**
      * 初始化数据
      */
     private void initView () {
+    	instance = this;
     	student_uid = getIntent().getStringExtra("student_uid");
     	stu_name = getIntent().getStringExtra("stu_name");
     	lessonId = getIntent().getIntExtra(Constants.LESSONID, 0);
@@ -120,7 +133,8 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
             protected void onPostExecute(Integer result) {
                 if (result == 1) {//成功
                     stuResultList.clear();
-                    stuResultList.addAll(getLessonHomework.stuResultList);        
+                    stuResultList.addAll(getLessonHomework.stuResultList);
+                    homework_id = getLessonHomework.id;
                     adapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(SubmitHomeWorkActivity.this,"网络请求失败",Toast.LENGTH_SHORT).show();
@@ -155,6 +169,9 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
                     startActivityForResult(intent, REQ_PARENT_ADDHOMEWORKREVIEW);
                 } else {
                    //跳转到学生修改页面
+                	Intent intent = new Intent(SubmitHomeWorkActivity.this,SignHomeworkResultkActivity.class);
+                    intent.putExtra("homework_id", homework_id);
+                    startActivity(intent);
                 }
 
             }
@@ -171,6 +188,14 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
 		}
     }
 
+    @Override
+    protected void onDestroy() {
+    	// TODO Auto-generated method stub
+    	super.onDestroy();
+    	if(instance != null){
+        	instance = null;
+        }
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

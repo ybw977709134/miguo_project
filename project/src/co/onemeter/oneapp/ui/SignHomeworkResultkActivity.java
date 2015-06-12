@@ -208,6 +208,9 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
                     public void onclick(MessageDialog dialog) {
                         dialog.dismiss();
                         finish();
+                        if(SubmitHomeWorkActivity.getInstance() != null){
+                        	SubmitHomeWorkActivity.getInstance().finish();
+                        }
                     }
                 });
 

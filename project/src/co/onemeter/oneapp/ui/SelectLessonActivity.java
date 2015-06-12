@@ -114,24 +114,18 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 		lessons.clear();
 		Database db = Database.open(SelectLessonActivity.this);
 		if(isTeacher()){
+			lessons.addAll(db.fetchLesson(classId));
+		}else{
 			if(homeworkTag != null){
-				if(homeworkTag.equals("homework")){
-					for(int i =0 ;i < mDBHelper.fetchLesson(classId).size();i++){
-						if(curTime < mDBHelper.fetchLesson(classId).get(i).end_date){
-							lessons.add(mDBHelper.fetchLesson(classId).get(i));
+				lessons.addAll(db.fetchLesson(classId));
+			}else{
+				for(int i =0 ;i < mDBHelper.fetchLesson(classId).size();i++){
+					if(curTime < mDBHelper.fetchLesson(classId).get(i).end_date){
+						lessons.add(mDBHelper.fetchLesson(classId).get(i));
 						}
 					}
-				}
-			}else{
-				lessons.addAll(db.fetchLesson(classId));
 			}
-			
-		}else{
-			for(int i =0 ;i < mDBHelper.fetchLesson(classId).size();i++){
-				if(curTime < mDBHelper.fetchLesson(classId).get(i).end_date){
-					lessons.add(mDBHelper.fetchLesson(classId).get(i));
-				}
-			}	
+				
 		}
 		
 //		lessons.addAll(db.fetchLesson(classId));

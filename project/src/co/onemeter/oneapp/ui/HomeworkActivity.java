@@ -186,11 +186,42 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 				}else{
 					Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);
 					addHomework = mDb.fetchLessonAddHomework(lessonId);
-					Moment moment = mDb.fetchMoment(addHomework.moment_id + "");
-					i.putExtra("moment", moment);
-			        i.putExtra("lessonId",lessonId);
-			        i.putExtra("studentId", String.valueOf(homeworkStates.get(0).get("stu_uid")));
-			        startActivityForResult(i, REQ_PARENT_DELHOMEWORK);
+					if(addHomework != null){
+						Moment moment = mDb.fetchMoment(addHomework.moment_id + "");
+						i.putExtra("moment", moment);
+				        i.putExtra("lessonId",lessonId);
+				        i.putExtra("studentId", String.valueOf(homeworkStates.get(0).get("stu_uid")));
+				        startActivityForResult(i, REQ_PARENT_DELHOMEWORK);
+					}else{
+						new Thread(new Runnable() {
+							
+							@Override
+							public void run() {
+								int errno;
+								try {
+									errno = LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,studentId,1);
+									if(errno == ErrorCode.INVALID_ARGUMENT){						
+										Moment moment = mDb.fetchMoment(String.valueOf(getLessonHomework.moment_id));
+										if(moment != null){
+											Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);
+											i.putExtra("moment", moment);
+									        i.putExtra("lessonId",lessonId);
+									        i.putExtra("studentId", studentId);
+											startActivity(i);
+											mHandler.sendEmptyMessage(errno);
+										}else{
+											mHandler.sendEmptyMessage(errno);
+										}
+									}else{
+										mHandler.sendEmptyMessage(errno);
+									}
+								} catch (Exception e) {
+									mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);
+								}
+							}
+						}).start();
+					}
+					
 				}
 			}else{
 				new Thread(new Runnable() {

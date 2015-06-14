@@ -37,7 +37,7 @@ gradle clean \
 # archive proguard mapping file (the path is configured in proguard.cfg)
 if [ -f project/classes-processed.map ]
 then
-    cp project/classes-processed.map ${dest%$.apk}.map
+    cp project/classes-processed.map ${dest%.apk}.map
 fi
 
 #

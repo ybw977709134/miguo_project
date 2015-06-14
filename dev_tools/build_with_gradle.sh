@@ -34,6 +34,12 @@ gradle clean \
     && cp $src $dest \
     && echo output to $dest
 
+# archive proguard mapping file (the path is configured in proguard.cfg)
+if [ -f project/classes-processed.map ]
+then
+    cp project/classes-processed.map ${dest%$.apk}.map
+fi
+
 #
 # prepare for publishing
 #

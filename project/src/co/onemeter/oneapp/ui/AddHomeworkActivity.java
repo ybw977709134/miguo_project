@@ -307,49 +307,61 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 	}
 	private void showPickImgSelector() {
 		hideIME();
-        final BottomButtonBoard bottomBoard=new BottomButtonBoard(this, getWindow().getDecorView());
-        bottomBoard.add(getString(R.string.image_take_photo), BottomButtonBoard.BUTTON_BLUE,
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        bottomBoard.dismiss();
-                        if (listPhoto.size() >= CreateMomentActivity.TOTAL_PHOTO_ALLOWED) {
-                            mMsgBox.toast(String.format(AddHomeworkActivity.this.getString(R.string.settings_account_moment_take_photos_oom), CreateMomentActivity.TOTAL_PHOTO_ALLOWED));
-                            return;
-                        }
-                        mediaHelper.takePhoto(AddHomeworkActivity.this, ACTIVITY_REQ_ID_PICK_PHOTO_FROM_CAMERA);
-                    }
-                });
-        bottomBoard.add(getString(R.string.image_pick_from_local), BottomButtonBoard.BUTTON_BLUE,
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        bottomBoard.dismiss();
-                        if (listPhoto.size() >= TOTAL_PHOTO_ALLOWED) {
-                            mMsgBox.toast(String.format(AddHomeworkActivity.this.getString(R.string.settings_account_moment_take_photos_oom), CreateMomentActivity.TOTAL_PHOTO_ALLOWED));
-                            return;
-                        }
-                        int i = 0;
-                        for (CreateMomentActivity.WMediaFile photo : listPhoto) {
-                            if (!photo.isFromGallery) {
-                                i++;
+
+        //在外面点击加号图片就能判断提示
+        if (listPhoto.size() >= TOTAL_PHOTO_ALLOWED) {
+            mMsgBox.toast("布置作业最多上传6张图片");
+            return;
+
+        } else {
+
+            final BottomButtonBoard bottomBoard = new BottomButtonBoard(this, getWindow().getDecorView());
+            //拍摄上传照片
+            bottomBoard.add(getString(R.string.image_take_photo), BottomButtonBoard.BUTTON_BLUE,
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            bottomBoard.dismiss();
+                            if (listPhoto.size() >= TOTAL_PHOTO_ALLOWED) {
+                                mMsgBox.toast("布置作业最多只能上传6张图片");
+                                return;
                             }
+                            mediaHelper.takePhoto(AddHomeworkActivity.this, ACTIVITY_REQ_ID_PICK_PHOTO_FROM_CAMERA);
                         }
-                        Intent intent = new Intent(AddHomeworkActivity.this, SelectPhotoActivity.class);
-                        intent.putExtra("num", TOTAL_PHOTO_ALLOWED - i);
-                        ThemeHelper.putExtraCurrThemeResId(intent, AddHomeworkActivity.this);
-                        ArrayList<String> listPath = new ArrayList<String>();
-                        for (CreateMomentActivity.WMediaFile photo : listPhoto) {
-                            if (photo.isFromGallery) {
-                                listPath.add(photo.galleryPath);
+                    });
+
+            //从本地相册中选择上传照片
+            bottomBoard.add(getString(R.string.image_pick_from_local), BottomButtonBoard.BUTTON_BLUE,
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            bottomBoard.dismiss();
+                            if (listPhoto.size() >= TOTAL_PHOTO_ALLOWED) {
+                                mMsgBox.toast("布置作业最多只能上传6张图片");
+                                return;
                             }
+                            int i = 0;
+                            for (CreateMomentActivity.WMediaFile photo : listPhoto) {
+                                if (!photo.isFromGallery) {
+                                    i++;
+                                }
+                            }
+                            Intent intent = new Intent(AddHomeworkActivity.this, SelectPhotoActivity.class);
+                            intent.putExtra("num", TOTAL_PHOTO_ALLOWED - i);
+                            ThemeHelper.putExtraCurrThemeResId(intent, AddHomeworkActivity.this);
+                            ArrayList<String> listPath = new ArrayList<String>();
+                            for (CreateMomentActivity.WMediaFile photo : listPhoto) {
+                                if (photo.isFromGallery) {
+                                    listPath.add(photo.galleryPath);
+                                }
+                            }
+                            intent.putStringArrayListExtra("list", listPath);
+                            startActivityForResult(intent, ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY);
                         }
-                        intent.putStringArrayListExtra("list", listPath);
-                        startActivityForResult(intent, ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY);
-                    }
-                });
-        bottomBoard.addCancelBtn(getString(R.string.cancel));
-        bottomBoard.show();
+                    });
+            bottomBoard.addCancelBtn(getString(R.string.cancel));
+            bottomBoard.show();
+        }
     }
 
 	@Override

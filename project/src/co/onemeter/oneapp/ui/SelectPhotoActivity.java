@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import co.onemeter.oneapp.utils.ThemeHelper;
+
+import org.w3c.dom.Text;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.bitmapfun.ui.RecyclingImageView;
 import org.wowtalk.ui.bitmapfun.util.ImageCache;
@@ -137,7 +139,8 @@ public class SelectPhotoActivity extends Activity implements View.OnClickListene
     }
 
     private void notifySelectTooMany() {
-        mMsgBox.show(null, String.format(getString(R.string.moments_create_too_many_photo), mTotalPhotoNumAllowed));
+//        mMsgBox.show(null, String.format(getString(R.string.moments_create_too_many_photo), mTotalPhotoNumAllowed));
+        mMsgBox.toast(String.format(getString(R.string.moments_create_too_many_photo), mTotalPhotoNumAllowed));
     }
 
     private class FPhoto {
@@ -158,7 +161,7 @@ public class SelectPhotoActivity extends Activity implements View.OnClickListene
     private int photoNum = 0;
     private TextView titleText;
     private ImageButton btnTitleBack;
-    private ImageButton btnTitleConfirm;
+    private TextView btnTitleConfirm;
     private GridView photoGrid;
     private ArrayList<FPhoto> listFPhoto;
     private ArrayList<String> listSelected;
@@ -173,7 +176,7 @@ public class SelectPhotoActivity extends Activity implements View.OnClickListene
     private void initView() {
         titleText = (TextView) findViewById(R.id.title_text);
         btnTitleBack = (ImageButton) findViewById(R.id.title_back);
-        btnTitleConfirm = (ImageButton) findViewById(R.id.title_confirm);
+        btnTitleConfirm = (TextView) findViewById(R.id.title_confirm);
         photoGrid = (GridView) findViewById(R.id.photo_grid);
 
         btnTitleBack.setOnClickListener(this);

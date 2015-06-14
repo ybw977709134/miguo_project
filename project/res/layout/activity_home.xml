@@ -302,6 +302,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:src="@drawable/icon_section_row_selector"
+                        android:visibility="gone"
                         android:layout_marginRight="10dp"/>
                 </RelativeLayout>
 

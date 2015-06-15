@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.adapter.HomeWorkAdapter;
 import co.onemeter.oneapp.adapter.MomentAdapter;
 import co.onemeter.utils.AsyncTaskExecutor;
 
@@ -227,7 +228,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
             }
         }
 
-        MomentAdapter.setImageLayout(this, moment,mImageResizer, photoFiles, imageTable);
+        HomeWorkAdapter.setImageLayout(this, moment,mImageResizer, photoFiles, imageTable);
     }
 	@Override
 	public void onClick(View view) {

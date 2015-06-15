@@ -304,7 +304,8 @@ public abstract class MessageComposerActivityBase extends Activity
                 if (endTime - startTime < 1500) {
                     try {
                         Thread.sleep(1500 - (endTime - startTime));
-                    } catch (InterruptedException exception) {
+                    }
+                    catch (InterruptedException exception) {
                         exception.printStackTrace();
                     }
                 }
@@ -312,7 +313,7 @@ public abstract class MessageComposerActivityBase extends Activity
             }
 
             @Override
-            protected void onPostExecute(ArrayList <ChatMessage> chatMessageList) {
+            protected void onPostExecute(ArrayList<ChatMessage> chatMessageList) {
                 co.onemeter.oneapp.ui.Log.d("#loadEarlierMsgs, load finished.");
                 lv_message.onRefreshComplete();
 
@@ -331,12 +332,12 @@ public abstract class MessageComposerActivityBase extends Activity
 
 	protected void fRefreshUserInfo() {
 		mHandler.post(new Runnable() {
-			public void run() {
+            public void run() {
                 if (_targetUID != null) {
                     txtTitle.setText(getTargetDisplayName());
                 }
-			}
-		});
+            }
+        });
 	}
 
 	protected void refreshMsgListView(final boolean scrollToBottom) {
@@ -781,7 +782,7 @@ public abstract class MessageComposerActivityBase extends Activity
             protected Void doInBackground(Void... arg0) {
                 WowTalkWebServerIF.getInstance(MessageComposerActivityBase.this).fPostFileToServer(
                         pathOfThumbNail, true,
-                        new NetworkIFDelegate(){
+                        new NetworkIFDelegate() {
 
                             @Override
                             public void didFailNetworkIFCommunication(int arg0,
@@ -804,14 +805,14 @@ public abstract class MessageComposerActivityBase extends Activity
 
                         }, 0);
 
-                if(thumb_id == null) {
+                if (thumb_id == null) {
                     mDbHelper.setChatMessageCannotSent(msg);
                     return null;
                 }
 
                 WowTalkWebServerIF.getInstance(MessageComposerActivityBase.this).fPostFileToServer(
                         pathOfMultimedia, true,
-                        new NetworkIFDelegate(){
+                        new NetworkIFDelegate() {
 
                             @Override
                             public void didFailNetworkIFCommunication(int arg0,
@@ -834,15 +835,15 @@ public abstract class MessageComposerActivityBase extends Activity
                         }, 0);
 
 
-                if(media_id != null) {
-                    if(msg.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE)
+                if (media_id != null) {
+                    if (msg.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_VIDEO_NOTE)
                             || msg.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_PHOTO))
                         msg.formatContentAsPhotoMessage(media_id, thumb_id);
-                    else if(msg.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_VOICE_NOTE)) {
+                    else if (msg.msgType.equals(ChatMessage.MSGTYPE_MULTIMEDIA_VOICE_NOTE)) {
                         msg.formatContentAsVoiceMessage(media_id, voiceDuration);
                     }
 
-                    if(msg.isGroupChatMessage) {
+                    if (msg.isGroupChatMessage) {
                         mWebif.fGroupChat_SendMessage(msg.chatUserName, msg);
                     } else {
                         WowTalkVoipIF.getInstance(MessageComposerActivityBase.this).fSendChatMessage(msg);
@@ -855,8 +856,8 @@ public abstract class MessageComposerActivityBase extends Activity
 
             @Override
             protected void onProgressUpdate(Integer... param) {
-                ProgressBar progressBar = (ProgressBar)msg.extraObjects.get("progressBar");
-                if(progressBar != null) {
+                ProgressBar progressBar = (ProgressBar) msg.extraObjects.get("progressBar");
+                if (progressBar != null) {
                     progressBar.setProgress(param[0]);
                 }
                 msg.extraData.putInt(ChatMessage.EXTRA_DATA_PROGRESS, param[0]);
@@ -870,8 +871,8 @@ public abstract class MessageComposerActivityBase extends Activity
 
                 msg.extraData.putBoolean("isTransferring", false);
 //                mDbHelper.updateChatMessage(msg, true);
-                final ProgressBar progressBar = (ProgressBar)msg.extraObjects.get("progressBar");
-                if(progressBar != null)
+                final ProgressBar progressBar = (ProgressBar) msg.extraObjects.get("progressBar");
+                if (progressBar != null)
                     progressBar.setVisibility(View.GONE);
 //				showSentStatus(msg);
             }
@@ -1048,7 +1049,7 @@ public abstract class MessageComposerActivityBase extends Activity
             protected Boolean doInBackground(Void... params) {
                 if (_targetIsNormalGroup || _targetIsTmpGroup) {
                     // TODO
-                } else {
+                } else if (!isFromSchool()) {
                     if (ErrorCode.OK == mWebif.fGetBuddyWithUID(_targetUID)) {
                         Buddy buddy = new Database(MessageComposerActivityBase.this).buddyWithUserID(_targetUID);
                         if (0 != (buddy.getFriendShipWithMe() & Buddy.RELATIONSHIP_FRIEND_HERE)) {
@@ -1068,6 +1069,11 @@ public abstract class MessageComposerActivityBase extends Activity
                 }
             }
         });
+    }
+
+    private boolean isFromSchool() {
+        Buddy oldInfo = new Database(MessageComposerActivityBase.this).buddyWithUserID(_targetUID);
+        return Buddy.ACCOUNT_TYPE_SCHOOL == oldInfo.getAccountType();
     }
 
     /**

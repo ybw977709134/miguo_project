@@ -333,8 +333,9 @@ public class ChatMessageHandler {
                 if (null == b) {
                     mWeb.fGetBuddyWithUID(msg.chatUserName);
                     needReloadCompanyStructure=true;
-                } else if (Buddy.ACCOUNT_TYPE_PUBLIC == b.getAccountType()) {
-                    // 公司通知，公司名字和图片可能有变动
+                } else if (Buddy.ACCOUNT_TYPE_PUBLIC == b.getAccountType()
+                        || Buddy.ACCOUNT_TYPE_SCHOOL == b.getAccountType()) {
+                    // 学校通知，学校名字和图片可能有变动
                     int resultCode = mWeb.fGetBuddyWithUID(msg.chatUserName);
                     if (ErrorCode.OK == resultCode) {
                         Buddy noticeBuddy = mDb.buddyWithUserID(msg.chatUserName);

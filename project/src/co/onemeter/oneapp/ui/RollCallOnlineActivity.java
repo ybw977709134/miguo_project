@@ -5,8 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +23,10 @@ import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
 
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ListViewUtils;
@@ -53,6 +51,8 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
 
     private LessonWebServerIF signWebServer;
     private MessageBox msgbox;
+
+    private TextView roll_call_ok;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +72,9 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
 
         //先去服务器取数据，如果有则不让编辑并显示
         getLessonPerformanceFormServer();
+
+
+
     }
 
 
@@ -88,6 +91,12 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
 
             @Override
             protected void onPostExecute(Void result) {
+
+                if (performancesFromServer != null && performancesFromServer.size() > 0) {
+                    roll_call_ok.setEnabled(false);
+                    roll_call_ok.setTextColor(getResources().getColor(R.color.gray_40));
+
+                }
                 getClassStudentInfo();
             }
         });
@@ -150,7 +159,10 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
     }
 
     void initView(){
-        findViewById(R.id.roll_call_ok).setOnClickListener(this);
+//        findViewById(R.id.roll_call_ok).setOnClickListener(this);
+        roll_call_ok = (TextView) findViewById(R.id.roll_call_ok);
+        roll_call_ok.setOnClickListener(this);
+
         findViewById(R.id.btn_all_signin).setOnClickListener(this);
 //        findViewById(R.id.btn_all_signin).setVisibility(View.GONE);
         listView = (ListView) findViewById(R.id.listView_roll_call);
@@ -170,6 +182,7 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                 finish();
                 break;
             case R.id.roll_call_ok://确认
+
             	MessageDialog dialog = new MessageDialog(RollCallOnlineActivity.this);
                 dialog.setTitle("提示");
                 dialog.setMessage("你确定这次考勤吗?");

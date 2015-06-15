@@ -27,6 +27,7 @@ import com.androidquery.AQuery;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -266,29 +267,27 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
             bottomBoard.add(getString(R.string.group_disband), BottomButtonBoard.BUTTON_RED, new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    bottomBoard.dismiss();
-        			Builder builder = new AlertDialog.Builder(ContactGroupInfoActivity.this);
-        			builder.setTitle("提示");
-        			builder.setMessage("你确定要解散群组吗?");
-        			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-        				
-        				@Override
-        				public void onClick(DialogInterface arg0, int arg1) {
-        					mDbHelper.deleteChatMessageWithUser(groupID);
-        					mDbHelper.deleteLatestChatTarget(groupID);
+
+                    MessageDialog dialog = new MessageDialog(ContactGroupInfoActivity.this);
+                    dialog.setTitle("提示");
+                    dialog.setMessage("你确定要解散群组吗?");
+                    dialog.setRightBold(true);
+                    dialog.setOnLeftClickListener("取消", null);
+                    dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                        @Override
+                        public void onclick(MessageDialog dialog) {
+                            dialog.dismiss();
+                            mDbHelper.deleteChatMessageWithUser(groupID);
+                            mDbHelper.deleteLatestChatTarget(groupID);
                             disbandGroup();
                             Intent intent = new Intent(ContactGroupInfoActivity.this, StartActivity.class);
                             startActivity(intent);
-        				}
-        			});
-        			builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {			
-        				@Override
-        				public void onClick(DialogInterface arg0, int arg1) {
-        					
-        				}
-        			});
-        			
-        			builder.create().show();
+
+                        }
+                    });
+                    dialog.show();
+
+
                 }
             });
             bottomBoard.add(getString(R.string.group_edit_info), BottomButtonBoard.BUTTON_BLUE, new OnClickListener() {
@@ -319,29 +318,26 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
                 @Override
                 public void onClick(View v) {
                     bottomBoard.dismiss();
-                    Builder builder = new AlertDialog.Builder(ContactGroupInfoActivity.this);
-        			builder.setTitle("提示");
-        			builder.setMessage("你确定要退出吗?");
-        			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-        				
-        				@Override
-        				public void onClick(DialogInterface arg0, int arg1) {
-        					mDbHelper.deleteChatMessageWithUser(groupID);
-        					mDbHelper.deleteLatestChatTarget(groupID);
-        					quitGroup();
+
+                    MessageDialog dialog = new MessageDialog(ContactGroupInfoActivity.this);
+                    dialog.setTitle("提示");
+                    dialog.setMessage("你确定要退出该群吗?");
+                    dialog.setRightBold(true);
+                    dialog.setOnLeftClickListener("取消", null);
+                    dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                        @Override
+                        public void onclick(MessageDialog dialog) {
+                            dialog.dismiss();
+                            mDbHelper.deleteChatMessageWithUser(groupID);
+                            mDbHelper.deleteLatestChatTarget(groupID);
+                            quitGroup();
                             Intent intent = new Intent(ContactGroupInfoActivity.this, StartActivity.class);
                             startActivity(intent);
-        				}
-        			});
-        			builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {			
-        				@Override
-        				public void onClick(DialogInterface arg0, int arg1) {
-        					
-        				}
-        			});
-        			
-        			builder.create().show();
-                    
+
+                        }
+                    });
+                    dialog.show();
+
                 }
             });
             bottomBoard.add(getString(R.string.group_edit_info), BottomButtonBoard.BUTTON_BLUE, new OnClickListener() {
@@ -372,30 +368,29 @@ public class ContactGroupInfoActivity extends Activity implements OnClickListene
                 @Override
                 public void onClick(View v) {
                     bottomBoard.dismiss();
-        			Builder builder = new AlertDialog.Builder(ContactGroupInfoActivity.this);
-        			builder.setTitle("提示");
-        			builder.setMessage("你确定要退出吗?");
-        			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-        				
-        				@Override
-        				public void onClick(DialogInterface arg0, int arg1) {
-        					mDbHelper.deleteChatMessageWithUser(groupID);
-        					mDbHelper.deleteLatestChatTarget(groupID);
+
+                    MessageDialog dialog = new MessageDialog(ContactGroupInfoActivity.this);
+                    dialog.setTitle("提示");
+                    dialog.setMessage("你确定要退出该群吗?");
+                    dialog.setRightBold(true);
+                    dialog.setOnLeftClickListener("取消", null);
+                    dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                        @Override
+                        public void onclick(MessageDialog dialog) {
+                            dialog.dismiss();
+                            mDbHelper.deleteChatMessageWithUser(groupID);
+                            mDbHelper.deleteLatestChatTarget(groupID);
                             quitGroup();
                             Intent intent = new Intent(ContactGroupInfoActivity.this, StartActivity.class);
                             startActivity(intent);
-        				}
-        			});
-        			builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {			
-        				@Override
-        				public void onClick(DialogInterface arg0, int arg1) {
-        					
-        				}
-        			});
-        			
-        			builder.create().show();
+
+                        }
+                    });
+                    dialog.show();
+
                 }
             });
+
         }
         bottomBoard.addCancelBtn(getString(R.string.close));
         bottomBoard.show();

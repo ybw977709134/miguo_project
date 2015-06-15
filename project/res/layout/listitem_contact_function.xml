@@ -34,6 +34,7 @@
         android:gravity="center"
         android:textColor="@color/white"/>
 
+    <!--
     <ImageView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -41,5 +42,13 @@
         android:layout_marginRight="20dp"
         android:layout_centerVertical="true"
         android:background="@drawable/table_arrow"/>
+        -->
+
+    <ImageView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

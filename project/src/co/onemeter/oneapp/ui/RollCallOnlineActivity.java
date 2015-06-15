@@ -393,6 +393,10 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                             }
                         });
                         performancesToPost.add(performance);
+                        holder.rg_per.setEnabled(false);
+                        holder.radio0.setEnabled(false);
+                        holder.radio1.setEnabled(false);
+                        holder.radio2.setEnabled(false);
                         return convertView;
             		}else if(performancesFromServer.get(position).property_value == 4){
             			holder.radio1.setChecked(true);
@@ -426,6 +430,10 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                             }
                         });
                         performancesToPost.add(performance);
+                        holder.rg_per.setEnabled(false);
+                        holder.radio0.setEnabled(false);
+                        holder.radio1.setEnabled(false);
+                        holder.radio2.setEnabled(false);
                         return convertView;
             		}else{
             			if(performancesFromServer.size() > position){

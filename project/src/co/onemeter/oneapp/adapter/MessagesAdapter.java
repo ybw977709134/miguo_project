@@ -438,7 +438,7 @@ public class MessagesAdapter extends BaseAdapter {
             }
         }
         txtDate.setText(strDate);
-        txtDate.setTextColor(mBlockColor);
+//        txtDate.setTextColor(mBlockColor);
 
         if (TextUtils.isEmpty(message.msgType)) {
             // set content empty on UI.

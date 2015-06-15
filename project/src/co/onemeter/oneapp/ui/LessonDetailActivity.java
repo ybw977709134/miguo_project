@@ -215,7 +215,9 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 				if(lessoonDetails_performance.size() > 1){
 					for(LessonPerformance performance :lessoonDetails_performance){
 						if(performance.student_id.equals(mPre.getUid())){
-							property_value = performance.property_value;
+							if(performance.property_id == 10){
+								property_value = performance.property_value;
+							}						
 						}
 					}
 					if(property_value == 2 || property_value == 1){
@@ -226,6 +228,11 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 						intent.setClass(this, LessonStatusActivity.class);
 						startActivity(intent);
 					}
+				}else{
+					intent.putExtra(Constants.STUID, mPre.getUid());
+					intent.putExtra(LessonStatusActivity.FALG, false);
+					intent.setClass(this, LessonStatusActivity.class);
+					startActivity(intent);
 				}
 				
 				
@@ -249,7 +256,9 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 				if(lessoonDetails_performance.size() > 1){
 					for(LessonPerformance performance :lessoonDetails_performance){
 						if(performance.student_id.equals(mPre.getUid())){
-							property_value = performance.property_value;
+							if(performance.property_id == 10){
+								property_value = performance.property_value;
+							}
 						}
 					}
 					if(property_value == 2 || property_value == 1){
@@ -268,6 +277,21 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 							}else{
 								new MessageBox(this).toast(R.string.class_parent_opinion_not_submitted,500);
 							}
+						}
+					}
+				}else{
+					LessonParentFeedback feedback = mDbHelper.fetchLessonParentFeedback(lessonId, mPre.getUid());
+					if(feedback == null){
+						intent.putExtra(Constants.STUID, mPre.getUid());
+						intent.putExtra(LessonStatusActivity.FALG, false);
+						intent.setClass(this, LessonParentFeedbackActivity.class);
+						startActivityForResult(intent,REQ_PARENT_FEEDBACK);
+					}else{
+						Moment moment = mDbHelper.fetchMoment(feedback.moment_id + "");
+						if(moment != null){
+							FeedbackDetailActivity.launch(LessonDetailActivity.this,moment,PrefUtil.getInstance(this).getUserName(),null);
+						}else{
+							new MessageBox(this).toast(R.string.class_parent_opinion_not_submitted,500);
 						}
 					}
 				}

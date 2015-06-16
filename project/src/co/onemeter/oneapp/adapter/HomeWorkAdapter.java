@@ -259,8 +259,8 @@ public class HomeWorkAdapter extends BaseAdapter{
 //                        params.height = DensityUtil.dip2px(context, 80);
 //                        params.width = DensityUtil.dip2px(context, 80);
 //                    }
-                    params.height = DensityUtil.dip2px(context, 100);
-                    params.width = DensityUtil.dip2px(context, 100);
+                    params.height = DensityUtil.dip2px(context, 80);
+                    params.width = DensityUtil.dip2px(context, 80);
                     params.setMargins(0, 0, DensityUtil.dip2px(context, 3), 0);
                     imageView.setLayoutParams(params);
                     imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);

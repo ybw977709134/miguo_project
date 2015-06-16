@@ -35,7 +35,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -77,6 +76,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 	private final static int ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY = 2;
 	private String strContent;
 	private int modify_homework_id;
+	private ArrayList<String> photolistPath;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +103,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 			listPhoto = new ArrayList<>();
 	}
 	private void initView(Bundle savedInstanceState) {
+		photolistPath = getIntent().getStringArrayListExtra("list");
 		title_back = (ImageButton) findViewById(R.id.btn_notice_back);
 		listMoment = new LinkedList<Moment>();
 		strContent = getIntent().getStringExtra("text");
@@ -145,7 +146,9 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 		if(strContent != null){
 			edt_moment_content.setText(strContent);
 		}
-		
+		if(photolistPath != null){
+			startActivityForResult(new Intent(AddHomeworkActivity.this, SelectPhotoActivity.class), ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY);
+		}
 	}
 	private void modifyLessonHomework(final int lessonId,final int homework_id,final Moment moment){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>(){
@@ -428,6 +431,9 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 		case ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY:
 			if (resultCode == RESULT_OK) {
                 ArrayList<String> listPath = data.getStringArrayListExtra("list");
+                if(String.valueOf(listPath.get(0)) == null){
+                	listPath = photolistPath;
+                }
                 ArrayList<CreateMomentActivity.WMediaFile> photo2add = new ArrayList<CreateMomentActivity.WMediaFile>();
                 ArrayList<CreateMomentActivity.WMediaFile> photo2del = new ArrayList<CreateMomentActivity.WMediaFile>();
                 for (int i = 0; i < listPhoto.size(); i++) {

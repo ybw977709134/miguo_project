@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,11 +49,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
     private int homeworkResult_id;
     private TextView tv_modify_homework;
     private String studentId;
-    private class FPhoto {
-        String path;
-        boolean isSelected = false;
-    }
-    private ArrayList<FPhoto> listFPhoto;
+    private ArrayList<String> listPhoto;
     private static LessonHomeworkActivity instance;
     
 
@@ -227,6 +224,23 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
                 }
             }
         }
+        
+        if (null != moment) {
+			try {
+				if (moment.multimedias != null && !moment.multimedias.isEmpty()) {
+					listPhoto = new ArrayList<>(moment.multimedias.size());
+					for (WFile f : moment.multimedias) {
+						if (f.isImageByExt() || f.isVideoByExt()) {
+							listPhoto.add(new CreateMomentActivity.WMediaFile(f).fileid);
+						}
+					}
+				} else {
+					listPhoto = new ArrayList<>();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 
         HomeWorkAdapter.setImageLayout(this, moment,mImageResizer, photoFiles, imageTable);
     }
@@ -279,16 +293,17 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			intent.putExtra("text", txt_content.getText().toString());
 			intent.putExtra("lessonId", lessonId);
 			intent.putExtra("homework_id", homework_id);
-			startActivity(intent);
+			
+			ArrayList<String> listPath = new ArrayList<String>();
+            for (String photoPath : listPhoto) {
+                    listPath.add(photoPath);
+            }
+            intent.putStringArrayListExtra("list", listPath);
+            startActivity(intent);
 			break;
 		default:
 			break;
 		}
-	}
-	
-	private void getPhotos(){
-		listFPhoto = new ArrayList<FPhoto>();
-		ContentResolver contentResolver = getContentResolver();
 	}
 	private boolean isTeacher(){
 		if(Buddy.ACCOUNT_TYPE_TEACHER == PrefUtil.getInstance(this).getMyAccountType()){

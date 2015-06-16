@@ -21,6 +21,7 @@ import org.wowtalk.api.MomentWebServerIF;
 import org.wowtalk.api.WFile;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
 import org.wowtalk.ui.msg.InputBoardManager.ChangeToOtherAppsListener;
@@ -374,10 +375,44 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 			showPickImgSelector();
 			break;
 		case R.id.btn_ok:
+
 			if(strContent != null){
-				modifyLessonHomework(lessonId,modify_homework_id, moment);
+                //修改作业的提示弹框
+                MessageDialog dialog = new MessageDialog(AddHomeworkActivity.this);
+                dialog.setTitle("提示");
+                dialog.setMessage("你确定修改布置的作业吗?");
+                dialog.setCancelable(false);
+                dialog.setRightBold(true);
+                dialog.setOnLeftClickListener("取消", null);
+
+                dialog.setOnRightClickListener("修改", new MessageDialog.MessageDialogClickListener() {
+                            @Override
+                            public void onclick(MessageDialog dialog) {
+                                dialog.dismiss();
+                                modifyLessonHomework(lessonId,modify_homework_id, moment);
+                            }
+                        }
+                );
+                dialog.show();
+
 			}else{
-				addLessonHomework(lessonId, moment);
+                //布置作业的弹框
+                MessageDialog dialog = new MessageDialog(AddHomeworkActivity.this);
+                dialog.setTitle("提示");
+                dialog.setMessage("你确定布置作业吗?");
+                dialog.setCancelable(false);
+                dialog.setRightBold(true);
+                dialog.setOnLeftClickListener("取消", null);
+
+                dialog.setOnRightClickListener("布置", new MessageDialog.MessageDialogClickListener() {
+                            @Override
+                            public void onclick(MessageDialog dialog) {
+                                dialog.dismiss();
+                                addLessonHomework(lessonId, moment);
+                            }
+                        }
+                );
+                dialog.show();
 			}
 			
 			break;

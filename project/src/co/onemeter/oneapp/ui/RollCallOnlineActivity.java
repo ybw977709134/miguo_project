@@ -97,7 +97,7 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
 
                               if (performancesFromServer.get(i).property_value != -1) {
                                   roll_call_ok.setEnabled(false);
-                                    roll_call_ok.setTextColor(getResources().getColor(R.color.gray_40));
+                                  roll_call_ok.setTextColor(getResources().getColor(R.color.gray_40));
                                   break;
                               }
                   }
@@ -175,8 +175,11 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
         TextView txt_name = (TextView) findViewById(R.id.title_back);
         txt_name.setOnClickListener(this);
         txt_name.setText(lesson_name);
+
         if(currentTime > endDate){
         	findViewById(R.id.btn_all_signin).setVisibility(View.GONE);
+            roll_call_ok.setEnabled(false);
+            roll_call_ok.setTextColor(getResources().getColor(R.color.gray_40));
         }
     }
 

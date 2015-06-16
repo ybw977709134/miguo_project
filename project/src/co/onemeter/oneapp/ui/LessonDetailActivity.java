@@ -25,6 +25,7 @@ import co.onemeter.utils.AsyncTaskExecutor;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -211,14 +212,20 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 				startActivity(intent);
 			}else{
 				int property_value = 0;
+				String stuID = null;
 				if(lessoonDetails_performance.size() >= 1){
-					for(LessonPerformance performance :lessoonDetails_performance){
-						if(performance.student_id.equals(mPre.getUid())){
-							if(performance.property_id == 10){
-								property_value = performance.property_value;
-							}						
+					stuID = lessoonDetails_performance.get(0).student_id;
+					if(stuID != null){
+						for(LessonPerformance performance :lessoonDetails_performance){
+							
+							if(performance.student_id.equals(mPre.getUid())){
+								if(performance.property_id == 10){
+									property_value = performance.property_value;
+								}						
+							}
 						}
 					}
+					
 					if(property_value == 2 || property_value == 1 || property_value == 4){
 						msgbox.toast("学生没有出席这节课，不能查看课堂点评");
 					}else{
@@ -252,14 +259,19 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 				startActivity(intent);
 			}else{
 				int property_value = 0;
+				String stuID = null;
 				if(lessoonDetails_performance.size() >= 1){
-					for(LessonPerformance performance :lessoonDetails_performance){
-						if(performance.student_id.equals(mPre.getUid())){
-							if(performance.property_id == 10){
-								property_value = performance.property_value;
+					stuID = lessoonDetails_performance.get(0).student_id;
+					if(stuID != null){
+						for(LessonPerformance performance :lessoonDetails_performance){
+							if(performance.student_id.equals(mPre.getUid())){
+								if(performance.property_id == 10){
+									property_value = performance.property_value;
+								}
 							}
 						}
 					}
+					
 					if(property_value == 2 || property_value == 1 || property_value == 4){
 						msgbox.toast("学生没有出席这节课，不能提交家长意见");
 					}else{

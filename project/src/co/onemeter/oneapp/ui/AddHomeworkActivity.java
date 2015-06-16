@@ -11,6 +11,7 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.wowtalk.api.Buddy;
+import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GlobalSetting;
@@ -19,8 +20,10 @@ import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.Moment;
 import org.wowtalk.api.MomentWebServerIF;
 import org.wowtalk.api.WFile;
+import org.wowtalk.api.WowTalkVoipIF;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
 import org.wowtalk.ui.msg.InputBoardManager.ChangeToOtherAppsListener;
@@ -47,6 +50,7 @@ import android.widget.TextView;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ThemeHelper;
+import co.onemeter.oneapp.utils.TimeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 /**
@@ -378,9 +382,41 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 			break;
 		case R.id.btn_ok:
 			if(strContent != null){
-				modifyLessonHomework(lessonId,modify_homework_id, moment);
+				MessageDialog dialog = new MessageDialog(AddHomeworkActivity.this);
+                dialog.setTitle("提示");
+                dialog.setMessage("你确定修改布置作业吗?");
+                dialog.setCancelable(false);
+                dialog.setRightBold(true);
+                dialog.setOnLeftClickListener("取消", null);
+                
+                dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                    @Override
+                    public void onclick(MessageDialog dialog) {
+                        dialog.dismiss();
+                        modifyLessonHomework(lessonId,modify_homework_id, moment);
+                    }
+                }
+                );
+                dialog.show();	
+				
 			}else{
-				addLessonHomework(lessonId, moment);
+				MessageDialog dialog = new MessageDialog(AddHomeworkActivity.this);
+                dialog.setTitle("提示");
+                dialog.setMessage("你确定布置作业吗?");
+                dialog.setCancelable(false);
+                dialog.setRightBold(true);
+                dialog.setOnLeftClickListener("取消", null);
+                
+                dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                    @Override
+                    public void onclick(MessageDialog dialog) {
+                        dialog.dismiss();
+                        addLessonHomework(lessonId, moment);
+                    }
+                }
+                );
+                dialog.show();	
+				
 			}
 			
 			break;

@@ -2,6 +2,7 @@ package co.onemeter.oneapp.ui;
 
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -202,7 +203,23 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 
 
             case R.id.textView_homework_send://发送
-            	addHomeworkReview();
+            	MessageDialog dialog = new MessageDialog(HomeWorkEvaluate.this);
+                dialog.setTitle("提示");
+                dialog.setMessage("你确定评分该作业吗?");
+                dialog.setCancelable(false);
+                dialog.setRightBold(true);
+                dialog.setOnLeftClickListener("取消", null);
+                
+                dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                    @Override
+                    public void onclick(MessageDialog dialog) {
+                        dialog.dismiss();
+                        addHomeworkReview();
+                    }
+                }
+                );
+                dialog.show();	
+            	
                 break;
 
             case R.id.btn_comment://获得模板

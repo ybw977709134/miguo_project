@@ -92,11 +92,16 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
             @Override
             protected void onPostExecute(Void result) {
 
-                if (performancesFromServer != null && performancesFromServer.size() > 0) {
-                    roll_call_ok.setEnabled(false);
-                    roll_call_ok.setTextColor(getResources().getColor(R.color.gray_40));
 
-                }
+                  for (int i = 0 ; i < performancesFromServer.size(); i++) {
+
+                              if (performancesFromServer.get(i).property_value != -1) {
+                                  roll_call_ok.setEnabled(false);
+                                    roll_call_ok.setTextColor(getResources().getColor(R.color.gray_40));
+                                  break;
+                              }
+                  }
+
                 getClassStudentInfo();
             }
         });
@@ -194,6 +199,8 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
                     @Override
                     public void onclick(MessageDialog dialog) {
                         dialog.dismiss();
+
+                        Log.d("---performancesFromServer",performancesFromServer.size());
                         if(performancesFromServer.size() > 0){
                             finish();
                         }

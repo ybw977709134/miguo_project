@@ -578,13 +578,15 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 //    }
 
     private void updateSurveyDeadLine() {
-        if(moment.surveyDeadLine == Moment.SURVEY_DEADLINE_NO_LIMIT_VALUE) {
-            Date date = new Date(moment.surveyDeadLine);
 
-            SimpleDateFormat dateFormat= new SimpleDateFormat(getResources().getString(R.string.msg_date_format_with_year));
+        SimpleDateFormat dateFormat= new SimpleDateFormat(getResources().getString(R.string.msg_date_format_with_year));
+        if(moment.surveyDeadLine == Moment.SURVEY_DEADLINE_NO_LIMIT_VALUE) {
+            Date date = new Date(System.currentTimeMillis());
             tvSurveyVoteDeadLine.setText(dateFormat.format(date));
+
         } else {
-            tvSurveyVoteDeadLine.setText(R.string.survey_dead_line_no_limit);
+            Date date = new Date(moment.surveyDeadLine * 1000);
+            tvSurveyVoteDeadLine.setText(dateFormat.format(date));
         }
     }
 
@@ -607,22 +609,25 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                             moment.surveyDeadLine = endCalendar.getTimeInMillis() / 1000;
                             updateSurveyDeadLine();
                         }
-                        rlSurveyVoteDeadLine.setEnabled(true);
+//                        rlSurveyVoteDeadLine.setEnabled(true);
                     }
                 };
 
+
         Calendar calendar = Calendar.getInstance();
         if (moment.surveyDeadLine == Moment.SURVEY_DEADLINE_NO_LIMIT_VALUE) {
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
+//            calendar.add(Calendar.DAY_OF_MONTH, 1);
         } else {
             calendar.setTimeInMillis(moment.surveyDeadLine * 1000);
         }
+
         DatePickerDialog dialog = new DatePickerDialog(this,
                 dateListener,
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
         dialog.show();
+        rlSurveyVoteDeadLine.setEnabled(true);
     }
 
     private void updateGotVoice() {

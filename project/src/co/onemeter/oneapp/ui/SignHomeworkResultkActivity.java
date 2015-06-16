@@ -23,8 +23,10 @@ import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
 import org.wowtalk.ui.msg.BmpUtils;
+import org.wowtalk.ui.msg.DoubleClickedUtils;
 import org.wowtalk.ui.msg.FileUtils;
 import org.wowtalk.ui.msg.InputBoardManager.ChangeToOtherAppsListener;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -282,6 +284,9 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
 			showPickImgSelector();
 			break;
 		case R.id.btn_ok:
+			if(DoubleClickedUtils.isFastDoubleClick()){
+				break;  
+        	}
 			addLessonHomework(lessonId, moment);
 			break;
 		default:

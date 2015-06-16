@@ -137,6 +137,17 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 				if(result == 1){
 					homework_id = getLessonHomework.id;
 					tv_addhomework_state.setText("已布置");
+					int momentId = 0;
+					for(int j = 0;j < getLessonHomework.stuResultList.size();j++){
+						if(studentId.equals(getLessonHomework.stuResultList.get(j).student_id)){
+							momentId = getLessonHomework.stuResultList.get(j).moment_id;
+						}
+					}
+					if(momentId == 0){
+						tv_signup_homework_state.setText("未提交");
+					}else{
+						tv_signup_homework_state.setText("已提交");
+					}
 				}else if(result == 0){
 					tv_addhomework_state.setText("未布置");
 				}
@@ -305,6 +316,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			}else if(requestCode == REQ_PARENT_DELHOMEWORK){
 				getHomeworkState(lessonId);
 			}else if(requestCode == REQ_STUDENT_SIGNUP){
+				getHomeworkState_student(lessonId, studentId);
 				tv_signup_homework_state.setText("已提交");
 			}else if(requestCode == REQ_PARENT_DELHOMEWORKRESULT){
 				tv_signup_homework_state.setText("未提交");

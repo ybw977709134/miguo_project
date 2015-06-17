@@ -115,7 +115,7 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 			protected void onPostExecute(Integer result) {
 				super.onPostExecute(result);
 				if(result == 1){
-					mMsgBox.showWaitImageWorng("评分失败");
+                    mMsgBox.showWaitImageCaution("请填写评语");
 					new Thread(new Runnable() {
 						
 						@Override
@@ -124,7 +124,6 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 								Thread.sleep(2000);
 								mMsgBox.dismissWait();
 							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 							
@@ -132,7 +131,7 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 					}).start();
 				}else if(result == 0){
 					if(confirmNum == 0 && timelyNum == 0 && exactNum == 0){
-						mMsgBox.showWaitImageCaution("还没有评分,不能提交");
+						mMsgBox.showWaitImageCaution("请填写星星评分");
 						new Thread(new Runnable() {
 							
 							@Override
@@ -141,7 +140,6 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 									Thread.sleep(2000);
 									mMsgBox.dismissWait();
 								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 								
@@ -158,7 +156,6 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 									Thread.sleep(3000);
 									finish();
 								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 								
@@ -171,6 +168,8 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 			
 		});
     }
+
+
     private class RatingBarListener implements RatingBar.OnRatingBarChangeListener{
 
         @Override

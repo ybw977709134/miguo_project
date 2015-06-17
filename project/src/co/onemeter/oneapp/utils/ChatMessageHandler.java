@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import org.wowtalk.api.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +55,11 @@ public class ChatMessageHandler {
     private PrefUtil mPrefUtil;
     private boolean mSaveDb = false;
     private List<GroupChatRoom> schools;
+    /** 记录消息发送者的展示信息的上次检查时间。
+     * key := buddy id 或 group id;
+     * value := unix time in sec.
+     */
+    private static HashMap<String, Long> senderInfoLastCheck = new HashMap<>();
 
     public ChatMessageHandler(Context context) {
         this.context = context;
@@ -317,31 +323,27 @@ public class ChatMessageHandler {
             boolean needReloadCompanyStructure=false;
             if (msg.isGroupChatMessage()) {
                 GroupChatRoom g = mDb.fetchGroupChatRoom(msg.chatUserName);
-                if(g == null) {
-                    if(ErrorCode.OK == mWeb.fGroupChat_GetMyGroups()) {
+                if(g == null || !isLocalSenderInfoFresh(g.groupID)) {
+                    if(ErrorCode.OK == mWeb.fGroupChat_GetGroupDetail(msg.chatUserName)) {
+                        senderInfoLastCheck.put(msg.chatUserName, System.currentTimeMillis() / 1000);
                         PrefUtil.getInstance(context).setLocalGroupListLastModified();
                     }
                 }
                 // 群组聊天时，使用groupChatSenderID作为对方buddyId
                 Buddy b = mDb.buddyWithUserID(msg.groupChatSenderID);
-                if (null == b) {
-                    mWeb.fGetBuddyWithUID(msg.groupChatSenderID);
-                    needReloadCompanyStructure=true;
+                if (null == b || !isLocalSenderInfoFresh(b.userID)) {
+                    if (ErrorCode.OK == mWeb.fGetBuddyWithUID(msg.groupChatSenderID)) {
+                        senderInfoLastCheck.put(msg.groupChatSenderID, System.currentTimeMillis() / 1000);
+                    }
                 }
             } else {
                 Buddy b = mDb.buddyWithUserID(msg.chatUserName);
-                if (null == b) {
-                    mWeb.fGetBuddyWithUID(msg.chatUserName);
-                    needReloadCompanyStructure=true;
-                } else if (Buddy.ACCOUNT_TYPE_PUBLIC == b.getAccountType()
-                        || Buddy.ACCOUNT_TYPE_SCHOOL == b.getAccountType()) {
-                    // 学校通知，学校名字和图片可能有变动
+                if (null == b || !isLocalSenderInfoFresh(b.userID)) {
                     int resultCode = mWeb.fGetBuddyWithUID(msg.chatUserName);
                     if (ErrorCode.OK == resultCode) {
+                        senderInfoLastCheck.put(msg.chatUserName, System.currentTimeMillis() / 1000);
                         Buddy noticeBuddy = mDb.buddyWithUserID(msg.chatUserName);
-                        if (null != noticeBuddy
-                                && ((!TextUtils.isEmpty(noticeBuddy.nickName) && !noticeBuddy.nickName.equals(b.nickName))
-                                        || noticeBuddy.photoUploadedTimeStamp != b.photoUploadedTimeStamp)) {
+                        if (null != noticeBuddy && buddyInfoDiffer(noticeBuddy, b)) {
                             mDb.triggerNoticeManChanged();
                         }
                     }
@@ -367,6 +369,19 @@ public class ChatMessageHandler {
         } else {
 //            mDb.setChatMessageReaded(msg);
         }
+    }
+
+    private boolean buddyInfoDiffer(Buddy a, Buddy b) {
+        if (a == null && b != null)
+            return true;
+        if (a != null && b == null)
+            return true;
+        return !TextUtils.equals(a.nickName, b.nickName) || a.photoUploadedTimeStamp != b.photoUploadedTimeStamp;
+    }
+
+    private boolean isLocalSenderInfoFresh(String id) {
+        Long time = senderInfoLastCheck.get(id);
+        return time != null && time > System.currentTimeMillis() / 1000 - 60;
     }
 
     private void handleX(ChatMessage msg) {

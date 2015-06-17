@@ -127,6 +127,8 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			protected void onPostExecute(Integer result) {
 				if(result == 0){
 					homework_id = getLessonHomework.id;
+				}else if(result == 1){
+					homework_id = getLessonHomework.id;
 				}
 				
 			}

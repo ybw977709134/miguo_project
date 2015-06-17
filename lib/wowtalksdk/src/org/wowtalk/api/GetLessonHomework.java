@@ -15,6 +15,7 @@ public class GetLessonHomework implements Parcelable{
     public int id;
     public int lesson_id;
     public int moment_id;
+    public String teacher_id;
     public HomeWorkMoment teacherMoment;
     public List<HomeWorkResult> stuResultList;
     public int homework_id;

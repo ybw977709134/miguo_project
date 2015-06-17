@@ -11,6 +11,7 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.wowtalk.api.Buddy;
+import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GlobalSetting;
@@ -19,6 +20,7 @@ import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.Moment;
 import org.wowtalk.api.MomentWebServerIF;
 import org.wowtalk.api.WFile;
+import org.wowtalk.api.WowTalkVoipIF;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
@@ -36,6 +38,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -49,6 +52,7 @@ import android.widget.TextView;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ThemeHelper;
+import co.onemeter.oneapp.utils.TimeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 /**
@@ -77,6 +81,8 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
 	private final static int ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY = 2;
 	private TextView tv_class_notice_title;
 	private int homework_id;
+	private String teacherID;
+	private String lesson_name;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +125,8 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
 		mMsgBox = new MessageBox(this);
 		tv_class_notice_title.setText(R.string.class_signup);
 		homework_id = getIntent().getIntExtra("homework_id", 0);
+		teacherID = getIntent().getStringExtra("teacherID");
+		lesson_name = getIntent().getStringExtra("lesson_name");
 		if (null != moment) {
 			try {
 				if (!TextUtils.isEmpty(moment.text)) {
@@ -288,6 +296,7 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
 				break;  
         	}
 			addLessonHomework(lessonId, moment);
+			noticeTeacherHomeworkResult();
 			break;
 		default:
 			break;
@@ -565,6 +574,24 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
         }
     }
 
+	private void noticeTeacherHomeworkResult(){
+		String reason = "[作业完成]"+"你好,"+lesson_name+"作业已经完成";
+
+		
+		final ChatMessage message = new ChatMessage();
+		message.chatUserName = teacherID;
+
+		message.messageContent = reason;
+		message.msgType = ChatMessage.MSGTYPE_NORMAL_TXT_MESSAGE;
+		message.sentStatus = ChatMessage.SENTSTATUS_SENDING;
+		message.sentDate = TimeHelper.getTimeForMessage(SignHomeworkResultkActivity.this);
+		message.uniqueKey = Database.chatMessageSentDateToUniqueKey(message.sentDate);
+		message.ioType = ChatMessage.IOTYPE_OUTPUT;
+		
+		message.primaryKey = new Database(SignHomeworkResultkActivity.this)
+	                            .storeNewChatMessage(message, false);
+		WowTalkVoipIF.getInstance(SignHomeworkResultkActivity.this).fSendChatMessage(message);
+	}
 	private void removePhotoFromMoment(CreateMomentActivity.WMediaFile aPhoto) {
 		WFile file2remove = null;
 		for (WFile aFile : moment.multimedias) {

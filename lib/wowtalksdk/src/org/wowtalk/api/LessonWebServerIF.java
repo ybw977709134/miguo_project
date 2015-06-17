@@ -1688,6 +1688,11 @@ public class LessonWebServerIF {
                             }
 
                         }
+                        if (pullParser.getName().equals("teacher_id")) {
+                            if (flagMoment == 1) {
+                                getLessonHomework.teacher_id = pullParser.nextText();
+                            }
+                        }
 
                         /**
                          * 以下是moment段*/

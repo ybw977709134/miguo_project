@@ -273,6 +273,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			}else{
 				int momentId = 0;
 				int homeworkResult_id = 0;
+				String teacherID = getLessonHomework.teacher_id;
 				for(int j = 0;j < getLessonHomework.stuResultList.size();j++){
 					if(studentId.equals(getLessonHomework.stuResultList.get(j).student_id)){
 						momentId = getLessonHomework.stuResultList.get(j).moment_id;
@@ -282,6 +283,8 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 				if(momentId == 0){
 					Intent i = new Intent(HomeworkActivity.this, SignHomeworkResultkActivity.class);
 					i.putExtra("homework_id", homework_id);
+					i.putExtra("teacherID", teacherID);
+					i.putExtra("lesson_name", tv_lesson_name.getText().toString());
 					startActivityForResult(i, REQ_STUDENT_SIGNUP);
 				}else{				
 //					Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);				
@@ -293,7 +296,8 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 //			        startActivityForResult(i, REQ_PARENT_DELHOMEWORKRESULT);
 					Intent i = new Intent(HomeworkActivity.this, SubmitHomeWorkActivity.class);
 					i.putExtra("lessonId",lessonId);
-					i.putExtra("student_uid",studentId);		
+					i.putExtra("student_uid",studentId);	
+					i.putExtra("lesson_name", tv_lesson_name.getText().toString());
 					startActivity(i);
 				}
 				

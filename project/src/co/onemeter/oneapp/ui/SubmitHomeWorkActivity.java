@@ -51,6 +51,8 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
     private String student_uid;
     private String stu_name;
     private int homework_id;
+    private String teacherId;
+    private String lesson_name;
     private static SubmitHomeWorkActivity instance;
 
     @Override
@@ -76,6 +78,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
     	instance = this;
     	student_uid = getIntent().getStringExtra("student_uid");
     	stu_name = getIntent().getStringExtra("stu_name");
+    	lesson_name = getIntent().getStringExtra("lesson_name");
     	lessonId = getIntent().getIntExtra(Constants.LESSONID, 0);
     	result_id = getIntent().getIntExtra("result_id", 0);
         title_back = (ImageButton) findViewById(R.id.title_back);
@@ -135,6 +138,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
                     stuResultList.clear();
                     stuResultList.addAll(getLessonHomework.stuResultList);
                     homework_id = getLessonHomework.id;
+                    teacherId = getLessonHomework.teacher_id;
                     adapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(SubmitHomeWorkActivity.this,"网络请求失败",Toast.LENGTH_SHORT).show();
@@ -171,6 +175,8 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
                    //跳转到学生修改页面
                 	Intent intent = new Intent(SubmitHomeWorkActivity.this,SignHomeworkResultkActivity.class);
                     intent.putExtra("homework_id", homework_id);
+                    intent.putExtra("lesson_name", lesson_name);
+                    intent.putExtra("teacherID", teacherId);
                     startActivity(intent);
                 }
 

@@ -95,7 +95,8 @@ public class RollCallOnlineActivity extends Activity implements View.OnClickList
 
                   for (int i = 0 ; i < performancesFromServer.size(); i++) {
 
-                              if (performancesFromServer.get(i).property_value != -1) {
+
+                              if (performancesFromServer.get(i).property_value != -1 && performancesFromServer.get(i).property_value != 4) {
                                   roll_call_ok.setEnabled(false);
                                   roll_call_ok.setTextColor(getResources().getColor(R.color.gray_40));
                                   break;

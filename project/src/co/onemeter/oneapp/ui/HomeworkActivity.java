@@ -323,6 +323,8 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			}
 		}
 	}
+
+
 	class HomeworkStateAdapter extends BaseAdapter{
 		private List<Map<String, Object>> homeworkStates;
 		public HomeworkStateAdapter(List<Map<String, Object>> homeworkStates){

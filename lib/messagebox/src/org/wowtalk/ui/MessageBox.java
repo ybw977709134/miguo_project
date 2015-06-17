@@ -513,7 +513,7 @@ public class MessageBox {
             text.setText(msg);
 
             mToast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-            mToast.setDuration(Toast.LENGTH_LONG);
+            mToast.setDuration(Toast.LENGTH_SHORT);
             mToast.setView(layout);
         } else {
             text = (TextView)mToast.getView().findViewById(R.id.text1);

@@ -250,7 +250,17 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
         							StudentAbsenceActivity.this.finish();
     			            	}else{
     			            		messageBox.showWaitImageCaution("不能重复请假");
-    			            		
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                Thread.sleep(2000);
+                                                messageBox.dismissWait();
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }).start();
     			            	}
         					}
         					

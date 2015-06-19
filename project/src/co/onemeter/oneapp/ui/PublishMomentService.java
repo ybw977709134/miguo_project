@@ -110,7 +110,7 @@ public class PublishMomentService extends android.app.Service {
                     mWeb.fPostFileToServer(
                             file.localThumbnailPath,
                             file.remoteDir,
-                            false, new NetworkIFDelegate() {
+                            true, new NetworkIFDelegate() {
                                 @Override
                                 public void didFinishNetworkIFCommunication(int i, byte[] bytes) {
                                     file.thumb_fileid = new String(bytes);
@@ -147,7 +147,7 @@ public class PublishMomentService extends android.app.Service {
                 mWeb.fPostFileToServer(
                         file.localPath,
                         file.remoteDir,
-                        false, new NetworkIFDelegate() {
+                        true, new NetworkIFDelegate() {
                             @Override
                             public void didFinishNetworkIFCommunication(int i, byte[] bytes) {
                                 file.fileid = new String(bytes);

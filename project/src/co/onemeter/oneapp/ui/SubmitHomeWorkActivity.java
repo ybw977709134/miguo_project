@@ -23,10 +23,12 @@ import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.HomeWorkAdapter;
+import co.onemeter.oneapp.utils.ListViewUtils;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 /**
@@ -99,11 +101,12 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
         
 
         imageResizer = new ImageResizer(this, DensityUtil.dip2px(this, 100));
-        if (adapter == null) {
-            adapter = new HomeWorkAdapter(this,unStuResultList,imageResizer,getLessonHomework);
-        }
-
-        listView_submit.setAdapter(adapter);
+//        if (adapter == null) {
+//            adapter = new HomeWorkAdapter(this,unStuResultList,imageResizer,getLessonHomework);
+//        }
+//
+//        listView_submit.setAdapter(adapter);
+        
 
 //        listView_submit.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
 //            @Override
@@ -141,6 +144,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
             protected void onPostExecute(Integer result) {
                 if (result == 1) {//成功
                     stuResultList.clear();
+                    unStuResultList.clear();
                     stuResultList.addAll(getLessonHomework.stuResultList);
                     
                     
@@ -149,7 +153,15 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
                     }
                     homework_id = getLessonHomework.id;
                     teacherId = getLessonHomework.teacher_id;
-                    adapter.notifyDataSetChanged();
+                    
+                    if (adapter == null) {
+                        adapter = new HomeWorkAdapter(SubmitHomeWorkActivity.this,unStuResultList,imageResizer,getLessonHomework);
+                    }
+
+                    listView_submit.setAdapter(adapter);
+                    
+                    
+//                    adapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(SubmitHomeWorkActivity.this,"网络请求失败",Toast.LENGTH_SHORT).show();
                 }
@@ -180,7 +192,6 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
                     intent.putExtra("homeworkresult_id", result_id);
                     intent.putExtra("stu_name", stu_name);
                     intent.putExtra("student_uid", student_uid);
-                    
                     intent.putExtra("class_name", class_name);
                     intent.putExtra("lesson_name", lesson_name);
                     intent.putExtra("schoolId",schoolId);
@@ -219,6 +230,8 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
         	instance = null;
         }
     }
+    
+    
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -228,6 +241,8 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
                 break;
         }
     }
+    
+    
 }
 
 

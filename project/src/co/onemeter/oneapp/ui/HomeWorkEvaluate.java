@@ -1,5 +1,8 @@
 package co.onemeter.oneapp.ui;
 
+import java.util.List;
+import java.util.Map;
+
 import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.LessonWebServerIF;
@@ -54,6 +57,7 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
     private String lesson_name;
     private String class_name;
     private Database mDb;
+    private int lessonId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +175,14 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 								try {
 									Thread.sleep(3000);
 									finish();
+									if(SubmitHomeWorkActivity.getInstance() != null){
+			                        	SubmitHomeWorkActivity.getInstance().finish();
+			                        }
+									
+									if (HomeworkActivity.getInstance() != null) {
+										HomeworkActivity.getInstance().finish();
+									}
+									
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
@@ -184,7 +196,6 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 			
 		});
     }
-
 
     private class RatingBarListener implements RatingBar.OnRatingBarChangeListener{
 

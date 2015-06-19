@@ -64,6 +64,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 
     private MessageBox messageBox;
 	
+    private static HomeworkActivity instance;
 	
 
 	@Override
@@ -71,6 +72,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_homework);
         messageBox = new MessageBox(this);
+        instance =this;
 		initView();
 		if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
 			getHomeworkState_student(lessonId,studentId);
@@ -123,7 +125,22 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		adapter = new HomeworkStateAdapter(homeworkStates);
 		lvHomework.setAdapter(adapter);
 	}
+	
+	@Override
+	protected void onDestroy() {
+		if (instance != null) {
+			instance = null;
+		}
+		super.onDestroy();
+	}
 
+	public static HomeworkActivity getInstance() {
+    	if (instance != null) {
+    		return instance;
+    	}
+    	return null;
+    }
+	
 	private void getHomeworkState_student(final int lessonId,final String studentId){
 		msgbox.showWait();
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {

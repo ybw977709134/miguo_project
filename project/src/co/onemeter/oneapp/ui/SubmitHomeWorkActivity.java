@@ -45,6 +45,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
     private HomeWorkAdapter adapter;
     private ImageResizer imageResizer;
     private List<HomeWorkResult> stuResultList;
+    List<HomeWorkResult> unStuResultList;//反序
 
     private int lessonId;//需要传进来
     private int result_id;
@@ -90,12 +91,12 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
         
         getLessonHomework = new GetLessonHomework();
         stuResultList = new ArrayList<HomeWorkResult>();
-        
+        unStuResultList = new ArrayList<HomeWorkResult>();
         
 
         imageResizer = new ImageResizer(this, DensityUtil.dip2px(this, 100));
         if (adapter == null) {
-            adapter = new HomeWorkAdapter(this,stuResultList,imageResizer,getLessonHomework);
+            adapter = new HomeWorkAdapter(this,unStuResultList,imageResizer,getLessonHomework);
         }
 
         listView_submit.setAdapter(adapter);
@@ -137,6 +138,11 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
                 if (result == 1) {//成功
                     stuResultList.clear();
                     stuResultList.addAll(getLessonHomework.stuResultList);
+                    
+                    
+                    for (int i = stuResultList.size() -1; i >= 0; i--) {
+                    	unStuResultList.add(stuResultList.get(i));
+                    }
                     homework_id = getLessonHomework.id;
                     teacherId = getLessonHomework.teacher_id;
                     adapter.notifyDataSetChanged();

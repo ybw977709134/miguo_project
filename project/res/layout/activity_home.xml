@@ -26,7 +26,8 @@
             style="@style/page_title_dark"/>
         
         
-        <RelativeLayout 
+        <RelativeLayout
+            android:id="@+id/layout_home_setting"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center_vertical">

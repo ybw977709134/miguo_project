@@ -228,6 +228,8 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.img_home_chatroom).setOnClickListener(this);
         findViewById(R.id.img_home_movable).setOnClickListener(this);
         findViewById(R.id.btn_home_setting).setOnClickListener(this);
+        findViewById(R.id.layout_home_setting).setOnClickListener(this);
+
         findViewById(R.id.btn_goto_myclass).setOnClickListener(this);
         
         findViewById(R.id.txt_home_classnotice).setOnClickListener(this);
@@ -281,6 +283,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.btn_home_setting:
+            case R.id.layout_home_setting:
                 intent = new Intent(this,SettingActivity.class)
                         .putExtra(SettingActivity.EXTRA_APP_UPDATES_AVAILABLE, appUpdatesAvailable);
                 startActivityForResult(intent, REQ_SETTINGS);

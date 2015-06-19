@@ -645,8 +645,8 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 //            tvDesc.setVisibility(View.GONE);
             hsvImgList.setBackgroundResource(R.drawable.table_white);
         } else {
-            tvDesc.setVisibility(View.VISIBLE);
-            hsvImgList.setBackgroundResource(R.drawable.bkg_e6e6e6);
+//            tvDesc.setVisibility(View.VISIBLE);
+        	hsvImgList.setBackgroundResource(R.drawable.table_white);
         }
     }
 	private void addMedia2moment(CreateMomentActivity.WMediaFile file) {

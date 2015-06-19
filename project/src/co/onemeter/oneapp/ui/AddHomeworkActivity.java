@@ -11,7 +11,6 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.wowtalk.api.Buddy;
-import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GlobalSetting;
@@ -19,8 +18,9 @@ import org.wowtalk.api.LessonAddHomework;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.Moment;
 import org.wowtalk.api.MomentWebServerIF;
+import org.wowtalk.api.NetworkIFDelegate;
 import org.wowtalk.api.WFile;
-import org.wowtalk.api.WowTalkVoipIF;
+import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
@@ -37,6 +37,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -50,7 +51,6 @@ import android.widget.TextView;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.utils.ThemeHelper;
-import co.onemeter.oneapp.utils.TimeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 /**
@@ -79,7 +79,9 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 	private final static int ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY = 2;
 	private String strContent;
 	private int modify_homework_id;
-	private ArrayList<String> photolistPath;
+	private ArrayList<CreateMomentActivity.WMediaFile>  listWMediaFile;
+	private ArrayList<String> list_path;
+	private String tag;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +108,9 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 			listPhoto = new ArrayList<>();
 	}
 	private void initView(Bundle savedInstanceState) {
-		photolistPath = getIntent().getStringArrayListExtra("list");
+		tag = getIntent().getStringExtra("tag_intent_AddHomeworkActivity");
+//		listWMediaFile = getIntent().getParcelableArrayListExtra("listWMediaFile");
+		list_path = getIntent().getStringArrayListExtra("list_path");
 		title_back = (ImageButton) findViewById(R.id.btn_notice_back);
 		listMoment = new LinkedList<Moment>();
 		strContent = getIntent().getStringExtra("text");
@@ -149,10 +153,86 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 		if(strContent != null){
 			edt_moment_content.setText(strContent);
 		}
-		if(photolistPath != null){
-			startActivityForResult(new Intent(AddHomeworkActivity.this, SelectPhotoActivity.class), ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY);
+//		if(photolistPath != null){
+//			startActivityForResult(new Intent(AddHomeworkActivity.this, SelectPhotoActivity.class), ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY);
+//		}
+		if(tag != null){
+			ArrayList<String> listPath = new ArrayList<String>();
+//			listPath.add("/storage/emulated/0/DCIM/Camera/IMG_20150618_180330.jpg");
+//			listPath.add("/storage/emulated/0/DCIM/Camera/IMG_20150618_180327.jpg");
+//			listPath.add("/storage/emulated/0/DCIM/Camera/IMG_20150618_180323.jpg");
+			listPath = list_path;
+            ArrayList<CreateMomentActivity.WMediaFile> photo2add = new ArrayList<CreateMomentActivity.WMediaFile>();
+            ArrayList<CreateMomentActivity.WMediaFile> photo2del = new ArrayList<CreateMomentActivity.WMediaFile>();
+            for (int i = 0; i < listPhoto.size(); i++) {
+                boolean needAdd=false;
+                if (!listPhoto.get(i).isFromGallery) {
+                    needAdd=true;
+                } else {
+                    if(listPath.contains(listPhoto.get(i).galleryPath)) {
+                        listPath.remove(listPhoto.get(i).galleryPath);
+                        needAdd=true;
+                    } else {
+                        //not contained,delete this
+                        photo2del.add(listPhoto.get(i));
+                    }
+                }
+
+                if(needAdd) {
+                    photo2add.add(listPhoto.get(i));
+                }
+            }
+
+            for(CreateMomentActivity.WMediaFile aPhoto : photo2del) {
+                deleteAImage(aPhoto.relativeView);
+            }
+            listPhoto = photo2add;
+
+            mMsgBox.showWait();
+            AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<ArrayList<String>, Void, Void>() {
+                //                        boolean firstAdd=true;
+                @Override
+                protected Void doInBackground(ArrayList<String>... params) {
+                    for (String path : params[0]) {
+                        CreateMomentActivity.WMediaFile photo = new CreateMomentActivity.WMediaFile(true);
+                        Bitmap bmp = BmpUtils.decodeFile(path, CreateMomentActivity.PHOTO_SEND_WIDTH, CreateMomentActivity.PHOTO_SEND_HEIGHT);
+                        File file = MediaInputHelper.makeOutputMediaFile(
+                                MediaInputHelper.MEDIA_TYPE_IMAGE, ".jpg");
+                        try {
+                            OutputStream os = new FileOutputStream(file);
+                            bmp.compress(Bitmap.CompressFormat.JPEG, 90, os);
+                            os.close();
+
+                            BmpUtils.recycleABitmap(bmp);
+
+                            photo.localPath = file.getAbsolutePath();
+                            photo.galleryPath = path;
+                            photo.isFromGallery = true;
+                            listPhoto.add(photo);
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        publishProgress((Void) null);
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onProgressUpdate(Void... errno) {
+                    notifyFileChanged(true);
+                }
+
+                @Override
+                protected void onPostExecute(Void errno) {
+                    mMsgBox.dismissWait();
+                    notifyFileChanged(false);
+                }
+            }, listPath);
 		}
 	}
+	
 	private void modifyLessonHomework(final int lessonId,final int homework_id,final Moment moment){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>(){
 			
@@ -432,9 +512,6 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 		case ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY:
 			if (resultCode == RESULT_OK) {
                 ArrayList<String> listPath = data.getStringArrayListExtra("list");
-                if(String.valueOf(listPath.get(0)) == null){
-                	listPath = photolistPath;
-                }
                 ArrayList<CreateMomentActivity.WMediaFile> photo2add = new ArrayList<CreateMomentActivity.WMediaFile>();
                 ArrayList<CreateMomentActivity.WMediaFile> photo2del = new ArrayList<CreateMomentActivity.WMediaFile>();
                 for (int i = 0; i < listPhoto.size(); i++) {

@@ -97,6 +97,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		q.find(R.id.title_back).clicked(this);
 		q.find(R.id.layout_sign_class).clicked(this);
 		q.find(R.id.layout_signup_homework).clicked(this);
+		q.find(R.id.title_refresh).clicked(this);
 
 		homeworkStates = new ArrayList<Map<String, Object>>();
 		tv_class_name = (TextView) findViewById(R.id.tv_class_name);
@@ -307,6 +308,14 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		case R.id.lay_footer_add:
 //			showAddHomeworkDialog();
 			break;
+		case R.id.title_refresh:
+			if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
+				getHomeworkState_student(lessonId,studentId);
+			}else if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER){
+				getHomeworkState(lessonId);
+				adapter.notifyDataSetChanged();
+			}
+			break;
 		default:
 			break;
 		}
@@ -373,6 +382,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 				holder.tv_homework_state.setTextColor(0xff8eb4e6);
 			}else if(state == 2){
 				stateStr = "已批改";
+				holder.tv_homework_state.setTextColor(getResources().getColor(R.color.gray));
 			}
 			holder.tv_student_name.setText(String.valueOf(homeworkStates.get(position).get("stu_name")));
 			holder.tv_homework_state.setText(stateStr);

@@ -1,18 +1,15 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.HomeWorkAdapter;
-import co.onemeter.oneapp.adapter.MomentAdapter;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 import org.wowtalk.api.*;
@@ -49,9 +46,10 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
     private int homeworkResult_id;
     private TextView tv_modify_homework;
     private String studentId;
-    private ArrayList<String> listPhoto;
+    private ArrayList<CreateMomentActivity.WMediaFile> listPhoto;
     private static LessonHomeworkActivity instance;
-    
+    private String path = null;
+    private ArrayList<String> list_path = new ArrayList<>();
 
     
     @Override
@@ -233,7 +231,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 					listPhoto = new ArrayList<>(moment.multimedias.size());
 					for (WFile f : moment.multimedias) {
 						if (f.isImageByExt() || f.isVideoByExt()) {
-							listPhoto.add(new CreateMomentActivity.WMediaFile(f).fileid);
+							listPhoto.add(new CreateMomentActivity.WMediaFile(f));
 						}
 					}
 				} else {
@@ -295,12 +293,19 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			intent.putExtra("text", txt_content.getText().toString());
 			intent.putExtra("lessonId", lessonId);
 			intent.putExtra("homework_id", homework_id);
+			intent.putExtra("tag_intent_AddHomeworkActivity", "tag_intent_AddHomeworkActivity");
 			
-			ArrayList<String> listPath = new ArrayList<String>();
-            for (String photoPath : listPhoto) {
-                    listPath.add(photoPath);
+			ArrayList<CreateMomentActivity.WMediaFile> listWMediaFile = new ArrayList<CreateMomentActivity.WMediaFile>();
+            for (CreateMomentActivity.WMediaFile f : listPhoto) {
+            	listWMediaFile.add(f);
             }
-            intent.putStringArrayListExtra("list", listPath);
+            list_path.clear();
+            for(int i = 0;i < listWMediaFile.size();i++){
+            	getPhotos(listWMediaFile.get(i));
+            	list_path.add(path);
+            }
+//            intent.putExtra("listWMediaFile", listWMediaFile);
+            intent.putExtra("list_path", list_path);
             startActivity(intent);
 			break;
 		default:
@@ -312,6 +317,45 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			return true;
 		}
 		return false;
+	}
+	private void getPhotos(final WFile file){
+		path = PhotoDisplayHelper.makeLocalFilePath(file.fileid, file.getExt());
+		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
+            boolean ok;
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                WowTalkWebServerIF.getInstance(LessonHomeworkActivity.this).fGetFileFromServer(file.fileid,
+                        GlobalSetting.S3_MOMENT_FILE_DIR,
+                        new NetworkIFDelegate() {
+                            @Override
+                            public void didFinishNetworkIFCommunication(int i, byte[] bytes) {
+                                ok = true;
+                            }
+
+                            @Override
+                            public void didFailNetworkIFCommunication(int i, byte[] bytes) {
+                                ok = false;
+                            }
+
+                            @Override
+                            public void setProgress(int i, int i2) {
+                                publishProgress(i2);
+                            }
+                        }, 0, path, null);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void v) {
+               
+            }
+
+            @Override
+            protected void onProgressUpdate(Integer... params) {
+
+            }
+        });
 	}
 //	/**
 //     * 跳转到此页面

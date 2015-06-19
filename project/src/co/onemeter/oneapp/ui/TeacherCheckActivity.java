@@ -129,7 +129,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 			final int pos = position;
 			mMsgBox.showWait();
 			final Database db = new Database(TeacherCheckActivity.this);
-			LessonParentFeedback feedback0 = db.fetchLessonParentFeedback(lessonId, performances.get(position).student_id);
+			LessonParentFeedback feedback0 = db.fetchLessonParentFeedback(lessonId, performancesNoAbsenceStu.get(position).student_id);
 			if(feedback0 == null){
 				new Thread(new Runnable() {
 					

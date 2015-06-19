@@ -19,6 +19,7 @@ import org.wowtalk.api.LessonAddHomework;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.Moment;
 import org.wowtalk.api.MomentWebServerIF;
+import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WFile;
 import org.wowtalk.api.WowTalkVoipIF;
 import org.wowtalk.ui.MediaInputHelper;
@@ -83,6 +84,9 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
 	private int homework_id;
 	private String teacherID;
 	private String lesson_name;
+	private String class_name;
+	private String schoolId;
+	private String my_uid;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +131,9 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
 		homework_id = getIntent().getIntExtra("homework_id", 0);
 		teacherID = getIntent().getStringExtra("teacherID");
 		lesson_name = getIntent().getStringExtra("lesson_name");
+		class_name = getIntent().getStringExtra("class_name");
+		schoolId = getIntent().getStringExtra("schoolId");
+		my_uid = PrefUtil.getInstance(this).getUid();
 		if (null != moment) {
 			try {
 				if (!TextUtils.isEmpty(moment.text)) {
@@ -575,9 +582,9 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
     }
 
 	private void noticeTeacherHomeworkResult(){
-		String reason = "[作业完成]"+"你好,"+lesson_name+"作业已经完成";
-
-		
+		String student_alias = mDb.fetchStudentAlias(schoolId, my_uid);
+		String reason = class_name+"课"+lesson_name+"班的"+student_alias+"学生提交作业啦！请批阅";
+	
 		final ChatMessage message = new ChatMessage();
 		message.chatUserName = teacherID;
 

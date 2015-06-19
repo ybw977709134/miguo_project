@@ -48,12 +48,14 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
     List<HomeWorkResult> unStuResultList;//反序
 
     private int lessonId;//需要传进来
+    private String schoolId;
     private int result_id;
     private String student_uid;
     private String stu_name;
     private int homework_id;
     private String teacherId;
     private String lesson_name;
+    private String class_name;
     private static SubmitHomeWorkActivity instance;
 
     @Override
@@ -78,8 +80,10 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
     private void initView () {
     	instance = this;
     	student_uid = getIntent().getStringExtra("student_uid");
+    	schoolId = getIntent().getStringExtra("schoolId");
     	stu_name = getIntent().getStringExtra("stu_name");
     	lesson_name = getIntent().getStringExtra("lesson_name");
+    	class_name = getIntent().getStringExtra("class_name");
     	lessonId = getIntent().getIntExtra(Constants.LESSONID, 0);
     	result_id = getIntent().getIntExtra("result_id", 0);
         title_back = (ImageButton) findViewById(R.id.title_back);
@@ -175,6 +179,11 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
                     Intent intent = new Intent(SubmitHomeWorkActivity.this,HomeWorkEvaluate.class);
                     intent.putExtra("homeworkresult_id", result_id);
                     intent.putExtra("stu_name", stu_name);
+                    intent.putExtra("student_uid", student_uid);
+                    
+                    intent.putExtra("class_name", class_name);
+                    intent.putExtra("lesson_name", lesson_name);
+                    intent.putExtra("schoolId",schoolId);
                     //传一些参数
                     startActivityForResult(intent, REQ_PARENT_ADDHOMEWORKREVIEW);
                 } else {
@@ -183,6 +192,8 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
                     intent.putExtra("homework_id", homework_id);
                     intent.putExtra("lesson_name", lesson_name);
                     intent.putExtra("teacherID", teacherId);
+                    intent.putExtra("class_name", class_name);
+                    intent.putExtra("schoolId",schoolId);
                     startActivity(intent);
                 }
 

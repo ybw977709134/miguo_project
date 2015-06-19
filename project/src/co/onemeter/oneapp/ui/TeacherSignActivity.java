@@ -121,6 +121,7 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
             			if(homeworkTag.equals("homework")){
             				Intent homeworkIntent = new Intent(this, HomeworkActivity.class);
             				homeworkIntent.putExtra(Constants.LESSONID, lessonID);
+            				homeworkIntent.putExtra("schoolId", schoolID);
             				homeworkIntent.putExtra("lesson_name", textView_lesson_name.getText().toString());
             				   
             				if(className_intent != null){
@@ -149,6 +150,7 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
         			if(homeworkTag.equals("homework")){
         				Intent homeworkIntent = new Intent(this, HomeworkActivity.class);
             			homeworkIntent.putExtra(Constants.LESSONID, lessonID);
+            			homeworkIntent.putExtra("schoolId", schoolID);
             			homeworkIntent.putExtra("lesson_name", textView_lesson_name.getText().toString());
             			homeworkIntent.putExtra("class_name", textView_class_name.getText().toString());
             			startActivity(homeworkIntent);    				

@@ -60,6 +60,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 	
 	private GetLessonHomework getLessonHomework;
 	private String studentId = null;
+	private String schoolId;
 
     private MessageBox messageBox;
 	
@@ -90,6 +91,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 	};
 	private void initView() {
 		lessonId = getIntent().getIntExtra(Constants.LESSONID, 0);
+		schoolId = getIntent().getStringExtra("schoolId");
 		lvHomework = (ListView) findViewById(R.id.lv_homework);
 		q = new AQuery(this);
 		mDb = new Database(this);
@@ -285,7 +287,9 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 					Intent i = new Intent(HomeworkActivity.this, SignHomeworkResultkActivity.class);
 					i.putExtra("homework_id", homework_id);
 					i.putExtra("teacherID", teacherID);
+					i.putExtra("schoolId", schoolId);
 					i.putExtra("lesson_name", tv_lesson_name.getText().toString());
+					i.putExtra("class_name", tv_class_name.getText().toString());
 					startActivityForResult(i, REQ_STUDENT_SIGNUP);
 				}else{				
 //					Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);				
@@ -297,8 +301,10 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 //			        startActivityForResult(i, REQ_PARENT_DELHOMEWORKRESULT);
 					Intent i = new Intent(HomeworkActivity.this, SubmitHomeWorkActivity.class);
 					i.putExtra("lessonId",lessonId);
+					i.putExtra("schoolId", schoolId);
 					i.putExtra("student_uid",studentId);	
 					i.putExtra("lesson_name", tv_lesson_name.getText().toString());
+					i.putExtra("class_name", tv_class_name.getText().toString());
 					startActivity(i);
 				}
 				
@@ -406,15 +412,18 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		if(Integer.parseInt(String.valueOf(homeworkStates.get(position).get("stu_state"))) != 0){
 			Intent i = new Intent(HomeworkActivity.this, SubmitHomeWorkActivity.class);
 			i.putExtra("lessonId",lessonId);
+			i.putExtra("schoolId",schoolId);
+			i.putExtra("class_name", tv_class_name.getText().toString());
+			i.putExtra("lesson_name", tv_lesson_name.getText().toString());
 			i.putExtra("student_uid",String.valueOf(homeworkStates.get(position).get("stu_uid")));		
 			i.putExtra("result_id", Integer.parseInt(String.valueOf(homeworkStates.get(position).get("result_id"))));
 			i.putExtra("stu_name",String.valueOf(homeworkStates.get(position).get("stu_name")));	
 			startActivity(i);
 		}else{
 			String uid = String.valueOf(homeworkStates.get(position).get("stu_uid"));
-			String name = String.valueOf(homeworkStates.get(position).get("stu_name"));
-			
-			String reason = "[作业提醒]"+name+"你好,"+tv_lesson_name.getText().toString()+"的作业请尽快提交。";
+//			String name = String.valueOf(homeworkStates.get(position).get("stu_name"));
+			String student_alias = mDb.fetchStudentAlias(schoolId, studentId);
+			String reason = tv_class_name.getText().toString()+"课"+tv_lesson_name.getText().toString()+"班的"+student_alias+"老师提醒你，该交作业啦！";
 
 			
 			final ChatMessage message = new ChatMessage();

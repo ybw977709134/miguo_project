@@ -1,6 +1,10 @@
 package co.onemeter.oneapp.ui;
 
+import org.wowtalk.api.ChatMessage;
+import org.wowtalk.api.Database;
 import org.wowtalk.api.LessonWebServerIF;
+import org.wowtalk.api.PrefUtil;
+import org.wowtalk.api.WowTalkVoipIF;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
 
@@ -18,6 +22,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.TimeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
@@ -43,7 +48,12 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
     private MessageBox mMsgBox;
     private int homeworkresult_id;
     private String stu_name;
-
+    private String student_uid;
+    private String schoolId;
+    private String my_uid;
+    private String lesson_name;
+    private String class_name;
+    private Database mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +64,15 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 
 
     private void initView() {
+    	lesson_name = getIntent().getStringExtra("lesson_name");
+		class_name = getIntent().getStringExtra("class_name");
+    	schoolId = getIntent().getStringExtra("schoolId");
     	homeworkresult_id = getIntent().getIntExtra("homeworkresult_id", 0);
     	stu_name = getIntent().getStringExtra("stu_name");
+    	student_uid = getIntent().getStringExtra("student_uid");
+    	my_uid = PrefUtil.getInstance(this).getUid();
     	mMsgBox = new MessageBox(this);
+    	mDb = new Database(this);
         title_back = (ImageButton) findViewById(R.id.title_back);
         textView_homework_back = (TextView) findViewById(R.id.textView_homework_back);
         textView_homework_send = (TextView) findViewById(R.id.textView_homework_send);
@@ -214,6 +230,7 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
                     public void onclick(MessageDialog dialog) {
                         dialog.dismiss();
                         addHomeworkReview();
+                        noticeTeacherHomeworkReview();
                     }
                 }
                 );
@@ -243,4 +260,23 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 
         }
     }
+    
+    private void noticeTeacherHomeworkReview(){
+		String teacher_alias = mDb.fetchStudentAlias(schoolId, my_uid);
+		String reason = class_name+"课"+lesson_name+"班的"+teacher_alias+"老师已经批改了你的作业，快去查看";
+	
+		final ChatMessage message = new ChatMessage();
+		message.chatUserName = student_uid;
+
+		message.messageContent = reason;
+		message.msgType = ChatMessage.MSGTYPE_NORMAL_TXT_MESSAGE;
+		message.sentStatus = ChatMessage.SENTSTATUS_SENDING;
+		message.sentDate = TimeHelper.getTimeForMessage(HomeWorkEvaluate.this);
+		message.uniqueKey = Database.chatMessageSentDateToUniqueKey(message.sentDate);
+		message.ioType = ChatMessage.IOTYPE_OUTPUT;
+		
+		message.primaryKey = new Database(HomeWorkEvaluate.this)
+	                            .storeNewChatMessage(message, false);
+		WowTalkVoipIF.getInstance(HomeWorkEvaluate.this).fSendChatMessage(message);
+	}
 }

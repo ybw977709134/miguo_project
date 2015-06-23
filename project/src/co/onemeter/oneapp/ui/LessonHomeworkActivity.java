@@ -50,6 +50,11 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
     private static LessonHomeworkActivity instance;
     private String path = null;
     private ArrayList<String> list_path = new ArrayList<>();
+    private String schoolId;
+    private String class_name;
+    private String lesson_name;
+    private String teacherID;
+    private int momentId = 0;
 
     
     @Override
@@ -73,7 +78,12 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
         homeworkResult_id = getIntent().getIntExtra("homeworkResult_id", -1);
         lessonId = getIntent().getIntExtra("lessonId", -1);
         studentId = getIntent().getStringExtra("studentId");
-        flag = getIntent().getIntExtra("flag", -1);
+        lesson_name = getIntent().getStringExtra("lesson_name");
+		class_name = getIntent().getStringExtra("class_name");
+		schoolId = getIntent().getStringExtra("schoolId");
+		teacherID = getIntent().getStringExtra("teacherID");
+		momentId = getIntent().getIntExtra("momentId", -1);
+        flag = getIntent().getIntExtra("flag", -1);//学生账号查看作业
         if(null == moment) {
             finish();
             return;
@@ -100,8 +110,8 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 		imageTable = (TableLayout) findViewById(R.id.imageTable);
 		getLessonHomework = new GetLessonHomework();
 		
-		if(flag == 1){
-			tv_del.setVisibility(View.GONE);
+		if(flag == 1){//-1 学生账号查看作业
+			tv_del.setText("提交");
 			tv_modify_homework.setVisibility(View.GONE);
 		}
 		if(flag == 2){
@@ -112,7 +122,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 		tv_del.setOnClickListener(this);
 		tv_modify_homework.setOnClickListener(this);
 	}
-	private void getLessonHomework(){
+	private void getLessonHomework(){//获取作业列表
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
@@ -134,7 +144,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 		});
 	}
 	
-	private void delLessonHomework(){
+	private void delLessonHomework(){//老师账号可以删除作业
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
@@ -154,7 +164,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			
 		});
 	}
-	private void delLessonHomeworkResult(){
+	private void delLessonHomeworkResult(){//学生账号删除已经提交的作业
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
@@ -251,41 +261,63 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			onBackPressed();
 			break;
 		case R.id.tv_del:
-			if(isTeacher()){
-				MessageDialog dialog = new MessageDialog(LessonHomeworkActivity.this);
-	            dialog.setTitle("提示");
-	            dialog.setMessage("你确定要删除该作业吗?");
-	            dialog.setCancelable(false);
-	            dialog.setRightBold(true);
-	            dialog.setOnLeftClickListener("取消", null);
-	               
-	               dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
-	                   @Override
-	                   public void onclick(MessageDialog dialog) {
-	                	   dialog.dismiss();
-	                	   delLessonHomework();                
-	                   }
-	               }
-	               );
-	               dialog.show();
+			if(flag == 1){//判断是学生账号进入查看作业界面
+				if(momentId == 0){
+					Intent i = new Intent(LessonHomeworkActivity.this, SignHomeworkResultkActivity.class);
+					i.putExtra("homework_id", homework_id);
+					i.putExtra("teacherID", teacherID);
+					i.putExtra("schoolId", schoolId);
+					i.putExtra("lesson_name",lesson_name);
+					i.putExtra("class_name", class_name);
+					startActivity(i);
+				}else{
+					Intent i = new Intent(LessonHomeworkActivity.this, SubmitHomeWorkActivity.class);
+					i.putExtra("lessonId",lessonId);
+					i.putExtra("schoolId", schoolId);
+					i.putExtra("student_uid",studentId);	
+					i.putExtra("lesson_name", lesson_name);
+					i.putExtra("class_name", class_name);
+					startActivity(i);
+				}
+				
 			}else{
-				MessageDialog dialog = new MessageDialog(LessonHomeworkActivity.this);
-	            dialog.setTitle("提示");
-	            dialog.setMessage("你确定要删除该作业吗?");
-	            dialog.setCancelable(false);
-	            dialog.setRightBold(true);
-	            dialog.setOnLeftClickListener("取消", null);
-	               
-	               dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
-	                   @Override
-	                   public void onclick(MessageDialog dialog) {
-	                	   dialog.dismiss();
-	                	   delLessonHomeworkResult();              
-	                   }
-	               }
-	               );
-	               dialog.show();
+				if(isTeacher()){
+					MessageDialog dialog = new MessageDialog(LessonHomeworkActivity.this);
+		            dialog.setTitle("提示");
+		            dialog.setMessage("你确定要删除该作业吗?");
+		            dialog.setCancelable(false);
+		            dialog.setRightBold(true);
+		            dialog.setOnLeftClickListener("取消", null);
+		               
+		               dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+		                   @Override
+		                   public void onclick(MessageDialog dialog) {
+		                	   dialog.dismiss();
+		                	   delLessonHomework();                
+		                   }
+		               }
+		               );
+		               dialog.show();
+				}else{
+					MessageDialog dialog = new MessageDialog(LessonHomeworkActivity.this);
+		            dialog.setTitle("提示");
+		            dialog.setMessage("你确定要删除该作业吗?");
+		            dialog.setCancelable(false);
+		            dialog.setRightBold(true);
+		            dialog.setOnLeftClickListener("取消", null);
+		               
+		               dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+		                   @Override
+		                   public void onclick(MessageDialog dialog) {
+		                	   dialog.dismiss();
+		                	   delLessonHomeworkResult();              
+		                   }
+		               }
+		               );
+		               dialog.show();
+				}
 			}
+			
 			
 			break;
 		case R.id.tv_modify_homework:

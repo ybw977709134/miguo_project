@@ -30,6 +30,7 @@ import org.wowtalk.api.Moment;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkVoipIF;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.msg.DoubleClickedUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,9 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
     private MessageBox messageBox;
 	
     private static HomeworkActivity instance;
+    private int momentId = 0;
+    private int homeworkResult_id = 0;
+    private String teacherID;
 	
 
 	@Override
@@ -76,6 +80,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		initView();
 		if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
 			getHomeworkState_student(lessonId,studentId);
+			
 		}else if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER){
 			getHomeworkState(lessonId);
 		}
@@ -155,6 +160,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			protected void onPostExecute(Integer result) {
 				msgbox.dismissWait();
 				if(result == 1){
+					getMomentId();
 					homework_id = getLessonHomework.id;
 					tv_addhomework_state.setText("已布置");
 					int momentId = 0;
@@ -201,6 +207,15 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		});
 	}
 
+	private void getMomentId(){
+		teacherID = getLessonHomework.teacher_id;
+		for(int j = 0;j < getLessonHomework.stuResultList.size();j++){
+			if(studentId.equals(getLessonHomework.stuResultList.get(j).student_id)){
+				momentId = getLessonHomework.stuResultList.get(j).moment_id;
+				homeworkResult_id = getLessonHomework.stuResultList.get(j).id;
+			}
+		}
+	}
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
@@ -209,6 +224,9 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			break;
 			
 		case R.id.layout_sign_class:	
+			if(DoubleClickedUtils.isFastDoubleClick()){
+				break;  
+        	}
 			if(isTeacher()){
 				if(homeworkStates.size() == 0){
 					Intent i = new Intent(HomeworkActivity.this, AddHomeworkActivity.class);
@@ -269,6 +287,11 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 									i.putExtra("moment", moment);
 							        i.putExtra("lessonId",lessonId);
 							        i.putExtra("studentId", studentId);
+							        i.putExtra("schoolId", schoolId);
+							        i.putExtra("teacherID", teacherID);
+							        i.putExtra("momentId", momentId);
+									i.putExtra("lesson_name", tv_lesson_name.getText().toString());
+									i.putExtra("class_name", tv_class_name.getText().toString());
 							        i.putExtra("flag", 1);
 									startActivity(i);
 									mHandler.sendEmptyMessage(errno);
@@ -291,15 +314,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			if(homework_id == 0){
 				Toast.makeText(this, "还未布置作业", Toast.LENGTH_SHORT).show();
 			}else{
-				int momentId = 0;
-				int homeworkResult_id = 0;
-				String teacherID = getLessonHomework.teacher_id;
-				for(int j = 0;j < getLessonHomework.stuResultList.size();j++){
-					if(studentId.equals(getLessonHomework.stuResultList.get(j).student_id)){
-						momentId = getLessonHomework.stuResultList.get(j).moment_id;
-						homeworkResult_id = getLessonHomework.stuResultList.get(j).id;
-					}
-				}
+				
 				if(momentId == 0){
 					Intent i = new Intent(HomeworkActivity.this, SignHomeworkResultkActivity.class);
 					i.putExtra("homework_id", homework_id);

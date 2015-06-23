@@ -1,9 +1,11 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -119,13 +121,13 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 		layout_student_absence = (RelativeLayout) findViewById(R.id.layout_student_absence);
 		
 		layout_student_absence.setOnTouchListener(new OnTouchListener() {
-			
+
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				layout_student_absence.setFocusable(true);
 				layout_student_absence.setFocusableInTouchMode(true);
 				layout_student_absence.requestFocus();
-				
+
 				return false;
 			}
 		});
@@ -226,9 +228,9 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
         	        				String reason = "[请假]"+textView_teacher_name.getText().toString()+"你好"+"\n"
         	        						+"班级： "+textView_class_name.getText().toString()+"\n"
         	        						+"课程： "+textView_lesson_name.getText().toString()+"\n"
+											+"学生： "+ getMyNameAsStudent() +"\n"
         	        						+"事由： "+editText_absence_reason.getText().toString();
 
-        	        				
         	        				final ChatMessage message = new ChatMessage();
         	        				message.chatUserName = teacherID;
 
@@ -308,7 +310,17 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
 		}
 		 
 	}
-	
+
+	private String getMyNameAsStudent() {
+		Context context = StudentAbsenceActivity.this;
+		String studentName = new Database(context).fetchStudentAlias(
+                schoolID, PrefUtil.getInstance(context).getUid());
+		if (TextUtils.isEmpty(studentName)) {
+            studentName = PrefUtil.getInstance(context).getMyNickName();
+        }
+		return studentName;
+	}
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);

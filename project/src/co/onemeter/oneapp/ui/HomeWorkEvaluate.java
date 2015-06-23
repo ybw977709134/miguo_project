@@ -102,15 +102,13 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
                     Toast.makeText(HomeWorkEvaluate.this,"评语不能超过20字",Toast.LENGTH_SHORT).show();                    
                 }
 
-                if (s.length() <= 20) {
-                    isEvaluate = false;
-                }
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (s.length() >= 20) {
+                    isEvaluate = false;
+                }
             }
         });
 
@@ -255,6 +253,7 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.btn_comment://获得模板
+                isEvaluate = true;//使用了评语模板，不受editText字数的限制
                 Intent intent = new Intent(this,HomeWorkTemplate.class);
                 startActivityForResult(intent,REQ_TEMPLATE);
                 break;
@@ -271,7 +270,7 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
                 if (requestCode == REQ_TEMPLATE) {
                    String text = data.getStringExtra("template");
                     editText_comment.setText(text);
-                    isEvaluate = true;//使用了评语模板，不受editText字数的限制
+//                    isEvaluate = true;//使用了评语模板，不受editText字数的限制
                 }
                 break;
 

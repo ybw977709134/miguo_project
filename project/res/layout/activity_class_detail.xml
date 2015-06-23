@@ -352,7 +352,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white"
-                android:cacheColorHint="#00000000"
                 android:divider="@drawable/bg_section_divider_line_light" >
             </ListView>
         </LinearLayout>

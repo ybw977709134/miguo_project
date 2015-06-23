@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_dark"
+    android:background="@color/background_light"
     android:orientation="vertical"
     android:focusableInTouchMode="true">
 
@@ -46,6 +46,7 @@
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" 
-        android:cacheColorHint="#00000000"/>
+        android:cacheColorHint="#00000000"
+        android:divider="@drawable/bg_section_divider_line_light"/>
 
 </LinearLayout>

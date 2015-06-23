@@ -17,6 +17,7 @@ import android.widget.Toast;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.GetLessonHomework;
 import org.wowtalk.api.HomeWorkResult;
+import org.wowtalk.api.HomeWorkReview;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
@@ -47,6 +48,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
     private HomeWorkAdapter adapter;
     private ImageResizer imageResizer;
     private List<HomeWorkResult> stuResultList;
+    private List<String> teaReview;
     List<HomeWorkResult> unStuResultList;//反序
 
     private int lessonId;//需要传进来
@@ -93,10 +95,11 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
 
         listView_submit = (ListView) findViewById(R.id.listView_submit);
 //        listView_fresh = listView_submit.getRefreshableView();
-        listView_submit.addFooterView(buildHeader());//为listview的后面添加button
+       
         
         getLessonHomework = new GetLessonHomework();
         stuResultList = new ArrayList<HomeWorkResult>();
+        teaReview = new ArrayList<String>();
         unStuResultList = new ArrayList<HomeWorkResult>();
         
 
@@ -124,7 +127,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
 //            }
 //        });
         fillListView();
-
+//        listView_submit.addFooterView(buildHeader());//为listview的后面添加button
         title_back.setOnClickListener(this);
         textView_homework_back.setOnClickListener(this);
 
@@ -146,8 +149,12 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
                     stuResultList.clear();
                     unStuResultList.clear();
                     stuResultList.addAll(getLessonHomework.stuResultList);
-                    
-                    
+                    for(int i = 0;i < getLessonHomework.stuResultList.size();i++){
+                    	if(getLessonHomework.stuResultList.get(i).homeWorkReview != null){
+                    		teaReview.add(getLessonHomework.stuResultList.get(i).homeWorkReview.text);
+                    	}
+                    	 
+                    }
                     for (int i = stuResultList.size() -1; i >= 0; i--) {
                     	unStuResultList.add(stuResultList.get(i));
                     }
@@ -159,8 +166,14 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
                     }
 
                     listView_submit.setAdapter(adapter);
-                    
-                    
+                    if(PrefUtil.getInstance(SubmitHomeWorkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER){
+                    	 if(teaReview.size() != stuResultList.size()){
+                    		 listView_submit.addFooterView(buildHeader());//为listview的后面添加button
+                         }
+                    }else{
+                    	listView_submit.addFooterView(buildHeader());//为listview的后面添加button
+                    }
+                   
 //                    adapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(SubmitHomeWorkActivity.this,"网络请求失败",Toast.LENGTH_SHORT).show();
@@ -179,7 +192,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
         btn = (Button) view.findViewById(R.id.custom_button);
 
         if (PrefUtil.getInstance(SubmitHomeWorkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER) {//老师
-            btn.setText("去评分");
+            btn.setText("去评分"); 
         } else {
             btn.setText("修改作业");
         }

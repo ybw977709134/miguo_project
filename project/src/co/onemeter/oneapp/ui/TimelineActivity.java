@@ -21,6 +21,7 @@ import com.androidquery.AQuery;
 
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 import org.wowtalk.ui.msg.InputBoardManager;
 
 /**
@@ -564,7 +565,25 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
                         @Override
                         public void onClick(View view) {
                             menu.dismiss();
-                            deleteMomentReview(activity,momentId,replyTo,momentReviewDelListener);
+
+                            MessageDialog dialog = new MessageDialog(activity);
+                            dialog.setTitle("提示");
+                            dialog.setMessage("确定要删除这条回复吗？");
+                            dialog.setCancelable(false);
+                            dialog.setRightBold(true);
+                            dialog.setTextColorBtnRight(activity.getResources().getColor(R.color.red_30));
+                            dialog.setOnLeftClickListener("取消", null);
+                            dialog.setOnRightClickListener("删除", new MessageDialog.MessageDialogClickListener() {
+                                @Override
+                                public void onclick(MessageDialog dialog) {
+                                    dialog.dismiss();
+                                    deleteMomentReview(activity,momentId,replyTo,momentReviewDelListener);
+                                }
+                            });
+                            dialog.show();
+
+
+//                            deleteMomentReview(activity,momentId,replyTo,momentReviewDelListener);
                         }
                     });
         }

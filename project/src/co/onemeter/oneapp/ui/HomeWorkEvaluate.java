@@ -41,6 +41,7 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
     private EditText editText_comment;//评语
 
     private static int REQ_TEMPLATE = 1;//评语模板请求
+    private boolean isEvaluate = false;
 
 
     //星星评分对应的数值
@@ -57,7 +58,7 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
     private String lesson_name;
     private String class_name;
     private Database mDb;
-    private int lessonId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +98,12 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() >= 20) {
+                if (s.length() >= 20 && !isEvaluate) {
                     Toast.makeText(HomeWorkEvaluate.this,"评语不能超过20字",Toast.LENGTH_SHORT).show();                    
+                }
+
+                if (s.length() <= 20) {
+                    isEvaluate = false;
                 }
 
             }
@@ -266,6 +271,7 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
                 if (requestCode == REQ_TEMPLATE) {
                    String text = data.getStringExtra("template");
                     editText_comment.setText(text);
+                    isEvaluate = true;//使用了评语模板，不受editText字数的限制
                 }
                 break;
 

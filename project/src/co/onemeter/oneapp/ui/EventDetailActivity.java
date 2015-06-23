@@ -24,6 +24,8 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class EventDetailActivity extends Activity implements OnClickListener {
     private static final int NUM_COLUMNS = 4;
@@ -182,15 +184,29 @@ public class EventDetailActivity extends Activity implements OnClickListener {
     @Override
 	public void onClick(View v) {
         switch (v.getId()) {
+
             case R.id.left_button:
                 finish();
                 break;
+
             case R.id.right_button_up:
             	//Log.i("--membercount", eventDetail.joinedMemberCount + "");
             	//Log.i("--capacity", eventDetail.capacity + "");
             	if(eventDetail.is_get_member_info){
-            		Intent intent = new Intent(this, SubmitInformationActivity.class);
-            		startActivityForResult(intent, 100);
+
+                    if (System.currentTimeMillis() > eventDetail.endTime.getTime()) {//报名时期已过时
+
+                        MessageDialog dialog = new MessageDialog(EventDetailActivity.this,false,MessageDialog.SIZE_NORMAL);
+                        dialog.setTitle("");
+                        dialog.setMessage("该活动已结束，请期待下次活动！");
+                        dialog.setCancelable(false);
+                        dialog.show();
+
+                    } else {
+                        Intent intent = new Intent(this, SubmitInformationActivity.class);
+                        startActivityForResult(intent, 100);
+                    }
+
             	}else{
             		joinEvent();
             		btn_right_up.setVisibility(View.GONE);
@@ -198,11 +214,15 @@ public class EventDetailActivity extends Activity implements OnClickListener {
             	}
                 
                 break;
+
             case R.id.right_button_down:
                 MessageDialog dialog = new MessageDialog(this);
                 dialog.setTitle(getString(R.string.contacts_QRcode_dialogtitle));
                 dialog.setMessage(getString(R.string.event_cancel_join_msg));
-                dialog.setOnLeftClickListener(getString(R.string.ok), new MessageDialog.MessageDialogClickListener() {
+                dialog.setRightBold(true);
+                dialog.setCancelable(false);//不能点击空白处取消
+                dialog.setOnLeftClickListener(getString(R.string.cancel),null);
+                dialog.setOnRightClickListener(getString(R.string.ok), new MessageDialog.MessageDialogClickListener() {
                     @Override
                     public void onclick(MessageDialog dialog) {
                         dialog.dismiss();
@@ -212,7 +232,6 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                         Toast.makeText(EventDetailActivity.this, R.string.require_cancel_event_joined, Toast.LENGTH_SHORT).show();
                     }
                 });
-                dialog.setOnRightClickListener(getString(R.string.cancel),null);
                 dialog.show();
             	break;
             default:

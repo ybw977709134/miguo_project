@@ -583,7 +583,7 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
 
 	private void noticeTeacherHomeworkResult(){
 		String student_alias = mDb.fetchStudentAlias(schoolId, my_uid);
-		String reason = class_name+"课"+lesson_name+"班的"+student_alias+"学生提交作业啦！请批阅";
+		String reason = lesson_name+"班的"+class_name+"课"+student_alias+"学生提交作业啦！请批阅";
 	
 		final ChatMessage message = new ChatMessage();
 		message.chatUserName = teacherID;

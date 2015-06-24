@@ -113,10 +113,10 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		
 		if(lesson.end_date * 1000 > System.currentTimeMillis()){
 			q.find(R.id.text_first).textColor(getResources().getColor(R.color.text_gray4));
-			q.find(R.id.text_second).textColor(getResources().getColor(R.color.text_gray4));
+//			q.find(R.id.text_second).textColor(getResources().getColor(R.color.text_gray4));
 			q.find(R.id.text_third).textColor(getResources().getColor(R.color.text_gray4));
 			lay_first.setEnabled(false);
-			lay_second.setEnabled(false);
+//			lay_second.setEnabled(false);
 			lay_third.setEnabled(false);
 		}
 //		else{

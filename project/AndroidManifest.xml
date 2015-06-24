@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="co.onemeter.oneapp"
-    android:versionCode="77"
-    android:versionName="3.6.0.0624(dev01)/77" > <!-- 版本号规则：双周发布 x.x.5，单周测试 x.x.0 -->
+    android:versionCode="78"
+    android:versionName="3.6.0.0624(dev01)/78" > <!-- 版本号规则：双周发布 x.x.5，单周测试 x.x.0 -->
     <!-- 在 Android 2.3 上，PullToRefreshListView 产生 stack overflow 错误。 -->
     <uses-sdk android:minSdkVersion="11" />
 

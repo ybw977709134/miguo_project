@@ -192,6 +192,7 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 								
 							}
 						}).start();
+						noticeTeacherHomeworkReview();
 					}
 					
 				}
@@ -244,7 +245,7 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
                     public void onclick(MessageDialog dialog) {
                         dialog.dismiss();
                         addHomeworkReview();
-                        noticeTeacherHomeworkReview();
+                        
                     }
                 }
                 );

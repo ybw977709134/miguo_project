@@ -461,43 +461,93 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 			showPickImgSelector();
 			break;
 		case R.id.btn_ok:
-			if(strContent != null){
-				MessageDialog dialog = new MessageDialog(AddHomeworkActivity.this);
-                dialog.setTitle("提示");
-                dialog.setMessage("你确定修改布置作业吗?");
+
+            if (edt_moment_content.getText().length() <= 0) {
+
+                MessageDialog dialog = new MessageDialog(AddHomeworkActivity.this,false,MessageDialog.SIZE_NORMAL);
+                dialog.setTitle("");
+                dialog.setMessage("请填写作业内容!");
                 dialog.setCancelable(false);
-                dialog.setRightBold(true);
-                dialog.setOnLeftClickListener("取消", null);
-                
-                dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
-                    @Override
-                    public void onclick(MessageDialog dialog) {
-                        dialog.dismiss();
-                        modifyLessonHomework(lessonId,modify_homework_id, moment);
-                    }
+                dialog.show();
+
+            } else {
+                if(strContent != null){
+                    MessageDialog dialog = new MessageDialog(AddHomeworkActivity.this);
+                    dialog.setTitle("提示");
+                    dialog.setMessage("你确定修改布置作业吗?");
+                    dialog.setCancelable(false);
+                    dialog.setRightBold(true);
+                    dialog.setOnLeftClickListener("取消", null);
+
+                    dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                                @Override
+                                public void onclick(MessageDialog dialog) {
+                                    dialog.dismiss();
+                                    modifyLessonHomework(lessonId,modify_homework_id, moment);
+                                }
+                            }
+                    );
+                    dialog.show();
+
+                }else{
+                    MessageDialog dialog = new MessageDialog(AddHomeworkActivity.this);
+                    dialog.setTitle("提示");
+                    dialog.setMessage("你确定布置作业吗?");
+                    dialog.setCancelable(false);
+                    dialog.setRightBold(true);
+                    dialog.setOnLeftClickListener("取消", null);
+
+                    dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+                                @Override
+                                public void onclick(MessageDialog dialog) {
+                                    dialog.dismiss();
+                                    addLessonHomework(lessonId, moment);
+                                }
+                            }
+                    );
+                    dialog.show();
+
                 }
-                );
-                dialog.show();	
-				
-			}else{
-				MessageDialog dialog = new MessageDialog(AddHomeworkActivity.this);
-                dialog.setTitle("提示");
-                dialog.setMessage("你确定布置作业吗?");
-                dialog.setCancelable(false);
-                dialog.setRightBold(true);
-                dialog.setOnLeftClickListener("取消", null);
-                
-                dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
-                    @Override
-                    public void onclick(MessageDialog dialog) {
-                        dialog.dismiss();
-                        addLessonHomework(lessonId, moment);
-                    }
-                }
-                );
-                dialog.show();	
-				
-			}
+            }
+
+
+//			if(strContent != null){
+//				MessageDialog dialog = new MessageDialog(AddHomeworkActivity.this);
+//                dialog.setTitle("提示");
+//                dialog.setMessage("你确定修改布置作业吗?");
+//                dialog.setCancelable(false);
+//                dialog.setRightBold(true);
+//                dialog.setOnLeftClickListener("取消", null);
+//
+//                dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+//                    @Override
+//                    public void onclick(MessageDialog dialog) {
+//                        dialog.dismiss();
+//                        modifyLessonHomework(lessonId,modify_homework_id, moment);
+//                    }
+//                }
+//                );
+//                dialog.show();
+//
+//			}else{
+//				MessageDialog dialog = new MessageDialog(AddHomeworkActivity.this);
+//                dialog.setTitle("提示");
+//                dialog.setMessage("你确定布置作业吗?");
+//                dialog.setCancelable(false);
+//                dialog.setRightBold(true);
+//                dialog.setOnLeftClickListener("取消", null);
+//
+//                dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+//                    @Override
+//                    public void onclick(MessageDialog dialog) {
+//                        dialog.dismiss();
+//                        addLessonHomework(lessonId, moment);
+//                    }
+//                }
+//                );
+//                dialog.show();
+//
+//			}
 			
 			break;
 		default:

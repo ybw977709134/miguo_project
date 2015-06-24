@@ -5,12 +5,12 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.wowtalk.ui.messagebox.R;
 
 /**
@@ -314,12 +314,10 @@ public class MessageBox {
      * Try to dismiss the progress dialog shown by
      * {@link #showWait()}.
      *
-     * <p>Will try to run on current thread, if this is not possible
-     * (because the context passed in ctor is not a instance of
-     * {@link Activity}), run on current thread.</p>
+     * Can be called on non-UI thread.
      */
     public void dismissWait() {
-        if (mActivity != null) {
+        if (mActivity != null && Looper.myLooper() != Looper.getMainLooper()) {
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -523,8 +521,13 @@ public class MessageBox {
 //        dismissToast();
     }
 
+    /**
+     * Try to dismiss toast.
+     *
+     * Can be called on non-UI thread.
+     */
     public void dismissToast() {
-        if (mActivity != null) {
+        if (mActivity != null && Looper.myLooper() != Looper.getMainLooper()) {
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

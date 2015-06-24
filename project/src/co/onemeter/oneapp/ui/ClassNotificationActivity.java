@@ -76,8 +76,8 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 		
 		initView();
 		bulletins.clear();
-		getClassBulletin(classId,lastTimeStamp);
-		getSchoolClassInfo();
+		getClassBulletin(classId,lastTimeStamp);//获取班级通知
+		getSchoolClassInfo();//获取班级信息
 
 	}
 	
@@ -140,7 +140,7 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 		});
 	}
 	
-	private void delClassBulletin(final int position){
+	private void delClassBulletin(final int position){ //删除班级通知
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
@@ -195,7 +195,7 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 		case R.id.btn_notice_back:
 			finish();
 			break;
-		case R.id.btn_add:
+		case R.id.btn_add://跳转到发送通知界面
 			Intent intent = new Intent(ClassNotificationActivity.this, SendNotificationActivity.class);
 			Bundle bundle=new Bundle();
 			bundle.putStringArray("className", className);
@@ -298,7 +298,7 @@ public class ClassNotificationActivity extends Activity implements OnClickListen
 	}
 
 	@Override
-	public boolean onItemLongClick(AdapterView<?> parent, View view,
+	public boolean onItemLongClick(AdapterView<?> parent, View view, //长按删除
 			final int position, long id) {
 		if(PrefUtil.getInstance(ClassNotificationActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER){
 			MessageDialog dialog = new MessageDialog(ClassNotificationActivity.this);

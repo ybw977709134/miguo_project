@@ -289,7 +289,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 startActivityForResult(intent, REQ_SETTINGS);
                 break;
 
-            case R.id.img_home_classnotice:
+            case R.id.img_home_classnotice://班级通知
             case R.id.txt_home_classnotice:
             	intent = new Intent(this, ClassNotificationActivity.class);
                 startActivity(intent);
@@ -319,7 +319,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.img_home_movable:
                 break;
-            case R.id.img_home_homework:
+            case R.id.img_home_homework://在线作业
             case R.id.txt_home_homework:
 //                MessageDialog dialog = new MessageDialog(this);
 //                dialog.setIsDouleBtn(false);

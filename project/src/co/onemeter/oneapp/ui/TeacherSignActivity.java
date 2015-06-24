@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
- * 老师签到
+ * 老师签到/在线作业公用
  * @author hutianfeng
  * @date 2015/4/1
  *
@@ -46,7 +46,7 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
         private String classId_intent = null;
         private String className_intent = null;
         private String schoolID = null;
-        private String homeworkTag = null;
+        private String homeworkTag = null;//标记 这个页面是在线作业时使用的
 		private int lessonID = 0;	
 		private long endDate;
 		
@@ -118,7 +118,7 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
             if(classId_intent != null){
                 if(lessonID != 0){
                 	if(homeworkTag != null){
-            			if(homeworkTag.equals("homework")){
+            			if(homeworkTag.equals("homework")){//判断如果是在线作业标记 跳转到在线作业
             				Intent homeworkIntent = new Intent(this, HomeworkActivity.class);
             				homeworkIntent.putExtra(Constants.LESSONID, lessonID);
             				homeworkIntent.putExtra("schoolId", schoolID);

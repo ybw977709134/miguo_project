@@ -243,7 +243,7 @@ public class StudentAbsenceActivity extends Activity implements OnClickListener{
         	        				
         	        				message.primaryKey = new Database(StudentAbsenceActivity.this)
         	        			                            .storeNewChatMessage(message, false);
-    			            		WowTalkVoipIF.getInstance(StudentAbsenceActivity.this).fSendChatMessage(message);
+    			            		WowTalkVoipIF.getInstance(StudentAbsenceActivity.this).fSendChatMessage(message);//发送消息
     			            		try {
         								Thread.sleep(2000);
         							} catch (InterruptedException e) {

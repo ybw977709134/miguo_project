@@ -320,7 +320,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			
 			
 			break;
-		case R.id.tv_modify_homework:
+		case R.id.tv_modify_homework://修改作业
 			Intent intent = new Intent(LessonHomeworkActivity.this, AddHomeworkActivity.class);
 			intent.putExtra("text", txt_content.getText().toString());
 			intent.putExtra("lessonId", lessonId);

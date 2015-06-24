@@ -331,7 +331,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 		super.onDestroy();
 	}
 
-	private void setupIntent() {
+	private void setupTabs() {
 		mHost = getTabHost();
 		mHost.setOnTabChangedListener(this);
 			
@@ -400,7 +400,7 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         IncomeMessageIntentReceiver.closeNoticeMessage();
 
 		initView();
-		setupIntent();
+		setupTabs();
 
         if (null == savedInstanceState) {
             mIsStartFromLogin = getIntent().getBooleanExtra(KEY_IS_START_FROM_LOGIN, false);

@@ -14,6 +14,7 @@ import org.wowtalk.api.Lesson;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -62,7 +63,6 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 		initView();
 		getLessonInfo();
 
-
 	}
 	
 	private void initView(){
@@ -105,9 +105,30 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 					if (ErrorCode.OK == result) {
 						refreshLessonInfo();
 					}
+
+                    //如果没有课程数据将给出应有的提示
+                    if (lessons == null || lessons.size() == 0) {
+                        MessageDialog dialog = new MessageDialog(SelectLessonActivity.this,false,MessageDialog.SIZE_NORMAL);
+                        dialog.setTitle("");
+                        dialog.setMessage("该班级还没有开设任何课程!");
+                        dialog.setCancelable(false);
+                        dialog.setOnLeftClickListener("返回", new MessageDialog.MessageDialogClickListener() {
+                            @Override
+                            public void onclick(MessageDialog dialog) {
+                                dialog.dismiss();
+                                finish();
+                            }
+                        });
+
+                        dialog.show();
+                    }
+
+
 				};
 
 			});
+
+
 	}
 	
 	private void refreshLessonInfo(){

@@ -348,9 +348,9 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			break;
 		case R.id.title_refresh:
 			if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
-				getHomeworkState_student(lessonId,studentId);
+				getHomeworkState_student(lessonId,studentId); //学生账号 执行
 			}else if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER){
-				getHomeworkState(lessonId);
+				getHomeworkState(lessonId);//老师账号 执行
 				adapter.notifyDataSetChanged();
 			}
 			break;

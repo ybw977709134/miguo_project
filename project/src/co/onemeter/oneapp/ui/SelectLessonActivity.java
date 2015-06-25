@@ -134,9 +134,9 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 	private void refreshLessonInfo(){
 		lessons.clear();
 		Database db = Database.open(SelectLessonActivity.this);
-		if(isTeacher()){
+		if(isTeacher()){ //老师账号 签到 在线作业 显示全部课程
 			lessons.addAll(db.fetchLesson(classId));
-		}else{
+		}else{           //学生账号  在线作业 显示全部课程；请假 只显示还未结束的课
 			if(homeworkTag != null){
 				lessons.addAll(db.fetchLesson(classId));
 			}else{

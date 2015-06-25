@@ -1,6 +1,4 @@
-import com.android.builder.core.DefaultManifestParser
-
-apply plugin: 'android-library'
+apply plugin: 'android'
 
 buildscript {
     repositories {
@@ -21,7 +19,7 @@ allprojects {
 }
 
 dependencies {
-    compile files('libs/simplesound-0.1.jar')
+    compile(name: 'recording-1.0', ext: 'aar')
     compile 'com.android.support:support-v4:21.0.2'
 }
 
@@ -47,10 +45,20 @@ android {
             exclude 'META-INF/NOTICE.txt'
     }
 
+    signingConfigs {
+        cybertech {
+            storeFile file("/home/panzy/workspace/pm-android/keystore/cybertech.keystore")
+            storePassword "cybertech"
+            keyAlias "cybertech"
+            keyPassword "cybertech"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             proguardFile 'proguard-project.txt'
+            signingConfig signingConfigs.cybertech
         }
     }
 
@@ -81,21 +89,6 @@ android {
     lintOptions {
         abortOnError false
         disable 'OldTargetApi', 'SimpleDateFormat', 'StringFormatInvalid', 'InvalidPackage', 'PropertyEscape'
-    }
-
-    libraryVariants.all { variant ->
-
-        def manifestParser = new DefaultManifestParser();
-        def ver = manifestParser.getVersionName(
-                android.sourceSets.main.manifest.srcFile);
-
-        variant.outputs.each { output ->
-            output.outputFile = new File(
-                    output.outputFile.parent,
-                    variant.name == 'debug' 
-                        ? "recording-${variant.name}-${ver}.aar"
-                        : "recording-${ver}.aar");
-        }
     }
 }
 

@@ -3,9 +3,9 @@ apply plugin: 'android-library'
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     compile project(':lib:wowtalksdk')
-    compile project(':lib:AndroidRecording:lib')
     compile project(':lib:paint_android')
     compile 'com.android.support:support-v4:21.0.2'
+    compile 'com.skd:recording:1.0@aar'
 }
 
 android {

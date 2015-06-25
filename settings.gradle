@@ -1,7 +1,6 @@
 include ':lib:message-input'
 include ':lib:messagebox'
 include ':lib:bitmapfun'
-include ':lib:AndroidRecording:lib'
 include ':lib:DraggableListView'
 include ':project'
 include ':lib:wowtalksdk'

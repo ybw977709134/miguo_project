@@ -176,6 +176,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 					}
 				}else if(result == 0){
 					tv_addhomework_state.setText("未布置");
+                    tv_signup_homework_state.setText("");
 				}
 				
 			}

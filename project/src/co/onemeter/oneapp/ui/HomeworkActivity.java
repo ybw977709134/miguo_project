@@ -40,7 +40,7 @@ import java.util.Map;
  * 家庭作业作业页面.
  * Created by pzy on 11/10/14. Modified by yl on 23/12/2014 Modified by zz on 10/05/2015
  */
-public class HomeworkActivity extends Activity implements OnClickListener, OnItemClickListener{
+public class HomeworkActivity extends Activity implements OnClickListener, OnItemClickListener ,SignHomeworkResultkActivity.RefreshHomework{
 	private static final int REQ_PARENT_ADDHOMEWORK = 100;
 	private static final int REQ_PARENT_DELHOMEWORK = 1001;
 	private static final int REQ_STUDENT_SIGNUP = 1002;
@@ -86,6 +86,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		}
 		
 	}
+
 	private Handler mHandler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
 			if(msg.what != ErrorCode.INVALID_ARGUMENT){
@@ -376,8 +377,21 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		}
 	}
 
+    /**
+     * 重写刷新当前页的接口回调方法，实现在其它页面刷新本页面的功能
+     */
+    @Override
+    public void refresh() {
+        if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
+            getHomeworkState_student(lessonId,studentId); //学生账号 执行
+        }else if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER){
+            getHomeworkState(lessonId);//老师账号 执行
+            adapter.notifyDataSetChanged();
+        }
+    }
 
-	class HomeworkStateAdapter extends BaseAdapter{
+
+    class HomeworkStateAdapter extends BaseAdapter{
 		private List<Map<String, Object>> homeworkStates;
 		public HomeworkStateAdapter(List<Map<String, Object>> homeworkStates){
 			this.homeworkStates = homeworkStates;

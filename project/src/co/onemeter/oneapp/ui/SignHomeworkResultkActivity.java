@@ -88,6 +88,15 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
 	private String schoolId;
 	private String my_uid;
 
+    private  RefreshHomework refreshHomework;
+
+
+    //定义刷新HomeWorkActivity的方法
+    public interface RefreshHomework{
+        public void refresh();
+    }
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -95,6 +104,10 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
 		initData(savedInstanceState);
 
         initView(savedInstanceState);
+
+        if (refreshHomework == null) {
+            refreshHomework = HomeworkActivity.getInstance();
+        }
 	}
 	
 	private void initData(Bundle savedInstanceState){
@@ -228,6 +241,8 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
                         if(SubmitHomeWorkActivity.getInstance() != null){
                         	SubmitHomeWorkActivity.getInstance().finish();
                         }
+                        //调用借口回调方法，刷新提交作业后返回作业列表的状态
+                        refreshHomework.refresh();
                     }
                 });
 
@@ -312,6 +327,7 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
                 dialog.show();
             } else {
                 addLessonHomework(lessonId, moment);
+
                 noticeTeacherHomeworkResult();
             }
 

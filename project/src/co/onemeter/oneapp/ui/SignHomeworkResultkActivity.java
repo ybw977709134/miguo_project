@@ -275,7 +275,7 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
                         mediaHelper.takePhoto(SignHomeworkResultkActivity.this, ACTIVITY_REQ_ID_PICK_PHOTO_FROM_CAMERA);
                     }
                 });
-        bottomBoard.add(getString(R.string.image_pick_from_local), BottomButtonBoard.BUTTON_BLUE,
+        bottomBoard.add(getString(R.string.scan_qr_code_btn_gallery), BottomButtonBoard.BUTTON_BLUE,
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

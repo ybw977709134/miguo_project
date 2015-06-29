@@ -28,6 +28,7 @@ import java.util.ArrayList;
 public class LessonHomeworkActivity extends Activity implements OnClickListener{
 	private static final String IMAGE_CACHE_DIR = "image";
 	private ImageButton title_back;
+    private TextView textView__back;
 	private TextView tv_del;
 	private TextView txt_content;
     private Moment moment;
@@ -102,6 +103,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
     }
 	private void initView() {
 		title_back = (ImageButton) findViewById(R.id.title_back);
+        textView__back = (TextView) findViewById(R.id.textView__back);
 		tv_del = (TextView) findViewById(R.id.tv_del);
 		txt_content = (TextView) findViewById(R.id.txt_content);
 		tv_title_name = (TextView) findViewById(R.id.title_name);
@@ -119,6 +121,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			tv_modify_homework.setVisibility(View.GONE);
 		}
 		title_back.setOnClickListener(this);
+        textView__back.setOnClickListener(this);
 		tv_del.setOnClickListener(this);
 		tv_modify_homework.setOnClickListener(this);
 	}
@@ -258,6 +261,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 	public void onClick(View view) {
 		switch (view.getId()) {
 		case R.id.title_back:
+        case R.id.textView__back:
 			onBackPressed();
 			break;
 		case R.id.tv_del:

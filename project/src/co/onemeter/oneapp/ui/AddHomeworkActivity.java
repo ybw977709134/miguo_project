@@ -396,7 +396,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 		final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(edt_moment_content.getWindowToken(), 0);
 	}
-	private void showPickImgSelector() {
+	private void  showPickImgSelector() {
 		hideIME();
 
         //在外面点击加号图片就能判断提示
@@ -422,7 +422,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
                     });
 
             //从本地相册中选择上传照片
-            bottomBoard.add(getString(R.string.image_pick_from_local), BottomButtonBoard.BUTTON_BLUE,
+            bottomBoard.add(getString(R.string.scan_qr_code_btn_gallery), BottomButtonBoard.BUTTON_BLUE,
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

@@ -10,6 +10,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.w3c.dom.Text;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
@@ -63,6 +64,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 	private int lessonId;
 	private LinearLayout trigger_add_img_layout;
 	private ImageButton title_back;
+    private TextView textView_back;
 	private MessageBox mMsgBox;
 	private MediaInputHelper mediaHelper;
 	private EditText edt_moment_content;
@@ -112,6 +114,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 //		listWMediaFile = getIntent().getParcelableArrayListExtra("listWMediaFile");
 		list_path = getIntent().getStringArrayListExtra("list_path");
 		title_back = (ImageButton) findViewById(R.id.btn_notice_back);
+        textView_back = (TextView) findViewById(R.id.textView_back);
 		listMoment = new LinkedList<Moment>();
 		strContent = getIntent().getStringExtra("text");
 		modify_homework_id = getIntent().getIntExtra("homework_id", -1);
@@ -124,6 +127,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 		trigger_add_img_layout.setOnClickListener(this);
 		btn_ok.setOnClickListener(this);
 		title_back.setOnClickListener(this);
+        textView_back.setOnClickListener(this);
 		mDb = new Database(this);
 		mMsgBox = new MessageBox(this);
 		
@@ -289,7 +293,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 			}			
 			@Override
 			protected void onPostExecute(Integer result) {	
-				mMsgBox.showWaitImageSuccess("布置作业修改成功");
+				mMsgBox.showWaitImageSuccess("作业修改成功");
 				new Thread(new Runnable() {
 					
 					@Override
@@ -455,6 +459,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 	public void onClick(View view) {
 		switch (view.getId()) {
 		case R.id.btn_notice_back:
+        case R.id.textView_back:
 			onBackPressed();
 			break;
 		case R.id.trigger_add_img_layout:

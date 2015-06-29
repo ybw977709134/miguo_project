@@ -66,6 +66,7 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
 	private int lessonId;
 	private LinearLayout trigger_add_img_layout;
 	private ImageButton title_back;
+    private TextView textView_back;
 	private MessageBox mMsgBox;
 	private MediaInputHelper mediaHelper;
 	private EditText edt_moment_content;
@@ -127,6 +128,7 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
 	}
 	private void initView(Bundle savedInstanceState) {
 		title_back = (ImageButton) findViewById(R.id.btn_notice_back);
+        textView_back = (TextView) findViewById(R.id.textView_back);
 		tv_class_notice_title = (TextView) findViewById(R.id.class_notice_title);
 		listMoment = new LinkedList<Moment>();
 		lessonId = getIntent().getIntExtra(Constants.LESSONID, 0);
@@ -138,6 +140,7 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
 		trigger_add_img_layout.setOnClickListener(this);
 		btn_ok.setOnClickListener(this);
 		title_back.setOnClickListener(this);
+        textView_back.setOnClickListener(this);
 		mDb = new Database(this);
 		mMsgBox = new MessageBox(this);
 		tv_class_notice_title.setText(R.string.class_signup);
@@ -308,6 +311,7 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
 	public void onClick(View view) {
 		switch (view.getId()) {
 		case R.id.btn_notice_back:
+        case R.id.textView_back:
 			onBackPressed();
 			break;
 		case R.id.trigger_add_img_layout:
@@ -610,8 +614,8 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
 
 	private void noticeTeacherHomeworkResult(){
 		String student_alias = mDb.fetchStudentAlias(schoolId, my_uid);
-		String reason = class_name+"班的"+lesson_name+"课"+student_alias+"学生提交作业啦！请批阅";
-
+//		String reason = lesson_name+"课"+class_name+"班的"+student_alias+"学生提交作业啦！请批阅";
+        String reason = lesson_name+""+class_name+"的"+student_alias+"学生提交作业啦！请批阅";
 		final ChatMessage message = new ChatMessage();
 		message.chatUserName = teacherID;
 

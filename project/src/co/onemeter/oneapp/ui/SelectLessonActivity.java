@@ -47,6 +47,7 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 	private ImageButton title_back;
 	private ImageView lesson_refresh;
 	private CourseTableAdapter adapter;
+    private TextView textView_back;
 	private MessageBox mMsgBox;
 	private Database mDBHelper;
 	private String classId = null;
@@ -67,9 +68,11 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 	
 	private void initView(){
 		lvCourtable = (ListView) findViewById(R.id.listView_lesson_show);
+        textView_back = (TextView) findViewById(R.id.textView_back);
 		title_back = (ImageButton) findViewById(R.id.title_back);
 		lesson_refresh = (ImageView) findViewById(R.id.lesson_refresh);
-		
+
+        textView_back.setOnClickListener(this);
 		lvCourtable.setOnItemClickListener(this);
 		lesson_refresh.setOnClickListener(this);
 		title_back.setOnClickListener(this);
@@ -80,6 +83,9 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 		mDBHelper = new Database(this);
 		classId = getIntent().getStringExtra("classId");
 		homeworkTag = getIntent().getStringExtra("homework");
+        if (homeworkTag != null) {
+            textView_back.setText("在线作业");
+        }
 		curTime = System.currentTimeMillis()/1000;
 //		for(int i =0 ;i < mDBHelper.fetchLesson(classId).size();i++){
 //			if(curTime < mDBHelper.fetchLesson(classId).get(i).start_date){
@@ -157,11 +163,13 @@ public class SelectLessonActivity extends Activity implements OnClickListener, O
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.title_back:
-			finish();
+            case R.id.textView_back:
+		    case R.id.title_back:
+			    finish();
 			break;
-		case R.id.lesson_refresh:
-			getLessonInfo();
+
+		    case R.id.lesson_refresh:
+			    getLessonInfo();
 			break;
 		}
 		

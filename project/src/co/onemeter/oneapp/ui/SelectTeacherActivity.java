@@ -59,6 +59,7 @@ public class SelectTeacherActivity extends Activity implements OnClickListener, 
 	private void initView(){
 		AQuery q = new AQuery(this);
 		q.find(R.id.title_back).clicked(this);
+        q.find(R.id.textView_back).clicked(this);
 		q.find(R.id.teacher_refresh).clicked(this);
 		listView_teacher_show = (ListView) findViewById(R.id.listView_teacher_show);
 		
@@ -103,6 +104,7 @@ public class SelectTeacherActivity extends Activity implements OnClickListener, 
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.title_back:
+        case R.id.textView_back:
 			finish();
 			break;
 			

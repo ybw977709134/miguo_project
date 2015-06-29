@@ -12,11 +12,22 @@
 
         <ImageButton
             android:id="@+id/title_back"
-            android:layout_width="50dp"
+            android:layout_width="30dp"
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:background="@null"
             android:src="@drawable/icon_back_selector" />
+
+        <co.onemeter.oneapp.ui.widget.PressedTextView
+            android:id="@+id/textView_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/title_back"
+            android:layout_centerVertical="true"
+            android:textSize="16sp"
+            android:clickable="true"
+            android:textColor="@color/white"
+            android:text="在线作业" />
 
         <TextView
             style="?attr/navbar_title"

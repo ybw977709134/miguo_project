@@ -50,7 +50,11 @@ public class SelectClassActivity extends Activity implements OnClickListener, On
 	private void initView(){
 		AQuery q = new AQuery(this);
 		q.find(R.id.title_back).clicked(this);
+        q.find(R.id.textView_back).clicked(this);
 		q.find(R.id.class_refresh).clicked(this);
+        if (getIntent().getStringExtra("homework") != null) {
+            q.find(R.id.textView_back).text("在线作业");
+        }
 		listView_class_show = (ListView) findViewById(R.id.listView_class_show);
 		msgbox = new MessageBox(this);
 		talkwebserver =  WowTalkWebServerIF.getInstance(SelectClassActivity.this);
@@ -102,6 +106,7 @@ public class SelectClassActivity extends Activity implements OnClickListener, On
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.title_back:
+         case R.id.textView_back:
 			finish();
 			break;
 		case R.id.class_refresh:

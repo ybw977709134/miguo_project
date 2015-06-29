@@ -105,6 +105,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		mDb = new Database(this);
 		msgbox = new MessageBox(this);
 		q.find(R.id.title_back).clicked(this);
+        q.find(R.id.textView_back).clicked(this);
 		q.find(R.id.layout_sign_class).clicked(this);
 		q.find(R.id.layout_signup_homework).clicked(this);
 		q.find(R.id.title_refresh).clicked(this);
@@ -222,6 +223,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 	public void onClick(View view) {
 		switch (view.getId()) {
 		case R.id.title_back:
+        case R.id.textView_back:
 			onBackPressed();
 			break;
 			

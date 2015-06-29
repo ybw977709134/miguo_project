@@ -261,7 +261,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
-                                android:text="在线作业"
+                                android:text="在线交作业"
                                 style="@style/home_txt_middle"/>
                         </LinearLayout>
                         <LinearLayout

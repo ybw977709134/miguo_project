@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_dark"
-    android:orientation="vertical"
     android:focusableInTouchMode="true">
 
     <RelativeLayout
@@ -47,10 +46,31 @@
         android:id="@+id/listView_submit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="60dp"
         android:divider="@null"
         android:cacheColorHint="@null"
         android:dividerHeight="0dp"
         android:fadingEdge="none"
         android:footerDividersEnabled="false"/>
 
-</LinearLayout>
+
+
+
+    <Button
+        android:id="@+id/btn_homework_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/btn_small_bule_valid"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="text"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
+
+</RelativeLayout>

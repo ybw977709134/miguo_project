@@ -113,7 +113,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 		getLessonHomework = new GetLessonHomework();
 		
 		if(flag == 1){//-1 学生账号查看作业
-			tv_del.setText("提交");
+			tv_del.setText("提交作业");
 			tv_modify_homework.setVisibility(View.GONE);
 		}
 		if(flag == 2){

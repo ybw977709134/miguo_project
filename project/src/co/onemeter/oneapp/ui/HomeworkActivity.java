@@ -124,6 +124,8 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
 			lvHomework.setVisibility(View.GONE);
 			q.find(R.id.layout_signup_homework).visibility(View.VISIBLE);
+            //学生显示作业
+            q.find(R.id.textView_sign_work).text("作业");
 		}else{
 			lvHomework.setVisibility(View.VISIBLE);
 			q.find(R.id.layout_signup_homework).visibility(View.GONE);
@@ -472,7 +474,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			String uid = String.valueOf(homeworkStates.get(position).get("stu_uid"));
 //			String name = String.valueOf(homeworkStates.get(position).get("stu_name"));
 			String student_alias = mDb.fetchStudentAlias(schoolId, studentId);
-			String reason = tv_class_name.getText().toString()+"课"+tv_lesson_name.getText().toString()+"班的"+student_alias+"老师提醒你，该交作业啦！";
+			String reason = tv_lesson_name.getText().toString()+"课"+tv_class_name.getText().toString()+"班的"+student_alias+"老师提醒你，该交作业啦！";
 
 			
 			final ChatMessage message = new ChatMessage();

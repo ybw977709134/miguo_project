@@ -28,7 +28,7 @@
             android:textSize="16sp"
             android:clickable="true"
             android:textColor="@color/white"
-            android:text="在线作业" />
+            android:text="作业列表" />
 
         <TextView
             android:id="@+id/title_name"
@@ -41,7 +41,7 @@
 
         <co.onemeter.oneapp.ui.widget.PressedTextView
             android:id="@+id/tv_del"
-            android:layout_width="50dp"
+            android:layout_width="80dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:background="@null"

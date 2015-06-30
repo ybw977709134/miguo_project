@@ -40,6 +40,7 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
     //返回
     private ImageButton title_back;
     private TextView textView_homework_back;
+    private TextView contact_current_group;
 
 
     private ListView listView_submit;
@@ -92,6 +93,8 @@ public class SubmitHomeWorkActivity extends Activity implements View.OnClickList
     	result_id = getIntent().getIntExtra("result_id", 0);
         title_back = (ImageButton) findViewById(R.id.title_back);
         textView_homework_back = (TextView) findViewById(R.id.textView_homework_back);
+        contact_current_group = (TextView) findViewById(R.id.contact_current_group);
+        contact_current_group.setText(stu_name);
 
         listView_submit = (ListView) findViewById(R.id.listView_submit);
 //        listView_fresh = listView_submit.getRefreshableView();

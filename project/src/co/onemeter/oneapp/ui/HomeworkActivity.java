@@ -24,6 +24,7 @@ import org.wowtalk.api.ChatMessage;
 import org.wowtalk.api.Database;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.GetLessonHomework;
+import org.wowtalk.api.HomeWorkReview;
 import org.wowtalk.api.LessonAddHomework;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.Moment;
@@ -168,16 +169,25 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 					homework_id = getLessonHomework.id;
 					tv_addhomework_state.setText("已布置");
 					int momentId = 0;
+                    HomeWorkReview homeWorkReview = null;
 					for(int j = 0;j < getLessonHomework.stuResultList.size();j++){
 						if(studentId.equals(getLessonHomework.stuResultList.get(j).student_id)){
 							momentId = getLessonHomework.stuResultList.get(j).moment_id;
+                            homeWorkReview = getLessonHomework.stuResultList.get(j).homeWorkReview;
 						}
 					}
+
 					if(momentId == 0){
 						tv_signup_homework_state.setText("未提交");
 					}else{
-						tv_signup_homework_state.setText("已提交");
+
+                        if (homeWorkReview != null) {
+                            tv_signup_homework_state.setText("已批改");
+                        } else {
+                            tv_signup_homework_state.setText("已提交");
+                        }
 					}
+
 				}else if(result == 0){
 					tv_addhomework_state.setText("未布置");
                     tv_signup_homework_state.setText("");

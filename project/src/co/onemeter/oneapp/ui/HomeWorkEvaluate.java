@@ -153,8 +153,8 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
 						}
 					}).start();
 				}else if(result == 0){
-					if(confirmNum == 0 && timelyNum == 0 && exactNum == 0){
-						mMsgBox.showWaitImageCaution("请填写星星评分");
+					if(confirmNum == 0 || timelyNum == 0 || exactNum == 0){
+						mMsgBox.showWaitImageCaution("请对每个选项给出星星评分");
 						new Thread(new Runnable() {
 							
 							@Override
@@ -280,7 +280,8 @@ public class HomeWorkEvaluate extends Activity implements View.OnClickListener {
     
     private void noticeTeacherHomeworkReview(){
 		String teacher_alias = mDb.fetchStudentAlias(schoolId, my_uid);
-		String reason = class_name+"课"+lesson_name+"班的"+teacher_alias+"老师已经批改了你的作业，快去查看";
+//		String reason = class_name+"课"+lesson_name+"班的"+teacher_alias+"老师已经批改了你的作业，快去查看";
+        String reason = lesson_name+class_name+"的"+teacher_alias+"老师已经批改了你的作业，快去查看";
 	
 		final ChatMessage message = new ChatMessage();
 		message.chatUserName = student_uid;

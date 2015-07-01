@@ -926,6 +926,7 @@
     <string name="class_edit_cursetable_info">编辑课表</string>
     <string name="class_lesson_situation_table">课堂点评</string>
     <string name="class_set_homework">布置作业</string>
+    <string name="lesson_homework">作业</string>
     <string name="class_parent_suggestion">家长意见</string>
     <string name="class_lesson_situation">评价学生</string>
     <string name="class_lesson_classroom">教室</string>

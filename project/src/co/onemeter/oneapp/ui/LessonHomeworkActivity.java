@@ -57,6 +57,8 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
     private String teacherID;
     private int momentId = 0;
 
+    private int REQ_PARENT_MODIFYHOMEWORK = 1;
+
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,18 +193,18 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 	@Override
     protected void onResume() {
         super.onResume();
-        mImageResizer.setExitTasksEarly(false);
+//        mImageResizer.setExitTasksEarly(false);
         AppStatusService.setIsMonitoring(true);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mImageResizer.setPauseWork(false);
-        mImageResizer.setExitTasksEarly(true);
+//        mImageResizer.setPauseWork(false);
+//        mImageResizer.setExitTasksEarly(true);
         mImageResizer.flushCache();
 
-        mImageResizer.clearCacheInMem();
+//        mImageResizer.clearCacheInMem();
     }
 
     @Override
@@ -258,6 +260,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 
         HomeWorkAdapter.setImageLayout(this, moment,mImageResizer, photoFiles, imageTable);
     }
+
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
@@ -343,7 +346,8 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
             }
 //            intent.putExtra("listWMediaFile", listWMediaFile);
             intent.putExtra("list_path", list_path);
-            startActivity(intent);
+//            startActivity(intent);
+            startActivityForResult(intent,REQ_PARENT_MODIFYHOMEWORK);
 			break;
 		default:
 			break;
@@ -406,4 +410,14 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 //        context.startActivity(intent);
 //    }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == Activity.RESULT_OK){
+            if(requestCode == REQ_PARENT_MODIFYHOMEWORK){
+                moment = data.getParcelableExtra("modifyMoment");
+                setupContent(moment);
+            }
+        }
+    }
 }

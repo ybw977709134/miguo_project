@@ -109,10 +109,12 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 		if (listPhoto == null)
 			listPhoto = new ArrayList<>();
 	}
+
 	private void initView(Bundle savedInstanceState) {
 		tag = getIntent().getStringExtra("tag_intent_AddHomeworkActivity");
 //		listWMediaFile = getIntent().getParcelableArrayListExtra("listWMediaFile");
 		list_path = getIntent().getStringArrayListExtra("list_path");
+
 		title_back = (ImageButton) findViewById(R.id.btn_notice_back);
         textView_back = (TextView) findViewById(R.id.textView_back);
 		listMoment = new LinkedList<Moment>();
@@ -257,8 +259,9 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 					mDb.storeMultimedia(moment, f);
 				}
 
-//				Intent data = new Intent();
-//				setResult(RESULT_OK, data);
+				Intent data = new Intent();
+                data.putExtra("modifyMoment",moment);
+				setResult(RESULT_OK, data);
 
 				// upload to server
 				new Thread(new Runnable() {
@@ -301,9 +304,9 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 						try {
 							Thread.sleep(3000);
 							AddHomeworkActivity.this.finish();
-							if(LessonHomeworkActivity.getInstance() != null){
-								LessonHomeworkActivity.getInstance().finish();
-							}
+//							if(LessonHomeworkActivity.getInstance() != null){
+//								LessonHomeworkActivity.getInstance().finish();
+//							}
 							
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
@@ -681,6 +684,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
         }
         bmpDrawableList.clear();
     }
+
 	private void deleteAImage(View view) {
         CreateMomentActivity.WMediaFile path = (CreateMomentActivity.WMediaFile) view.getTag();
         listPhoto.remove(path);
@@ -694,6 +698,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
         recycleAView(view);
         notifyFileChanged(false);
     }
+
 	private void updateTriggerAddImgDescTxtStatus() {
         TextView tvDesc=(TextView) findViewById(R.id.trigger_add_img_txt_desc);
         if(listPhoto.size() > 0) {
@@ -704,6 +709,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
         	hsvImgList.setBackgroundResource(R.drawable.table_white);
         }
     }
+
 	private void addMedia2moment(CreateMomentActivity.WMediaFile file) {
 		for (WFile aFile : moment.multimedias) {
 			if (aFile.localPath.equals(file.localPath)) {
@@ -722,6 +728,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 
 		copyFileForMomentMultimedia(file, file.isPhoto);
 	}
+
 	private void copyFileForMomentMultimedia(WFile aFile, boolean isPhoto) {
 		String destFilePath = PhotoDisplayHelper.makeLocalFilePath(
 				aFile.fileid, aFile.getExt());
@@ -764,6 +771,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 			}
 		}
 	}
+
 	private void notifyFileChanged(boolean isAdded) {
         updateTriggerAddImgDescTxtStatus();
 

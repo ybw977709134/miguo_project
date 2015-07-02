@@ -1400,8 +1400,12 @@ public class LessonWebServerIF {
 				errno = ErrorCode.OK;			
 				Database db = new Database(mContext);
 			    
-				db.deleteLessonHomework(addhomework.homework_id);
-				db.storeLessonAddHomework(addhomework,addhomework.homework_id);
+//				db.deleteLessonHomework(addhomework.homework_id);
+
+                if (db.deleteLessonHomework(addhomework.homework_id) > 0) {
+                    db.storeLessonAddHomework(addhomework,addhomework.homework_id);
+                }
+//				db.storeLessonAddHomework(addhomework,addhomework.homework_id);
 			} else {
 				errno = Integer.parseInt(errorStr);
 			}

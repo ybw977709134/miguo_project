@@ -171,9 +171,13 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 			
 		case R.id.layout_sign_class://获取班级名和id
 			Intent intentClass = new Intent(this,SelectClassActivity.class);
-            if(homeworkTag.equals("homework")){
-                intentClass.putExtra("homework", homeworkTag);
+
+            if (homeworkTag != null) {
+                if(homeworkTag.equals("homework")){
+                    intentClass.putExtra("homework", homeworkTag);
+                }
             }
+
 
 			startActivityForResult(intentClass, REQ_SIGN_CLASS);
 			break;
@@ -191,9 +195,12 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
 			if (classID != null) {
 				Intent intentLesson = new Intent(this,SelectLessonActivity.class);
 				intentLesson.putExtra("classId", classID);
-                if(homeworkTag.equals("homework")){
-                    intentLesson.putExtra("homework", homeworkTag);
+                if (homeworkTag != null) {
+                    if(homeworkTag.equals("homework")){
+                        intentLesson.putExtra("homework", homeworkTag);
+                    }
                 }
+
 				startActivityForResult(intentLesson, REQ_SIGN_LESSON);
 			} else {
 				alert("请选择请假班级");

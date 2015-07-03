@@ -90,17 +90,17 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_homework);
 		initData(savedInstanceState);
-
         initView(savedInstanceState);
 	}
-	
-	private void initData(Bundle savedInstanceState){
+
+private void initData(Bundle savedInstanceState){
 		if (savedInstanceState != null) {
 			if (moment == null)
 				moment = savedInstanceState.getParcelable(EXTRA_MOMENT);
 			mediaHelper = savedInstanceState.getParcelable("media_helper");
 			listPhoto = savedInstanceState.getParcelableArrayList("list_photo");
 		}
+
 		if (moment == null)
 			moment = new Moment();
 		if (mediaHelper == null)
@@ -111,6 +111,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 	}
 
 	private void initView(Bundle savedInstanceState) {
+
 		tag = getIntent().getStringExtra("tag_intent_AddHomeworkActivity");
 //		listWMediaFile = getIntent().getParcelableArrayListExtra("listWMediaFile");
 		list_path = getIntent().getStringArrayListExtra("list_path");
@@ -470,16 +471,16 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
 			break;
 		case R.id.btn_ok:
 
-            if (edt_moment_content.getText().length() <= 0) {
+            if (edt_moment_content.getText().length() <= 0 && moment.multimedias.size() <= 0) {
 
                 MessageDialog dialog = new MessageDialog(AddHomeworkActivity.this,false,MessageDialog.SIZE_NORMAL);
                 dialog.setTitle("");
-                dialog.setMessage("请填写作业内容!");
+                dialog.setMessage("作业的内容不能为空!");
                 dialog.setCancelable(false);
                 dialog.show();
 
             } else {
-                if(strContent != null){
+                if (tag != null) {//从新设置判定布置过作业的标志
                     MessageDialog dialog = new MessageDialog(AddHomeworkActivity.this);
                     dialog.setTitle("提示");
                     dialog.setMessage("你确定修改布置作业吗?");
@@ -497,7 +498,7 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
                     );
                     dialog.show();
 
-                }else{
+                } else {
                     MessageDialog dialog = new MessageDialog(AddHomeworkActivity.this);
                     dialog.setTitle("提示");
                     dialog.setMessage("你确定布置作业吗?");
@@ -518,44 +519,6 @@ public class AddHomeworkActivity extends Activity implements OnClickListener, Ch
                 }
             }
 
-
-//			if(strContent != null){
-//				MessageDialog dialog = new MessageDialog(AddHomeworkActivity.this);
-//                dialog.setTitle("提示");
-//                dialog.setMessage("你确定修改布置作业吗?");
-//                dialog.setCancelable(false);
-//                dialog.setRightBold(true);
-//                dialog.setOnLeftClickListener("取消", null);
-//
-//                dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
-//                    @Override
-//                    public void onclick(MessageDialog dialog) {
-//                        dialog.dismiss();
-//                        modifyLessonHomework(lessonId,modify_homework_id, moment);
-//                    }
-//                }
-//                );
-//                dialog.show();
-//
-//			}else{
-//				MessageDialog dialog = new MessageDialog(AddHomeworkActivity.this);
-//                dialog.setTitle("提示");
-//                dialog.setMessage("你确定布置作业吗?");
-//                dialog.setCancelable(false);
-//                dialog.setRightBold(true);
-//                dialog.setOnLeftClickListener("取消", null);
-//
-//                dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
-//                    @Override
-//                    public void onclick(MessageDialog dialog) {
-//                        dialog.dismiss();
-//                        addLessonHomework(lessonId, moment);
-//                    }
-//                }
-//                );
-//                dialog.show();
-//
-//			}
 			
 			break;
 		default:

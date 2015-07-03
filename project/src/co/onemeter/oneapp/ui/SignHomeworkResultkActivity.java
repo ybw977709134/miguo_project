@@ -246,6 +246,8 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
                         }
                         //调用借口回调方法，刷新提交作业后返回作业列表的状态
                         refreshHomework.refresh();
+
+                        noticeTeacherHomeworkResult();
                     }
                 });
 
@@ -323,16 +325,16 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
         	}
 
             //如果作业的内容为空将不能都够提交作业
-            if (edt_moment_content.getText().length() <= 0) {
+            if (edt_moment_content.getText().length() <= 0 && moment.multimedias.size() <= 0) {
                 MessageDialog dialog = new MessageDialog(SignHomeworkResultkActivity.this,false,MessageDialog.SIZE_NORMAL);
                 dialog.setTitle("");
-                dialog.setMessage("请填写作业内容!");
+                dialog.setMessage("作业不能为空!");
                 dialog.setCancelable(false);
                 dialog.show();
             } else {
                 addLessonHomework(lessonId, moment);
 
-                noticeTeacherHomeworkResult();
+//                noticeTeacherHomeworkResult();
             }
 
 			break;

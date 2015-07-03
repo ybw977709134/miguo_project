@@ -224,6 +224,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
         }
 
         if (moment.text == null || moment.text.equals("")) {
+            txt_content.setText("");
         	txt_content.setVisibility(View.GONE);
         } else {
         	txt_content.setVisibility(View.VISIBLE);

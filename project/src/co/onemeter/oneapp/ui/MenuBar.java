@@ -40,6 +40,9 @@ public abstract class MenuBar {
 
     private static String sText;
 
+    private static TextView btn_sender;
+    private static TextView btn_cat;
+
     /**
      * @param dialogBackground 作为对话框下方的屏幕背景，一般为半透明的黑色。
      */
@@ -54,6 +57,10 @@ public abstract class MenuBar {
         this.dialogBackground = dialogBackground;
         this.anchorView = view;
 
+
+        btn_sender = (TextView) view.findViewById(R.id.btn_sender);
+        btn_cat = (TextView) view.findViewById(R.id.btn_cat);
+
         for (int r : menuItemResIds) {
             selectedItemIdx.put(r, 0);
         }
@@ -65,6 +72,20 @@ public abstract class MenuBar {
         if(menuItemResIds.length == 1){
             sText = q.find(menuItemResIds[0]).getText().toString();
         }
+    }
+
+    public static TextView getSender() {
+        if (btn_sender != null) {
+            return btn_sender;
+        }
+        return null;
+    }
+
+    public static TextView getCat() {
+        if (btn_cat != null) {
+            return btn_cat;
+        }
+        return null;
     }
 
     protected abstract String[] getSubItems(int itemId);

@@ -138,7 +138,7 @@ public class HomeWorkAdapter extends BaseAdapter{
 
         String homeworkDate = Utils.stampsToDateCN(date_comment);
         String homeworkTime = Utils.stampsToTime(date_comment);
-        Toast.makeText(context,homeworkTime,Toast.LENGTH_LONG).show();
+//        Toast.makeText(context,homeworkTime,Toast.LENGTH_LONG).show();
 
         String timeHour = homeworkTime.substring(0,2);
 

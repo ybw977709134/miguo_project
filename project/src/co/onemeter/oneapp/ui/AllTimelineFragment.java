@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import co.onemeter.oneapp.R;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import org.wowtalk.api.Database;
@@ -27,7 +29,7 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timeline, container, false);
-        ptrListView = (PullToRefreshListView) view.findViewById(R.id.ptr_list);
+         ptrListView = (PullToRefreshListView) view.findViewById(R.id.ptr_list);
         dialogBackground = view.findViewById(R.id.dialog_container);
         dialogBackground.setVisibility(View.GONE);
         return view;
@@ -85,6 +87,8 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
             headerView = timelineDropdownFilter.getView();
             getListView().addHeaderView(headerView);
             timelineDropdownFilter.setOnFilterChangedListener(this);
+
+
         }
     }
 
@@ -101,7 +105,21 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
     public void onDropdownMenuItemClick(int subMenuResId, int itemIdx) {
         switch (subMenuResId) {
             case R.id.btn_sender:
+
+                if (itemIdx == 0) {//全部
+                    MenuBar.getSender().setText("全部");
+                } else if (itemIdx == 1) {//官方账号 0
+                    MenuBar.getSender().setText("官方账号");
+                } else if (itemIdx == 2) {//老师账号2
+                    MenuBar.getSender().setText("老师账号");
+                } else if (itemIdx == 3) {//学生账号1
+                    MenuBar.getSender().setText("学生账号");
+                }
+
+
                 onSenderChanged(itemIdx);
+
+
                 break;
             case R.id.btn_cat:
             	//0全部，1通知，2问答，3学习，4生活，5，投票，6视频
@@ -110,6 +128,22 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
             	if (itemIdx >= 1) {
             		itemIdx += 2;
             	}
+
+                if (itemIdx == 0) {//
+                    MenuBar.getCat().setText("全部");
+                } else if (itemIdx == 1) {
+                    MenuBar.getCat().setText("通知");
+                } else if (itemIdx == 2) {
+                    MenuBar.getCat().setText("问答");
+                } else if (itemIdx == 3) {
+                    MenuBar.getCat().setText("学习");
+                }else if (itemIdx == 4) {
+                    MenuBar.getCat().setText("生活");
+                }else if (itemIdx == 5) {
+                    MenuBar.getCat().setText("投票");
+                } else if (itemIdx == 6) {
+                    MenuBar.getCat().setText("视频");
+                }
             	
                 onTagChanged(itemIdx);
                 break;

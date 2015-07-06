@@ -222,6 +222,20 @@ public class Utils {
   		String date = sdf.format(new Date(stamps * 1000));
   		return String.valueOf(date);
   	}
+
+
+    public static String stampsToDateTimeCN(long stamps){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
+        String date = sdf.format(new Date(stamps * 1000));
+        return String.valueOf(date);
+    }
+    public static String stampsToDateCN(long stamps){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+        String date = sdf.format(new Date(stamps * 1000));
+        return String.valueOf(date);
+    }
+
+
   	public static String stampsToTime(long stamps){
   		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
   		String time = sdf.format(new Date(stamps * 1000));

@@ -17,6 +17,7 @@ import android.widget.RatingBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.Database;
@@ -33,7 +34,9 @@ import org.wowtalk.ui.bitmapfun.ui.RecyclingImageView;
 import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import co.onemeter.oneapp.R;
@@ -131,8 +134,24 @@ public class HomeWorkAdapter extends BaseAdapter{
         }
 
         long date_comment = stuResultList.get(position).stuMoment.insert_timestamp;
-        String date_comment_str = Utils.stampsToDateTime(date_comment);
-        holder.date_homework_comment.setText(date_comment_str);
+//        String date_comment_str = Utils.stampsToDateTime(date_comment);
+
+        String homeworkDate = Utils.stampsToDateCN(date_comment);
+        String homeworkTime = Utils.stampsToTime(date_comment);
+        Toast.makeText(context,homeworkTime,Toast.LENGTH_LONG).show();
+
+        String timeHour = homeworkTime.substring(0,2);
+
+        String timeType = null;
+        if (Integer.valueOf(timeHour) / 12 <= 0) {
+            timeType = "上午";
+        } else {
+            timeType = "下午";
+        }
+
+        String homeworkDateTime = homeworkDate+" "+timeType+homeworkTime;
+
+        holder.date_homework_comment.setText(homeworkDateTime);
 
         //下载图片
         if (photoFiles.size() == 0) {

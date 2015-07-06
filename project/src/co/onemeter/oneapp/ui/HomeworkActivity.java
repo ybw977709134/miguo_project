@@ -446,6 +446,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 				holder.tv_homework_state.setTextColor(0xff8eb4e6);
 			}else if(state == 1){
 				stateStr = "新提交";
+                holder.tv_homework_state.setBackgroundResource(R.color.white);
 				holder.tv_homework_state.setTextColor(0xff8eb4e6);
 			}else if(state == 2){
 				stateStr = "已批改";

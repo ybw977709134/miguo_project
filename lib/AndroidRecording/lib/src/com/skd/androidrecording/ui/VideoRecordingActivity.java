@@ -2,6 +2,8 @@ package com.skd.androidrecording.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.Camera.Size;
 import android.net.Uri;
@@ -10,8 +12,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.*;
-import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.skd.androidrecording.R;
 import com.skd.androidrecording.video.AdaptiveSurfaceView;
 import com.skd.androidrecording.video.CameraHelper;
@@ -33,6 +36,9 @@ public class VideoRecordingActivity extends Activity {
 	public static final String EXTRA_DURATION_LIMIT = "duration_limit";
 	/** 输入参数：是否隐藏视频尺寸选择控件？ */
 	public static final String EXTRA_HIDE_VIDEOSIZE_PICKER = "hide_videosize_picker";
+	/** 输入参数：不允许除这些以外的视频尺寸供用户选择。
+	 * 值应该是一个 ArrayList&lt;Integer&gt; = [ size1.w, size1.h, size2.w, size2.h, ... ]*/
+	public static final String EXTRA_ALLOWED_VIDEO_SIZES = "allowed_video_sizes ";
 
 	private static final int REQ_PREVIEW = 123;
 
@@ -41,16 +47,18 @@ public class VideoRecordingActivity extends Activity {
 	private AdaptiveSurfaceView videoView;
 	private ImageButton recordBtn;
 	private ImageButton switchBtn;
-	private Spinner videoSizeSpinner;
+	private View settingBtn;
 	private TextView durationText;
 	private TextView fileSizeText;
 
+	// current video size
 	private Size videoSize = null;
 	private int preferredWidth;
 	private int preferredHeight;
 	private int durationLimit = 0;
 	private int fileLimit = 0;
 	private boolean hideVideoSizePicker;
+	private ArrayList<Integer> allowedSizes;
 	private ArrayList<Size> supportedSizes = new ArrayList<>();
 	private VideoRecordingManager recordingManager;
 	private boolean previewStarted;
@@ -153,6 +161,7 @@ public class VideoRecordingActivity extends Activity {
 			fileLimit = savedInstanceState.getInt(EXTRA_FILE_LIMIT);
 			durationLimit = savedInstanceState.getInt(EXTRA_DURATION_LIMIT);
 			hideVideoSizePicker = savedInstanceState.getBoolean(EXTRA_HIDE_VIDEOSIZE_PICKER);
+			allowedSizes = savedInstanceState.getIntegerArrayList(EXTRA_ALLOWED_VIDEO_SIZES);
 		} else if (getIntent() != null && getIntent().getExtras() != null) {
 			Bundle bundle = getIntent().getExtras();
 			preferredWidth = bundle.getInt(EXTRA_PREFERRED_WIDTH);
@@ -160,6 +169,10 @@ public class VideoRecordingActivity extends Activity {
 			fileLimit = bundle.getInt(EXTRA_FILE_LIMIT);
 			durationLimit = bundle.getInt(EXTRA_DURATION_LIMIT);
 			hideVideoSizePicker = bundle.getBoolean(EXTRA_HIDE_VIDEOSIZE_PICKER);
+			allowedSizes = bundle.getIntegerArrayList(EXTRA_ALLOWED_VIDEO_SIZES);
+		}
+		if (allowedSizes != null) {
+			CameraHelper.setAllowedVideoSizes(allowedSizes);
 		}
 		
 		videoView = (AdaptiveSurfaceView) findViewById(R.id.videoView);
@@ -191,9 +204,17 @@ public class VideoRecordingActivity extends Activity {
 		else {
 			switchBtn.setVisibility(View.GONE);
 		}
+
+		settingBtn = (ImageButton) findViewById(R.id.settingBtn);
+		settingBtn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showSettings();
+			}
+		});
 		
 		if (hideVideoSizePicker) {
-			findViewById(R.id.videoSizeSpinner).setVisibility(View.GONE);
+			findViewById(R.id.settingBtn).setVisibility(View.GONE);
 		}
 	}
 
@@ -240,21 +261,9 @@ public class VideoRecordingActivity extends Activity {
 
 	@SuppressLint("NewApi")
 	private void loadVideoSizes() {
-		videoSizeSpinner = (Spinner) findViewById(R.id.videoSizeSpinner);
 		List<Size> sizes = CameraHelper.getCameraSupportedVideoSizes(recordingManager.getCameraManager().getCamera());
 		supportedSizes.clear();
 		supportedSizes.addAll(sizes);
-		videoSizeSpinner.setAdapter(new SizeAdapter(sizes));
-		videoSizeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				restartPreview((Size) arg0.getItemAtPosition(arg2));
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
 	}
 
 	private Size pickPreferredSize() {
@@ -273,16 +282,6 @@ public class VideoRecordingActivity extends Activity {
 						delta = d;
 					}
 				}
-			}
-
-			if (!hideVideoSizePicker) {
-				// suspend listener
-				OnItemSelectedListener l = videoSizeSpinner.getOnItemSelectedListener();
-				videoSizeSpinner.setOnItemSelectedListener(null);
-				// set selection
-				videoSizeSpinner.setSelection(idx);
-				// restore listener
-				videoSizeSpinner.setOnItemSelectedListener(l);
 			}
 
 			return supportedSizes.get(idx);
@@ -360,7 +359,7 @@ public class VideoRecordingActivity extends Activity {
 		recordBtn.setImageResource(R.drawable.btn_record_video_start);
 		switchBtn.setVisibility(View.VISIBLE);
 		if (!hideVideoSizePicker)
-			videoSizeSpinner.setVisibility(View.VISIBLE);
+			settingBtn.setVisibility(View.VISIBLE);
 		durationText.setVisibility(View.INVISIBLE);
 		fileSizeText.setVisibility(View.INVISIBLE);
 	}
@@ -369,7 +368,7 @@ public class VideoRecordingActivity extends Activity {
 		recordBtn.setImageResource(R.drawable.btn_record_video_stop);
 		switchBtn.setVisibility(View.GONE);
 		if (!hideVideoSizePicker)
-			videoSizeSpinner.setVisibility(View.GONE);
+			settingBtn.setVisibility(View.GONE);
 		durationText.setVisibility(View.VISIBLE);
 		fileSizeText.setVisibility(View.VISIBLE);
 	}
@@ -378,5 +377,25 @@ public class VideoRecordingActivity extends Activity {
 		Intent i = new Intent(VideoRecordingActivity.this, VideoPlaybackActivity.class);
 		i.putExtra(VideoPlaybackActivity.FileNameArg, fileName);
 		startActivityForResult(i, REQ_PREVIEW);
+	}
+
+	private void showSettings() {
+		String[] items = new String[supportedSizes.size()];
+		int i = 0;
+		for (Size sz : supportedSizes) {
+			items[i] = String.format("%c %d x %d", (sz == videoSize ? '*' : ' '), sz.width, sz.height);
+			++i;
+		}
+
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.select_video_size)
+				.setItems(items, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						restartPreview(supportedSizes.get(which));
+					}
+				})
+				.create()
+				.show();
 	}
 }

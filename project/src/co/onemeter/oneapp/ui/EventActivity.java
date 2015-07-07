@@ -420,16 +420,6 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
             case 2:
                 acts = mDb.fetchNotJoinedEvents();
                 break;
-//		case 1:
-//			acts = mDb.fetchOfficialEvents();
-//			break;
-//		case 2:
-//			acts = mDb.fetchAppliedEvents();
-//			break;
-//		case 3:
-//			acts = mDb.fetchJoinedEvents();
-//			break;
-//		case 4:
             default:
                 acts = mDb.fetchAllEvents();
                 break;
@@ -633,37 +623,29 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
     public void onDropdownMenuItemClick(int subMenuResId, int itemIdx) {
         if (subMenuResId == R.id.btn_filter1) {
         	curFilterLeftTag = itemIdx;
-//            if (itemIdx == 0) {
-//                eventAdapter.setDataSource(acts);
-//            } else if (itemIdx == 1) { // joined
-//                ArrayList<WEvent> filtered = new ArrayList<WEvent>();
-//                for (WEvent e : acts) {
-//                    if (e.membership == WEvent.MEMBER_SHIP_JOINED) {
-//                        filtered.add(e);
-//                    }
-//                }
-//                eventAdapter.setDataSource(filtered);
-//            } else if (itemIdx == 2) { // my
-//                ArrayList<WEvent> filtered = new ArrayList<WEvent>();
-//                String myUid = PrefUtil.getInstance(this).getUid();
-//                for (WEvent e : acts) {
-//                    if (TextUtils.equals(myUid, e.owner_uid)) {
-//                        filtered.add(e);
-//                    }
-//                }
-//                eventAdapter.setDataSource(filtered);
+
+//            if (eventStateTag == 0) {
+//            	downloadLatestEvents(GET_COMMING_EVENT_0,null);
+//                MenuBar.getBtnFilter1().setText("所有活动");
+//            } else if (eventStateTag == 1) { // on going
+//            	downloadLatestEvents(null,null);
+//                MenuBar.getBtnFilter1().setText("已报名活动");
+//            } else if (eventStateTag == 2) { // expired
+//                downloadLatestEvents(GET_FINISHED_EVENT_1,null);
+//                MenuBar.getBtnFilter1().setText("我发布的活动");
 //            }
-            if (eventStateTag == 0) {
-            	downloadLatestEvents(GET_COMMING_EVENT_0,null);
+
+            if (curFilterLeftTag == 0) {
+                downloadLatestEvents(GET_COMMING_EVENT_0,null);
                 MenuBar.getBtnFilter1().setText("所有活动");
-            } else if (eventStateTag == 1) { // on going
-            	downloadLatestEvents(null,null);
+            } else if (curFilterLeftTag == 1) { // on going
+                downloadLatestEvents(null,null);
                 MenuBar.getBtnFilter1().setText("已报名活动");
-            } else if (eventStateTag == 2) { // expired
+            } else if (curFilterLeftTag == 2) { // expired
                 downloadLatestEvents(GET_FINISHED_EVENT_1,null);
                 MenuBar.getBtnFilter1().setText("我发布的活动");
             }
-            return;
+
         } else if (subMenuResId == R.id.btn_filter2) {
         	eventStateTag = itemIdx;
             if (itemIdx == 0) {
@@ -676,10 +658,11 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
                 downloadLatestEvents(GET_FINISHED_EVENT_1,null);
                 MenuBar.getBtnFilter2().setText("已结束的活动");
             }
-            return;
-        }
 
-        Toast.makeText(this, subMenuResId + "/" + itemIdx, Toast.LENGTH_SHORT).show();
+
+        }
+//        Toast.makeText(EventActivity.this, subMenuResId + "/" + itemIdx, Toast.LENGTH_LONG).show();
+
     }
 
     private Spannable formatField(String label, String value){

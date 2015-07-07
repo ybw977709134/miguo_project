@@ -43,6 +43,11 @@ public abstract class MenuBar {
     private static TextView btn_sender;
     private static TextView btn_cat;
 
+    private static TextView btn_filter1;
+    private static TextView btn_filter2;
+
+
+
     /**
      * @param dialogBackground 作为对话框下方的屏幕背景，一般为半透明的黑色。
      */
@@ -57,9 +62,16 @@ public abstract class MenuBar {
         this.dialogBackground = dialogBackground;
         this.anchorView = view;
 
+        if (layoutResId == R.layout.timeline_filter) {
+            btn_sender = (TextView) view.findViewById(R.id.btn_sender);
+            btn_cat = (TextView) view.findViewById(R.id.btn_cat);
+        }
 
-        btn_sender = (TextView) view.findViewById(R.id.btn_sender);
-        btn_cat = (TextView) view.findViewById(R.id.btn_cat);
+        if (layoutResId == R.layout.event_filter) {
+            btn_filter1 = (TextView) view.findViewById(R.id.btn_filter1);
+            btn_filter2 = (TextView) view.findViewById(R.id.btn_filter2);
+        }
+
 
         for (int r : menuItemResIds) {
             selectedItemIdx.put(r, 0);
@@ -84,6 +96,21 @@ public abstract class MenuBar {
     public static TextView getCat() {
         if (btn_cat != null) {
             return btn_cat;
+        }
+        return null;
+    }
+
+
+    public static TextView getBtnFilter1() {
+        if (btn_filter1 != null) {
+            return btn_filter1;
+        }
+        return null;
+    }
+
+    public static TextView getBtnFilter2() {
+        if (btn_filter2 != null) {
+            return btn_filter2;
         }
         return null;
     }

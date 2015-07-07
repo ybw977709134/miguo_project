@@ -12,6 +12,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -654,20 +655,26 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 //            }
             if (eventStateTag == 0) {
             	downloadLatestEvents(GET_COMMING_EVENT_0,null);
+                MenuBar.getBtnFilter1().setText("所有活动");
             } else if (eventStateTag == 1) { // on going
             	downloadLatestEvents(null,null);
+                MenuBar.getBtnFilter1().setText("已报名活动");
             } else if (eventStateTag == 2) { // expired
                 downloadLatestEvents(GET_FINISHED_EVENT_1,null);
+                MenuBar.getBtnFilter1().setText("我发布的活动");
             }
             return;
         } else if (subMenuResId == R.id.btn_filter2) {
         	eventStateTag = itemIdx;
             if (itemIdx == 0) {
             	downloadLatestEvents(GET_COMMING_EVENT_0,null);
+                MenuBar.getBtnFilter2().setText("即将进行的活动");
             } else if (itemIdx == 1) { // on going
             	downloadLatestEvents(null,null);
+                MenuBar.getBtnFilter2().setText("进行中的活动");
             } else if (itemIdx == 2) { // expired
                 downloadLatestEvents(GET_FINISHED_EVENT_1,null);
+                MenuBar.getBtnFilter2().setText("已结束的活动");
             }
             return;
         }

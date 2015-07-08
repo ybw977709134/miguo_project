@@ -273,36 +273,36 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 						}
 					}
 					
-					if(property_value == 2 || property_value == 1 || property_value == 4){
+					if (property_value == 2 || property_value == 1 || property_value == 4) {
 						msgbox.toast("学生没有出席这节课，不能提交家长意见");
-					}else{
+					} else {
 						LessonParentFeedback feedback = mDbHelper.fetchLessonParentFeedback(lessonId, mPre.getUid());
-						if(feedback == null){
+						if (feedback == null) {
 							intent.putExtra(Constants.STUID, mPre.getUid());
 							intent.putExtra(LessonStatusActivity.FALG, false);
 							intent.setClass(this, LessonParentFeedbackActivity.class);
 							startActivityForResult(intent,REQ_PARENT_FEEDBACK);
-						}else{
+						} else{
 							Moment moment = mDbHelper.fetchMoment(feedback.moment_id + "");
 							if(moment != null){
-								FeedbackDetailActivity.launch(LessonDetailActivity.this,moment,PrefUtil.getInstance(this).getUserName(),null);
+                                 FeedbackDetailActivity.launch(LessonDetailActivity.this,moment,mDbHelper.fetchStudentAlias(schoolId,mPre.getUid()),null);
 							}else{
 								new MessageBox(this).toast(R.string.class_parent_opinion_not_submitted,500);
 							}
 						}
 					}
-				}else{
+				} else {
 					LessonParentFeedback feedback = mDbHelper.fetchLessonParentFeedback(lessonId, mPre.getUid());
-					if(feedback == null){
+					if (feedback == null) {
 						intent.putExtra(Constants.STUID, mPre.getUid());
 						intent.putExtra(LessonStatusActivity.FALG, false);
 						intent.setClass(this, LessonParentFeedbackActivity.class);
 						startActivityForResult(intent,REQ_PARENT_FEEDBACK);
-					}else{
+					} else {
 						Moment moment = mDbHelper.fetchMoment(feedback.moment_id + "");
-						if(moment != null){
-							FeedbackDetailActivity.launch(LessonDetailActivity.this,moment,PrefUtil.getInstance(this).getUserName(),null);
-						}else{
+						if (moment != null) {
+                            FeedbackDetailActivity.launch(LessonDetailActivity.this,moment,mDbHelper.fetchStudentAlias(schoolId,mPre.getUid()),null);
+						} else {
 							new MessageBox(this).toast(R.string.class_parent_opinion_not_submitted,500);
 						}
 					}
@@ -359,7 +359,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 	}
 	
 	private boolean isTeacher(){
-		if(Buddy.ACCOUNT_TYPE_TEACHER == PrefUtil.getInstance(this).getMyAccountType()){
+		if(Buddy.ACCOUNT_TYPE_TEACHER == PrefUtil.getInstance(LessonDetailActivity.this).getMyAccountType()){
 			return true;
 		}
 		return false;

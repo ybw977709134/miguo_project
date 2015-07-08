@@ -17,6 +17,7 @@
 package com.skd.androidrecording.video;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Size;
@@ -24,7 +25,6 @@ import android.os.Build;
 import android.view.Surface;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 /*
@@ -34,10 +34,21 @@ import java.util.List;
 
 public class CameraHelper {
 
+	private static int[] allowedSizes = {
+			// width, height,
+			1920, 1080,
+			1280, 720,
+			720, 480,
+			640, 480,
+			320, 240
+	};
+
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	public static int getAvailableCamerasCount() {
 		return Camera.getNumberOfCameras();
 	}
 	
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	public static int getDefaultCameraID() {
 		int camerasCnt = getAvailableCamerasCount();
 		int defaultCameraID = 0;
@@ -51,6 +62,7 @@ public class CameraHelper {
         return defaultCameraID;
 	}
 	
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	public static boolean isCameraFacingBack(int cameraID) {
 		CameraInfo cameraInfo = new CameraInfo();
 		Camera.getCameraInfo(cameraID, cameraInfo);
@@ -60,41 +72,46 @@ public class CameraHelper {
 	@SuppressLint("NewApi")
 	public static List<Size> getCameraSupportedVideoSizes(android.hardware.Camera camera) {
 		if (camera != null) {
-			if ((Build.VERSION.SDK_INT >= 11) && camera.getParameters().getSupportedVideoSizes() != null) {
-				return camera.getParameters().getSupportedVideoSizes();
-			} else {
-				// Video sizes may be null, which indicates that all the supported
-				// preview sizes are supported for video recording.
-				HashSet<String> allSizesLiteral = new HashSet<>();
-				for (Camera.Size sz : camera.getParameters().getSupportedPreviewSizes()) {
-					allSizesLiteral.add(String.format("%dx%d", sz.width, sz.height));
-				}
-
-				// on Samsung Galaxy 3, the supported preview sizes are too many,
-				// but it seems that not all of them can be used as recording video size.
-				// the following set are used by the built-in camera app.
-				Camera.Size[] preferredSizes = {
-						camera.new Size(1920, 1080),
-						camera.new Size(1280, 720),
-						camera.new Size(720, 480),
-						camera.new Size(640, 480),
-						camera.new Size(320, 240)
-				};
-
-				List<Size> result = new ArrayList<>(preferredSizes.length);
-				for (Camera.Size sz : preferredSizes) {
-					if (allSizesLiteral.contains(String.format("%dx%d", sz.width, sz.height)))
-						result.add(sz);
-				}
-
-				return result;
-			}
+			List<Size> supportedSizes = null;
+			if ((Build.VERSION.SDK_INT >= 11))
+				supportedSizes = camera.getParameters().getSupportedVideoSizes();
+			if (supportedSizes == null)
+				supportedSizes = camera.getParameters().getSupportedPreviewSizes();
+			return filterVideoSizes(camera, supportedSizes);
 		}
 		else {
 			return null;
 		}
 	}
-	
+
+	/**
+	 * On some devices, not all sizes it declared to support are REALLY supported,
+	 * so filter them, preserve only well-known sizes.
+	 * @param camera
+	 * @param supportedSizes
+	 * @return
+	 */
+	private static List<Size> filterVideoSizes(Camera camera, List<Size> supportedSizes) {
+		// Video sizes may be null, which indicates that all the supported
+		// preview sizes are supported for video recording.
+		StringBuilder allSizesLiteralSB = new StringBuilder();
+		for (Size sz : supportedSizes) {
+            allSizesLiteralSB.append(String.format("(%dx%d)", sz.width, sz.height));
+        }
+		String allSizesLiteral = allSizesLiteralSB.toString();
+
+		List<Size> result = new ArrayList<>(allowedSizes.length);
+		for (int i = 0; i < allowedSizes.length; i += 2) {
+			int w = allowedSizes[i];
+			int h = allowedSizes[i + 1];
+            if (allSizesLiteral.contains(String.format("(%dx%d)", w, h)))
+                result.add(camera.new Size(w, h));
+        }
+
+		return result;
+	}
+
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	public static int setCameraDisplayOrientation(int cameraId, android.hardware.Camera camera, int displayRotation) {
 		Camera.CameraInfo info = new Camera.CameraInfo();
 		Camera.getCameraInfo(cameraId, info);
@@ -131,5 +148,18 @@ public class CameraHelper {
 			}
 		}
 		return camRotationDegree;
+	}
+
+	public static void setAllowedVideoSizes(int[] sizes) {
+		allowedSizes = sizes;
+	}
+
+	public static void setAllowedVideoSizes(ArrayList<Integer> sizes) {
+		allowedSizes = new int[sizes.size()];
+		int i = 0;
+		for (Integer value : sizes) {
+			allowedSizes[i] = value;
+			++i;
+		}
 	}
 }

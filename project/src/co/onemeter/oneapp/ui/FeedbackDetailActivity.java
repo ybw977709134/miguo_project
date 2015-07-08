@@ -276,10 +276,11 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
         String tag = getIntent().getStringExtra("tag");
         if(!TextUtils.isEmpty(name)){
         	txtName.setText(name);
+            Toast.makeText(this,name,Toast.LENGTH_LONG).show();
         }
         if(!TextUtils.isEmpty(tag)){
         	title_name.setText(tag);
-        	linearLayout_date_time.setVisibility(View.GONE);
+//        	linearLayout_date_time.setVisibility(View.GONE);
         }
         long time = Long.valueOf(moment.timestamp * 1000);
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");

@@ -2,7 +2,6 @@ package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -18,14 +17,11 @@ import com.androidquery.AQuery;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
+import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class EventDetailActivity extends Activity implements OnClickListener {
     private static final int NUM_COLUMNS = 4;
@@ -74,7 +70,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
             @Override
             protected void onPostExecute(Void v) {
                 if (ok) {
-                    displayImage(thumbnail ? aFile.localThumbnailPath : aFile.localPath, imageView);
+                    displayImage(thumbnail ? aFile.localThumbnailPath : aFile.localPath, imageView, false);
                 }
             }
 
@@ -105,7 +101,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                 // display big image
                 if (numImages == 0) {
                     ImageView imageView = (ImageView)findViewById(R.id.image_cover);
-                    if (!displayImage(aFile.localPath, imageView)) {
+                    if (!displayImage(aFile.localPath, imageView, true)) {
                         downloadImage(aFile, false, imageView);
                     }
                 }
@@ -117,7 +113,7 @@ public class EventDetailActivity extends Activity implements OnClickListener {
                     ImageView imageView = addImageView(row, numImages);
 
                     // set image source
-                    if (!displayImage(filename, imageView)) {
+                    if (!displayImage(filename, imageView, false)) {
                         imageView.setImageResource(R.drawable.feed_default_pic);
                         downloadImage(aFile, true, imageView);
                     }
@@ -134,13 +130,12 @@ public class EventDetailActivity extends Activity implements OnClickListener {
         }
 	}
 
-    private boolean displayImage(String filename, ImageView imageView) {
+    private boolean displayImage(String filename, ImageView imageView, boolean asAlbumCover) {
         boolean ok = false;
         try {
             if (new File(filename).exists()) {
-                InputStream in = new FileInputStream(filename);
-                Drawable drawable = Drawable.createFromStream(in, null);
-                imageView.setImageDrawable(drawable);
+                int size = asAlbumCover ? 300 : 100;
+                new ImageResizer(this, size).loadImage(filename, imageView);
                 ok = true;
             }
         } catch (Exception e) {

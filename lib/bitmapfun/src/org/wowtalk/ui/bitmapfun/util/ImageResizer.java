@@ -21,12 +21,16 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
-
-import java.io.FileDescriptor;
-
+import android.widget.ImageView;
+import org.wowtalk.api.WFile;
 import org.wowtalk.ui.bitmapfun.BuildConfig;
+
+import java.io.File;
+import java.io.FileDescriptor;
 
 /**
  * A simple subclass of {@link ImageWorker} that resizes images from resources given a target width
@@ -94,6 +98,32 @@ public class ImageResizer extends ImageWorker {
             return decodeSampledBitmapFromFile((String)data,
                     mImageWidth, mImageHeight, getImageCache());
         }
+    }
+
+    /**
+     *
+     * @param data can be:
+     *             <ul>
+     *             <li>int - drawable resource ID</li>
+     *             <li>String - local file path</li>
+     *             <li>{@link WFile}</li>
+     *             </ul>
+     * @param imageView The ImageView to bind the downloaded image to.
+     */
+    @Override
+    public void loadImage(Object data, ImageView imageView) {
+        if (data instanceof WFile) {
+            WFile aFile = (WFile)data;
+            if (!TextUtils.isEmpty(aFile.localPath) && new File(aFile.localPath).exists()) {
+                super.loadImage(aFile.localPath, imageView);
+            } else if (!TextUtils.isEmpty(aFile.localThumbnailPath) && new File(aFile.localThumbnailPath).exists()) {
+                super.loadImage(aFile.localThumbnailPath, imageView);
+            } else if (mLoadingBitmap != null) {
+                imageView.setImageDrawable(new BitmapDrawable(mLoadingBitmap));
+            }
+            return;
+        }
+        super.loadImage(data, imageView);
     }
 
     /**

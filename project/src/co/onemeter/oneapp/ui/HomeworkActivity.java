@@ -157,7 +157,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 
 			@Override
 			protected Integer doInBackground(Void... params) {
-				int status= LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,studentId,1);
+				int status = LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,studentId,1);
 				return status;
 			}
 			
@@ -196,8 +196,8 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			}
 			
 		});
-		
 	}
+
 	private void getHomeworkState(final int lessonId){
 		msgbox.showWait();
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, List<Map<String, Object>>>() {
@@ -231,6 +231,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			}
 		}
 	}
+
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
@@ -249,15 +250,15 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 					i.putExtra("lessonId",lessonId);
 					startActivityForResult(i, REQ_PARENT_ADDHOMEWORK);
 				}else{//布置过作业
-//					Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);
-//					addHomework = mDb.fetchLessonAddHomework(lessonId);
-//					if(addHomework != null){//判断本地是否存储
-//						Moment moment = mDb.fetchMoment(addHomework.moment_id + "");
-//						i.putExtra("moment", moment);
-//				        i.putExtra("lessonId",lessonId);
+					Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);
+					addHomework = mDb.fetchLessonAddHomework(lessonId);
+					if(addHomework != null){//判断本地是否存储
+						Moment moment = mDb.fetchMoment(addHomework.moment_id + "");
+						i.putExtra("moment", moment);
+				        i.putExtra("lessonId",lessonId);
 //				        i.putExtra("studentId", String.valueOf(homeworkStates.get(0).get("stu_uid")));
-//				        startActivityForResult(i, REQ_PARENT_DELHOMEWORK);
-//					}else{//本地没有 网络请求获取
+				        startActivityForResult(i, REQ_PARENT_DELHOMEWORK);
+					}else{//本地没有 网络请求获取
 						new Thread(new Runnable() {
 							
 							@Override
@@ -271,8 +272,12 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 											Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);
 											i.putExtra("moment", moment);
 									        i.putExtra("lessonId",lessonId);
-									        i.putExtra("studentId", studentId);
-											startActivity(i);
+
+
+//									        i.putExtra("studentId", studentId);
+//                                            i.putExtra("studentId", String.valueOf(homeworkStates.get(0).get("stu_uid")));
+//											startActivity(i);
+                                            startActivityForResult(i, REQ_PARENT_DELHOMEWORK);
 											mHandler.sendEmptyMessage(errno);
 										}else{
 											mHandler.sendEmptyMessage(errno);
@@ -287,8 +292,9 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 						}).start();
 					}
 					
-//				}
-			}else{//学生账号 直接网络请求
+				}
+
+			} else {//学生账号 直接网络请求
 				new Thread(new Runnable() {
 					
 					@Override
@@ -296,7 +302,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 						int errno;
 						try {
 							errno = LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,studentId,1);
-							if(errno == ErrorCode.INVALID_ARGUMENT){						
+							if (errno == ErrorCode.INVALID_ARGUMENT) {
 								Moment moment = mDb.fetchMoment(String.valueOf(getLessonHomework.moment_id));
 								if(moment != null){
 									Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);
@@ -311,10 +317,10 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 							        i.putExtra("flag", 1);
 									startActivity(i);
 									mHandler.sendEmptyMessage(errno);
-								}else{
+								} else {
 									mHandler.sendEmptyMessage(errno);
 								}
-							}else{
+							} else {
 								mHandler.sendEmptyMessage(errno);
 							}
 						} catch (Exception e) {
@@ -323,9 +329,8 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 					}
 				}).start();
 			}
-			
-			
 			break;
+
 		case R.id.layout_signup_homework://提交作业
 			if(homework_id == 0){
 				Toast.makeText(this, "还未布置作业", Toast.LENGTH_SHORT).show();
@@ -339,6 +344,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 					i.putExtra("lesson_name", tv_lesson_name.getText().toString());
 					i.putExtra("class_name", tv_class_name.getText().toString());
 					startActivityForResult(i, REQ_STUDENT_SIGNUP);
+
 				}else{//已有布置作业	
 //					Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);				
 //					Moment moment = mDb.fetchMoment(momentId + "");
@@ -355,13 +361,13 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 					i.putExtra("class_name", tv_class_name.getText().toString());
 					startActivity(i);
 				}
-				
-				
 			}
 			break;
+
 		case R.id.lay_footer_add:
 //			showAddHomeworkDialog();
 			break;
+
 		case R.id.title_refresh:
 			if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
 				getHomeworkState_student(lessonId,studentId); //学生账号 执行
@@ -370,6 +376,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 				adapter.notifyDataSetChanged();
 			}
 			break;
+
 		default:
 			break;
 		}
@@ -439,19 +446,23 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			}	
 			int state = Integer.parseInt(String.valueOf(homeworkStates.get(position).get("stu_state")));
 			String stateStr = null;
+
 			if(state == 0){
 				stateStr = "提醒交作业";
 				holder.tv_homework_state.setBackgroundResource(R.drawable.btn_small_valid);
                 holder.tv_homework_state.setPadding(2,2,2,2);
 				holder.tv_homework_state.setTextColor(0xff8eb4e6);
+
 			}else if(state == 1){
 				stateStr = "新提交";
                 holder.tv_homework_state.setBackgroundResource(R.color.white);
 				holder.tv_homework_state.setTextColor(0xff8eb4e6);
+
 			}else if(state == 2){
 				stateStr = "已批改";
 				holder.tv_homework_state.setTextColor(getResources().getColor(R.color.gray));
 			}
+
 			holder.tv_student_name.setText(String.valueOf(homeworkStates.get(position).get("stu_name")));
 			holder.tv_homework_state.setText(stateStr);
 			return convertView;
@@ -471,7 +482,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		if(Integer.parseInt(String.valueOf(homeworkStates.get(position).get("stu_state"))) != 0){
+		if (Integer.parseInt(String.valueOf(homeworkStates.get(position).get("stu_state"))) != 0) {
 			Intent i = new Intent(HomeworkActivity.this, SubmitHomeWorkActivity.class);
 			i.putExtra("lessonId",lessonId);
 			i.putExtra("schoolId",schoolId);
@@ -481,13 +492,12 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			i.putExtra("result_id", Integer.parseInt(String.valueOf(homeworkStates.get(position).get("result_id"))));
 			i.putExtra("stu_name",String.valueOf(homeworkStates.get(position).get("stu_name")));	
 			startActivity(i);
-		}else{
+		} else {
 			String uid = String.valueOf(homeworkStates.get(position).get("stu_uid"));
 //			String name = String.valueOf(homeworkStates.get(position).get("stu_name"));
 			String student_alias = mDb.fetchStudentAlias(schoolId, studentId);
 			String reason = tv_lesson_name.getText().toString()+"课"+tv_class_name.getText().toString()+"班的"+student_alias+"老师提醒你，该交作业啦！";
 
-			
 			final ChatMessage message = new ChatMessage();
 			message.chatUserName = uid;
 

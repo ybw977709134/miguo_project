@@ -113,6 +113,9 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 		
 		imageTable = (TableLayout) findViewById(R.id.imageTable);
 		getLessonHomework = new GetLessonHomework();
+
+
+
 		
 		if(flag == 1){//-1 学生账号查看作业
 			tv_del.setText("提交作业");
@@ -128,12 +131,22 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 		tv_del.setOnClickListener(this);
 		tv_modify_homework.setOnClickListener(this);
 	}
+
+    /**
+     * 获取作业列表
+     */
 	private void getLessonHomework(){//获取作业列表
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
 			protected Integer doInBackground(Void... params) {
 				int status= LessonWebServerIF.getInstance(LessonHomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,studentId,2);
+//                for (int i = 0; i < getLessonHomework.teacherMoment.homeWorkMultimedias.size(); i++) {
+//                    Log.d("----list_path--:",getLessonHomework.teacherMoment.homeWorkMultimedias.get(i).multimedia_thumbnail_path);
+//                    list_path.add(getLessonHomework.teacherMoment.homeWorkMultimedias.get(i).multimedia_thumbnail_path);
+//
+//
+//                }
 				return status;
 			}
 			
@@ -149,7 +162,10 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			
 		});
 	}
-	
+
+    /**
+     * 老师删除作业
+     */
 	private void delLessonHomework(){//老师账号可以删除作业
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
@@ -170,6 +186,10 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			
 		});
 	}
+
+    /**
+     * 学生删除自己已经提交的作业
+     */
 	private void delLessonHomeworkResult(){//学生账号删除已经提交的作业
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
@@ -190,6 +210,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			
 		});
 	}
+
 	@Override
     protected void onResume() {
         super.onResume();
@@ -242,22 +263,22 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
             }
         }
         
-        if (null != moment) {
-			try {
-				if (moment.multimedias != null && !moment.multimedias.isEmpty()) {
-					listPhoto = new ArrayList<>(moment.multimedias.size());
-					for (WFile f : moment.multimedias) {
-						if (f.isImageByExt() || f.isVideoByExt()) {
-							listPhoto.add(new CreateMomentActivity.WMediaFile(f));
-						}
-					}
-				} else {
-					listPhoto = new ArrayList<>();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+//        if (null != moment) {
+//			try {
+//				if (moment.multimedias != null && !moment.multimedias.isEmpty()) {
+//					listPhoto = new ArrayList<>(moment.multimedias.size());
+//					for (WFile f : moment.multimedias) {
+//						if (f.isImageByExt() || f.isVideoByExt()) {
+//							listPhoto.add(new CreateMomentActivity.WMediaFile(f));
+//						}
+//					}
+//				} else {
+//					listPhoto = new ArrayList<>();
+//				}
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
 
         HomeWorkAdapter.setImageLayout(this, moment,mImageResizer, photoFiles, imageTable);
     }
@@ -269,9 +290,10 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
         case R.id.textView__back:
 			onBackPressed();
 			break;
+
 		case R.id.tv_del:
 			if(flag == 1){//判断是学生账号进入查看作业界面
-				if(momentId == 0){
+				if (momentId == 0) {
 					Intent i = new Intent(LessonHomeworkActivity.this, SignHomeworkResultkActivity.class);
 					i.putExtra("homework_id", homework_id);
 					i.putExtra("teacherID", teacherID);
@@ -279,7 +301,8 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 					i.putExtra("lesson_name",lesson_name);
 					i.putExtra("class_name", class_name);
 					startActivity(i);
-				}else{
+
+				} else {
 					Intent i = new Intent(LessonHomeworkActivity.this, SubmitHomeWorkActivity.class);
 					i.putExtra("lessonId",lessonId);
 					i.putExtra("schoolId", schoolId);
@@ -289,8 +312,8 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 					startActivity(i);
 				}
 				
-			}else{
-				if(isTeacher()){
+			} else {
+				if (isTeacher()) {
 					MessageDialog dialog = new MessageDialog(LessonHomeworkActivity.this);
 		            dialog.setTitle("提示");
 		            dialog.setMessage("你确定要删除该作业吗?");
@@ -307,7 +330,8 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 		               }
 		               );
 		               dialog.show();
-				}else{
+
+				} else {
 					MessageDialog dialog = new MessageDialog(LessonHomeworkActivity.this);
 		            dialog.setTitle("提示");
 		            dialog.setMessage("你确定要删除该作业吗?");
@@ -326,25 +350,22 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 		               dialog.show();
 				}
 			}
-			
-			
 			break;
+
 		case R.id.tv_modify_homework://修改作业
 			Intent intent = new Intent(LessonHomeworkActivity.this, AddHomeworkActivity.class);
 			intent.putExtra("text", txt_content.getText().toString());
 			intent.putExtra("lessonId", lessonId);
 			intent.putExtra("homework_id", homework_id);
 			intent.putExtra("tag_intent_AddHomeworkActivity", "tag_intent_AddHomeworkActivity");
-			
-			ArrayList<CreateMomentActivity.WMediaFile> listWMediaFile = new ArrayList<CreateMomentActivity.WMediaFile>();
-            for (CreateMomentActivity.WMediaFile f : listPhoto) {
-            	listWMediaFile.add(f);
-            }
+
             list_path.clear();
-            for(int i = 0;i < listWMediaFile.size();i++){
-            	getPhotos(listWMediaFile.get(i));
-            	list_path.add(path);
+            for(int i = 0;i < photoFiles.size();i++){
+                getPhotos(photoFiles.get(i));
+                list_path.add(path);
             }
+
+
 //            intent.putExtra("listWMediaFile", listWMediaFile);
             intent.putExtra("list_path", list_path);
 //            startActivity(intent);
@@ -354,12 +375,14 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			break;
 		}
 	}
+
 	private boolean isTeacher(){
 		if(Buddy.ACCOUNT_TYPE_TEACHER == PrefUtil.getInstance(this).getMyAccountType()){
 			return true;
 		}
 		return false;
 	}
+
 	private void getPhotos(final WFile file){
 		path = PhotoDisplayHelper.makeLocalFilePath(file.fileid, file.getExt());
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
@@ -418,6 +441,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
             if(requestCode == REQ_PARENT_MODIFYHOMEWORK){
                 moment = data.getParcelableExtra("modifyMoment");
                 setupContent(moment);
+                getLessonHomework();
             }
         }
     }

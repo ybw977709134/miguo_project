@@ -276,7 +276,7 @@ public class FeedbackDetailActivity extends Activity implements View.OnClickList
         String tag = getIntent().getStringExtra("tag");
         if(!TextUtils.isEmpty(name)){
         	txtName.setText(name);
-            Toast.makeText(this,name,Toast.LENGTH_LONG).show();
+//            Toast.makeText(this,name,Toast.LENGTH_LONG).show();
         }
         if(!TextUtils.isEmpty(tag)){
         	title_name.setText(tag);

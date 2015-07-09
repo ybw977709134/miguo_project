@@ -101,8 +101,10 @@ private void initData(Bundle savedInstanceState){
 			listPhoto = savedInstanceState.getParcelableArrayList("list_photo");
 		}
 
+        //初始化各个对象
 		if (moment == null)
 			moment = new Moment();
+
 		if (mediaHelper == null)
             mediaHelper = new MediaInputHelper(this);
 		
@@ -163,12 +165,15 @@ private void initData(Bundle savedInstanceState){
 //		if(photolistPath != null){
 //			startActivityForResult(new Intent(AddHomeworkActivity.this, SelectPhotoActivity.class), ACTIVITY_REQ_ID_PICK_PHOTO_FROM_GALLERY);
 //		}
+
+        //修改作业，显示上个页面传过来的作业内容，只要是多媒体内容
 		if(tag != null){
 			ArrayList<String> listPath = new ArrayList<String>();
 //			listPath.add("/storage/emulated/0/DCIM/Camera/IMG_20150618_180330.jpg");
 //			listPath.add("/storage/emulated/0/DCIM/Camera/IMG_20150618_180327.jpg");
 //			listPath.add("/storage/emulated/0/DCIM/Camera/IMG_20150618_180323.jpg");
-			listPath = list_path;
+//			listPath = list_path;
+            listPath.addAll(list_path);
             ArrayList<CreateMomentActivity.WMediaFile> photo2add = new ArrayList<CreateMomentActivity.WMediaFile>();
             ArrayList<CreateMomentActivity.WMediaFile> photo2del = new ArrayList<CreateMomentActivity.WMediaFile>();
             for (int i = 0; i < listPhoto.size(); i++) {
@@ -214,7 +219,8 @@ private void initData(Bundle savedInstanceState){
 
                             photo.localPath = file.getAbsolutePath();
                             photo.galleryPath = path;
-                            photo.isFromGallery = true;
+//                            photo.isFromGallery = true;
+                            photo.isFromGallery = false;
                             listPhoto.add(photo);
                         }
                         catch (Exception e) {
@@ -239,7 +245,13 @@ private void initData(Bundle savedInstanceState){
             }, listPath);
 		}
 	}
-	
+
+    /**
+     * 老师修改作业
+     * @param lessonId
+     * @param homework_id
+     * @param moment
+     */
 	private void modifyLessonHomework(final int lessonId,final int homework_id,final Moment moment){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>(){
 			
@@ -260,6 +272,7 @@ private void initData(Bundle savedInstanceState){
 					mDb.storeMultimedia(moment, f);
 				}
 
+                //返回列表刷新
 				Intent data = new Intent();
                 data.putExtra("modifyMoment",moment);
 				setResult(RESULT_OK, data);
@@ -275,20 +288,13 @@ private void initData(Bundle savedInstanceState){
 						addhomework.lesson_id = lessonId;
 						addhomework.homework_id = homework_id;
 
-						int errno2 = LessonWebServerIF.getInstance(
-								AddHomeworkActivity.this)
-								.modifyLessonHomework(addhomework, moment);
-						if (errno == ErrorCode.OK
-								&& errno2 == ErrorCode.OK) {
-							Intent intent = new Intent(
-									AddHomeworkActivity.this,
-									PublishMomentService.class);
-							intent.putExtra(
-									PublishMomentService.EXTRA_MOMENT,
-									moment);
-							intent.putExtra(
-									PublishMomentService.EXTRA_ANONYMOUS,
-									true);
+						int errno2 = LessonWebServerIF.getInstance(AddHomeworkActivity.this).modifyLessonHomework(addhomework, moment);
+
+						if (errno == ErrorCode.OK && errno2 == ErrorCode.OK) {
+
+							Intent intent = new Intent(AddHomeworkActivity.this,PublishMomentService.class);
+							intent.putExtra(PublishMomentService.EXTRA_MOMENT,moment);
+							intent.putExtra(PublishMomentService.EXTRA_ANONYMOUS,true);
 							startService(intent);
 						}
 					}
@@ -306,21 +312,24 @@ private void initData(Bundle savedInstanceState){
 							Thread.sleep(3000);
 							AddHomeworkActivity.this.finish();
 //							if(LessonHomeworkActivity.getInstance() != null){
-//								LessonHomeworkActivity.getInstance().finish();
+//								LessonHomeworkActivity.getInstance().finish();layout_sign_class
 //							}
-							
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						
 					}
 				}).start();
-				
 			}
 			
 		});
 	}
+
+    /**
+     * 老师布置作业
+     * @param lessonId
+     * @param moment
+     */
 	private void addLessonHomework(final int lessonId,final Moment moment){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>(){
 			
@@ -383,9 +392,8 @@ private void initData(Bundle savedInstanceState){
 					public void run() {
 						try {
 							Thread.sleep(3000);
-							finish();
+							AddHomeworkActivity.this.finish();
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						
@@ -396,10 +404,13 @@ private void initData(Bundle savedInstanceState){
 			
 		});
 	}
+
+    //关闭输入键盘
 	private void hideIME() {
 		final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(edt_moment_content.getWindowToken(), 0);
 	}
+
 	private void  showPickImgSelector() {
 		hideIME();
 
@@ -603,6 +614,7 @@ private void initData(Bundle savedInstanceState){
                 }, listPath);
             }
 			break;
+
 		case ACTIVITY_REQ_ID_PICK_PHOTO_FROM_CAMERA:
             if (resultCode == RESULT_OK) {
                 AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Intent, Void, Boolean>() {
@@ -832,11 +844,13 @@ private void initData(Bundle savedInstanceState){
 			}
 		}
 	}
+
 	private void deleteWPhotoFile(CreateMomentActivity.WMediaFile aWPhoto) {
         if(null != aWPhoto) {
             Database.deleteAFile(aWPhoto.localPath);
         }
     }
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);

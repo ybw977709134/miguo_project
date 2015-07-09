@@ -51,7 +51,7 @@ public abstract class ImageWorker {
 
     private ImageCache mImageCache;
     private ImageCache.ImageCacheParams mImageCacheParams;
-    private Bitmap mLoadingBitmap;
+    protected Bitmap mLoadingBitmap;
     private boolean mFadeInBitmap = false;
     private boolean mExitTasksEarly = false;
     protected boolean mPauseWork = false;
@@ -131,8 +131,9 @@ public abstract class ImageWorker {
      *
      * @param bitmap
      */
-    public void setLoadingImage(Bitmap bitmap) {
+    public ImageWorker setLoadingImage(Bitmap bitmap) {
         mLoadingBitmap = bitmap;
+        return this;
     }
 
     /**
@@ -140,8 +141,9 @@ public abstract class ImageWorker {
      *
      * @param resId
      */
-    public void setLoadingImage(int resId) {
+    public ImageWorker setLoadingImage(int resId) {
         mLoadingBitmap = BitmapFactory.decodeResource(mResources, resId);
+        return this;
     }
 
     /**

@@ -28,6 +28,7 @@ import co.onemeter.oneapp.ui.scale_viewpager.PhotoViewPager;
 import co.onemeter.utils.AsyncTaskExecutor;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.bitmapfun.util.ImageResizer;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.FileUtils;
 
@@ -50,6 +51,9 @@ public class ImageViewActivity extends Activity implements View.OnClickListener,
     private static final String EXTRA_WFILES = "wfiles";
     private static final String EXTRA_UPDATE_TYPE = "update_type";
     private static final String EXTRA_IS_MESSAGE_HISTORY = "is_message_history";
+
+    /** limit max image size to avoid OOM */
+    private static final int MAX_IMG_SIZE = 1600;
 
     public static final int UPDATE_WITH_NONE=-1;
     public static final int UPDATE_WITH_CHAT_MESSAGE=1;
@@ -218,11 +222,9 @@ public class ImageViewActivity extends Activity implements View.OnClickListener,
 
                 ImageView iv = (ImageView) v;
                 BitmapDrawable oldBmpDrawable=(BitmapDrawable)iv.getDrawable();
-//                BitmapDrawable d = new BitmapDrawable(getResources(),
-//                        files.get(position).localPath);
-                iv.setImageDrawable(getDrawableFromWFile(files.get(position)));
-                iv.invalidate();
-
+                ImageResizer imageResizer = new ImageResizer(ImageViewActivity.this, MAX_IMG_SIZE);
+                imageResizer.setLoadingImage(R.drawable.feed_default_pic);
+                imageResizer.loadImage(files.get(position), iv);
                 freeABitmapDrawable(oldBmpDrawable);
 
                 if(UPDATE_WITH_CHAT_MESSAGE == updateType) {
@@ -363,20 +365,6 @@ public class ImageViewActivity extends Activity implements View.OnClickListener,
         });
     }
 
-    private BitmapDrawable getDrawableFromWFile(WFile aFile) {
-        BitmapDrawable drawable=null;
-
-        if (!TextUtils.isEmpty(aFile.localPath) && new File(aFile.localPath).exists()) {
-            drawable=new BitmapDrawable(getResources(), aFile.localPath);
-        } else if (!TextUtils.isEmpty(aFile.localThumbnailPath) && new File(aFile.localThumbnailPath).exists()) {
-            drawable=new BitmapDrawable(getResources(), aFile.localThumbnailPath);
-        } else {
-            Log.e("can not create bitmap drawable from WFile");
-            drawable=new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(),R.drawable.feed_default_pic));
-        }
-        return drawable;
-    }
-
     private void setupViewPager(int curPhotoIdx) {
         mainViewPager = (PhotoViewPager)findViewById(R.id.mainViewPager);
 
@@ -390,11 +378,6 @@ public class ImageViewActivity extends Activity implements View.OnClickListener,
             PhotoView iv = new PhotoView(this);
             iv.setLayoutParams(mParams);
 
-//            if (new File(file.localPath).exists())
-//                iv.setImageDrawable(new BitmapDrawable(getResources(), file.localPath));
-//            else
-//                iv.setImageDrawable(new BitmapDrawable(getResources(), file.localThumbnailPath));
-//            iv.setImageDrawable(getDrawableFromWFile(file));
             iv.setImageDrawable(null);
             iv.setOnViewTapListener(this);
             mImageViews.add(iv);
@@ -448,29 +431,6 @@ public class ImageViewActivity extends Activity implements View.OnClickListener,
         i.putExtra(EXTRA_UPDATE_TYPE, UPDATE_WITH_NONE);
         context.startActivity(i);
     }
-
-    /**
-     * @param context
-     * @param filename image filename
-     */
-//    public static void launch(Context context, String filename) {
-//        Intent i = new Intent(context, ImageViewActivity.class);
-//        if (null != filename)
-//            i.putExtra(EXTRA_IMGPATH, filename);
-//        i.putExtra(EXTRA_UPDATE_TYPE, UPDATE_WITH_NONE);
-//        context.startActivity(i);
-//    }
-//
-//    public static void launch(Context context, int position, String[] filenames) {
-//        ArrayList<WFile> files = new ArrayList<WFile>(filenames.length);
-//        for (String path : filenames) {
-//            if (null == path) continue;
-//            WFile f = new WFile();
-//            f.localPath = path;
-//            files.add(f);
-//        }
-//        launch(context, position, files,UPDATE_WITH_NONE);
-//    }
 
     public static void launch(Context context, int position, List<PhotoWithThumbPair> pairList,int updateType) {
         launch(context, position, pairList, updateType, false);
@@ -651,7 +611,9 @@ public class ImageViewActivity extends Activity implements View.OnClickListener,
 
             BitmapDrawable bmpDrawable=(BitmapDrawable) mImageViews.get(position).getDrawable();
             if(null == bmpDrawable) {
-                mImageViews.get(position).setImageDrawable(getDrawableFromWFile(files.get(position)));
+                ImageResizer imageResizer = new ImageResizer(ImageViewActivity.this, MAX_IMG_SIZE);
+                imageResizer.setLoadingImage(R.drawable.feed_default_pic);
+                imageResizer.loadImage(files.get(position), mImageViews.get(position));
             }
             container.addView(mImageViews.get(position), 0);
 

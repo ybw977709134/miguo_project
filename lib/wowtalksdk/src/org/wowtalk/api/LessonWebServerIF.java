@@ -1914,7 +1914,6 @@ public class LessonWebServerIF {
 
                     case XmlPullParser.END_TAG:
 
-
                         if (pullParser.getName().equals("multimedias")) {
 
                                 homeWorkMultimedias.add(homeWorkMultimedia);

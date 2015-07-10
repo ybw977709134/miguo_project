@@ -141,12 +141,13 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 			@Override
 			protected Integer doInBackground(Void... params) {
 				int status= LessonWebServerIF.getInstance(LessonHomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,studentId,2);
-//                for (int i = 0; i < getLessonHomework.teacherMoment.homeWorkMultimedias.size(); i++) {
-//                    Log.d("----list_path--:",getLessonHomework.teacherMoment.homeWorkMultimedias.get(i).multimedia_thumbnail_path);
-//                    list_path.add(getLessonHomework.teacherMoment.homeWorkMultimedias.get(i).multimedia_thumbnail_path);
-//
-//
-//                }
+
+                for (int i = 0; i < getLessonHomework.teacherMoment.homeWorkMultimedias.size(); i++) {
+                    Log.d("----list_path--:",getLessonHomework.teacherMoment.homeWorkMultimedias.get(i).multimedia_content_path);
+                    list_path.add(getLessonHomework.teacherMoment.homeWorkMultimedias.get(i).multimedia_thumbnail_path);
+                }
+
+                Log.d("----space --:","--------------------------------------");
 				return status;
 			}
 			
@@ -385,6 +386,9 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 
 	private void getPhotos(final WFile file){
 		path = PhotoDisplayHelper.makeLocalFilePath(file.fileid, file.getExt());
+
+        Log.d("---newPath---:",path);
+
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Void>() {
             boolean ok;
 

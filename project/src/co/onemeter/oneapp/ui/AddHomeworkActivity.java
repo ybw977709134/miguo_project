@@ -234,7 +234,7 @@ private void initData(Bundle savedInstanceState){
 
                 @Override
                 protected void onProgressUpdate(Void... errno) {
-                    notifyFileChanged(true);
+//                    notifyFileChanged(true);
                 }
 
                 @Override
@@ -281,9 +281,7 @@ private void initData(Bundle savedInstanceState){
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						int errno = MomentWebServerIF.getInstance(
-								AddHomeworkActivity.this)
-								.fAddMoment(moment, true);
+						int errno = MomentWebServerIF.getInstance(AddHomeworkActivity.this).fAddMoment(moment, true);
 						LessonAddHomework addhomework = new LessonAddHomework();
 						addhomework.lesson_id = lessonId;
 						addhomework.homework_id = homework_id;
@@ -300,7 +298,8 @@ private void initData(Bundle savedInstanceState){
 					}
 				}).start();
 				return 0;
-			}			
+			}
+
 			@Override
 			protected void onPostExecute(Integer result) {	
 				mMsgBox.showWaitImageSuccess("作业修改成功");
@@ -751,8 +750,8 @@ private void initData(Bundle savedInstanceState){
         updateTriggerAddImgDescTxtStatus();
 
         if (isAdded) {
-            Assert.assertTrue(!listPhoto.isEmpty());
-            addMedia2moment(listPhoto.get(listPhoto.size() - 1));
+//            Assert.assertTrue(!listPhoto.isEmpty());
+//            addMedia2moment(listPhoto.get(listPhoto.size() - 1));
 
             final View view = LayoutInflater.from(this).inflate(R.layout.listitem_moment_image, addedImgLayout, false);
             final ImageView imgPhoto = (ImageView) view.findViewById(R.id.img_photo);

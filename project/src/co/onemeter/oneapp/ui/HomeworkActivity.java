@@ -250,15 +250,15 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 					i.putExtra("lessonId",lessonId);
 					startActivityForResult(i, REQ_PARENT_ADDHOMEWORK);
 				}else{//布置过作业
-					Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);
-					addHomework = mDb.fetchLessonAddHomework(lessonId);
-					if(addHomework != null){//判断本地是否存储
-						Moment moment = mDb.fetchMoment(addHomework.moment_id + "");
-						i.putExtra("moment", moment);
-				        i.putExtra("lessonId",lessonId);
-//				        i.putExtra("studentId", String.valueOf(homeworkStates.get(0).get("stu_uid")));
-				        startActivityForResult(i, REQ_PARENT_DELHOMEWORK);
-					}else{//本地没有 网络请求获取
+//					Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);
+//					addHomework = mDb.fetchLessonAddHomework(lessonId);
+//					if(addHomework != null){//判断本地是否存储
+//						Moment moment = mDb.fetchMoment(addHomework.moment_id + "");
+//						i.putExtra("moment", moment);
+//				        i.putExtra("lessonId",lessonId);
+////				        i.putExtra("studentId", String.valueOf(homeworkStates.get(0).get("stu_uid")));
+//				        startActivityForResult(i, REQ_PARENT_DELHOMEWORK);
+//					}else{//本地没有 网络请求获取
 						new Thread(new Runnable() {
 							
 							@Override
@@ -292,7 +292,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 						}).start();
 					}
 					
-				}
+//				}
 
 			} else {//学生账号 直接网络请求
 				new Thread(new Runnable() {

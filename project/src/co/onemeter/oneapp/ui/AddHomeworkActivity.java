@@ -209,6 +209,7 @@ private void initData(Bundle savedInstanceState){
                         CreateMomentActivity.WMediaFile photo = new CreateMomentActivity.WMediaFile(true);
                         Bitmap bmp = BmpUtils.decodeFile(path, CreateMomentActivity.PHOTO_SEND_WIDTH, CreateMomentActivity.PHOTO_SEND_HEIGHT);
                         File file = MediaInputHelper.makeOutputMediaFile(
+
                                 MediaInputHelper.MEDIA_TYPE_IMAGE, ".jpg");
                         try {
                             OutputStream os = new FileOutputStream(file);
@@ -381,12 +382,13 @@ private void initData(Bundle savedInstanceState){
 					}
 				}).start();
 				return 0;
-			}			
+			}
+
 			@Override
 			protected void onPostExecute(Integer result) {	
 				mMsgBox.showWaitImageSuccess("作业布置成功");
 				new Thread(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						try {
@@ -395,10 +397,9 @@ private void initData(Bundle savedInstanceState){
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-						
+
 					}
 				}).start();
-				
 			}
 			
 		});
@@ -750,8 +751,8 @@ private void initData(Bundle savedInstanceState){
         updateTriggerAddImgDescTxtStatus();
 
         if (isAdded) {
-//            Assert.assertTrue(!listPhoto.isEmpty());
-//            addMedia2moment(listPhoto.get(listPhoto.size() - 1));
+            Assert.assertTrue(!listPhoto.isEmpty());
+            addMedia2moment(listPhoto.get(listPhoto.size() - 1));
 
             final View view = LayoutInflater.from(this).inflate(R.layout.listitem_moment_image, addedImgLayout, false);
             final ImageView imgPhoto = (ImageView) view.findViewById(R.id.img_photo);

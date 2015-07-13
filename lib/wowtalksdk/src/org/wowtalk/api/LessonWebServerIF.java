@@ -1567,11 +1567,25 @@ public class LessonWebServerIF {
             return 0;
 
         String action = "get_lesson_homework";
-        String postStr = "action=" + action
-                + "&uid=" + Utils.urlencodeUtf8(uid)
-                + "&password=" + Utils.urlencodeUtf8(password)
-                + "&lesson_id="+ lesson_id
-                + "&student_id=" + Utils.urlencodeUtf8(student_id);
+        String postStr= null;
+
+        if (TextUtils.isEmpty(student_id)) {//课程中没有学生的情况下布置作业
+            postStr = "action=" + action
+                    + "&uid=" + Utils.urlencodeUtf8(uid)
+                    + "&password=" + Utils.urlencodeUtf8(password)
+                    + "&lesson_id="+ lesson_id;
+        } else {
+            postStr = "action=" + action
+                    + "&uid=" + Utils.urlencodeUtf8(uid)
+                    + "&password=" + Utils.urlencodeUtf8(password)
+                    + "&lesson_id="+ lesson_id
+                    + "&student_id=" + Utils.urlencodeUtf8(student_id);
+        }
+//        String postStr = "action=" + action
+//                + "&uid=" + Utils.urlencodeUtf8(uid)
+//                + "&password=" + Utils.urlencodeUtf8(password)
+//                + "&lesson_id="+ lesson_id
+//                + "&student_id=" + Utils.urlencodeUtf8(student_id);
 
         Connect2 connect2 = new Connect2();
         Connect2.SetTimeout(5000, 0);

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -258,13 +259,17 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 //				        i.putExtra("lessonId",lessonId);
 ////				        i.putExtra("studentId", String.valueOf(homeworkStates.get(0).get("stu_uid")));
 //				        startActivityForResult(i, REQ_PARENT_DELHOMEWORK);
-//					}else{//本地没有 网络请求获取
+//					}else{
+                        //网络请求获取，实现不同端老师对作业的修改
 						new Thread(new Runnable() {
 							
 							@Override
 							public void run() {
 								int errno;
 								try {
+                                    if (TextUtils.isEmpty(studentId)) {
+                                        studentId = "";
+                                    }
 									errno = LessonWebServerIF.getInstance(HomeworkActivity.this).getLessonHomeWork(lessonId, getLessonHomework,studentId,1);
 									if(errno == ErrorCode.INVALID_ARGUMENT){						
 										Moment moment = mDb.fetchMoment(String.valueOf(getLessonHomework.moment_id));
@@ -384,7 +389,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(resultCode == Activity.RESULT_OK){
+		if(resultCode == RESULT_OK){
 			if(requestCode == REQ_PARENT_ADDHOMEWORK){
 				getHomeworkState(lessonId);
 			}else if(requestCode == REQ_PARENT_DELHOMEWORK){

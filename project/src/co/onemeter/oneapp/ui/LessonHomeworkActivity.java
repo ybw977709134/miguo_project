@@ -47,7 +47,6 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
     private int homeworkResult_id;
     private TextView tv_modify_homework;
     private String studentId;
-    private ArrayList<CreateMomentActivity.WMediaFile> listPhoto;
     private static LessonHomeworkActivity instance;
     private String path = null;
     private ArrayList<String> list_path = new ArrayList<>();
@@ -59,7 +58,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 
     private int REQ_PARENT_MODIFYHOMEWORK = 1;
 
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,8 +91,9 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
             return;
         }
         initView();
-        setupContent(moment);
+//        setupContent(moment);
         getLessonHomework();
+
     }
 
     public static LessonHomeworkActivity getInstance(){
@@ -114,9 +114,8 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 		imageTable = (TableLayout) findViewById(R.id.imageTable);
 		getLessonHomework = new GetLessonHomework();
 
+        photoFiles = new ArrayList<WFile>();
 
-
-		
 		if(flag == 1){//-1 学生账号查看作业
 			tv_del.setText("提交作业");
             tv_title_name.setText(R.string.lesson_homework);
@@ -144,7 +143,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 
                 for (int i = 0; i < getLessonHomework.teacherMoment.homeWorkMultimedias.size(); i++) {
                     Log.d("----list_path--:",getLessonHomework.teacherMoment.homeWorkMultimedias.get(i).multimedia_content_path);
-                    list_path.add(getLessonHomework.teacherMoment.homeWorkMultimedias.get(i).multimedia_thumbnail_path);
+//                    list_path.add(getLessonHomework.teacherMoment.homeWorkMultimedias.get(i).multimedia_thumbnail_path);
                 }
 
                 Log.d("----space --:","--------------------------------------");
@@ -158,10 +157,12 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 				}else if(result == 1){
 					homework_id = getLessonHomework.id;
 				}
-				
+                setupContent(moment);
+
 			}
 			
 		});
+
 	}
 
     /**
@@ -172,6 +173,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 
 			@Override
 			protected Integer doInBackground(Void... params) {
+                Log.d("----homework_id:",homework_id+"");
 				int status= LessonWebServerIF.getInstance(LessonHomeworkActivity.this).delHomework(homework_id);
 				return status;
 			}
@@ -182,7 +184,6 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 					setResult(RESULT_OK);
 					finish();
 				}
-
 			}
 			
 		});
@@ -206,7 +207,6 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 					setResult(RESULT_OK);
 					finish();
 				}
-
 			}
 			
 		});
@@ -253,7 +253,8 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
         	txt_content.setText(moment.text);
         }
 
-        photoFiles = new ArrayList<WFile>();
+//        photoFiles = new ArrayList<WFile>();
+        photoFiles.clear();
         if (moment != null && moment.multimedias != null && !moment.multimedias.isEmpty()) {
             for (WFile file : moment.multimedias) {
                 if (file.isAudioByExt()) {
@@ -263,23 +264,7 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
                 }
             }
         }
-        
-//        if (null != moment) {
-//			try {
-//				if (moment.multimedias != null && !moment.multimedias.isEmpty()) {
-//					listPhoto = new ArrayList<>(moment.multimedias.size());
-//					for (WFile f : moment.multimedias) {
-//						if (f.isImageByExt() || f.isVideoByExt()) {
-//							listPhoto.add(new CreateMomentActivity.WMediaFile(f));
-//						}
-//					}
-//				} else {
-//					listPhoto = new ArrayList<>();
-//				}
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
+
 
         HomeWorkAdapter.setImageLayout(this, moment,mImageResizer, photoFiles, imageTable);
     }
@@ -366,10 +351,8 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
                 list_path.add(path);
             }
 
-
 //            intent.putExtra("listWMediaFile", listWMediaFile);
             intent.putExtra("list_path", list_path);
-//            startActivity(intent);
             startActivityForResult(intent,REQ_PARENT_MODIFYHOMEWORK);
 			break;
 		default:
@@ -439,13 +422,22 @@ public class LessonHomeworkActivity extends Activity implements OnClickListener{
 //    }
 
 
+    /**
+     * 修改完作业返回刷新最新的作业列表
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == Activity.RESULT_OK){
-            if(requestCode == REQ_PARENT_MODIFYHOMEWORK){
+        if (resultCode == Activity.RESULT_OK) {
+            if(requestCode == REQ_PARENT_MODIFYHOMEWORK) {
                 moment = data.getParcelableExtra("modifyMoment");
-                setupContent(moment);
+
                 getLessonHomework();
+//                setupContent(moment);
+
+
             }
         }
     }

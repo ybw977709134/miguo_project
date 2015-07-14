@@ -99,6 +99,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			}
 		};
 	};
+
 	private void initView() {
 		lessonId = getIntent().getIntExtra(Constants.LESSONID, 0);
 		schoolId = getIntent().getStringExtra("schoolId");
@@ -120,9 +121,10 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		tv_addhomework_state = (TextView) findViewById(R.id.tv_addhomework_state);
 		tv_signup_homework_state = (TextView) findViewById(R.id.tv_signup_homework_state);
 		lvHomework.setOnItemClickListener(this);
-		studentId = PrefUtil.getInstance(this).getUid();
+		studentId = PrefUtil.getInstance(this).getUid();//如果是老师账号类型,studentId为老师的账号ID
 		getLessonHomework = new GetLessonHomework();
 		addHomework = mDb.fetchLessonAddHomework(lessonId);
+
 		if(PrefUtil.getInstance(HomeworkActivity.this).getMyAccountType() == Buddy.ACCOUNT_TYPE_STUDENT){
 			lvHomework.setVisibility(View.GONE);
 			q.find(R.id.layout_signup_homework).visibility(View.VISIBLE);
@@ -133,6 +135,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			q.find(R.id.layout_signup_homework).visibility(View.GONE);
 			q.find(R.id.divider_signup_homework).visibility(View.GONE);
 		}
+
 		adapter = new HomeworkStateAdapter(homeworkStates);
 		lvHomework.setAdapter(adapter);
 	}
@@ -209,14 +212,32 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 			}
 			protected void onPostExecute(List<Map<String, Object>> result) {
 				msgbox.dismissWait();
-				homeworkStates.clear();	
-				homeworkStates.addAll(result);
-				if(homeworkStates.size() == 0){
-					tv_addhomework_state.setText("未布置");
-				}else{
-					tv_addhomework_state.setText("已布置");
-				}
-				
+//				homeworkStates.clear();
+//				homeworkStates.addAll(result);
+//                Log.d("---homeworkStates_size:",homeworkStates.size()+"");
+//				if(homeworkStates.size() == 0){
+//					tv_addhomework_state.setText("未布置");
+//				}else{
+//					tv_addhomework_state.setText("已布置");
+//				}
+
+
+                if (result == null) {
+                    tv_addhomework_state.setText("未布置");
+                } else {
+                    homeworkStates.clear();
+                    homeworkStates.addAll(result);
+                    Log.d("---homeworkStates_size:",homeworkStates.size()+"");
+
+//                    if(Integer.parseInt(String.valueOf(homeworkStates.get(0).get("homework_flag")).trim()) == 1){
+                    if (homeworkStates.size() == 0) {
+
+                        tv_addhomework_state.setText("未布置");
+                    }else{
+                        tv_addhomework_state.setText("已布置");
+                    }
+                }
+
 				ListViewUtils.setListViewHeightBasedOnChildren(lvHomework);
 			}
 			
@@ -246,11 +267,15 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 				break;  
         	}
 			if(isTeacher()){ //老师账号
+                Log.d("---homeworkStates_size:",homeworkStates.size()+"");
 				if(homeworkStates.size() == 0){//没有布置过作业
+//                if (homeworkStates.get(0).get("homework_id") == null) {
+                    Log.d("---homeworkStates:","老师没有布置作业");
 					Intent i = new Intent(HomeworkActivity.this, AddHomeworkActivity.class);
 					i.putExtra("lessonId",lessonId);
 					startActivityForResult(i, REQ_PARENT_ADDHOMEWORK);
 				}else{//布置过作业
+                    Log.d("---homeworkStates:","老师布置过作业");
 //					Intent i = new Intent(HomeworkActivity.this, LessonHomeworkActivity.class);
 //					addHomework = mDb.fetchLessonAddHomework(lessonId);
 //					if(addHomework != null){//判断本地是否存储
@@ -392,6 +417,7 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 		if(resultCode == RESULT_OK){
 			if(requestCode == REQ_PARENT_ADDHOMEWORK){
 				getHomeworkState(lessonId);
+                adapter.notifyDataSetChanged();
 			}else if(requestCode == REQ_PARENT_DELHOMEWORK){
 				getHomeworkState(lessonId);
 			}else if(requestCode == REQ_STUDENT_SIGNUP){
@@ -448,28 +474,29 @@ public class HomeworkActivity extends Activity implements OnClickListener, OnIte
 				convertView.setTag(holder);
 			}else{
 				holder = (ViewHodler) convertView.getTag();
-			}	
-			int state = Integer.parseInt(String.valueOf(homeworkStates.get(position).get("stu_state")));
-			String stateStr = null;
-
-			if(state == 0){
-				stateStr = "提醒交作业";
-				holder.tv_homework_state.setBackgroundResource(R.drawable.btn_small_valid);
-                holder.tv_homework_state.setPadding(2,2,2,2);
-				holder.tv_homework_state.setTextColor(0xff8eb4e6);
-
-			}else if(state == 1){
-				stateStr = "新提交";
-                holder.tv_homework_state.setBackgroundResource(R.color.white);
-				holder.tv_homework_state.setTextColor(0xff8eb4e6);
-
-			}else if(state == 2){
-				stateStr = "已批改";
-				holder.tv_homework_state.setTextColor(getResources().getColor(R.color.gray));
 			}
 
-			holder.tv_student_name.setText(String.valueOf(homeworkStates.get(position).get("stu_name")));
-			holder.tv_homework_state.setText(stateStr);
+                int state = Integer.parseInt(String.valueOf(homeworkStates.get(position).get("stu_state")));
+                String stateStr = null;
+
+                if (state == 0) {
+                    stateStr = "提醒交作业";
+                    holder.tv_homework_state.setBackgroundResource(R.drawable.btn_small_valid);
+                    holder.tv_homework_state.setPadding(2, 2, 2, 2);
+                    holder.tv_homework_state.setTextColor(0xff8eb4e6);
+
+                } else if (state == 1) {
+                    stateStr = "新提交";
+                    holder.tv_homework_state.setBackgroundResource(R.color.white);
+                    holder.tv_homework_state.setTextColor(0xff8eb4e6);
+
+                } else if (state == 2) {
+                    stateStr = "已批改";
+                    holder.tv_homework_state.setTextColor(getResources().getColor(R.color.gray));
+                }
+
+                holder.tv_student_name.setText(String.valueOf(homeworkStates.get(position).get("stu_name")));
+                holder.tv_homework_state.setText(stateStr);
 			return convertView;
 		}
 		class ViewHodler{

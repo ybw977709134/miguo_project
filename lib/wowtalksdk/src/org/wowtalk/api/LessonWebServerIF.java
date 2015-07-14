@@ -1476,56 +1476,75 @@ public class LessonWebServerIF {
 	        Map<String, Object> map = null;
 //	        String homework_id = null;
 	        int flag = 0;
+            Log.d("---外层:","开始解析了");
 	        
 	        while (event != XmlPullParser.END_DOCUMENT) {
 	        	int i = 1;
-
 	        	i++;
 	        	switch (event) {
-	        	
-	        	
 	        	case XmlPullParser.START_DOCUMENT:
 //	        		listALL = new ArrayList<List<Map<String, Object>>>();
 	        		
 	        		list = new ArrayList<Map<String,Object>>();
-	        		
-	        	
+                    Log.d("---document:","START_DOCUMENT");
 	        	break;
 	        	
 	        	case XmlPullParser.START_TAG:
 		        	if ("homework".equals(pullParser.getName())) {
 //		        		list = new ArrayList<Map<String, Object>>();
 		        		flag = 1;
+                        map = new HashMap<String, Object>();
+                        Log.d("---homework:","homework");
 		        	}
 
 		        	if ("homework_id".equals(pullParser.getName())) {
 		        		if(flag == 1){
-		        			map = new HashMap<String, Object>();	
-		        		    map.put("homework_id",  Integer.valueOf(pullParser.nextText()));
+//		        			map = new HashMap<String, Object>();
+                            String homeworkid = pullParser.nextText();
+//		        		    map.put("homework_id",  Integer.valueOf(pullParser.nextText()));
+                            map.put("homework_id",  Integer.valueOf(homeworkid));
+                             Log.d("---homework_id:",homeworkid);
 		        		}
-		        		
 		        	}
 		        	
 		        	if ("student".equals(pullParser.getName())) {
 		        		if (flag == 2) {
 		        			map = new HashMap<String, Object>();
 		        		}
-
 		        	}
 
 		        	if (pullParser.getName().equals("uid")) {
-		        		map.put("stu_uid", pullParser.nextText());
+
+//		        		map.put("stu_uid", pullParser.nextText());
+
+                        String stuUid = pullParser.nextText();
+                         map.put("stu_uid", stuUid);
+                        Log.d("---stu_uid:",stuUid);
 		        	}
 		        	
 		        	if (pullParser.getName().equals("name")) {
-		        		map.put("stu_name", pullParser.nextText());
+//		        		map.put("stu_name", pullParser.nextText());
+
+                        String stuName = pullParser.nextText();
+                        map.put("stu_name", stuName);
+                        Log.d("---stu_name:",stuName);
 		        	}
 		        	       	
 		        	if (pullParser.getName().equals("state")) {
-		        		map.put("stu_state", pullParser.nextText());
+//		        		map.put("stu_state", pullParser.nextText());
+
+                        String stuState = pullParser.nextText();
+                        map.put("stu_state", stuState);
+                        Log.d("---stu_state:",stuState);
 		        	}
 		        	if (pullParser.getName().equals("homework_result_id")) {
-		        		map.put("result_id", pullParser.nextText());
+//		        		map.put("result_id", pullParser.nextText());
+
+
+                        String resultId = pullParser.nextText();
+
+                        map.put("result_id", resultId);
+                        Log.d("---result_id:",resultId);
 		        	}
 		        	
 	        	break;
@@ -1539,6 +1558,27 @@ public class LessonWebServerIF {
 	        			flag = 2;
 	        		}
 	        	}
+
+                 //老师账号类型第一次布置作业的情况
+
+//                    if (flag == 1) {
+//                        list.add(map);
+//                    }
+
+//                 if (pullParser.getName().equals("homework")) {
+//                        Log.d("---homework:","结束的homework");
+//
+//                     if (flag == 1) {
+//                           map.put("homework_flag",flag);
+//                           list.add(map);
+//                     } else {
+//                         map.put("homework_flag",flag);
+//                         list.add(map);
+//                     }
+//
+//
+//                   }
+
 	        	break;
 	        	
 	        	}

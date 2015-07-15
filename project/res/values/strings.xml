@@ -203,7 +203,7 @@
     <string name="event_member_count_nolimit">不限</string>
     <string name="event_join_coin_free">免费</string>
     <string name="event_finish_info">发布活动需要完成所有信息的填写！</string>
-    <string name="event_info_fill">请先填写信息！</string>
+    <string name="event_info_fill">请填写完整信息！</string>
     <string name="event_cancel_join_msg">你确认取消报名吗？</string>
     <string name="event_quota_full">该活动名额已满!</string>
     <string name="event_detail_applicants">报名名单:</string>

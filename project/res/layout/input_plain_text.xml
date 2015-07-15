@@ -40,7 +40,7 @@
             android:layout_height="50dp"
             android:layout_width="50dp"
             android:textSize="16sp"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:textColor="@color/white"
             android:layout_alignParentRight="true"
             android:clickable="true"

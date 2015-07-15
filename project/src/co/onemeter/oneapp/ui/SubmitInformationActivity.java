@@ -57,6 +57,10 @@ public class SubmitInformationActivity extends Activity implements OnClickListen
 	
 	private void setResultInfo(){
 		if(isInfoFill()){
+            if (!InputPlainTextActivity.isPhoneNum(submit_telephone.getText().toString())) {
+                msgbox.toast("你填写的手机号码格式不正确");
+                return;
+            }
 			Intent data = new Intent();
 			data.putExtra(SUBMITNAME, submit_accountInput.getText().toString());
 			data.putExtra(SUBMITPHONE, submit_telephone.getText().toString());

@@ -54,6 +54,11 @@ public class InputPlainTextActivity extends Activity {
     private RelativeLayout layout_input_plain_text;
     InputMethodManager mInputMethodManager ;
 
+    String title = "";
+    String desc = "";
+    int inputType = -1;
+    MessageBox msgBox;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,9 +67,10 @@ public class InputPlainTextActivity extends Activity {
         // fix problem on displaying gradient bmp
         getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
 
-        String title = "";
-        String desc = "";
-        int inputType = -1;
+//        String title = "";
+//        String desc = "";
+//        int inputType = -1;
+        msgBox = new MessageBox(this);
 
         Bundle b;
         if (savedInstanceState != null) {
@@ -230,10 +236,19 @@ public class InputPlainTextActivity extends Activity {
     private void onDone() {
         String name = edtValue.getText().toString();
         if (!allowEmpty && TextUtils.isEmpty(name)) {
-            MessageBox msgBox = new MessageBox(this);
+//            MessageBox msgBox = new MessageBox(this);
             msgBox.toast(R.string.input_single_line_text_empty_not_allowed);
             return;
         }
+
+        //如果是手机号码的话需要进一步的验证
+        if (title.equals("联系方式")) {
+            if (!isPhoneNum(name)) {
+                msgBox.toast("你填写的手机号码格式不正确");
+                return;
+            }
+        }
+
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putString(EXTRA_VALUE, name);
@@ -257,5 +272,29 @@ public class InputPlainTextActivity extends Activity {
     protected void onPause() {
         super.onPause();
     }
+
+
+    /**
+     * 验证手机号码的格式是否正确
+     * @author hutianfeng created at 2015/7/15
+     * @param phNum
+     * @return
+     */
+    public static boolean isPhoneNum(String phNum){
+        /*
+    移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
+    联通：130、131、132、152、155、156、185、186
+    电信：133、153、180、189、（1349卫通）
+    总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9
+    */
+        String telRegex = "[1][358]\\d{9}";//"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
+        if (TextUtils.isEmpty(phNum)) {
+            return false;
+        } else {
+            return phNum.matches(telRegex);
+        }
+
+    }
+
     
 }

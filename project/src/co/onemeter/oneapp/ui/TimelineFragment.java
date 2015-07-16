@@ -173,6 +173,7 @@ public abstract class TimelineFragment extends ListFragment
     public void insertMoment(Moment moment, int index) {
         if (adapter != null) {
             adapter.insert(moment, index);
+            Log.d("---insertMoment----:","insertMomen插入新活动");
 //            adapter.notifyLoadingCompleted();
             //把下面两句放在此，主要是为了达到真正的新建动态刷新，不影响局部刷新和位置
             //还可以解决新建动态后头像标记不刷新问题
@@ -222,6 +223,7 @@ public abstract class TimelineFragment extends ListFragment
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("---fragment");
         if (requestCode == REQ_COMMENT && resultCode == Activity.RESULT_OK) {
+            Log.d("---REQ_COMMENT:","刷新view");
             // refresh views
             boolean handled = false;
             if (data != null) {

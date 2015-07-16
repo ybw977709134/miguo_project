@@ -371,7 +371,7 @@
                         android:src="@drawable/timeline_close"
                         android:background="@drawable/bkg_e6e6e6"
                         android:scaleType="centerInside"
-                        android:visibility="gone"/>
+                        android:visibility="gone"  />
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

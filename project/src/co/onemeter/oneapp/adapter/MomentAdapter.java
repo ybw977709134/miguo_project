@@ -240,6 +240,7 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 photoFiles.add(file);
             }
         }
+
 		for (int i = 0; i < reviews.size(); i++) {
 			if (reviews.get(i).type == Review.TYPE_LIKE) {
 				likeReview.add(reviews.get(i));
@@ -724,9 +725,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                     }
                 });
 
-
-
-
                 //现在投票刷新后就不需要进行显示按钮了
 //                if(0 == choosed.size()) {
 //                    btnSurvey.setBackgroundResource(R.drawable.btn_gray_selector);
@@ -827,14 +825,6 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 //            holder.ivMomentShareRange.setVisibility(View.VISIBLE);
         }
 
-//        Database dbHelper = new Database(context);
-//        int ownerType = dbHelper.getBuddyCountType(moment.owner.userID);
-//
-//        if (ownerType == 2) {//老师帐号显示老师标记
-//        	holder.imgTagTeacher.setVisibility(View.VISIBLE);
-//        } else {//非老师帐号无标记
-//        	holder.imgTagTeacher.setVisibility(View.GONE);
-//        }
         //无需查询数据库，可获得当前动态的帐号类型
         if (null != moment.owner && moment.owner.getAccountType() == 2) {
         	holder.imgTagTeacher.setVisibility(View.VISIBLE);
@@ -1348,8 +1338,12 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
 
         if (files.isEmpty()) {
             table.setVisibility(View.GONE);
+            Log.d("---files:","文件为0");
             return;
         }
+
+
+        Log.d("---files:",files.size());
         table.removeAllViews();
         table.setVisibility(View.VISIBLE);
 
@@ -1377,6 +1371,8 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
             }
             if (TextUtils.isEmpty(file.localPath) || !new File(file.localPath).exists()) {
                 file.localPath = PhotoDisplayHelper.makeLocalFilePath(file.fileid, file.getExt());
+
+                Log.d("---EmptylocalPath:",file.localPath);
             }
             if (++i >= photoNum)
                 break;
@@ -1450,10 +1446,12 @@ public class MomentAdapter extends ArrayAdapter<Moment> {
                 if (new File(imageThumbnailPath).exists()) {
                     mImageResizer.loadImage(imageThumbnailPath, imageView);
 //                    imageView.setImageDrawable(new BitmapDrawable(BitmapFactory.decodeFile(imageThumbnailPath)));
+                    Log.d("---imageThumbnailPath1---:","路径1.......");
                 } else {
                     imageView.setImageResource(R.drawable.feed_default_pic);
                     addGetFileToContextList(context, files.get(i * columnNum + j).thumb_fileid,
                             files.get(i * columnNum + j).getExt(), imageView, mImageResizer);
+                    Log.d("---imageThumbnailPath1---:","路径2.......");
                 }
             }
             photoNum -= columnNum;

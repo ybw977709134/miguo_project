@@ -288,18 +288,20 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
             } catch (Exception e) {
                 e.printStackTrace();
             }
-//            moment.place = strAddress;
-//            if (null != location) {
-//                moment.latitude = location.getLatitude();
-//                moment.longitude = location.getLongitude();
-//            }
+
+            moment.place = strAddress;
+            if (null != location) {
+                moment.latitude = location.getLatitude();
+                moment.longitude = location.getLongitude();
+            }
 
 //            tvPickLocationTxtInd.setText(String.format(getString(R.string.event_place),strAddress));
-//            ivPickLocationImgInd.setImageResource(R.drawable.timeline_location_a);
-//            findViewById(R.id.pick_location_layout).setBackgroundResource(R.drawable.text_field);
-//            findViewById(R.id.pick_location_delete).setVisibility(View.VISIBLE);
+            tvPickLocationTxtInd.setText(strAddress);
+            ivPickLocationImgInd.setImageResource(R.drawable.timeline_location_a);
+            findViewById(R.id.pick_location_layout).setBackgroundResource(R.drawable.text_field);
+            findViewById(R.id.pick_location_delete).setVisibility(View.VISIBLE);
 
-//            isGettingLocation=false;
+            isGettingLocation=false;
         }
 
         @Override
@@ -440,6 +442,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 e.printStackTrace();
             }
         }
+
 
 //        if(TimelineActivity.TAG_NOTICE_IDX == tagType || tagType == TimelineActivity.TAG_VIDEO_IDX) {
 //            findViewById(R.id.location_layout).setVisibility(View.VISIBLE);
@@ -654,14 +657,17 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
             	rlSurveyVoteDeadLine.setEnabled(false);
                 showPickTimeLayout(); //在方法执行后  rlSurveyVoteDeadLine.setEnabled(true);                                                            
                 break;
+
             case R.id.btn_create_option:
 //                showAddSurveyOptionPopup();
                 addASurveyOption();
                 break;
+
             case R.id.survey_can_multi_select:
                 moment.isSurveyAllowMultiSelect = !moment.isSurveyAllowMultiSelect;
                 updateSurveyMultiSelectState();
                 break;
+
             case R.id.pick_location_delete:
                 moment.place = null;
                 moment.latitude = moment.longitude = 0;
@@ -671,14 +677,14 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 findViewById(R.id.pick_location_layout).setBackgroundResource(R.drawable.bkg_e6e6e6);
                 ivPickLocationImgInd.setImageResource(R.drawable.timeline_location);
                 break;
+
             case R.id.pick_location_layout:
                 if(!isGettingLocation && TextUtils.isEmpty(moment.place)) {
                 	tvPickLocationTxtInd.setText(R.string.getting_location_info);
                     isGettingLocation=true;
                     locationHelper.setOnLocationGotListener(mOnLocationGotListener);
                     locationHelper.getLocationWithAMap(true);
-                }else
-                {
+                } else {
                 	if(TextUtils.isEmpty(moment.place))
                 		tvPickLocationTxtInd.setText(R.string.place);
                 	isGettingLocation = false;
@@ -686,6 +692,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 	locationHelper.stop();
                 }
                 break;
+
             case R.id.ready_captured_voice_delete:
                 stopPlayingVoice();
 
@@ -694,9 +701,11 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
 
                 removeVoiceFromMoment();
                 break;
+
             case R.id.ready_captured_voice_inner_left_layout:
                 tryPlayOrStopVoice();
                 break;
+
             case R.id.capture_voice_layout:
             	View imageButton = findViewById(R.id.title_moment_send);
                 if(!isCapturingVoice) {
@@ -1219,7 +1228,7 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
                 @Override
                 protected void onPostExecute(Integer errno) {
                     mMsgBox.dismissWait();
-                    finish();
+                    CreateNormalMomentWithTagActivity.this.finish();
                 }
             });
         }

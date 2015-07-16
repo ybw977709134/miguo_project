@@ -85,6 +85,8 @@ public class PublishMomentService extends android.app.Service {
 
         boolean hasMediaFiles = null != moment.multimedias && !moment.multimedias.isEmpty();
 
+        Log.d("---hasMediaFiles:",hasMediaFiles+"");
+
         final int notiId = (int) (System.currentTimeMillis() & 0xFFFFFFFF); // unique
         final NotificationManager mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
@@ -193,6 +195,7 @@ public class PublishMomentService extends android.app.Service {
         }
 
         if (errno[0] == ErrorCode.OK && hasMediaFiles) {
+            Log.d("---fUploadMomentMultimedia:","fUploadMomentMultimedia");
             for (WFile file : moment.multimedias) {
                 errno[0] = mMomentWeb.fUploadMomentMultimedia(moment.id, file);
             }

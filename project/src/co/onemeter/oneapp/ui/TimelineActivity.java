@@ -144,6 +144,7 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
             Moment moment = data.getParcelableExtra(CreateNormalMomentWithTagActivity.EXTRA_MOMENT);
             if (moment != null)
                 currTimelineFragment.insertMoment(moment, 0);
+            Log.d("---timelineONresult","创建活动刷新");
         }
     }
     

@@ -492,6 +492,8 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             }
         }
     }
+
+    //刷新组织架构
     private void refresh() {
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override

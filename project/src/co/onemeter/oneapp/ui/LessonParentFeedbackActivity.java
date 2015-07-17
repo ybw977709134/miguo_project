@@ -300,29 +300,24 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
 			break;
 		case R.id.title_back:
 			// 发布动态退出时的提示
-			Builder builderBack = new AlertDialog.Builder(
-					LessonParentFeedbackActivity.this);
-			builderBack.setTitle("提示");
-			builderBack.setMessage("未完成发布，是否退出");
-			builderBack.setPositiveButton("确定",
-					new DialogInterface.OnClickListener() {
 
-						@Override
-						public void onClick(DialogInterface arg0, int arg1) {
-							releaseMediaFiles();
-							finish();
+            MessageDialog dialog = new MessageDialog(this);
+            dialog.setMessage("你确定放弃本次提交意见吗?");
+            dialog.setCancelable(false);
+            dialog.setLeftBold(true);
+            dialog.setOnLeftClickListener("确定",new MessageDialog.MessageDialogClickListener() {
+                @Override
+                public void onclick(MessageDialog dialog) {
+                    dialog.dismiss();
+                    releaseMediaFiles();
+                    finish();
+                }
+            });
+            dialog.setOnRightClickListener("取消",null);
+            dialog.show();
 
-						}
-					});
-			builderBack.setNegativeButton("取消",
-					new DialogInterface.OnClickListener() {
 
-						@Override
-						public void onClick(DialogInterface arg0, int arg1) {
-						}
-					});
 
-			builderBack.create().show();
 			break;
 
 		case R.id.btn_parent_confirm:
@@ -330,14 +325,14 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
 				Toast.makeText(LessonParentFeedbackActivity.this, "你还没有填写任何信息",
 						Toast.LENGTH_LONG).show();
 			} else {
-				MessageDialog dialog = new MessageDialog(LessonParentFeedbackActivity.this);
-                dialog.setTitle("提示");
-                dialog.setMessage("你确定提交这次家长意见吗?");
-                dialog.setCancelable(false);
-                dialog.setRightBold(true);
-                dialog.setOnLeftClickListener("取消", null);
-                
-                dialog.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
+				MessageDialog dialogConfirm = new MessageDialog(LessonParentFeedbackActivity.this);
+                dialogConfirm.setTitle("提示");
+                dialogConfirm.setMessage("你确定提交这次家长意见吗?");
+                dialogConfirm.setCancelable(false);
+                dialogConfirm.setRightBold(true);
+                dialogConfirm.setOnLeftClickListener("取消", null);
+
+                dialogConfirm.setOnRightClickListener("确定", new MessageDialog.MessageDialogClickListener() {
                     @Override
                     public void onclick(MessageDialog dialog) {
                         dialog.dismiss();
@@ -345,7 +340,7 @@ public class LessonParentFeedbackActivity extends Activity implements OnClickLis
                     }
                 }
                 );
-                dialog.show();
+                dialogConfirm.show();
 				
 			}
 			break;

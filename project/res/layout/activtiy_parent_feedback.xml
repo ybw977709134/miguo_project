@@ -27,7 +27,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/title_bar"
-        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:scrollbars="none" >
 
         <LinearLayout
@@ -39,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_medium"
-                android:background="@drawable/divider" />
+                android:background="@drawable/bg_section_divider_line_light" />
 
             <!-- msg -->
 
@@ -63,7 +64,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/normal_moment_layout_split_height"
-                android:background="@drawable/table_white"
+                android:background="@color/white"
                 android:visibility="gone" >
 
                 <TextView
@@ -102,7 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_medium"
-                android:background="@drawable/divider" />
+                android:background="@drawable/bg_section_divider_line_light" />
 
             <!-- image -->
 
@@ -161,7 +162,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/divider" />
+                android:background="@drawable/bg_section_divider_line_light" />
 
             <!-- voice -->
 
@@ -245,11 +246,7 @@
                 </LinearLayout>
             </FrameLayout>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/divider" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"

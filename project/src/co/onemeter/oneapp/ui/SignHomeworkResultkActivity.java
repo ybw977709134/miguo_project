@@ -245,7 +245,7 @@ public class SignHomeworkResultkActivity extends Activity implements OnClickList
                         	SubmitHomeWorkActivity.getInstance().finish();
                         }
                         //调用借口回调方法，刷新提交作业后返回作业列表的状态
-                        refreshHomework.refresh();
+//                        refreshHomework.refresh();
 
                         noticeTeacherHomeworkResult();
                     }

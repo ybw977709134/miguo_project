@@ -338,7 +338,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 //            }
 //        });
 //	}
-	private void getLessonsFromServer(){
+	private void  getLessonsFromServer(){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 				@Override
@@ -431,6 +431,10 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 //		
 //			
 //	}
+
+    /**
+     * 重新初始化班级信息
+     */
 	private void clearClassInfo(){
 		String term = getString(R.string.class_term);
 		String grade = getString(R.string.class_grade);
@@ -445,6 +449,10 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		tvTime.setText(time);
 		tvPlace.setText(place);
 	}
+
+    /**
+     * 刷新班级信息
+     */
 	private void refreshClassInfo(){
 		final String term = getString(R.string.class_term);
 		final String grade = getString(R.string.class_grade);
@@ -528,7 +536,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	    			alertDialog.setMessage("现在没有课程正在直播");
 	    			alertDialog.setOnLeftClickListener("确定", null);
 	    			alertDialog.show();
-				}else{
+
+				}else{//有直播的课程跳转到摄像头页面
+
 //					String[] times = time.split(":");
 //					String[] lengths = length.split(":");
 //					String[] startTimes = start_time.split(":");
@@ -552,9 +562,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 					}
 					Intent intent = new Intent();
 					intent.putExtra("student_live", 1);
-					intent.putExtra("lessonId", lessonId);
-					intent.putExtra("lessonName", lessonName);
-					intent.putExtra("schoolId", schoolId);
+					intent.putExtra("lessonId", lessonId);//课程ID
+					intent.putExtra("lessonName", lessonName);//课程名
+					intent.putExtra("schoolId", schoolId);//学校ID
 					intent.setClass(this, CameraActivity.class);
 					startActivity(intent);
 				}
@@ -744,17 +754,13 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
         }
     }
 
+    /**
+     * 显示更多，主要是编辑班级和课程信息
+     * @param parentView
+     */
 	private void showMore(View parentView) {
         final BottomButtonBoard bottomBoard = new BottomButtonBoard(this, parentView);
-        // class live
-//        bottomBoard.add(getString(R.string.class_live_class), BottomButtonBoard.BUTTON_BLUE,
-//                new OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                    	msgBox.toast("功能正在实现中...");
-//                        bottomBoard.dismiss();
-//                    }
-//                });
+
         // edit class info 
         bottomBoard.add(getString(R.string.class_edit_class_info), BottomButtonBoard.BUTTON_BLUE,
                 new OnClickListener() {
@@ -777,6 +783,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                         bottomBoard.dismiss();
                     }
                 });
+
         //edit coursetable info
         bottomBoard.add(getString(R.string.class_edit_cursetable_info), BottomButtonBoard.BUTTON_BLUE,
                 new OnClickListener() {
@@ -795,11 +802,19 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                         bottomBoard.dismiss();
                     }
                 });
+
         //Cancel
         bottomBoard.addCancelBtn(getString(R.string.class_camera_cancel));
         bottomBoard.show();
     }
-	
+
+    /**
+     * 点击该班级下的课程列表，进入相应课程的详情页
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {

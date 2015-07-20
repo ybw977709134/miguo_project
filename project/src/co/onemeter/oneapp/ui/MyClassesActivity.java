@@ -58,8 +58,8 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
         q.find(R.id.title_back).clicked(this);
         q.find(R.id.btn_add).clicked(this);
         loading = (ProgressBar) findViewById(R.id.loading);
-        layout_add_class = (LinearLayout) findViewById(R.id.layout_add_class);
         lvMyClass = (ListView) findViewById(R.id.lv_myClass);
+        layout_add_class = (LinearLayout) findViewById(R.id.layout_add_class);
         
         lvMyClass.setOnItemClickListener(this);
         lvMyClass.setEmptyView(loading);
@@ -168,6 +168,10 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 		});
 
     }
+
+    /**
+     * 通过邀请码绑定课堂
+     */
     private void submit() {
         String invitationCode = new AQuery(this).find(R.id.txt_code).getText().toString();
         if (TextUtils.isEmpty(invitationCode))
@@ -478,13 +482,20 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
     	
     }
 
+    /**
+     * 点击某学校的班级进入相应班级的详情页
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Intent intent = new Intent(this, ClassDetailActivity.class);
-		intent.putExtra("classId", classrooms.get(position).groupID);
-		intent.putExtra("schoolId", classrooms.get(position).schoolID);
-		intent.putExtra("classroomName", classrooms.get(position).groupNameOriginal);
+		intent.putExtra("classId", classrooms.get(position).groupID);//班级的ID
+		intent.putExtra("schoolId", classrooms.get(position).schoolID);//班级所在学校的id，一个学生在某段时间内只能在一个学校
+		intent.putExtra("classroomName", classrooms.get(position).groupNameOriginal);//班级名
 		startActivity(intent);
 	}
 	

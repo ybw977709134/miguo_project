@@ -249,7 +249,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			intent.setClass(this, HomeworkActivity.class);
 			intent.putExtra("schoolId", schoolId);
 			startActivity(intent);
-//			msgbox.toast("功能实现中。。。");
+
 			break;
 		case R.id.les_lay_third:
 			if(isTeacher()){

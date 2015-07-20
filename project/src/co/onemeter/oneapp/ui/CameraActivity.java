@@ -6,6 +6,7 @@ import java.util.List;
 import org.wowtalk.api.Camera;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import com.androidquery.AQuery;
 
@@ -143,7 +144,10 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 
 		});
 	}
-	
+
+    /**
+     * 老师账号获得摄像头信息
+     */
 	private void getCameraInfo(){
 		msgbox.showWait();
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
@@ -169,6 +173,10 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 
 		});
 	}
+
+    /**
+     * 学生账号获得摄像头信息
+     */
 	private void getCameraInfo_Student(){
 		msgbox.showWait();
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
@@ -272,6 +280,7 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 			holder.camera_item_icon.setOnClickListener(listener);
 			return convertView;
 		}
+
 		class ViewHodler{
 			ImageView camera_item_icon;
 			TextView camera_item_name;
@@ -293,23 +302,40 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 				Toast.makeText(this, R.string.network_connection_unavailable, Toast.LENGTH_SHORT).show();
 			}else{
 				if(Utils.is3G(this)){
-					Builder alertDialog = new AlertDialog.Builder(CameraActivity.this);
-					alertDialog.setTitle(R.string.class_camera_title);
-					alertDialog.setMessage(R.string.class_camera_is3G);
-					alertDialog.setPositiveButton(R.string.class_camera_ok, new DialogInterface.OnClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface arg0, int arg1) {
-							gotoVideoPlayer(position);
-						}
-					});  
-					alertDialog.setNegativeButton(R.string.class_camera_cancel, new DialogInterface.OnClickListener() {			
-						@Override
-						public void onClick(DialogInterface arg0, int arg1) {
-							
-						}
-					});
-					alertDialog.create().show();
+//					Builder alertDialog = new AlertDialog.Builder(CameraActivity.this);
+//					alertDialog.setTitle(R.string.class_camera_title);
+//					alertDialog.setMessage(R.string.class_camera_is3G);
+//					alertDialog.setPositiveButton(R.string.class_camera_ok, new DialogInterface.OnClickListener() {
+//
+//						@Override
+//						public void onClick(DialogInterface arg0, int arg1) {
+//							gotoVideoPlayer(position);
+//						}
+//					});
+//					alertDialog.setNegativeButton(R.string.class_camera_cancel, new DialogInterface.OnClickListener() {
+//						@Override
+//						public void onClick(DialogInterface arg0, int arg1) {
+//
+//						}
+//					});
+//					alertDialog.create().show();
+
+
+                    MessageDialog dialog = new MessageDialog(CameraActivity.this);
+                    dialog.setTitle(R.string.class_camera_title);
+                    dialog.setMessage(R.string.class_camera_is3G);
+                    dialog.setCancelable(false);
+                    dialog.setRightBold(true);
+                    dialog.setOnLeftClickListener(getString(R.string.class_camera_cancel) ,null);
+                    dialog.setOnRightClickListener(getString(R.string.class_camera_ok),new MessageDialog.MessageDialogClickListener() {
+                        @Override
+                        public void onclick(MessageDialog dialog) {
+                            dialog.dismiss();
+                            gotoVideoPlayer(position);
+                        }
+                    });
+                    dialog.show();
+
 				}else if(Utils.isWifi(this)){
 					gotoVideoPlayer(position);
 				}
@@ -319,8 +345,8 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 	private void gotoVideoPlayer(int position){
 		String httpUrl = cameras.get(position).httpURL;
 	    Intent i = new Intent();
-	    i.putExtra("httpURL", httpUrl);
-	    i.putExtra("lessonName", lessonName);
+	    i.putExtra("httpURL", httpUrl);//摄像头直播地址
+	    i.putExtra("lessonName", lessonName);//课程名
 	    i.setClass(this, VideoPlayingActivity.class);
 	    startActivity(i);
 	}

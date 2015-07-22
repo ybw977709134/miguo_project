@@ -34,6 +34,11 @@ gradle clean \
     && cp $src $dest \
     && echo output to $dest
 
+if [ ! $? -eq 0 ]
+then
+    exit
+fi
+
 # archive proguard mapping file (the path is configured in proguard.cfg)
 if [ -f project/classes-processed.map ]
 then

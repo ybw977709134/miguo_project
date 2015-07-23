@@ -759,6 +759,11 @@
             android:name=".UUPlayer.PlayerActivity" >
         </activity>
 
+        <activity
+            android:name=".UUPlayer.WebPlayerActivity"
+            android:screenOrientation="landscape">
+        </activity>
+
         <receiver
             android:name=".ui.SystemTimeChangedReceiver" >
             <intent-filter>

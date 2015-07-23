@@ -30,14 +30,22 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.UUPlayer.AppContext;
+import co.onemeter.oneapp.UUPlayer.BaseActivity;
+import co.onemeter.oneapp.UUPlayer.PlayerActivity;
+import co.onemeter.oneapp.UUPlayer.WebPlayerActivity;
 import co.onemeter.oneapp.liveplayer.VideoPlayingActivity;
 import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
+import ulucu.api.bean.Device;
+import ulucu.api.client.http.HttpClient;
+import ulucu.api.client.http.listener.HttpLoginListener;
+
 /**
  * 摄像头控制页面。
  * Created by zz on 03/03/2015.
  */
-public class CameraActivity extends Activity implements OnClickListener, OnItemClickListener{
+public class CameraActivity extends BaseActivity implements OnClickListener, OnItemClickListener,HttpLoginListener{
 	private ListView listView_camera_show;
 	private List<Camera> cameras;
 	private CameraAdapter cameraAdapter;
@@ -295,6 +303,7 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, final int position,
 			long id) {
+
 		if(cameras.get(position).status == 0){
 			Toast.makeText(this, R.string.class_camera_closed, Toast.LENGTH_SHORT).show();
 		}else{
@@ -341,15 +350,67 @@ public class CameraActivity extends Activity implements OnClickListener, OnItemC
 				}
 			}
 		}
+//        gotoVideoPlayer(position);
 	}
+
+
 	private void gotoVideoPlayer(int position){
 		String httpUrl = cameras.get(position).httpURL;
-	    Intent i = new Intent();
-	    i.putExtra("httpURL", httpUrl);//摄像头直播地址
-	    i.putExtra("lessonName", lessonName);//课程名
-	    i.setClass(this, VideoPlayingActivity.class);
-	    startActivity(i);
+        Log.d("---httpUrl---:",httpUrl);
+            Intent i = new Intent();
+        if (httpUrl.substring(0,4).equals("http") || httpUrl.substring(0,4).equals("HTTP")) {//小度乐现头
+            i.setClass(this, VideoPlayingActivity.class);
+            i.putExtra("httpURL", httpUrl);//摄像头直播地址
+            i.putExtra("lessonName", lessonName);//课程名
+
+            startActivity(i);
+        } else {//安眼摄像头
+
+//            AppContext.DEVICE_ID = httpUrl;
+//            AppContext.capi.Login("18117480390","123456");
+
+            i.setClass(this, WebPlayerActivity.class);
+            i.putExtra("device_id",httpUrl);
+            startActivity(i);
+        }
+
 	}
+
+    /*
+	 *
+	 * 监听登录消息，获取Token
+	 */
+    @Override
+    public void httpLoginRecall(String token) {
+        Log.d("---token:---", token);
+        AppContext.USERNAME = "18117480390";
+        AppContext.TOKEN = token;
+//        Intent i = new Intent();
+//        i.setClass(this, PlayerActivity.class);
+//        startActivity(i);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        /*
+		 *
+		 * 开启登录事件监听
+		 */
+        HttpClient.instance().setHttpLoginListener(this);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        /*
+		 *
+		 * 关闭登录事件监听
+		 */
+        HttpClient.instance().setHttpLoginListener(null);
+    }
 
 
 }

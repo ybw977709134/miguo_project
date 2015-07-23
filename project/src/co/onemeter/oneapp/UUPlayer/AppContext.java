@@ -19,6 +19,7 @@ public class AppContext extends Application{
     public static List<Device> PLAYBACKDEVICES = new ArrayList<Device>();
     public static String TOKEN;
     public static String USERNAME;
+    public static String DEVICE_ID;
     public static final String DeviceNoTag = "DeviceNoTag";
     public static ClientAPI capi = new ClientAPI();
 

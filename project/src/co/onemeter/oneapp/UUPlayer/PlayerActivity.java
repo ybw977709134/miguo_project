@@ -2,6 +2,7 @@ package co.onemeter.oneapp.UUPlayer;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -32,34 +33,52 @@ public class PlayerActivity extends BaseActivity implements PlayListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            device = AppContext.DEVIES.get(bundle
-                    .getInt(AppContext.DeviceNoTag));
+//        Bundle bundle = getIntent().getExtras();
+//        if (bundle != null) {
+//            device = AppContext.DEVIES.get(bundle
+//                    .getInt(AppContext.DeviceNoTag));
+//
+//        }
+        String device_id = getIntent().getStringExtra("device_id");
+        Log.d("---Player_device_id:---",device_id);
 
-        }
+        device = new Device();
+        device.setDevice_id(device_id);
+        device.setChancel_id(1);
+        device.setToken(AppContext.TOKEN);
+//        device.s
+//        device.setDrate();
+//        device.setDevice_rate("700");
         bitmaps = new ArrayList<>();
 		/*
 		 *
 		 * 发送消息获取当前设备详细信息
 		 */
-        if (device.getDeviceType().equals(Device.DeviceType.Normal)) {
-            AppContext.capi.DeviceView(device.getDevice_id(),
-                    device.getChancel_id(), AppContext.TOKEN);
 
-        }
+        AppContext.capi.DeviceView(device.getDevice_id(),
+                device.getChancel_id(), AppContext.TOKEN);
+
+//        if (device.getDeviceType().equals(Device.DeviceType.Normal)) {
+//            Log.d("---device_token:---",AppContext.TOKEN);
+//            AppContext.capi.DeviceView(device.getDevice_id(),
+//                    device.getChancel_id(), AppContext.TOKEN);
+//
+//        }
+
+        device.getPlayClient().setPlayListener(this);
+        device.getPlayClient().play(AppContext.USERNAME);
+
+
     }
 
     @Override
     public void onContentChanged() {
-        // TODO Auto-generated method stub
         super.onContentChanged();
         playerView = (ImageView) this.findViewById(R.id.player);
     }
 
     @Override
     protected void onResume() {
-        // TODO Auto-generated method stub
         super.onResume();
         HttpClient.instance().setHttpDeviceViewListener(this);
         HttpClient.instance().setHttpControlViewListener(this);
@@ -69,7 +88,6 @@ public class PlayerActivity extends BaseActivity implements PlayListener,
 
     @Override
     protected void onPause() {
-        // TODO Auto-generated method stub
         super.onPause();
         HttpClient.instance().setHttpDeviceViewListener(this);
         HttpClient.instance().setHttpControlViewListener(null);
@@ -82,7 +100,6 @@ public class PlayerActivity extends BaseActivity implements PlayListener,
 
     @Override
     protected void onDestroy() {
-        // TODO Auto-generated method stub
         super.onDestroy();
         for (int i = 0; i < bitmaps.size(); i++) {
             if (bitmaps.get(i).isRecycled()) {
@@ -130,6 +147,7 @@ public class PlayerActivity extends BaseActivity implements PlayListener,
 			 * 获取设备Token，打开设备，播放视频
 			 */
             if (device != null) {
+                Log.d("---DeviceViewRecall:",device.getDevice_name());
                 device.getPlayClient().setPlayListener(this);
                 device.getPlayClient().play(AppContext.USERNAME);
             }
@@ -137,10 +155,13 @@ public class PlayerActivity extends BaseActivity implements PlayListener,
 
     }
 
+
+
+
     @Override
     public void httpControlViewRecall(Device device) {
         if (device != null) {
-
+            Log.d("---ControlViewRecall:","device_id");
             device.setDeviceType(Device.DeviceType.Share);
             this.device = device;
         }
@@ -148,14 +169,14 @@ public class PlayerActivity extends BaseActivity implements PlayListener,
 
     @Override
     public void httpDeviceIndexRecall(List<Device> devices) {
-        AppContext.DEVIES.clear();
-        AppContext.DEVIES.addAll(devices);
-
-        String[] strings = new String[devices.size()];
-        for (int i = 0; i < devices.size(); i++) {
-            strings[i] = devices.get(i).getDevice_name();
-        }
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, strings);
+//        AppContext.DEVIES.clear();
+//        AppContext.DEVIES.addAll(devices);
+//
+//        String[] strings = new String[devices.size()];
+//        for (int i = 0; i < devices.size(); i++) {
+//            strings[i] = devices.get(i).getDevice_name();
+//        }
+//        ArrayAdapter adapter = new ArrayAdapter<String>(this,
+//                android.R.layout.simple_list_item_1, strings);
     }
 }

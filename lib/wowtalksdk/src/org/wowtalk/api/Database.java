@@ -262,6 +262,8 @@ public class Database {
         }
 
         endTranscation();
+
+        markDBTableModified(TBL_GROUP_MEMBER);
     }
 
     public void storeGroupMemberIds(ArrayList<String> groupIds, ArrayList<ArrayList<String>> buddyIdLists) {
@@ -291,6 +293,8 @@ public class Database {
             }
         }
         endTranscation();
+
+        markDBTableModified(TBL_GROUP_MEMBER);
     }
 
 	/**
@@ -6622,7 +6626,7 @@ public class Database {
 
                     //call listener
                     for(Pair<String,IDBTableChangeListener> aPair : changeListenersList) {
-                        Log.i("notify "+aPair.first+" modified");
+                        Log.i("notify "+aPair.first+" modified to " + aPair.second.getClass().getName());
                         aPair.second.onDBTableChanged(aPair.first);
                     }
 
@@ -6671,6 +6675,26 @@ public class Database {
     }
     private static dbTableModifiedNotifyRunnable delayNotifyRunnable=new dbTableModifiedNotifyRunnable();
 
+    /** 记录每个数据表的最后更新时间
+     *
+     * key: table name
+     * value: timestamp in ms
+     */
+    public static HashMap<String, Long> lastModified = new HashMap<>();
+
+    /**
+     * 检查某个数据表是否有更新。
+     * @param table
+     * @param checkpoint unixtime in ms
+     * @return
+     */
+    public static boolean modified(String table, long checkpoint) {
+        Long t = lastModified.get(table);
+        if (t == null)
+            return false;
+        return t > checkpoint;
+    }
+
     private static void markDBTableModified(String table) {
         //if thread not started,start it
         if(!delayNotifyRunnable.isRunning()) {
@@ -6688,6 +6712,8 @@ public class Database {
 //                }
 //            }
         }
+
+        lastModified.put(table, System.currentTimeMillis());
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

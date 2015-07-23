@@ -308,7 +308,9 @@ public class ChatMessageHandler {
             humanReadable = false;
             handleGroupRequest(msg);
         } else if(ChatMessage.MSGTYPE_SCHOOL_STRUCTURE_CHANGED.equals(msg.msgType)){
-        	structureChangedRefresh();
+            // 不会执行到这里，这种类型的消息会先被
+            // getSchoolStructureChangedNotification in interface WowTalkNotificationDelegate
+            // 捕获
         }else {
             if (SYSTEM_NOTIFICATION_SENDER.equals(msg.chatUserName)) {
                 humanReadable = false;
@@ -388,24 +390,6 @@ public class ChatMessageHandler {
         // nothing to do
     }
 
-    private void structureChangedRefresh(){
-        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
-            @Override
-            protected Integer doInBackground(Void... voids) {
-            	schools.clear();
-            	int errno;
-            	errno =  WowTalkWebServerIF.getInstance(context).getMySchoolsErrno(true, schools);
-            	return errno;
-            }
-
-            @Override
-            public void onPostExecute(Integer errno) {
-                if (errno == ErrorCode.OK) {
-                    new Database(context).storeSchools(schools);
-                }
-            }
-        });
-    }
     /**
      * @param msg
      * @return true : the msg is consumed (no more handling is required)

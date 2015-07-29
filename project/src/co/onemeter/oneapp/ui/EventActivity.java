@@ -12,7 +12,6 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -387,12 +386,12 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
 	}
 
 	protected void refresh() {
-		this.runOnUiThread(new Runnable(){
-			@Override
-			public void run() {
+		this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
                 fSetShownEvents();
-			}
-		});
+            }
+        });
 	}
 	
     private void downloadPreviousEvents(final String timestamp) {
@@ -517,9 +516,15 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
                     WEvent event = data.getParcelableExtra("event");
                     ArrayList<WEvent> events = new ArrayList<WEvent>();
                     events.add(event);
-                    events.addAll(acts);
-                    eventAdapter.clear();
-                    eventAdapter.addAll(events);
+                    if (acts != null)
+                        events.addAll(acts);
+                    if (eventAdapter != null) {
+                        eventAdapter.clear();
+                        eventAdapter.addAll(events);
+                    } else {
+                        eventAdapter = new EventAdapter(EventActivity.this, events);
+                        lvEvent.setAdapter(eventAdapter);
+                    }
                     break;
             }
         }

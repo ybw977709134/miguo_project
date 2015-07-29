@@ -1,23 +1,17 @@
 package co.onemeter.oneapp.ui;
 
-import org.wowtalk.api.Database;
-import org.wowtalk.api.LessonAddHomework;
-import org.wowtalk.api.Moment;
-import org.wowtalk.api.PrefUtil;
-import org.wowtalk.ui.MessageDialog;
-
-import co.onemeter.oneapp.Constants;
-import co.onemeter.oneapp.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import co.onemeter.oneapp.Constants;
+import co.onemeter.oneapp.R;
+import org.wowtalk.ui.MessageDialog;
 
 /**
  * 老师签到/在线作业公用
@@ -186,7 +180,7 @@ public class TeacherSignActivity extends Activity implements OnClickListener{
             if(classId_intent != null){
                 Intent intentLesson = new Intent(this,SelectLessonActivity.class);
                 intentLesson.putExtra("classId", classId_intent);
-                if(homeworkTag.equals("homework")){
+                if(homeworkTag != null && homeworkTag.equals("homework")){
                     intentLesson.putExtra("homework", homeworkTag);
                 }
                 startActivityForResult(intentLesson, REQ_SIGN_LESSON);

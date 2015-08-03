@@ -113,7 +113,7 @@
 					android:layout_width="fill_parent"
 					android:orientation="horizontal"
 					android:background="@drawable/menu_view_middle_selector"
-					android:visibility="gone"
+
 					android:clickable="true">
 					<TextView
 						android:layout_height="fill_parent"
@@ -138,8 +138,9 @@
 						android:textColor="@color/gray"
 						android:textSize="18sp"/>
 				</LinearLayout>
-				
-				
+
+                <ImageView
+                    style="@style/bg_section_divider_line_light"/>
 				
 				<LinearLayout
 					android:id="@+id/layout_password"
@@ -187,17 +188,7 @@
 			    android:text="@string/logout" />
 			<ImageView
 				style="@style/bg_section_divider_line_dark"/>
-			
-		<!--  
-			<Button
-				android:id="@+id/btn_logout"
-				android:layout_height="wrap_content"
-				android:layout_width="fill_parent"
-				style="@style/button_red"
-				android:layout_margin="@dimen/padding_medium"
-				android:text="@string/logout"/>
-				
-		-->
+
 		</LinearLayout>
 	</ScrollView>
 </RelativeLayout>

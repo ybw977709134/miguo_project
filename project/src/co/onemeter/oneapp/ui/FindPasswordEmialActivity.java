@@ -662,7 +662,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                     	MessageDialog dialog = new MessageDialog(FindPasswordEmialActivity.this,false,MessageDialog.SIZE_NORMAL);
                         dialog.setTitle("");
                         dialog.setCancelable(false);
-                        dialog.setMessage("今天邮的箱验证次数已用完"+"\n"+"请明天再试。");                      
+                        dialog.setMessage("今天的邮箱验证次数已用完"+"\n"+"请明天再试。");
                         dialog.show();
                         break;
                     	

@@ -437,13 +437,11 @@ public class WowTalkWebServerIF {
      * @param type
      * @return
      */
-    public List<Map<String,Object>> fSms_Send_SMS (String cellphone,String type) {
+    public int fSms_Send_SMS (String cellphone,String type) {
 
 //        type : 类型 如果是注册就是‘register’ 如果是绑定‘bind’
 //        一米家校短信模板ID ： 27154
-
 //        学点啥短信模板ID ： 26365
-
 
         String action = "sms_sendSMS";
         String postStr = "action=" + action
@@ -451,74 +449,7 @@ public class WowTalkWebServerIF {
                 + "&type=" + Utils.urlencodeUtf8(type)
                 + "&smstemplateid =" + 27154;
 
-        Connect2 connect2 = new Connect2();
-        Connect2.SetTimeout(5000, 0);
-
-        String xmlStr = connect2.getXmlString(postStr);
-
-        //对获得的xml文件进行pull解析
-        XmlPullParserFactory factory;
-        try {
-            factory = XmlPullParserFactory.newInstance();
-            // 实例化一个xml pull解析对象
-            XmlPullParser pullParser = factory.newPullParser();
-
-            // 将xml文件作为流传入到inputstream
-            //System.out.println(xmlStr);
-            xmlStr=xmlStr.replaceAll("&amp;", "＆");
-            xmlStr=xmlStr.replaceAll("&quot;", "\"");
-            xmlStr=xmlStr.replaceAll("&nbsp;", " ");
-
-            BufferedInputStream bis = new BufferedInputStream(
-                    new ByteArrayInputStream( xmlStr.getBytes()));
-
-            // xml解析对象接收输入流对象
-            pullParser.setInput(bis, "utf-8");
-
-            int event = pullParser.getEventType();
-            List<Map<String, Object>> list = null;
-            Map<String, Object> map = null;
-
-            while (event != XmlPullParser.END_DOCUMENT) {
-                switch (event) {
-                    case XmlPullParser.START_DOCUMENT:
-                        list = new ArrayList<>();
-                        break;
-
-                    case XmlPullParser.START_TAG:
-                        if ("sms_checkCode".equals(pullParser.getName())) {
-                            map = new HashMap<String, Object>();
-                        }
-                        if (pullParser.getName().equals("msg")) {
-                            map.put("msg", pullParser.nextText());
-                        }
-
-                        if (pullParser.getName().equals("mobile")) {
-                            map.put("mobile", pullParser.nextText());
-                        }
-
-                        if (pullParser.getName().equals("code")) {
-                            map.put("code", pullParser.nextText());
-                        }
-
-                        break;
-
-                    case XmlPullParser.END_TAG:
-                        if (pullParser.getName().equals("sms_checkCode")) {
-                            list.add(map);
-                        }
-                        break;
-                }
-
-                event = pullParser.next();
-
-            }
-            return list;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return _doRequestWithoutResponse(postStr);
     }
 
 
@@ -529,84 +460,66 @@ public class WowTalkWebServerIF {
      * @param code
      * @return
      */
-    public List<Map<String,Object>> fSms_Check_Code (String cellphone,String code) {
-
-
+    public int fSms_Check_Code (String cellphone,String code) {
 
         String action = "sms_checkCode";
         String postStr = "action=" + action
                 + "&mobile=" + Utils.urlencodeUtf8(cellphone)
                 + "&code=" + Utils.urlencodeUtf8(code);
 
-        Connect2 connect2 = new Connect2();
-        Connect2.SetTimeout(5000, 0);
-
-        String xmlStr = connect2.getXmlString(postStr);
-
-        //对获得的xml文件进行pull解析
-        XmlPullParserFactory factory;
-        try {
-            factory = XmlPullParserFactory.newInstance();
-            // 实例化一个xml pull解析对象
-            XmlPullParser pullParser = factory.newPullParser();
-
-            // 将xml文件作为流传入到inputstream
-            //System.out.println(xmlStr);
-            xmlStr=xmlStr.replaceAll("&amp;", "＆");
-            xmlStr=xmlStr.replaceAll("&quot;", "\"");
-            xmlStr=xmlStr.replaceAll("&nbsp;", " ");
-
-            BufferedInputStream bis = new BufferedInputStream(
-                    new ByteArrayInputStream( xmlStr.getBytes()));
-
-            // xml解析对象接收输入流对象
-            pullParser.setInput(bis, "utf-8");
-
-            int event = pullParser.getEventType();
-            List<Map<String, Object>> list = null;
-            Map<String, Object> map = null;
-
-            while (event != XmlPullParser.END_DOCUMENT) {
-                switch (event) {
-                    case XmlPullParser.START_DOCUMENT:
-                        list = new ArrayList<>();
-                        break;
-
-                    case XmlPullParser.START_TAG:
-                        if ("sms_checkCode".equals(pullParser.getName())) {
-                            map = new HashMap<String, Object>();
-                        }
-                        if (pullParser.getName().equals("msg")) {
-                            map.put("msg", pullParser.nextText());
-                        }
-
-                        if (pullParser.getName().equals("mobile")) {
-                            map.put("mobile", pullParser.nextText());
-                        }
-
-                        if (pullParser.getName().equals("code")) {
-                            map.put("code", pullParser.nextText());
-                        }
-
-                        break;
-
-                    case XmlPullParser.END_TAG:
-                        if (pullParser.getName().equals("sms_checkCode")) {
-                            list.add(map);
-                        }
-                        break;
-                }
-
-                event = pullParser.next();
-
-            }
-            return list;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return _doRequestWithoutResponse(postStr);
     }
+
+
+    /**
+     * 验证手机号码是否存在
+     * created at 2015/8/4 by hutianfeng
+     * @param cellphone
+     * @return
+     */
+    public int fCheckMobileExist (String cellphone) {
+
+        String action = "check_mobile_exist";
+        String postStr = "action=" + action
+                + "&mobile=" + Utils.urlencodeUtf8(cellphone);
+
+        return _doRequestWithoutResponse(postStr);
+    }
+
+
+    /**
+     * 检测手机号码是否已经绑定
+     * created at 2015/8/4 by hutianfeng
+     * @param cellphone
+     * @return
+     */
+    public int fCheckBindMobile (String cellphone) {
+
+        String action = "check_bind_mobile";
+        String postStr = "action=" + action
+                + "&mobile=" + Utils.urlencodeUtf8(cellphone);
+
+        return _doRequestWithoutResponse(postStr);
+    }
+
+
+    /**
+     * 通过手机号重置密码
+     * created at 2015/8/4 by hutianfeng
+     * @param cellphone
+     * @param newPassword
+     * @return
+     */
+    public int fResetPasswordByMobile (String cellphone,String newPassword) {
+
+        String action = "reset_password_by_mobile";
+        String postStr = "action=" + action
+                + "&mobile=" + Utils.urlencodeUtf8(cellphone)
+                + "&new_password=" + Utils.urlencodeUtf8(newPassword);
+
+        return _doRequestWithoutResponse(postStr);
+    }
+
 
 
     /**
@@ -616,81 +529,15 @@ public class WowTalkWebServerIF {
      * @return
      */
 
-    public List<Map<String,Object>> UserBindPhone (String cellphone) {
-
+    public int fUserBindPhone (String cellphone) {
         String uid = sPrefUtil.getUid();
-
         String action = "user_bind_phone";
         String postStr = "action=" + action
                 + "&uid=" + Utils.urlencodeUtf8(uid)
                 + "&mobile=" + Utils.urlencodeUtf8(cellphone);
 
-        Connect2 connect2 = new Connect2();
-        Connect2.SetTimeout(5000, 0);
-
-        String xmlStr = connect2.getXmlString(postStr);
-
-        //对获得的xml文件进行pull解析
-        XmlPullParserFactory factory;
-        try {
-            factory = XmlPullParserFactory.newInstance();
-            // 实例化一个xml pull解析对象
-            XmlPullParser pullParser = factory.newPullParser();
-
-            // 将xml文件作为流传入到inputstream
-            //System.out.println(xmlStr);
-            xmlStr=xmlStr.replaceAll("&amp;", "＆");
-            xmlStr=xmlStr.replaceAll("&quot;", "\"");
-            xmlStr=xmlStr.replaceAll("&nbsp;", " ");
-
-            BufferedInputStream bis = new BufferedInputStream(
-                    new ByteArrayInputStream( xmlStr.getBytes()));
-
-            // xml解析对象接收输入流对象
-            pullParser.setInput(bis, "utf-8");
-
-            int event = pullParser.getEventType();
-            List<Map<String, Object>> list = null;
-            Map<String, Object> map = null;
-
-            while (event != XmlPullParser.END_DOCUMENT) {
-                switch (event) {
-                    case XmlPullParser.START_DOCUMENT:
-                        list = new ArrayList<>();
-                        break;
-
-                    case XmlPullParser.START_TAG:
-                        if ("reset_password_via_email".equals(pullParser.getName())) {
-                            map = new HashMap<String, Object>();
-                        }
-
-                        if (pullParser.getName().equals("error")) {
-                            map.put("error", pullParser.nextText());
-                        }
-
-                        break;
-
-                    case XmlPullParser.END_TAG:
-                        if (pullParser.getName().equals("reset_password_via_email")) {
-                            list.add(map);
-                        }
-                        break;
-                }
-
-                event = pullParser.next();
-
-            }
-            return list;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return _doRequestWithoutResponse(postStr);
     }
-
-
-
-
 
 
 

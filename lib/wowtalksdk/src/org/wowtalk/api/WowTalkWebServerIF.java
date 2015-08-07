@@ -447,7 +447,7 @@ public class WowTalkWebServerIF {
         String postStr = "action=" + action
                 + "&mobile=" + Utils.urlencodeUtf8(cellphone)
                 + "&type=" + Utils.urlencodeUtf8(type)
-                + "&smstemplateid =" + 27154;
+                + "&smstemplateid=" + 27154;
 
         return _doRequestWithoutResponse(postStr);
     }

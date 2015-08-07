@@ -19,7 +19,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wowtech.DraggableListView.MainActivity;
+
 import org.wowtalk.api.ErrorCode;
+import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
@@ -72,6 +75,7 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
     private int time = 60;
     private Timer mTimer;
 
+    private PrefUtil mPrefUtil;
 
     private Handler mHandler = new Handler(){
         public void handleMessage(android.os.Message msg) {
@@ -93,6 +97,7 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
         setContentView(R.layout.activity_bind_cellphone);
         initView();
         mMsgBox = new MessageBox(this);
+        mPrefUtil = PrefUtil.getInstance(this);
 
         mInputMethodManager = (InputMethodManager) this
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -143,10 +148,11 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
             } else {
                 pageFlag = BIND_cellphone_PAGE;
 
-                unBindcellphoneAddress();//解绑
+
                 if (mTimer != null) {
                     mTimer.cancel();
                 }
+
                 layout_verification_auth_code.setVisibility(View.GONE);
                 layout_verification_cellphone.setVisibility(View.VISIBLE);
                 txt_auth_code.setText("");
@@ -355,18 +361,21 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
      */
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
             //清除绑定手机号码中文本框中的内容
             case R.id.field_clear_cellphone:
                 txt_bind_cellphone.setText("");
                 textView_verification_cellphone_result.setVisibility(View.GONE);
                 break;
+
             //清除验证码文本框中的内容
             case R.id.field_clear_auth_code:
                 txt_auth_code.setText("");
                 textView_verification_authCode_result.setVisibility(View.GONE);
 
                 break;
+
             //返回
             case R.id.textView_bindcellphone_back:
             case R.id.title_back:
@@ -380,7 +389,7 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
                 } else {
                     pageFlag = BIND_cellphone_PAGE;
 
-                    unBindcellphoneAddress();//解绑
+
                     if (mTimer != null) {
                         mTimer.cancel();
                     }
@@ -405,7 +414,7 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
                     @Override
                     public void onclick(MessageDialog dialog) {
                         dialog.dismiss();
-                        unBindcellphoneAddress();
+
                         Intent intent = new Intent(BindCellPhoneActivity.this,AccountSettingActivity.class);
                         startActivity(intent);
                         BindCellPhoneActivity.this.finish();
@@ -417,7 +426,7 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
             //验证绑定手机号码
             case R.id.btn_verification_cellphone:
                 mInputMethodManager.hideSoftInputFromWindow(txt_bind_cellphone.getWindowToken() , 0);
-                bindcellphoneAddress(txt_bind_cellphone.getText().toString());
+                getAccessCode(txt_bind_cellphone.getText().toString());
 
                 Handler hanlder = new Handler();
                 hanlder.postDelayed(new Runnable() {
@@ -434,12 +443,12 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
             //验证验证码
             case R.id.btn_verification_auth_code:
                 mInputMethodManager.hideSoftInputFromWindow(txt_auth_code.getWindowToken() , 0);
-                verifyBindcellphoneAddress(txt_auth_code.getText().toString(),txt_bind_cellphone.getText().toString());
+                checkSMS(txt_bind_cellphone.getText().toString(), txt_auth_code.getText().toString());
                 break;
 
             //重新获得验证码
             case R.id.btn_again_receive_auth_code:
-                bindcellphoneAddress(txt_bind_cellphone.getText().toString());
+                getAccessCode(txt_bind_cellphone.getText().toString());
                 break;
 
             default:
@@ -448,84 +457,14 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
 
     }
 
-    /**
-     *
-     * 绑定手机号码地址
-     * @param cellphoneAddress
-     * @author hutianfeng
-     * @date 2015/3/4
-     */
-    private void bindcellphoneAddress(final String cellphoneAddress) {
-        mMsgBox.showWait();
-
-        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
-
-            @Override
-            protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(BindCellPhoneActivity.this).fBindEmialAddress(cellphoneAddress);
-            }
-
-            @Override
-            protected void onPostExecute(Integer result) {
-                mMsgBox.dismissWait();
-
-                switch (result) {
-                    case ErrorCode.OK://0
-                        pageFlag = AUTH_CODE_PAGE;
-                        layout_verification_auth_code.setVisibility(View.VISIBLE);
-                        layout_verification_cellphone.setVisibility(View.GONE);
-                        textView_show_bind_cellphone.setVisibility(View.VISIBLE);
-                        textView_show_bind_cellphone.setText("你输入的手机号码" + txt_bind_cellphone.getText().toString());
 
 
-                        if (mTimer != null) {
-                            mTimer.cancel();
-                        }
-                        stopGetAccessCode();
-                        break;
 
-//                    case ErrorCode.cellphone_ADDRESS_VERIFICATION_CODE_ERROR://18:手机号码格式错误
-//                        textView_verification_cellphone_result.setVisibility(View.VISIBLE);
-//                        textView_verification_cellphone_result.setText(getString(R.string.bind_cellphone_format_error_msg));
-//                        break;
-//
-//                    case ErrorCode.AUTH://2:认证失败，错误的用户名或密码
-//                        textView_verification_cellphone_result.setVisibility(View.VISIBLE);
-//                        textView_verification_cellphone_result.setText(getString(R.string.bind_cellphone_pwd_err));
-//                        break;
-//
-//                    case ErrorCode.ACCESS_CODE_ERROR_OVER://24:验证码一天最多只能验证5次
-//                        MessageDialog dialog = new MessageDialog(BindCellPhoneActivity.this, false, MessageDialog.SIZE_NORMAL);
-//                        dialog.setTitle("");
-//                        dialog.setCancelable(false);
-//                        dialog.setMessage("今天手机号码验证次数已用完" + "\n" + "请明天再试。");
-//                        dialog.show();
-//                        break;
-//
-//                    case ErrorCode.cellphone_USED_BY_OTHERS://28：该手机号码已被其他用户绑定
-//                        textView_verification_cellphone_result.setVisibility(View.VISIBLE);
-//                        textView_verification_cellphone_result.setText(getString(R.string.settings_account_cellphone_used_by_others));
-//                        break;
-//
-//                    case ErrorCode.ERR_OPERATION_DENIED://37:该用户已绑定其它手机号码
-//                        textView_verification_cellphone_result.setVisibility(View.VISIBLE);
-//                        textView_verification_cellphone_result.setText(getString(R.string.settings_account_cellphone_used));
-//                        break;
-//
-//                    default://手机号码绑定失败
-//                        mMsgBox.showWaitImageWorng(getString(R.string.bind_cellphone_failed));
-//                        break;
-                }
-
-            }
-        });
-
-    }
 
     /**
      * 控制重新获取验证的按钮状态
      * @author hutainfeng
-     * @date 2015/3/4
+     * @date 2015/8/7
      *
      */
     private void stopGetAccessCode() {
@@ -548,22 +487,70 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
 
     }
 
+
     /**
-     * 验证绑定手机号码收到的验证码
-     * @param access_code
-     * @param cellphoneAddress
-     * @author hutainfeng
-     * @date 2015/3/4
+     * 获取验证码
+     * @param cellPhone
+     * created at 2015/8/7 by hutianfeng
      */
-    private void verifyBindcellphoneAddress(final String access_code,final String cellphoneAddress) {
+
+    private void getAccessCode (final String cellPhone) {
         mMsgBox.showWaitProgressbar("验证中");
 
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... params) {
-//                return WowTalkWebServerIF.getInstance(BindCellPhoneActivity.this).fVerifycellphoneAddress(access_code,cellphoneAddress);
-                return 1;
+                return WowTalkWebServerIF.getInstance(BindCellPhoneActivity.this).fCheckBindMobile(cellPhone);
+            }
+
+
+            @Override
+            protected void onPostExecute(Integer result) {
+//                mMsgBox.dismissWait();
+
+                switch (result) {
+                    case ErrorCode.OK://0//手机号码没有绑定
+
+                        //向手机发送短信验证码
+                        sendSMS(cellPhone);
+
+
+                        break;
+
+                    case ErrorCode.USER_ALREADY_EXISTS://6:手机号码已经被绑定
+                        mMsgBox.dismissWait();
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("手机号码已经被绑定");
+                        break;
+
+                    default:
+                        mMsgBox.dismissWait();
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("访问的服务器出错");
+                        break;
+                }
+            }
+        });
+    }
+
+
+
+
+    /**
+     * 发送验证码
+     * @param cellPhone
+     * created at 2015/8/7 by hutianfeng
+     */
+
+    private void sendSMS (final String cellPhone) {
+//        mMsgBox.showWaitProgressbar("验证中");
+
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
+
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return WowTalkWebServerIF.getInstance(BindCellPhoneActivity.this).fSms_Send_SMS(cellPhone,"bind");
             }
 
 
@@ -572,7 +559,141 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
                 mMsgBox.dismissWait();
 
                 switch (result) {
-                    case ErrorCode.OK://0
+                    case ErrorCode.OK://0//手机号码没有绑定
+
+                        mMsgBox.showWaitImageSuccess("验证码以短信已经发送到你的手机，请注意接收");
+                        pageFlag = AUTH_CODE_PAGE;
+                        layout_verification_auth_code.setVisibility(View.VISIBLE);
+                        layout_verification_cellphone.setVisibility(View.GONE);
+                        textView_show_bind_cellphone.setVisibility(View.VISIBLE);
+                        textView_show_bind_cellphone.setText("你输入的手机号码" + txt_bind_cellphone.getText().toString());
+
+
+                        if (mTimer != null) {
+                            mTimer.cancel();
+                        }
+                        stopGetAccessCode();
+
+                        break;
+
+                    case ErrorCode.ERR_VERIFICATION_CODE_NOT_SENT://53:短信接口报错
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("短信接口出错");
+                        break;
+
+                    case ErrorCode.ERR_VERIFICATION_CODE_TOO_MANY://54:短信验证码请求次数太多
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("短信验证码请求次数太多");
+                        break;
+
+                    case ErrorCode.ERR_SMS_MORE_TIMES://56:一天超过5次
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("一天超过5次");
+                        break;
+
+                    case ErrorCode.ERR_SMS_PHONE_NOT_CHECK://55:手机号码格式不正确
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("手机号码格式不正确");
+                        break;
+
+                    default:
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("访问的服务器出错");
+                        break;
+                }
+            }
+        });
+    }
+
+    /**
+     * 验证手机短信获得的验证码
+     * @param cellPhone
+     * created at 2015/8/7 by hutianfeng
+     */
+
+    private void checkSMS (final String cellPhone,final String code) {
+        mMsgBox.showWaitProgressbar("验证中");
+
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
+
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return WowTalkWebServerIF.getInstance(BindCellPhoneActivity.this).fSms_Check_Code(cellPhone,code);
+            }
+
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                mMsgBox.dismissWait();
+
+                switch (result) {
+                    case ErrorCode.OK://0//验证码验证成功
+
+                        //绑定手机号码
+                        userBindPhone(cellPhone);
+
+                        break;
+
+                    case ErrorCode.ERR_SMS_PHONE_NOT_CHECK://55:手机号码格式不正确
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("手机号码格式不正确");
+                        break;
+
+                    case ErrorCode.ERR_SMS_CODE_OVER://57:验证码过期
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("验证码过期");
+                        break;
+
+                    case ErrorCode.ERR_SMS_CODE_NOT_CHECK://58:验证码验证不通过
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("验证码验证不通过");
+                        break;
+
+                    case ErrorCode.ERR_VERIFICATION_CODE_TOO_MANY://54:短信验证码请求次数太多
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("短信验证码请求次数太多");
+                        break;
+
+
+                    default:
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("访问的服务器出错");
+                        break;
+                }
+            }
+        });
+    }
+
+
+
+
+    /**
+     * 获取验证码
+     * @param cellPhone
+     * created at 2015/8/7 by hutianfeng
+     */
+
+    private void userBindPhone (final String cellPhone) {
+        mMsgBox.showWaitProgressbar("验证中");
+
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
+
+            @Override
+            protected Integer doInBackground(Void... params) {
+                return WowTalkWebServerIF.getInstance(BindCellPhoneActivity.this).fUserBindPhone(cellPhone);
+            }
+
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                mMsgBox.dismissWait();
+
+                switch (result) {
+                    case ErrorCode.OK://0//手机号码绑定成功
+
+                        //手机号码绑定成功
+
+                        mPrefUtil.setPhoneNumber(cellPhone);
 
                         mMsgBox.showWaitImageSuccess("手机号码绑定成功");
                         new Thread(new Runnable() {
@@ -591,15 +712,16 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
                         }).start();
 
 
+
                         break;
 
-                    case ErrorCode.ACCESS_CODE_ERROR://22:无效的验证码，验证码有有效期，目前是一天的有效期
+                    case ErrorCode.USER_ALREADY_EXISTS://6:用户不存在
                         textView_verification_authCode_result.setVisibility(View.VISIBLE);
-                        textView_verification_authCode_result.setText(getString(R.string.access_code_error));
+                        textView_verification_authCode_result.setText("用户不存在");
                         break;
 
                     default:
-//                        mMsgBox.showWaitImageWorng( getString(R.string.bind_cellphone_failed));
+                        mMsgBox.showWaitImageWorng("手机号码绑定失败");
                         break;
                 }
             }
@@ -607,37 +729,6 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
     }
 
 
-    /**
-     * 解除绑定手机号码
-     * @author hutianfeng
-     * @date 2015/3/5
-     */
-    private void unBindcellphoneAddress() {
 
-        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
-
-            @Override
-            protected Integer doInBackground(Void... params) {
-//                return WowTalkWebServerIF.getInstance(BindCellPhoneActivity.this).fUnBindcellphoneAddress();
-                return 1;
-            }
-
-            @Override
-            protected void onPostExecute(Integer result) {
-
-                switch (result) {
-                    case ErrorCode.OK://0
-//                    	Toast.makeText(BindCellPhoneActivity.this, "没有绑定手机号码", Toast.LENGTH_SHORT).show();
-//                    	mMsgBox.show(null, "绑定手机号码失败");
-                        break;
-
-                    default:
-                        Toast.makeText(BindCellPhoneActivity.this, "连接服务器失败,请检查网络", Toast.LENGTH_SHORT).show();
-//                        mMsgBox.show(null, "请检查网络");
-                        break;
-                }
-            }
-        });
-    }
 
 }

@@ -119,7 +119,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="10dp"
                 android:textColor="@color/black_30"
-                android:text="请输入旧手机号码收到的验证码"/>
+                android:text="请输入旧手机短信收到的验证码"/>
 
             <!-- 绑定手机号码的验证和验证码的验证结果 -->
             <TextView

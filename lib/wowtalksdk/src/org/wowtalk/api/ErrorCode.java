@@ -65,6 +65,28 @@ public class ErrorCode {
      */
     public static final int ERR_DUPLICATE_LESSONS_ON_SAME_DAY = 50;
 
+
+    // 重复操作
+    public static final int ERR_REDUNDANT = 52;
+
+
+    /*短信接口报错*/
+    public static final int ERR_VERIFICATION_CODE_NOT_SENT = 53;
+    //手机号码格式不对
+    public static final int ERR_SMS_PHONE_NOT_CHECK = 55;
+    //一天超过5次
+    public static final int ERR_SMS_MORE_TIMES = 56;
+    //验证码过期
+    public static final int ERR_SMS_CODE_OVER = 57;
+    //验证码验证不通过
+    public static final int ERR_SMS_CODE_NOT_CHECK = 58;
+    // 短信验证码请求次数太多
+    public static final int ERR_VERIFICATION_CODE_TOO_MANY = 54;
+    // 访问阿里云OSS时遇到错误
+    public static final int ERR_ALIOSS = 60;
+
+
+
 	/** Error Code: Bad or no response from remote server. */
 	public static final int BAD_RESPONSE = -1;
 	/** Error Code: User does not exists. */

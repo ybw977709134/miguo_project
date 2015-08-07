@@ -87,6 +87,8 @@ public class PrefUtil {
     private static final String S3_UID = "s3_uid";
     private static final String S3_PASSWORD = "s3_password";
     private static final String S3_BUCKET = "s3_bucket";
+    private static final String BIND_PHONE = "bind_phone";
+
     /**
      * 离线消息是否获取成功
      */
@@ -971,12 +973,18 @@ public class PrefUtil {
         editor.commit();
     }
 
+    public void setPhoneNumber(String cellPhone) {
+        Editor editor = sPref.edit();
+        editor.putString(BIND_PHONE, cellPhone);
+        editor.commit();
+    }
+
     public String getMyCountryCode() {
         return sPref.getString(COUNTRYCODE, "");
     }
 
     public String getMyPhoneNumber() {
-        return sPref.getString(MY_PHONE, "");
+        return sPref.getString(BIND_PHONE, "");
     }
 
     public String getMyNickName() {
@@ -1204,6 +1212,7 @@ public class PrefUtil {
         editor.remove(APPLY_TIMES);
         editor.remove(COUNTRYCODE);
         editor.remove(USERNAME);
+        editor.remove(BIND_PHONE);
 
         editor.remove(WEB_DOMAIN);
         editor.remove(SIP_DOMAIN);

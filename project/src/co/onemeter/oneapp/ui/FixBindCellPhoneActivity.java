@@ -284,13 +284,12 @@ public class FixBindCellPhoneActivity extends Activity implements View.OnClickLi
 
             case R.id.btn_access_code:
                 textView_verification_code_result.setVisibility(View.GONE);
-                getAccessCode(PrefUtil.getInstance(FixBindCellPhoneActivity.this).getMyUsername(),bindcellphone);
-
+                sendSMS(PrefUtil.getInstance(FixBindCellPhoneActivity.this).getMyPhoneNumber());
                 break;
 
             case R.id.btn_verification_code://确认，跳转到绑定邮箱界面
 
-                checkCodeRetrievePassword(PrefUtil.getInstance(FixBindCellPhoneActivity.this).getMyUsername(),txt_access_code.getText().toString());
+                checkSMS(PrefUtil.getInstance(FixBindCellPhoneActivity.this).getMyPhoneNumber(),txt_access_code.getText().toString());
 
                 break;
             default:
@@ -325,156 +324,136 @@ public class FixBindCellPhoneActivity extends Activity implements View.OnClickLi
 
     }
 
-    /**
-     *
-     * 绑定邮箱地址
-     * @param cellphoneAddress
-     * @author hutianfeng
-     * @date 2015/3/4
-     */
-    private void getAccessCode(final String wowtalk_id,final String cellphoneAddress) {
-        mMsgBox.showWait();
-
-        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
-
-            @Override
-            protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(FixBindCellPhoneActivity.this).fSendCodeRetrievePassword(wowtalk_id, cellphoneAddress);
-            }
-
-            @Override
-            protected void onPostExecute(Integer result) {
-                mMsgBox.dismissWait();
-                Log.i("---result:"+result);
-                switch (result) {
-
-                    case ErrorCode.OK://0
-                        if (mTimer != null) {
-                            mTimer.cancel();
-                        }
-                        stopGetAccessCode();
-                        break;
-
-                    case ErrorCode.ACCESS_CODE_ERROR_OVER://23:验证码一天最多只能验证5次
-                        closeSoftKeyboard();
-                        MessageDialog dialog = new MessageDialog(FixBindCellPhoneActivity.this,false,MessageDialog.SIZE_NORMAL);
-                        dialog.setTitle("");
-                        dialog.setCancelable(false);
-                        dialog.setMessage("今天邮的箱验证次数已用完"+"\n"+"请明天再试。");
-                        dialog.show();
-                        break;
-
-                    default://获取验证码失败
-//                        mMsgBox.show(null, "获取验证码失败");
-                        textView_verification_code_result.setVisibility(View.VISIBLE);
-                        textView_verification_code_result.setText("获取验证码失败");
-//                        Toast.makeText(FixBindCellPhoneActivity.this, "获取验证码失败", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-        });
-    }
-
 
     /**
-     * 验证绑定邮箱收到的验证码
-     * @param wowtalk_id
-     * @param access_code
-     * @author hutainfeng
-     * @date 2015/3/12
+     * 发送验证码
+     * @param cellPhone
+     * created at 2015/8/7 by hutianfeng
      */
-    private void checkCodeRetrievePassword (final String wowtalk_id,final String access_code) {
+
+    private void sendSMS (final String cellPhone) {
         mMsgBox.showWaitProgressbar("验证中");
 
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(FixBindCellPhoneActivity.this).fCheckCodeRetrievePassword(wowtalk_id, access_code);
+                return WowTalkWebServerIF.getInstance(FixBindCellPhoneActivity.this).fSms_Send_SMS(cellPhone,"bind");
             }
+
 
             @Override
             protected void onPostExecute(Integer result) {
                 mMsgBox.dismissWait();
 
                 switch (result) {
-                    case ErrorCode.OK://0
-                        //跳转到绑定邮箱界面
-                        unBindcellphoneAddress();
+                    case ErrorCode.OK://0//手机号码没有绑定
+
+                        mMsgBox.showWaitImageSuccess("验证码以短信已经发送到你的手机，请注意接收");
+
+
+                        if (mTimer != null) {
+                            mTimer.cancel();
+                        }
+                        stopGetAccessCode();
+
                         break;
 
-                    case ErrorCode.USER_NOT_EXISTS://-99
+                    case ErrorCode.ERR_VERIFICATION_CODE_NOT_SENT://53:短信接口报错
                         textView_verification_code_result.setVisibility(View.VISIBLE);
-                        textView_verification_code_result.setText("你输入的账号不存在");
+                        textView_verification_code_result.setText("短信接口出错");
                         break;
 
-                    case ErrorCode.FORGET_PWD_ACCESS_CODE_FALSE://1108
+                    case ErrorCode.ERR_VERIFICATION_CODE_TOO_MANY://54:短信验证码请求次数太多
                         textView_verification_code_result.setVisibility(View.VISIBLE);
-                        textView_verification_code_result.setText("验证码不正确");
+                        textView_verification_code_result.setText("短信验证码请求次数太多");
                         break;
 
-                    case ErrorCode.FORGET_PWD_ACCESS_CODE_OUT_TIME://1109
+                    case ErrorCode.ERR_SMS_MORE_TIMES://56:一天超过5次
                         textView_verification_code_result.setVisibility(View.VISIBLE);
-                        textView_verification_code_result.setText("验证码已过时");
+                        textView_verification_code_result.setText("一天超过5次");
                         break;
 
-                    case ErrorCode.ACCESS_CODE_ERROR_OVER://24:验证码一天最多只能验证5次
-                        MessageDialog dialog = new MessageDialog(FixBindCellPhoneActivity.this,false,MessageDialog.SIZE_NORMAL);
-                        dialog.setTitle("");
-                        dialog.setCancelable(false);
-                        dialog.setMessage("今天邮箱验证次数已用完，请明天再试。");
-                        dialog.show();
-                        break;
-
-                    case ErrorCode.ACCESS_CODE_ERROR://22:无效的验证码，验证码有有效期，目前是一天的有效期
+                    case ErrorCode.ERR_SMS_PHONE_NOT_CHECK://55:手机号码格式不正确
                         textView_verification_code_result.setVisibility(View.VISIBLE);
-                        textView_verification_code_result.setText(getString(R.string.access_code_error));
+                        textView_verification_code_result.setText("手机号码格式不正确");
                         break;
 
                     default:
-//                        mMsgBox.show(null, "验证不通过");
-                        mMsgBox.showWaitImageCaution("验证不通过");
+                        textView_verification_code_result.setVisibility(View.VISIBLE);
+                        textView_verification_code_result.setText("访问的服务器出错");
                         break;
                 }
             }
         });
     }
 
+
     /**
-     * 解除绑定邮箱
-     * @author hutianfeng
-     * @date 2015/3/5
+     * 验证手机短信获得的验证码
+     * @param cellPhone
+     * created at 2015/8/7 by hutianfeng
      */
-    private void unBindcellphoneAddress() {
+
+    private void checkSMS (final String cellPhone,final String code) {
+        mMsgBox.showWaitProgressbar("验证中");
 
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
             @Override
             protected Integer doInBackground(Void... params) {
-//                return WowTalkWebServerIF.getInstance(FixBindCellPhoneActivity.this).fUnBindcellphoneAddress();
-                return 0;
+                return WowTalkWebServerIF.getInstance(FixBindCellPhoneActivity.this).fSms_Check_Code(cellPhone,code);
             }
+
 
             @Override
             protected void onPostExecute(Integer result) {
+                mMsgBox.dismissWait();
 
                 switch (result) {
-                    case ErrorCode.OK://0 //解绑成功后方可跳转到重新绑定邮箱的界面
+                    case ErrorCode.OK://0//验证码验证成功
 
-                        Toast.makeText(FixBindCellPhoneActivity.this, "原绑定邮箱已解绑", Toast.LENGTH_SHORT).show();
-                        Intent bindIntent = new Intent(FixBindCellPhoneActivity.this,BindCellPhoneActivity.class);
-                        bindIntent.putExtra(FIX_BIND_CELLPHONE, true);
-                        startActivity(bindIntent);
-                        FixBindCellPhoneActivity.this.finish();
+                        //跳转到绑定手机号码页面
+                        Intent bindPhone = new Intent(FixBindCellPhoneActivity.this,BindCellPhoneActivity.class);
+                        startActivity(bindPhone);
 
                         break;
 
+                    case ErrorCode.ERR_SMS_PHONE_NOT_CHECK://55:手机号码格式不正确
+                        textView_verification_code_result.setVisibility(View.VISIBLE);
+                        textView_verification_code_result.setText("手机号码格式不正确");
+                        break;
+
+                    case ErrorCode.ERR_SMS_CODE_OVER://57:验证码过期
+                        textView_verification_code_result.setVisibility(View.VISIBLE);
+                        textView_verification_code_result.setText("验证码过期");
+                        break;
+
+                    case ErrorCode.ERR_SMS_CODE_NOT_CHECK://58:验证码验证不通过
+                        textView_verification_code_result.setVisibility(View.VISIBLE);
+                        textView_verification_code_result.setText("验证码验证不通过");
+                        break;
+
+                    case ErrorCode.ERR_VERIFICATION_CODE_TOO_MANY://54:短信验证码请求次数太多
+                        textView_verification_code_result.setVisibility(View.VISIBLE);
+                        textView_verification_code_result.setText("短信验证码请求次数太多");
+                        break;
+
+
                     default:
-                        Toast.makeText(FixBindCellPhoneActivity.this, "连接服务器失败,请检查网络", Toast.LENGTH_SHORT).show();
+                        textView_verification_code_result.setVisibility(View.VISIBLE);
+                        textView_verification_code_result.setText("访问的服务器出错");
                         break;
                 }
             }
         });
     }
+
+
+
+
+
+
+
 
 }

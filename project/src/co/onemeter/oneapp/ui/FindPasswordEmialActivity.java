@@ -63,7 +63,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 	
 	//重置新密码
 	
-		private RelativeLayout layout_reset_password;
+		private RelativeLayout  layout_reset_password;
 		private EditText txt_new_password;//新密码
 		private EditText txt_confirm_new_password;//确认新密码
 		private ImageView field_clear_pwd;//清除密码

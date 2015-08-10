@@ -80,11 +80,13 @@
 				android:orientation="vertical" >
 
 				<ImageView
-					style="@style/bg_section_divider_line_dark"/>
+					style="@style/bg_section_divider_line_dark"
+                    android:visibility="gone"/>
 				
 				<RelativeLayout
 					android:layout_height="wrap_content"
-					android:layout_width="fill_parent">
+					android:layout_width="fill_parent"
+                    android:visibility="gone">
 
 				<EditText
 					android:id="@+id/account_edit"

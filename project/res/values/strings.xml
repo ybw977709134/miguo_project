@@ -452,7 +452,7 @@
     <string name="event_apply">报名</string>
     <string name="logo_name">一米家校</string>
     <string name="account_hint">帐号</string>
-    <string name="userName_hint">用户名</string>
+    <string name="userName_hint">用户名或手机号</string>
     <string name="passWord_hint">密码</string>
     <string name="login_failed">登陆失败</string>
     <string name="login_user_cannot_be_null">帐号不能为空</string>

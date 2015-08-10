@@ -639,6 +639,7 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
                         textView_verification_authCode_result.setText("手机号码格式不正确");
                         break;
 
+
                     case ErrorCode.ERR_SMS_CODE_OVER://57:验证码过期
                         textView_verification_authCode_result.setVisibility(View.VISIBLE);
                         textView_verification_authCode_result.setText("验证码过期");
@@ -694,6 +695,7 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
                         //手机号码绑定成功
 
                         mPrefUtil.setPhoneNumber(cellPhone);
+                        mPrefUtil.setSetupStep(2);
 
                         mMsgBox.showWaitImageSuccess("手机号码绑定成功");
                         new Thread(new Runnable() {

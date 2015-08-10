@@ -33,7 +33,7 @@ import co.onemeter.utils.AsyncTaskExecutor;
  *通过手机号找回密码
  * Created by hanson on 15-8-3.
  */
-public class FindPasswordCellPhoneActivity extends Activity implements View.OnClickListener {
+public class MobileRegisterActivity extends Activity implements View.OnClickListener {
 
 
     private RelativeLayout layout_find_password;
@@ -99,7 +99,7 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_find_password_cellphone);
+        setContentView(R.layout.activity_register_mobile);
         mMsgBox = new MessageBox(this);
         initView();
 
@@ -628,7 +628,7 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
 
             @Override
             protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(FindPasswordCellPhoneActivity.this).fCheckMobileExist(cellPhone);
+                return WowTalkWebServerIF.getInstance(MobileRegisterActivity.this).fCheckMobileExist(cellPhone);
             }
 
 
@@ -637,18 +637,17 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
 //                mMsgBox.dismissWait();
 
                 switch (result) {
-                    case ErrorCode.USER_ALREADY_EXISTS://1//手机号码存在
+                    case ErrorCode.OK://0//手机号码不存在数据库中，可以注册
 
                         //向手机发送短信验证码
                         sendSMS(cellPhone);
 
-
                         break;
 
-                    case ErrorCode.OK://0:手机号码不存在
+                    case ErrorCode.USER_ALREADY_EXISTS://6:手机号码存在
                         mMsgBox.dismissWait();
                         textView_verification_authCode_result.setVisibility(View.VISIBLE);
-                        textView_verification_authCode_result.setText("手机号码已存在");
+                        textView_verification_authCode_result.setText("手机号码已被注册，请使用其他手机号注册");
                         break;
 
                     case ErrorCode.DB://3:数据库操作错误
@@ -689,7 +688,7 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
 
             @Override
             protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(FindPasswordCellPhoneActivity.this).fSms_Send_SMS(cellPhone,"register");
+                return WowTalkWebServerIF.getInstance(MobileRegisterActivity.this).fSms_Send_SMS(cellPhone,"register");
             }
 
 
@@ -759,7 +758,7 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
 
             @Override
             protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(FindPasswordCellPhoneActivity.this).fSms_Check_Code(cellPhone,code);
+                return WowTalkWebServerIF.getInstance(MobileRegisterActivity.this).fSms_Check_Code(cellPhone,code);
             }
 
 
@@ -772,8 +771,15 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
                     case ErrorCode.OK://0//验证码验证成功
 
                         //跳转到绑定手机号码页面
-                        layout_verification_auth_code.setVisibility(View.GONE);
-                        layout_reset_password.setVisibility(View.VISIBLE);
+//                        layout_verification_auth_code.setVisibility(View.GONE);
+//                        layout_reset_password.setVisibility(View.VISIBLE);
+
+
+                       Intent registerIntent = new Intent(MobileRegisterActivity.this,RegisterActivity.class);
+                       registerIntent.putExtra("cellPhone",cellPhone);
+
+                       startActivity(registerIntent);
+
 
                         break;
 
@@ -822,7 +828,7 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
 
             @Override
             protected Integer doInBackground(Void... params) {
-                return WowTalkWebServerIF.getInstance(FindPasswordCellPhoneActivity.this).fResetPasswordByMobile(cellPhone,password);
+                return WowTalkWebServerIF.getInstance(MobileRegisterActivity.this).fResetPasswordByMobile(cellPhone,password);
             }
 
             @Override

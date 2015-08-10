@@ -545,6 +545,10 @@ public class WowTalkWebServerIF {
 
 
 
+
+
+
+
 	/**
 	 * 通过返回的list值判断是否当前用户绑定了邮箱
 	 * 该方法可以获得绑定邮箱的值
@@ -1512,6 +1516,7 @@ public class WowTalkWebServerIF {
                     }
 
                     sPrefUtil.setWowtalkId(wowtalk_id);
+                    sPrefUtil.setPhoneNumber(wowtalk_id);
                     sPrefUtil.setSetupStep(2);
 				}
 			} else {

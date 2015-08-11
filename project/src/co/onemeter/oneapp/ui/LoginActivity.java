@@ -385,7 +385,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 //            break;
 //        }
         case R.id.btn_signup:
-            startActivity(new Intent(this, RegisterActivity.class));
+            startActivity(new Intent(this, MobileRegisterActivity.class));
             break;
             
 		case R.id.forgotPassWord:
@@ -493,13 +493,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 		}).start();
     }
 
-    /**
-     * 跳转到找回密码的界面
-     */
-    private void fGotoFetchPwd() {
-		Intent fetchIntent = new Intent(LoginActivity.this, FindPasswordEmialActivity.class);
-		startActivity(fetchIntent);
-	}
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -594,14 +587,29 @@ public class LoginActivity extends Activity implements OnClickListener {
     private void showPopupMenu() {
         final BottomButtonBoard bottomBoard = new BottomButtonBoard(this, findViewById(R.id.layout_login));
 
+        //手机号码找回
+        bottomBoard.add(getString(R.string.login_findPassWord_cellphone), BottomButtonBoard.BUTTON_BLUE, new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomBoard.dismiss();
+
+                Intent fetchIntent = new Intent(LoginActivity.this, FindPasswordCellPhoneActivity.class);
+                startActivity(fetchIntent);
+
+            }
+        });
+
         //邮箱找回
         bottomBoard.add(getString(R.string.login_findPassWord_email), BottomButtonBoard.BUTTON_BLUE, new OnClickListener() {
             @Override
             public void onClick(View v) {
                 bottomBoard.dismiss();
-                fGotoFetchPwd();
+                Intent fetchIntent = new Intent(LoginActivity.this, FindPasswordEmialActivity.class);
+                startActivity(fetchIntent);
             }
         });
+
+
 
         //close popupMenu
         bottomBoard.addCancelBtn(getString(R.string.login_findPassWord_cancel));

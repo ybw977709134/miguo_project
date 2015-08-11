@@ -224,6 +224,7 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
                
 			
 			break;
+
 		case R.id.layout_id:
 //			Intent idIntent = new Intent(AccountSettingActivity.this, SettingUsernameActivity.class);
 //            idIntent.putExtra(SettingUsernameActivity.EXTRA_WOWID,
@@ -232,14 +233,29 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 //                    mPrefUtil.getMyUsernameChangedState());
 //			startActivityForResult(idIntent, REQ_INPUT_ID);
 			break;
+
 		case R.id.layout_password:
 			Intent passwordIntent = new Intent(AccountSettingActivity.this, SettingPasswordActivity.class);
 //            startActivity(passwordIntent);
 			startActivityForResult(passwordIntent, REQ_INPUT_PASSWORD);
 			break;
+
 		case R.id.layout_bind_phone:
-			Toast.makeText(AccountSettingActivity.this, "功能尚未实现..", Toast.LENGTH_LONG).show();
+			if (!mPrefUtil.getMyPasswordChangedState()) {
+                mMsgBox.toast(R.string.accountsetting_bindphone_email_set_pwd_first);
+            } else {
+
+                if (mPrefUtil.getMyPhoneNumber().length() == 0) {//未绑定//跳转到绑定页面
+                    Intent bindPhone = new Intent(AccountSettingActivity.this,BindCellPhoneActivity.class);
+                    startActivity(bindPhone);
+                } else {//绑定//跳转到修改绑定手机号的页面
+                    Intent fixPhone = new Intent(AccountSettingActivity.this,FixBindCellPhoneActivity.class);
+                    startActivity(fixPhone);
+                }
+
+            }
 			break;
+
 		case R.id.layout_bind_email:
 
 		    if (!mPrefUtil.getMyPasswordChangedState()) {
@@ -284,7 +300,12 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
         super.onResume();
         fetchData();
         bindEmailStatus ();
-//        queryBindings();
+
+        if (mPrefUtil.getMyPhoneNumber().length() == 0) {//未绑定
+            txtPhonenumber.setText("请绑定手机");
+        } else {//绑定
+            txtPhonenumber.setText(mPrefUtil.getMyPhoneNumber());
+        }
 
     }
 

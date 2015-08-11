@@ -429,6 +429,126 @@ public class WowTalkWebServerIF {
 		return _doRequestWithoutResponse(postStr);
 	}
 
+
+    /**
+     * 发送短信验证码
+     * created at 2015/8/3 by hutianfeng
+     * @param cellphone
+     * @param type
+     * @return
+     */
+    public int fSms_Send_SMS (String cellphone,String type) {
+
+//        type : 类型 如果是注册就是‘register’ 如果是绑定‘bind’
+//        一米家校短信模板ID ： 27154
+//        学点啥短信模板ID ： 26365
+
+        String action = "sms_sendSMS";
+        String postStr = "action=" + action
+                + "&mobile=" + Utils.urlencodeUtf8(cellphone)
+                + "&type=" + Utils.urlencodeUtf8(type)
+                + "&smstemplateid=" + 27154;
+
+        return _doRequestWithoutResponse(postStr);
+    }
+
+
+    /**
+     * 验证手机收到的验证码
+     * created at 2015/8/3 by hutianfeng
+     * @param cellphone
+     * @param code
+     * @return
+     */
+    public int fSms_Check_Code (String cellphone,String code) {
+
+        String action = "sms_checkCode";
+        String postStr = "action=" + action
+                + "&mobile=" + Utils.urlencodeUtf8(cellphone)
+                + "&code=" + Utils.urlencodeUtf8(code);
+
+        return _doRequestWithoutResponse(postStr);
+    }
+
+
+    /**
+     * 验证手机号码是否存在
+     * created at 2015/8/4 by hutianfeng
+     * @param cellphone
+     * @return
+     */
+    public int fCheckMobileExist (String cellphone) {
+
+        String action = "check_mobile_exist";
+        String postStr = "action=" + action
+                + "&mobile=" + Utils.urlencodeUtf8(cellphone);
+
+        return _doRequestWithoutResponse(postStr);
+    }
+
+
+    /**
+     * 检测手机号码是否已经绑定
+     * created at 2015/8/4 by hutianfeng
+     * @param cellphone
+     * @return
+     */
+    public int fCheckBindMobile (String cellphone) {
+
+        String action = "check_bind_mobile";
+        String postStr = "action=" + action
+                + "&mobile=" + Utils.urlencodeUtf8(cellphone);
+
+        return _doRequestWithoutResponse(postStr);
+    }
+
+
+    /**
+     * 通过手机号重置密码
+     * created at 2015/8/4 by hutianfeng
+     * @param cellphone
+     * @param newPassword
+     * @return
+     */
+    public int fResetPasswordByMobile (String cellphone,String newPassword) {
+
+        String action = "reset_password_by_mobile";
+        String postStr = "action=" + action
+                + "&mobile=" + Utils.urlencodeUtf8(cellphone)
+                + "&new_password=" + Utils.urlencodeUtf8(newPassword);
+
+        return _doRequestWithoutResponse(postStr);
+    }
+
+
+
+    /**
+     * 绑定手机号码
+     * created at 2015/8/3 by hutianfeng
+     * @param cellphone
+     * @return
+     */
+
+    public int fUserBindPhone (String cellphone) {
+        String uid = sPrefUtil.getUid();
+        String action = "user_bind_phone";
+        String postStr = "action=" + action
+                + "&uid=" + Utils.urlencodeUtf8(uid)
+                + "&mobile=" + Utils.urlencodeUtf8(cellphone);
+
+        return _doRequestWithoutResponse(postStr);
+    }
+
+
+
+
+
+
+
+
+
+
+
 	/**
 	 * 通过返回的list值判断是否当前用户绑定了邮箱
 	 * 该方法可以获得绑定邮箱的值
@@ -577,7 +697,7 @@ public class WowTalkWebServerIF {
 	
 	/**
 	 * 重置密码
-	 * @param emailAddress
+	 * @param wowtalk_id,password
 	 * @return
 	 * @author hutianfeng
 	 * @date 2015/3/10
@@ -1396,6 +1516,7 @@ public class WowTalkWebServerIF {
                     }
 
                     sPrefUtil.setWowtalkId(wowtalk_id);
+                    sPrefUtil.setPhoneNumber(wowtalk_id);
                     sPrefUtil.setSetupStep(2);
 				}
 			} else {

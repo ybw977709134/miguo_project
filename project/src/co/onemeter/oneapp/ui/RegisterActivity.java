@@ -64,6 +64,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 
     private MessageBox mMsgBox;
     private int userType;
+    private String cellPhone;
     
     private InputMethodManager mInputMethodManager;
 	
@@ -112,7 +113,10 @@ public class RegisterActivity extends Activity implements OnClickListener{
 	};
 	
 	private void initView() {
-		
+
+        cellPhone = getIntent().getStringExtra("cellPhone");
+
+
 		layout_register = (RelativeLayout) findViewById(R.id.layout_register);
 		
 		layout_register.setOnTouchListener(new OnTouchListener() {
@@ -309,30 +313,30 @@ public class RegisterActivity extends Activity implements OnClickListener{
 
 	private void fRegister() {
 		
-		final String strUserName = edtAccount.getText().toString();
+//		final String strUserName = edtAccount.getText().toString();
 		final String strPassword = edtPwd.getText().toString();
 		final String strPwdConfirm = edtPwdConfirm.getText().toString();	
         
         /**
          * 帐号验证
          */
-        if (strUserName.length() <= 0) {//用户名不能为空
-        	textView_verification_newPassword.setVisibility(View.VISIBLE);
-        	textView_verification_newPassword.setText(getResources().getString(R.string.register_username_empty));
-        	return;
-        }
-        
-        if (strUserName.length() < 2) {//用户名不能小于2个字符
-        	textView_verification_newPassword.setVisibility(View.VISIBLE);
-        	textView_verification_newPassword.setText(getResources().getString(R.string.register_username_less));
-        	return;
-        }
-        
-        if (strUserName.length() > 20) {//用户名不能大于20个字符
-        	textView_verification_newPassword.setVisibility(View.VISIBLE);
-        	textView_verification_newPassword.setText(getResources().getString(R.string.register_username_more));
-        	return;
-        }
+//        if (strUserName.length() <= 0) {//用户名不能为空
+//        	textView_verification_newPassword.setVisibility(View.VISIBLE);
+//        	textView_verification_newPassword.setText(getResources().getString(R.string.register_username_empty));
+//        	return;
+//        }
+//
+//        if (strUserName.length() < 2) {//用户名不能小于2个字符
+//        	textView_verification_newPassword.setVisibility(View.VISIBLE);
+//        	textView_verification_newPassword.setText(getResources().getString(R.string.register_username_less));
+//        	return;
+//        }
+//
+//        if (strUserName.length() > 20) {//用户名不能大于20个字符
+//        	textView_verification_newPassword.setVisibility(View.VISIBLE);
+//        	textView_verification_newPassword.setText(getResources().getString(R.string.register_username_more));
+//        	return;
+//        }
         
         /**
          * 密码验证
@@ -377,11 +381,11 @@ public class RegisterActivity extends Activity implements OnClickListener{
         }
         
         
-        if (!Utils.verifyUsername(strUserName)) {//注册用户名的帐号错误
-            textView_verification_newPassword.setVisibility(View.VISIBLE);
-        	textView_verification_newPassword.setText(getResources().getString(R.string.setting_username_format_error));
-            return;
-        }
+//        if (!Utils.verifyUsername(strUserName)) {//注册用户名的帐号错误
+//            textView_verification_newPassword.setVisibility(View.VISIBLE);
+//        	textView_verification_newPassword.setText(getResources().getString(R.string.setting_username_format_error));
+//            return;
+//        }
 
         if (!Utils.verifyWowTalkPwd(strPassword)) {//密码格式错误
             textView_verification_newPassword.setVisibility(View.VISIBLE);
@@ -410,13 +414,13 @@ public class RegisterActivity extends Activity implements OnClickListener{
 				@Override
 				public void run() {
                     int result = WowTalkWebServerIF.getInstance(RegisterActivity.this)
-                            .fRegister(strUserName, strPassword, userType, buddy);
+                            .fRegister(cellPhone, strPassword, userType, buddy);
 					Log.i("register, the result_code is " + result);
 
 					Message msg = Message.obtain();
 					if (result == ErrorCode.OK) {
 						msg.what = MSG_REGISTER_SUCCESS;
-						msg.obj = new String[]{ strUserName, strPassword };
+						msg.obj = new String[]{ cellPhone, strPassword };
 						mHandler.sendMessage(msg);
 					} else if (result == ErrorCode.USER_ALREADY_EXISTS) {
 						msg.what = MSG_USER_ALREADY_EXIST;

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_fix_bind_cellphone"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background_dark"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        android:layout_height="@dimen/title_bar_height"
+        android:layout_width="fill_parent"
+        android:layout_alignParentTop="true"
+        style="@style/title_bar_blue">
+        <ImageButton
+            android:id="@+id/title_back"
+            android:layout_height="50dp"
+            android:layout_width="20dp"
+            android:layout_alignParentLeft="true"
+            android:background="@null"
+            android:src="@drawable/icon_back_selector"/>
+
+        <!-- 添加找回密码页表头的文本 -->
+        <co.onemeter.oneapp.ui.widget.PressedTextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/textView_fixBindcellphone_back"
+            android:layout_toRightOf="@id/title_back"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:clickable="true"
+            android:text="账号"/>
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:singleLine="true"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:text="修改手机号码"/>
+
+
+        <!-- 取消 -->
+        <co.onemeter.oneapp.ui.widget.PressedTextView
+            android:id="@+id/textView_fixBindcellphone_cancel"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:clickable="true"
+            android:text="取消"/>
+
+    </RelativeLayout>
+
+    <!-- 对绑定手机号码的输入格式和是否绑定进行验证 -->
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_bar"
+        android:gravity="center"
+        >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_large"
+                android:background="@color/white"
+                android:orientation="vertical" >
+
+                <ImageView
+                    style="@style/bg_section_divider_line_dark"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <!-- 输入绑定手机号码 获得的验证码-->
+                    <EditText
+                        android:id="@+id/txt_access_code"
+                        style="@style/inputbox_borderless"
+                        android:imeOptions="actionDone"
+                        android:hint="@string/login_input_verification"
+                        android:textCursorDrawable="@drawable/cursor_color" />
+                    <!-- 获取旧的绑定手机号码 验证码的按钮事件-->
+
+                    <Button
+                        android:id="@+id/btn_access_code"
+                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_alignRight="@+id/txt_access_code"
+                        android:layout_marginRight="5dp"
+                        android:layout_centerVertical="true"
+                        android:text="获取验证码"
+                        android:textColor="@color/blue_12"
+                        android:background="@drawable/btn_small_valid"
+                        />
+
+                </RelativeLayout>
+
+                <ImageView
+                    style="@style/bg_section_divider_line_dark"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/black_30"
+                android:text="请输入旧手机短信收到的验证码"/>
+
+            <!-- 绑定手机号码的验证和验证码的验证结果 -->
+            <TextView
+                android:id="@+id/textView_verification_code_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/red"
+                android:visibility="gone" />
+
+            <!-- 确认输入的绑定手机号码 -->
+            <Button
+                android:id="@+id/btn_verification_code"
+                style="@style/button_blue"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_small"
+                android:text="@string/fix_bindcellphone_ok" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

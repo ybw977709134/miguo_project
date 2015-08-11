@@ -63,7 +63,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 	
 	//重置新密码
 	
-		private RelativeLayout layout_reset_password;
+		private RelativeLayout  layout_reset_password;
 		private EditText txt_new_password;//新密码
 		private EditText txt_confirm_new_password;//确认新密码
 		private ImageView field_clear_pwd;//清除密码
@@ -662,7 +662,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                     	MessageDialog dialog = new MessageDialog(FindPasswordEmialActivity.this,false,MessageDialog.SIZE_NORMAL);
                         dialog.setTitle("");
                         dialog.setCancelable(false);
-                        dialog.setMessage("今天邮的箱验证次数已用完"+"\n"+"请明天再试。");                      
+                        dialog.setMessage("今天的邮箱验证次数已用完"+"\n"+"请明天再试。");
                         dialog.show();
                         break;
                     	

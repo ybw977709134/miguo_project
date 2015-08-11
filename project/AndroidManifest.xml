@@ -257,6 +257,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
+
+
+        <activity
+            android:name=".ui.MobileRegisterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Blue_main" >
+        </activity>
+
         <activity
             android:name=".ui.CallMainActivity"
             android:label="@string/app_name"
@@ -355,21 +363,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
-        <activity
-            android:name=".ui.BindPhoneActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Blue_main" >
-        </activity>
-        <activity
-            android:name=".ui.BindEmailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Blue_main" >
-        </activity>
-        <activity
-            android:name=".ui.BindCodeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Blue_main" >
-        </activity>
+
         <activity
             android:name=".ui.UnBindActivity"
             android:screenOrientation="portrait"
@@ -566,6 +560,11 @@
             android:name=".ui.FindPasswordEmialActivity"
             android:screenOrientation="portrait" />
 
+        <!-- 手机号码密码找回 -->
+        <activity
+            android:name=".ui.FindPasswordCellPhoneActivity"
+            android:screenOrientation="portrait" />
+
         <!-- 绑定邮箱 -->
         <activity
             android:name=".ui.BindEmailAddressActivity"
@@ -574,6 +573,18 @@
         <activity
             android:name=".ui.FixBindEmailAddressActivity"
             android:screenOrientation="portrait" />
+
+        <!-- 绑定手机号码 -->
+        <activity
+            android:name=".ui.BindCellPhoneActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 修改绑定手机号码 -->
+        <activity
+            android:name=".ui.FixBindCellPhoneActivity"
+            android:screenOrientation="portrait" />
+
+
         <activity
             android:name=".ui.SubmitInformationActivity"
             android:screenOrientation="portrait"

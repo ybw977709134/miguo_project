@@ -161,7 +161,6 @@ public abstract class TimelineFragment extends ListFragment
             adapter.setShowLoadMoreAsLastItem(!items.isEmpty());
             adapter.setLoadDelegate(this);
             setListAdapter(adapter);
-
     }
 
     public void checkNewMoments() {
@@ -447,10 +446,6 @@ public abstract class TimelineFragment extends ListFragment
     }
 
 
-    /**
-     * Possible error:
-     * java.lang.IllegalStateException: Cannot add header view to list -- setAdapter has already been called.
-     */
     protected abstract void setupListHeaderView();
 
     @Override

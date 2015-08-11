@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
 import co.onemeter.oneapp.R;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import org.wowtalk.api.Database;
@@ -66,7 +64,8 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
 
     @Override
     protected void setupListHeaderView() {
-        if (headerView == null || getListView().getHeaderViewsCount() == originalHeaderViewsCount) {
+        if ((headerView == null || getListView().getHeaderViewsCount() == originalHeaderViewsCount)
+                && getListAdapter() == null) {
             originalHeaderViewsCount = getListView().getHeaderViewsCount();
             timelineDropdownFilter =
                     new MenuBar(getActivity(),
@@ -87,8 +86,6 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
             headerView = timelineDropdownFilter.getView();
             getListView().addHeaderView(headerView);
             timelineDropdownFilter.setOnFilterChangedListener(this);
-
-
         }
     }
 

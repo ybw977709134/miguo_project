@@ -137,6 +137,10 @@ public class OssClient {
 			int oldProgress = (int) (total * PROGRESS_WEIGHT_WRITE_FILE / fileLength);
 			while (bytesRead > 0) {
 				os.write(buffer, 0, bufferSize);
+
+				// try to solve OOM on Android 4.4.4
+				os.flush();
+
 				bytesAvailable = fileInputStream.available();
 				bufferSize = Math.min(bytesAvailable, bytesToRead);
 				bytesRead = fileInputStream.read(buffer, 0, bufferSize);

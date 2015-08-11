@@ -134,6 +134,12 @@ public class PublishMomentService extends android.app.Service {
                                     // 假设缩略图占上传工作量的5%
                                     progress = (int) (baseProgress[0] + progress * (0.05f / (moment.multimedias.size())));
                                     mBuilder.setProgress(100, progress, false);
+                                    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
+                                        Intent intent = new Intent();
+                                        PendingIntent contentIntent = PendingIntent.getActivity(
+                                                PublishMomentService.this, 0, intent, 0);
+                                        mBuilder.setContentIntent(contentIntent);
+                                    }
                                     mNotifyManager.notify(notiId, mBuilder.build());
                                 }
                             }, 0);

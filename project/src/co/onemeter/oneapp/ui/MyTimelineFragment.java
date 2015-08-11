@@ -363,6 +363,9 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
     private int PtrIconHeightCache = 0;
 
     private void displayAlbumCover(ImageView view) {
+        if (view == null)
+            return;
+
         if (mAlbumCover != null && mAlbumCover.timestamp != -1 && mAlbumCover.fileId != null) {
             PhotoDisplayHelper.displayPhoto(getActivity(), view,
                     R.drawable.default_album_cover,

@@ -1,15 +1,12 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.ListFragment;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.adapter.MomentAdapter;
@@ -30,22 +27,23 @@ import java.util.ArrayList;
  */
 public abstract class TimelineFragment extends ListFragment
         implements MomentAdapter.MomentActionHandler, OnTimelineFilterChangedListener,
-        PullToRefreshListView.OnRefreshListener, MomentAdapter.LoadDelegate, InputBoardManager.ChangeToOtherAppsListener, InputBoardManager.InputResultHandler {
+        PullToRefreshListView.OnRefreshListener, MomentAdapter.LoadDelegate,
+        InputBoardManager.ChangeToOtherAppsListener, InputBoardManager.InputResultHandler {
     protected static final int PAGE_SIZE = 10;
     private static final int REQ_COMMENT = 123;
     private MomentAdapter adapter;
 
-    
+
     // selected tag index on UI
     private int selectedTag = 0;
     // record max timestamp for convenience of loading more
     private long maxTimestamp = 0;
     private boolean mNoMore = false;
-    
+
     //用于区分账号的类型
     private int countType = -1;//默认全部
     private boolean viewCreated = false;
-    
+
     //用于判断是自己还是好友时，动态是否显示新动态提醒
     public static boolean newReviewFlag = true;
 
@@ -121,7 +119,7 @@ public abstract class TimelineFragment extends ListFragment
      * @return {@link org.wowtalk.api.ErrorCode}
      */
     protected abstract int loadRemoteMoments(long maxTimestamp);
-    
+
     /**
      * 根据UI的从本地数据库中加载动态
      * @param maxTimestamp
@@ -138,8 +136,8 @@ public abstract class TimelineFragment extends ListFragment
     private void fillListView(ArrayList<Moment> lst, boolean append) {
         maxTimestamp = lst.isEmpty() ? 0 : lst.get(lst.size() - 1).timestamp;
         if (adapter != null) {
-            if (!append) 
-                adapter.clear();          	
+            if (!append)
+                adapter.clear();
             	adapter.addAll(lst);
 //            	adapter.setShowLoadMoreAsLastItem(!append || lst.size() >= PAGE_SIZE);
             	adapter.setShowLoadMoreAsLastItem(true);
@@ -148,13 +146,13 @@ public abstract class TimelineFragment extends ListFragment
             setupListAdapter(lst);
         }
     }
-    
-    private void setupListAdapter(ArrayList<Moment> items) {  	
+
+    private void setupListAdapter(ArrayList<Moment> items) {
         	ImageResizer imageResizer = new ImageResizer(getActivity(), DensityUtil.dip2px(getActivity(), 100));
         	adapter = new MomentAdapter(getActivity(),
                     getActivity(),
                     items,
-                    false,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                    false,
                     false,
                     imageResizer,
                     this,
@@ -163,7 +161,7 @@ public abstract class TimelineFragment extends ListFragment
             adapter.setShowLoadMoreAsLastItem(!items.isEmpty());
             adapter.setLoadDelegate(this);
             setListAdapter(adapter);
- 
+
     }
 
     public void checkNewMoments() {
@@ -179,21 +177,21 @@ public abstract class TimelineFragment extends ListFragment
             //还可以解决新建动态后头像标记不刷新问题
             setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag),-1));
             checkNewMoments();
-            
+
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        
+
         setupListHeaderView();
-        
+
         PullToRefreshListView listView = getPullToRefreshListView();
         if (listView != null) {
             listView.setOnRefreshListener(this);
         }
-        
+
         checkNewReviews();
 
         Database.addDBTableChangeListener(Database.TBL_MOMENT,momentReviewObserver);
@@ -208,8 +206,8 @@ public abstract class TimelineFragment extends ListFragment
         TimelineFragment.newReviewFlag = true;
         Database.removeDBTableChangeListener(momentReviewObserver);
     }
-    
-    
+
+
     @Override
     public void onDestroy() {
     	if (adapter != null) {
@@ -310,7 +308,7 @@ public abstract class TimelineFragment extends ListFragment
 //
 //    }
 
-    
+
     /**
      * 点赞和评论的局部刷新
      */
@@ -322,7 +320,7 @@ public abstract class TimelineFragment extends ListFragment
 
                 @Override
                 protected Integer doInBackground(String... params) {
-                    MomentWebServerIF web = MomentWebServerIF.getInstance(getActivity());  
+                    MomentWebServerIF web = MomentWebServerIF.getInstance(getActivity());
                     if (!moment.likedByMe) { // 点赞
                         return web.fReviewMoment(params[0], Review.TYPE_LIKE, null, null, r);
                     } else { // 撤销赞
@@ -398,7 +396,8 @@ public abstract class TimelineFragment extends ListFragment
 //
 //                    @Override
 //                    public void run() {
-//                        InputMethodManager imm = (InputMethodManager) mInputMgr.mTxtContent.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                        InputMethodManager imm = (InputMethodManager) mInputMgr.mTxtContent.getContext()
+// .getSystemService(Context.INPUT_METHOD_SERVICE);
 //                        imm.showSoftInput(mInputMgr.mTxtContent, 0);
 //                    }
 //                }, 200);
@@ -469,8 +468,8 @@ public abstract class TimelineFragment extends ListFragment
     	//重新定位到全部内容
     	selectedTag = 0;
     	fillListView(loadLocalMoments (0, tagIdxFromUiToDb(selectedTag),countType), false);
-    	
-    	
+
+
     }
 
     /**
@@ -599,7 +598,7 @@ public abstract class TimelineFragment extends ListFragment
     private void addReviewToList(Review r) {
         moment.reviews.add(moment.reviews.size(), r);
     }
-    
+
 
     @Override
     public void onTagChanged(int index) {

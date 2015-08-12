@@ -9,13 +9,6 @@
 
     （请注意其中的 ANDROID_HOME 环境变量，它表示 Android SDK 根目录）
     
-	mvn install:install-file \
-            -Dfile=project/libs/oss-android-sdk-1.3.0.jar \
-            -DgroupId=com.alibaba.sdk \
-            -DartifactId=oss \
-            -Dversion=1.3.0 \
-            -Dpackaging=jar
-
 	#安眼的sdk的jar包
 	mvn install:install-file \
             -Dfile=project/libs/anyan_jar_sdk.jar \

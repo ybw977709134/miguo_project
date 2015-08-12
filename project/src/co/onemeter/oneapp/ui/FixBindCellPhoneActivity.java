@@ -52,7 +52,7 @@ public class FixBindCellPhoneActivity extends Activity implements View.OnClickLi
 
     private Button btn_verification_code;//确认
 
-    public static final String FIX_BIND_CELLPHONE = "fix_bind_cellphone";//修改绑定邮箱页面的请求码
+    public static final String FIX_BIND_CELLPHONE = "fix_bind_cellphone";//修改绑定手机页面的请求码
 
     private MessageBox mMsgBox;
     String bindcellphone= null;
@@ -265,7 +265,7 @@ public class FixBindCellPhoneActivity extends Activity implements View.OnClickLi
 
                 MessageDialog dialog = new MessageDialog(FixBindCellPhoneActivity.this);
 
-                dialog.setMessage("你要取消修改绑定邮箱吗？");
+                dialog.setMessage("你要取消修改绑定手机吗？");
                 dialog.setOnLeftClickListener("继续修改", null);
                 dialog.setCancelable(false);
                 dialog.setRightBold(true);
@@ -287,7 +287,7 @@ public class FixBindCellPhoneActivity extends Activity implements View.OnClickLi
                 sendSMS(PrefUtil.getInstance(FixBindCellPhoneActivity.this).getMyPhoneNumber());
                 break;
 
-            case R.id.btn_verification_code://确认，跳转到绑定邮箱界面
+            case R.id.btn_verification_code://确认，跳转到绑定手机界面
 
                 checkSMS(PrefUtil.getInstance(FixBindCellPhoneActivity.this).getMyPhoneNumber(),txt_access_code.getText().toString());
 

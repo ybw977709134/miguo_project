@@ -1,7 +1,17 @@
 package org.wowtalk.api;
 
+import android.content.Context;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Base64;
+import com.alibaba.sdk.android.oss.OSSService;
+import com.alibaba.sdk.android.oss.OSSServiceProvider;
+import com.alibaba.sdk.android.oss.model.AuthenticationType;
+import com.alibaba.sdk.android.oss.model.ClientConfiguration;
+import com.alibaba.sdk.android.oss.model.OSSException;
+import com.alibaba.sdk.android.oss.model.TokenGenerator;
+import com.alibaba.sdk.android.oss.storage.OSSBucket;
+import com.alibaba.sdk.android.oss.storage.OSSFile;
 import com.aliyun.common.auth.HmacSHA1Signature;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -26,6 +36,8 @@ import java.util.*;
 /**
  * <p>Upload/download file to/from Aliyun OSS.</p>
  *
+ * <p>实现中采用 OSS RESTful 接口，当时还没有官方的 OSS SDK for Android。</p>
+ *
  * Created by pzy on 11/10/14.
  */
 public class OssClient {
@@ -33,6 +45,7 @@ public class OssClient {
 
 	private static final String BOUNDARY = "9431149156168";
 
+	private final Context context;
 	private final String accessKeyId;
 	private final String accessKeySerect;
 	private final String bucketName;
@@ -42,7 +55,8 @@ public class OssClient {
 	private NetworkIFDelegate callback;
 	private int callbackTag;
 
-	public OssClient(String accessKeyId, String accessKeySerect, String bucketName) {
+	public OssClient(Context context, String accessKeyId, String accessKeySerect, String bucketName) {
+		this.context = context;
 		this.accessKeyId = accessKeyId;
 		this.accessKeySerect = accessKeySerect;
 		this.bucketName = bucketName;
@@ -67,6 +81,12 @@ public class OssClient {
 	}
 
 	public void upload(String fileId, String inFilename) {
+		// Android 4.4 上的 HttpURLConnection 内部实现采用的 OkHTTP 似乎存在会导致 OOM 的 BUG，
+		// 于是采用官方的 OSS SDK。不过官方 SDK 似乎不能通知上传进度。
+		if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+			uploadOssFile(inFilename, remoteDir, fileId, callback, callbackTag);
+			return;
+		}
 
 		List<NameValuePair> postData = new ArrayList<NameValuePair>(10);
 		postData.add(new BasicNameValuePair("OSSAccessKeyId", accessKeyId));
@@ -381,6 +401,72 @@ public class OssClient {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private void uploadOssFile(String inFilename, String remoteDir, String remoteFileId,
+							   NetworkIFDelegate callback, int callbackTag) {
+		try {
+			if (!TextUtils.isEmpty(remoteDir) && !remoteDir.endsWith("/"))
+				remoteDir += "/";
+			final String contentType = "application/octet-stream"; // TODO guess by ext
+			final String OSS_HOST = "oss-cn-hangzhou.aliyuncs.com";
+
+			OSSService ossService = OSSServiceProvider.getService();
+			ossService.setApplicationContext(context.getApplicationContext());
+			ossService.setGlobalDefaultHostId(OSS_HOST);
+			ossService.setAuthenticationType(AuthenticationType.ORIGIN_AKSK);
+			ossService.setGlobalDefaultTokenGenerator(new TokenGenerator() {
+				@Override
+				public String generateToken(String httpMethod,
+											String md5,
+										    String type,
+											String date,
+											String ossHeaders,
+											String resource) {
+
+					String result = "OSS " + accessKeyId + ":"
+							+ HmacSHA1Signature.create().computeSignature(
+							accessKeySerect,
+							httpMethod + "\n"
+									+ md5 + "\n"
+									+ contentType + "\n"
+									+ date + "\n"
+									+ resource);
+
+					Log.i(TAG, " get header auth: ", result);
+					return result;
+				}
+			});
+
+			ClientConfiguration conf = new ClientConfiguration();
+			conf.setConnectTimeout(15 * 1000); // 设置建连超时时间，默认为30s
+			conf.setSocketTimeout(15 * 1000); // 设置socket超时时间，默认为30s
+			conf.setMaxConnections(50); // 设置全局最大并发连接数，默认为50个
+			conf.setMaxConcurrentTaskNum(10); // 设置全局最大并发任务数，默认10个
+			ossService.setClientConfiguration(conf);
+
+			OSSFile ossFile = ossService.getOssFile(
+					new OSSBucket(bucketName),
+					remoteDir + remoteFileId);
+			ossFile.setUploadFilePath(inFilename, contentType);
+			ossFile.enableUploadCheckMd5sum();
+
+			Log.i(TAG, " upload to http://" + bucketName + "." + OSS_HOST + "/"
+					+ remoteDir + remoteFileId);
+			ossFile.upload();
+			if (callback != null)
+				callback.didFinishNetworkIFCommunication(callbackTag, remoteFileId.getBytes());
+		}
+		catch (OSSException e) {
+			e.printStackTrace();
+			if (callback != null)
+				callback.didFailNetworkIFCommunication(callbackTag, e.toString().getBytes());
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+			if (callback != null)
+				callback.didFailNetworkIFCommunication(callbackTag, e.toString().getBytes());
+		}
 	}
 }
 

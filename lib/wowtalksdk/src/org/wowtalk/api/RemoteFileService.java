@@ -53,6 +53,7 @@ public class RemoteFileService {
                 if (TextUtils.isEmpty(remoteFileId))
                     remoteFileId = UUID.randomUUID().toString();
                 new OssClient(
+                        context,
                         sPrefUtil.getOssUid(),
                         sPrefUtil.getOssKey(),
                         sPrefUtil.getOssBucket())
@@ -115,6 +116,7 @@ public class RemoteFileService {
         try {
             if (sPrefUtil.isUseOss()) {
                 new OssClient(
+                        context,
                         sPrefUtil.getOssUid(),
                         sPrefUtil.getOssKey(),
                         sPrefUtil.getOssBucket())

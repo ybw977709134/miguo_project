@@ -3,6 +3,7 @@ apply plugin: 'android-library'
 dependencies {
     compile 'com.aliyun:openservices:1.2.3'
     compile 'com.kawao:kakasi:1.0.0'
+    compile 'com.alibaba.sdk:oss:1.3.0'
 
     if (System.getenv('OM_ENV') != null)
         compile "co.onemeter:im-sdk-" + System.getenv('OM_ENV') + ":1.0.0"

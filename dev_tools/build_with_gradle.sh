@@ -29,8 +29,11 @@ echo version $curr_ver_code '=>' $curr_ver_name
 src=./project/build/outputs/apk/project-release.apk
 dest=./out/om_im_android_${omenv}_`date +%m%d`_${curr_ver_code}.apk
 
-gradle clean \
-    && gradle assembleRelease \
+if [ ! -d out ]; then 
+    mkdir out
+fi
+
+gradle assembleRelease \
     && cp $src $dest \
     && echo output to $dest
 

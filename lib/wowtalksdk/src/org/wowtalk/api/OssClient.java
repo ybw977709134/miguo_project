@@ -14,11 +14,13 @@ import org.wowtalk.Log;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import javax.net.SocketFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.Socket;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -26,17 +28,26 @@ import java.util.*;
 /**
  * <p>Upload/download file to/from Aliyun OSS.</p>
  *
+ * * 通过 RESTful 接口访问OSS服务器；
+ * * 实现这个类时，阿里云OSS的官方SDK for Android尚未发布；
+ * * 关于上传：
+ * 		- 最初通过 {@link HttpURLConnection} 执行 HTTP 请求，但是在 Android 4.4 上
+ * 		  上传大文件时会发生 OOM；
+ * 		- 官方 SDK (oss-android-sdk-1.3.0.jar) 在 Android 4.4 上也存在类似的 OOM 现象；
+ * 		- 所以现在没有使用任何 HTTP 库，而是直接用 Socket；
+ *
  * Created by pzy on 11/10/14.
  */
 public class OssClient {
 	private static final String TAG = "OssClient";
 
 	private static final String BOUNDARY = "9431149156168";
+	private static final String OSS_HOST = "oss-cn-hangzhou.aliyuncs.com";
 
 	private final String accessKeyId;
 	private final String accessKeySerect;
 	private final String bucketName;
-	private String rootUrl;
+	private String host;
 	/** guaranty to be empty or ends with '/', and not starts with '/' */
 	private String remoteDir = "";
 	private NetworkIFDelegate callback;
@@ -46,7 +57,7 @@ public class OssClient {
 		this.accessKeyId = accessKeyId;
 		this.accessKeySerect = accessKeySerect;
 		this.bucketName = bucketName;
-		rootUrl = String.format("http://%s.oss-cn-hangzhou.aliyuncs.com", bucketName);
+		host = bucketName + "." + OSS_HOST;
 	}
 
 	public OssClient setRemoteDir(String dir) {
@@ -68,16 +79,14 @@ public class OssClient {
 
 	public void upload(String fileId, String inFilename) {
 
-		List<NameValuePair> postData = new ArrayList<NameValuePair>(10);
+		List<NameValuePair> postData = new ArrayList<>(10);
 		postData.add(new BasicNameValuePair("OSSAccessKeyId", accessKeyId));
 		String policy = getPolicy();
 		postData.add(new BasicNameValuePair("policy", policy));
 		postData.add(new BasicNameValuePair("Signature", getSignature(policy)));
 		postData.add(new BasicNameValuePair("key", remoteDir + fileId));
 
-		Log.i(TAG, " start upload ", inFilename, " => ", remoteDir, fileId);
-
-		HttpURLConnection conn = null;
+		Log.i(TAG, " start upload ", inFilename, " => http://", host, "/", remoteDir, fileId);
 
 		try {
 
@@ -90,29 +99,33 @@ public class OssClient {
 			long fileLength = inputFile.length();
 			Log.i(TAG, " upload file length:", fileLength);
 
-			byte[] postDataPart1 = createBoundaryMessage(postData, inputFile.getName()).getBytes();
+			String postDataPart1 = createBoundaryMessage(postData, inputFile.getName());
 			String endBoundary = "\r\n--" + BOUNDARY + "--\r\n";
-			byte[] postDataPart3 = endBoundary.getBytes();
 
 			// init http client
 
-			conn = (HttpURLConnection) new URL(rootUrl).openConnection();
-			conn.setRequestProperty("Content-Type",
-					"multipart/form-data; boundary=" + BOUNDARY);
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("User-Agent", "Android");
-			conn.setDoOutput(true);
-			conn.setChunkedStreamingMode(0);
-//			conn.setFixedLengthStreamingMode((int)(
-//					postDataPart1.length  + fileLength + postDataPart3.length));
-			conn.connect();
+			Socket socket = SocketFactory.getDefault().createSocket(host, 80);
+			OutputStream os = socket.getOutputStream();
 
-			// send post data
+			// send HTTP headers
 
-			OutputStream os = conn.getOutputStream();
-			os.write(postDataPart1);
+			write(os, "POST / HTTP/1.1\r\n");
+			write(os, "Host: " + host + "\r\n");
+			write(os, "Content-Length: " +
+					(postDataPart1.getBytes().length +
+							fileLength +
+							endBoundary.getBytes().length) + "\r\n");
+			write(os, "Content-Type: multipart/form-data; boundary=" + BOUNDARY + "\r\n");
+			write(os, "Accept:application/xml\r\n");
+			write(os, "User-Agent: Android\r\n");
+			write(os, "\r\n");
 
-			//
+			// send HTTP body - part1, some post fields
+
+			write(os, postDataPart1);
+			Log.i(TAG, " >>> [binary]");
+
+			// send HTTP body - part2, the file
 
 			int bytesToRead = (int) (fileLength / 100);
 			if (bytesToRead < 1024)
@@ -156,29 +169,50 @@ public class OssClient {
 			//
 			fileInputStream.close();
 
-			os.write(postDataPart3);
+			// send HTTP body - part3
+
+			write(os, endBoundary);
 			os.flush();
-			os.close();
+			socket.shutdownOutput();
 
 			// read response from server
 			// response code may be 204
 			//
 			// NOTE: getResponseCode() 会阻塞，所以分配一定的进度给它
-			boolean requestOk = conn.getResponseCode() / 200 == 1;
+			boolean requestOk = false;
 
 			Log.i(TAG, " progress 100%");
 			if (callback != null)
 				callback.setProgress(callbackTag, 100);
 
 			BufferedReader r = new BufferedReader(new InputStreamReader(
-					requestOk ? conn.getInputStream() : conn.getErrorStream(),
-					"UTF-8"));
+					socket.getInputStream(), "UTF-8"));
 			StringBuilder resStr = new StringBuilder();
 			String line;
+			int lineIdx = 0;
+			boolean isReadingBody = false;
 			while ((line = r.readLine()) != null) {
+				Log.i(TAG, " <<<: ", line);
+
+				if (lineIdx == 0) {
+					// first line, "HTTP/1.1 204 No Content"
+					String[] a = line.split(" ");
+					requestOk = a[1].startsWith("2");
+				}
+
+				++lineIdx;
+
+				if (!isReadingBody) {
+					continue;
+				}
+
+				if (line.equals("\r\n")) {
+					isReadingBody = true;
+					continue;
+				}
+
 				resStr.append(line);
 			}
-			Log.i(TAG, " response: ", resStr.toString());
 
 			if (requestOk) {
 				Log.i(TAG, " upload succeed. ");
@@ -193,19 +227,24 @@ public class OssClient {
 				if (callback != null)
 					callback.didFailNetworkIFCommunication(callbackTag, err.getBytes());
 			}
+
+			socket.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if(callback !=null)
 				callback.didFailNetworkIFCommunication(callbackTag, e.toString().getBytes());
 		} finally {
-			if (conn != null)
-				conn.disconnect();
 		}
+	}
+
+	private void write(OutputStream os, String line) throws IOException {
+		os.write(line.getBytes());
+		Log.i(TAG, " >>> ", line);
 	}
 
 	public void download(String fileId, String outFilename) {
 
-		String url = rootUrl + "/" + remoteDir + fileId;
+		String url = "http://" + host + "/" + remoteDir + fileId;
 		Log.i(TAG, " start download ", outFilename, " <= ", url);
 
 		HttpURLConnection conn = null;

@@ -133,13 +133,13 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
         //登陆后跳转到此页面检测用户是否绑定了邮箱，绑定了，不提示，未绑定，弹框提示用户是否要绑定邮箱
         //如果用户未绑定邮箱，跳转到绑定邮箱界面
-//        checkBindEmail();
+
 
         if (PrefUtil.getInstance(HomeActivity.this).getMyPhoneNumber().length() == 0) {
 
             MessageDialog dialog = new MessageDialog(HomeActivity.this,false,MessageDialog.SIZE_NORMAL);
             dialog.setTitle("");
-            dialog.setMessage("请绑定手机号，用于找回密码和登陆");
+            dialog.setMessage("请绑定手机号，用于找回密码和登录");
             dialog.setCancelable(false);
             dialog.setRightBold(true);
             dialog.setOnLeftClickListener("去绑定", new MessageDialog.MessageDialogClickListener() {
@@ -159,54 +159,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     }
 
 
-    private AsyncTask<Void, Integer, List<Map<String, Object>>> asyncTask_email_status;
 
-    private void checkBindEmail(){
-        asyncTask_email_status  = new AsyncTask<Void, Integer, List<Map<String, Object>>> () {
-
-            @Override
-            protected List<Map<String, Object>> doInBackground(Void... params) {
-                List<Map<String, Object>> reslut = null;
-                try {
-                    reslut = WowTalkWebServerIF.getInstance(HomeActivity.this).fEmailBindStatus();
-                }catch (Exception e){
-
-                }
-                return reslut;
-            }
-
-            @Override
-            protected void onPostExecute(List<Map<String, Object>> result) {
-                String bindEmail = null;
-                if (result != null) {
-                    bindEmail = (String) result.get(0).get("email"); 
-
-                    if (bindEmail == null) {
-                        MessageDialog dialog = new MessageDialog(HomeActivity.this);
-                        dialog.setTitle("");
-                        dialog.setMessage("请绑定邮箱，用于找回密码");
-                        dialog.setCancelable(false);
-                        dialog.setRightBold(true);
-                        dialog.setOnLeftClickListener("以后再说", null);
-                        dialog.setOnRightClickListener("去绑定", new MessageDialog.MessageDialogClickListener() {
-                            @Override
-                            public void onclick(MessageDialog dialog) {
-                                dialog.dismiss();
-                                Intent intent = new Intent(HomeActivity.this, BindEmailAddressActivity.class);
-                                startActivity(intent);
-                            }
-                        });
-                        dialog.show();
-                    } else {
-//            			Toast.makeText(HomeActivity.this, bindEmail, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(HomeActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
-                }
-            }
-        };
-        AsyncTaskExecutor.executeShortNetworkTask(asyncTask_email_status);
-    }
 
     private void initDots(){
         int len = imgIds.length;
@@ -280,7 +233,6 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        asyncTask_email_status.cancel(true);
         asyncTask_check_update.cancel(true);
     }
 

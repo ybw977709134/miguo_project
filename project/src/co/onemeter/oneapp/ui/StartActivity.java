@@ -29,11 +29,13 @@ import org.wowtalk.api.*;
 import org.wowtalk.core.RegistrationState;
 import org.wowtalk.core.WowTalkChatMessageState;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("deprecation")
 public class StartActivity extends TabActivity
@@ -444,8 +446,9 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         networkFilter.addAction(ACTION_CONNECTIVITY_CHANGE);
 //        networkFilter.addAction(ACTION_WIFI_STATE_CHANGE);
         registerReceiver(mNetworkStateChangedReceiver, networkFilter);
-        refresh();
 
+        //刷新校园组织架构
+        refresh();
     }
 
     @Override
@@ -580,6 +583,8 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
             }
         });
     }
+
+
     
     private boolean isEmpty(){
 		return schools == null ||schools.isEmpty();

@@ -527,6 +527,19 @@ public class Buddy implements IHasPhoto, Parcelable {
         this.email = email;
     }
 
+
+    /**
+     * phoneNumber address.
+     */
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+
     /**
      * Buddy.FRIENDSHIP_* constants.
      */

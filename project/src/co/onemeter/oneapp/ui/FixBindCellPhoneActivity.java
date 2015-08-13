@@ -112,30 +112,6 @@ public class FixBindCellPhoneActivity extends Activity implements View.OnClickLi
             }
         }, 200);
 
-
-
-
-        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, List<Map<String, Object>>>() {
-
-            @Override
-            protected List<Map<String, Object>> doInBackground(Void... params) {
-//                return WowTalkWebServerIF.getInstance(FixBindCellPhoneActivity.this).fcellphoneBindStatus();
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(List<Map<String, Object>> result) {
-                mMsgBox.dismissWait();
-                if (result != null) {
-                    bindcellphone = (String) result.get(0).get("cellphone");//有值解绑
-
-                } else {
-                    Toast.makeText(FixBindCellPhoneActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-
     }
 
     @Override

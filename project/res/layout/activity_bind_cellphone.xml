@@ -58,6 +58,7 @@
             android:textSize="16sp"
             android:clickable="true"
             android:onClick="clickButton"
+            android:visibility="gone"
             android:text="取消"/>
 
     </RelativeLayout>

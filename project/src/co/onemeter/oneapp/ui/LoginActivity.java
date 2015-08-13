@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -47,6 +48,8 @@ import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class LoginActivity extends Activity implements OnClickListener {
 
@@ -62,6 +65,10 @@ public class LoginActivity extends Activity implements OnClickListener {
     public static final String EXTRA_USERNAME = "username";
     /** 可选，自动采用该密码登录。*/
     public static final String EXTRA_PASSWORD = "password";
+
+    /** 绑定的手机号*/
+//    public static  String bindCellphone;
+
 
 	private static final int MSG_LOGIN_SUCCESS = 100;
 	private static final int MSG_AUTO_REGISTER_SUCCESS = 101;
@@ -149,6 +156,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 if (ErrorCode.OK == result) {
                     GlobalValue.IS_BOOT_FROM_LOGIN = true;
                     if (!mIsAddAccount) {
+
                         Intent newIntent = new Intent(LoginActivity.this, StartActivity.class);
                         newIntent.putExtra(StartActivity.KEY_IS_START_FROM_LOGIN, true);
                         newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -169,31 +177,11 @@ public class LoginActivity extends Activity implements OnClickListener {
     @SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
-//            String oldUId = "";
-//            String newUId = "";
 
 			switch (msg.what) {
 			case MSG_LOGIN_SUCCESS:
                 handleSuccessLogin(false, msg.obj);
 
-//                oldUId = String.valueOf(msg.obj);
-//                newUId = mWebIF.getPrefUid();
-//                clearCachedValues(oldUId, newUId);
-//
-//                PrefUtil.getInstance(LoginActivity.this).setAutoLogin(false);
-//                PrefUtil.getInstance(LoginActivity.this).setCompanyId(edtCompany.getText().toString().trim());
-//
-//                // 每次登录时，获取所有群组及成员
-//                if (GlobalValue.RELEASE_AS_WOWTALKBIZ) {
-//                    getAllGroupsAndMembersFromServer();
-//                }
-//
-//				Intent mIntent = new Intent(LoginActivity.this, StartActivity.class);
-//				startActivity(mIntent);
-//
-//                // 获取个人信息成功后，取消等待Dialog
-//                mMsgBox.dismissWait();
-//				finish();
 				break;
 				
 			case MSG_AUTO_REGISTER_SUCCESS:
@@ -266,7 +254,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         q.find(R.id.forgotPassWord).clicked(this);
         q.find(R.id.login_username).clicked(this);
-//        q.find(R.id.login_qrcode).clicked(this);
         q.find(R.id.btn_signup).clicked(this);
         fieldClear_account.setOnClickListener(this);
         fieldClear_passWord.setOnClickListener(this);
@@ -374,16 +361,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		case R.id.login_username:
 			login();
 			break;
-//		case R.id.login_qrcode:
-//        {
-//            Intent i = new Intent(this, ScanQRCodeActivity.class)
-//                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_WITH_LAYOUT, true)
-//                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_LAYOUT_ID, R.layout.scan_qr_code_layout)
-//                            .putExtra(ScanQRCodeActivity.ACTIVITY_ARG_FINISH_AFTER_DECODE, false);
-//            ThemeHelper.putExtraCurrThemeResId(i, this);
-//            startActivityForResult(i, REQ_SCAN);
-//            break;
-//        }
+
         case R.id.btn_signup:
             startActivity(new Intent(this, MobileRegisterActivity.class));
             break;
@@ -406,6 +384,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 		}
 	}
 
+    /**
+     * 登录
+     */
     private void login() {
         final String username = edtAccount.getText().toString().trim();
         final String pwdStr = edtPassword.getText().toString().trim();
@@ -418,7 +399,6 @@ public class LoginActivity extends Activity implements OnClickListener {
             return;
         }
         login(username, pwdStr);
-
 
     }
 
@@ -467,11 +447,18 @@ public class LoginActivity extends Activity implements OnClickListener {
                     mPrefUtil.clearOldSP();
                 }
 
+
                 int result = -1;
                 result = webIF.fLogin(username, pwdStr, buddy);
+
                 System.out.println(result);
                 Message msg = Message.obtain();
                 if (result == ErrorCode.OK) {
+
+
+//                    bindCellphone = mPrefUtil.getMyPhoneNumber();
+                    Log.d("---loginCellPhone:---",mPrefUtil.getMyPhoneNumber());
+
 					msg.what = MSG_LOGIN_SUCCESS;
 					msg.obj = (null == account) ? oldUId : account;
 					mHandler.sendMessage(msg);
@@ -489,6 +476,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 				    // 登录失败，则将原来uid对应的SP拷贝到当前SP中
 				    mPrefUtil.fillNewSP(oldUId);
 				}
+
+
 			}
 		}).start();
     }

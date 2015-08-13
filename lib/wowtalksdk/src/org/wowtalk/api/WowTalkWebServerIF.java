@@ -540,15 +540,6 @@ public class WowTalkWebServerIF {
     }
 
 
-
-
-
-
-
-
-
-
-
 	/**
 	 * 通过返回的list值判断是否当前用户绑定了邮箱
 	 * 该方法可以获得绑定邮箱的值
@@ -1603,6 +1594,7 @@ public class WowTalkWebServerIF {
                     Element pwdChangedElement = Utils.getFirstElementByTagName(loginElement, "password_changed");
                     Element wowtalkIdChangedElement = Utils.getFirstElementByTagName(loginElement, "wowtalk_id_changed");
                     Element emailElement = Utils.getFirstElementByTagName(loginElement, "email_address");
+                    Element phoneElement = Utils.getFirstElementByTagName(loginElement, "phone_number");
                     Element webDomainElement = Utils.getFirstElementByTagName(loginElement, "web_domain");
                     Element sipDomainElement = Utils.getFirstElementByTagName(loginElement, "sip_domain");
                     Element sipPasswordElement = Utils.getFirstElementByTagName(loginElement, "sip_password");
@@ -1635,6 +1627,12 @@ public class WowTalkWebServerIF {
                         result.setEmail(emailElement.getTextContent());
                         sPrefUtil.setMyEmail(result.getEmail());
                     }
+
+                    if(null != phoneElement) {
+                        result.setPhoneNumber(phoneElement.getTextContent());
+                        sPrefUtil.setPhoneNumber(result.getPhoneNumber());
+                    }
+
                     if(null != webDomainElement) {
                         sPrefUtil.setWebDomain(webDomainElement.getTextContent());
                     }

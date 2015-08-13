@@ -771,17 +771,10 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
 
                         //手机号码绑定成功
 
-//                        mPrefUtil.setPhoneNumber(cellPhone);
-//                        mPrefUtil.setSetupStep(2);
-
-                        Buddy buddy = new Buddy(mPrefUtil.getUid());
-                        buddy.phoneNumber = cellPhone;
-
-                        updateMyProfile(buddy);
-
-
+                        mPrefUtil.setPhoneNumber(cellPhone);
 
                         mMsgBox.showWaitImageSuccess("手机号码绑定成功");
+
                         new Thread(new Runnable() {
 
                             @Override

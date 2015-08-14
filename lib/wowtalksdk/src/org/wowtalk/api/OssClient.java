@@ -88,6 +88,7 @@ public class OssClient {
 
 		Log.i(TAG, " start upload ", inFilename, " => http://", host, "/", remoteDir, fileId);
 
+		boolean requestOk = false; // 上传成功？
 		try {
 
 			// post data 有三部分：
@@ -173,13 +174,12 @@ public class OssClient {
 
 			write(os, endBoundary);
 			os.flush();
-			socket.shutdownOutput();
+			//socket.shutdownOutput(); // 某些设备上： java.net.SocketException: shutdown failed: EBADF (Bad file number)
 
 			// read response from server
 			// response code may be 204
 			//
 			// NOTE: getResponseCode() 会阻塞，所以分配一定的进度给它
-			boolean requestOk = false;
 
 			Log.i(TAG, " progress 100%");
 			if (callback != null)
@@ -231,7 +231,7 @@ public class OssClient {
 			socket.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			if(callback !=null)
+			if(!requestOk && callback !=null)
 				callback.didFailNetworkIFCommunication(callbackTag, e.toString().getBytes());
 		} finally {
 		}

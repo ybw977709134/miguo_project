@@ -140,13 +140,13 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
 
             if (pageFlag == BIND_cellphone_PAGE) {//绑定手机号码起始页
 
-                if (getIntent().getBooleanExtra(FixBindCellPhoneActivity.FIX_BIND_CELLPHONE, false)) {
-                    Intent intent = new Intent(BindCellPhoneActivity.this,AccountSettingActivity.class);
-                    startActivity(intent);
-                }
+//                if (getIntent().getBooleanExtra(FixBindCellPhoneActivity.FIX_BIND_CELLPHONE, false)) {
+//                    Intent intent = new Intent(BindCellPhoneActivity.this,AccountSettingActivity.class);
+//                    startActivity(intent);
+//                }
 
                 closeSoftKeyboard();
-                BindCellPhoneActivity.this.finish();
+//                BindCellPhoneActivity.this.finish();
             } else {
                 pageFlag = BIND_cellphone_PAGE;
 

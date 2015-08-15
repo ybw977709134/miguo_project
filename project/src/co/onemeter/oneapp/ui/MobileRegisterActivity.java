@@ -82,6 +82,7 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
     private MessageBox mMsgBox;
     private int time;
     private Timer mTimer;
+    private int codeFlag = 1;//1-代表第一次获取验证码，2-代表再次获取验证码
 
     private Handler mHandler = new Handler(){
         public void handleMessage(android.os.Message msg) {
@@ -95,6 +96,7 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
             }
         };
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -501,11 +503,7 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
                 break;
 
             case R.id.btn_verification_cellphone://验证手机号码
-
-//                sendCodeRetrievePassword(txt_bind_account.getText().toString(),txt_bind_cellphone.getText().toString());
-//                //60秒内不可点击  重新获取验证码
-//                stopGetAccessCode();
-
+                codeFlag = 1;
                 getAccessCode(txt_bind_cellphone.getText().toString());
 
                 break;
@@ -517,11 +515,7 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
 
             //重新获得验证码	
             case R.id.btn_again_receive_auth_code:
-
-//                sendCodeRetrievePassword(txt_bind_account.getText().toString(),txt_bind_cellphone.getText().toString());
-//                //60秒内不可点击  重新获取验证码
-//                stopGetAccessCode();
-
+                codeFlag = 2;
                 getAccessCode(txt_bind_cellphone.getText().toString());
 
                 break;
@@ -646,33 +640,59 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
 
                     case ErrorCode.USER_ALREADY_EXISTS://6:手机号码存在
                         mMsgBox.dismissWait();
-                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
-                        textView_verification_authCode_result.setText("手机号码已被注册，请使用其他手机号注册");
+                        if (codeFlag == 1) {
+                            textView_verification_cellphone_result.setVisibility(View.VISIBLE);
+                            textView_verification_cellphone_result.setText("手机号码已被注册，请使用其他手机号注册");
+                        } else {
+                            textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                            textView_verification_authCode_result.setText("手机号码已被注册，请使用其他手机号注册");
+                        }
+
                         break;
 
                     case ErrorCode.DB://3:数据库操作错误
                         mMsgBox.dismissWait();
-                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
-                        textView_verification_authCode_result.setText("数据库操作错误");
+
+                        if (codeFlag == 1) {
+                            textView_verification_cellphone_result.setVisibility(View.VISIBLE);
+                            textView_verification_cellphone_result.setText("数据库操作错误");
+                        } else {
+                            textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                            textView_verification_authCode_result.setText("数据库操作错误");
+                        }
+
                         break;
 
                     case ErrorCode.INVALID_ARGUMENT://1:传入的参数有误
                         mMsgBox.dismissWait();
-                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
-                        textView_verification_authCode_result.setText("传入的参数有误");
+
+                        if (codeFlag == 1) {
+                            textView_verification_cellphone_result.setVisibility(View.VISIBLE);
+                            textView_verification_cellphone_result.setText("传入的参数有误");
+                        } else {
+                            textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                            textView_verification_authCode_result.setText("传入的参数有误");
+                        }
+
                         break;
 
                     default:
                         mMsgBox.dismissWait();
-                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
-                        textView_verification_authCode_result.setText("请检查网络连接");
+
+                        if (codeFlag == 1) {
+                            textView_verification_cellphone_result.setVisibility(View.VISIBLE);
+                            textView_verification_cellphone_result.setText("请检查网络连接");
+                        } else {
+                            textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                            textView_verification_authCode_result.setText("请检查网络连接");
+                        }
+
+
                         break;
                 }
             }
         });
     }
-
-
 
 
     /**
@@ -771,9 +791,6 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
                     case ErrorCode.OK://0//验证码验证成功
 
                         //跳转到绑定手机号码页面
-//                        layout_verification_auth_code.setVisibility(View.GONE);
-//                        layout_reset_password.setVisibility(View.VISIBLE);
-
 
                        Intent registerIntent = new Intent(MobileRegisterActivity.this,RegisterActivity.class);
                        registerIntent.putExtra("cellPhone",cellPhone);
@@ -784,30 +801,30 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
                         break;
 
                     case ErrorCode.ERR_SMS_PHONE_NOT_CHECK://55:手机号码格式不正确
-                        textView_verification_cellphone_result.setVisibility(View.VISIBLE);
-                        textView_verification_cellphone_result.setText("手机号码格式不正确");
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("手机号码格式不正确");
                         break;
 
 
                     case ErrorCode.ERR_SMS_CODE_OVER://57:验证码过期
-                        textView_verification_cellphone_result.setVisibility(View.VISIBLE);
-                        textView_verification_cellphone_result.setText("验证码过期");
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("验证码过期");
                         break;
 
                     case ErrorCode.ERR_SMS_CODE_NOT_CHECK://58:验证码验证不通过
-                        textView_verification_cellphone_result.setVisibility(View.VISIBLE);
-                        textView_verification_cellphone_result.setText("验证码验证不通过");
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("验证码验证不通过");
                         break;
 
                     case ErrorCode.ERR_VERIFICATION_CODE_TOO_MANY://54:短信验证码请求次数太多
-                        textView_verification_cellphone_result.setVisibility(View.VISIBLE);
-                        textView_verification_cellphone_result.setText("短信验证码请求次数太多");
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("短信验证码请求次数太多");
                         break;
 
 
                     default:
-                        textView_verification_cellphone_result.setVisibility(View.VISIBLE);
-                        textView_verification_cellphone_result.setText("访问的服务器出错");
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("访问的服务器出错");
                         break;
                 }
             }

@@ -41,7 +41,6 @@ import java.util.*;
 public class OssClient {
 	private static final String TAG = "OssClient";
 
-	private static final String BOUNDARY = "9431149156168";
 	private static final String OSS_HOST = "oss-cn-hangzhou.aliyuncs.com";
 
 	private final String accessKeyId;
@@ -79,6 +78,8 @@ public class OssClient {
 
 	public void upload(String fileId, String inFilename) {
 
+        String boundary = UUID.randomUUID().toString();
+
 		List<NameValuePair> postData = new ArrayList<>(10);
 		postData.add(new BasicNameValuePair("OSSAccessKeyId", accessKeyId));
 		String policy = getPolicy();
@@ -99,8 +100,11 @@ public class OssClient {
 			long fileLength = inputFile.length();
 			Log.i(TAG, " upload file length:" + fileLength);
 
-			String postDataPart1 = createBoundaryMessage(postData, inputFile.getName());
-			String endBoundary = "\r\n--" + BOUNDARY + "--\r\n";
+			String postDataPart1 = createBoundaryMessage(boundary, postData, inputFile.getName());
+			String endBoundary = "\r\n--" + boundary + "--\r\n";
+            long contentLength = (postDataPart1.getBytes().length +
+							fileLength +
+							endBoundary.getBytes().length);
 
 			// init http client
 
@@ -111,19 +115,17 @@ public class OssClient {
 
 			write(os, "POST / HTTP/1.1\r\n");
 			write(os, "Host: " + host + "\r\n");
-			write(os, "Content-Length: " +
-					(postDataPart1.getBytes().length +
-							fileLength +
-							endBoundary.getBytes().length) + "\r\n");
-			write(os, "Content-Type: multipart/form-data; boundary=" + BOUNDARY + "\r\n");
-			write(os, "Accept:application/xml\r\n");
+			write(os, "Content-Length: " + contentLength + "\r\n");
+			write(os, "Content-Type: multipart/form-data; boundary=" + boundary + "\r\n");
+			write(os, "Accept: application/xml\r\n");
+            write(os, "Connection: close\r\n");
 			write(os, "User-Agent: Android\r\n");
 			write(os, "\r\n");
 
 			// send HTTP body - part1, some post fields
 
-			write(os, postDataPart1);
-			Log.i(TAG, " >>> [binary]");
+            write(os, postDataPart1);
+            Log.i(TAG, " >>> [binary]");
 
 			// send HTTP body - part2, the file
 
@@ -151,7 +153,7 @@ public class OssClient {
 			while (bytesRead > 0) {
 				os.write(buffer, 0, bufferSize);
 
-				// try to solve OOM on Android 4.4.4
+                // try to solve OOM on Android 4.4.4
 				os.flush();
 
 				bytesAvailable = fileInputStream.available();
@@ -173,7 +175,11 @@ public class OssClient {
 
 			write(os, endBoundary);
 			os.flush();
-			socket.shutdownOutput();
+
+            // 这里不要执行 socket.shutdownOutput()，否则有一定的概率出现以下两种结果：
+            // 1, 抛出 SocketException；
+            // 2, 随后从 Socket InputStream 中读不到任何数据；
+
 
 			// read response from server
 			// response code may be 204
@@ -184,6 +190,49 @@ public class OssClient {
 			Log.i(TAG, " progress 100%");
 			if (callback != null)
 				callback.setProgress(callbackTag, 100);
+
+			/*
+			应答示例
+
+			成功
+
+            <<<: HTTP/1.1 204 No Content
+            <<<: Date: Sat, 15 Aug 2015 04:49:25 GMT
+            <<<: Content-Length: 0
+            <<<: Connection: keep-alive
+            <<<: ETag: "AFE18268458D58407D04B262653661E0"
+            <<<: Server: AliyunOSS
+            <<<: x-oss-request-id: 55CEC4D544ABFA9D08C3DE12
+            <<<:
+
+            失败
+
+			值得注意的是，HTTP body 中是 XML + HTML。
+
+			<<<: HTTP/1.1 404 Not Found
+            <<<: Date: Sat, 15 Aug 2015 04:19:17 GMT
+            <<<: Content-Type: application/xml
+            <<<: Content-Length: 289
+            <<<: Connection: keep-alive
+            <<<: Server: AliyunOSS
+            <<<: x-oss-request-id: 55CEBDC5770DFE9C34920999
+            <<<:
+            <<<: <?xml version="1.0" encoding="UTF-8"?>
+            <<<: <Error>
+            <<<:   <BucketName>o-im-dev01</BucketName>
+            <<<:   <Code>NoSuchBucket</Code>
+            <<<:   <Message>The specified bucket does not exist.</Message>
+            <<<:   <RequestId>55CEBDC5770DFE9C34920999</RequestId>
+            <<<:   <HostId>o-im-dev01.oss-cn-hangzhou.aliyuncs.com</HostId>
+            <<<: </Error>
+            <<<: <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+            <<<: <html>
+            <<<: <head><title>400 Bad Request</title></head>
+            <<<: <body bgcolor="white">
+            <<<: <h1>400 Bad Request</h1>
+            <<<: <p>Your browser sent a request that this server could not understand.<hr/>Powered by AliyunOSS</body>
+            <<<: </html>
+			 */
 
 			BufferedReader r = new BufferedReader(new InputStreamReader(
 					socket.getInputStream(), "UTF-8"));
@@ -202,16 +251,16 @@ public class OssClient {
 
 				++lineIdx;
 
-				if (!isReadingBody) {
-					continue;
-				}
-
-				if (line.equals("\r\n")) {
+				if (line.startsWith("<?xml ")) {
+                    // XML 已开始
 					isReadingBody = true;
-					continue;
-				}
+				} else if (line.startsWith("<!DOCTYPE HTML ")) {
+                    // HTML 已开始（XML已结束）
+                    isReadingBody = false;
+                }
 
-				resStr.append(line);
+                if (isReadingBody)
+                    resStr.append(line);
 			}
 
 			if (requestOk) {
@@ -219,10 +268,15 @@ public class OssClient {
 				if (callback != null)
 					callback.didFinishNetworkIFCommunication(callbackTag, fileId.getBytes());
 			} else {
-				String xmlStr = resStr.toString();
-				Element root = parseXml(xmlStr);
-				String err = root.getElementsByTagName("Code").item(0).getTextContent()
-						+ ": " + root.getElementsByTagName("Message").item(0).getTextContent();
+                String err;
+                if (resStr.length() > 0) {
+                    String xmlStr = resStr.toString();
+                    Element root = parseXml(xmlStr);
+                    err = root.getElementsByTagName("Code").item(0).getTextContent()
+                            + ": " + root.getElementsByTagName("Message").item(0).getTextContent();
+                } else {
+                    err = "no response";
+                }
 				Log.e(TAG, "upload failed: " + err);
 				if (callback != null)
 					callback.didFailNetworkIFCommunication(callbackTag, err.getBytes());
@@ -315,7 +369,7 @@ public class OssClient {
 		}
 	}
 
-	private String createBoundaryMessage(List<NameValuePair> postData, String fileName) {
+	private String createBoundaryMessage(String BOUNDARY, List<NameValuePair> postData, String fileName) {
 		StringBuffer res = new StringBuffer("--").append(BOUNDARY).append(
 				"\r\n");
 		for (NameValuePair nv : postData) {

@@ -16,7 +16,7 @@ import org.wowtalk.api.PrefUtil;
 import org.wowtalk.ui.MessageBox;
 import co.onemeter.oneapp.R;
 
-public class AboutPage extends Activity implements OnClickListener{
+public class AboutPage extends Activity implements OnClickListener, View.OnLongClickListener {
     private static final String SUPPORT_EMAIL_ADD = "support@onemeter.co";
 
     private ImageButton btnTitleBack;
@@ -29,6 +29,8 @@ public class AboutPage extends Activity implements OnClickListener{
         textView_about_back = (TextView) findViewById(R.id.textView_about_back);
         txtVersion = (TextView) findViewById(R.id.txt_version);
         txtVersion.setText(getVersion(false));
+        txtVersion.setLongClickable(true);
+        txtVersion.setOnLongClickListener(this);
         btnTitleBack.setOnClickListener(this);
         textView_about_back.setOnClickListener(this);
         findViewById(R.id.app_support_layout).setOnClickListener(this);
@@ -81,6 +83,16 @@ public class AboutPage extends Activity implements OnClickListener{
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        switch (view.getId()) {
+            case R.id.txt_version:
+                startActivity(new Intent(this, com.example.panzy.sockettester.MainActivity.class));
+                break;
+        }
+        return false;
     }
 
     @Override

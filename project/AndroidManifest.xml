@@ -775,6 +775,11 @@
             android:screenOrientation="landscape">
         </activity>
 
+        <activity
+            android:name="com.example.panzy.sockettester.MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
         <receiver
             android:name=".ui.SystemTimeChangedReceiver" >
             <intent-filter>

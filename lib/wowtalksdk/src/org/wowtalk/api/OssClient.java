@@ -2,6 +2,7 @@ package org.wowtalk.api;
 
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import com.aliyun.common.auth.HmacSHA1Signature;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -10,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.wowtalk.Log;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -86,7 +86,7 @@ public class OssClient {
 		postData.add(new BasicNameValuePair("Signature", getSignature(policy)));
 		postData.add(new BasicNameValuePair("key", remoteDir + fileId));
 
-		Log.i(TAG, " start upload ", inFilename, " => http://", host, "/", remoteDir, fileId);
+		Log.i(TAG, "start upload " + inFilename + " => http://" + host + "/" + remoteDir + fileId);
 
 		try {
 
@@ -97,7 +97,7 @@ public class OssClient {
 
 			File inputFile = new File(inFilename);
 			long fileLength = inputFile.length();
-			Log.i(TAG, " upload file length:", fileLength);
+			Log.i(TAG, " upload file length:" + fileLength);
 
 			String postDataPart1 = createBoundaryMessage(postData, inputFile.getName());
 			String endBoundary = "\r\n--" + BOUNDARY + "--\r\n";
@@ -160,7 +160,7 @@ public class OssClient {
 				total += bytesRead;
 				int newProgress = (int) (total * PROGRESS_WEIGHT_WRITE_FILE / fileLength);
 				if (newProgress != oldProgress) {
-					Log.i(TAG, " progress ", newProgress, "%");
+					Log.i(TAG, " progress " + newProgress + "%");
 					if (callback != null)
 						callback.setProgress(callbackTag, newProgress);
 					oldProgress = newProgress;
@@ -192,7 +192,7 @@ public class OssClient {
 			int lineIdx = 0;
 			boolean isReadingBody = false;
 			while ((line = r.readLine()) != null) {
-				Log.i(TAG, " <<<: ", line);
+				Log.i(TAG, "<<<: " + line);
 
 				if (lineIdx == 0) {
 					// first line, "HTTP/1.1 204 No Content"
@@ -223,7 +223,7 @@ public class OssClient {
 				Element root = parseXml(xmlStr);
 				String err = root.getElementsByTagName("Code").item(0).getTextContent()
 						+ ": " + root.getElementsByTagName("Message").item(0).getTextContent();
-				Log.e(TAG, " upload failed: ", err);
+				Log.e(TAG, "upload failed: " + err);
 				if (callback != null)
 					callback.didFailNetworkIFCommunication(callbackTag, err.getBytes());
 			}
@@ -239,13 +239,13 @@ public class OssClient {
 
 	private void write(OutputStream os, String line) throws IOException {
 		os.write(line.getBytes());
-		Log.i(TAG, " >>> ", line);
+		Log.i(TAG, ">>> " + line);
 	}
 
 	public void download(String fileId, String outFilename) {
 
 		String url = "http://" + host + "/" + remoteDir + fileId;
-		Log.i(TAG, " start download ", outFilename, " <= ", url);
+		Log.i(TAG, "start download " + outFilename + " <= " + url);
 
 		HttpURLConnection conn = null;
 
@@ -271,7 +271,7 @@ public class OssClient {
 						conn.getInputStream());
 
 				int contentLength = conn.getContentLength();
-				Log.i(TAG, " download content-length: ", contentLength);
+				Log.i(TAG, "download content-length: " + contentLength);
 
 				byte data[] = new byte[1024];
 				long total = 0;
@@ -296,12 +296,12 @@ public class OssClient {
 				while ((line = r.readLine()) != null) {
 					resStr.append(line);
 				}
-				Log.i(TAG, " response: ", resStr.toString());
+				Log.i(TAG, "response: " + resStr.toString());
 				String xmlStr = resStr.toString();
 				Element root = parseXml(xmlStr);
 				String err = root.getElementsByTagName("Code").item(0).getTextContent()
 						+ ": " + root.getElementsByTagName("Message").item(0).getTextContent();
-				Log.e(TAG, " download failed: ", err);
+				Log.e(TAG, "download failed: " + err);
 				if (callback != null)
 					callback.didFailNetworkIFCommunication(callbackTag, err.getBytes());
 			}
@@ -387,13 +387,13 @@ public class OssClient {
 						+ date + "\n"
 						+ canonicalizedResource);
 
-		Log.i(TAG, " get header auth: ", result);
+		Log.i(TAG, "get header auth: " + result);
 		return result;
 	}
 
 	private String getSignature(String policy) {
 		String result = HmacSHA1Signature.create().computeSignature(accessKeySerect, policy);
-		Log.i(TAG, " get signature: ", result);
+		Log.i(TAG, "get signature: " + result);
 		return result;
 	}
 
@@ -411,8 +411,8 @@ public class OssClient {
 			String json = root.toString();
 			String result = Base64.encodeToString(json.getBytes("UTF-8"), Base64.URL_SAFE);
 			result = result.replace("\n", "");
-			Log.i(TAG, " get policy json:", json);
-			Log.i(TAG, " get policy base64:", result);
+			Log.i(TAG, "get policy json:" + json);
+			Log.i(TAG, "get policy base64:" + result);
 			return result;
 		} catch (JSONException e) {
 			e.printStackTrace();

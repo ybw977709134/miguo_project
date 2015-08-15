@@ -3,7 +3,6 @@ package org.wowtalk.api;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
-import com.aliyun.common.auth.HmacSHA1Signature;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -14,6 +13,8 @@ import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.net.SocketFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,6 +23,8 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -433,12 +436,12 @@ public class OssClient {
 		String canonicalizedResource = String.format("/%s/%s%s", bucketName, remoteDir, objName);
 
 		String result = "OSS " + accessKeyId + ":" + HmacSHA1Signature.create().computeSignature(
-				accessKeySerect,
-				verb + "\n"
-						+ "\n" // content-MD5
-						+ "\n" // content-type
-						+ date + "\n"
-						+ canonicalizedResource);
+                accessKeySerect,
+                verb + "\n"
+                        + "\n" // content-MD5
+                        + "\n" // content-type
+                        + date + "\n"
+                        + canonicalizedResource);
 
 		Log.i(TAG, "get header auth: " + result);
 		return result;
@@ -474,5 +477,63 @@ public class OssClient {
 		}
 		return null;
 	}
+
+    /**
+     * 反编译自 com.aliyun:openservices:1.2.3，有改动
+     */
+    static class HmacSHA1Signature {
+        private static final Object LOCK = new Object();
+        private static Mac macInstance;
+
+        public String getVersion() {
+            return "1";
+        }
+
+        public HmacSHA1Signature() {
+        }
+
+        public String computeSignature(String key, String data) {
+            try {
+                byte[] ex = this.sign(key.getBytes("UTF-8"), data.getBytes("UTF-8"));
+                return Base64.encodeToString(ex, Base64.DEFAULT).trim();
+            } catch (UnsupportedEncodingException var4) {
+                throw new RuntimeException("Unsupported algorithm: UTF-8");
+            }
+        }
+
+        private byte[] sign(byte[] key, byte[] data) {
+            try {
+                Object ex;
+                if(macInstance == null) {
+                    ex = LOCK;
+                    synchronized(LOCK) {
+                        if(macInstance == null) {
+                            macInstance = Mac.getInstance("HmacSHA1");
+                        }
+                    }
+                }
+
+                ex = null;
+
+                Mac ex1;
+                try {
+                    ex1 = (Mac)macInstance.clone();
+                } catch (CloneNotSupportedException var5) {
+                    ex1 = Mac.getInstance("HmacSHA1");
+                }
+
+                ex1.init(new SecretKeySpec(key, "HmacSHA1"));
+                return ex1.doFinal(data);
+            } catch (NoSuchAlgorithmException var7) {
+                throw new RuntimeException("Unsupported algorithm: HmacSHA1");
+            } catch (InvalidKeyException var8) {
+                throw new RuntimeException();
+            }
+        }
+
+        public static HmacSHA1Signature create() {
+            return new HmacSHA1Signature();
+        }
+    }
 }
 

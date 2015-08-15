@@ -1,7 +1,6 @@
 apply plugin: 'android-library'
 
 dependencies {
-    compile 'com.aliyun:openservices:1.2.3'
     compile 'com.kawao:kakasi:1.0.0'
 
     if (System.getenv('OM_ENV') != null)

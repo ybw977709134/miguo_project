@@ -1,11 +1,8 @@
 package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,7 +25,6 @@ import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.oneapp.utils.TimeElapseReportRunnable;
 import co.onemeter.utils.AsyncTaskExecutor;
 import junit.framework.Assert;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
 import org.wowtalk.ui.MessageBox;
@@ -1599,17 +1595,23 @@ public class CreateNormalMomentWithTagActivity extends Activity implements View.
             case ACTIVITY_REQ_ID_INPUT_VIDEO:
                 if (resultCode == RESULT_OK && null != mediaHelper) {
                     String[] videoPath = new String[2];
-                    if(mediaHelper.handleVideoResult(
-                            this,
-                            data,
-                            CreateMomentActivity.PHOTO_SEND_WIDTH, CreateMomentActivity.PHOTO_SEND_HEIGHT,
-                            PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
-                            videoPath)) {
+                    try {
+                        mediaHelper.handleVideoResult(
+                                this,
+                                data,
+                                CreateMomentActivity.PHOTO_SEND_WIDTH, CreateMomentActivity.PHOTO_SEND_HEIGHT,
+                                PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
+                                videoPath);
                         CreateMomentActivity.WMediaFile videoFile = new CreateMomentActivity.WMediaFile(false);
                         videoFile.localPath = videoPath[0];
                         videoFile.localThumbnailPath = videoPath[1];
                         listPhotoOrVideo.add(videoFile);
                         notifyFileChanged(true);
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                        if (mMsgBox != null)
+                            mMsgBox.toast(e.getMessage());
                     }
                 }
                 break;

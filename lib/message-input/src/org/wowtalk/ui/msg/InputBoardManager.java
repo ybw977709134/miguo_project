@@ -1349,14 +1349,19 @@ public class InputBoardManager implements Parcelable,
             case REQ_INPUT_VIDEO:
                 if (null != mMediaInputHelper) {
                     String[] videoPath = new String[2];
-                    if(mMediaInputHelper.handleVideoResult(
-                            mContext,
-                            data,
-                            PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
-                            PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
-                            videoPath)) {
+                    try {
+                        mMediaInputHelper.handleVideoResult(
+                                mContext,
+                                data,
+                                PHOTO_SEND_WIDTH, PHOTO_SEND_HEIGHT,
+                                PHOTO_THUMBNAIL_WIDTH, PHOTO_THUMBNAIL_HEIGHT,
+                                videoPath);
                         mResultHandler.onVideoInputted(videoPath[0], videoPath[1]);
                         result = true;
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;

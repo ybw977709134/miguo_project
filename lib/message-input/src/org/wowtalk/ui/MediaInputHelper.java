@@ -24,6 +24,7 @@ import org.wowtalk.Log;
 import org.wowtalk.api.ChatMessage;
 import org.wowtalk.ui.msg.BmpUtils;
 import org.wowtalk.ui.msg.InputBoardManager.ChangeToOtherAppsListener;
+import org.wowtalk.ui.msg.R;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -571,7 +572,9 @@ public class MediaInputHelper implements Parcelable {
     }
 
     /**
+     * 处理视频输入 (Activity Result）。
      *
+     * <p>若失败，会抛出异常，UI层可把 {@link Exception#getMessage()} 展示给用户。</p>
      * @param activity
      * @param data
      * @param limitWidth not implemented
@@ -579,15 +582,14 @@ public class MediaInputHelper implements Parcelable {
      * @param thumbnailWidth
      * @param thumbnailHeight
      * @param path
-     * @return
      */
-    public boolean handleVideoResult(Activity activity,
+    public void handleVideoResult(Activity activity,
                                      Intent data,
                                      int limitWidth,
                                      int limitHeight,
                                      int thumbnailWidth,
                                      int thumbnailHeight,
-                                     String[] path) {
+                                     String[] path) throws Exception {
 
         Uri uri = null;
         if(data == null || data.getData() == null) {
@@ -598,52 +600,63 @@ public class MediaInputHelper implements Parcelable {
         }
 
         if (uri == null)
-            return false;
+            throw new Exception(activity.getString(R.string.err_operation_failed));
 
         final Uri furi = uri;
 
+        String videopath = resolveMediaPath(activity, furi, MEDIA_TYPE_VIDEO);
+        Bitmap thumbnail = null;
+        // MINI_KIND => 960x544,
+        // MICRO_KIND is too small
+
+        /* It is suspected that on some devices (Sharp-IS12), the video file is not available immediately,
+         * as ThumbnailUtils.createVideoThumbnail() would return null.
+         */
         try {
-            String videopath = resolveMediaPath(activity, furi, MEDIA_TYPE_VIDEO);
-            Bitmap thumbnail = null;
-            // MINI_KIND => 960x544,
-            // MICRO_KIND is too small
-
-				/* It is suspected that on some devices (Sharp-IS12), the video file is not available immediately,
-				 * as ThumbnailUtils.createVideoThumbnail() would return null.
-				 */
             Thread.sleep(1500);
+        }
+        catch (InterruptedException e) {
+        }
 
-            Bitmap thumbnail0 = ThumbnailUtils.createVideoThumbnail(
-                    videopath, MediaStore.Images.Thumbnails.MINI_KIND);
-            if(thumbnail0 != null) {
-                // ... while MINI_KIND is a little too large
-                thumbnail = ThumbnailUtils.extractThumbnail(
-                        thumbnail0,
-                        thumbnailWidth, thumbnailHeight,
-                        ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
-                thumbnail0.recycle();
-            } else {
-                thumbnail = ThumbnailUtils.createVideoThumbnail(
-                        videopath, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND);
-            }
+        if (new File(videopath).length() > VIDEO_FILE_LIMIT * 1.2f) {
+            throw new Exception(activity.getString(R.string.err_file_too_large));
+        }
 
-            File fbmp = null;
-            if(thumbnail != null) {
+        Bitmap thumbnail0 = ThumbnailUtils.createVideoThumbnail(
+                videopath, MediaStore.Images.Thumbnails.MINI_KIND);
+        if(thumbnail0 != null) {
+            // ... while MINI_KIND is a little too large
+            thumbnail = ThumbnailUtils.extractThumbnail(
+                    thumbnail0,
+                    thumbnailWidth, thumbnailHeight,
+                    ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+            thumbnail0.recycle();
+        } else {
+            thumbnail = ThumbnailUtils.createVideoThumbnail(
+                    videopath, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND);
+        }
+
+        File fbmp = null;
+        if(thumbnail != null) {
+            try {
                 fbmp = makeOutputMediaFile(MEDIA_TYPE_THUMNAIL, ".jpg");
                 OutputStream os = new FileOutputStream(fbmp);
                 thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, os);
                 os.close();
                 thumbnail.recycle();
             }
-
-            path[0] = videopath;
-            path[1] = fbmp == null ? null : fbmp.getAbsolutePath();
-
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
+            catch (FileNotFoundException e) {
+                e.printStackTrace();
+                throw new Exception(activity.getString(R.string.err_create_thumbnail));
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                throw new Exception(activity.getString(R.string.err_create_thumbnail));
+            }
         }
-        return false;
+
+        path[0] = videopath;
+        path[1] = fbmp == null ? null : fbmp.getAbsolutePath();
     }
 
 	/**

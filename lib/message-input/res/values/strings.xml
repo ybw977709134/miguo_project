@@ -32,4 +32,7 @@
 
     <string name="crop__done">DONE</string>
     <string name="crop__cancel" >CANCEL</string>
+    <string name="err_file_too_large">文件太大（请勿超过16MB）</string>
+    <string name="err_operation_failed">操作失败</string>
+    <string name="err_create_thumbnail">无法生成缩略图</string>
 </resources>

@@ -308,7 +308,7 @@ public class FixBindCellPhoneActivity extends Activity implements View.OnClickLi
      */
 
     private void sendSMS (final String cellPhone) {
-        mMsgBox.showWaitProgressbar("验证中");
+        mMsgBox.showWaitProgressbar("发送中");
 
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
@@ -325,8 +325,7 @@ public class FixBindCellPhoneActivity extends Activity implements View.OnClickLi
                 switch (result) {
                     case ErrorCode.OK://0//手机号码没有绑定
 
-                        mMsgBox.showWaitImageSuccess("验证码以短信已经发送到你的手机，请注意接收");
-
+                        mMsgBox.toast("验证码以短信已经发送到你的手机，请注意接收");
 
                         if (mTimer != null) {
                             mTimer.cancel();

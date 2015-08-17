@@ -622,7 +622,7 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
      */
 
     private void getAccessCode (final String cellPhone) {
-        mMsgBox.showWaitProgressbar("验证中");
+        mMsgBox.showWaitProgressbar("发送中");
 
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 

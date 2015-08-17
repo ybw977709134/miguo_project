@@ -640,6 +640,7 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
 
                     case ErrorCode.USER_ALREADY_EXISTS://6:手机号码存在
                         mMsgBox.dismissWait();
+
                         if (codeFlag == 1) {
                             textView_verification_cellphone_result.setVisibility(View.VISIBLE);
                             textView_verification_cellphone_result.setText("手机号码已被注册，请使用其他手机号注册");
@@ -719,8 +720,7 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
                 switch (result) {
                     case ErrorCode.OK://0//手机号码没有绑定
 
-                        mMsgBox.showWaitImageSuccess("验证码以短信已经发送到你的手机，请注意接收");
-
+                        mMsgBox.toast("验证码以短信已经发送到你的手机，请注意接收");
 
                         layout_verification_auth_code.setVisibility(View.VISIBLE);
                         layout_verification_cellphone.setVisibility(View.GONE);
@@ -837,7 +837,7 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
      * 重置密码
      * @param cellPhone
      * @param password
-     * @date 2015/3/11
+     * @date 2015/8/11
      */
     private void resetPasswordByMobile(final String cellPhone,final String password) {
         mMsgBox.showWait();

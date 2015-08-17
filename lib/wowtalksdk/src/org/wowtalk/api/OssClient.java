@@ -133,17 +133,11 @@ public class OssClient {
 
 			// send HTTP body - part2, the file
 
-			int bytesToRead = (int) (fileLength / 100);
-			if (bytesToRead < 1024)
-				bytesToRead = 1024;
-			if (bytesToRead > 1024 * 256)
-				bytesToRead = 1024 * 256;
+			final int BUF_SIZE = 1024;
 
 			FileInputStream fileInputStream = new FileInputStream(inputFile);
 			// create a buffer of maximum size
-			int bytesAvailable = fileInputStream.available();
-			int bufferSize = Math.min(bytesAvailable, bytesToRead);
-			byte[] buffer = new byte[bufferSize];
+			byte[] buffer = new byte[BUF_SIZE];
 
 			// 写文件占整个上传任务的进度的百分比，
 			// 剩余进度分配给 getResponseCode()
@@ -151,18 +145,16 @@ public class OssClient {
 
 			// read file and write it into form...
 			long total = 0;
-			int bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+			int bytesRead = fileInputStream.read(buffer, 0, BUF_SIZE);
 			total += bytesRead;
 			int oldProgress = (int) (total * PROGRESS_WEIGHT_WRITE_FILE / fileLength);
 			while (bytesRead > 0) {
-				os.write(buffer, 0, bufferSize);
+				os.write(buffer, 0, bytesRead);
 
                 // try to solve OOM on Android 4.4.4
 				os.flush();
 
-				bytesAvailable = fileInputStream.available();
-				bufferSize = Math.min(bytesAvailable, bytesToRead);
-				bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+				bytesRead = fileInputStream.read(buffer, 0, BUF_SIZE);
 				total += bytesRead;
 				int newProgress = (int) (total * PROGRESS_WEIGHT_WRITE_FILE / fileLength);
 				if (newProgress != oldProgress) {

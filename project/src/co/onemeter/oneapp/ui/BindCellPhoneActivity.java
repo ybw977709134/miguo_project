@@ -852,7 +852,7 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
      * @param phNum
      * @return
      */
-    public static boolean isPhoneNum(String phNum){
+    private boolean isPhoneNum(String phNum){
         /*
     移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
     联通：130、131、132、152、155、156、185、186

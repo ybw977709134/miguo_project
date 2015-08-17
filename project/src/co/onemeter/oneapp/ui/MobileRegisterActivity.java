@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
@@ -504,7 +505,14 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
 
             case R.id.btn_verification_cellphone://验证手机号码
                 codeFlag = 1;
-                getAccessCode(txt_bind_cellphone.getText().toString());
+
+                if (isPhoneNum(txt_bind_cellphone.getText().toString())) {
+                    getAccessCode(txt_bind_cellphone.getText().toString());
+
+                } else {
+                    textView_verification_cellphone_result.setVisibility(View.VISIBLE);
+                    textView_verification_cellphone_result.setText("你填写的手机号码格式不正确");
+                }
 
                 break;
 
@@ -889,6 +897,31 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
                 }
             }
         });
+    }
+
+
+
+
+    /**
+     * 验证手机号码的格式是否正确
+     * @author hutianfeng created at 2015/8/17
+     * @param phNum
+     * @return
+     */
+    private boolean isPhoneNum(String phNum){
+        /*
+    移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
+    联通：130、131、132、152、155、156、185、186
+    电信：133、153、180、189、（1349卫通）
+    总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9
+    */
+        String telRegex = "[1][358]\\d{9}";//"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
+        if (TextUtils.isEmpty(phNum)) {
+            return false;
+        } else {
+            return phNum.matches(telRegex);
+        }
+
     }
 
 

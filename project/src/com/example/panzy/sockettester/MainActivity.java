@@ -40,46 +40,47 @@ public class MainActivity extends Activity implements NetworkIFDelegate {
     }
 
     private void oss_upload() {
-        final String dataFilename = "dummy_data.txt";
-        final int contentLength = 60 * 1024 * 1024;
-        final byte[] timestampBytes = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ")
-                .format(Calendar.getInstance().getTime()) + "\n").getBytes();
 
-        try {
+      new Thread(new Runnable() {
+        @Override
+        public void run() {
+          final String dataFilename = "dummy_data.txt";
+          final int contentLength = 60 * 1024 * 1024;
+          final byte[] timestampBytes = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ")
+              .format(Calendar.getInstance().getTime()) + "\n").getBytes();
+
+          try {
             FileOutputStream fos = openFileOutput(dataFilename, Context.MODE_PRIVATE);
             fos.write(timestampBytes);
 
             byte[] piece = new byte[1024];
             for (int i = 0; i < 8; ++i) {
-                for (int j = 0; j < 127; ++j)
-                    piece[i] = '0';
-                piece[127] = '\n';
+              for (int j = 0; j < 127; ++j)
+                piece[i] = '0';
+              piece[127] = '\n';
             }
 
             for (int i = 0; i < contentLength / 1024; ++i) {
-                fos.write(piece);
+              fos.write(piece);
             }
             fos.close();
-        }
-        catch (FileNotFoundException e) {
+          }
+          catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
-        catch (IOException e) {
+          }
+          catch (IOException e) {
             e.printStackTrace();
+          }
+
+          log("will post " + (contentLength + timestampBytes.length) + " bytes");
+          log("");
+
+          new OssClient("u9HhKKGaN779cDQQ", "E67LFFrjqeSQ4FKmVFhXgpACUrSgEf", "om-im-dev01")
+            .setRemoteDir("test/")
+            .setCallback(MainActivity.this, 0)
+            .upload("oss_client_test.txt", getFilesDir() + "/" + dataFilename);
         }
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                log("will post " + (contentLength + timestampBytes.length) + " bytes");
-                log("");
-
-                new OssClient("u9HhKKGaN779cDQQ", "E67LFFrjqeSQ4FKmVFhXgpACUrSgEf", "om-im-dev01")
-                        .setRemoteDir("test/")
-                        .setCallback(MainActivity.this, 0)
-                        .upload("oss_client_test.txt", getFilesDir() + "/" + dataFilename);
-            }
-        }).start();
+      }).start();
     }
 
     private void socket_http_post() {

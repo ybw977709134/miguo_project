@@ -37,8 +37,19 @@ public class YuanquActivity extends Activity {
         // 用户名 panzhiyong@onemeter.co
         // 密码 oEBH5z84
         // https://mint.splunk.com
-        if (!BuildConfig.DEBUG)
+        if (!BuildConfig.DEBUG) {
+            /*
+            java.lang.OutOfMemoryError: (Heap Size=69428KB, Allocated=42146KB)
+                at java.lang.AbstractStringBuilder.enlargeBuffer(AbstractStringBuilder.java:~94)
+                at java.lang.AbstractStringBuilder.append0(AbstractStringBuilder.java:145)
+                at java.lang.StringBuffer.append(StringBuffer.java:219)
+                at com.splunk.mint.network.io.InputStreamMonitor.b(SourceFile:67)
+                at com.splunk.mint.network.io.InputStreamMonitor.write(SourceFile:58)
+                at org.wowtalk.api.OssClient.upload(SourceFile:153)
+             */
+            Mint.disableNetworkMonitoring();
             Mint.initAndStartSession(this, "579f6a2f");
+        }
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.yuanqu);

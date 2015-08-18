@@ -453,7 +453,16 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
             //验证验证码
             case R.id.btn_verification_auth_code:
                 mInputMethodManager.hideSoftInputFromWindow(txt_auth_code.getWindowToken() , 0);
-                checkSMS(txt_bind_cellphone.getText().toString(), txt_auth_code.getText().toString());
+
+                if (txt_auth_code.getText().toString().length() == 4) {
+
+                    checkSMS(txt_bind_cellphone.getText().toString(), txt_auth_code.getText().toString());
+
+                } else {
+                    textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                    textView_verification_authCode_result.setText("验证码不正确");
+                }
+
                 break;
 
             //重新获得验证码

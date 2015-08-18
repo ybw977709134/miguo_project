@@ -265,7 +265,15 @@ public class FixBindCellPhoneActivity extends Activity implements View.OnClickLi
 
             case R.id.btn_verification_code://确认，跳转到绑定手机界面
 
-                checkSMS(PrefUtil.getInstance(FixBindCellPhoneActivity.this).getMyPhoneNumber(),txt_access_code.getText().toString());
+                if (txt_access_code.getText().toString().length() == 4) {
+
+                    checkSMS(PrefUtil.getInstance(FixBindCellPhoneActivity.this).getMyPhoneNumber(),txt_access_code.getText().toString());
+
+                } else {
+                    textView_verification_code_result.setVisibility(View.VISIBLE);
+                    textView_verification_code_result.setText("验证码不正确");
+                }
+
 
                 break;
             default:

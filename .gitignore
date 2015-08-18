@@ -53,3 +53,4 @@ project/build/
 
 local.properties
 captures/
+gradle.properties

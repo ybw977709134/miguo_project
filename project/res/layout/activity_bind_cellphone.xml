@@ -179,7 +179,7 @@
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:textColor="@color/black_30"
-                android:text="会收到一份包含6位数字验证码的手机短信"/>
+                android:text="会收到一份包含4位数字验证码的手机短信"/>
 
             <LinearLayout
                 android:layout_width="fill_parent"

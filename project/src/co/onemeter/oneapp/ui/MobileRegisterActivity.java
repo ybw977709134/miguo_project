@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
@@ -486,12 +487,14 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
             //清除绑定手机号码中文本框中的内容
             case R.id.field_clear_cellphone:
                 txt_bind_cellphone.setText("");
+                textView_verification_cellphone_result.setVisibility(View.GONE);
                 btn_verification_cellphone.setTextColor(getResources().getColor(R.color.white_40));
                 btn_verification_cellphone.setEnabled(false);
                 break;
             //清除验证码文本框中的内容	
             case R.id.field_clear_auth_code:
                 txt_auth_code.setText("");
+                textView_verification_authCode_result.setVisibility(View.GONE);
                 btn_verification_auth_code.setTextColor(getResources().getColor(R.color.white_40));
                 btn_verification_auth_code.setEnabled(false);
                 break;
@@ -504,7 +507,14 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
 
             case R.id.btn_verification_cellphone://验证手机号码
                 codeFlag = 1;
-                getAccessCode(txt_bind_cellphone.getText().toString());
+
+                if (isPhoneNum(txt_bind_cellphone.getText().toString())) {
+                    getAccessCode(txt_bind_cellphone.getText().toString());
+
+                } else {
+                    textView_verification_cellphone_result.setVisibility(View.VISIBLE);
+                    textView_verification_cellphone_result.setText("你填写的手机号码格式不正确");
+                }
 
                 break;
 
@@ -640,6 +650,7 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
 
                     case ErrorCode.USER_ALREADY_EXISTS://6:手机号码存在
                         mMsgBox.dismissWait();
+
                         if (codeFlag == 1) {
                             textView_verification_cellphone_result.setVisibility(View.VISIBLE);
                             textView_verification_cellphone_result.setText("手机号码已被注册，请使用其他手机号注册");
@@ -719,8 +730,7 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
                 switch (result) {
                     case ErrorCode.OK://0//手机号码没有绑定
 
-                        mMsgBox.showWaitImageSuccess("验证码以短信已经发送到你的手机，请注意接收");
-
+                        mMsgBox.toast("验证码以短信已经发送到你的手机，请注意接收");
 
                         layout_verification_auth_code.setVisibility(View.VISIBLE);
                         layout_verification_cellphone.setVisibility(View.GONE);
@@ -837,7 +847,7 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
      * 重置密码
      * @param cellPhone
      * @param password
-     * @date 2015/3/11
+     * @date 2015/8/11
      */
     private void resetPasswordByMobile(final String cellPhone,final String password) {
         mMsgBox.showWait();
@@ -889,6 +899,31 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
                 }
             }
         });
+    }
+
+
+
+
+    /**
+     * 验证手机号码的格式是否正确
+     * @author hutianfeng created at 2015/8/17
+     * @param phNum
+     * @return
+     */
+    private boolean isPhoneNum(String phNum){
+        /*
+    移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
+    联通：130、131、132、152、155、156、185、186
+    电信：133、153、180、189、（1349卫通）
+    总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9
+    */
+        String telRegex = "[1][358]\\d{9}";//"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
+        if (TextUtils.isEmpty(phNum)) {
+            return false;
+        } else {
+            return phNum.matches(telRegex);
+        }
+
     }
 
 

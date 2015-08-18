@@ -493,7 +493,6 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
             }
         }, 0, 1000);
 
-//		mTimer.schedule(mTimerTask, 0, 1000);
 
     }
 
@@ -505,7 +504,7 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
      */
 
     private void getAccessCode (final String cellPhone) {
-        mMsgBox.showWaitProgressbar("验证中");
+        mMsgBox.showWaitProgressbar("发送中");
 
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 
@@ -623,8 +622,6 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
 
                 switch (result) {
                     case ErrorCode.OK://0//手机号码没有绑定
-
-//                        mMsgBox.showWaitImageSuccess("验证码以短信已经发送到你的手机，请注意接收");
 
                         mMsgBox.toast("验证码以短信已经发送到你的手机，请注意接收");
 
@@ -855,7 +852,7 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
      * @param phNum
      * @return
      */
-    public static boolean isPhoneNum(String phNum){
+    private boolean isPhoneNum(String phNum){
         /*
     移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
     联通：130、131、132、152、155、156、185、186

@@ -3,8 +3,13 @@
     package="co.onemeter.oneapp"
     android:versionCode="107"
     android:versionName="3.7.0.0817(dev01)/107" > <!-- 版本号规则：双周发布 x.x.5，单周测试 x.x.0 -->
-    <!-- 在 Android 2.3 上，PullToRefreshListView 产生 stack overflow 错误。 -->
-    <uses-sdk android:minSdkVersion="11" />
+    <!--
+ 在 Android 2.3 上，PullToRefreshListView 产生 stack overflow 错误。
+    为了能在通知中显示彩色的logo，targetSdkVersion<=20
+    -->
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="20" />
 
     <!-- android:targetSdkVersion="17" -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -257,14 +262,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
-
-
         <activity
             android:name=".ui.MobileRegisterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
-
         <activity
             android:name=".ui.CallMainActivity"
             android:label="@string/app_name"
@@ -363,7 +365,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
-
         <activity
             android:name=".ui.UnBindActivity"
             android:screenOrientation="portrait"
@@ -583,8 +584,6 @@
         <activity
             android:name=".ui.FixBindCellPhoneActivity"
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".ui.SubmitInformationActivity"
             android:screenOrientation="portrait"
@@ -765,27 +764,27 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Blue_main" >
         </activity>
-
-        <activity
-            android:name=".UUPlayer.PlayerActivity" >
+        <activity android:name=".UUPlayer.PlayerActivity" >
         </activity>
-
         <activity
             android:name=".UUPlayer.WebPlayerActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape" >
         </activity>
-
         <activity
             android:name="com.example.panzy.sockettester.MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
 
-        <receiver
-            android:name=".ui.SystemTimeChangedReceiver" >
+        <receiver android:name=".ui.SystemTimeChangedReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.TIME_SET" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".SchoolInvitationActivity"
+            android:label="@string/title_activity_school_invitation" >
+        </activity>
     </application>
 
 </manifest>

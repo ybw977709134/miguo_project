@@ -1012,6 +1012,12 @@
     <string name="title_activity_home_work_template">HomeWorkTemplate</string>
     <string name="title_activity_submit_home_work">SubmitHomeWorkActivity</string>
     <string name="bind_mobile">手机号码</string>
+    <string name="school_invitation_notification_ticker">有学校邀请您</string>
+    <string name="school_invitation_notification_content_text">邀请您加入</string>
+    <string name="school_invitation_notification_content_text_with_class_name">邀请您加入[%s]</string>
+    <string name="accept">接受</string>
+    <string name="reject">拒绝</string>
+	<string name="title_activity_school_invitation">SchoolInvitationActivity</string>
 
 
 </resources>

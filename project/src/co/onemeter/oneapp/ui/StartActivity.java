@@ -7,6 +7,7 @@ import android.app.TabActivity;
 import android.content.*;
 import android.graphics.PixelFormat;
 import android.os.*;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.*;
@@ -18,10 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import co.onemeter.oneapp.Constants;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.SchoolInvitationActivity;
 import co.onemeter.oneapp.ui.AppStatusService.AppStatusBinder;
 import co.onemeter.oneapp.utils.WebServerEventPoller;
 import co.onemeter.utils.AsyncTaskExecutor;
-
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wowtalk.Log;
@@ -29,17 +32,13 @@ import org.wowtalk.api.*;
 import org.wowtalk.core.RegistrationState;
 import org.wowtalk.core.WowTalkChatMessageState;
 import org.wowtalk.ui.MessageBox;
-import org.wowtalk.ui.MessageDialog;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings("deprecation")
 public class StartActivity extends TabActivity
 implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDelegate, OnTabChangeListener {
+
     /**
      * 消息
      */
@@ -65,7 +64,8 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
 
     private static final String ACTION_CONNECTIVITY_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
     private static final String NOTI_ACTION_REVIEW = "NOTIFICATION/MOMENT_REVIEW";
-//    private static final String ACTION_WIFI_STATE_CHANGE = "android.net.wifi.STATE_CHANGE";
+    private static final int REQ_PROCESS_SCHOOL_INVITATION = 123;
+    //    private static final String ACTION_WIFI_STATE_CHANGE = "android.net.wifi.STATE_CHANGE";
     private NetworkStateChangeReceiver mNetworkStateChangedReceiver = new NetworkStateChangeReceiver();
 
 	/**
@@ -1340,9 +1340,82 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         }
     }
 
+    /**
+     * @param uid
+     * @param msg e.g. "s2015/08/19 14:13:26.178|{993606178}{6ed46c0b-3d40-4156-b0bf-7bc4a736fc44}..."
+     */
     @Override
-    public void getSchoolStructureChangedNotification(String uid, String schoolId) {
-        Log.i("getSchoolStructureChangedNotification: uid ", uid, ", school ", schoolId);
-        refresh();
+    public void getSchoolStructureChangedNotification(String uid, String msg) {
+        Log.i("getSchoolStructureChangedNotification: uid ", uid, ", message ", msg);
+
+        // extract msg body
+        String body = null;
+        int i = msg.indexOf('}');
+        if (i != -1) {
+            i = msg.indexOf('}', i + 1);
+            if (i != -1 && i < msg.length()) {
+                body = msg.substring(i + 1);
+            }
+        }
+
+        // msg 可能是：
+        // A, JSON = { event:, school_id:, school_name: }
+        // B, school_id
+        // 其中 A 对应的事件取决于 JSON.event，目前只有 "invite" 一种情形；
+        // B 对应的事件是“学校的组织架构已经发生变化”。
+        if (body != null && body.startsWith("{")) { // A
+            try {
+                JsonObject j = (JsonObject) new JsonParser().parse(body);
+                String event = j.has("event") ? j.get("event").getAsString() : null;
+
+                if (TextUtils.equals(event, "invite")) {
+                    String phone = j.has("phone") ? j.get("phone").getAsString() : null;
+                    String schoolId = j.has("school_id") ? j.get("school_id").getAsString() : null;
+                    String schoolName = j.has("school_name") ? j.get("school_name").getAsString() : null;
+
+                    if (!TextUtils.isEmpty(phone)
+                            && !TextUtils.isEmpty(schoolId)
+                            && !TextUtils.isEmpty(schoolName)) {
+                        String className = j.has("class_name") ? j.get("class_name").getAsString() : null;
+                        String contentText = TextUtils.isEmpty(className) ?
+                                getString(R.string.school_invitation_notification_content_text) :
+                                getString(R.string.school_invitation_notification_content_text_with_class_name,
+                                        className);
+
+                        Intent intent = new Intent(this, SchoolInvitationActivity.class)
+                                .putExtra(SchoolInvitationActivity.EXTRA_PHONE, phone)
+                                .putExtra(SchoolInvitationActivity.EXTRA_SCHOOL_ID, schoolId)
+                                .putExtra(SchoolInvitationActivity.EXTRA_CLASS_NAME, className)
+                                .putExtra(SchoolInvitationActivity.EXTRA_SCHOOL_NAME, schoolName);
+
+                        // use different request code each time
+                        // http://stackoverflow.com/questions/27255106/get-notification-intent-extras
+                        int reqCode = (int) (Calendar.getInstance().getTimeInMillis() & 0xFFFFFFFF);
+
+                        Notification noti = new NotificationCompat.Builder(this)
+                                .setSmallIcon(R.drawable.icon)
+                                .setTicker(getString(R.string.school_invitation_notification_ticker))
+                                .setContentTitle(schoolName)
+                                .setContentText(contentText)
+                                .setContentIntent(PendingIntent.getActivity(
+                                        this, reqCode, intent, 0))
+                                .setAutoCancel(true)
+                                .build();
+
+                        NotificationManager mNotificationManager = (NotificationManager)
+                                getSystemService(Context.NOTIFICATION_SERVICE);
+                        mNotificationManager.notify(100, noti);
+                    } else {
+                        Log.e("invalid School Structure Changed Notification: " + body);
+                    }
+                } else {
+                    Log.e("unknown event of School Structure Changed Notification: " + event);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else { // B
+            refresh();
+        }
     }
 }

@@ -1,10 +1,8 @@
 package org.wowtalk.api;
 
-import android.R.integer;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -1354,7 +1352,7 @@ public class LessonWebServerIF {
 				if (null != e)
 					homeworkID = Utils.tryParseInt(e.getTextContent(), 0);
 				Database db = new Database(mContext);
-				db.storeLessonAddHomework(addhomework,homeworkID);
+				db.storeLessonAddHomework(addhomework, homeworkID);
 			} else {
 				errno = Integer.parseInt(errorStr);
 			}
@@ -2144,4 +2142,23 @@ public class LessonWebServerIF {
         return errno;
     }
 
+	public int processInvitation(String phone, String schoolId, boolean accepted) {
+		int errno = -1;
+		String uid = mPrefUtil.getUid();
+		String password = mPrefUtil.getPassword();
+		if (uid == null || password == null)
+			return errno;
+
+		final String action = "process_invitation";
+		String postStr = "action=" + action +
+				"&uid=" + Utils.urlencodeUtf8(uid) +
+				"&password=" + Utils.urlencodeUtf8(password) +
+				"&phone=" + Utils.urlencodeUtf8(phone) +
+				"&school_id=" + Utils.urlencodeUtf8(schoolId) +
+				"&status=" + (accepted ? "accepted" : "rejected");
+
+		errno = _doRequestWithoutResponse(postStr);
+
+		return errno;
+	}
 }

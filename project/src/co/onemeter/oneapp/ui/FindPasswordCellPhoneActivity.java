@@ -108,16 +108,16 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
         mInputMethodManager = (InputMethodManager) this
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        txt_bind_account.setFocusable(true);
-        txt_bind_account.setFocusableInTouchMode(true);
-        txt_bind_account.requestFocus();
+        txt_bind_cellphone.setFocusable(true);
+        txt_bind_cellphone.setFocusableInTouchMode(true);
+        txt_bind_cellphone.requestFocus();
 
         Handler hanlder = new Handler();
         hanlder.postDelayed(new Runnable() {
 
             @Override
             public void run() {
-                mInputMethodManager.showSoftInput(txt_bind_account, InputMethodManager.RESULT_SHOWN);
+                mInputMethodManager.showSoftInput(txt_bind_cellphone, InputMethodManager.RESULT_SHOWN);
                 mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
             }
         }, 200);
@@ -297,14 +297,20 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
+                if (s.length() == 0 ) {
                     field_clear_cellphone.setVisibility(View.GONE);
                     btn_verification_cellphone.setTextColor(getResources().getColor(R.color.white_40));
                     btn_verification_cellphone.setEnabled(false);
                 } else {
                     field_clear_cellphone.setVisibility(View.VISIBLE);
-                    btn_verification_cellphone.setTextColor(getResources().getColor(R.color.white));
-                    btn_verification_cellphone.setEnabled(true);
+                    if (isPhoneNum(txt_bind_cellphone.getText().toString())) {
+                        btn_verification_cellphone.setTextColor(getResources().getColor(R.color.white));
+                        btn_verification_cellphone.setEnabled(true);
+                    } else {
+                        btn_verification_cellphone.setTextColor(getResources().getColor(R.color.white_40));
+                        btn_verification_cellphone.setEnabled(false);
+                    }
+
                 }
 
             }
@@ -488,12 +494,14 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
             //清除绑定手机号码中文本框中的内容
             case R.id.field_clear_cellphone:
                 txt_bind_cellphone.setText("");
+                textView_verification_cellphone_result.setVisibility(View.GONE);
                 btn_verification_cellphone.setTextColor(getResources().getColor(R.color.white_40));
                 btn_verification_cellphone.setEnabled(false);
                 break;
             //清除验证码文本框中的内容	
             case R.id.field_clear_auth_code:
                 txt_auth_code.setText("");
+                textView_verification_authCode_result.setVisibility(View.GONE);
                 btn_verification_auth_code.setTextColor(getResources().getColor(R.color.white_40));
                 btn_verification_auth_code.setEnabled(false);
                 break;
@@ -658,16 +666,17 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
 
                         break;
 
-                    case ErrorCode.OK://0:手机号码不存在
+                    case ErrorCode.OK://0:手机号码未注册
                         mMsgBox.dismissWait();
 
                         if (codeFlag == 1) {
-
+                            textView_verification_cellphone_result.setVisibility(View.VISIBLE);
+                            textView_verification_cellphone_result.setText("该手机号码未注册");
                         } else {
-
+                            textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                            textView_verification_authCode_result.setText("该手机号码未注册");
                         }
-                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
-                        textView_verification_authCode_result.setText("手机号码已存在");
+
                         break;
 
                     case ErrorCode.DB://3:数据库操作错误

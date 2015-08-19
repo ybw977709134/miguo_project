@@ -108,16 +108,16 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
         mInputMethodManager = (InputMethodManager) this
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        txt_bind_account.setFocusable(true);
-        txt_bind_account.setFocusableInTouchMode(true);
-        txt_bind_account.requestFocus();
+        txt_bind_cellphone.setFocusable(true);
+        txt_bind_cellphone.setFocusableInTouchMode(true);
+        txt_bind_cellphone.requestFocus();
 
         Handler hanlder = new Handler();
         hanlder.postDelayed(new Runnable() {
 
             @Override
             public void run() {
-                mInputMethodManager.showSoftInput(txt_bind_account, InputMethodManager.RESULT_SHOWN);
+                mInputMethodManager.showSoftInput(txt_bind_cellphone, InputMethodManager.RESULT_SHOWN);
                 mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
             }
         }, 200);

@@ -662,12 +662,13 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
                         mMsgBox.dismissWait();
 
                         if (codeFlag == 1) {
-
+                            textView_verification_cellphone_result.setVisibility(View.VISIBLE);
+                            textView_verification_cellphone_result.setText("手机号码已存在");
                         } else {
-
+                            textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                            textView_verification_authCode_result.setText("手机号码已存在");
                         }
-                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
-                        textView_verification_authCode_result.setText("手机号码已存在");
+
                         break;
 
                     case ErrorCode.DB://3:数据库操作错误

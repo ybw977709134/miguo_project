@@ -2142,6 +2142,50 @@ public class LessonWebServerIF {
         return errno;
     }
 
+	public int getMyInvitations(List<SchoolInvitation> output) {
+		String uid = mPrefUtil.getUid();
+		String password = mPrefUtil.getPassword();
+		if (uid == null || password == null)
+			return ErrorCode.NOT_LOGGED_IN;
+
+		final String action = "get_my_invitations";
+		String postStr = "action=" + action + "&uid="
+				+ Utils.urlencodeUtf8(uid) + "&password="
+				+ Utils.urlencodeUtf8(password);
+
+		Connect2 connect2 = new Connect2();
+		Element root = connect2.Post(postStr);
+
+		int errno = ErrorCode.BAD_RESPONSE;
+		if (root != null) {
+			NodeList errorList = root.getElementsByTagName("err_no");
+			Element errorElement = (Element) errorList.item(0);
+			String errorStr = errorElement.getFirstChild().getNodeValue();
+
+			if (errorStr.equals("0")) {
+				errno = ErrorCode.OK;
+
+				Element resultElement = Utils.getFirstElementByTagName(root,
+						action);
+				if (resultElement != null) {
+					NodeList invitationNodes = resultElement
+							.getElementsByTagName("invitation");
+					for (int i = 0; i < invitationNodes.getLength(); ++i) {
+						Node node = invitationNodes.item(i);
+						if (node instanceof Element) {
+							SchoolInvitation inv = XmlHelper
+									.parseSchoolInvitation((Element) node);
+							output.add(inv);
+						}
+					}
+				}
+			} else {
+				errno = Integer.parseInt(errorStr);
+			}
+		}
+		return errno;
+	}
+
 	public int processInvitation(String phone, String schoolId, boolean accepted) {
 		int errno = -1;
 		String uid = mPrefUtil.getUid();

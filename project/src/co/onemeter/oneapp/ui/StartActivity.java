@@ -1382,15 +1382,11 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
                                 getString(R.string.school_invitation_notification_content_text_with_class_name,
                                         className);
 
-                        Intent intent = new Intent(this, SchoolInvitationActivity.class)
-                                .putExtra(SchoolInvitationActivity.EXTRA_PHONE, phone)
-                                .putExtra(SchoolInvitationActivity.EXTRA_SCHOOL_ID, schoolId)
-                                .putExtra(SchoolInvitationActivity.EXTRA_CLASS_NAME, className)
-                                .putExtra(SchoolInvitationActivity.EXTRA_SCHOOL_NAME, schoolName);
+                        Intent intent = new Intent(this, SchoolInvitationActivity.class);
 
                         // use different request code each time
                         // http://stackoverflow.com/questions/27255106/get-notification-intent-extras
-                        int reqCode = (int) (Calendar.getInstance().getTimeInMillis() & 0xFFFFFFFF);
+                        int reqCode = 0; // (int) (Calendar.getInstance().getTimeInMillis() & 0xFFFFFFFF);
 
                         Notification noti = new NotificationCompat.Builder(this)
                                 .setSmallIcon(R.drawable.icon)

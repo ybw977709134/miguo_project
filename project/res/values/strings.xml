@@ -1018,6 +1018,7 @@
     <string name="accept">接受</string>
     <string name="reject">拒绝</string>
 	<string name="title_activity_school_invitation">SchoolInvitationActivity</string>
+    <string name="err_failed_to_load_data_with_errno">加载数据失败 (Error %d)</string>
 
 
 </resources>

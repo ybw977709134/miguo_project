@@ -3,7 +3,6 @@ package org.wowtalk.api;
 import android.content.Context;
 import android.graphics.PointF;
 import android.text.TextUtils;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -762,7 +761,7 @@ public class XmlHelper {
                 option.momentId=moment.id;
                 XmlHelper.parseOption(optionNode, option);
                 moment.surveyOptions.add(option);
-                Log.w("parser option "+option.optionDesc+", j="+j+", m="+m);
+                Log.w("parser option " + option.optionDesc + ", j=" + j + ", m=" + m);
             }
         }
     }
@@ -1405,5 +1404,62 @@ public class XmlHelper {
             performance.property_value = Integer.parseInt(e.getTextContent());
 
         return performance;
+    }
+
+    /**
+     * 解析 SchoolInvitation 数据结构。
+     *
+     * @param node
+     * @return 失败时返回 null，不会抛出异常。
+     */
+    public static SchoolInvitation parseSchoolInvitation(Element node) {
+        try {
+            SchoolInvitation inv = new SchoolInvitation();
+            Element e;
+
+            e = Utils.getFirstElementByTagName(node, "id");
+            if (e != null)
+                inv.id = Utils.tryParseInt(e.getTextContent(), 0);
+
+            e = Utils.getFirstElementByTagName(node, "phone");
+            if (e != null)
+                inv.phone = e.getTextContent();
+
+            e = Utils.getFirstElementByTagName(node, "status");
+            if (e != null)
+                inv.status = e.getTextContent();
+
+            e = Utils.getFirstElementByTagName(node, "school_id");
+            if (e != null)
+                inv.schoolId = e.getTextContent();
+
+            e = Utils.getFirstElementByTagName(node, "school_name");
+            if (e != null)
+                inv.schoolName = e.getTextContent();
+
+            NodeList classRoomNodes = node.getElementsByTagName("class");
+            if (classRoomNodes.getLength() > 0) {
+                int n = classRoomNodes.getLength();
+                inv.classroomIds = new String[n];
+                inv.classroomNames = new String[n];
+
+                for (int i = 0; i < n; ++i) {
+                    Element cn = (Element) classRoomNodes.item(i);
+
+                    e = Utils.getFirstElementByTagName(cn, "id");
+                    if (e != null)
+                        inv.classroomIds[i] = e.getTextContent();
+
+                    e = Utils.getFirstElementByTagName(cn, "name");
+                    if (e != null)
+                        inv.classroomNames[i] = e.getTextContent();
+                }
+            }
+
+            return inv;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

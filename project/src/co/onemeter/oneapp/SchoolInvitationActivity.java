@@ -1,48 +1,42 @@
 package co.onemeter.oneapp;
 
-import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.LessonWebServerIF;
+import org.wowtalk.api.SchoolInvitation;
 import org.wowtalk.ui.MessageBox;
 
-public class SchoolInvitationActivity extends Activity implements View.OnClickListener {
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-    public static final String EXTRA_PHONE = "phone";
-    public static final String EXTRA_SCHOOL_ID = "school_id";
-    public static final String EXTRA_SCHOOL_NAME = "school_name";
-    public static final String EXTRA_CLASS_NAME = "class_name";
+/**
+ * 展示学校邀请的列表。
+ */
+public class SchoolInvitationActivity extends ListActivity implements View.OnClickListener {
 
-    String phone;
-    String schoolId;
-    String schoolName;
-    String className;
+    /** 我收到的所有邀请 */
+    List<SchoolInvitation> invitations = new ArrayList<>();
+    SchoolInvitationAdatper adatper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_school_invitation);
 
         getArgs(getIntent().getExtras());
 
-        AQuery q = new AQuery(this);
-
-        String contentText = TextUtils.isEmpty(className) ?
-                getString(R.string.school_invitation_notification_content_text) :
-                getString(R.string.school_invitation_notification_content_text_with_class_name,
-                        className);
-
-        q.find(R.id.txt_content).text(schoolName + contentText);
-        q.find(R.id.btn_accept).clicked(this);
-        q.find(R.id.btn_reject).clicked(this);
+        loadData();
     }
 
     @Override
@@ -55,10 +49,6 @@ public class SchoolInvitationActivity extends Activity implements View.OnClickLi
 
     private void getArgs(Bundle args) {
         if (args != null) {
-            phone = args.getString(EXTRA_PHONE);
-            schoolId = args.getString(EXTRA_SCHOOL_ID);
-            schoolName = args.getString(EXTRA_SCHOOL_NAME);
-            className = args.getString(EXTRA_CLASS_NAME);
         }
     }
 
@@ -87,17 +77,34 @@ public class SchoolInvitationActivity extends Activity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_accept:
-                sendProcessInvitationRequest(true);
-                break;
-            case R.id.btn_reject:
-                sendProcessInvitationRequest(false);
-                break;
             default:
         }
     }
 
-    private void sendProcessInvitationRequest(final boolean accepted) {
+    private void loadData() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... voids) {
+                invitations.clear();
+                return LessonWebServerIF.getInstance(SchoolInvitationActivity.this)
+                        .getMyInvitations(invitations);
+            }
+
+            @Override
+            protected void onPostExecute(Integer errno) {
+                if (errno == ErrorCode.OK) {
+                    adatper = new SchoolInvitationAdatper(SchoolInvitationActivity.this,
+                            invitations);
+                    setListAdapter(adatper);
+                } else {
+                    new MessageBox(SchoolInvitationActivity.this)
+                            .toast(getString(R.string.err_failed_to_load_data_with_errno, errno));
+                }
+            }
+        });
+    }
+
+    private void sendProcessInvitationRequest(final String phone, final String schoolId, final boolean accepted) {
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... voids) {
@@ -116,5 +123,45 @@ public class SchoolInvitationActivity extends Activity implements View.OnClickLi
                 }
             }
         });
+    }
+
+    static class SchoolInvitationAdatper extends ArrayAdapter<SchoolInvitation> {
+        WeakReference<SchoolInvitationActivity> activityRef;
+
+        public SchoolInvitationAdatper(SchoolInvitationActivity activity, List<SchoolInvitation> objects) {
+            super(activity, R.layout.listitem_school_invitation, R.id.txt_content, objects);
+            activityRef = new WeakReference<>(activity);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = super.getView(position, convertView, parent);
+            AQuery q = new AQuery(view);
+
+            final SchoolInvitation obj = getItem(position);
+
+            String contentText = obj.classroomNames.length == 0 ?
+                    getContext().getString(R.string.school_invitation_notification_content_text) :
+                    getContext().getString(R.string.school_invitation_notification_content_text_with_class_name,
+                            Arrays.toString(obj.classroomNames));
+
+            q.find(R.id.txt_content).text(obj.schoolName + contentText);
+            q.find(R.id.btn_accept).clicked(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (activityRef.get() != null)
+                        activityRef.get().sendProcessInvitationRequest(obj.phone, obj.schoolId, true);
+                }
+            });
+            q.find(R.id.btn_reject).clicked(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (activityRef.get() != null)
+                        activityRef.get().sendProcessInvitationRequest(obj.phone, obj.schoolId, false);
+                }
+            });
+
+            return view;
+        }
     }
 }

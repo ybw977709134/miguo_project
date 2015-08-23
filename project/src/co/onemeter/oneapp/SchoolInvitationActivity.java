@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +35,10 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getArgs(getIntent().getExtras());
+        // 只是为了获得统一的外观
+        setContentView(R.layout.activity_school_invitations);
+
+        setupEventHandlers();
 
         loadData();
     }
@@ -43,13 +47,12 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        Bundle args = intent.getExtras();
-        getArgs(args);
+        loadData();
     }
 
-    private void getArgs(Bundle args) {
-        if (args != null) {
-        }
+    private void setupEventHandlers() {
+        AQuery q = new AQuery(this);
+        q.find(R.id.title_back).clicked(this);
     }
 
     @Override
@@ -77,7 +80,9 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            default:
+            case R.id.title_back:
+                onBackPressed();
+                break;
         }
     }
 
@@ -85,9 +90,14 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... voids) {
-                invitations.clear();
-                return LessonWebServerIF.getInstance(SchoolInvitationActivity.this)
-                        .getMyInvitations(invitations);
+                List<SchoolInvitation> list = new ArrayList<>();
+                int errno = LessonWebServerIF.getInstance(SchoolInvitationActivity.this)
+                        .getMyInvitations(list);
+                synchronized (invitations) {
+                    invitations.clear();
+                    invitations.addAll(list);
+                }
+                return errno;
             }
 
             @Override
@@ -117,7 +127,6 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
                 MessageBox messageBox = new MessageBox(SchoolInvitationActivity.this);
                 if (errno == ErrorCode.OK) {
                     messageBox.toast(R.string.operation_done);
-                    finish();
                 } else {
                     messageBox.toast(R.string.operation_failed);
                 }
@@ -140,26 +149,55 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
 
             final SchoolInvitation obj = getItem(position);
 
-            String contentText = obj.classroomNames.length == 0 ?
-                    getContext().getString(R.string.school_invitation_notification_content_text) :
-                    getContext().getString(R.string.school_invitation_notification_content_text_with_class_name,
-                            Arrays.toString(obj.classroomNames));
+            String contentText;
+            if (obj.classroomNames != null && obj.classroomNames.length > 0) {
+                contentText = getContext().getString(R.string.school_invitation_notification_content_text_with_class_name,
+                        Arrays.toString(obj.classroomNames));
+            } else {
+                contentText = getContext().getString(R.string.school_invitation_notification_content_text);
+            }
 
             q.find(R.id.txt_content).text(obj.schoolName + contentText);
             q.find(R.id.btn_accept).clicked(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (activityRef.get() != null)
+                    if (activityRef.get() != null) {
+                        obj.status = "accepted";
+                        activityRef.get().adatper.notifyDataSetChanged();
                         activityRef.get().sendProcessInvitationRequest(obj.phone, obj.schoolId, true);
+                    }
                 }
             });
             q.find(R.id.btn_reject).clicked(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (activityRef.get() != null)
+                    if (activityRef.get() != null) {
+                        obj.status = "rejected";
+                        activityRef.get().adatper.notifyDataSetChanged();
                         activityRef.get().sendProcessInvitationRequest(obj.phone, obj.schoolId, false);
+                    }
                 }
             });
+
+            // set status
+            if (TextUtils.equals(obj.status, "accepted")) {
+                q.find(R.id.txt_status).visible().text(R.string.school_invitation_status_accepted);
+                q.find(R.id.btn_accept).gone();
+                q.find(R.id.btn_reject).gone();
+            } else if (TextUtils.equals(obj.status, "rejected")) {
+                q.find(R.id.txt_status).visible().text(R.string.school_invitation_status_rejected);
+                q.find(R.id.btn_accept).gone();
+                q.find(R.id.btn_reject).gone();
+            } else if (TextUtils.equals(obj.status, "sent")) {
+                q.find(R.id.txt_status).gone();
+                q.find(R.id.btn_accept).visible();
+                q.find(R.id.btn_reject).visible();
+            } else {
+                // this shouldn't happen
+                q.find(R.id.txt_status).gone();
+                q.find(R.id.btn_accept).gone();
+                q.find(R.id.btn_reject).gone();
+            }
 
             return view;
         }

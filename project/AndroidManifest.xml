@@ -783,6 +783,8 @@
 
         <activity
             android:name=".SchoolInvitationActivity"
+            android:theme="@style/Theme.Blue_main"
+            android:launchMode="singleTop"
             android:label="@string/title_activity_school_invitation" >
         </activity>
     </application>

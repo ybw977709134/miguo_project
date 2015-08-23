@@ -1014,11 +1014,13 @@
     <string name="bind_mobile">手机号码</string>
     <string name="school_invitation_notification_ticker">有学校邀请您</string>
     <string name="school_invitation_notification_content_text">邀请您加入</string>
-    <string name="school_invitation_notification_content_text_with_class_name">邀请您加入[%s]</string>
+    <string name="school_invitation_notification_content_text_with_class_name">邀请您加入%s</string>
     <string name="accept">接受</string>
     <string name="reject">拒绝</string>
-	<string name="title_activity_school_invitation">SchoolInvitationActivity</string>
+	<string name="title_activity_school_invitation">学校邀请</string>
     <string name="err_failed_to_load_data_with_errno">加载数据失败 (Error %d)</string>
+    <string name="school_invitation_status_accepted">已接受</string>
+    <string name="school_invitation_status_rejected">已拒绝</string>
 
 
 </resources>

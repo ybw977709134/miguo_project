@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -153,6 +155,30 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
             closeSoftKeyboard();
         }
         return super.onTouchEvent(event);
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            MessageDialog dialog = new MessageDialog(MobileRegisterActivity.this);
+            dialog.setTitle("提示");
+            dialog.setRightBold(true);
+            dialog.setCancelable(false);
+            dialog.setMessage("别急着走哦，发送验证码可能需要一些时间，请耐心稍等，留在该页还是确定返回");
+            dialog.setOnLeftClickListener("返回",new MessageDialog.MessageDialogClickListener() {
+                @Override
+                public void onclick(MessageDialog dialog) {
+                    dialog.dismiss();
+                    MobileRegisterActivity.this.finish();
+                }
+            });
+
+            dialog.setOnRightClickListener("继续绑定",null);
+            dialog.show();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void closeSoftKeyboard() {
@@ -500,7 +526,23 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
                 break;
             case R.id.title_back:
             case R.id.textView_findPassword_back:
-                finish();
+
+                MessageDialog dialog = new MessageDialog(MobileRegisterActivity.this);
+                dialog.setTitle("提示");
+                dialog.setRightBold(true);
+                dialog.setCancelable(false);
+                dialog.setMessage("别急着走哦，发送验证码可能需要一些时间，请耐心稍等，留在该页还是确定返回");
+                dialog.setOnLeftClickListener("返回",new MessageDialog.MessageDialogClickListener() {
+                    @Override
+                    public void onclick(MessageDialog dialog) {
+                        dialog.dismiss();
+                        MobileRegisterActivity.this.finish();
+                    }
+                });
+
+                dialog.setOnRightClickListener("继续绑定",null);
+                dialog.show();
+
                 break;
             case R.id.textView_findPassword_cancel:
                 break;

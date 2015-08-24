@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +52,8 @@ public class ParentChatroomActivity extends Activity implements AdapterView.OnIt
     private boolean mIsFromHomeWork = false;
     private String[] path = new String[2];
 
+    private static final int REQ_Parent_Chat = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +73,7 @@ public class ParentChatroomActivity extends Activity implements AdapterView.OnIt
         listview = (ListView)findViewById(R.id.listview);
         listview.setOnItemClickListener(this);
         findViewById(R.id.title_back).setOnClickListener(this);
+        findViewById(R.id.btn_add).setOnClickListener(this);
 
         msgbox = new MessageBox(this);
 
@@ -181,6 +185,23 @@ public class ParentChatroomActivity extends Activity implements AdapterView.OnIt
     public void onClick(View v) {
         if(v.getId() == R.id.title_back){
             finish();
+        }
+
+        if (v.getId() == R.id.btn_add) {
+            Intent intent = new Intent(this,AddClassActivity.class);
+            startActivityForResult(intent, REQ_Parent_Chat);
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case  REQ_Parent_Chat:
+                    refresh();
+                    break;
+            }
         }
     }
 

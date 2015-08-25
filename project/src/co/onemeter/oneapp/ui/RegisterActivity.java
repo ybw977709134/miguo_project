@@ -77,15 +77,24 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			{
 				final String[] args = (String[])msg.obj;
 				mMsgBox.showWaitImageSuccess("注册成功");
+
+
 				new Thread(new Runnable() {
 					
 					@Override
 					public void run() {
 						try {
 							Thread.sleep(3000);
-							startActivity(new Intent(RegisterActivity.this, LoginActivity.class)
-							.putExtra(LoginActivity.EXTRA_USERNAME, args[0])
-							.putExtra(LoginActivity.EXTRA_PASSWORD, args[1]));
+
+                            Intent intent = new Intent (RegisterActivity.this, LoginActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString(LoginActivity.EXTRA_USERNAME, args[0]);
+                            bundle.putString(LoginActivity.EXTRA_PASSWORD, args[1]);
+                            intent.putExtras(bundle);
+							startActivity(intent);
+
+//							.putExtra(LoginActivity.EXTRA_USERNAME, args[0])
+//							.putExtra(LoginActivity.EXTRA_PASSWORD, args[1]));
 //							finish();
 						} catch (InterruptedException e) {
 							e.printStackTrace();

@@ -52,7 +52,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
         AQuery q = new AQuery(this);
         classrooms = new LinkedList<GroupChatRoom>();
 
-        if(getIntent().getBooleanExtra(TAG,false)){
+        if(!getIntent().getBooleanExtra(TAG,false)){
             q.find(R.id.title_back).visibility(View.VISIBLE);
         }
         q.find(R.id.title_back).clicked(this);
@@ -117,6 +117,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 //                }
 //            }
 //        });
+
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
@@ -132,32 +133,23 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
                     /*
                         处理无班级内容
                      */
-//                    View emptyView = lvMyClass.getEmptyView();
-//                    emptyView.setVisibility(View.GONE);
-//                    RelativeLayout lay_main = (RelativeLayout) findViewById(R.id.lay_myclass_main);
-//                    TextView textView = new TextView(MyClassesActivity.this);
-//                    textView.setText(getString(R.string.class_not_bind));
-//                    textView.setGravity(Gravity.CENTER);
-//                    RelativeLayout.LayoutParams params =
-//                            new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
-//                    textView.setLayoutParams(params);
-//                    lay_main.addView(textView);
-                	if(!getIntent().getBooleanExtra(TAG,false)){
-                		View emptyView = lvMyClass.getEmptyView();
-                        emptyView.setVisibility(View.GONE);
-                        RelativeLayout lay_main = (RelativeLayout) findViewById(R.id.lay_myclass_main);
-                        TextView textView = new TextView(MyClassesActivity.this);
-                        textView.setText(getString(R.string.class_not_bind));
-                        textView.setGravity(Gravity.CENTER);
-                        RelativeLayout.LayoutParams params =
-                              new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
-                        textView.setLayoutParams(params);
-                        lay_main.addView(textView);
-                	}else{
+
+//                	if(!getIntent().getBooleanExtra(TAG,false)){
+//                		View emptyView = lvMyClass.getEmptyView();
+//                        emptyView.setVisibility(View.GONE);
+//                        RelativeLayout lay_main = (RelativeLayout) findViewById(R.id.lay_myclass_main);
+//                        TextView textView = new TextView(MyClassesActivity.this);
+//                        textView.setText(getString(R.string.class_not_bind));
+//                        textView.setGravity(Gravity.CENTER);
+//                        RelativeLayout.LayoutParams params =
+//                              new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+//                        textView.setLayoutParams(params);
+//                        lay_main.addView(textView);
+//                	}else{
                 		lvMyClass.setVisibility(View.GONE);
                     	loading.setVisibility(View.GONE);
                     	layout_add_class.setVisibility(View.VISIBLE);
-                	}
+//                	}
                 	
                 }else {
                     adapter = new MyClassAdapter(classrooms);
@@ -191,22 +183,19 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
             public void onPostExecute(Integer errno) {
                 msgbox.dismissWait();
                 if (errno == ErrorCode.OK) {
-        			msgbox.showWaitImageSuccess("添加新课堂成功");
-                    
-                    
-                    new Thread(new Runnable() {
-						
-						@Override
-						public void run() {
-							try {
-								Thread.sleep(2000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-							setResult(RESULT_OK);
-		                    finish();
-						}
-					}).start();
+//        			msgbox.showWaitImageSuccess("添加新课堂成功");
+                    msgbox.toast("添加新课堂成功");
+
+
+                    lvMyClass.setVisibility(View.VISIBLE);
+                    loading.setVisibility(View.VISIBLE);
+                    layout_add_class.setVisibility(View.GONE);
+
+                    //刷新我的课堂
+                    refresh();
+
+
+
                 } else {
                     if (errno == ErrorCode.ERR_EXPIRED_INVITATION_CODE) {
                         msgbox.toast(R.string.invite_code_out_time, Toast.LENGTH_SHORT);
@@ -241,12 +230,48 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
             case R.id.btn_add:
             	submit();
             	break;
-//            case R.id.livingClass:
-//            	Intent intent = new Intent(this, VideoPlayingActivity.class);
-//            	startActivity(intent);
-//            	break;
+
         }
     }
+
+
+    //刷新组织架构
+    private void refresh() {
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... voids) {
+
+                List<GroupChatRoom> result = new LinkedList<>();
+                int errno = WowTalkWebServerIF.getInstance(MyClassesActivity.this).getMySchoolsErrno(true, result);
+                if (errno == ErrorCode.OK) {
+                    classrooms.clear();
+                    classrooms.addAll(result);
+                }
+
+                return errno;
+            }
+            @Override
+            public void onPostExecute(Integer errno) {
+                msgbox.dismissWait();
+                if (errno == ErrorCode.OK) {
+
+                    adapter = new MyClassAdapter(classrooms);
+                    lvMyClass.setAdapter(adapter);
+
+                    new Database(MyClassesActivity.this).storeSchools(classrooms);
+
+                } else {
+
+                   msgbox.toast(R.string.operation_failed);
+
+                }
+
+            }
+        });
+    }
+
+
+
 
     // 测试课堂相关的API
 //    private void test() {

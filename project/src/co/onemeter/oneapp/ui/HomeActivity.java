@@ -338,7 +338,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 //        }
 //        startActivityForResult(intent, REQ_ADD_CLASS);
     	Intent intent = new Intent(HomeActivity.this, MyClassesActivity.class);
-    	intent.putExtra(MyClassesActivity.TAG, true);
+//    	intent.putExtra(MyClassesActivity.TAG, true);
     	startActivityForResult(intent, REQ_ADD_CLASS);
     }
 

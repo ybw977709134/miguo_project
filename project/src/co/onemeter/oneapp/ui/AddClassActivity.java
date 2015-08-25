@@ -108,11 +108,12 @@ public class AddClassActivity extends Activity implements View.OnClickListener {
 						public void run() {
 							try {
 								Thread.sleep(3000);
+                                setResult(RESULT_OK);
+                                finish();
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
-							setResult(RESULT_OK);
-		                    finish();
+
 						}
 					}).start();
         			

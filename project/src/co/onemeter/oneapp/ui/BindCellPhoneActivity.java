@@ -562,13 +562,13 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
                     case ErrorCode.DB://3:数据库出错
                         mMsgBox.dismissWait();
                         textView_verification_cellphone_result.setVisibility(View.VISIBLE);
-                        textView_verification_cellphone_result.setText("访问服务器出错");
+                        textView_verification_cellphone_result.setText("请检查网络连接");
                         break;
 
                     default:
                         mMsgBox.dismissWait();
                         textView_verification_cellphone_result.setVisibility(View.VISIBLE);
-                        textView_verification_cellphone_result.setText("请检查网络");
+                        textView_verification_cellphone_result.setText("请检查网络连接");
                         break;
                 }
             }
@@ -613,7 +613,7 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
                     default:
                         mMsgBox.dismissWait();
                         textView_verification_cellphone_result.setVisibility(View.VISIBLE);
-                        textView_verification_cellphone_result.setText("访问的服务器出错");
+                        textView_verification_cellphone_result.setText("请检查网络连接");
                         break;
                 }
             }
@@ -697,7 +697,7 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
 
                     default:
                         textView_verification_cellphone_result.setVisibility(View.VISIBLE);
-                        textView_verification_cellphone_result.setText("访问的服务器出错");
+                        textView_verification_cellphone_result.setText("请检查网络连接");
                         break;
                 }
             }
@@ -757,7 +757,7 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
 
                     default:
                         textView_verification_authCode_result.setVisibility(View.VISIBLE);
-                        textView_verification_authCode_result.setText("访问的服务器出错");
+                        textView_verification_authCode_result.setText("请检查网络连接");
                         break;
                 }
             }

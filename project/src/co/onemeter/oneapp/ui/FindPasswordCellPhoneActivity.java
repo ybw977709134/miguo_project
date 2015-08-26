@@ -811,10 +811,10 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
                     default:
                         if (codeFlag == 1) {
                             textView_verification_cellphone_result.setVisibility(View.VISIBLE);
-                            textView_verification_cellphone_result.setText("访问的服务器出错");
+                            textView_verification_cellphone_result.setText("请检查网络连接");
                         } else {
                             textView_verification_authCode_result.setVisibility(View.VISIBLE);
-                            textView_verification_authCode_result.setText("访问的服务器出错");
+                            textView_verification_authCode_result.setText("请检查网络连接");
                         }
 
                         break;
@@ -879,7 +879,7 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
 
                     default:
                         textView_verification_authCode_result.setVisibility(View.VISIBLE);
-                        textView_verification_authCode_result.setText("访问的服务器出错");
+                        textView_verification_authCode_result.setText("请检查网络连接");
                         break;
                 }
             }

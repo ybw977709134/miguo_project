@@ -677,7 +677,7 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
      */
 
     private void getAccessCode (final String cellPhone) {
-        mMsgBox.showWaitProgressbar("验证中");
+        mMsgBox.showWaitProgressbar("发送中");
 
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
 

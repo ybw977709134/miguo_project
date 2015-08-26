@@ -87,6 +87,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 						try {
 							Thread.sleep(3000);
 
+                            mMsgBox.dismissWait();
                             Intent intent = new Intent (RegisterActivity.this, LoginActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putString(LoginActivity.EXTRA_USERNAME, args[0]);

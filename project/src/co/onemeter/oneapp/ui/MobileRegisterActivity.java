@@ -704,10 +704,10 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
 
                         if (codeFlag == 1) {
                             textView_verification_cellphone_result.setVisibility(View.VISIBLE);
-                            textView_verification_cellphone_result.setText("手机号码已被注册，请使用其他手机号注册");
+                            textView_verification_cellphone_result.setText("手机号码已被注册或绑定，请使用其他手机号注册");
                         } else {
                             textView_verification_authCode_result.setVisibility(View.VISIBLE);
-                            textView_verification_authCode_result.setText("手机号码已被注册，请使用其他手机号注册");
+                            textView_verification_authCode_result.setText("手机号码已被注册或绑定，请使用其他手机号注册");
                         }
 
                         break;

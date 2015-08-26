@@ -917,6 +917,15 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
                             public void run() {
                                 try {
                                     Thread.sleep(3000);
+
+                                    mMsgBox.dismissWait();
+                                    Intent intent = new Intent (FindPasswordCellPhoneActivity.this, LoginActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString(LoginActivity.EXTRA_USERNAME, cellPhone);
+                                    bundle.putString(LoginActivity.EXTRA_PASSWORD, password);
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }

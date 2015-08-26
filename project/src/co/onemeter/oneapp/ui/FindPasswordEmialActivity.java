@@ -12,6 +12,7 @@ import co.onemeter.oneapp.R;
 import co.onemeter.utils.AsyncTaskExecutor;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -769,6 +770,15 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 							public void run() {
 								try {
 									Thread.sleep(3000);
+
+                                    mMsgBox.dismissWait();
+                                    Intent intent = new Intent (FindPasswordEmialActivity.this, LoginActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString(LoginActivity.EXTRA_USERNAME, wowtalk_id);
+                                    bundle.putString(LoginActivity.EXTRA_PASSWORD, password);
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}

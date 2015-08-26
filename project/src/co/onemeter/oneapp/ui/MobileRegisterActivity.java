@@ -101,6 +101,13 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
     };
 
 
+
+    private static int BIND_cellphone_PAGE = 1;//验证绑定手机号码阶段
+    private static int AUTH_CODE_PAGE = 2;//验证验证码阶段
+    //验证阶段判断标志
+    private int pageFlag = BIND_cellphone_PAGE;//默认为验证绑定手机号码阶段
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,22 +169,61 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-            MessageDialog dialog = new MessageDialog(MobileRegisterActivity.this);
-            dialog.setTitle("提示");
-            dialog.setRightBold(true);
-            dialog.setCancelable(false);
-            dialog.setMessage("别急着走哦，发送验证码可能需要一些时间，请耐心稍等，留在该页还是确定返回");
-            dialog.setOnLeftClickListener("返回",new MessageDialog.MessageDialogClickListener() {
-                @Override
-                public void onclick(MessageDialog dialog) {
-                    dialog.dismiss();
-                    MobileRegisterActivity.this.finish();
-                }
-            });
+            if (pageFlag == BIND_cellphone_PAGE) {
 
-            dialog.setOnRightClickListener("继续绑定",null);
-            dialog.show();
+                closeSoftKeyboard();
+
+                MessageDialog dialog = new MessageDialog(MobileRegisterActivity.this);
+                dialog.setTitle("提示");
+                dialog.setRightBold(true);
+                dialog.setCancelable(false);
+                dialog.setMessage("别急着走哦，发送验证码可能需要一些时间，请耐心稍等，留在该页还是确定返回");
+                dialog.setOnLeftClickListener("返回",new MessageDialog.MessageDialogClickListener() {
+                    @Override
+                    public void onclick(MessageDialog dialog) {
+                        dialog.dismiss();
+                        MobileRegisterActivity.this.finish();
+                    }
+                });
+
+                dialog.setOnRightClickListener("继续绑定",null);
+                dialog.show();
+
+            } else {
+                pageFlag = BIND_cellphone_PAGE;
+
+
+                if (mTimer != null) {
+                    mTimer.cancel();
+                }
+                layout_verification_auth_code.setVisibility(View.GONE);
+                layout_verification_cellphone.setVisibility(View.VISIBLE);
+                txt_auth_code.setText("");
+                txt_bind_cellphone.setText("");
+                textView_verification_cellphone_result.setVisibility(View.GONE);
+                textView_verification_authCode_result.setVisibility(View.GONE);
+            }
+
+
+
+//            MessageDialog dialog = new MessageDialog(MobileRegisterActivity.this);
+//            dialog.setTitle("提示");
+//            dialog.setRightBold(true);
+//            dialog.setCancelable(false);
+//            dialog.setMessage("别急着走哦，发送验证码可能需要一些时间，请耐心稍等，留在该页还是确定返回");
+//            dialog.setOnLeftClickListener("返回",new MessageDialog.MessageDialogClickListener() {
+//                @Override
+//                public void onclick(MessageDialog dialog) {
+//                    dialog.dismiss();
+//                    MobileRegisterActivity.this.finish();
+//                }
+//            });
+//
+//            dialog.setOnRightClickListener("继续绑定",null);
+//            dialog.show();
+
         }
+
         return super.onKeyDown(keyCode, event);
     }
 
@@ -527,21 +573,60 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
             case R.id.title_back:
             case R.id.textView_findPassword_back:
 
-                MessageDialog dialog = new MessageDialog(MobileRegisterActivity.this);
-                dialog.setTitle("提示");
-                dialog.setRightBold(true);
-                dialog.setCancelable(false);
-                dialog.setMessage("别急着走哦，发送验证码可能需要一些时间，请耐心稍等，留在该页还是确定返回");
-                dialog.setOnLeftClickListener("返回",new MessageDialog.MessageDialogClickListener() {
-                    @Override
-                    public void onclick(MessageDialog dialog) {
-                        dialog.dismiss();
-                        MobileRegisterActivity.this.finish();
-                    }
-                });
 
-                dialog.setOnRightClickListener("继续绑定",null);
-                dialog.show();
+                if (pageFlag == BIND_cellphone_PAGE) {
+
+                    closeSoftKeyboard();
+
+                    MessageDialog dialog = new MessageDialog(MobileRegisterActivity.this);
+                    dialog.setTitle("提示");
+                    dialog.setRightBold(true);
+                    dialog.setCancelable(false);
+                    dialog.setMessage("别急着走哦，发送验证码可能需要一些时间，请耐心稍等，留在该页还是确定返回");
+                    dialog.setOnLeftClickListener("返回",new MessageDialog.MessageDialogClickListener() {
+                        @Override
+                        public void onclick(MessageDialog dialog) {
+                            dialog.dismiss();
+                            MobileRegisterActivity.this.finish();
+                        }
+                    });
+
+                    dialog.setOnRightClickListener("继续绑定",null);
+                    dialog.show();
+
+                } else {
+                    pageFlag = BIND_cellphone_PAGE;
+
+
+                    if (mTimer != null) {
+                        mTimer.cancel();
+                    }
+                    layout_verification_auth_code.setVisibility(View.GONE);
+                    layout_verification_cellphone.setVisibility(View.VISIBLE);
+                    txt_auth_code.setText("");
+                    txt_bind_cellphone.setText("");
+                    textView_verification_cellphone_result.setVisibility(View.GONE);
+                    textView_verification_authCode_result.setVisibility(View.GONE);
+                }
+
+
+
+
+//                MessageDialog dialog = new MessageDialog(MobileRegisterActivity.this);
+//                dialog.setTitle("提示");
+//                dialog.setRightBold(true);
+//                dialog.setCancelable(false);
+//                dialog.setMessage("别急着走哦，发送验证码可能需要一些时间，请耐心稍等，留在该页还是确定返回");
+//                dialog.setOnLeftClickListener("返回",new MessageDialog.MessageDialogClickListener() {
+//                    @Override
+//                    public void onclick(MessageDialog dialog) {
+//                        dialog.dismiss();
+//                        MobileRegisterActivity.this.finish();
+//                    }
+//                });
+//
+//                dialog.setOnRightClickListener("继续绑定",null);
+//                dialog.show();
 
                 break;
             case R.id.textView_findPassword_cancel:
@@ -783,6 +868,7 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
 
                         mMsgBox.toast("验证码以短信已经发送到你的手机，请注意接收");
 
+                        pageFlag = AUTH_CODE_PAGE;
                         layout_verification_auth_code.setVisibility(View.VISIBLE);
                         layout_verification_cellphone.setVisibility(View.GONE);
                         textView_show_bind_cellphone.setVisibility(View.VISIBLE);

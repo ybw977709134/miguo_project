@@ -69,6 +69,8 @@ public class RegisterActivity extends Activity implements OnClickListener{
     private InputMethodManager mInputMethodManager;
 	
 	private Buddy buddy = new Buddy();
+
+    /*注册成功后自动登录到应用的首页*/
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			
@@ -77,7 +79,6 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			{
 				final String[] args = (String[])msg.obj;
 				mMsgBox.showWaitImageSuccess("注册成功");
-
 
 				new Thread(new Runnable() {
 					
@@ -107,10 +108,8 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			break;
 			
 			case MSG_USER_ALREADY_EXIST:
-			{
 				textView_verification_newPassword.setVisibility(View.VISIBLE);
 	        	textView_verification_newPassword.setText(getResources().getString(R.string.reg_failed_username_was_taken));
-			}
 			break;
 			
 			default:
@@ -120,12 +119,13 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			}
 		}
 	};
-	
+
+    /**
+     * 初始化各个控件
+     */
 	private void initView() {
 
         cellPhone = getIntent().getStringExtra("cellPhone");
-
-
 		layout_register = (RelativeLayout) findViewById(R.id.layout_register);
 		
 		layout_register.setOnTouchListener(new OnTouchListener() {
@@ -424,6 +424,7 @@ public class RegisterActivity extends Activity implements OnClickListener{
 				public void run() {
                     int result = WowTalkWebServerIF.getInstance(RegisterActivity.this)
                             .fRegister(cellPhone, strPassword, userType, buddy);
+
 					Log.i("register, the result_code is " + result);
 
 					Message msg = Message.obtain();
@@ -431,9 +432,11 @@ public class RegisterActivity extends Activity implements OnClickListener{
 						msg.what = MSG_REGISTER_SUCCESS;
 						msg.obj = new String[]{ cellPhone, strPassword };
 						mHandler.sendMessage(msg);
+
 					} else if (result == ErrorCode.USER_ALREADY_EXISTS) {
 						msg.what = MSG_USER_ALREADY_EXIST;
 						mHandler.sendMessage(msg);
+
 					} else {
 						msg.what = MSG_ERROR_UNKNOWN;
 						mHandler.sendMessage(msg);
@@ -449,6 +452,8 @@ public class RegisterActivity extends Activity implements OnClickListener{
 			return;
 		}
 	}
+
+
 	
 	/**
 	 * 验证两次输入的密码是否一致

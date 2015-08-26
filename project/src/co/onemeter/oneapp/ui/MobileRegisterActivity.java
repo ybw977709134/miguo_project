@@ -851,7 +851,7 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
 
                     case ErrorCode.OK://0//验证码验证成功
 
-                        //跳转到绑定手机号码页面
+                        //跳转到注册密码输入页面
 
                        Intent registerIntent = new Intent(MobileRegisterActivity.this,RegisterActivity.class);
                        registerIntent.putExtra("cellPhone",cellPhone);

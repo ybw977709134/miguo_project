@@ -19,7 +19,6 @@
             android:layout_width="20dp"
             android:layout_alignParentLeft="true"
             android:background="@null"
-            android:visibility="gone"
             android:src="@drawable/icon_back_selector"/>
 
         <!-- 绑定手机页表头的文本 -->
@@ -33,7 +32,6 @@
             android:textSize="16sp"
             android:clickable="true"
             android:onClick="clickButton"
-            android:visibility="gone"
             android:text="返回"/>
 
         <TextView

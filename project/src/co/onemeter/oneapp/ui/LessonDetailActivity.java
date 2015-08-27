@@ -45,6 +45,8 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 	private int lessonId;
 	private String classId;
 	private String schoolId;
+    private String className;
+    private String lessonName;
 	private Lesson lesson;
 	private long startdate;
 	private long enddate;
@@ -85,7 +87,10 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		AQuery q = new AQuery(this);
 		Intent intent = getIntent();
 		if(null != intent){
-			q.find(R.id.lesson_title).text(intent.getStringExtra("title"));
+
+            className = intent.getStringExtra("classname");
+            lessonName = intent.getStringExtra("title");
+			q.find(R.id.lesson_title).text(lessonName);
 			lessonId = intent.getIntExtra(Constants.LESSONID,0);
 			classId = intent.getStringExtra("classId");
 			lesson = intent.getParcelableExtra("lesson");
@@ -248,6 +253,8 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 		case R.id.les_lay_second:
 			intent.setClass(this, HomeworkActivity.class);
 			intent.putExtra("schoolId", schoolId);
+            intent.putExtra("class_name", className);
+            intent.putExtra("lesson_name", lessonName);
 			startActivity(intent);
 
 			break;

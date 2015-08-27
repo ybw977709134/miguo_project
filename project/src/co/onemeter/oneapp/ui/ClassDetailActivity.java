@@ -287,57 +287,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 
 		});
 	}
-//	private void getSchoolClassFromServer(){
-//        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
-//
-//            protected void onPreExecute() {
-//                //msgBox.showWait();
-//            }
-//
-//            ;
-//
-//            @Override
-//            protected Void doInBackground(Void... params) {
-//            	schoolrooms.clear();
-////                schoolrooms = talkwebserver.getMySchools(true);
-//                errno = mWTWebSer.getMySchoolsErrno(true, schoolrooms);
-//                return null;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Void result) {
-//                if (errno == ErrorCode.OK) {
-//                	new Database(ClassDetailActivity.this).storeSchools(schoolrooms);
-//                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
-//
-//                        @Override
-//                        protected Void doInBackground(Void... params) {
-//                        	classrooms.clear();
-//                            for (GroupChatRoom school : schoolrooms) {
-//                                List<GroupChatRoom> claz = mWTWebSer.getSchoolClassRooms(school.groupID);
-//                                for (GroupChatRoom classroom : claz) {
-//                                    classrooms.add(classroom);
-//                                }
-//                            }
-//                            return null;
-//                        }
-//
-//                        protected void onPostExecute(Void result) {
-//                            //msgBox.dismissWait();
-//                            adapter = new MyClassAdapter(classrooms);
-//                            lvMyClass.setAdapter(adapter);
-//                        }
-//
-//                        ;
-//                    });
-//                } else {
-//                    //msgBox.dismissWait();
-//                    Toast.makeText(ClassDetailActivity.this,R.string.conn_time_out,Toast.LENGTH_LONG).show();
-//                    finish();
-//                }
-//            }
-//        });
-//	}
+
+
 	private void  getLessonsFromServer(){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
@@ -354,6 +305,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 
 			});
 	}
+
+
 	private void getClassInfo(final String classId,final GroupChatRoom g){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
@@ -382,6 +335,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 
 		});
 	}
+
+
 	private void refreshLessonInfo(){
 		lessons.clear();
 		Database db = Database.open(ClassDetailActivity.this);
@@ -397,7 +352,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		}
         return str.split(Constants.COMMA, -1); // 第二个参数传 -1, 保留空字段
 	}
-	
+
+
 	private View footerView() {
 		View view = getLayoutInflater().inflate(R.layout.drawerlay_lv_footer, null);
 		TextView txt_footer = (TextView) view.findViewById(R.id.txt_footer_add);
@@ -406,31 +362,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		layout.setOnClickListener(this);	
 		return view;
 	}
-//	private void setClassInfo(){
-//		final Handler hanlder = new Handler();
-//		
-//		new Thread(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				int errno = WowTalkWebServerIF.getInstance(ClassDetailActivity.this).fGroupChat_GetByID(classId, class_group);
-////				android.util.Log.i("-->>", class_group.description);
-//				if(errno == ErrorCode.OK){
-//					hanlder.post(new Runnable() {
-//						
-//						@Override
-//						public void run() {
-//							if(class_group != null){
-//								refreshClassInfo();
-//							}
-//						}
-//					});
-//				}
-//			}
-//		}).start();
-//		
-//			
-//	}
+
 
     /**
      * 重新初始化班级信息
@@ -502,6 +434,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			}
 			
 			break;
+
 		case R.id.class_live_class:
 			currentTime = System.currentTimeMillis()/1000;
 //			String time = tvTime.getText().toString().substring(5);
@@ -539,23 +472,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 
 				}else{//有直播的课程跳转到摄像头页面
 
-//					String[] times = time.split(":");
-//					String[] lengths = length.split(":");
-//					String[] startTimes = start_time.split(":");
-//					String[] endTimes = end_time.split(":");
-//					startDateStamps =Integer.parseInt(startTimes[0])*3600 + Integer.parseInt(startTimes[1])*60;
-//					endDateStamps =Integer.parseInt(endTimes[0])*3600 + Integer.parseInt(endTimes[1])*60;
-					
-//					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//					for(Lesson lesson:lessons){
-//						String date = sdf.format(new Date(lesson.start_date * 1000));
-//						String[] dates = date.split("-");
-//						long timeStamps = Utils.getTimeStamp(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]), Integer.parseInt(dates[2]))/1000;
-//						if(currentTime > lesson_Live.start_date && currentTime < lesson_Live.end_date){
-//							lessonId = lesson.lesson_id;
-//							lessonName = lesson.title;
-//							}
-//						}
 					if(currentTime > lesson_Live.start_date && currentTime < lesson_Live.end_date){
 						lessonId = lesson_Live.lesson_id;
 						lessonName = lesson_Live.title;
@@ -569,20 +485,22 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 					startActivity(intent);
 				}
 			}
-				
-
 			break;
+
 		case R.id.more:
 			showMore(v);
 			break;
+
 		case R.id.btn_gotoclass:
 			Intent intent = new Intent(this,TimelineActivity.class);
 			startActivity(intent);
 			break;
+
 		case R.id.lay_footer_add:
 			Intent i = new Intent(this,AddClassActivity.class);
 			startActivityForResult(i, 1001);
 			break;
+
 		case R.id.btn_tea_stu_list:
 		case R.id.tv_tea_stu_list:
 			Intent data = new Intent(this,ClassMembersActivity.class);
@@ -615,6 +533,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			result.putExtra("classId",classId);
 			startActivity(result);
 			break;
+
         case R.id.btn_photo_answering:
         case R.id.tv_photo_answering:
             final BottomButtonBoard board = new BottomButtonBoard(this,v);
@@ -635,6 +554,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
             board.addCancelBtn(getString(R.string.cancel));
             board.show();
             break;
+
         case R.id.btn_homework_online:
         case R.id.tv_homework_online:
         	Intent homeworkIntent = new Intent(this, TeacherSignActivity.class);
@@ -643,19 +563,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
         	homeworkIntent.putExtra("homework", "homework");
         	homeworkIntent.putExtra("classname",myclasses_title.getText().toString());
         	startActivity(homeworkIntent);
-//            MessageDialog dialog = new MessageDialog(this);
-//            dialog.setIsDouleBtn(false);
-//            dialog.setTitle("");
-//            dialog.setMessage("请拍下作业,发送给老师");
-//            dialog.setOnLeftClickListener("确定", new MessageDialog.MessageDialogClickListener() {
-//                @Override
-//                public void onclick(MessageDialog dialog) {
-//                    dialog.dismiss();
-//                    mMediaHelper.takePhoto(ClassDetailActivity.this, REQ_TAKE_PHO);
-//                }
-//            });
-//            dialog.show();
             break;
+
         case R.id.btn_apply_lesson:
         case R.id.tv_apply_lesson:
         	MessageDialog dialog_apply_lesson = new MessageDialog(this);
@@ -670,6 +579,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
             });
         	dialog_apply_lesson.show();
         	break;
+
 		default:
 			break;
 		}
@@ -710,9 +620,11 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                             rePlace;
                     getClassInfo(classId,class_group);
                     break;
+
                 case 1001:
                     getSchoolClassFromServer();
                     break;
+
                 case REQ_TAKE_PHO:
                     String[] photoPath = new String[2];
                     boolean isSuccess = MediaUtils.handleImageResult(this,mMediaHelper,new Intent().setData(mMediaHelper.getLastImageUri()),photoPath);
@@ -722,12 +634,15 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
                                 .putExtra(TeacherInClassActivity.INTENT_CLASSID, classId));
                     }
                     break;
+
                 case REQ_TAKE_PHO_DOOLE:
                     goDoodle(new Intent().setData(mMediaHelper.getLastImageUri()));
                     break;
+
                 case REQ_PICK_PHO_DOOLE:
                     goDoodle(data);
                     break;
+
                 case REQ_SEND_DOODLE:
                     photoPath = new String[2];
                     photoPath[0] = outputfilename;
@@ -825,6 +740,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		intent.setClass(this, LessonDetailActivity.class);
 		intent.putExtra(Constants.LESSONID, lessons.get(position).lesson_id);
 		intent.putExtra("title", lessons.get(position).title);
+        intent.putExtra("classname",myclasses_title.getText().toString());
 		intent.putExtra("classId", classId);
 		intent.putExtra("schoolId", schoolId);
 		intent.putExtra("lesson", lessons.get(position));

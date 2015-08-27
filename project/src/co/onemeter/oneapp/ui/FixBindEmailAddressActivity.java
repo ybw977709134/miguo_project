@@ -41,8 +41,8 @@ import android.widget.Toast;
  *
  */
 public class FixBindEmailAddressActivity extends Activity implements OnClickListener{
-	
-	private RelativeLayout layout_fix_bind_email;
+    private RelativeLayout layout_fix_bind_email;
+
 	InputMethodManager mInputMethodManager ;
 	private ImageButton title_back;
 	private TextView textView_fixBindEmail_back;//返回

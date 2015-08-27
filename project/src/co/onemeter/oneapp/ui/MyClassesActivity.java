@@ -183,9 +183,8 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
             public void onPostExecute(Integer errno) {
                 msgbox.dismissWait();
                 if (errno == ErrorCode.OK) {
-//        			msgbox.showWaitImageSuccess("添加新课堂成功");
-                    msgbox.toast("添加新课堂成功");
 
+                    msgbox.toast("添加新课堂成功");
 
                     lvMyClass.setVisibility(View.VISIBLE);
                     loading.setVisibility(View.VISIBLE);
@@ -193,8 +192,6 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
 
                     //刷新我的课堂
                     refresh();
-
-
 
                 } else {
                     if (errno == ErrorCode.ERR_EXPIRED_INVITATION_CODE) {

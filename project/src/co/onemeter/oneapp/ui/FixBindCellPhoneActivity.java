@@ -398,7 +398,9 @@ public class FixBindCellPhoneActivity extends Activity implements View.OnClickLi
 
                         //跳转到绑定手机号码页面
                         Intent bindPhone = new Intent(FixBindCellPhoneActivity.this,BindCellPhoneActivity.class);
+                        bindPhone.putExtra(FIX_BIND_CELLPHONE, true);
                         startActivity(bindPhone);
+                        FixBindCellPhoneActivity.this.finish();
 
                         break;
 

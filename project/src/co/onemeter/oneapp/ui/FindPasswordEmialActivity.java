@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -94,6 +95,11 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 			}
 		};
 	};
+
+    private static int FIND_EMAIL_PAGE = 1;//验证绑定手机号码阶段
+    private static int AUTH_CODE_PAGE = 2;//验证验证码阶段
+    //验证阶段判断标志
+    private int pageFlag = FIND_EMAIL_PAGE;//默认为验证绑定手机号码阶段
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +155,53 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
     			  closeSoftKeyboard();			  
     	  }
     	return super.onTouchEvent(event);
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            if (pageFlag == FIND_EMAIL_PAGE) {
+
+                closeSoftKeyboard();
+                FindPasswordEmialActivity.this.finish();
+
+            } else {
+
+                MessageDialog dialog = new MessageDialog(FindPasswordEmialActivity.this);
+                dialog.setTitle("提示");
+                dialog.setRightBold(true);
+                dialog.setCancelable(false);
+                dialog.setMessage("别急着走哦，发送验证码可能需要一些时间，请耐心稍等，留在该页还是确定返回");
+                dialog.setOnLeftClickListener("返回上页",new MessageDialog.MessageDialogClickListener() {
+                    @Override
+                    public void onclick(MessageDialog dialog) {
+                        dialog.dismiss();
+
+                        pageFlag = FIND_EMAIL_PAGE;
+
+                        if (mTimer != null) {
+                            mTimer.cancel();
+                        }
+
+                        layout_verification_auth_code.setVisibility(View.GONE);
+                        layout_verification_email.setVisibility(View.VISIBLE);
+                        txt_auth_code.setText("");
+                        txt_bind_email.setText("");
+                        textView_verification_email_result.setVisibility(View.GONE);
+                        textView_verification_authCode_result.setVisibility(View.GONE);
+
+                    }
+                });
+
+                dialog.setOnRightClickListener("继续等待",null);
+                dialog.show();
+            }
+
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
     
     private void closeSoftKeyboard() {
@@ -480,6 +533,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 		case R.id.field_clear_account:
 			txt_bind_account.setText("");
 			break;
+        
 		//清除绑定邮箱中文本框中的内容
 		case R.id.field_clear_email:
 			txt_bind_email.setText("");
@@ -487,6 +541,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 			btn_verification_email.setTextColor(getResources().getColor(R.color.white_40));
 			btn_verification_email.setEnabled(false);
 			break;
+        
 		//清除验证码文本框中的内容	
 		case R.id.field_clear_auth_code:
 			txt_auth_code.setText("");
@@ -494,10 +549,47 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
 			btn_verification_auth_code.setTextColor(getResources().getColor(R.color.white_40));
 			btn_verification_auth_code.setEnabled(false);
 			break;
+        
 		case R.id.title_back:
 		case R.id.textView_findPassword_back:
-			finish();
+            if (pageFlag == FIND_EMAIL_PAGE) {
+
+                closeSoftKeyboard();
+                FindPasswordEmialActivity.this.finish();
+
+            } else {
+
+                MessageDialog dialog = new MessageDialog(FindPasswordEmialActivity.this);
+                dialog.setTitle("提示");
+                dialog.setRightBold(true);
+                dialog.setCancelable(false);
+                dialog.setMessage("别急着走哦，发送验证码可能需要一些时间，请耐心稍等，留在该页还是确定返回");
+                dialog.setOnLeftClickListener("返回上页",new MessageDialog.MessageDialogClickListener() {
+                    @Override
+                    public void onclick(MessageDialog dialog) {
+                        dialog.dismiss();
+
+                        pageFlag = FIND_EMAIL_PAGE;
+
+                        if (mTimer != null) {
+                            mTimer.cancel();
+                        }
+
+                        layout_verification_auth_code.setVisibility(View.GONE);
+                        layout_verification_email.setVisibility(View.VISIBLE);
+                        txt_auth_code.setText("");
+                        txt_bind_email.setText("");
+                        textView_verification_email_result.setVisibility(View.GONE);
+                        textView_verification_authCode_result.setVisibility(View.GONE);
+
+                    }
+                });
+
+                dialog.setOnRightClickListener("继续等待",null);
+                dialog.show();
+            }
 			break;
+        
 		case R.id.textView_findPassword_cancel:
 			break;
 			
@@ -646,6 +738,8 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                
                 switch (result) {
                     case ErrorCode.OK://0
+
+                        pageFlag = AUTH_CODE_PAGE;
                     	layout_verification_auth_code.setVisibility(View.VISIBLE);
         				layout_verification_email.setVisibility(View.GONE);
         				textView_show_bind_email.setVisibility(View.VISIBLE);

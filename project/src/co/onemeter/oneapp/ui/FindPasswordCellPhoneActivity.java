@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.WowTalkWebServerIF;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -86,6 +88,8 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
     private Timer mTimer;
     private int codeFlag = 1;//1-代表第一次获取验证码，2-代表再次获取验证码
 
+
+
     private Handler mHandler = new Handler(){
         public void handleMessage(android.os.Message msg) {
             if (msg.what == 0) {
@@ -98,6 +102,12 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
             }
         };
     };
+
+
+    private static int FIND_CELLPHONE_PAGE = 1;//验证绑定手机号码阶段
+    private static int AUTH_CODE_PAGE = 2;//验证验证码阶段
+    //验证阶段判断标志
+    private int pageFlag = FIND_CELLPHONE_PAGE;//默认为验证绑定手机号码阶段
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +164,54 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
         }
         return super.onTouchEvent(event);
     }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            if (pageFlag == FIND_CELLPHONE_PAGE) {
+
+                closeSoftKeyboard();
+                FindPasswordCellPhoneActivity.this.finish();
+
+            } else {
+
+                MessageDialog dialog = new MessageDialog(FindPasswordCellPhoneActivity.this);
+                dialog.setTitle("提示");
+                dialog.setRightBold(true);
+                dialog.setCancelable(false);
+                dialog.setMessage("别急着走哦，发送验证码可能需要一些时间，请耐心稍等，留在该页还是确定返回");
+                dialog.setOnLeftClickListener("返回上页",new MessageDialog.MessageDialogClickListener() {
+                    @Override
+                    public void onclick(MessageDialog dialog) {
+                        dialog.dismiss();
+
+                        pageFlag = FIND_CELLPHONE_PAGE;
+
+                        if (mTimer != null) {
+                            mTimer.cancel();
+                        }
+
+                        layout_verification_auth_code.setVisibility(View.GONE);
+                        layout_verification_cellphone.setVisibility(View.VISIBLE);
+                        txt_auth_code.setText("");
+                        txt_bind_cellphone.setText("");
+                        textView_verification_cellphone_result.setVisibility(View.GONE);
+                        textView_verification_authCode_result.setVisibility(View.GONE);
+
+                    }
+                });
+
+                dialog.setOnRightClickListener("继续等待",null);
+                dialog.show();
+            }
+
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
 
     private void closeSoftKeyboard() {
         if (txt_bind_cellphone.hasFocus()) {
@@ -488,10 +546,12 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+
             //清空账号输入框中的内容
             case R.id.field_clear_account:
                 txt_bind_account.setText("");
                 break;
+
             //清除绑定手机号码中文本框中的内容
             case R.id.field_clear_cellphone:
                 txt_bind_cellphone.setText("");
@@ -499,6 +559,7 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
                 btn_verification_cellphone.setTextColor(getResources().getColor(R.color.white_40));
                 btn_verification_cellphone.setEnabled(false);
                 break;
+
             //清除验证码文本框中的内容	
             case R.id.field_clear_auth_code:
                 txt_auth_code.setText("");
@@ -506,10 +567,48 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
                 btn_verification_auth_code.setTextColor(getResources().getColor(R.color.white_40));
                 btn_verification_auth_code.setEnabled(false);
                 break;
+
             case R.id.title_back:
             case R.id.textView_findPassword_back:
-                finish();
+
+                if (pageFlag == FIND_CELLPHONE_PAGE) {
+                    closeSoftKeyboard();
+                    FindPasswordCellPhoneActivity.this.finish();
+
+                } else {
+
+                    MessageDialog dialog = new MessageDialog(FindPasswordCellPhoneActivity.this);
+                    dialog.setTitle("提示");
+                    dialog.setRightBold(true);
+                    dialog.setCancelable(false);
+                    dialog.setMessage("别急着走哦，发送验证码可能需要一些时间，请耐心稍等，留在该页还是确定返回");
+                    dialog.setOnLeftClickListener("返回上页",new MessageDialog.MessageDialogClickListener() {
+                        @Override
+                        public void onclick(MessageDialog dialog) {
+                            dialog.dismiss();
+
+                            pageFlag = FIND_CELLPHONE_PAGE;
+
+                            if (mTimer != null) {
+                                mTimer.cancel();
+                            }
+
+                            layout_verification_auth_code.setVisibility(View.GONE);
+                            layout_verification_cellphone.setVisibility(View.VISIBLE);
+                            txt_auth_code.setText("");
+                            txt_bind_cellphone.setText("");
+                            textView_verification_cellphone_result.setVisibility(View.GONE);
+                            textView_verification_authCode_result.setVisibility(View.GONE);
+
+                        }
+                    });
+
+                    dialog.setOnRightClickListener("继续等待",null);
+                    dialog.show();
+                }
+
                 break;
+
             case R.id.textView_findPassword_cancel:
                 break;
 
@@ -768,6 +867,7 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
 
                         mMsgBox.toast("验证码以短信已经发送到你的手机，请注意接收");
 
+                        pageFlag = AUTH_CODE_PAGE;
                         layout_verification_auth_code.setVisibility(View.VISIBLE);
                         layout_verification_cellphone.setVisibility(View.GONE);
                         textView_show_bind_cellphone.setVisibility(View.VISIBLE);

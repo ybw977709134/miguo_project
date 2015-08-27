@@ -146,57 +146,41 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
                 }
 
                 closeSoftKeyboard();
-//                BindCellPhoneActivity.this.finish();
+                BindCellPhoneActivity.this.finish();
+
+
+            } else {
 
                 MessageDialog dialog = new MessageDialog(BindCellPhoneActivity.this);
                 dialog.setTitle("警告");
                 dialog.setRightBold(true);
                 dialog.setCancelable(false);
                 dialog.setMessage("强烈建议绑定手机号，如果是发送验证码可能需要一些时间，请稍等，留在该页还是确定返回");
-                dialog.setOnLeftClickListener("返回",new MessageDialog.MessageDialogClickListener() {
+                dialog.setOnLeftClickListener("返回上页",new MessageDialog.MessageDialogClickListener() {
                     @Override
                     public void onclick(MessageDialog dialog) {
                         dialog.dismiss();
-                        BindCellPhoneActivity.this.finish();
+
+                        pageFlag = BIND_cellphone_PAGE;
+
+                        if (mTimer != null) {
+                            mTimer.cancel();
+                        }
+
+                        layout_verification_auth_code.setVisibility(View.GONE);
+                        layout_verification_cellphone.setVisibility(View.VISIBLE);
+                        txt_auth_code.setText("");
+
+                        txt_bind_cellphone.setText("");
+                        textView_verification_cellphone_result.setVisibility(View.GONE);
+                        textView_verification_authCode_result.setVisibility(View.GONE);
                     }
                 });
 
-                dialog.setOnRightClickListener("继续绑定",null);
+                dialog.setOnRightClickListener("继续等待",null);
                 dialog.show();
 
-            } else {
-                pageFlag = BIND_cellphone_PAGE;
-
-
-                if (mTimer != null) {
-                    mTimer.cancel();
-                }
-
-                layout_verification_auth_code.setVisibility(View.GONE);
-                layout_verification_cellphone.setVisibility(View.VISIBLE);
-                txt_auth_code.setText("");
-
-                txt_bind_cellphone.setText("");
-                textView_verification_cellphone_result.setVisibility(View.GONE);
-                textView_verification_authCode_result.setVisibility(View.GONE);
             }
-
-//            MessageDialog dialog = new MessageDialog(BindCellPhoneActivity.this);
-//            dialog.setTitle("警告");
-//            dialog.setRightBold(true);
-//            dialog.setCancelable(false);
-//            dialog.setMessage("强烈建议绑定手机号，如果是发送验证码可能需要一些时间，请稍等，留在该页还是确定返回");
-//            dialog.setOnLeftClickListener("返回",new MessageDialog.MessageDialogClickListener() {
-//                @Override
-//                public void onclick(MessageDialog dialog) {
-//                    dialog.dismiss();
-//                    BindCellPhoneActivity.this.finish();
-//                }
-//            });
-//
-//            dialog.setOnRightClickListener("继续绑定",null);
-//            dialog.show();
-
         }
 
         return super.onKeyDown(keyCode, event);
@@ -414,44 +398,50 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
             //返回
             case R.id.textView_bindcellphone_back:
             case R.id.title_back:
-                if (pageFlag == BIND_cellphone_PAGE) {
-                    if (getIntent().getBooleanExtra(FixBindCellPhoneActivity.FIX_BIND_CELLPHONE, false)) {
-                        Intent intent = new Intent(BindCellPhoneActivity.this,AccountSettingActivity.class);
-                        startActivity(intent);
-                    }
-                    closeSoftKeyboard();
-//                    BindCellPhoneActivity.this.finish();
 
-                    MessageDialog dialog = new MessageDialog(BindCellPhoneActivity.this);
-                    dialog.setTitle("警告");
-                    dialog.setRightBold(true);
-                    dialog.setCancelable(false);
-                    dialog.setMessage("强烈建议绑定手机号，如果是发送验证码可能需要一些时间，请稍等，留在该页还是确定返回");
-                    dialog.setOnLeftClickListener("返回",new MessageDialog.MessageDialogClickListener() {
-                        @Override
-                        public void onclick(MessageDialog dialog) {
-                            dialog.dismiss();
-                            BindCellPhoneActivity.this.finish();
+                    if (pageFlag == BIND_cellphone_PAGE) {//绑定手机号码起始页
+
+                        if (getIntent().getBooleanExtra(FixBindCellPhoneActivity.FIX_BIND_CELLPHONE, false)) {
+                            Intent intent = new Intent(BindCellPhoneActivity.this,AccountSettingActivity.class);
+                            startActivity(intent);
                         }
-                    });
 
-                    dialog.setOnRightClickListener("继续绑定",null);
-                    dialog.show();
-
-                } else {
-                    pageFlag = BIND_cellphone_PAGE;
+                        closeSoftKeyboard();
+                        BindCellPhoneActivity.this.finish();
 
 
-                    if (mTimer != null) {
-                        mTimer.cancel();
+                    } else {
+
+                        MessageDialog dialog = new MessageDialog(BindCellPhoneActivity.this);
+                        dialog.setTitle("警告");
+                        dialog.setRightBold(true);
+                        dialog.setCancelable(false);
+                        dialog.setMessage("强烈建议绑定手机号，如果是发送验证码可能需要一些时间，请稍等，留在该页还是确定返回");
+                        dialog.setOnLeftClickListener("返回上页",new MessageDialog.MessageDialogClickListener() {
+                            @Override
+                            public void onclick(MessageDialog dialog) {
+                                dialog.dismiss();
+
+                                pageFlag = BIND_cellphone_PAGE;
+
+                                if (mTimer != null) {
+                                    mTimer.cancel();
+                                }
+
+                                layout_verification_auth_code.setVisibility(View.GONE);
+                                layout_verification_cellphone.setVisibility(View.VISIBLE);
+                                txt_auth_code.setText("");
+
+                                txt_bind_cellphone.setText("");
+                                textView_verification_cellphone_result.setVisibility(View.GONE);
+                                textView_verification_authCode_result.setVisibility(View.GONE);
+                            }
+                        });
+
+                        dialog.setOnRightClickListener("继续等待",null);
+                        dialog.show();
+
                     }
-                    layout_verification_auth_code.setVisibility(View.GONE);
-                    layout_verification_cellphone.setVisibility(View.VISIBLE);
-                    txt_auth_code.setText("");
-                    txt_bind_cellphone.setText("");
-                    textView_verification_cellphone_result.setVisibility(View.GONE);
-                    textView_verification_authCode_result.setVisibility(View.GONE);
-                }
                 break;
 
             //取消

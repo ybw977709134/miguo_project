@@ -28,6 +28,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.utils.Utils;
 import co.onemeter.utils.AsyncTaskExecutor;
 
 /**
@@ -549,10 +550,12 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
 
             case R.id.field_clear_pwd:
                 txt_new_password.setText("");
+                textView_verification_newPassword.setVisibility(View.GONE);
                 break;
 
             case R.id.field_clear_confirm:
                 txt_confirm_new_password.setText("");
+                textView_verification_newPassword.setVisibility(View.GONE);
                 break;
 
             //显示密码
@@ -575,29 +578,43 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
 
             //重置后的密码
             case R.id.btn_newPassWord_ok:
-                if (txt_new_password.getText().toString().length() < 6) {
-                    textView_verification_newPassword.setVisibility(View.VISIBLE);
-                    textView_verification_newPassword.setText("密码至少6位");
 
-                    break;
-                } else  if (txt_new_password.getText().toString().length() > 20) {
+                if (txt_new_password.getText().toString().length() == 0) {
                     textView_verification_newPassword.setVisibility(View.VISIBLE);
-                    textView_verification_newPassword.setText("密码最多20位");
-                    break;
-                } else  if (txt_confirm_new_password.getText().toString().length() < 6) {
+                    textView_verification_newPassword.setText(getResources().getString(R.string.register_password_empty));
+                } else if (txt_new_password.getText().toString().length() < 6) {
                     textView_verification_newPassword.setVisibility(View.VISIBLE);
-                    textView_verification_newPassword.setText("确认密码至少6位");
+                    textView_verification_newPassword.setText(getResources().getString(R.string.register_password_less));
                     break;
-                } else  if (txt_confirm_new_password.getText().toString().length() > 20) {
+                } else if (txt_new_password.getText().toString().length() > 20) {
                     textView_verification_newPassword.setVisibility(View.VISIBLE);
-                    textView_verification_newPassword.setText("确认密码最多20位");
-
+                    textView_verification_newPassword.setText(getResources().getString(R.string.register_password_more));
                     break;
-                } else  if (!txt_new_password.getText().toString().equals(txt_confirm_new_password.getText().toString())) {
+                } else if (txt_confirm_new_password.getText().toString().length() == 0) {
                     textView_verification_newPassword.setVisibility(View.VISIBLE);
-                    textView_verification_newPassword.setText("密码和确认密码输入不一致");
+                    textView_verification_newPassword.setText(getResources().getString(R.string.register_pwdConfrim_empty));
                     break;
-                }else {
+                } else if (txt_confirm_new_password.getText().toString().length() < 6) {
+                    textView_verification_newPassword.setVisibility(View.VISIBLE);
+                    textView_verification_newPassword.setText(getResources().getString(R.string.register_pwdConfrim_empty));
+                    break;
+                } else if (txt_confirm_new_password.getText().toString().length() > 20) {
+                    textView_verification_newPassword.setVisibility(View.VISIBLE);
+                    textView_verification_newPassword.setText(getResources().getString(R.string.register_pwdConfrim_more));
+                    break;
+                } else if (!Utils.verifyWowTalkPwd(txt_new_password.getText().toString())) {//密码格式错误
+                    textView_verification_newPassword.setVisibility(View.VISIBLE);
+                    textView_verification_newPassword.setText(getResources().getString(R.string.settings_account_passwd_format_error));
+                    break;
+                } else if (!Utils.verifyWowTalkPwd(txt_confirm_new_password.getText().toString())) {//确认密码格式错误
+                    textView_verification_newPassword.setVisibility(View.VISIBLE);
+                    textView_verification_newPassword.setText(getResources().getString(R.string.settings_account_pwdConfrim_format_error));
+                    break;
+                } else if (!txt_new_password.getText().toString().equals(txt_confirm_new_password.getText().toString())) {
+                    textView_verification_newPassword.setVisibility(View.VISIBLE);
+                    textView_verification_newPassword.setText(getResources().getString(R.string.register_pwd_must_fit));
+                    break;
+                } else {
                     resetPasswordByMobile(txt_bind_cellphone.getText().toString(),txt_new_password.getText().toString());
                     break;
                 }

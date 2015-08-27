@@ -724,18 +724,18 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                         break;
                         
                     case ErrorCode.USER_NOT_EXISTS://-99
-                    	textView_verification_email_result.setVisibility(View.VISIBLE);
-                    	textView_verification_email_result.setText("你输入的账号不存在");
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("你输入的账号不存在");
                     	break;
                     	
                     case ErrorCode.FORGET_PWD_ACCESS_CODE_FALSE://1108
-                    	textView_verification_email_result.setVisibility(View.VISIBLE);
-                    	textView_verification_email_result.setText("验证码不正确");
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("验证码不正确");
                     	break;
                     	
                     case ErrorCode.FORGET_PWD_ACCESS_CODE_OUT_TIME://1109
-                    	textView_verification_email_result.setVisibility(View.VISIBLE);
-                    	textView_verification_email_result.setText("验证码已过时");
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("验证码已过时");
                     	break;
 
                     case ErrorCode.ACCESS_CODE_ERROR://22:无效的验证码，验证码有有效期，目前是一天的有效期
@@ -809,18 +809,18 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                         break;
                         
                     case ErrorCode.FORGET_PWD_ACCESS_CODE_FALSE://1108
-                    	textView_verification_email_result.setVisibility(View.VISIBLE);
-                    	textView_verification_email_result.setText("未验证验证码");
+                        textView_verification_newPassword.setVisibility(View.VISIBLE);
+                        textView_verification_newPassword.setText("未验证验证码");
                     	break;
                     	
                     case ErrorCode.FORGET_PWD_ACCESS_CODE_OUT_TIME://1109
-                    	textView_verification_email_result.setVisibility(View.VISIBLE);
-                    	textView_verification_email_result.setText("验证码已过时");
+                        textView_verification_newPassword.setVisibility(View.VISIBLE);
+                        textView_verification_newPassword.setText("验证码已过时");
                     	break;
                     	
                     case ErrorCode.USER_NOT_EXISTS://-99
-                    	textView_verification_email_result.setVisibility(View.VISIBLE);
-                    	textView_verification_email_result.setText("你输入的账号不存在");
+                        textView_verification_newPassword.setVisibility(View.VISIBLE);
+                        textView_verification_newPassword.setText("你输入的账号不存在");
                     	break;
                     	
                     	

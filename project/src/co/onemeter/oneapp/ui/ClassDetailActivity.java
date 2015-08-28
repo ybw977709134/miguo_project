@@ -235,8 +235,6 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			
 			@Override
 			public void onDrawerStateChanged(int arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
@@ -269,6 +267,10 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		}
 		
 	}
+
+    /**
+     * 获取该账号绑定的班级信息
+     */
 	private void getSchoolClassFromServer(){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
@@ -289,6 +291,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	}
 
 
+    /**
+     * 从服务器获取课程信息
+     */
 	private void  getLessonsFromServer(){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
@@ -307,6 +312,11 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	}
 
 
+    /**
+     * 获得班级信息
+     * @param classId
+     * @param g
+     */
 	private void getClassInfo(final String classId,final GroupChatRoom g){
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
@@ -337,6 +347,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	}
 
 
+    /**
+     * 刷新课程信息
+     */
 	private void refreshLessonInfo(){
 		lessons.clear();
 		Database db = Database.open(ClassDetailActivity.this);
@@ -439,16 +452,16 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			currentTime = System.currentTimeMillis()/1000;
 //			String time = tvTime.getText().toString().substring(5);
 //			String length = tvLength.getText().toString().substring(5);	
-			if(lessons == null){
+			if (lessons == null) {
 				MessageDialog alertDialog = new MessageDialog(ClassDetailActivity.this);
     			alertDialog.setTitle("提示");
                 alertDialog.setIsDouleBtn(false);
     			alertDialog.setMessage("现在没有课程正在直播");
     			alertDialog.setOnLeftClickListener("确定", null);
     			alertDialog.show();
-			}else{
+			} else {
 				Lesson lesson_Live = null;
-				for(Lesson lesson : lessons){
+				for (Lesson lesson : lessons) {
 					if(currentTime <lesson.end_date && currentTime >lesson.start_date){
 						lesson_Live = lesson;
 					}

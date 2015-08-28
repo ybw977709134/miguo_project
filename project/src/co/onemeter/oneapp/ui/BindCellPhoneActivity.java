@@ -823,6 +823,9 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
 
                         //手机号码绑定成功
 
+
+                        mPrefUtil.setWowtalkIdChanged(true);
+                        mPrefUtil.setWowtalkId(cellPhone);
                         mPrefUtil.setPhoneNumber(cellPhone);
 
                         mMsgBox.showWaitImageSuccess("手机号码绑定成功");

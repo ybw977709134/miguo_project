@@ -58,8 +58,6 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 	private MessageBox mMsgBox;
 	
 	private String bindEmail = null;//是否绑定邮箱
-	private static final int BIND_EMAIL_REQUEST_CODE = 1;//绑定邮箱页面的请求码
-	private static final int FIX_BIND_EMAIL_REQUEST_CODE = 2;//修改绑定邮箱页面的请求码
 	
 	public static final AccountSettingActivity instance() {
 		if (instance != null)
@@ -93,59 +91,22 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 	
 	private void fetchData() {
 
-//		if (mPrefUtil.getMyPasswordChangedState()) {
-//            txtPwdSetting.setText(getResources().getString(R.string.settings_account_setted));
-//            txtPwdSetting.setTextColor(getResources().getColor(R.color.text_gray1));
-//		} else {
-//            txtPwdSetting.setText(getResources().getString(R.string.settings_account_not_set));
-//            txtPwdSetting.setTextColor(getResources().getColor(R.color.orange));
-//		}
-
+        //检测用户账号
         if (mPrefUtil.getMyUsernameChangedState()) {
         	txtOneMeterID.setText(mPrefUtil.getMyUsername());
         } else {
         	txtOneMeterID.setText(getResources().getString(R.string.settings_account_not_set));
         }
+
+        //检测用户绑定手机号
+        if (mPrefUtil.getMyPhoneNumber().length() == 0) {//未绑定
+            txtPhonenumber.setText("请绑定手机");
+        } else {//绑定
+            txtPhonenumber.setText(mPrefUtil.getMyPhoneNumber());
+        }
 	}
 	
-//	private void queryBindings() {
-//        mBindPhone.setEnabled(false);
-//        mBindEmail.setEnabled(false);
-//        final long startTime = System.currentTimeMillis();
-//		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Integer, Integer>() {
-//
-//			@Override
-//			protected Integer doInBackground(Void... params) {
-//				return WowTalkWebServerIF.getInstance(AccountSettingActivity.this).fGetBindedStuff(binds);
-//			}
-//
-//			@Override
-//			protected void onPostExecute(Integer result) {
-//				if (result == ErrorCode.OK) {
-//					if (binds[0] != null && !binds[0].equals("")) {
-//						txtEmail.setText(binds[0]);
-//					} else {
-//						txtEmail.setText(getResources().getString(R.string.not_binded));
-//					}
-//					if (binds[1] != null && !binds[1].equals("")) {
-//						txtPhonenumber.setText(binds[1]);
-//					} else {
-//						txtPhonenumber.setText(getResources().getString(R.string.not_binded));
-//					}
-//				}
-//				new Handler().post(new Runnable() {
-//					@Override
-//					public void run() {
-//						mBindPhone.setEnabled(true);
-//						mBindEmail.setEnabled(true); 
-//						long endTime = System.currentTimeMillis();
-//						Log.d(TAG, ", onResume, the time of invoking queryBinds() is " + (endTime - startTime) + " milliseconds.");
-//					}
-//				});
-//			}
-//
-//		});
-//	}
+
 	
 	private void logout() {
         mMsgBox.showWait();
@@ -191,20 +152,19 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+
 		case R.id.title_back:
 		case R.id.textView_setting_back:
 			finish();
 			break;
+
 		case R.id.textView_logout:
 
 			   MessageDialog dialog = new MessageDialog(AccountSettingActivity.this);
-
-   			//Builder builder = new AlertDialog.Builder(HomeActivity.this);
                dialog.setTitle("提示");
                dialog.setMessage("你确定要退出吗?");
                dialog.setCancelable(false);
                dialog.setRightBold(true);
-//               dialog.setTextColorBtnRight(AccountSettingActivity.this.getResources().getColor(R.color.red));
                dialog.setOnLeftClickListener("取消", null);
                
                dialog.setOnRightClickListener("退出", new MessageDialog.MessageDialogClickListener() {
@@ -236,7 +196,6 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 
 		case R.id.layout_password:
 			Intent passwordIntent = new Intent(AccountSettingActivity.this, SettingPasswordActivity.class);
-//            startActivity(passwordIntent);
 			startActivityForResult(passwordIntent, REQ_INPUT_PASSWORD);
 			break;
 
@@ -264,11 +223,9 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
 		    	if (bindEmail != null) {//绑定了邮箱，点击进入，修改邮箱的解绑界面
 		    		Intent fixEmailIntent = new Intent(AccountSettingActivity.this, FixBindEmailAddressActivity.class);
                     startActivity(fixEmailIntent);
-//		    		startActivityForResult(fixEmailIntent, FIX_BIND_EMAIL_REQUEST_CODE);
 		    	} else {//未绑定邮箱进入绑定邮箱界面
 		    		Intent bindEmailIntent = new Intent(AccountSettingActivity.this, BindEmailAddressActivity.class);
                     startActivity(bindEmailIntent);
-//		    		startActivityForResult(bindEmailIntent, BIND_EMAIL_REQUEST_CODE);
 		    	}
 		    }
 			
@@ -299,13 +256,10 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
     protected void onResume() {
         super.onResume();
         fetchData();
+        //检测绑定邮箱的状态
         bindEmailStatus ();
 
-        if (mPrefUtil.getMyPhoneNumber().length() == 0) {//未绑定
-            txtPhonenumber.setText("请绑定手机");
-        } else {//绑定
-            txtPhonenumber.setText(mPrefUtil.getMyPhoneNumber());
-        }
+
 
     }
 
@@ -343,43 +297,6 @@ public class AccountSettingActivity extends Activity implements OnClickListener{
             } 
         });
     }
-    
-    /**
-     * 绑定邮箱成功后返回到设置界面，显示你已经绑定的邮箱(目前是为了解决修改密码出现的异常)
-     * @author hutianfeng
-     * @date 2015/3/5
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	super.onActivityResult(requestCode, resultCode, data);
-    	if (resultCode == RESULT_OK) {
-			switch (requestCode) {
-//			case BIND_EMAIL_REQUEST_CODE://绑定邮箱成功后的处理结果
-//
-//				bindEmailStatus ();
-//				if (!TextUtils.isEmpty(bindEmail)) {
-//					mMsgBox.show(null, getString(R.string.bind_email_successed));
-//					mMsgBox.dismissDialog();
-//				}
-//				break;
-//
-//			case FIX_BIND_EMAIL_REQUEST_CODE://修改绑定邮箱后的处理结果
-//
-//				bindEmailStatus();
-//				if (!TextUtils.isEmpty(bindEmail)) {
-//					mMsgBox.show(null, getString(R.string.bind_email_successed));
-//					mMsgBox.dismissDialog();
-//				}
-//				break;
 
-
-            case REQ_INPUT_PASSWORD:
-                logout();
-                break;
-			default:
-				break;
-			}
-    	}
-    }
     
 }

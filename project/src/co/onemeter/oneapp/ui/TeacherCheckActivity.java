@@ -47,11 +47,9 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 	
 	private Handler mHandler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
+//            mMsgBox.dismissWait();
 			if(msg.what != ErrorCode.OK){
-				mMsgBox.dismissWait();
 				mMsgBox.toast(R.string.class_parent_opinion_not_submitted,500);
-			}else {
-				mMsgBox.dismissWait();
 			}
 		};
 	};
@@ -82,7 +80,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 			schoolId = intent.getStringExtra("schoolId");
 			if(lvFlag == LESSITUATION){
 				txtTitle.setText(R.string.class_lesson_situation_table);
-			}else if(lvFlag == PARENTSUG){
+			} else if(lvFlag == PARENTSUG) {
 				txtTitle.setText(R.string.class_parent_suggestion);
 			}
 		}
@@ -98,7 +96,7 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
             @Override
             protected Void doInBackground(Void... params) {
                 performances = signWebServer.getLessonRollCalls(lessonId);
-                for(LessonPerformance per : performances){
+                for(LessonPerformance per : performances) {
                 	if(per.property_value == 3 || per.property_value == -1){
                 		performancesNoAbsenceStu.add(per);
                 	}
@@ -127,9 +125,12 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 			startActivity(intent);
 		}else if(lvFlag == PARENTSUG){
 			final int pos = position;
-			mMsgBox.showWait();
+
+//			mMsgBox.showWait();
+
 			final Database db = new Database(TeacherCheckActivity.this);
 			LessonParentFeedback feedback0 = db.fetchLessonParentFeedback(lessonId, performancesNoAbsenceStu.get(position).student_id);
+
 			if(feedback0 == null){
 				new Thread(new Runnable() {
 					
@@ -138,30 +139,34 @@ public class TeacherCheckActivity extends Activity implements OnItemClickListene
 						int errno;
 						try {
 							errno = LessonWebServerIF.getInstance(TeacherCheckActivity.this).getLessonParentFeedback(lessonId, performancesNoAbsenceStu.get(pos).student_id);
-							if(errno == ErrorCode.OK){
+							if (errno == ErrorCode.OK) {
 								LessonParentFeedback feedback = db.fetchLessonParentFeedback(lessonId, performancesNoAbsenceStu.get(pos).student_id);
 								Moment moment = db.fetchMoment(feedback.moment_id + "");
-								if(moment != null){
+								if (moment != null) {
 									FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment,db.fetchStudentAlias(schoolId, performancesNoAbsenceStu.get(pos).student_id),null);
-									mHandler.sendEmptyMessage(errno);
-								}else{
-									mHandler.sendEmptyMessage(errno);
+//									mHandler.sendEmptyMessage(errno);
+								} else {
+//									mHandler.sendEmptyMessage(errno);
 								}
-							}else{
-								mHandler.sendEmptyMessage(errno);
+							} else {
+//								mHandler.sendEmptyMessage(errno);
+                                mMsgBox.toast(R.string.class_parent_opinion_not_submitted,500);
 							}
 						} catch (Exception e) {
-							mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);
+//							mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);
+                            mMsgBox.toast(R.string.class_parent_opinion_not_submitted,500);
 						}
 					}
 				}).start();
-			}else{
+
+			} else {
 				Moment moment = db.fetchMoment(feedback0.moment_id + "");
-				if(moment != null){
+				if (moment != null) {
 					FeedbackDetailActivity.launch(TeacherCheckActivity.this,moment,db.fetchStudentAlias(schoolId, performancesNoAbsenceStu.get(position).student_id),null);
-					mHandler.sendEmptyMessage(ErrorCode.OK);
-				}else{
-					mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);
+//					mHandler.sendEmptyMessage(ErrorCode.OK);
+				} else {
+//					mHandler.sendEmptyMessage(ErrorCode.BAD_RESPONSE);
+                    mMsgBox.toast(R.string.class_parent_opinion_not_submitted,500);
 				}
 			}
 		}

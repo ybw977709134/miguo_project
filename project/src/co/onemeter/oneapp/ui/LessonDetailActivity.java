@@ -194,36 +194,40 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 	
 	@Override
 	public void onClick(View v) {
+
 		PrefUtil mPre = PrefUtil.getInstance(this);
 		Database mDbHelper = Database.getInstance(this);
 		Intent intent = new Intent();
 		intent.putExtra(Constants.LESSONID, lessonId);
 		switch (v.getId()) {
+
 		case R.id.title_back:
-			finish();
-			break;
 		case R.id.tv_back:
 			finish();
 			break;
+
 		case R.id.title_refresh:
 			getLessonDetail();
 			break;
+
 		case R.id.les_lay_first:
+
 			if(isTeacher()){
 				intent.setClass(this, TeacherCheckActivity.class);
 				intent.putExtra("classId", classId);
 				intent.putExtra("schoolId", schoolId);
 				intent.putExtra("lvFlag", 0);
 				startActivity(intent);
+
 			}else{
 				int property_value = 0;
 				String stuID = null;
-				if(lessoonDetails_performance.size() >= 1){
+				if (lessoonDetails_performance.size() >= 1) {
 					stuID = lessoonDetails_performance.get(0).student_id;
-					if(stuID != null){
-						for(LessonPerformance performance :lessoonDetails_performance){
+					if (stuID != null) {
+						for (LessonPerformance performance :lessoonDetails_performance) {
 							
-							if(performance.student_id.equals(mPre.getUid())){
+							if(performance.student_id.equals(mPre.getUid())) {
 								if(performance.property_id == 10){
 									property_value = performance.property_value;
 								}						
@@ -231,15 +235,15 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 						}
 					}
 					
-					if(property_value == 2 || property_value == 1 || property_value == 4){
+					if (property_value == 2 || property_value == 1 || property_value == 4) {
 						msgbox.toast("学生没有出席这节课，不能查看课堂点评");
-					}else{
+					} else {
 						intent.putExtra(Constants.STUID, mPre.getUid());
 						intent.putExtra(LessonStatusActivity.FALG, false);
 						intent.setClass(this, LessonStatusActivity.class);
 						startActivity(intent);
 					}
-				}else{
+				} else {
 					intent.putExtra(Constants.STUID, mPre.getUid());
 					intent.putExtra(LessonStatusActivity.FALG, false);
 					intent.setClass(this, LessonStatusActivity.class);
@@ -248,8 +252,8 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 				
 				
 			}
-
 			break;
+
 		case R.id.les_lay_second:
 			intent.setClass(this, HomeworkActivity.class);
 			intent.putExtra("schoolId", schoolId);
@@ -258,7 +262,9 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 			startActivity(intent);
 
 			break;
+
 		case R.id.les_lay_third:
+
 			if(isTeacher()){
 				intent.setClass(this, TeacherCheckActivity.class);
 				intent.putExtra("classId", classId);
@@ -289,7 +295,7 @@ public class LessonDetailActivity extends Activity implements OnClickListener {
 							intent.putExtra(LessonStatusActivity.FALG, false);
 							intent.setClass(this, LessonParentFeedbackActivity.class);
 							startActivityForResult(intent,REQ_PARENT_FEEDBACK);
-						} else{
+						} else {
 							Moment moment = mDbHelper.fetchMoment(feedback.moment_id + "");
 							if(moment != null){
                                  FeedbackDetailActivity.launch(LessonDetailActivity.this,moment,mDbHelper.fetchStudentAlias(schoolId,mPre.getUid()),null);

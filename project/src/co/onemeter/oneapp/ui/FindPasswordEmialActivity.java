@@ -660,7 +660,7 @@ public class FindPasswordEmialActivity extends Activity implements OnClickListen
                 break;
             } else if (txt_confirm_new_password.getText().toString().length() < 6) {
                 textView_verification_newPassword.setVisibility(View.VISIBLE);
-                textView_verification_newPassword.setText(getResources().getString(R.string.register_pwdConfrim_empty));
+                textView_verification_newPassword.setText(getResources().getString(R.string.register_pwdConfrim_less));
                 break;
             } else if (txt_confirm_new_password.getText().toString().length() > 20) {
                 textView_verification_newPassword.setVisibility(View.VISIBLE);

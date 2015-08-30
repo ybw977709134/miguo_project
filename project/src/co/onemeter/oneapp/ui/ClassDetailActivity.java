@@ -208,10 +208,9 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 //				    setClassInfo();
 				    if(TextUtils.isEmpty(classrooms.get(position).description)){
 				    	clearClassInfo();
-				    }else{
-				    	getClassInfo(classId,class_group);
 				    }
-				    
+					getClassInfo(classId,class_group);
+
 				}
 				
 				
@@ -280,11 +279,11 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				classrooms.addAll(mWTWebSer.getSchoolClassRooms(null));
 				return null;
 			}
-			
+
 			@Override
 			protected void onPostExecute(Integer result) {
 				adapter = new MyClassAdapter(classrooms);
-                lvMyClass.setAdapter(adapter);
+				lvMyClass.setAdapter(adapter);
 			}
 
 		});
@@ -323,7 +322,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			@Override
 			protected Integer doInBackground(Void... params) {
 				classInfos.clear();
-				return LessonWebServerIF.getInstance(ClassDetailActivity.this).getClassInfo(classId,classInfos,g);
+				resetClassInfoObject(g);
+				return LessonWebServerIF.getInstance(ClassDetailActivity.this).getClassInfo(classId, classInfos, g);
 			}
 
 			protected void onPostExecute(Integer result) {
@@ -346,8 +346,17 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		});
 	}
 
+	/**
+	 * 把 GroupChatRoom 对象作为输出参数传给 {@link LessonWebServerIF#getClassInfo(String, List, GroupChatRoom)}
+	 * 之前，应该清除旧的信息，因为API不保证能覆盖旧的信息。
+	 * @param g
+	 */
+	private void resetClassInfoObject(GroupChatRoom g) {
+		g.description = "";
+	}
 
-    /**
+
+	/**
      * 刷新课程信息
      */
 	private void refreshLessonInfo(){
@@ -415,6 +424,8 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 //			tvTime.setText(time + infos[4]);
 			tvPlace.setText(place + infos[3]);
 //			tvLength.setText(length + infos[6]);
+		} else {
+			clearClassInfo();
 		}
 	}
 

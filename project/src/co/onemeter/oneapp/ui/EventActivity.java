@@ -629,16 +629,6 @@ public class EventActivity extends Activity implements OnClickListener, MenuBar.
         if (subMenuResId == R.id.btn_filter1) {
         	curFilterLeftTag = itemIdx;
 
-//            if (eventStateTag == 0) {
-//            	downloadLatestEvents(GET_COMMING_EVENT_0,null);
-//                MenuBar.getBtnFilter1().setText("所有活动");
-//            } else if (eventStateTag == 1) { // on going
-//            	downloadLatestEvents(null,null);
-//                MenuBar.getBtnFilter1().setText("已报名活动");
-//            } else if (eventStateTag == 2) { // expired
-//                downloadLatestEvents(GET_FINISHED_EVENT_1,null);
-//                MenuBar.getBtnFilter1().setText("我发布的活动");
-//            }
 
             if (curFilterLeftTag == 0) {
                 downloadLatestEvents(GET_COMMING_EVENT_0,null);

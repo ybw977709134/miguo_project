@@ -63,7 +63,7 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
 
     private int mMessageTxtSize = -1;
 
-    private boolean mIsDouleBtn = false;
+    private boolean mWith2Buttons = false;
 
     private int mSize = SIZE_NORMAL;
 
@@ -76,18 +76,17 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
     }
 
     /**
-     * isDoubleBtn is false,dialog has one btn
      * @param context
-     * @param isDouleBtn
+     * @param with2Buttons with 2 or 1 button(s)?
      */
-    public MessageDialog(Context context, boolean isDouleBtn, int size){
-        this(context,0, isDouleBtn,size);
+    public MessageDialog(Context context, boolean with2Buttons, int size){
+        this(context,0, with2Buttons,size);
     }
 
-    protected MessageDialog(Context context, int theme, boolean isDouleBtn, int size) {
+    protected MessageDialog(Context context, int theme, boolean with2Buttons, int size) {
         super(context, theme);
         mContext = context;
-        mIsDouleBtn = isDouleBtn;
+        mWith2Buttons = with2Buttons;
         mSize = size;
     }
 
@@ -96,7 +95,7 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lay_messagedialog);
-        if (mIsDouleBtn){
+        if (mWith2Buttons){
             findViewById(R.id.lay_btn_double).setVisibility(View.VISIBLE);
             findViewById(R.id.lay_btn_single).setVisibility(View.GONE);
         }else{
@@ -122,7 +121,7 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
         TextView txt_msg = (TextView) findViewById(R.id.txt_msg);
         txt_msg.setMovementMethod(ScrollingMovementMethod.getInstance());
         
-        if (!mIsDouleBtn){
+        if (!mWith2Buttons){
              txt_msg.setGravity(Gravity.CENTER);
         }
         if(mTitle.length() == 0){
@@ -163,11 +162,12 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
         }
     }
 
-    public void setOnLeftClickListener(String txt, MessageDialogClickListener listener) {
+    public MessageDialog setOnLeftClickListener(String txt, MessageDialogClickListener listener) {
         mOnOkClickListener = listener;
         if(txt != null) {
             mBtnLeftText = txt;
         }
+        return this;
     }
     
     //设置粗体、颜色、大小
@@ -211,26 +211,29 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
         this.mTitle = mContext.getString(strId);
     }
 
-    public void setMessage(String message){
+    public MessageDialog setMessage(String message){
         this.mMsg = message;
+        return this;
     }
 
-    public void setMessage(int strId){
+    public MessageDialog setMessage(int strId){
         this.mMsg = mContext.getString(strId);
+        return this;
     }
 
     public Button getBtnCancel(){
     	return btn_cancel;
     }
-    public void setOnRightClickListener(String txt, MessageDialogClickListener listener){
+    public MessageDialog setOnRightClickListener(String txt, MessageDialogClickListener listener){
         mCancelListener = listener;
         if(txt != null){
             mBtnRightText = txt;
         }
+        return this;
     }
     
     public void setIsDouleBtn(boolean mIsDouleBtn) {
-    	this.mIsDouleBtn = mIsDouleBtn;
+    	this.mWith2Buttons = mIsDouleBtn;
     }
 
     @Override

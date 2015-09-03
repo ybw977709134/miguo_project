@@ -14,11 +14,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import co.onemeter.oneapp.AppUpgradeService;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.SchoolInvitationActivity;
 import co.onemeter.oneapp.utils.ThemeHelper;
 import co.onemeter.utils.AsyncTaskExecutor;
-
 import com.androidquery.AQuery;
-
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
@@ -114,10 +113,12 @@ public class SettingActivity extends Activity implements OnClickListener {
         q.find(R.id.settings_about).clicked(this);
         q.find(R.id.textView_check_update).clicked(this);
         q.find(R.id.app_updates_available_indicator).clicked(this);
+        q.find(R.id.settings_view_school_invitations).clicked(this);
+        q.find(R.id.settings_ignore_school_invitations).clicked(this);
         
         updateNoticeStatus();
-        
-        checkForUpdates();
+
+        queryDataFromServer();
 
 //        updateUi();
 
@@ -134,6 +135,10 @@ public class SettingActivity extends Activity implements OnClickListener {
         	q.find(R.id.app_updates_available_indicator).visibility(View.GONE);
         	q.find(R.id.textView_check_update).text(getString(R.string.settings_upgrade_is_uptodate));
         }
+
+        q.find(R.id.txt_ignore_school_invitations_value).text(
+                PrefUtil.getInstance(this).getBoolean(PrefUtil.IGNORE_SCHOOL_INVITATIONS, false) ?
+                        R.string.bool_yes : R.string.bool_no);
     }
 
     private void updateNoticeStatus() {
@@ -204,17 +209,71 @@ public class SettingActivity extends Activity implements OnClickListener {
             case R.id.app_updates_available_indicator:
             case R.id.textView_check_update:
                 StartActivity.instance().changeNewUpdateFlagView(View.GONE);
-//                checkForUpdates();
                 if (appUpdatesAvailable) {
                 	showUpdateDialog();
                 }
+                break;
+            case R.id.settings_view_school_invitations:
+                startActivity(new Intent(this, SchoolInvitationActivity.class));
+                break;
+            case R.id.settings_ignore_school_invitations:
+                onIgnoreSchoolInvitationsPressed();
                 break;
             default:
                 break;
         }
     }
 
-	/**
+    /**
+     * 修改学校邀请的设置。
+     */
+    private void onIgnoreSchoolInvitationsPressed() {
+        final boolean currIgnore = PrefUtil.getInstance(this)
+                .getBoolean(PrefUtil.IGNORE_SCHOOL_INVITATIONS, false);
+        new MessageDialog(this, true, MessageDialog.SIZE_NORMAL)
+                .setMessage(currIgnore ?
+                        R.string.confirm_recv_school_invitations :
+                        R.string.confirm_ignore_school_invitations)
+                .setOnLeftClickListener(getString(R.string.cancel), null)
+                .setOnRightClickListener(getString(R.string.confirm),
+                        new MessageDialog.MessageDialogClickListener() {
+                            @Override
+                            public void onclick(MessageDialog dialog) {
+                                dialog.dismiss();
+                                ignoreSchoolInvitations(!currIgnore);
+                            }
+                        })
+                .show();
+    }
+
+    private void ignoreSchoolInvitations(final boolean ignore) {
+        if (mMsgBox != null)
+            mMsgBox.showWait();
+
+        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... voids) {
+                return mWeb.fSetPrivacy(null, null, null, null, null, null, ignore);
+            }
+
+            @Override
+            protected void onPostExecute(Integer errno) {
+                if (mMsgBox != null)
+                    mMsgBox.dismissWait();
+
+                if (errno == ErrorCode.OK) {
+                    PrefUtil.getInstance(SettingActivity.this)
+                            .putBoolean(PrefUtil.IGNORE_SCHOOL_INVITATIONS, ignore);
+                    updateUi();
+                } else {
+                    mMsgBox.show(null,
+                            getString(R.string.privacysetting_failure));
+                }
+            }
+        });
+    }
+
+    /**
 	 * 告诉朋友
 	 * @param parentView
 	 */
@@ -255,15 +314,16 @@ public class SettingActivity extends Activity implements OnClickListener {
     }
 
     /**
-     * 检查更新
+     * 从服务器查询最新的设置、版本号。
      */
-    private void checkForUpdates() {
+    private void queryDataFromServer() {
     	mMsgBox.showWait();
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
         	
             @Override
             protected Integer doInBackground(Void... voids) {
                 try {
+                    mWeb.fGetPrivacySetting();
                     int errno = mWeb.fCheckForUpdates(updatesInfo);
                     if (ErrorCode.OK != errno)
                         return errno;

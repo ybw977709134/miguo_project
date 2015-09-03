@@ -128,6 +128,10 @@ public class PrefUtil {
     private static final String UNKNOWN_BUDDY_CAN_MESSAGE_ME = "unknown_buddy_can_message_me";
     private static final String PUSH_SHOW_DETAIL_FLAG = "push_show_detail_flag";
     private static final String LIST_ME_IN_NEARBY_RESULT = "list_me_in_nearby_result";
+    /**
+     * 隐私选项的键值：是否自动忽略学校的入班邀请？
+     */
+    public static final String IGNORE_SCHOOL_INVITATIONS = "IGNORE_SCHOOL_INVITATIONS";
     private static final String IS_UPLOADING_MY_AVATAR = "is_uploading_my_avatar";
     private static final String LOCALE_LANGUAGE = "locale_language";
     private static final String PINYIN_DATA_RES_ID = "pinyin_data_res_id";
@@ -190,6 +194,14 @@ public class PrefUtil {
 
     public SharedPreferences getPreferences() {
         return sPref;
+    }
+
+    public boolean getBoolean(String key, boolean defValue) {
+        return sPref.getBoolean(key, defValue);
+    }
+
+    public void putBoolean(String key, boolean value) {
+        sPref.edit().putBoolean(key, value).commit();
     }
 
     public boolean isLogined() {

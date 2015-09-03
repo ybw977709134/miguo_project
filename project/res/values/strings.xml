@@ -291,6 +291,7 @@
     <string name="privacysetting_auth_is_needed">好友需要验证</string>
     <string name="privacysetting_nearby_find_me">附近的人可以看到我</string>
     <string name="privacysetting_failure">隐私设置失败</string>
+    <string name="privacysetting_query_failed">隐私设置刷新失败</string>
     <string name="setting_send_email">发送邮件</string>
     <string name="setting_send_sms">发送短信</string>
     <string name="setting_tell_friend_sms_content">我正在使用一米家校，加入我吧！</string>
@@ -1021,6 +1022,12 @@
     <string name="err_failed_to_load_data_with_errno">加载数据失败 (Error %d)</string>
     <string name="school_invitation_status_accepted">已接受</string>
     <string name="school_invitation_status_rejected">已拒绝</string>
+    <string name="settings_view_school_invitations">入班邀请</string>
+    <string name="settings_ignore_school_invitations">忽略来自任何学校的邀请</string>
+    <string name="confirm_recv_school_invitations">显示来自学校的入班邀请？</string>
+    <string name="confirm_ignore_school_invitations">忽略来自任何学校的入班邀请？</string>
+    <string name="bool_yes">是</string>
+    <string name="bool_no">否</string>
 
 
 </resources>

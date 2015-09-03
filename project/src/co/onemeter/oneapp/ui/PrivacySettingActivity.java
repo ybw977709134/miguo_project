@@ -183,7 +183,7 @@ public class PrivacySettingActivity extends Activity implements OnClickListener{
                 if (mIsOthersCanAddMe) {
                     allowOthersAddMe = mIsAuthNeeded ? OTHERS_CAN_ADD_ME_NEED_AUTH : OTHERS_CAN_ADD_ME_WITHOUT_AUTH;
                 }
-                int resultCode = mWebIF.fSetPrivacy(true, allowOthersAddMe, true, true, true, mIsNearbyCanFindMe);
+                int resultCode = mWebIF.fSetPrivacy(true, allowOthersAddMe, true, true, true, mIsNearbyCanFindMe, null);
                 return resultCode;
             }
 

@@ -3613,7 +3613,7 @@ public class WowTalkWebServerIF {
 	 */
 	public void fGetFileFromServer(String fileID, NetworkIFDelegate delegate,
 			int tag){
-		this.fGetFileFromServer(fileID,delegate,tag,null,null);
+		this.fGetFileFromServer(fileID, delegate, tag, null, null);
 	}
 
 	/**
@@ -3625,7 +3625,7 @@ public class WowTalkWebServerIF {
 	 */
 	public void fGetFileFromServer(String fileID, NetworkIFDelegate delegate,
 			int tag, String outputFilepath){
-		this.fGetFileFromServer(fileID,delegate,tag,outputFilepath,null);
+		this.fGetFileFromServer(fileID, delegate, tag, outputFilepath, null);
 	}
 
 	/**
@@ -3643,7 +3643,7 @@ public class WowTalkWebServerIF {
     public void fGetFileFromServer(String fileID, NetworkIFDelegate delegate,
                                    int tag, String outputFilepath, CancelFlag cancelFlag) {
         fGetFileFromServer(fileID, GlobalSetting.S3_UPLOAD_FILE_DIR, delegate,
-                tag, outputFilepath, cancelFlag);
+				tag, outputFilepath, cancelFlag);
     }
 
 	/**
@@ -5471,7 +5471,9 @@ public class WowTalkWebServerIF {
     }
 
 	/**
-	 * Set privacy 
+	 * Set privacy
+	 *
+	 * Any setting value can be null, in which case no change will be made to that setting.
 	 * 
 	 * @param addBuddyAutomatically
 	 *            : true to allow buddy matching
@@ -5487,11 +5489,16 @@ public class WowTalkWebServerIF {
 	 *            : true to show message detail in push service
 	 * @param listMeInNearbyResult
 	 *            : true to list me in nearby result
+	 * @param ignoreSchoolInvitations
 	 * @return 0: good result -1: no reply others: error code from server
 	 */
-	public int fSetPrivacy(boolean addBuddyAutomatically,
-			int peopleCanAddMe, boolean unknownPeopleCanCallMe,
-			boolean unknownPeopleCanMessageMe, boolean shouldShowMsgDetailInPush, boolean listMeInNearbyResult) {
+	public int fSetPrivacy(Boolean addBuddyAutomatically,
+						   Integer peopleCanAddMe,
+						   Boolean unknownPeopleCanCallMe,
+						   Boolean unknownPeopleCanMessageMe,
+						   Boolean shouldShowMsgDetailInPush,
+						   Boolean listMeInNearbyResult,
+						   Boolean ignoreSchoolInvitations) {
         String strUID = sPrefUtil.getUid();
         String strPwd = sPrefUtil.getPassword();
 
@@ -5502,14 +5509,41 @@ public class WowTalkWebServerIF {
 		}
 
         String postStr = String
-                .format("action=update_privacy_setting&uid=%s&password=%s&add_buddy_automatically=%d&people_can_add_me=%d&unknown_buddy_can_call_me=%d&unknown_buddy_can_message_me=%d&push_show_detail_flag=%d&list_me_in_nearby_result=%d",
-                        strUID, strPwd,
-                        addBuddyAutomatically ? 1 : 0,
-                        peopleCanAddMe,
-                        unknownPeopleCanCallMe ? 1 : 0,
-                        unknownPeopleCanMessageMe ? 1 : 0,
-                        shouldShowMsgDetailInPush ? 1 : 0,
-                        listMeInNearbyResult ? 1 : 0);
+                .format("action=update_privacy_setting&uid=%s&password=%s",
+                        strUID, strPwd);
+
+		int n = 0;
+		if (addBuddyAutomatically != null) {
+			postStr += "&add_buddy_automatically=" + (addBuddyAutomatically ? 1 : 0);
+			++n;
+		}
+		if (peopleCanAddMe != null) {
+			postStr += "&people_can_add_me=" + peopleCanAddMe;
+			++n;
+		}
+		if (unknownPeopleCanCallMe != null) {
+			postStr += "&unknown_buddy_can_call_me=" + (unknownPeopleCanCallMe ? 1 : 0);
+			++n;
+		}
+		if (unknownPeopleCanMessageMe != null) {
+			postStr += "&unknown_buddy_can_message_me=" + (unknownPeopleCanMessageMe ? 1 : 0);
+			++n;
+		}
+		if (shouldShowMsgDetailInPush != null) {
+			postStr += "&push_show_detail_flag=" + (shouldShowMsgDetailInPush ? 1 : 0);
+			++n;
+		}
+		if (listMeInNearbyResult != null) {
+			postStr += "&list_me_in_nearby_result=" + (listMeInNearbyResult ? 1 : 0);
+			++n;
+		}
+		if (ignoreSchoolInvitations != null) {
+			postStr += "&ignore_school_invitations=" + (ignoreSchoolInvitations ? 1 : 0);
+			++n;
+		}
+
+		if (n == 0)
+			return 0;
 
 		Connect2 connect2 = new Connect2();
 		Element root = connect2.Post(postStr);
@@ -5537,8 +5571,6 @@ public class WowTalkWebServerIF {
 	/**
 	 * Get privacy Privacy and save to local db
 	 * 
-	 * @param NetworkIFDidFinishDelegate
-	 * @param status
 	 */
 	public int fGetPrivacySetting() {
         String strUID = sPrefUtil.getUid();
@@ -5617,13 +5649,21 @@ public class WowTalkWebServerIF {
                             .getNodeValue().equals("1");
                 }
 
-                // TODO
+				nodeList = root.getElementsByTagName("ignore_school_invitations");
+				element = (Element) nodeList.item(0);
+				boolean ignore_school_invitations = true;
+				if (element != null && element.getFirstChild() != null) {
+					ignore_school_invitations = element.getFirstChild()
+							.getNodeValue().equals("1");
+				}
+
                 sPrefUtil.setAddBuddyAuto(add_buddy_automatically);
                 sPrefUtil.setOthersCanAddMe(people_can_add_me);
                 sPrefUtil.setUnknownCanCallMe(unknown_buddy_can_call_me);
                 sPrefUtil.setUnknownCanMsgMe(unknown_buddy_can_message_me);
                 sPrefUtil.setPushShowDetailFlag(push_show_detail_flag);
                 sPrefUtil.setListMeInNearbyResult(list_me_in_nearby_result);
+				sPrefUtil.putBoolean(PrefUtil.IGNORE_SCHOOL_INVITATIONS, ignore_school_invitations);
 
                 errno = 0;
 			} else {

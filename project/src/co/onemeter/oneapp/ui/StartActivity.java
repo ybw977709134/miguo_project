@@ -1401,6 +1401,10 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
                         NotificationManager mNotificationManager = (NotificationManager)
                                 getSystemService(Context.NOTIFICATION_SERVICE);
                         mNotificationManager.notify(100, noti);
+
+                        PrefUtil.getInstance(this).getPreferences().edit()
+                                .putString(PrefUtil.LATEST_SCHOOL_INVITATION, body)
+                                .commit();
                     } else {
                         Log.e("invalid School Structure Changed Notification: " + body);
                     }

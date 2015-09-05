@@ -2,6 +2,7 @@ package co.onemeter.oneapp.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -11,14 +12,17 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 import co.onemeter.oneapp.R;
+import co.onemeter.oneapp.SchoolInvitationActivity;
 import co.onemeter.oneapp.ui.widget.AutoScrollViewPager;
 import co.onemeter.utils.AsyncTaskExecutor;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.pzy.paint.DoodleActivity;
 import org.wowtalk.api.*;
 import org.wowtalk.ui.MediaInputHelper;
@@ -29,7 +33,10 @@ import org.wowtalk.ui.msg.InputBoardManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by pzy on 9/18/14.Modified by Jacky on 3/18/2015.
@@ -220,6 +227,10 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     protected void onResume() {
         super.onResume();
         viewPager_home.startAutoScroll();
+
+        if (hasPendingSchoolInvitations()) {
+            promptSchoolInvitations();
+        }
     }
 
     @Override
@@ -481,8 +492,9 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                     schools.addAll(result);
                 }
                 isRequestingMyClasses = false;
-            	return errno;
+                return errno;
             }
+
             @Override
             public void onPostExecute(Integer errno) {
                 if (errno == ErrorCode.OK) {
@@ -552,6 +564,65 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             }
         };
         AsyncTaskExecutor.executeShortNetworkTask(asyncTask_check_update);
+    }
+
+    /**
+     * 弹出对话框，让用户处理学校邀请。
+     */
+    private void promptSchoolInvitations() {
+        final SharedPreferences pref = PrefUtil.getInstance(this).getPreferences();
+        String body = pref.getString(PrefUtil.LATEST_SCHOOL_INVITATION, null);
+
+        if (body != null && body.startsWith("{")) {
+            try {
+                JsonObject j = (JsonObject) new JsonParser().parse(body);
+                final String phone = j.has("phone") ? j.get("phone").getAsString() : null;
+                final String schoolId = j.has("school_id") ? j.get("school_id").getAsString() : null;
+                String schoolName = j.has("school_name") ? j.get("school_name").getAsString() : null;
+
+                if (!TextUtils.isEmpty(phone)
+                        && !TextUtils.isEmpty(schoolId)
+                        && !TextUtils.isEmpty(schoolName)) {
+                    String className = j.has("class_name") ? j.get("class_name").getAsString() : null;
+                    String contentText = schoolName + "\n" +
+                            (TextUtils.isEmpty(className) ?
+                                    getString(R.string.school_invitation_notification_content_text) :
+                                    getString(R.string.school_invitation_notification_content_text_with_class_name,
+                                            "\n" + className));
+
+                    new MessageDialog(this)
+                            .setMessage(contentText)
+                            .setOnLeftClickListener(getString(R.string.postpone),
+                                    new MessageDialog.MessageDialogClickListener() {
+                                        @Override
+                                        public void onclick(MessageDialog dialog) {
+                                            dialog.dismiss();
+                                            pref.edit().remove(PrefUtil.LATEST_SCHOOL_INVITATION).commit();
+                                        }
+                                    })
+                            .setOnRightClickListener(getString(R.string.join),
+                                    new MessageDialog.MessageDialogClickListener() {
+                                        @Override
+                                        public void onclick(MessageDialog dialog) {
+                                            dialog.dismiss();
+                                            pref.edit().remove(PrefUtil.LATEST_SCHOOL_INVITATION).commit();
+                                            SchoolInvitationActivity.sendProcessInvitationRequest(
+                                                    HomeActivity.this,
+                                                    phone, schoolId, true);
+                                        }
+                                    })
+                            .setRightBold(true)
+                            .show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private boolean hasPendingSchoolInvitations() {
+        return null != PrefUtil.getInstance(this).getPreferences().getString(
+                PrefUtil.LATEST_SCHOOL_INVITATION, null);
     }
 
     private void changeNewUpdateFlagView(int visibility){

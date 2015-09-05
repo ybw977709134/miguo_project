@@ -1,5 +1,6 @@
 package co.onemeter.oneapp;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,6 +13,7 @@ import co.onemeter.utils.AsyncTaskExecutor;
 import com.androidquery.AQuery;
 import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.LessonWebServerIF;
+import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.SchoolInvitation;
 import org.wowtalk.ui.MessageBox;
 import org.wowtalk.ui.MessageDialog;
@@ -89,6 +91,8 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
                     adatper = new SchoolInvitationAdatper(SchoolInvitationActivity.this,
                             invitations);
                     setListAdapter(adatper);
+                    PrefUtil.getInstance(SchoolInvitationActivity.this).getPreferences()
+                            .edit().remove(PrefUtil.LATEST_SCHOOL_INVITATION).commit();
                 } else {
                     new AQuery(SchoolInvitationActivity.this).find(android.R.id.empty).text(
                             getString(R.string.err_failed_to_load_data_with_errno, errno));
@@ -97,17 +101,25 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
         });
     }
 
-    private void sendProcessInvitationRequest(final String phone, final String schoolId, final boolean accepted) {
+    /**
+     * 在异步任务中发送对学校邀请的处理决定。
+     * @param context 用于 Toast 操作结果。
+     * @param phone
+     * @param schoolId
+     * @param accepted
+     */
+    public static void sendProcessInvitationRequest(final Activity context, final String phone,
+                                                    final String schoolId, final boolean accepted) {
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... voids) {
-                return LessonWebServerIF.getInstance(SchoolInvitationActivity.this)
+                return LessonWebServerIF.getInstance(context)
                         .processInvitation(phone, schoolId, accepted);
             }
 
             @Override
             protected void onPostExecute(Integer errno) {
-                MessageBox messageBox = new MessageBox(SchoolInvitationActivity.this);
+                MessageBox messageBox = new MessageBox(context);
                 if (errno == ErrorCode.OK) {
                     messageBox.toast(R.string.operation_done);
                 } else {
@@ -150,7 +162,7 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
                     if (activityRef.get() != null) {
                         obj.status = "accepted";
                         activityRef.get().adatper.notifyDataSetChanged();
-                        activityRef.get().sendProcessInvitationRequest(obj.phone, obj.schoolId, true);
+                        sendProcessInvitationRequest(activityRef.get(), obj.phone, obj.schoolId, true);
                     }
                 }
             });
@@ -175,7 +187,7 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
 
                                                 obj.status = "rejected";
                                                 activity.adatper.notifyDataSetChanged();
-                                                activity.sendProcessInvitationRequest(obj.phone, obj.schoolId, false);
+                                                sendProcessInvitationRequest(activity, obj.phone, obj.schoolId, false);
                                             }
                                         })
                                 .setTextColorBtnLeftOrSingle(activity.getResources().getColor(R.color.blue))

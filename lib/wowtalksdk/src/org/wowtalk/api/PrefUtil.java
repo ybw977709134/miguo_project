@@ -149,6 +149,12 @@ public class PrefUtil {
     private static final String SYS_NOTICE_MOMENT_QA = "sys_notice_moment_qa";
     private static final String SYS_NOTICE_MOMENT_SHARE = "sys_notice_moment_share";
     private static final String SYS_NOTICE_MOMENT_VOTE = "sys_notice_moment_vote";
+
+    /** 收到的最近一条入班邀请。数据格式是通知中的 JSON。
+     *
+     * 收到推送通知时写入；用户在首页的对话框中处理过、或者查看过入班邀请页面后清空。*/
+    public static final String LATEST_SCHOOL_INVITATION = "LATEST_SCHOOL_INVITATION";
+
     /***=======SP_uid的key================end=====================*/
 
     private static final boolean SYS_NOTICE_ENABLE_DEF_VALUE=true;

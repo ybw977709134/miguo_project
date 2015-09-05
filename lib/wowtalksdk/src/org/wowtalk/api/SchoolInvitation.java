@@ -1,6 +1,7 @@
 package org.wowtalk.api;
 
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Created by panzy on 8/21/15.
@@ -17,6 +18,7 @@ public class SchoolInvitation {
     public String status;
     public String[] classroomIds;
     public String[] classroomNames;
+    public Date lastModified;
 
     @Override
     public String toString() {

@@ -1018,9 +1018,9 @@
     <string name="school_invitation_notification_content_text_with_class_name">邀请您加入%s</string>
     <string name="accept">接受</string>
     <string name="reject">拒绝</string>
-	<string name="title_activity_school_invitation">学校邀请</string>
+	<string name="title_activity_school_invitation">入班邀请</string>
     <string name="err_failed_to_load_data_with_errno">加载数据失败 (Error %d)</string>
-    <string name="school_invitation_status_accepted">已接受</string>
+    <string name="school_invitation_status_accepted">已加入</string>
     <string name="school_invitation_status_rejected">已拒绝</string>
     <string name="settings_view_school_invitations">入班邀请</string>
     <string name="settings_ignore_school_invitations">忽略来自任何学校的邀请</string>
@@ -1028,6 +1028,11 @@
     <string name="confirm_ignore_school_invitations">忽略来自任何学校的入班邀请？</string>
     <string name="bool_yes">是</string>
     <string name="bool_no">否</string>
+    <string name="join">加入</string>
+    <string name="loading">加载中...</string>
+    <string name="no_data">没有数据</string>
+    <string name="confirm_reject_school_invitations_of_following_classrooms">拒绝加入以下班级？</string>
+    <string name="nothing">无</string>
 
 
 </resources>

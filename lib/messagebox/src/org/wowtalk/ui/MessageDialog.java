@@ -175,8 +175,9 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
     	leftFlag = flag;
     }
     
-    public void setRightBold(boolean flag){
+    public MessageDialog setRightBold(boolean flag){
     	rightFlag = flag;
+        return this;
     }
     
     public void setSingleBold(boolean flag){
@@ -195,12 +196,14 @@ public class MessageDialog extends AlertDialog implements View.OnClickListener{
         mMsgColor = color;
     }
 
-    public void setTextColorBtnLeftOrSingle(int color){
+    public MessageDialog setTextColorBtnLeftOrSingle(int color){
         mBtn_l_color = color;
+        return this;
     }
 
-    public void setTextColorBtnRight(int color){
+    public MessageDialog setTextColorBtnRight(int color){
         mBtn_r_color = color;
+        return this;
     }
 
     public void setMessageTextSize(int size){

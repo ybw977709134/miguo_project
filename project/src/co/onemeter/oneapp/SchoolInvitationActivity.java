@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -16,10 +14,11 @@ import org.wowtalk.api.ErrorCode;
 import org.wowtalk.api.LessonWebServerIF;
 import org.wowtalk.api.SchoolInvitation;
 import org.wowtalk.ui.MessageBox;
+import org.wowtalk.ui.MessageDialog;
 
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -56,28 +55,6 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_school_invitation, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -88,6 +65,11 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
 
     private void loadData() {
         AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected void onPreExecute() {
+                new AQuery(SchoolInvitationActivity.this).find(android.R.id.empty).text(R.string.loading);
+            }
+
             @Override
             protected Integer doInBackground(Void... voids) {
                 List<SchoolInvitation> list = new ArrayList<>();
@@ -103,12 +85,13 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
             @Override
             protected void onPostExecute(Integer errno) {
                 if (errno == ErrorCode.OK) {
+                    new AQuery(SchoolInvitationActivity.this).find(android.R.id.empty).text(R.string.no_data);
                     adatper = new SchoolInvitationAdatper(SchoolInvitationActivity.this,
                             invitations);
                     setListAdapter(adatper);
                 } else {
-                    new MessageBox(SchoolInvitationActivity.this)
-                            .toast(getString(R.string.err_failed_to_load_data_with_errno, errno));
+                    new AQuery(SchoolInvitationActivity.this).find(android.R.id.empty).text(
+                            getString(R.string.err_failed_to_load_data_with_errno, errno));
                 }
             }
         });
@@ -136,6 +119,7 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
 
     static class SchoolInvitationAdatper extends ArrayAdapter<SchoolInvitation> {
         WeakReference<SchoolInvitationActivity> activityRef;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         public SchoolInvitationAdatper(SchoolInvitationActivity activity, List<SchoolInvitation> objects) {
             super(activity, R.layout.listitem_school_invitation, R.id.txt_content, objects);
@@ -149,15 +133,17 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
 
             final SchoolInvitation obj = getItem(position);
 
-            String contentText;
+            final String classrooms;
             if (obj.classroomNames != null && obj.classroomNames.length > 0) {
-                contentText = getContext().getString(R.string.school_invitation_notification_content_text_with_class_name,
-                        Arrays.toString(obj.classroomNames));
+                classrooms = TextUtils.join("\n", obj.classroomNames);
             } else {
-                contentText = getContext().getString(R.string.school_invitation_notification_content_text);
+                classrooms = "(" + getContext().getString(R.string.nothing) + ")";
             }
 
-            q.find(R.id.txt_content).text(obj.schoolName + contentText);
+            q.find(R.id.txt_classrooms).text(classrooms);
+            q.find(R.id.txt_date).text(dateFormat.format(obj.lastModified));
+
+            q.find(R.id.txt_content).text(obj.schoolName);
             q.find(R.id.btn_accept).clicked(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -172,9 +158,30 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
                 @Override
                 public void onClick(View view) {
                     if (activityRef.get() != null) {
-                        obj.status = "rejected";
-                        activityRef.get().adatper.notifyDataSetChanged();
-                        activityRef.get().sendProcessInvitationRequest(obj.phone, obj.schoolId, false);
+                        final SchoolInvitationActivity activity = activityRef.get();
+
+                        String msg = activity.getString(
+                                R.string.confirm_reject_school_invitations_of_following_classrooms) +
+                                "\n" + classrooms;
+
+                        new MessageDialog(activity, true, MessageDialog.SIZE_NORMAL)
+                                .setMessage(msg)
+                                .setOnLeftClickListener(activity.getString(R.string.cancel), null)
+                                .setOnRightClickListener(activity.getString(R.string.reject),
+                                        new MessageDialog.MessageDialogClickListener() {
+                                            @Override
+                                            public void onclick(MessageDialog dialog) {
+                                                dialog.dismiss();
+
+                                                obj.status = "rejected";
+                                                activity.adatper.notifyDataSetChanged();
+                                                activity.sendProcessInvitationRequest(obj.phone, obj.schoolId, false);
+                                            }
+                                        })
+                                .setTextColorBtnLeftOrSingle(activity.getResources().getColor(R.color.blue))
+                                .setTextColorBtnRight(activity.getResources().getColor(R.color.red))
+                                .setRightBold(true)
+                                .show();
                     }
                 }
             });
@@ -182,21 +189,17 @@ public class SchoolInvitationActivity extends ListActivity implements View.OnCli
             // set status
             if (TextUtils.equals(obj.status, "accepted")) {
                 q.find(R.id.txt_status).visible().text(R.string.school_invitation_status_accepted);
-                q.find(R.id.btn_accept).gone();
-                q.find(R.id.btn_reject).gone();
+                q.find(R.id.vg_actions).gone();
             } else if (TextUtils.equals(obj.status, "rejected")) {
                 q.find(R.id.txt_status).visible().text(R.string.school_invitation_status_rejected);
-                q.find(R.id.btn_accept).gone();
-                q.find(R.id.btn_reject).gone();
+                q.find(R.id.vg_actions).gone();
             } else if (TextUtils.equals(obj.status, "sent")) {
                 q.find(R.id.txt_status).gone();
-                q.find(R.id.btn_accept).visible();
-                q.find(R.id.btn_reject).visible();
+                q.find(R.id.vg_actions).visible();
             } else {
                 // this shouldn't happen
                 q.find(R.id.txt_status).gone();
-                q.find(R.id.btn_accept).gone();
-                q.find(R.id.btn_reject).gone();
+                q.find(R.id.vg_actions).gone();
             }
 
             return view;

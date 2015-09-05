@@ -38,7 +38,9 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@android:id/list">
+            android:id="@android:id/list"
+            android:background="@color/bg_color"
+            android:divider="@null">
         </ListView>
     </RelativeLayout>
 </LinearLayout>

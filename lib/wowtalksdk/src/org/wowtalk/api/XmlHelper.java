@@ -1456,6 +1456,11 @@ public class XmlHelper {
                 }
             }
 
+            // <last_modified>2015-08-23T14:47:03+0000</last_modified>
+            e = Utils.getFirstElementByTagName(node, "last_modified");
+            if (e != null)
+                inv.lastModified = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZ").parse(e.getTextContent());
+
             return inv;
         } catch (Exception e) {
             e.printStackTrace();

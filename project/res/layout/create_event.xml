@@ -502,12 +502,16 @@
 
             <EditText
                 android:id="@+id/edt_content"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:layout_margin="10dp"
                 android:gravity="top|left"
                 style="@style/inputbox_white"
                 android:padding="10dp"
+                android:singleLine="false"
+                android:scrollbars="vertical"
+                android:lines="5"
+                android:focusable="true"
                 android:hint="@string/event_desc" />
 
                 <ImageView

@@ -52,9 +52,11 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
         AQuery q = new AQuery(this);
         classrooms = new LinkedList<GroupChatRoom>();
 
-        if(!getIntent().getBooleanExtra(TAG,false)){
-            q.find(R.id.title_back).visibility(View.VISIBLE);
-        }
+        //隐藏掉返回功能
+//        if(!getIntent().getBooleanExtra(TAG,false)){
+//            q.find(R.id.title_back).visibility(View.VISIBLE);
+//        }
+
         q.find(R.id.title_back).clicked(this);
         q.find(R.id.btn_add).clicked(this);
         loading = (ProgressBar) findViewById(R.id.loading);
@@ -68,56 +70,7 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
         
         schoolrooms = new ArrayList<GroupChatRoom>();
         
-        //这里用两层异步任务，先取到学校的信息，在取班级信息
-//        AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
-//
-//            protected void onPreExecute() {
-//                //msgBox.showWait();
-//            }
-//
-//            ;
-//
-//            @Override
-//            protected Void doInBackground(Void... params) {
-//            	classrooms.clear();
-////                schoolrooms = talkwebserver.getMySchools(true);
-//                errno = talkwebserver.getMySchoolsErrno(true, schoolrooms);
-//                return null;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Void result) {
-//                if (errno == ErrorCode.OK) {
-//                	new Database(MyClassesActivity.this).storeSchools(schoolrooms);
-//                    AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Void>() {
-//
-//                        @Override
-//                        protected Void doInBackground(Void... params) {
-//                            for (GroupChatRoom school : schoolrooms) {
-//                                List<GroupChatRoom> claz = talkwebserver.getSchoolClassRooms(school.groupID);
-//                                for (GroupChatRoom classroom : claz) {
-//                                    classrooms.add(classroom);
-//                                }
-//                            }
-//                            return null;
-//                        }
-//
-//                        protected void onPostExecute(Void result) {
-//                            //msgBox.dismissWait();
-//                            adapter = new MyClassAdapter(classrooms);
-//                            lvMyClass.setAdapter(adapter);
-//                        }
-//
-//                        ;
-//                    });
-//                } else {
-//                    //msgBox.dismissWait();
-//                    Toast.makeText(MyClassesActivity.this,R.string.conn_time_out,Toast.LENGTH_LONG).show();
-//                    finish();
-//                }
-//            }
-//        });
-
+       //通过异步任务拉取组织架构的信息
 		AsyncTaskExecutor.executeShortNetworkTask(new AsyncTask<Void, Void, Integer>() {
 
 			@Override
@@ -134,22 +87,18 @@ public class MyClassesActivity extends Activity implements View.OnClickListener,
                         处理无班级内容
                      */
 
-//                	if(!getIntent().getBooleanExtra(TAG,false)){
-//                		View emptyView = lvMyClass.getEmptyView();
-//                        emptyView.setVisibility(View.GONE);
-//                        RelativeLayout lay_main = (RelativeLayout) findViewById(R.id.lay_myclass_main);
-//                        TextView textView = new TextView(MyClassesActivity.this);
-//                        textView.setText(getString(R.string.class_not_bind));
-//                        textView.setGravity(Gravity.CENTER);
-//                        RelativeLayout.LayoutParams params =
-//                              new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
-//                        textView.setLayoutParams(params);
-//                        lay_main.addView(textView);
-//                	}else{
-                		lvMyClass.setVisibility(View.GONE);
-                    	loading.setVisibility(View.GONE);
-                    	layout_add_class.setVisibility(View.VISIBLE);
-//                	}
+
+                		View emptyView = lvMyClass.getEmptyView();
+                        emptyView.setVisibility(View.GONE);
+                        RelativeLayout lay_main = (RelativeLayout) findViewById(R.id.lay_myclass_main);
+                        TextView textView = new TextView(MyClassesActivity.this);
+                        textView.setText(getString(R.string.class_not_bind));
+                        textView.setGravity(Gravity.CENTER);
+                        RelativeLayout.LayoutParams params =
+                              new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+                        textView.setLayoutParams(params);
+                        lay_main.addView(textView);
+
                 	
                 }else {
                     adapter = new MyClassAdapter(classrooms);

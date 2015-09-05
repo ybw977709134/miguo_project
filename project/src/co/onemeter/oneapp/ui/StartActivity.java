@@ -23,6 +23,8 @@ import co.onemeter.oneapp.SchoolInvitationActivity;
 import co.onemeter.oneapp.ui.AppStatusService.AppStatusBinder;
 import co.onemeter.oneapp.utils.WebServerEventPoller;
 import co.onemeter.utils.AsyncTaskExecutor;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.json.JSONException;
@@ -33,7 +35,10 @@ import org.wowtalk.core.RegistrationState;
 import org.wowtalk.core.WowTalkChatMessageState;
 import org.wowtalk.ui.MessageBox;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class StartActivity extends TabActivity
@@ -1376,7 +1381,19 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
                     if (!TextUtils.isEmpty(phone)
                             && !TextUtils.isEmpty(schoolId)
                             && !TextUtils.isEmpty(schoolName)) {
-                        String className = j.has("class_name") ? j.get("class_name").getAsString() : null;
+
+                        String className = "";
+                        if (j.has("classrooms")) {
+                            JsonArray arr = j.get("classrooms").getAsJsonArray();
+                            i = 0;
+                            for (JsonElement c : arr) {
+                                if (i > 0)
+                                    className += ", ";
+                                className += ((JsonObject)c).get("name").getAsString();
+                                ++i;
+                            }
+                        }
+
                         String contentText = TextUtils.isEmpty(className) ?
                                 getString(R.string.school_invitation_notification_content_text) :
                                 getString(R.string.school_invitation_notification_content_text_with_class_name,

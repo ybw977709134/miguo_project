@@ -21,6 +21,8 @@ import co.onemeter.oneapp.R;
 import co.onemeter.oneapp.SchoolInvitationActivity;
 import co.onemeter.oneapp.ui.widget.AutoScrollViewPager;
 import co.onemeter.utils.AsyncTaskExecutor;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.pzy.paint.DoodleActivity;
@@ -68,6 +70,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     private List<GroupChatRoom> schools;
     private boolean isRequestingMyClasses = false;
     private boolean isWaitingForMyClasses = false;
+    private MessageDialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -239,6 +242,9 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         msgbox.dismissWait();
         msgbox.dismissToast();
         viewPager_home.stopAutoScroll();
+
+        if (dialog != null)
+            dialog.dismiss();
     }
 
     @Override
@@ -583,14 +589,29 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 if (!TextUtils.isEmpty(phone)
                         && !TextUtils.isEmpty(schoolId)
                         && !TextUtils.isEmpty(schoolName)) {
-                    String className = j.has("class_name") ? j.get("class_name").getAsString() : null;
+
+                    String className = "";
+                    if (j.has("classrooms")) {
+                        JsonArray arr = j.get("classrooms").getAsJsonArray();
+                        int i = 0;
+                        for (JsonElement c : arr) {
+                            if (i > 0)
+                                className += "\n";
+                            className += ((JsonObject)c).get("name").getAsString();
+                            ++i;
+                        }
+                    }
+
                     String contentText = schoolName + "\n" +
                             (TextUtils.isEmpty(className) ?
                                     getString(R.string.school_invitation_notification_content_text) :
                                     getString(R.string.school_invitation_notification_content_text_with_class_name,
                                             "\n" + className));
 
-                    new MessageDialog(this)
+                    if (dialog != null)
+                        dialog.dismiss();
+
+                    dialog = new MessageDialog(this)
                             .setMessage(contentText)
                             .setOnLeftClickListener(getString(R.string.postpone),
                                     new MessageDialog.MessageDialogClickListener() {
@@ -611,8 +632,8 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                                                     phone, schoolId, true);
                                         }
                                     })
-                            .setRightBold(true)
-                            .show();
+                            .setRightBold(true);
+                    dialog.show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

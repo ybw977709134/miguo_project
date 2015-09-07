@@ -102,7 +102,7 @@ public class MyTimelineFragment extends TimelineFragment implements InputBoardMa
     protected void setupListHeaderView() {
 //        if ((headerView_tagbar == null || getListView().getHeaderViewsCount() == originalHeaderViewsCount)
 //                && getListAdapter() == null) {
-        if (headerView_tagbar == null) {    
+        if (headerView_tagbar == null) {
             originalHeaderViewsCount = getListView().getHeaderViewsCount();
             setupListHeaderView_albumCover();
             int flag = new Database(getActivity()).getBuddyCountType(uid());

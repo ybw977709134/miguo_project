@@ -834,6 +834,18 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
 
                         mMsgBox.toast("验证码以短信已经发送到你的手机，请注意接收");
 
+
+                        //打开输入法
+                        Handler hanlder = new Handler();
+                        hanlder.postDelayed(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                mInputMethodManager.showSoftInput(txt_auth_code, InputMethodManager.RESULT_SHOWN);
+                                mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                            }
+                        }, 200);
+
                         pageFlag = AUTH_CODE_PAGE;
                         layout_verification_auth_code.setVisibility(View.VISIBLE);
                         layout_verification_cellphone.setVisibility(View.GONE);

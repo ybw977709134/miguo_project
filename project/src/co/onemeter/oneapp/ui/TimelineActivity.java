@@ -46,6 +46,8 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
     public final static int TAG_LIFE_IDX =5;
     public final static int TAG_VIDEO_IDX =6;
 
+    public static boolean FLAG_ISPUBLIC = false;
+
     private static final String FRAGMENT_TAG_ALL = "all";
     private static final String FRAGMENT_TAG_MY = "my";
 
@@ -80,6 +82,10 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
         q.find(R.id.vg_new_video).clicked(this);
 
         newMomentPanel = q.find(R.id.new_moment_panel).clicked(this).getView();
+        if (getIntent().getBooleanExtra("isPublic",false)) {
+            FLAG_ISPUBLIC = true;
+            setTitle("公众号");
+        }
 
         getData(savedInstanceState == null ? getIntent().getExtras() : savedInstanceState);
 
@@ -115,8 +121,14 @@ public class TimelineActivity extends FragmentActivity implements View.OnClickLi
 
     @Override
     protected void onDestroy() {
+        //判断是否打开了键盘
         if (inputMgr != null) {
             inputMgr = null;
+        }
+
+        //重置好友圈还是公众号的标志位
+        if (FLAG_ISPUBLIC) {
+            FLAG_ISPUBLIC = false;
         }
         super.onDestroy();
     }

@@ -89,8 +89,12 @@ public abstract class TimelineFragment extends ListFragment
             }
         };
 
+        if (TimelineActivity.FLAG_ISPUBLIC) {
+            countType = 0;
+        }
+
         // load moments
-        setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag),-1));
+        setupListAdapter(loadLocalMoments(0, tagIdxFromUiToDb(selectedTag),countType));
         checkNewMoments();
     }
 

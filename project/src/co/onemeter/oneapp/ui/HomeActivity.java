@@ -267,6 +267,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.img_home_growth_class:
                 intent = new Intent(this,TimelineActivity.class);
+                intent.putExtra("isPublic",true);
                 startActivity(intent);
                 break;
             case R.id.img_home_friends:

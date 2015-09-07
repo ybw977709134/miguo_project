@@ -64,8 +64,14 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
 
     @Override
     protected void setupListHeaderView() {
-        if ((headerView == null || getListView().getHeaderViewsCount() == originalHeaderViewsCount)
-                && getListAdapter() == null) {
+
+        Log.i("---运行1:","外层");
+//        if ((headerView == null || getListView().getHeaderViewsCount() == originalHeaderViewsCount)
+//                && getListAdapter() == null) {
+
+        if (headerView == null ) {
+
+            Log.i("---运行2:","内层");
             originalHeaderViewsCount = getListView().getHeaderViewsCount();
             timelineDropdownFilter =
                     new MenuBar(getActivity(),
@@ -84,7 +90,16 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
                         }
                     };
             headerView = timelineDropdownFilter.getView();
-            getListView().addHeaderView(headerView);
+
+//            headerView.setVisibility(View.GONE);
+
+//            getListView().addHeaderView(headerView);
+
+            if (TimelineActivity.FLAG_ISPUBLIC) {
+                headerView.setVisibility(View.GONE);
+            } else {
+                getListView().addHeaderView(headerView);
+            }
             timelineDropdownFilter.setOnFilterChangedListener(this);
         }
     }
@@ -113,11 +128,10 @@ public class AllTimelineFragment extends TimelineFragment implements MenuBar.OnD
                     MenuBar.getSender().setText("学生账号");
                 }
 
-
                 onSenderChanged(itemIdx);
 
-
                 break;
+
             case R.id.btn_cat:
             	//0全部，1通知，2问答，3学习，4生活，5，投票，6视频
             	//由于新需求的变化，无论是老师账号还是学生账号都去除掉通知和问答的栏目

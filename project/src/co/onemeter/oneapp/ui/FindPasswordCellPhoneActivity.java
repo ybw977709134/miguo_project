@@ -106,6 +106,7 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
 
     private static int FIND_CELLPHONE_PAGE = 1;//验证绑定手机号码阶段
     private static int AUTH_CODE_PAGE = 2;//验证验证码阶段
+    private static int AUTH_PASSWORD_PAGE = 3;//验证密码阶段
     //验证阶段判断标志
     private int pageFlag = FIND_CELLPHONE_PAGE;//默认为验证绑定手机号码阶段
 
@@ -171,11 +172,10 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
             if (pageFlag == FIND_CELLPHONE_PAGE) {
-
                 closeSoftKeyboard();
                 FindPasswordCellPhoneActivity.this.finish();
 
-            } else {
+            } else if (pageFlag == AUTH_CODE_PAGE) {
 
                 MessageDialog dialog = new MessageDialog(FindPasswordCellPhoneActivity.this);
                 dialog.setTitle("提示");
@@ -205,6 +205,16 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
 
                 dialog.setOnRightClickListener("继续等待",null);
                 dialog.show();
+            } else {
+                pageFlag = AUTH_CODE_PAGE;
+
+                layout_reset_password.setVisibility(View.GONE);
+                layout_verification_auth_code.setVisibility(View.VISIBLE);
+                txt_auth_code.setText("");
+                txt_new_password.setText("");
+                txt_confirm_new_password.setText("");
+                textView_verification_newPassword.setVisibility(View.GONE);
+                textView_verification_authCode_result.setVisibility(View.GONE);
             }
 
         }
@@ -575,7 +585,7 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
                     closeSoftKeyboard();
                     FindPasswordCellPhoneActivity.this.finish();
 
-                } else {
+                } else if (pageFlag == AUTH_CODE_PAGE) {
 
                     MessageDialog dialog = new MessageDialog(FindPasswordCellPhoneActivity.this);
                     dialog.setTitle("提示");
@@ -605,6 +615,16 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
 
                     dialog.setOnRightClickListener("继续等待",null);
                     dialog.show();
+                } else {
+                    pageFlag = AUTH_CODE_PAGE;
+
+                    layout_reset_password.setVisibility(View.GONE);
+                    layout_verification_auth_code.setVisibility(View.VISIBLE);
+                    txt_auth_code.setText("");
+                    txt_new_password.setText("");
+                    txt_confirm_new_password.setText("");
+                    textView_verification_newPassword.setVisibility(View.GONE);
+                    textView_verification_authCode_result.setVisibility(View.GONE);
                 }
 
                 break;
@@ -967,6 +987,7 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
                     case ErrorCode.OK://0//验证码验证成功
 
                         //跳转到绑定手机号码页面
+                        pageFlag = AUTH_PASSWORD_PAGE;
                         layout_verification_auth_code.setVisibility(View.GONE);
                         layout_reset_password.setVisibility(View.VISIBLE);
 

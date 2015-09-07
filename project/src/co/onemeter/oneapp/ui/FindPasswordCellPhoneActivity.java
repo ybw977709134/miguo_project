@@ -985,7 +985,7 @@ public class FindPasswordCellPhoneActivity extends Activity implements View.OnCl
 
                     case ErrorCode.ERR_SMS_CODE_NOT_CHECK://58:验证码验证不通过
                         textView_verification_authCode_result.setVisibility(View.VISIBLE);
-                        textView_verification_authCode_result.setText("验证码验证不通过");
+                        textView_verification_authCode_result.setText("验证码不正确");
                         break;
 
                     case ErrorCode.ERR_VERIFICATION_CODE_TOO_MANY://54:短信验证码请求次数太多

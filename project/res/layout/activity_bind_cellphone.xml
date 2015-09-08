@@ -106,6 +106,7 @@
                         style="@style/inputbox_borderless"
                         android:imeOptions="actionDone"
                         android:hint="@string/bind_mobile"
+                        android:inputType="number"
                         android:textCursorDrawable="@drawable/cursor_color" />
                     <!-- 清除输入的绑定手机 -->
                     <ImageButton
@@ -199,6 +200,7 @@
                         style="@style/inputbox_borderless"
                         android:imeOptions="actionDone"
                         android:hint="@string/login_input_verification"
+                        android:inputType="number"
                         android:textCursorDrawable="@drawable/cursor_color"/>
 
                     <!-- 验证码清除按钮 -->

@@ -346,18 +346,9 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-//					txt_auth_code.setText("");
                     if (txt_auth_code.getText().toString().length() > 0) {
                         field_clear_auth_code.setVisibility(View.VISIBLE);
-//						 Handler hanlder = new Handler();
-//	        		        hanlder.postDelayed(new Runnable() {
-//
-//	        					@Override
-//	        					public void run() {
-//	        						mInputMethodManager.showSoftInput(txt_auth_code, InputMethodManager.RESULT_SHOWN);
-//	        						mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-//	        					}
-//	        				}, 200);
+
                     }
                 } else {
                     field_clear_auth_code.setVisibility(View.GONE);
@@ -474,7 +465,6 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
             //验证绑定手机号码
             case R.id.btn_verification_cellphone:
                 mInputMethodManager.hideSoftInputFromWindow(txt_bind_cellphone.getWindowToken() , 0);
-//                getAccessCode(txt_bind_cellphone.getText().toString());
 
                 if (isPhoneNum(txt_bind_cellphone.getText().toString())) {
                     getAccessCode(txt_bind_cellphone.getText().toString());
@@ -483,16 +473,6 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
                     textView_verification_cellphone_result.setVisibility(View.VISIBLE);
                     textView_verification_cellphone_result.setText("你填写的手机号码格式不正确");
                 }
-
-//                Handler hanlder = new Handler();
-//                hanlder.postDelayed(new Runnable() {
-//
-//                    @Override
-//                    public void run() {
-//                        mInputMethodManager.showSoftInput(txt_auth_code, InputMethodManager.RESULT_SHOWN);
-//                        mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-//                    }
-//                }, 200);
 
                 break;
 

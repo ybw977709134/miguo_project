@@ -363,15 +363,13 @@ public class FixBindEmailAddressActivity extends Activity implements OnClickList
                     	MessageDialog dialog = new MessageDialog(FixBindEmailAddressActivity.this,false,MessageDialog.SIZE_NORMAL);
                         dialog.setTitle("");
                         dialog.setCancelable(false);
-                        dialog.setMessage("今天邮的箱验证次数已用完"+"\n"+"请明天再试。");                      
+                        dialog.setMessage("今天邮箱验证次数已用完"+"\n"+"请明天再试。");
                         dialog.show();
                         break;
  
                     default://获取验证码失败
-//                        mMsgBox.show(null, "获取验证码失败");
                         textView_verification_code_result.setVisibility(View.VISIBLE);
-                        textView_verification_code_result.setText("获取验证码失败");	
-//                        Toast.makeText(FixBindEmailAddressActivity.this, "获取验证码失败", Toast.LENGTH_SHORT).show();
+                        textView_verification_code_result.setText("获取验证码失败");
                         break;    
                 }
             }

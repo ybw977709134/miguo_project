@@ -716,8 +716,12 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
                         break;
 
                     case ErrorCode.ERR_SMS_MORE_TIMES://56:一天超过5次
-                        textView_verification_cellphone_result.setVisibility(View.VISIBLE);
-                        textView_verification_cellphone_result.setText("一天超过5次");
+                        MessageDialog dialog = new MessageDialog(BindCellPhoneActivity.this,false,MessageDialog.SIZE_NORMAL);
+                        dialog.setTitle("提示");
+                        dialog.setMessage("今天手机号验证次数已超5次\"+\"\\n\"+\"请明天再试");
+                        dialog.setCancelable(false);
+                        dialog.setOnLeftClickListener("确定",null);
+                        dialog.show();
                         break;
 
                     case ErrorCode.ERR_SMS_PHONE_NOT_CHECK://55:手机号码格式不正确
@@ -770,8 +774,12 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
 
 
                     case ErrorCode.ERR_SMS_MORE_TIMES://56:一天超过5次
-                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
-                        textView_verification_authCode_result.setText("一天超过5次");
+                        MessageDialog dialog = new MessageDialog(BindCellPhoneActivity.this,false,MessageDialog.SIZE_NORMAL);
+                        dialog.setTitle("提示");
+                        dialog.setMessage("今天手机号验证次数已超5次\"+\"\\n\"+\"请明天再试");
+                        dialog.setCancelable(false);
+                        dialog.setOnLeftClickListener("确定",null);
+                        dialog.show();
                         break;
 
 

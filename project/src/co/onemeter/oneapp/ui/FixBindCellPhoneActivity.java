@@ -409,6 +409,11 @@ public class FixBindCellPhoneActivity extends Activity implements View.OnClickLi
                         textView_verification_code_result.setText("手机号码格式不正确");
                         break;
 
+                    case ErrorCode.ERR_SMS_MORE_TIMES://56:一天超过5次
+                        textView_verification_code_result.setVisibility(View.VISIBLE);
+                        textView_verification_code_result.setText("一天超过5次");
+                        break;
+
                     case ErrorCode.ERR_SMS_CODE_OVER://57:验证码过期
                         textView_verification_code_result.setVisibility(View.VISIBLE);
                         textView_verification_code_result.setText("验证码过期");

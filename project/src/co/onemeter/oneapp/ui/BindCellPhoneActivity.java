@@ -769,6 +769,12 @@ public class BindCellPhoneActivity extends Activity implements View.OnClickListe
                         break;
 
 
+                    case ErrorCode.ERR_SMS_MORE_TIMES://56:一天超过5次
+                        textView_verification_authCode_result.setVisibility(View.VISIBLE);
+                        textView_verification_authCode_result.setText("一天超过5次");
+                        break;
+
+
                     case ErrorCode.ERR_SMS_CODE_OVER://57:验证码过期
                         textView_verification_authCode_result.setVisibility(View.VISIBLE);
                         textView_verification_authCode_result.setText("验证码过期");

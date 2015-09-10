@@ -17,7 +17,6 @@
             android:layout_width="50dp"
             android:layout_alignParentRight="true"
             android:background="@null"
-            android:visibility="gone"
             android:src="@drawable/nav_add_selector"/>
         <TextView
             android:layout_width="wrap_content"
@@ -341,7 +340,7 @@
                             android:src="@drawable/icon_home_growth_class"/>
                         <TextView
                             style="@style/home_txt_bottom_relative"
-                            android:text="公众号"/>
+                            android:text="班级圈"/>
                     </RelativeLayout>
                     <RelativeLayout
                         android:layout_width="0dp"

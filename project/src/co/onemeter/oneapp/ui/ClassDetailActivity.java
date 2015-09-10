@@ -173,7 +173,7 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 		query.find(R.id.class_live_class).clicked(this);
 		query.find(R.id.more).clicked(this);
 		
-//		query.find(R.id.btn_gotoclass).clicked(this);
+		query.find(R.id.btn_gotoclass).clicked(this);
 		query.find(R.id.btn_tea_stu_list).clicked(this);
 		query.find(R.id.btn_class_notice).clicked(this);
 		query.find(R.id.btn_holiday_apply).clicked(this);
@@ -216,16 +216,15 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 				
 			}
 		});
-//		lvMyClass.setEmptyView(this.findViewById(R.id.loading));
-        lvMyClass.setEmptyView(emptyView());
-//		lvMyClass.addFooterView(footerView());
+		lvMyClass.setEmptyView(this.findViewById(R.id.loading));
+		lvMyClass.addFooterView(footerView());
 //		schoolrooms = new ArrayList<GroupChatRoom>();
 		
 		TextView tv_class_live = (TextView) findViewById(R.id.class_live_class);
 		TextView tv_more = (TextView) findViewById(R.id.more);
 		if(PrefUtil.getInstance(this).getMyAccountType() == Buddy.ACCOUNT_TYPE_TEACHER){
 			tv_class_live.setVisibility(View.GONE);
-			tv_more.setVisibility(View.GONE);
+			tv_more.setVisibility(View.VISIBLE);
 		}else{
 			tv_class_live.setVisibility(View.VISIBLE);
 			tv_more.setVisibility(View.GONE);
@@ -377,14 +376,12 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 	}
 
 
-	private View emptyView() {
+	private View footerView() {
 		View view = getLayoutInflater().inflate(R.layout.drawerlay_lv_footer, null);
 		TextView txt_footer = (TextView) view.findViewById(R.id.txt_footer_add);
-		txt_footer.setText(getString(R.string.class_noadd_classes));
-        ImageView imageView_footer = (ImageView) view.findViewById(R.id.imageView_footer_add);
-        imageView_footer.setVisibility(View.GONE);
-//		LinearLayout layout = (LinearLayout) view.findViewById(R.id.lay_footer_add);
-//		layout.setOnClickListener(this);
+		txt_footer.setText(getString(R.string.class_add_classes));
+		LinearLayout layout = (LinearLayout) view.findViewById(R.id.lay_footer_add);
+		layout.setOnClickListener(this);	
 		return view;
 	}
 
@@ -518,10 +515,10 @@ public class ClassDetailActivity extends Activity implements OnClickListener, On
 			showMore(v);
 			break;
 
-//		case R.id.btn_gotoclass:
-//			Intent intent = new Intent(this,TimelineActivity.class);
-//			startActivity(intent);
-//			break;
+		case R.id.btn_gotoclass:
+			Intent intent = new Intent(this,TimelineActivity.class);
+			startActivity(intent);
+			break;
 
 		case R.id.lay_footer_add:
 			Intent i = new Intent(this,AddClassActivity.class);

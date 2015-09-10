@@ -320,7 +320,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:orientation="horizontal" >
 
                     <Button
@@ -338,7 +337,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/background_dark"
-                android:layout_marginTop="10dp"
                 android:paddingLeft="10dp" >
 
                 <TextView
@@ -381,7 +379,6 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_centerInParent="true"
-                android:visibility="gone"
                 android:indeterminateDrawable="@drawable/progressbar_load" />
         </RelativeLayout>
     </android.support.v4.widget.DrawerLayout>

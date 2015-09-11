@@ -876,7 +876,7 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
 
                         MessageDialog dialog = new MessageDialog(MobileRegisterActivity.this,false,MessageDialog.SIZE_NORMAL);
                         dialog.setTitle("提示");
-                        dialog.setMessage("今天手机号验证次数已超5次\"+\"\\n\"+\"请明天再试");
+                        dialog.setMessage("今天手机号验证次数已超5次,请明天再试");
                         dialog.setCancelable(false);
                         dialog.setOnLeftClickListener("确定",null);
                         dialog.show();
@@ -942,7 +942,7 @@ public class MobileRegisterActivity extends Activity implements View.OnClickList
 
                         MessageDialog dialog = new MessageDialog(MobileRegisterActivity.this,false,MessageDialog.SIZE_NORMAL);
                         dialog.setTitle("提示");
-                        dialog.setMessage("今天手机号验证次数已超5次\"+\"\\n\"+\"请明天再试");
+                        dialog.setMessage("今天手机号验证次数已超5次,请明天再试");
                         dialog.setCancelable(false);
                         dialog.setOnLeftClickListener("确定",null);
                         dialog.show();

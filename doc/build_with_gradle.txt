@@ -76,13 +76,6 @@
             -Dpackaging=jar
 
     mvn install:install-file \
-            -Dfile=lib/wowtalksdk/libs/kakasi.jar \
-            -DgroupId=com.kawao \
-            -DartifactId=kakasi \
-            -Dversion=1.0.0 \
-            -Dpackaging=jar
-
-    mvn install:install-file \
             -Dfile=lib/wowtalksdk/libs/om_im_android_sdk-dev01-release.aar \
             -DgroupId=co.onemeter \
             -DartifactId=im-sdk-dev01 \

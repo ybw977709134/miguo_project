@@ -83,27 +83,18 @@
             -Dpackaging=jar
 
     mvn install:install-file \
-            -Dfile=lib/wowtalksdk/libs/aliyun-openservices-1.2.3.jar \
-            -DgroupId=com.aliyun \
-            -DartifactId=openservices \
-            -Dversion=1.2.3 \
-            -Dpackaging=jar
-
-    # git checkout dev
-    mvn install:install-file \
-            -Dfile=lib/wowtalksdk/libs/om_im_android_sdk.jar \
+            -Dfile=lib/wowtalksdk/libs/om_im_android_sdk-dev01-release.aar \
             -DgroupId=co.onemeter \
             -DartifactId=im-sdk-dev01 \
             -Dversion=1.0.0 \
-            -Dpackaging=jar
+            -Dpackaging=aar
 
-    # git checkout product
     mvn install:install-file \
-            -Dfile=lib/wowtalksdk/libs/om_im_android_sdk.jar \
+            -Dfile=lib/wowtalksdk/libs/om_im_android_sdk-product-release.aar \
             -DgroupId=co.onemeter \
             -DartifactId=im-sdk-product \
             -Dversion=1.0.0 \
-            -Dpackaging=jar
+            -Dpackaging=aar
 
 --------------------------------------------------------------------------------
 

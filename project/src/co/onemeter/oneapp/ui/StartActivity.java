@@ -1049,8 +1049,6 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
                     needDownloadGroupsAndMembers();
                 }
 
-                checkLocalLanguage();
-
                 getSecurityLevelFromServer();
 
                 // report push sercie token to server
@@ -1201,17 +1199,6 @@ implements OnClickListener, WowTalkUIChatMessageDelegate, WowTalkNotificationDel
         if (counts == 0) {
             co.onemeter.oneapp.ui.Log.i("StartActivity, db is empty, start downloading!");
             getDatasFromServer();
-        }
-    }
-
-    private void checkLocalLanguage() {
-        // 记录语言
-        String language = getResources().getConfiguration().locale.getLanguage();
-        String originalLanguage = mPrefUtil.getLocaleLanguage();
-        Log.d("system language is " + language + ", the original language is " + originalLanguage);
-        if (!originalLanguage.equals(language)) {
-            // 只负责发通知，更新SP中的语言在通知中处理
-            sendBroadcast(new Intent(LocaleChangedReceiver.ACTION_LOCALE_CHANGED_MINE));
         }
     }
 

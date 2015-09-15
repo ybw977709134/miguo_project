@@ -15,7 +15,6 @@ import co.onemeter.oneapp.ui.StartActivity;
 import co.onemeter.oneapp.utils.TimeHelper;
 import com.splunk.mint.Mint;
 import org.wowtalk.NetworkManager;
-import org.wowtalk.api.JapaneseHelper;
 import org.wowtalk.api.PrefUtil;
 import org.wowtalk.api.WowTalkVoipIF;
 
@@ -65,10 +64,6 @@ public class YuanquActivity extends Activity {
         Handler hdl = new Handler();
 		hdl.postDelayed(new splashHandler(), 500);
 
-        initJapaneseItaijiDictionary();
-        initJapaneseKanwaDictionary();
-        JapaneseHelper.setJapaneseDict(this);
-
         fixVoipState();
 
         TimeHelper.syncTime(this);
@@ -92,99 +87,6 @@ public class YuanquActivity extends Activity {
                 }
             }).start();
         }
-    }
-
-    /**
-     * 将res/raw/下的kanwadict_x字典拷贝合并为/data/data/co.onemeter.oneapp/files/kanwadict文件
-     */
-    private void initJapaneseKanwaDictionary() {
-        // 判断是否已经拷贝完成
-        final File destFile = new File(JapaneseHelper.JA_DICTIONARY_PATH_PRE + getPackageName()
-                + JapaneseHelper.JA_DICTIONARY_KANWA_PATH_SUFFIX);
-        if (destFile.exists()) {
-            return;
-        }
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                boolean isCopySuccess = false;
-                // 由于raw下只能读写1M以内文件，所以先将字典分为4部分
-                int[] jaDicts = new int[] {
-                        R.raw.kanwadict_1,
-                        R.raw.kanwadict_2,
-                        R.raw.kanwadict_3,
-                        R.raw.kanwadict_4};
-                try {
-                  OutputStream os = openFileOutput("kanwadict", Context.MODE_PRIVATE);
-                  byte[] buffer = new byte[1024];
-                  InputStream is;
-                  int readLen = 0;
-                  for (int dataResId : jaDicts) {
-                      is = getResources().openRawResource(dataResId);
-                      while ((readLen=is.read(buffer))!=-1) {
-                          os.write(buffer, 0, readLen);
-                      }
-                      os.flush();
-                      is.close();
-                  }
-                  os.close();
-                  isCopySuccess = true;
-              } catch (FileNotFoundException exception) {
-                  exception.printStackTrace();
-              } catch (IOException exception) {
-                  exception.printStackTrace();
-              } finally {
-                  // 拷贝失败，则删除目标文件，待下次重新拷贝
-                  if (!isCopySuccess) {
-                      destFile.delete();
-                  }
-              }
-            }
-        }).start();
-    }
-
-    /**
-     * 将res/raw/下的kanwadict_x字典拷贝合并为/data/data/co.onemeter.oneapp/files/itaiji文件
-     */
-    private void initJapaneseItaijiDictionary() {
-        // 判断是否已经拷贝完成
-        final File destFile = new File(JapaneseHelper.JA_DICTIONARY_PATH_PRE + getPackageName()
-                + JapaneseHelper.JA_DICTIONARY_ITAIJI_PATH_SUFFIX);
-        if (destFile.exists()) {
-            return;
-        }
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                boolean isCopySuccess = false;
-                try {
-                  OutputStream os = openFileOutput("itaiji", Context.MODE_PRIVATE);
-                  byte[] buffer = new byte[1024];
-                  InputStream is;
-                  int readLen = 0;
-                  is = getResources().openRawResource(R.raw.itaijidict);
-                  while ((readLen=is.read(buffer))!=-1) {
-                      os.write(buffer, 0, readLen);
-                  }
-                  
-                  os.flush();
-                  is.close();
-                  os.close();
-                  isCopySuccess = true;
-              } catch (FileNotFoundException exception) {
-                  exception.printStackTrace();
-              } catch (IOException exception) {
-                  exception.printStackTrace();
-              } finally {
-                  // 拷贝失败，则删除目标文件，待下次重新拷贝
-                  if (!isCopySuccess) {
-                      destFile.delete();
-                  }
-              }
-            }
-        }).start();
     }
 
     class splashHandler implements Runnable {

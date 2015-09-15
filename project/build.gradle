@@ -1,27 +1,5 @@
 apply plugin: 'android'
 
-dependencies {
-    compile fileTree(dir: 'libs', include: 'ndk_libs.jar')
-    compile project(':lib:message-input')
-    compile project(':lib:wowtalksdk')
-    compile project(':lib:pulltorefresh')
-    compile project(':lib:bitmapfun')
-    compile project(':lib:messagebox')
-    compile project(':lib:DraggableListView')
-    compile project(':lib:SimpleQRCodeLib')
-    compile 'com.androidquery:android-query:0.26.7'
-    compile 'com.amap.api:services:2.3.1'
-    compile 'com.baidu:cyberplayer:1.0.0'
-    compile 'com.baidu.lightapp.plugin.videoplayer:coreplayer:1.0.0'
-    compile 'de.greenrobot:eventbus:1.0.0'
-    compile 'com.google:gson:2.1'
-    compile 'com.android.support:support-v4:21.0.2'
-    compile 'com.android.support:multidex:1.0.0'
-    compile 'com.splunk.mint:mint:4.2'
-    compile 'com.anyan:anyan-sdk:1.0.0'
-    compile 'com.anyan:async-http:1.4.6'
-}
-
 android {
     compileSdkVersion 19
     buildToolsVersion '21.1.2'
@@ -29,6 +7,14 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    productFlavors {
+        dev01 {
+        }
+
+        product {
+        }
     }
 
     defaultConfig {
@@ -77,3 +63,38 @@ android {
         release.setRoot('build-types/release')
     }
 }
+
+dependencies {
+    compile fileTree(dir: 'libs', include: 'ndk_libs.jar')
+
+    dev01Compile project(path: ':lib:wowtalksdk', configuration: 'dev01Debug')
+    productCompile project(path: ':lib:wowtalksdk', configuration: 'productDebug')
+
+    dev01Compile project(path: ':lib:message-input', configuration: 'dev01Debug')
+    productCompile project(path: ':lib:message-input', configuration: 'productDebug')
+
+    dev01Compile project(path: ':lib:bitmapfun', configuration: 'dev01Debug')
+    productCompile project(path: ':lib:bitmapfun', configuration: 'productDebug')
+
+    dev01Compile project(path: ':lib:messagebox', configuration: 'dev01Debug')
+    productCompile project(path: ':lib:messagebox', configuration: 'productDebug')
+
+    dev01Compile project(path: ':lib:DraggableListView', configuration: 'dev01Debug')
+    productCompile project(path: ':lib:DraggableListView', configuration: 'productDebug')
+
+
+    compile project(':lib:pulltorefresh')
+    compile project(':lib:SimpleQRCodeLib')
+    compile 'com.androidquery:android-query:0.26.7'
+    compile 'com.amap.api:services:2.3.1'
+    compile 'com.baidu:cyberplayer:1.0.0'
+    compile 'com.baidu.lightapp.plugin.videoplayer:coreplayer:1.0.0'
+    compile 'de.greenrobot:eventbus:1.0.0'
+    compile 'com.google:gson:2.1'
+    compile 'com.android.support:support-v4:21.0.2'
+    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.splunk.mint:mint:4.2'
+    compile 'com.anyan:anyan-sdk:1.0.0'
+    compile 'com.anyan:async-http:1.4.6'
+}
+

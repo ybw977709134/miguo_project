@@ -1,10 +1,10 @@
 #!/bin/bash
 # usage
-#   sh dev_tools/build_with_gradle.sh [omenv]
-# where omenv = dev01 | product
+#   sh dev_tools/build_with_gradle.sh [flavor]
+# where flavor = dev01 | product
 
-omenv='dev01'
-[ $# -gt 0 ] && omenv=$1
+flavor='dev01'
+[ $# -gt 0 ] && flavor=$1
 
 # increase version code
 curr_ver_code=`grep android:versionCode project/AndroidManifest.xml |grep -oP '[0-9]+'`
@@ -16,24 +16,23 @@ perl -pi -e \
 # update build version name
 # version name := major.minor.ver_code.date
 buildVer=`date +%m%d`
-[ $omenv != 'product' ] && buildVer="$buildVer($omenv)"
+[ $flavor != 'product' ] && buildVer="$buildVer($flavor)"
 perl -pi -e \
     "s/android:versionName=\"([0-9]+)\.([0-9]+)\.([0-9]+)\..*\"/android:versionName=\"\1.\2.\3.$buildVer\/$curr_ver_code\"/" \
     project/AndroidManifest.xml
 curr_ver_name=`grep android:versionName project/AndroidManifest.xml |awk -F '"' '{print $2}'`
 
-export OM_ENV=$omenv 
-echo OM_ENV: $OM_ENV
+echo product flavor: $flavor
 echo version $curr_ver_code '=>' $curr_ver_name
 
-src=./project/build/outputs/apk/project-release.apk
-dest=./out/om_im_android_${omenv}_`date +%m%d`_${curr_ver_code}.apk
+src=./project/build/outputs/apk/project-${flavor}-release.apk
+dest=./out/om_im_android_${flavor}_`date +%m%d`_${curr_ver_code}.apk
 
 if [ ! -d out ]; then 
     mkdir out
 fi
 
-gradle assembleRelease \
+gradle assemble${flavor^}Release \
     && cp $src $dest \
     && echo output to $dest
 
@@ -53,7 +52,7 @@ fi
 #
 if [ $? -eq 0 ]
 then
-    if [ $omenv == 'product' ]; then
+    if [ $flavor == 'product' ]; then
         host='websrv.onemeter.co'
     else
         host='dev01-websrv.onemeter.co'
@@ -101,7 +100,7 @@ then
     echo '--------------------------------------'
     echo updated upgrading configuration written to $ver_xml
 
-    if [ $omenv == 'dev01' ]
+    if [ $flavor == 'dev01' ]
     then
         scp $dest root@$host:/var/www/newapi/download/
         scp $ver_xml root@$host:/var/www/newapi/download/ver.xml

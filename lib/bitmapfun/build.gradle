@@ -1,14 +1,18 @@
 apply plugin: 'android-library'
 
-dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
-    compile project(':lib:wowtalksdk')
-    compile 'com.android.support:support-v4:21.0.2'
-}
-
 android {
     compileSdkVersion 19
     buildToolsVersion "21.1.2"
+
+    publishNonDefault true
+
+    productFlavors {
+        dev01 {
+        }
+
+        product {
+        }
+    }
 
     sourceSets {
         main {
@@ -34,3 +38,11 @@ android {
         release.setRoot('build-types/release')
     }
 }
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+    dev01Compile project(path: ':lib:wowtalksdk', configuration: 'dev01Debug')
+    productCompile project(path: ':lib:wowtalksdk', configuration: 'productDebug')
+    compile 'com.android.support:support-v4:21.0.2'
+}
+

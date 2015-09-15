@@ -1,12 +1,5 @@
 apply plugin: 'android-library'
 
-dependencies {
-    if (System.getenv('OM_ENV') != null)
-        compile "co.onemeter:im-sdk-" + System.getenv('OM_ENV') + ":1.0.0@aar"
-    else
-        compile "co.onemeter:im-sdk-dev01:1.0.0@aar"
-}
-
 android {
     compileSdkVersion 19
     buildToolsVersion "21.1.2"
@@ -14,6 +7,16 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    publishNonDefault true
+
+    productFlavors {
+        dev01 {
+        }
+
+        product {
+        }
     }
 
     sourceSets {
@@ -40,3 +43,9 @@ android {
         release.setRoot('build-types/release')
     }
 }
+
+dependencies {
+    dev01Compile "co.onemeter:im-sdk-dev01:1.0.0@aar"
+    productCompile "co.onemeter:im-sdk-product:1.0.0@aar"
+}
+

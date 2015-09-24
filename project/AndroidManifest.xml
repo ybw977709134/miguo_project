@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="co.onemeter.oneapp"
     android:versionCode="114"
-    android:versionName="4.0.0.0915(dev01)/114" > <!-- 版本号规则：双周发布 x.x.5，单周测试 x.x.0 -->
+    android:versionName="3.9.0.0924/114" > <!-- 版本号规则：双周发布 x.x.5，单周测试 x.x.0 -->
     <!--
  在 Android 2.3 上，PullToRefreshListView 产生 stack overflow 错误。
     为了能在通知中显示彩色的logo，targetSdkVersion<=20

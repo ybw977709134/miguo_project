@@ -79,14 +79,14 @@
             -Dfile=lib/wowtalksdk/libs/om_im_android_sdk-dev01-release.aar \
             -DgroupId=co.onemeter \
             -DartifactId=im-sdk-dev01 \
-            -Dversion=1.0.0 \
+            -Dversion=1.0.1 \
             -Dpackaging=aar
 
     mvn install:install-file \
             -Dfile=lib/wowtalksdk/libs/om_im_android_sdk-product-release.aar \
             -DgroupId=co.onemeter \
             -DartifactId=im-sdk-product \
-            -Dversion=1.0.0 \
+            -Dversion=1.0.1 \
             -Dpackaging=aar
 
 --------------------------------------------------------------------------------

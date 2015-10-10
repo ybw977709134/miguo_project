@@ -45,7 +45,7 @@ android {
 }
 
 dependencies {
-    dev01Compile "co.onemeter:im-sdk-dev01:1.0.0@aar"
-    productCompile "co.onemeter:im-sdk-product:1.0.0@aar"
+    dev01Compile "co.onemeter:im-sdk-dev01:1.0.1@aar"
+    productCompile "co.onemeter:im-sdk-product:1.0.1@aar"
 }
 

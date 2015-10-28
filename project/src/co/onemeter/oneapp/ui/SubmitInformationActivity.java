@@ -1,5 +1,6 @@
 package co.onemeter.oneapp.ui;
 
+import co.onemeter.oneapp.utils.Utils;
 import org.wowtalk.ui.MessageBox;
 
 import android.app.Activity;
@@ -57,7 +58,7 @@ public class SubmitInformationActivity extends Activity implements OnClickListen
 	
 	private void setResultInfo(){
 		if(isInfoFill()){
-            if (!InputPlainTextActivity.isPhoneNum(submit_telephone.getText().toString())) {
+            if (!Utils.isPhoneNum(submit_telephone.getText().toString())) {
                 msgbox.toast("你填写的手机号码格式不正确");
                 return;
             }

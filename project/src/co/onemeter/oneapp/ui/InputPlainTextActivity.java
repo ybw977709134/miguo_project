@@ -5,27 +5,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
-import android.text.Selection;
-import android.text.Spannable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
+import android.text.*;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import co.onemeter.oneapp.R;
-
+import co.onemeter.oneapp.utils.Utils;
 import com.androidquery.AQuery;
-
 import org.wowtalk.ui.MessageBox;
 
 /**
@@ -243,7 +236,7 @@ public class InputPlainTextActivity extends Activity {
 
         //如果是手机号码的话需要进一步的验证
         if (title.equals("联系方式")) {
-            if (!isPhoneNum(name)) {
+            if (!Utils.isPhoneNum(name)) {
                 msgBox.toast("你填写的手机号码格式不正确");
                 return;
             }
@@ -274,27 +267,4 @@ public class InputPlainTextActivity extends Activity {
     }
 
 
-    /**
-     * 验证手机号码的格式是否正确
-     * @author hutianfeng created at 2015/7/15
-     * @param phNum
-     * @return
-     */
-    public static boolean isPhoneNum(String phNum){
-        /*
-    移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
-    联通：130、131、132、152、155、156、185、186
-    电信：133、153、180、189、（1349卫通）
-    总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9
-    */
-        String telRegex = "[1][358]\\d{9}";//"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
-        if (TextUtils.isEmpty(phNum)) {
-            return false;
-        } else {
-            return phNum.matches(telRegex);
-        }
-
-    }
-
-    
 }

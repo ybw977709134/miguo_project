@@ -3,7 +3,7 @@ package co.onemeter.oneapp.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
+import android.text.TextUtils;
 import org.wowtalk.api.Buddy;
 import org.wowtalk.api.PrefUtil;
 
@@ -84,6 +84,28 @@ public class Utils {
         String pattern = "(\\+)?[0-9]{1,15}";
         return verify(pattern, phoneNumber);
     }
+
+    /**
+     * 验证手机号码的格式是否正确
+     * @author hutianfeng created at 2015/8/17
+     * @param phNum
+     * @return
+     */
+    public static boolean isPhoneNum(String phNum){
+        /*
+    电信：189 181 180 177 153 133 1890 1330 1700
+    联通：186 185 176 145 156 155 132 131 130 1860 1709
+    移动：139 138 137 136 135 134 147 188 187 184 183 182 1705 178 159 158 157 152 151 150 1391 1390
+    */
+        String telRegex = "[1][34578]\\d{9}";
+        if (TextUtils.isEmpty(phNum)) {
+            return false;
+        } else {
+            return phNum.matches(telRegex);
+        }
+
+    }
+
 
 
     private static boolean verify(String patternString, String value) {

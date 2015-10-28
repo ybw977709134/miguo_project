@@ -479,8 +479,10 @@ public class WowTalkWebServerIF {
      */
     public int fCheckMobileExist (String cellphone) {
 
+		String uid = sPrefUtil.getUid();
         String action = "check_mobile_exist";
         String postStr = "action=" + action
+				+ "&ignore-uid=" + Utils.urlencodeUtf8(uid)
                 + "&mobile=" + Utils.urlencodeUtf8(cellphone);
 
         return _doRequestWithoutResponse(postStr);

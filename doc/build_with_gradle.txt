@@ -3,12 +3,12 @@
 
 --------------------------------------------------------------------------------
 项目依赖的 aar，通过以下命令安装到本地 maven repo：
+
+    # 录制视频的库
     $ cd lib/AndroidRecording/lib/ && gradle a uploadArchives
 
 项目依赖的 jar，通过以下命令安装到本地 maven repo：
 
-    （请注意其中的 ANDROID_HOME 环境变量，它表示 Android SDK 根目录）
-    
 	#安眼的sdk的jar包
 	mvn install:install-file \
             -Dfile=project/libs/anyan_jar_sdk.jar \
